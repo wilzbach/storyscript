@@ -3,7 +3,7 @@
 > Write code in English.
 
 [![Travis CI](https://secure.travis-ci.org/asyncy/storyscript.svg?branch=master)](http://travis-ci.org/asyncy/storyscript)
-[![Codecov](https://codecov.io/gh/asyncy/storyscript/branch/master/badge.svg)](https://codecov.io/github/asyncy/storyscript)
+[![Codecov](https://codecov.io/gh/asyncy/storyscript/branch/master/graphs/badge.svg)](https://codecov.io/github/asyncy/storyscript)
 
 
 # Overview
