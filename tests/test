@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+# remove cached tab and yacc
+rm -f storyscript/lextab.py storyscript/lextab.pyc
+rm -f storyscript/yacctab.py storyscript/yacctab.pyc
+
+# build new tab and yacc
+. venv/bin/activate; python -c "from storyscript import lexer; lexer.Lexer().build(optimize=1);"
+
+# run tests
+. venv/bin/activate; py.test --cov=.

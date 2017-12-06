@@ -1,4 +1,4 @@
-# StoryScript
+  # StoryScript
 
 > Write code in English.
 
@@ -62,4 +62,17 @@ For other issues, [submit a support ticket](#)
 
 # Developing
 
-To be determined.
+### Setup
+
+```sh
+# create virtual env
+virtualenv venv
+# install dependencies
+. venv/bin/activate; pip install -r requirements.txt -r tests/requirements.txt
+```
+
+### Run test suite
+
+```sh
+./tests/test
+```

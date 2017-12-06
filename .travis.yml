@@ -1,0 +1,10 @@
+language: python
+python:
+  - 2.7
+install:
+  - python setup.py install
+  - pip install -r tests/requirements.txt
+script:
+  - py.test --cov=.
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

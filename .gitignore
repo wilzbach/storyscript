@@ -1,0 +1,8 @@
+.cache
+.coverage
+*.egg-info
+*.pyc
+build
+dist
+htmlcov
+venv
