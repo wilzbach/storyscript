@@ -47,7 +47,9 @@ keywords = [
 
   "set",
   "unset",
-  "push"
+
+  # list and object minipulation
+  "append", "remove"
 ]
 
 all_letters = re.compile(r"^\w+$")
