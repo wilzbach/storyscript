@@ -200,7 +200,7 @@ class Lexer(object):
         r"((the)|a|(an))\s"
         pass
 
-    def t_WS(self,t):
+    def t_WS(self, t):
         r" [ \t]+ "
         value = t.value
         value = value.rsplit("\f", 1)[-1]
@@ -220,7 +220,7 @@ class Lexer(object):
         t.type = "STRING_CONTINUE"
         t.lexer.lineno += 1
 
-    def t_newline(self,t):
+    def t_newline(self, t):
         r"\n+"
         t.lexer.lineno += len(t.value)
         t.type = "NEWLINE"
@@ -270,7 +270,7 @@ class Lexer(object):
             t.value = t.value
         return t
 
-    def t_error(self,t):  # pragma: no cover
+    def t_error(self, t):  # pragma: no cover
         self.error("Syntax Error", t)
 
     def t_COMMENT(self, t):
@@ -422,7 +422,7 @@ class Lexer(object):
     t_singleq2_ignore = ""
 
     def t_singleq2_error(self, t):  # pragma: no cover
-       self.error("Syntax Error", t, "EOL while scanning single quoted string")
+        self.error("Syntax Error", t, "EOL while scanning single quoted string")
 
     # ------------------------------
     # Indenation Magic
