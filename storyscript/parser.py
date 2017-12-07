@@ -312,17 +312,23 @@ class Parser(object):
     # -------------
     # Set/Push/With
     # -------------
-    def p_stmt_set_path_to_paths(self, p):
-        '''stmt : SET PATH TO paths NEWLINE'''
+    def p_stmt_set_path(self, p):
+        '''stmt : SET PATH TO paths NEWLINE
+                | SET PATH TO figure NEWLINE
+                | SET PATH TO expressions NEWLINE'''
         p[0] = ast.Method("set", self, p.lineno(1), args=(p[2], p[4]))
 
-    def p_stmt_set_path_to_figure(self, p):
-        '''stmt : SET PATH TO figure NEWLINE'''
-        p[0] = ast.Method("set", parser=self, lineno=p.lineno(1), args=(p[2], p[4]))
-
-    def p_stmt_set_path_to_expression(self, p):
-        '''stmt : SET PATH TO expressions NEWLINE'''
-        p[0] = ast.Method("set", parser=self, lineno=p.lineno(1), args=(p[2], p[4]))
+    def p_stmt_set_path_is_eq(self, p):
+        '''stmt : PATH TO paths NEWLINE
+                | PATH TO figure NEWLINE
+                | PATH TO expressions NEWLINE
+                | PATH IS paths NEWLINE
+                | PATH IS figure NEWLINE
+                | PATH IS expressions NEWLINE
+                | PATH EQ paths NEWLINE
+                | PATH EQ figure NEWLINE
+                | PATH EQ expressions NEWLINE'''
+        p[0] = ast.Method("set", parser=self, lineno=p.lineno(1), args=(p[1], p[3]))
 
     def p_stmt_unset_path(self, p):
         '''stmt : UNSET PATH NEWLINE'''

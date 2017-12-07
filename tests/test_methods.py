@@ -66,6 +66,8 @@ class Tests(unittest.TestCase):
           ("# hello; this", {}),
           ("set x to not_me", {"output": None, "args": ["x", {"path": "not_me"} ], "method": "set", "parent": None, "kwargs": None , 'linenum': '1'}),
           ("set x to equals_it", {"output": None, "args": ["x", {"path": "equals_it"} ], "method": "set", "parent": None, "kwargs": None , 'linenum': '1'}),
+          ("x = equals_it", {"output": None, "args": ["x", {"path": "equals_it"} ], "method": "set", "parent": None, "kwargs": None , 'linenum': '1'}),
+          ("x is equals_it", {"output": None, "args": ["x", {"path": "equals_it"} ], "method": "set", "parent": None, "kwargs": None , 'linenum': '1'}),
           ("set x to true_it", {"output": None, "args": ["x", {"path": "true_it"} ], "method": "set", "parent": None, "kwargs": None , 'linenum': '1'}),
           ("append x into y", {'output': None, 'args': [{'path': 'x'}, {'path': 'y'}], 'method': 'append', 'parent': None, 'kwargs': None, 'linenum': '1'}),
           ("remove x from y", {'output': None, 'args': [{'path': 'x'}, {'path': 'y'}], 'method': 'remove', 'parent': None, 'kwargs': None, 'linenum': '1'}),
