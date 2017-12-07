@@ -6,3 +6,6 @@ build
 dist
 htmlcov
 venv
+
+lextab.py
+yacctab.py
