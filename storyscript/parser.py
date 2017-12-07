@@ -329,7 +329,8 @@ class Parser(object):
         p[0] = ast.Method("unset", parser=self, lineno=p.lineno(1), args=(p[2], ))
 
     def p_stmt_append(self, p):
-        '''stmt : APPEND variable TO paths NEWLINE'''
+        '''stmt : APPEND variable TO paths NEWLINE
+                | APPEND variable INTO paths NEWLINE'''
         p[0] = ast.Method("append", parser=self, lineno=p.lineno(1), args=(p[2], p[4]))
 
     def p_stmt_remove(self, p):
