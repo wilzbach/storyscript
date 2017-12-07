@@ -1,0 +1,7 @@
+exclude:
+- /storyscript/lextab.py
+- /storyscript/yacctab.py
+component_depth: 1
+languages:
+- python
+- script
