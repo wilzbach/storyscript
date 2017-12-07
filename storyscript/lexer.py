@@ -7,48 +7,14 @@ from .exceptions import ScriptError
 
 
 keywords = [
-  # -------
-  # Sorters
-  # -------
-  # desc
-  "largest", "newest", "top", "first", "highest", "most",
-  # asc
-  "lowest", "last", "bottom", "smallest", "oldest", "least",
-
-  # -----------
-  # Aggregators
-  # -----------
-  "length", "average", "avg", "max", "sum", "min",
-
-  # -------
-  # Helpers
-  # -------
-  # variable
   "with",
-  # other
-  "has", "of", "to", "as", "where",
-  # figures
-  "random", "unique",
-
-  # -----------
-  # Expressions
-  # -----------
+  "has", "of", "to", "as", "into",
   "and", "is", "like", "or",
   "contains",
-
-  # --------
-  # METHODS
-  # --------
-  "if", "else",
-  "try", "catch", "into",
+  "if", "else", "elif",
+  "try", "catch",
   "while", "from",
-
-  "elif",
-
-  "set",
-  "unset",
-
-  # list and object minipulation
+  "set", "unset",
   "append", "remove"
 ]
 
@@ -330,7 +296,7 @@ class Lexer(object):
 
     t_tripleq1_ignore = ""
 
-    def t_tripleq1_error(self,t):  # pragma: no cover
+    def t_tripleq1_error(self, t):  # pragma: no cover
        self.error("Syntax Error", t)
 
     # ------------------------------
