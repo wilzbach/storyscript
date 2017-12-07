@@ -118,8 +118,6 @@ class Tests(unittest.TestCase):
           ('log "...{{value}}..."', {'output': None, 'args': [{'values': {'0': {'path': 'value'}}, 'string': '...{0}...'}], 'method': 'log', 'parent': None, 'kwargs': None, 'linenum': '1'}),
           ('log \\\n "...{{value}}..."', {'output': None, 'args': [{'values': {'0': {'path': 'value'}}, 'string': '...{0}...'}], 'method': 'log', 'parent': None, 'kwargs': None, 'linenum': '1'}),
           ('method arg, arg as result', {'output': 'result', 'args': [{'path': 'arg'}, {'path': 'arg'}], 'method': 'method', 'parent': None, 'kwargs': None, 'linenum': '1'}),
-          ('set ppl to customer where tagged "bad-appels"', {"output": None, "args": ["ppl", {"where": {"tagged": True, "string": {"value": "bad-appels"} }, "figure": "customer"} ], "method": "set", "parent": None, "kwargs": None , 'linenum': '1'}),
-          ('set ppl to customer where isnt tagged "bad-appels"', {"output": None, "args": ["ppl", {"where": {"tagged": False, "string": {"value": "bad-appels"} }, "figure": "customer"} ], "method": "set", "parent": None, "kwargs": None , 'linenum': '1'}),
           # testing tokens work
           ('method ontop', {"output": None, "args": [{"path": "ontop"} ], "method": "method", "parent": None, "kwargs": None , 'linenum': '1'}),
           ('wait "January 25th": pass', {"output": None, "args": [{"value": "January 25th"} ], "method": "wait", "parent": None, "kwargs": None , 'linenum': '1'}),

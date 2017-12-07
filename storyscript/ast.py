@@ -237,11 +237,3 @@ class Comparison(object):
         return dict(method=self.method,
                     left=self.left.json() if hasattr(self.left, 'json') else self.left,
                     right=self.right.json() if hasattr(self.right, 'json') else self.right)
-
-
-class Tagged(object):
-    def __init__(self, string, boolean):
-        self.string, self.boolean = string, boolean
-
-    def json(self):
-        return dict(tagged=self.boolean, string=self.string.json())

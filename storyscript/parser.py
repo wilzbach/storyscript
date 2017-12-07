@@ -424,14 +424,6 @@ class Parser(object):
                       | paths ISNT variable'''
         p[0] = ast.Expression(ast.Comparison(p[1], "is" if p[2]=='is' else 'isnt', p[3]))
 
-    def p_expression_tagged(self, p):
-        '''expression : ISNT TAGGED string
-                      |      TAGGED string'''
-        if len(p)==4:
-            p[0] = ast.Expression(ast.Tagged(p[3], False))
-        else:
-            p[0] = ast.Expression(ast.Tagged(p[2], True))
-
     # ------------------
     # Expressions > Math
     # ------------------

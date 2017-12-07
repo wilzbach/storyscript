@@ -24,7 +24,7 @@ keywords = [
   # Helpers
   # -------
   # variable
-  "with", "tagged", "when",
+  "with", "when",
   # other
   "has", "of", "to", "as", "where",
   # figures
