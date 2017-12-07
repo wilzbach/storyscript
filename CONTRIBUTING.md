@@ -1,6 +1,6 @@
 # Storyscript contribution guidelines
 
-You are welcome to contribute to asyncy.
+You are welcome to contribute to Storyscript.
 
 ## Contributions flow
 
