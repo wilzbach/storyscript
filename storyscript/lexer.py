@@ -113,7 +113,6 @@ class Lexer(object):
         "PATH",
         "KWARG",
         "NUMBEROF",
-        "SCHEDULE",
 
         "NI", "INTO",
         "SORTBY", "ASCDESC",
