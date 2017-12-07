@@ -140,18 +140,6 @@ class Parser(object):
     # -------
     # Methods
     # -------
-    def p_story_scheduled(self, p):
-        '''stmt : SCHEDULE juice'''
-        p[0] = ast.Method('schedule', self, p.lineno(1), p[2][0], args=[p[1]] + p[2][1], kwargs=p[2][2])
-
-    def p_story_when(self, p):
-        '''stmt : WHEN figure_expression suite'''
-        p[0] = ast.Method('when', parser=self, lineno=p.lineno(1), suite=p[3], args=(p[2], ))
-
-    def p_story_after(self, p):
-        '''stmt : AFTER string output suite'''
-        p[0] = ast.Method("after", parser=self, lineno=p.lineno(1), suite=p[4], args=(p[2], ))
-
     def p_methods(self, p):
         '''stmt : PATH   juice
                 | RANDOM juice'''

@@ -24,7 +24,7 @@ keywords = [
   # Helpers
   # -------
   # variable
-  "with", "when",
+  "with",
   # other
   "has", "of", "to", "as", "where",
   # figures
@@ -39,7 +39,7 @@ keywords = [
   # --------
   # METHODS
   # --------
-  "if", "else", "after",
+  "if", "else",
   "try", "catch", "into",
   "while", "from",
 
@@ -247,10 +247,6 @@ class Lexer(object):
 
     def t_NI(self, t):
         r'(at|on|in)(?=\s)'
-        return t
-
-    def t_SCHEDULE(self, t):
-        r"(hourly|daily|weekly|monthly|quarterly|yearly|every)(?=\s)"
         return t
 
     @TOKEN(NAME)
