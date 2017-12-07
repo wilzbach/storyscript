@@ -141,8 +141,7 @@ class Parser(object):
     # Methods
     # -------
     def p_methods(self, p):
-        '''stmt : PATH   juice
-                | RANDOM juice'''
+        '''stmt : PATH juice'''
         p[0] = ast.Method(p[1], parser=self, lineno=p.lineno(1),
                                 suite=p[2][0], output=p[2][3],
                                 args=p[2][1], kwargs=p[2][2])
@@ -152,181 +151,20 @@ class Parser(object):
                  | stmts EOF'''
         p[0] = p[1]
 
-    # ------
-    # Figure
-    # ------
-    def p_figure_of(self, p):
-        '''of : OF
-              | '''
-        pass
-
-    def p_figure_agg(self, p):
-        '''agg : AVERAGE  of
-               | AVG      of
-               | NUMBEROF
-               | LENGTH   of
-               | MAX      of
-               | OLDEST   of
-               | HIGHEST  of
-               | LARGEST  of
-               | MIN      of
-               | NEWEST   of
-               | SMALLEST of
-               | LOWEST   of
-               | SUM      of
-               | RANDOM   of
-               | '''
-        if len(p) > 1:
-            p[0] = dict(agg=p[1], lineno=p.lineno(1))
-
-    def p_figure_offit(self, p):
-        '''offit : FIRST  DIGITS of
-                 | TOP    DIGITS of
-                 | LAST   DIGITS of
-                 | BOTTOM DIGITS of
-                 |        DIGITS
-                 | FIRST
-                 | LAST
-                 | '''
-        # p = [offset, limit]
-        if len(p) >= 3:
-            if p[1] in ('first', 'top'):
-                p[0] = dict(limit=float(p[2]), lineno=p.lineno(1))
-            else:
-                p[0] = dict(limit=float(p[2])*-1, lineno=p.lineno(1))
-
-        elif len(p) == 2:
-            if p[1] in ('first', 'top'):
-                p[0] = dict(limit=1, lineno=p.lineno(1))
-            elif p[1] in ('last', 'bottom'):
-                p[0] = dict(limit=-1, lineno=p.lineno(1))
-            else:
-                p[0] = dict(limit=float(p[1]), lineno=p.lineno(1))
-
-    def p_figure_unique(self, p):
-        '''unique : UNIQUE
-                  | '''
-        if len(p) == 2:
-            p[0] = dict(unique=True, lineno=p.lineno(1))
-
-    def p_figexp(self, p):
-        '''figexp : agg expression
-                  |     expression'''
-        if len(p) == 3:
-            p[2].expressions[0][1].agg = p[1]['agg']
-            p[0] = p[2]
-        else:
-            p[0] = p[1]
-
-    def p_figure_expressions(self, p):
-        '''figexps : WHERE       figexp
-                   | figexps AND figexp
-                   | figexps OR  figexp'''
-        if len(p) == 4:
-            p[0] = dict(lineno=p.lineno(2), where=p[1]['where'].add(method=p[2], expression=p[3]))
-        else:
-            p[0] = dict(lineno=p.lineno(1), where=p[2])
-
-    def p_figure_sort(self, p):
-        '''sort : SORTBY PATH ASCDESC
-                | SORTBY PATH
-                | '''
-        if len(p) == 4:
-            p[0] = dict(sortby=p[2], dir=p[3], lineno=p.lineno(1))
-        elif len(p) == 3:
-            p[0] = dict(sortby=p[2], lineno=p.lineno(1))
-
-    def p_figure_time(self, p):
-        '''time : FROM string
-                | '''
-        if len(p) == 3:
-            p[0] = dict(time=p[2], lineno=p.lineno(1))
-
-    def p_figure_location(self, p):
-        '''location : NI PATH
-                    |'''
-        if len(p) == 3:
-            p[0] = dict(location=p[2], lineno=p.lineno(1))
-
-    def p_figaggone(self, p):
-        '''figaggone : MOST
-                     | HIGHEST
-                     | LARGEST
-                     | NEWEST
-                     | LEAST
-                     | SMALLEST
-                     | LOWEST
-                     | OLDEST'''
-        p[0] = dict(dir='asc' if p[1] in ('least', 'oldest', 'smallest') else 'desc')
-
-    def p_figure_aggexp(self, p):
-        '''figaggexp : figaggone paths'''
-        p[1]['paths'] = p[2].path.split('.')
-        p[0] = p[1]
-
-    def p_figure(self, p):
-        '''figure : agg offit unique paths figexps sort time
-                  | agg offit unique paths         sort time
-                  | agg              paths figexps      time
-                  | agg              paths figexps
-                  | agg              paths              time
-                  |     offit        paths figexps sort time
-                  |     offit        paths         sort time
-                  |                  paths figexps      time
-                  |     offit unique paths              time
-                  |                  paths              time'''
-        _ = dict()
-        [_.update(p[x]) for x in xrange(1, len(p)) if type(p[x]) is dict]
-        for x in xrange(1, len(p)):
-            if p[x] and isinstance(p[x], ast.Path):
-                _['paths'] = p[x].path.split('.')
-
-        _.pop('lineno', None)
-        if _.keys() == ['paths']:
-            p[0] = ast.Path(self, p.lineno(1), ".".join(_['paths']))
-        else:
-            p[0] = ast.Figure(self, _.pop('paths'), **_)
-
-    def p_figure_with(self, p):
-        '''figure : offit  PATH WITH figaggexp location figexps time
-                  |        PATH WITH figaggexp location figexps time
-                  | offit  PATH WITH figaggexp location               time
-                  |        PATH WITH figaggexp location               time'''
-        _ = dict(agg="count",  # DEFAULT
-                 limit=1,  # DEFAULT
-                 lineno=p.lineno(2))
-        [_.update(p[x]) for x in xrange(1, len(p)) if type(p[x]) is dict]
-        _['paths'].insert(0, p[1 if p[2] == 'with' else 2])
-        _['sortby'] = _['paths'][-1]
-        _.pop('lineno', None)
-        p[0] = ast.Figure(self, _.pop('paths'), **_)
-
-    def p_figure_expression(self, p):
-        '''figure_expression : figure LT expression
-                             | figure GT expression
-                             | figure EQ expression
-                             | figure NE expression'''
-        p[0] = ast.Expression(p[1])
-        p[0].add(p[2], p[3])
-
     # -------------
     # Set/Push/With
     # -------------
     def p_stmt_set_path(self, p):
         '''stmt : SET PATH TO paths NEWLINE
-                | SET PATH TO figure NEWLINE
                 | SET PATH TO expressions NEWLINE'''
         p[0] = ast.Method("set", self, p.lineno(1), args=(p[2], p[4]))
 
     def p_stmt_set_path_is_eq(self, p):
         '''stmt : PATH TO paths NEWLINE
-                | PATH TO figure NEWLINE
                 | PATH TO expressions NEWLINE
                 | PATH IS paths NEWLINE
-                | PATH IS figure NEWLINE
                 | PATH IS expressions NEWLINE
                 | PATH EQ paths NEWLINE
-                | PATH EQ figure NEWLINE
                 | PATH EQ expressions NEWLINE'''
         p[0] = ast.Method("set", parser=self, lineno=p.lineno(1), args=(p[1], p[3]))
 
@@ -352,8 +190,7 @@ class Parser(object):
     # -----------
     def p_stmt_while(self, p):
         '''stmt : WHILE paths               output suite
-                | WHILE expressions         output suite
-                | WHILE figure_expression   output suite'''
+                | WHILE expressions         output suite'''
         p[0] = ast.Method("while", parser=self, lineno=p.lineno(1), output=p[3], suite=p[4], args=(p[2], ))
 
     # -----------
