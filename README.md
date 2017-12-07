@@ -19,18 +19,9 @@ Traditional programming languages have many abstractions, syntax and dependency 
 - Not vendor-specific. Code is can be adapted to other applications.
 - Quickly read and understand without navigation or 3rd party permissions.
 
-
-# Principles
-
-1. Readability first.
-1. Less is more.
-1. Simple is better than complex.
-1. Sparse is better than dense.
-1. Transparency is better than secrecy.
-1. Simple enough for your mother to understand it.
-
-> Inspired by [Zen of Python](https://en.wikipedia.org/wiki/Zen_of_Python)
-
+---
+Read our [Documentation](https://github.com/asyncy/storyscript/blob/master/DOCS.md) on the syntax.
+---
 
 # Goals
 
