@@ -7,7 +7,7 @@
 [![Travis CI](https://secure.travis-ci.org/asyncy/storyscript.svg?branch=master)](http://travis-ci.org/asyncy/storyscript)
 [![Codecov](https://codecov.io/gh/asyncy/storyscript/branch/master/graphs/badge.svg)](https://codecov.io/github/asyncy/storyscript)
 [![Pypi](https://img.shields.io/pypi/v/storyscript.svg)](https://pypi.python.org/pypi?%3Aaction=pkg_edit&name=storyscript)
-[![BCH compliance](https://bettercodehub.com/edge/badge/asyncy/storyscript?branch=master)](https://bettercodehub.com/)
+[![BCH compliance](https://bettercodehub.com/edge/badge/asyncy/storyscript?branch=master)](https://bettercodehub.com/results/asyncy/storyscript)
 
 #### **Why StoryScript?**
 Traditional programming languages have many abstractions, syntax and dependency management that is unnecessary when writing high-level algorithms.
