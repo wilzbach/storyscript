@@ -8,7 +8,7 @@
 
 # Overview
 
-StoryScript is a language that translates high-level algorithms (*aka Stories*) into an event tree that an application (*likely [Asyncy](https://asyncy.com)*) could execute.
+StoryScript is a language for orchestrating micro-services in a algorithmic program.
 
 #### **Why StoryScript?**
 Traditional programming languages have many abstractions, syntax and dependency management that is unnecessary when writing high-level algorithms.

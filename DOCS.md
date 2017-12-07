@@ -1,6 +1,6 @@
 # Documentation
 
-> StoryScript is a language designed to orchestrate micro-services in a algorithmic program.
+> StoryScript is a language for orchestrating micro-services in a algorithmic program.
 
 
 ### Principles
@@ -11,7 +11,6 @@
 1. Simple is better than complex.
 1. Sparse is better than dense.
 1. Transparency is better than secrecy.
-1. Simple enough for your mother to understand it.
 
 The goal is to write high-level logic into a **StoryScript** which orchestrates containers. These containers (typically micro-services or functions) execute low-level functions passing the output back into the Story.
 
