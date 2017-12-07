@@ -149,7 +149,7 @@ class Parser(object):
 
     def p_story(self, p):
         '''story : stmt  EOF
-                | stmts EOF'''
+                 | stmts EOF'''
         p[0] = p[1]
 
     # ------
