@@ -19,7 +19,7 @@ keywords = [
   # Aggregators
   # -----------
   "length", "average", "avg", "max", "sum", "min",
-  
+
   # -------
   # Helpers
   # -------
@@ -28,7 +28,7 @@ keywords = [
   # other
   "has", "of", "to", "as", "where",
   # figures
-  "random", "unique", 
+  "random", "unique",
 
   # -----------
   # Expressions
@@ -107,8 +107,8 @@ class Lexer(object):
               ("tripleq2", "exclusive"))
 
     tokens = tuple(set((
-        "ID", 
-        "PATH", 
+        "ID",
+        "PATH",
         "KWARG",
         "NUMBEROF",
         "SCHEDULE",
@@ -179,7 +179,7 @@ class Lexer(object):
     def t_OPERATOR(self, t):
         r"(\+|-|\*|\/|\<=|\>=)"
         return t
-        
+
     def t_GT(self, t):
         r'(\>|((is\s)?greater\sth(e|a)n))'
         t.value = ">"
@@ -330,7 +330,7 @@ class Lexer(object):
         t.type = "STRING_END"
         t.lexer.pop_state()
         return t
-    
+
     t_tripleq1_ignore = ""
 
     def t_tripleq1_error(self,t): # pragma: no cover
@@ -452,7 +452,7 @@ class Lexer(object):
         token_stream = self.synthesize_indentation_tokens(token_stream)
         token_stream = self._end(token_stream)
         return token_stream
-   
+
     def annotate_indentation(self, lexer, token_stream):
         lexer.at_line_start = at_line_start = True
         must_indent_next_line = False
@@ -478,7 +478,7 @@ class Lexer(object):
                 if next_real_token_must_indent:
                     token.must_indent = True
                     next_real_token_must_indent = False
-                
+
                 at_line_start = False
 
             yield token
@@ -506,7 +506,7 @@ class Lexer(object):
                 continue
 
             prev_was_ws = False
-            
+
             if token.must_indent:
                 # current depth must be larger than the previous depth
                 if not (depth > levels[-1]):

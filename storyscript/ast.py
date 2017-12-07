@@ -1,7 +1,7 @@
 from . import version
 
 
-def debug(yes, *this): # pragma: no cover
+def debug(yes, *this):  # pragma: no cover
     if yes:
         if len(this) > 1:
             for x in this[:-1]:
@@ -189,7 +189,7 @@ class Figure(object):
         self.kwargs = kwargs
 
     def json(self):
-        return dict([(k,  v.json() if hasattr(v, 'json') else v) for k,v in self.kwargs.items() if v])
+        return dict([(k, v.json() if hasattr(v, 'json') else v) for k, v in self.kwargs.items() if v])
 
 
 class Expression(object):
