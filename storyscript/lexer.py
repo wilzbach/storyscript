@@ -264,14 +264,14 @@ class Lexer(object):
         if t.value.endswith('%'):
             t.value = float(t.value[:-1]) / 100
         elif t.value.find('$') > -1:
-            float(t.value[1:]) # just to test it
+            float(t.value[1:])  # just to test it
             t.value = t.value[1:]
         else:
-            float(t.value) # just to test it
+            float(t.value)  # just to test it
             t.value = t.value
         return t
 
-    def t_error(self,t): # pragma: no cover
+    def t_error(self,t):  # pragma: no cover
         self.error("Syntax Error", t)
 
     def t_COMMENT(self, t):
@@ -293,7 +293,7 @@ class Lexer(object):
     # ------------------------------
     # Strings
     # ------------------------------
-    def t_singleq1_singleq2_tripleq1_tripleq2_escaped(self,t):
+    def t_singleq1_singleq2_tripleq1_tripleq2_escaped(self, t):
         r"\\(.|\n)"
         t.type = "STRING_CONTINUE"
         t.lexer.lineno += t.value.count("\n")
@@ -302,14 +302,14 @@ class Lexer(object):
     # ------------------------------
     # '''  '''
     # ------------------------------
-    def t_start_triple_quoted_q1_string(self,t):
+    def t_start_triple_quoted_q1_string(self, t):
         r"'''"
         t.lexer.push_state("tripleq1")
         t.type = "STRING_START_TRIPLE"
         t.value = t.value.split("'", 1)[0]
         return t
 
-    def t_tripleq1_simple(self,t):
+    def t_tripleq1_simple(self, t):
         r"((({|})?[^{}'])|('{0,2}[^'{}]+))+"
         t.type = "STRING_CONTINUE"
         t.lexer.lineno += t.value.count("\n")
@@ -323,7 +323,7 @@ class Lexer(object):
         r'}}'
         t.lexer.pop_state()
 
-    def t_tripleq1_end(self,t):
+    def t_tripleq1_end(self, t):
         r"'''"
         t.type = "STRING_END"
         t.lexer.pop_state()
@@ -331,20 +331,20 @@ class Lexer(object):
 
     t_tripleq1_ignore = ""
 
-    def t_tripleq1_error(self,t): # pragma: no cover
+    def t_tripleq1_error(self,t):  # pragma: no cover
        self.error("Syntax Error", t)
 
     # ------------------------------
     # """  """
     # ------------------------------
-    def t_start_triple_quoted_q2_string(self,t):
+    def t_start_triple_quoted_q2_string(self, t):
         r'"""'
         t.lexer.push_state("tripleq2")
         t.type = "STRING_START_TRIPLE"
         t.value = t.value
         return t
 
-    def t_tripleq2_simple(self,t):
+    def t_tripleq2_simple(self, t):
         r'((({|})?[^{}"])|("{0,2}[^"{}]+))+'
         t.type = "STRING_CONTINUE"
         t.lexer.lineno += t.value.count("\n")
@@ -354,7 +354,7 @@ class Lexer(object):
         r'{{'
         t.lexer.push_state('variable')
 
-    def t_tripleq2_end(self,t):
+    def t_tripleq2_end(self, t):
        r'"""'
        t.type = "STRING_END"
        t.lexer.pop_state()
@@ -362,20 +362,20 @@ class Lexer(object):
 
     t_tripleq2_ignore = ""
 
-    def t_tripleq2_error(self,t): # pragma: no cover
+    def t_tripleq2_error(self, t):  # pragma: no cover
        self.error("Syntax Error", t)
 
     # ------------------------------
     # ' '
     # ------------------------------
-    def t_start_single_quoted_q1_string(self,t):
+    def t_start_single_quoted_q1_string(self, t):
         r"'"
         t.lexer.push_state("singleq1")
         t.type = "STRING_START_SINGLE"
         t.value = t.value.split("'", 1)[0]
         return t
 
-    def t_singleq1_simple(self,t):
+    def t_singleq1_simple(self, t):
         r"(({|})?[^{}'])+"
         t.type = "STRING_CONTINUE"
         return t
@@ -384,7 +384,7 @@ class Lexer(object):
         r'{{'
         t.lexer.push_state('variable')
 
-    def t_singleq1_end(self,t):
+    def t_singleq1_end(self, t):
         r"'"
         t.type = "STRING_END"
         t.lexer.pop_state()
@@ -392,20 +392,20 @@ class Lexer(object):
 
     t_singleq1_ignore = ""
 
-    def t_singleq1_error(self, t): # pragma: no cover
+    def t_singleq1_error(self, t):  # pragma: no cover
        self.error("Syntax Error", t, "EOL while scanning single quoted string")
 
     # ------------------------------
     # " "
     # ------------------------------
-    def t_start_single_quoted_q2_string(self,t):
+    def t_start_single_quoted_q2_string(self, t):
         r'"'
         t.lexer.push_state("singleq2")
         t.type = "STRING_START_SINGLE"
         t.value = t.value.split('"', 1)[0]
         return t
 
-    def t_singleq2_simple(self,t):
+    def t_singleq2_simple(self, t):
         r'(({|})?[^{}"])+'
         t.type = "STRING_CONTINUE"
         return t
@@ -414,7 +414,7 @@ class Lexer(object):
         r'{{'
         t.lexer.push_state('variable')
 
-    def t_singleq2_end(self,t):
+    def t_singleq2_end(self, t):
         r'"'
         t.type = "STRING_END"
         t.lexer.pop_state()
@@ -422,7 +422,7 @@ class Lexer(object):
 
     t_singleq2_ignore = ""
 
-    def t_singleq2_error(self, t): # pragma: no cover
+    def t_singleq2_error(self, t):  # pragma: no cover
        self.error("Syntax Error", t, "EOL while scanning single quoted string")
 
     # ------------------------------
@@ -466,7 +466,7 @@ class Lexer(object):
                     next_real_token_must_indent = True
 
             elif token.type == "WS":
-                assert token.at_line_start == True
+                assert token.at_line_start is True
                 at_line_start = True
 
             else:

@@ -8,7 +8,7 @@ from .exceptions import ScriptError
 
 try:
     from . import lextab, yacctab
-except ImportError: # pragma: no cover
+except ImportError:  # pragma: no cover
     lextab, yacctab = 'lextab', 'yacctab'
 
 
@@ -33,7 +33,7 @@ class Parser(object):
     def p_error(self, t):
         self.errors.append(dict(lineno=t.lineno, token=t.type, value=t.value))
         if self.using_cli:
-            sys.stdout.write("\033[91mSyntax Error:\033[0m \033[96mLine:\033[0m %s, \033[96mToken:\033[0m %s, \033[96mValue:\033[0m %s\n"% (t.lineno, t.type, t.value))
+            sys.stdout.write("\033[91mSyntax Error:\033[0m \033[96mLine:\033[0m %s, \033[96mToken:\033[0m %s, \033[96mValue:\033[0m %s\n" % (t.lineno, t.type, t.value))
 
         self.parser.restart()
         return t
@@ -276,8 +276,8 @@ class Parser(object):
                   |     offit unique paths              time
                   |                  paths              time'''
         _ = dict()
-        [_.update(p[x]) for x in xrange(1,len(p)) if type(p[x]) is dict]
-        for x in xrange(1,len(p)):
+        [_.update(p[x]) for x in xrange(1, len(p)) if type(p[x]) is dict]
+        for x in xrange(1, len(p)):
             if p[x] and isinstance(p[x], ast.Path):
                 _['paths'] = p[x].path.split('.')
 
@@ -292,10 +292,10 @@ class Parser(object):
                   |        PATH WITH figaggexp location figexps time
                   | offit  PATH WITH figaggexp location               time
                   |        PATH WITH figaggexp location               time'''
-        _ = dict(agg="count", # DEFAULT
-                 limit=1, # DEFAULT
+        _ = dict(agg="count",  # DEFAULT
+                 limit=1,  # DEFAULT
                  lineno=p.lineno(2))
-        [_.update(p[x]) for x in xrange(1,len(p)) if type(p[x]) is dict]
+        [_.update(p[x]) for x in xrange(1, len(p)) if type(p[x]) is dict]
         _['paths'].insert(0, p[1 if p[2] == 'with' else 2])
         _['sortby'] = _['paths'][-1]
         _.pop('lineno', None)
@@ -414,7 +414,7 @@ class Parser(object):
     def p_expression_is(self, p):
         '''expression : paths IS   variable
                       | paths ISNT variable'''
-        p[0] = ast.Expression(ast.Comparison(p[1], "is" if p[2]=='is' else 'isnt', p[3]))
+        p[0] = ast.Expression(ast.Comparison(p[1], "is" if p[2] == 'is' else 'isnt', p[3]))
 
     # ------------------
     # Expressions > Math
