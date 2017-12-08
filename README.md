@@ -2,7 +2,7 @@
 
 ![StoryScript logo](https://s3.amazonaws.com/asnycy/storyscript.png)
 
-> A language for orchestrating micro-services in a algorithmic program.
+> A language for orchestrating micro-services in an algorithmic program.
 
 [![Travis CI](https://secure.travis-ci.org/asyncy/storyscript.svg?branch=master)](http://travis-ci.org/asyncy/storyscript)
 [![Codecov](https://codecov.io/gh/asyncy/storyscript/branch/master/graphs/badge.svg)](https://codecov.io/github/asyncy/storyscript)

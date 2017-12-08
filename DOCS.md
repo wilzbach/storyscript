@@ -1,6 +1,6 @@
 # Documentation
 
-> StoryScript is a language for orchestrating micro-services in a algorithmic program.
+> StoryScript is a language for orchestrating micro-services in an algorithmic program.
 
 
 ### Principles
