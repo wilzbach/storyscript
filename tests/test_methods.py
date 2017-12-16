@@ -118,7 +118,6 @@ class Tests(unittest.TestCase):
           ("set x to '''{{black-n-white**'''", SyntaxError),
           ('set x to """a""', SyntaxError),
           ('if this; that', SyntaxError),
-          ('set x to y sort by z arg', SyntaxError),
           ('set x to sum of w x y z for "1"', SyntaxError)
           )
     def test_errors(self, (script, exception)):

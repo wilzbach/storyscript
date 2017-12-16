@@ -8,7 +8,7 @@ from .exceptions import ScriptError
 
 keywords = [
   "with",
-  "has", "of", "to", "as", "into",
+  "has", "to", "as", "into",
   "and", "is", "like", "or",
   "contains",
   "if", "else", "elif",
@@ -81,7 +81,6 @@ class Lexer(object):
         "NUMBEROF",
 
         "NI", "INTO",
-        "SORTBY", "ASCDESC",
 
         "DIGITS",
         "BOOLEAN",
@@ -198,14 +197,6 @@ class Lexer(object):
 
     def t_IF(self, t):
         r'(if|unless)'
-        return t
-
-    def t_SORTBY(self, t):
-        r'(sort\sby)'
-        return t
-
-    def t_ASCDESC(self, t):
-        r'(asc|desc)(?=\s)'
         return t
 
     def t_FROM(self, t):
