@@ -1,6 +1,3 @@
-from . import version
-
-
 def debug(yes, *this):  # pragma: no cover
     if yes:
         if len(this) > 1:
@@ -39,11 +36,15 @@ class Program(object):
         elif hasattr(obj, 'json'):
             return obj.json()
         elif type(obj) is dict:
-            return dict([(key, self._dump_json(var)) for key, var in obj.items()])
+            return dict([(key, self._dump_json(var))
+                         for key, var in obj.items()])
         else:
-            return [var.json() if hasattr(var, 'json') else var for var in obj]
+            return [var.json() if hasattr(var, 'json') else var
+                    for var in obj]
 
     def json(self):
+        from . import version
+
         dct = {}
         self._json_next(dct, self.story)
         return dict(
@@ -53,7 +54,8 @@ class Program(object):
 
 
 class Method(object):
-    def __init__(self, method, parser, lineno, suite=None, output=None, args=None, kwargs=None):
+    def __init__(self, method, parser, lineno,
+                 suite=None, output=None, args=None, kwargs=None):
         self.method = method
         self.parser = parser
         self.lineno = str(lineno)
@@ -75,7 +77,10 @@ class Path(object):
         return self
 
     def json(self):
-        return dict(path=self.path, agg=self.agg) if self.agg else dict(path=self.path)
+        if self.agg:
+            return dict(path=self.path, agg=self.agg)
+        else:
+            return dict(path=self.path)
 
 
 class String(object):
@@ -99,18 +104,19 @@ class String(object):
             for st in self.chunks:
                 if isinstance(st, Path):
                     values[str(len(values))] = st.json()
-                    string.append("{%d}" % (len(values)-1))
+                    string.append('{%d}' % (len(values)-1))
                 else:
                     string.append(st)
             return dict(string=''.join(string).strip(), values=values)
 
         else:
-            return dict(value=" ".join([d.strip() for d in self.chunks]).strip())
+            return dict(value=' '.join([d.strip()
+                                        for d in self.chunks]).strip())
 
 
 class Expression(object):
     def __init__(self, expression):
-        self.expressions = [("", expression)]
+        self.expressions = [('', expression)]
 
     def add(self, method, expression):
         self.expressions.append((method, expression))
@@ -135,11 +141,11 @@ class Expression(object):
                 d = expression.json()
                 i = (max(map(int, values.keys())) + 1) if values else 0
                 values[str(i)] = d
-                evals.append("{%d}" % (i))
+                evals.append('{%d}' % (i))
             else:
                 evals.append(expression)
 
-        return dict(expression=" ".join([ev for ev in evals if ev != ""]),
+        return dict(expression=' '.join([ev for ev in evals if ev != '']),
                     values=values)
 
 
@@ -150,6 +156,18 @@ class Comparison(object):
         self.right = right
 
     def json(self):
-        return dict(method=self.method,
-                    left=self.left.json() if hasattr(self.left, 'json') else self.left,
-                    right=self.right.json() if hasattr(self.right, 'json') else self.right)
+        if hasattr(self.left, 'json'):
+            _left = self.left.json()
+        else:
+            _left = self.left
+
+        if hasattr(self.right, 'json'):
+            _right = self.right.json()
+        else:
+            _right = self.right
+
+        return dict(
+            method=self.method,
+            left=_left,
+            right=_right
+        )

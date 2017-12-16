@@ -1,24 +1,25 @@
-import re
 import os
+import re
+
 from ply import lex
-from ply.lex import TOKEN
 
 from .exceptions import ScriptError
 
 
 keywords = [
-  "with",
-  "has", "to", "as", "into",
-  "and", "is", "like", "or",
-  "contains",
-  "if", "else", "elif",
-  "try", "catch",
-  "while", "from",
-  "set", "unset",
-  "append", "remove"
+  'with',
+  'has', 'to', 'as', 'into',
+  'and', 'is', 'like', 'or',
+  'contains',
+  'if', 'else', 'elif',
+  'try', 'catch',
+  'while', 'from',
+  'set', 'unset',
+  'append', 'remove'
 ]
 
-all_letters = re.compile(r"^\w+$")
+
+all_letters = re.compile(r'^\w+$')
 
 
 class Lexer(object):
@@ -38,16 +39,16 @@ class Lexer(object):
         self.token_stream = None
 
     def input(self, script):
-        if not script.endswith("\n"):
+        if not script.endswith('\n'):
             # we will insert a new line if the source has none
-            script += "\n"
+            script += '\n'
         self.lexer.input(script)
         self.lexer._offsets = self.get_offsets(script)
         self.token_stream = self._token_stream(self.lexer)
 
     def get_offsets(self, text):
         offsets = [0]
-        for i in re.compile(r"\n").finditer(text):
+        for i in re.compile(r'\n').finditer(text):
             offsets.append(i.end())
         offsets.append(len(text))
         return offsets
@@ -66,41 +67,56 @@ class Lexer(object):
         end = lexer._offsets[_lineno+1]-1
         text = lexer.lexdata[start:end]
         offset = lexpos - start + 1
-        raise ScriptError([dict(message=reason, text=text, offset=offset, lineno=lineno)])
+        raise ScriptError([dict(
+            message=reason,
+            text=text,
+            offset=offset,
+            lineno=lineno
+        )])
 
-    states = (("variable", "exclusive"),
-              ("singleq1", "exclusive"),
-              ("singleq2", "exclusive"),
-              ("tripleq1", "exclusive"),
-              ("tripleq2", "exclusive"))
+    states = (('variable', 'exclusive'),
+              ('singleq1', 'exclusive'),
+              ('singleq2', 'exclusive'),
+              ('tripleq1', 'exclusive'),
+              ('tripleq2', 'exclusive'))
 
     tokens = tuple(set((
-        "ID",
-        "PATH",
-        "KWARG",
+        'ID',
+        'PATH',
+        'KWARG',
 
-        "NI", "INTO",
+        'NI', 'INTO',
 
-        "DIGITS",
-        "BOOLEAN",
-        "REGEX",
-        "FROM",
+        'DIGITS',
+        'BOOLEAN',
+        'REGEX',
+        'FROM',
 
-        "ELSEIF", "SET",
+        'ELSEIF', 'SET',
 
         # Operations
-        "OPERATOR", "LT", "GT", "EQ", "NE", "ISNT", "LPAREN", "RPAREN",
+        'OPERATOR', 'LT', 'GT', 'EQ', 'NE', 'ISNT', 'LPAREN', 'RPAREN',
 
         # Strings
-        "STRING_START_TRIPLE", "STRING_START_SINGLE", "STRING_CONTINUE", "STRING_END",
+        'STRING_START_TRIPLE',
+        'STRING_START_SINGLE',
+        'STRING_CONTINUE',
+        'STRING_END',
 
         # System
-        "NEWLINE", "WS", "COMMA", "INDENT", "DEDENT", "EOF",
+        'NEWLINE', 'WS', 'COMMA', 'INDENT', 'DEDENT', 'EOF',
         ) + tuple([k.upper() for k in keywords if all_letters.match(k)])))
 
-    REQUIRES_INDENT = ("IF", "ELSEIF", "ELSE", "CHECKOUT", "SUITE")
+    REQUIRES_INDENT = ('IF', 'ELSEIF', 'ELSE', 'CHECKOUT', 'SUITE')
 
-    DIGITS = r"""\-?\$?(?:0[xX][0-9a-fA-F]+|0[0-7]+|(?:(?:0|[1-9][0-9]*)\.[0-9]*(?:[eE][+-]?[0-9]+)?|\.[0-9]+(?:[eE][+-]?[0-9]+)?|(?:0|[1-9][0-9]*)(?:[eE][+-]?[0-9]+)?))\%?"""
+    DIGITS = (
+        r'\-?\$?(?:0[xX][0-9a-fA-F]+'
+        r'|0[0-7]+'
+        r'|(?:(?:0'
+        r'|[1-9][0-9]*)\.[0-9]*(?:[eE][+-]?[0-9]+)?'
+        r'|\.[0-9]+(?:[eE][+-]?[0-9]+)?'
+        r'|(?:0|[1-9][0-9]*)(?:[eE][+-]?[0-9]+)?))\%?'
+    )
 
     # Token
     t_LPAREN = r'\('
@@ -109,11 +125,18 @@ class Lexer(object):
     t_COMMA = r'\,'
     t_SET = r'set'
 
-    INDEXES = r'(\[(-?\d+)(((?:(-?\d+))\.{2})|(\.{2}(?=(-?\d+))))?((?:\.{2})-?\d*)?\])?'
-    NAME = r"""((\.?_?[a-zA-Z]+(\-\w+)?\d*)|(\[('[^']+'|"[^"]+"|\d+)\]))+""" + INDEXES
+    INDEXES = (
+        r'(\[(-?\d+)(((?:(-?\d+))\.{2})'
+        r'|(\.{2}(?=(-?\d+))))?((?:\.{2})-?\d*)?\])?'
+    )
+
+    NAME = (
+        r'((\.?_?[a-zA-Z]+(\-\w+)?\d*)'
+        r'|(\[(\'[^\']+\'|"[^"]+"|\d+)\]))+'
+    ) + INDEXES
 
     def t_BOOLEAN(self, t):
-        r"(true|false)(?=\s)"
+        r'(true|false)(?=\s)'
         t.value = (t.value == 'true')
         return t
 
@@ -128,61 +151,61 @@ class Lexer(object):
 
     def t_EQ(self, t):
         r'((==?)|((is\s)?equals?(?=\s)(\sto)?))'
-        t.value = "=="
+        t.value = '=='
         return t
 
     def t_NE(self, t):
         r'(!=|((is\s)?not\sequals?(\sto)?))'
-        t.value = "!="
+        t.value = '!='
         return t
 
     def t_OPERATOR(self, t):
-        r"(\+|-|\*|\/|\<=|\>=)"
+        r'(\+|-|\*|\/|\<=|\>=)'
         return t
 
     def t_GT(self, t):
         r'(\>|((is\s)?greater\sth(e|a)n))'
-        t.value = ">"
+        t.value = '>'
         return t
 
     def t_LT(self, t):
         r'(\<|((is\s)?less\sth(e|a)n))'
-        t.value = "<"
+        t.value = '<'
         return t
 
     def t_ISNT(self, t):
-        r"((is\snot)|isnt|not)(?=\s)"
+        r'((is\snot)|isnt|not)(?=\s)'
         t.value = 'isnot'
         return t
 
     def t_CONJ(self, t):
-        r"((the)|a|(an))\s"
+        r'((the)|a|(an))\s'
         pass
 
     def t_WS(self, t):
-        r" [ \t]+ "
+        r' [ \t]+ '
         value = t.value
-        value = value.rsplit("\f", 1)[-1]
+        value = value.rsplit('\f', 1)[-1]
         pos = 0
         while True:
-            pos = value.find("\t")
+            pos = value.find('\t')
             if pos == -1:
                 break
             n = 2 - (pos % 2)
-            value = value[:pos] + (" " * n) + value[pos+1:]
+            value = value[:pos] + (' ' * n) + value[pos+1:]
 
         if not hasattr(t.lexer, 'at_line_start') or t.lexer.at_line_start:
             return t
 
     def t_escaped_newline(self, t):
-        r"\\\n"
-        t.type = "STRING_CONTINUE"
+        r'\\\n'
+        t.type = 'STRING_CONTINUE'
         t.lexer.lineno += 1
 
     def t_newline(self, t):
-        r"\n+"
+        r'\n+'
         t.lexer.lineno += len(t.value)
-        t.type = "NEWLINE"
+        t.type = 'NEWLINE'
         return t
 
     def t_ELSEIF(self, t):
@@ -201,7 +224,7 @@ class Lexer(object):
         r'(at|on|in)(?=\s)'
         return t
 
-    @TOKEN(NAME)
+    @lex.TOKEN(NAME)
     def t_ID(self, t):
         if t.value.lower() in keywords:
             t.type = t.value.upper()
@@ -209,7 +232,7 @@ class Lexer(object):
             t.type = 'PATH'
         return t
 
-    @TOKEN(DIGITS)
+    @lex.TOKEN(DIGITS)
     def t_DIGITS(self, t):
         if t.value.endswith('%'):
             t.value = float(t.value[:-1]) / 100
@@ -222,7 +245,7 @@ class Lexer(object):
         return t
 
     def t_error(self, t):  # pragma: no cover
-        self.error("Syntax Error", t)
+        self.error('Syntax Error', t)
 
     def t_COMMENT(self, t):
         r'\#.*'
@@ -231,22 +254,22 @@ class Lexer(object):
     # ------------------------------
     # Variables
     # ------------------------------
-    t_variable_ignore = r" "
+    t_variable_ignore = r' '
 
-    @TOKEN(NAME)
+    @lex.TOKEN(NAME)
     def t_variable_PATH(self, t):
         return t
 
     def t_variable_error(self, t):
-        self.error("Syntax Error", t)
+        self.error('Syntax Error', t)
 
     # ------------------------------
     # Strings
     # ------------------------------
     def t_singleq1_singleq2_tripleq1_tripleq2_escaped(self, t):
-        r"\\(.|\n)"
-        t.type = "STRING_CONTINUE"
-        t.lexer.lineno += t.value.count("\n")
+        r'\\(.|\n)'
+        t.type = 'STRING_CONTINUE'
+        t.lexer.lineno += t.value.count('\n')
         return t
 
     # ------------------------------
@@ -254,15 +277,15 @@ class Lexer(object):
     # ------------------------------
     def t_start_triple_quoted_q1_string(self, t):
         r"'''"
-        t.lexer.push_state("tripleq1")
-        t.type = "STRING_START_TRIPLE"
+        t.lexer.push_state('tripleq1')
+        t.type = 'STRING_START_TRIPLE'
         t.value = t.value.split("'", 1)[0]
         return t
 
     def t_tripleq1_simple(self, t):
         r"((({|})?[^{}'])|('{0,2}[^'{}]+))+"
-        t.type = "STRING_CONTINUE"
-        t.lexer.lineno += t.value.count("\n")
+        t.type = 'STRING_CONTINUE'
+        t.lexer.lineno += t.value.count('\n')
         return t
 
     def t_tripleq1_variable_START(self, t):
@@ -275,29 +298,29 @@ class Lexer(object):
 
     def t_tripleq1_end(self, t):
         r"'''"
-        t.type = "STRING_END"
+        t.type = 'STRING_END'
         t.lexer.pop_state()
         return t
 
-    t_tripleq1_ignore = ""
+    t_tripleq1_ignore = ''
 
-    def t_tripleq1_error(self, t):  # pragma: no cover
-       self.error("Syntax Error", t)
+    def t_tripleq1_error(self, t):
+        self.error('Syntax Error', t)
 
     # ------------------------------
     # """  """
     # ------------------------------
     def t_start_triple_quoted_q2_string(self, t):
         r'"""'
-        t.lexer.push_state("tripleq2")
-        t.type = "STRING_START_TRIPLE"
+        t.lexer.push_state('tripleq2')
+        t.type = 'STRING_START_TRIPLE'
         t.value = t.value
         return t
 
     def t_tripleq2_simple(self, t):
         r'((({|})?[^{}"])|("{0,2}[^"{}]+))+'
-        t.type = "STRING_CONTINUE"
-        t.lexer.lineno += t.value.count("\n")
+        t.type = 'STRING_CONTINUE'
+        t.lexer.lineno += t.value.count('\n')
         return t
 
     def t_tripleq2_variable_START(self, t):
@@ -305,29 +328,29 @@ class Lexer(object):
         t.lexer.push_state('variable')
 
     def t_tripleq2_end(self, t):
-       r'"""'
-       t.type = "STRING_END"
-       t.lexer.pop_state()
-       return t
+        r'"""'
+        t.type = 'STRING_END'
+        t.lexer.pop_state()
+        return t
 
-    t_tripleq2_ignore = ""
+    t_tripleq2_ignore = ''
 
     def t_tripleq2_error(self, t):  # pragma: no cover
-       self.error("Syntax Error", t)
+        self.error('Syntax Error', t)
 
     # ------------------------------
     # ' '
     # ------------------------------
     def t_start_single_quoted_q1_string(self, t):
         r"'"
-        t.lexer.push_state("singleq1")
-        t.type = "STRING_START_SINGLE"
+        t.lexer.push_state('singleq1')
+        t.type = 'STRING_START_SINGLE'
         t.value = t.value.split("'", 1)[0]
         return t
 
     def t_singleq1_simple(self, t):
         r"(({|})?[^{}'])+"
-        t.type = "STRING_CONTINUE"
+        t.type = 'STRING_CONTINUE'
         return t
 
     def t_singleq1_variable_START(self, t):
@@ -336,28 +359,32 @@ class Lexer(object):
 
     def t_singleq1_end(self, t):
         r"'"
-        t.type = "STRING_END"
+        t.type = 'STRING_END'
         t.lexer.pop_state()
         return t
 
-    t_singleq1_ignore = ""
+    t_singleq1_ignore = ''
 
     def t_singleq1_error(self, t):  # pragma: no cover
-       self.error("Syntax Error", t, "EOL while scanning single quoted string")
+        self.error(
+            'Syntax Error',
+            t,
+            'EOL while scanning single quoted string'
+        )
 
     # ------------------------------
     # " "
     # ------------------------------
     def t_start_single_quoted_q2_string(self, t):
         r'"'
-        t.lexer.push_state("singleq2")
-        t.type = "STRING_START_SINGLE"
+        t.lexer.push_state('singleq2')
+        t.type = 'STRING_START_SINGLE'
         t.value = t.value.split('"', 1)[0]
         return t
 
     def t_singleq2_simple(self, t):
         r'(({|})?[^{}"])+'
-        t.type = "STRING_CONTINUE"
+        t.type = 'STRING_CONTINUE'
         return t
 
     def t_singleq2_variable_START(self, t):
@@ -366,14 +393,18 @@ class Lexer(object):
 
     def t_singleq2_end(self, t):
         r'"'
-        t.type = "STRING_END"
+        t.type = 'STRING_END'
         t.lexer.pop_state()
         return t
 
-    t_singleq2_ignore = ""
+    t_singleq2_ignore = ''
 
     def t_singleq2_error(self, t):  # pragma: no cover
-        self.error("Syntax Error", t, "EOL while scanning single quoted string")
+        self.error(
+            'Syntax Error',
+            t,
+            'EOL while scanning single quoted string'
+        )
 
     # ------------------------------
     # Indenation Magic
@@ -388,11 +419,11 @@ class Lexer(object):
 
     def DEDENT(self, lineno):
         self._dedent()
-        return self.TOKEN("DEDENT", lineno)
+        return self.TOKEN('DEDENT', lineno)
 
     def INDENT(self, lineno):
         self._indent()
-        return self.TOKEN("INDENT", lineno)
+        return self.TOKEN('INDENT', lineno)
 
     def _token_stream(self, lexer):
         token_stream = iter(lexer.token, None)
@@ -409,13 +440,13 @@ class Lexer(object):
             token.at_line_start = at_line_start
             token.must_indent = False
 
-            if token.type == "NEWLINE":
+            if token.type == 'NEWLINE':
                 at_line_start = True
                 if must_indent_next_line:
                     must_indent_next_line = False
                     next_real_token_must_indent = True
 
-            elif token.type == "WS":
+            elif token.type == 'WS':
                 assert token.at_line_start is True
                 at_line_start = True
 
@@ -438,14 +469,14 @@ class Lexer(object):
         depth = 0
         prev_was_ws = False
         for token in token_stream:
-            if token.type == "WS":
+            if token.type == 'WS':
                 # WS occurs at SOL only, skip till someobject real
                 assert depth == 0
                 depth = len(token.value)
                 prev_was_ws = True
                 continue
 
-            if token.type == "NEWLINE":
+            if token.type == 'NEWLINE':
                 depth = 0
                 if prev_was_ws or token.at_line_start:
                     # ignore empty lines
@@ -458,7 +489,7 @@ class Lexer(object):
             if token.must_indent:
                 # current depth must be larger than the previous depth
                 if not (depth > levels[-1]):
-                    self.error("Indentation Error", token)
+                    self.error('Indentation Error', token)
 
                 levels.append(depth)
                 yield self.INDENT(token.lineno)
@@ -494,4 +525,4 @@ class Lexer(object):
         for tok in token_stream:
             yield tok
         lineno = tok.lineno if tok is not None else 1
-        yield self.TOKEN("EOF", lineno)
+        yield self.TOKEN('EOF', lineno)

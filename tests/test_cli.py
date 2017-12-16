@@ -9,19 +9,25 @@ except ImportError:
 
 class Tests(unittest.TestCase):
     def test_json_output(self):
-        output = subprocess.check_output('python -m storyscript.__init__ -f tests/test.story', shell=True)
+        output = subprocess.check_output(
+            'python -m storyscript.__init__ -f tests/test.story', shell=True
+        )
         print(output)
         out = json.loads(output)
         self.assertIn('script', out)
         self.assertIn('version', out)
 
     def test_silent(self):
-        output = subprocess.check_output('python -m storyscript.__init__ -sf tests/test.story', shell=True)
+        output = subprocess.check_output(
+            'python -m storyscript.__init__ -sf tests/test.story', shell=True
+        )
         print(output)
         self.assertEquals("", output)
 
     def test_tokens(self):
-        output = subprocess.check_output('python -m storyscript.__init__ -slf tests/test.story', shell=True)
+        output = subprocess.check_output(
+            'python -m storyscript.__init__ -slf tests/test.story', shell=True
+        )
         print(output)
         o = output.split('\n')
         assert len(o) == 6
@@ -33,8 +39,18 @@ class Tests(unittest.TestCase):
 
     def test_error(self):
         try:
-            subprocess.check_output('python -m storyscript.__init__ "begin\n\tred -- flba"', shell=True)
+            subprocess.check_output(
+                'python -m storyscript.__init__ "begin\n\tred -- flba"', shell=True
+            )
         except subprocess.CalledProcessError as e:
-            self.assertEqual(e.output.strip(), "\x1b[91mSyntax Error:\x1b[0m \x1b[96mLine:\x1b[0m 2, \x1b[96mToken:\x1b[0m OPERATOR, \x1b[96mValue:\x1b[0m -")
+            self.assertEqual(
+                e.output.strip(),
+                (
+                    '\x1b[91mSyntax Error:\x1b[0m '
+                    '\x1b[96mLine:\x1b[0m 2, '
+                    '\x1b[96mToken:\x1b[0m OPERATOR, '
+                    '\x1b[96mValue:\x1b[0m -'
+                )
+            )
         except:
-            raise Exception("CalledProcessError not raised")
+            raise Exception('CalledProcessError not raised')

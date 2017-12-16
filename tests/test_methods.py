@@ -3,6 +3,7 @@ from json import dumps
 from ddt import ddt, data
 
 import storyscript
+from storyscript import exceptions
 
 
 @ddt
@@ -121,7 +122,7 @@ class Tests(unittest.TestCase):
           )
     def test_errors(self, (script, exception)):
         print(self.expand_script(script))
-        with self.assertRaisesRegexp(exception, "storyscript Syntax Errors found while compiling"):
+        with self.assertRaisesRegexp(exception, 'StoryScript Syntax Errors found.'):
             print(storyscript.parse(self.expand_script(script+"\n")).json())
 
     @data(("begin\n\tif true\npass", [{'text': 'pass', 'message': None, 'lineno': 3, 'offset': 1}]),
@@ -129,10 +130,10 @@ class Tests(unittest.TestCase):
           ("do this\n\t--plus\n\t\t\t\t\thello", [{'token': 'INDENT', 'lineno': 3, 'value': None}]),
           )
     def test_indentation_error(self, (script, error)):
-        with self.assertRaisesRegexp(storyscript.ScriptError, "storyscript Syntax Errors found while compiling"):
+        with self.assertRaisesRegexp(exceptions.ScriptError, 'StoryScript Syntax Errors found.'):
             try:
                 print(script)
                 print(storyscript.parse(script).json())
-            except storyscript.ScriptError as e:
+            except exceptions.ScriptError as e:
                 self.assertItemsEqual(e.json(), error)
                 raise
