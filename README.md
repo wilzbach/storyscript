@@ -71,15 +71,10 @@ pip install storyscript
 storyscript -f path/to/my_first_story.story
 ```
 
-### Developing
+### Testing
 
 ```sh
-# create virtual env
-virtualenv venv
-# install dependencies
-. venv/bin/activate; pip install -r requirements.txt -r tests/requirements.txt
-# run test suite
-./tests/test
+tox
 ```
 
 Please follow our [contribution guidelines](https://github.com/asyncy/storyscript/blob/master/CONTRIBUTING.md).
