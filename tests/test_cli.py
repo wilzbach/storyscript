@@ -10,19 +10,19 @@ except ImportError:
 class Tests(unittest.TestCase):
     def test_json_output(self):
         output = subprocess.check_output('python -m storyscript.__init__ -f tests/test.story', shell=True)
-        print "\033[92m....\033[0m", output
+        print(output)
         out = json.loads(output)
         self.assertIn('script', out)
         self.assertIn('version', out)
 
     def test_silent(self):
         output = subprocess.check_output('python -m storyscript.__init__ -sf tests/test.story', shell=True)
-        print "\033[92m....\033[0m", output
+        print(output)
         self.assertEquals("", output)
 
     def test_tokens(self):
         output = subprocess.check_output('python -m storyscript.__init__ -slf tests/test.story', shell=True)
-        print "\033[92m....\033[0m", output
+        print(output)
         o = output.split('\n')
         assert len(o) == 6
         assert "LexToken(PATH,'run',1,0)" in o[0]

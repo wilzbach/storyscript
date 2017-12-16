@@ -5,8 +5,8 @@ def debug(yes, *this):  # pragma: no cover
     if yes:
         if len(this) > 1:
             for x in this[:-1]:
-                print x,
-        print this[-1]
+                print(x)
+        print(this[-1])
 
 
 class Program(object):

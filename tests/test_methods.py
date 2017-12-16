@@ -87,11 +87,10 @@ class Tests(unittest.TestCase):
           ('unset apples', {"output": None, "args": ["apples"], "method": "unset", "parent": None, "kwargs": None , 'linenum': '1'}),
           )
     def test(self, (script, expected)):
-        print "\033[90m%s\033[0m" % self.expand_script(script)
+        print(self.expand_script(script))
         result = storyscript.parse(self.expand_script(script+"\n")).json()
-        print dumps(result['script'].get('1', {}), indent=2)
-        print
-        print result['script'].get('1')
+        print(dumps(result['script'].get('1', {}), indent=2))
+        print(result['script'].get('1'))
         self.assertDictEqual(result['script'].get('1', {}), expected)
 
     @data(
@@ -101,9 +100,9 @@ class Tests(unittest.TestCase):
           ('unless 1=1: pass; else unless 1=0: pass; else: pass', {"1": {"linenum": "1", "output": None, "args": [{"values": {}, "expression": "1.0 == 1.0"} ], "method": "unless", "parent": None, "kwargs": None }, "3": {"linenum": "3", "output": None, "args": [{"values": {}, "expression": "1.0 == 0.0"} ], "method": "unlessif", "parent": None, "kwargs": None }, "2": {"linenum": "2", "output": None, "args": None, "method": "pass", "parent": "1", "kwargs": None }, "5": {"linenum": "5", "output": None, "args": None, "method": "else", "parent": None, "kwargs": None }, "4": {"linenum": "4", "output": None, "args": None, "method": "pass", "parent": "3", "kwargs": None }, "6": {"linenum": "6", "output": None, "args": None, "method": "pass", "parent": "5", "kwargs": None } }),
           )
     def test_full(self, (script, expected)):
-        print "\033[90m%s\033[0m" % self.expand_script(script)
+        print(self.expand_script(script))
         result = storyscript.parse(self.expand_script(script+"\n")).json()
-        print dumps(result['script'], indent=2)
+        print(dumps(result['script'], indent=2))
         self.assertDictEqual(result['script'], expected)
 
     @data(("set results to first 6 unique myList prices", SyntaxError),
@@ -121,9 +120,9 @@ class Tests(unittest.TestCase):
           ('set x to sum of w x y z for "1"', SyntaxError)
           )
     def test_errors(self, (script, exception)):
-        print "\033[90m%s\033[0m" % self.expand_script(script)
+        print(self.expand_script(script))
         with self.assertRaisesRegexp(exception, "storyscript Syntax Errors found while compiling"):
-            print "\033[92m....\033[0m", storyscript.parse(self.expand_script(script+"\n")).json()
+            print(storyscript.parse(self.expand_script(script+"\n")).json())
 
     @data(("begin\n\tif true\npass", [{'text': 'pass', 'message': None, 'lineno': 3, 'offset': 1}]),
           ("wait\n--this", [{'token': 'KWARG', 'lineno': 2, 'value': '--this'}]),
@@ -132,8 +131,8 @@ class Tests(unittest.TestCase):
     def test_indentation_error(self, (script, error)):
         with self.assertRaisesRegexp(storyscript.ScriptError, "storyscript Syntax Errors found while compiling"):
             try:
-                print "\033[90m", script, "\033[0m"
-                print storyscript.parse(script).json()
+                print(script)
+                print(storyscript.parse(script).json())
             except storyscript.ScriptError as e:
                 self.assertItemsEqual(e.json(), error)
                 raise
