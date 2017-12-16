@@ -78,7 +78,6 @@ class Lexer(object):
         "ID",
         "PATH",
         "KWARG",
-        "NUMBEROF",
 
         "NI", "INTO",
 
@@ -121,11 +120,6 @@ class Lexer(object):
     def t_REGEX(self, t):
         r'\/[^\s]+\/i?'
         t.value = dict(regexp=re.compile(t.value[1:-1]).pattern)
-        return t
-
-    def t_NUMBEROF(self, t):
-        r'number\sof'
-        t.value = 'count'
         return t
 
     def t_KWARG(self, t):
