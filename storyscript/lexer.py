@@ -9,7 +9,7 @@ from .exceptions import ScriptError
 keywords = [
   'with',
   'has', 'to', 'as', 'into',
-  'and', 'is', 'like', 'or',
+  'is', 'like', 'or',
   'contains',
   'if', 'else', 'elif',
   'try', 'catch',
@@ -84,7 +84,7 @@ class Lexer(object):
         'ID',
         'PATH',
         'KWARG',
-
+        'AND',
         'NI', 'INTO',
 
         'DIGITS',
@@ -121,7 +121,7 @@ class Lexer(object):
     # Token
     t_LPAREN = r'\('
     t_RPAREN = r'\)'
-    # t_AND = r'(\&)'
+    t_AND = r'\&|and|also'
     t_COMMA = r'\,'
     t_SET = r'set'
 
