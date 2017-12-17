@@ -388,7 +388,7 @@ class Parser(object):
     # Arguments
     # ---------
     def p_args(self, p):
-        """args :            variable
+        """args : variable
                 | args COMMA variable
                 |"""
         if len(p) == 2:

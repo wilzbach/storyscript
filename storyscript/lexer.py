@@ -23,13 +23,8 @@ all_letters = re.compile(r'^\w+$')
 
 
 class Lexer(object):
-    def __init__(self, _indent=None, _dedent=None):
+    def __init__(self):
         self.build()
-        self._indent = self._none
-        self._dedent = self._none
-
-    def _none(self):
-        return None
 
     def build(self, **kwargs):
         self.lexer = lex.lex(object=self,
@@ -95,7 +90,8 @@ class Lexer(object):
         'ELSEIF', 'SET',
 
         # Operations
-        'OPERATOR', 'LT', 'GT', 'EQ', 'NE', 'ISNT', 'LPAREN', 'RPAREN',
+        'OPERATOR', 'LT', 'GT', 'EQ', 'NE', 'ISNT',
+        'LPAREN', 'RPAREN',
 
         # Strings
         'STRING_START_TRIPLE',
@@ -184,16 +180,6 @@ class Lexer(object):
 
     def t_WS(self, t):
         r' [ \t]+ '
-        value = t.value
-        value = value.rsplit('\f', 1)[-1]
-        pos = 0
-        while True:
-            pos = value.find('\t')
-            if pos == -1:
-                break
-            n = 2 - (pos % 2)
-            value = value[:pos] + (' ' * n) + value[pos+1:]
-
         if not hasattr(t.lexer, 'at_line_start') or t.lexer.at_line_start:
             return t
 
@@ -418,11 +404,9 @@ class Lexer(object):
         return tok
 
     def DEDENT(self, lineno):
-        self._dedent()
         return self.TOKEN('DEDENT', lineno)
 
     def INDENT(self, lineno):
-        self._indent()
         return self.TOKEN('INDENT', lineno)
 
     def _token_stream(self, lexer):
