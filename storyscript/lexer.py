@@ -107,7 +107,7 @@ class Lexer(object):
         'NEWLINE', 'WS', 'COMMA', 'INDENT', 'DEDENT', 'EOF',
         ) + tuple([k.upper() for k in keywords if all_letters.match(k)])))
 
-    REQUIRES_INDENT = ('IF', 'ELSEIF', 'ELSE', 'CHECKOUT', 'SUITE')
+    REQUIRES_INDENT = ('IF', 'ELSEIF', 'ELSE', 'SUITE')
 
     DIGITS = (
         r'\-?\$?(?:0[xX][0-9a-fA-F]+'
