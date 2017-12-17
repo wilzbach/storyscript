@@ -7,15 +7,15 @@ from .exceptions import ScriptError
 
 
 keywords = [
-  'with',
-  'has', 'to', 'as', 'into',
-  'is', 'like', 'or',
-  'contains',
-  'if', 'else', 'elif',
-  'try', 'catch',
-  'while', 'from',
-  'set', 'unset',
-  'append', 'remove'
+    'with',
+    'has', 'to', 'as', 'into',
+    'is', 'like', 'or',
+    'contains',
+    'if', 'else', 'elif',
+    'try', 'catch',
+    'while', 'from',
+    'set', 'unset',
+    'append', 'remove'
 ]
 
 
@@ -64,7 +64,7 @@ class Lexer(object):
         lexer, lineno, lexpos = self.lexer, t.lineno, t.lexpos
         _lineno = lineno - 1
         start = lexer._offsets[_lineno]
-        end = lexer._offsets[_lineno+1]-1
+        end = lexer._offsets[_lineno + 1] - 1
         text = lexer.lexdata[start:end]
         offset = lexpos - start + 1
         raise ScriptError([dict(
@@ -105,7 +105,7 @@ class Lexer(object):
 
         # System
         'NEWLINE', 'WS', 'COMMA', 'INDENT', 'DEDENT', 'EOF',
-        ) + tuple([k.upper() for k in keywords if all_letters.match(k)])))
+    ) + tuple([k.upper() for k in keywords if all_letters.match(k)])))
 
     REQUIRES_INDENT = ('IF', 'ELSEIF', 'ELSE', 'SUITE')
 
@@ -506,7 +506,7 @@ class Lexer(object):
                 else:
                     # back up; but only if it matches a previous level
                     i = levels.index(depth)
-                    for _ in range(i+1, len(levels)):
+                    for _ in range(i + 1, len(levels)):
                         yield self.DEDENT(token.lineno)
                         levels.pop()
 

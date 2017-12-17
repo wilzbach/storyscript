@@ -73,7 +73,7 @@ class Path(object):
         self.agg = agg
 
     def add(self, path):
-        self.path = self.path+'.'+path
+        self.path = '%s.%s' % (self.path, path)
         return self
 
     def json(self):
@@ -104,7 +104,7 @@ class String(object):
             for st in self.chunks:
                 if isinstance(st, Path):
                     values[str(len(values))] = st.json()
-                    string.append('{%d}' % (len(values)-1))
+                    string.append('{%d}' % (len(values) - 1))
                 else:
                     string.append(st)
             return dict(string=''.join(string).strip(), values=values)
