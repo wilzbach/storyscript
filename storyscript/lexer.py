@@ -7,7 +7,7 @@ from .exceptions import ScriptError
 
 
 keywords = [
-    'with',
+    'with', 'and',
     'has', 'to', 'as', 'into',
     'is', 'like', 'or',
     'contains',
@@ -50,7 +50,7 @@ class Lexer(object):
 
     def token(self):
         try:
-            x = self.token_stream.next()
+            x = next(self.token_stream)
             return x
         except StopIteration:
             return None
@@ -79,7 +79,6 @@ class Lexer(object):
         'ID',
         'PATH',
         'KWARG',
-        'AND',
         'NI', 'INTO',
 
         'DIGITS',

@@ -41,7 +41,7 @@ def all_in_directory(_this, debug):
                             )
                         )
                     except Exception as e:
-                        sys.stdout.write(str(e)+'\n')
+                        sys.stdout.write(str(e) + '\n')
 
 
 def main():
