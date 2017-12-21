@@ -3,6 +3,8 @@ import json
 import os
 import sys
 
+from . import exceptions
+from . import resolver
 from .lexer import Lexer
 from .parser import Parser
 

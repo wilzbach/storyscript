@@ -302,15 +302,15 @@ class Parser(object):
 
     def p_expression_not_in(self, p):
         """expression : paths ISNT NI paths"""
-        p[0] = ast.Expression(ast.Comparison(p[4], 'excludes', p[1]))
+        p[0] = ast.Expression(ast.Comparison(p[1], 'excludes', p[4]))
 
     def p_expression_contains(self, p):
         """expression : variable CONTAINS variable
                       | variable    NI    variable"""
         if p[2] == 'contains':
-            p[0] = ast.Expression(ast.Comparison(p[3], 'contains', p[1]))
-        else:
             p[0] = ast.Expression(ast.Comparison(p[1], 'contains', p[3]))
+        else:
+            p[0] = ast.Expression(ast.Comparison(p[1], 'in', p[3]))
 
     def p_expression_like(self, p):
         """expression : paths      LIKE expression
