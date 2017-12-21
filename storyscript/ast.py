@@ -100,11 +100,11 @@ class String(object):
 
         if is_complex:
             string = []
-            values = {}
+            values = []
             for st in self.chunks:
                 if isinstance(st, Path):
-                    values[str(len(values))] = st.json()
-                    string.append('{%d}' % (len(values) - 1))
+                    values.append(st.json())
+                    string.append('{}')
                 else:
                     string.append(st)
             return dict(string=''.join(string).strip(), values=values)
@@ -128,7 +128,7 @@ class Expression(object):
                 e = self.expressions[0][1]
                 return e.json() if hasattr(e, 'json') else e
             evals = []
-            values = {}
+            values = []
         for mixin, expression in self.expressions:
             evals.append(mixin)
 
@@ -139,9 +139,8 @@ class Expression(object):
 
             elif hasattr(expression, 'json'):
                 d = expression.json()
-                i = (max(map(int, values.keys())) + 1) if values else 0
-                values[str(i)] = d
-                evals.append('{%d}' % (i))
+                values.append(d)
+                evals.append('{}')
             else:
                 evals.append(expression)
 
