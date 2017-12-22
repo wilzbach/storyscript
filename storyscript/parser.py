@@ -274,7 +274,7 @@ class Parser(object):
 
     def p_expression_num(self, p):
         """expression : DIGITS"""
-        p[0] = ast.Expression(str(float(p[1])))
+        p[0] = ast.Expression(p[1])
 
     def p_expression_var(self, p):
         """expression : variable"""
