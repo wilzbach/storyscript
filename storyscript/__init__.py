@@ -7,9 +7,10 @@ from . import exceptions
 from . import resolver
 from .lexer import Lexer
 from .parser import Parser
+from .version import version
 
 
-__version__ = VERSION = version = '0.0.1'
+__version__ = VERSION = version
 
 
 def parse(script, debug=False):
