@@ -64,14 +64,17 @@ def test_app_get_stories_directory(mocker):
     assert App.get_stories('stories') == ['one.story']
 
 
-def test_app_parse(parser, read_story):
+def test_app_parse(mocker, parser, read_story):
     """
     Ensures App.parse runs the parser
     """
-    result = App.parse('/path/to/story')
+    mocker.patch.object(App, 'get_stories', return_value=['one.story'])
+    result = App.parse('path')
     kwargs = {'debug': False, 'using_cli': True}
+    App.get_stories.assert_called_with('path')
+    App.read_story.assert_called_with('one.story')
     Parser().parse.assert_called_with(App.read_story(), **kwargs)
-    assert result == Parser().parse()
+    assert result == {'one.story': Parser().parse()}
 
 
 def test_app_parse_json(mocker, parser, read_story):
@@ -79,10 +82,11 @@ def test_app_parse_json(mocker, parser, read_story):
     Ensures App.parse runs the parser
     """
     mocker.patch.object(json, 'dumps')
+    mocker.patch.object(App, 'get_stories', return_value=['one.story'])
     result = App.parse('/path/to/story', as_json=True)
     kwargs = {'indent': 2, 'separators': (',', ': ')}
     json.dumps.assert_called_with(Parser.parse().json(), **kwargs)
-    assert result == json.dumps()
+    assert result == {'one.story': json.dumps()}
 
 
 def test_app_lexer(mocker, read_story):

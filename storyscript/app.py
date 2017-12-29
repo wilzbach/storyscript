@@ -34,12 +34,18 @@ class App:
         """
         Parses a story
         """
-        story = cls.read_story(storypath)
+        results = {}
         parser = Parser()
-        result = parser.parse(story, debug=debug, using_cli=True)
-        if as_json:
-            return json.dumps(result.json(), indent=2, separators=(',', ': '))
-        return result
+        stories = cls.get_stories(storypath)
+        for file in stories:
+            story = cls.read_story(file)
+            result = parser.parse(story, debug=debug, using_cli=True)
+            results[file] = result
+            if as_json:
+                results[file] = json.dumps(result.json(),
+                                           indent=2,
+                                           separators=(',', ': '))
+        return results
 
     @classmethod
     def lexer(cls, storypath):
