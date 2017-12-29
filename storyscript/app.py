@@ -1,3 +1,5 @@
+import json
+
 from .lexer import Lexer
 from .parser import Parser
 
@@ -13,13 +15,16 @@ class App:
             return file.read()
 
     @classmethod
-    def parse(cls, storypath, debug=False):
+    def parse(cls, storypath, debug=False, as_json=False):
         """
         Parses a story
         """
         story = cls.read_story(storypath)
         parser = Parser()
-        return parser.parse(story, debug=debug, using_cli=True)
+        result = parser.parse(story, debug=debug, using_cli=True)
+        if as_json:
+            return json.dumps(result.json(), indent=2, separators=(',', ': '))
+        return result
 
     @classmethod
     def lexer(cls, storypath):
