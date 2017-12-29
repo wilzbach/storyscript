@@ -32,10 +32,12 @@ class Cli:
         """
         Shows lexer tokens for given stories
         """
-        result = App.lexer(storypath)
+        results = App.lexer(storypath)
         message = '{} {}'
-        for x, tok in enumerate(result):
-            click.echo(message.format(x, tok))
+        for file, tokens in results.items():
+            click.echo('File: {}'.format(file))
+            for x, tok in enumerate(tokens):
+                click.echo(message.format(x, tok))
 
     @staticmethod
     @main.command()

@@ -41,10 +41,11 @@ def test_cli_lexer(mocker, runner, app, echo):
     """
     Ensures the lexer command outputs lexer tokens
     """
-    mocker.patch.object(App, 'lexer', return_value=['one'])
+    mocker.patch.object(App, 'lexer', return_value={'one.story': ['run']})
     runner.invoke(Cli.lexer, ['/path/to/story'])
     app.lexer.assert_called_with('/path/to/story')
-    click.echo.assert_called_with('0 one')
+    click.echo.assert_called_with('0 run')
+    assert click.echo.call_count == 2
 
 
 def test_cli_parse(runner, echo, app):
