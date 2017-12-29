@@ -7,39 +7,49 @@ from .version import version as app_version
 class Cli:
 
     version_help = 'Prints Storyscript version'
-    debug_help = 'Prints Storyscript version'
+    debug_help = 'Debug mode'
     silent_help = 'Silent mode. Return syntax errors only.'
-    lexer_help = 'Show lexer tokens'
-    parse_help = 'Parse only, dont show json dump'
 
-    @staticmethod
-    @click.command()
+    @click.group(invoke_without_command=True)
     @click.option('--version', is_flag=True, help=version_help)
-    @click.option('--debug', '-v', is_flag=True, help=debug_help)
-    @click.option('--silent', '-s', is_flag=True, help=silent_help)
-    @click.option('--lexer', '-l', is_flag=True, help=lexer_help)
-    @click.option('--parse', '-p', is_flag=True, help=parse_help)
-    @click.argument('storypath', required=False)
-    def main(version, debug, silent, lexer, parse, storypath):
+    @click.pass_context
+    def main(context, version): # noqa N805
+        """
+        Learn more at http://storyscript.org
+        """
         if version:
             message = 'StoryScript {} - http://storyscript.org'
             click.echo(message.format(app_version))
             exit()
 
-        if lexer:
-            result = App.lexer(storypath)
-            message = '{} {}'
-            for x, tok in enumerate(result):
-                click.echo(message.format(x, tok))
-            exit()
+        if context.invoked_subcommand is None:
+            click.echo(context.get_help())
 
-        json = True
-        if silent:
-            json = False
+    @staticmethod
+    @main.command()
+    @click.argument('storypath')
+    def lexer(storypath):
+        """
+        Shows lexer tokens for given stories
+        """
+        result = App.lexer(storypath)
+        message = '{} {}'
+        for x, tok in enumerate(result):
+            click.echo(message.format(x, tok))
 
+    @staticmethod
+    @main.command()
+    @click.argument('storypath')
+    @click.option('--json', '-j', is_flag=True)
+    @click.option('--silent', '-s', is_flag=True, help=silent_help)
+    @click.option('--debug', '-d', is_flag=True, help=debug_help)
+    def parse(storypath, json, silent, debug):
+        """
+        Parses stories and prints the resulting json
+        """
         result = App.parse(storypath, debug=debug, as_json=json)
         if not silent:
-            if parse:
+            if not json:
                 click.echo('Script syntax passed!', fg='green')
                 exit()
             click.echo(result)
