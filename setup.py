@@ -11,7 +11,10 @@ classifiers = [
     'Topic :: Software Development :: Compilers'
 ]
 
-requirements = ['ply==3.4']
+requirements = [
+    'click==6.7',
+    'ply==3.4'
+]
 
 
 setup(name='storyscript',
