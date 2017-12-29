@@ -47,9 +47,12 @@ class Cli:
         """
         Parses stories and prints the resulting json
         """
-        result = App.parse(storypath, debug=debug, as_json=json)
+        results = App.parse(storypath, debug=debug, as_json=json)
         if not silent:
             if not json:
                 click.echo('Script syntax passed!', fg='green')
                 exit()
-            click.echo(result)
+
+            for file, story_json in results.items():
+                click.echo('File: {}'.format(file))
+                click.echo(story_json)

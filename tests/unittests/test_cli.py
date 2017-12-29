@@ -77,9 +77,11 @@ def test_cli_parse_silent(runner, echo, app, option):
 
 
 @mark.parametrize('option', ['--json', '-j'])
-def test_cli_parse_json(runner, echo, app, option):
+def test_cli_parse_json(mocker, runner, echo, app, option):
     """
     Ensures --json outputs json
     """
-    runner.invoke(Cli.parse, ['/path/to/story', option])
-    click.echo.assert_called_with(App.parse())
+    App.parse.return_value = {'story.one': 'json'}
+    result = runner.invoke(Cli.parse, ['/path/to/story', option])
+    click.echo.assert_called_with('json')
+    assert click.echo.call_count == 2
