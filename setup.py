@@ -28,4 +28,6 @@ setup(name='storyscript',
       include_package_data=True,
       zip_safe=True,
       install_requires=requirements,
-      entry_points={'console_scripts': ['storyscript=storyscript:main']})
+      entry_points={
+          'console_scripts': ['storyscript=storyscript.cli:Cli.main']
+      })
