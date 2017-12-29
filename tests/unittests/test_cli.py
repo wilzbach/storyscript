@@ -36,7 +36,7 @@ def test_cli_story(runner, echo, app):
     Ensures passing a path results in a story being parsed and outputted
     """
     runner.invoke(Cli.main, ['/path/to/story'])
-    App.parse.assert_called_with('/path/to/story', debug=False)
+    App.parse.assert_called_with('/path/to/story', debug=False, as_json=True)
     click.echo.assert_called_with(App.parse())
 
 
@@ -46,7 +46,7 @@ def test_cli_story_debug(runner, app, debug):
     Ensures --debug is passed where needed
     """
     runner.invoke(Cli.main, ['/path/to/story', debug])
-    App.parse.assert_called_with('/path/to/story', debug=True)
+    App.parse.assert_called_with('/path/to/story', debug=True, as_json=True)
 
 
 @mark.parametrize('option', ['--silent', '-s'])
@@ -55,6 +55,7 @@ def test_cli_story_silent(runner, echo, app, option):
     Ensures --silent makes everything quiet
     """
     result = runner.invoke(Cli.main, ['/path/to/story', option])
+    App.parse.assert_called_with('/path/to/story', debug=False, as_json=False)
     assert result.output == ''
     assert click.echo.call_count == 0
 

@@ -33,7 +33,11 @@ class Cli:
                 click.echo(message.format(x, tok))
             exit()
 
-        result = App.parse(storypath, debug=debug)
+        json = True
+        if silent:
+            json = False
+
+        result = App.parse(storypath, debug=debug, as_json=json)
         if not silent:
             if parse:
                 click.echo('Script syntax passed!', fg='green')
