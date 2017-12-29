@@ -1,4 +1,5 @@
 import json
+import os
 
 from .lexer import Lexer
 from .parser import Parser
@@ -13,6 +14,20 @@ class App:
         """
         with open(storypath, 'r') as file:
             return file.read()
+
+    @staticmethod
+    def get_stories(storypath):
+        """
+        Gets stories from a path
+        """
+        stories = []
+        if os.path.isdir(storypath):
+            for file in os.listdir(storypath):
+                if file.endswith('.story'):
+                    stories.append(file)
+            return stories
+
+        return [storypath]
 
     @classmethod
     def parse(cls, storypath, debug=False, as_json=False):

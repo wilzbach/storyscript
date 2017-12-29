@@ -47,6 +47,23 @@ def test_app_read_story(story, storypath):
     assert result == story
 
 
+def test_app_get_stories(mocker):
+    """
+    Ensures App.get_stories returns the original path if it's not a directory
+    """
+    mocker.patch.object(os.path, 'isdir', return_value=False)
+    assert App.get_stories('stories') == ['stories']
+
+
+def test_app_get_stories_directory(mocker):
+    """
+    Ensures App.get_stories returns stories in a directory
+    """
+    mocker.patch.object(os.path, 'isdir')
+    mocker.patch.object(os, 'listdir', return_value=['one.story', 'two'])
+    assert App.get_stories('stories') == ['one.story']
+
+
 def test_app_parse(parser, read_story):
     """
     Ensures App.parse runs the parser
