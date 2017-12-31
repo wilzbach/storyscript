@@ -47,10 +47,10 @@ class Program(object):
 
         dct = {}
         self._json_next(dct, self.story)
-        return dict(
-            version=version,
-            script=dct
-        )
+        return {
+            'version': version,
+            'script': dct
+        }
 
 
 class Method(object):
@@ -78,9 +78,16 @@ class Path(object):
 
     def json(self):
         if self.agg:
-            return dict(path=self.path, agg=self.agg)
+            return {
+                '$OBJECT': 'path',
+                'paths': self.paths,
+                'agg': self.agg
+            }
         else:
-            return dict(path=self.path)
+            return {
+                '$OBJECT': 'path',
+                'paths': self.paths
+            }
 
 
 class String(object):
@@ -107,11 +114,19 @@ class String(object):
                     string.append('{}')
                 else:
                     string.append(st)
-            return dict(string=''.join(string).strip(), values=values)
+            return {
+                '$OBJECT': 'string',
+                'string': ''.join(string).strip(),
+                'values': values
+            }
 
         else:
-            return dict(value=' '.join([d.strip()
-                                        for d in self.chunks]).strip())
+            return {
+                '$OBJECT': 'string',
+                'string': ' '.join(
+                    [d.strip() for d in self.chunks]
+                ).strip()
+            }
 
 
 class Expression(object):
@@ -144,8 +159,11 @@ class Expression(object):
             else:
                 evals.append(expression)
 
-        return dict(expression=' '.join([ev for ev in evals if ev != '']),
-                    values=values)
+        return {
+            '$OBJECT': 'expression',
+            'expression': ' '.join([str(ev) for ev in evals if ev != '']),
+            'values': values
+        }
 
 
 class Comparison(object):
@@ -165,8 +183,9 @@ class Comparison(object):
         else:
             _right = self.right
 
-        return dict(
-            method=self.method,
-            left=_left,
-            right=_right
-        )
+        return {
+            '$OBJECT': 'method',
+            'method': self.method,
+            'left': _left,
+            'right': _right
+        }
