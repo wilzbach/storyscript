@@ -1,6 +1,5 @@
 import pytest
 from json import dumps
-from ddt import ddt, data
 
 import storyscript
 from storyscript import exceptions
