@@ -34,6 +34,7 @@ def test_eq(script, expression):
     ]
 
 
+                'regexp': 'apple'
 @pytest.mark.parametrize('script,expression', [
     ('if x and y\n\tpass', '{} and {}'),
     ('if x or y\n\tpass', '{} or {}')

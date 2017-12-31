@@ -47,6 +47,8 @@ def resolve_method(data, left, right, method):
     try:
         if method == 'like':
             return _right.match(_left) is not None
+        elif method == 'notlike':
+            return _right.match(_left) is None
         elif method in ('has', 'contains'):
             return _right in _left
         elif method == 'in':

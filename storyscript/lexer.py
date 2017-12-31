@@ -137,7 +137,10 @@ class Lexer(object):
 
     def t_REGEX(self, t):
         r'\/[^\s]+\/i?'
-        t.value = dict(regexp=re.compile(t.value[1:-1]).pattern)
+        t.value = {
+            '$OBJECT': 'regexp',
+            'regexp': re.compile(t.value[1:-1]).pattern,
+        }
         return t
 
     def t_KWARG(self, t):
