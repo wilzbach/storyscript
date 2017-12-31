@@ -1,3 +1,6 @@
+import re
+
+
 def debug(yes, *this):  # pragma: no cover
     if yes:
         if len(this) > 1:
@@ -65,15 +68,39 @@ class Method(object):
         self.kwargs = kwargs
 
 
+_path_bracket = re.compile(r"""(\[(\'|\")*.+?(\'|\")*\])""")
+_path_clean = re.compile(r'\[|\]|\'|\"')
+
+
+def _path_splitter(path):
+    """
+    a.b['c'] => [a, b, c]
+    """
+    matches = []
+    for match in _path_bracket.findall(path):
+        path = path.replace(match[0], '.@', 1)
+        matches.append(
+            match[0].replace('[', '')
+                    .replace(']', '')
+                    .replace('"', '')
+                    .replace("'", '')
+        )
+
+    return list(map(
+        lambda p: matches.pop() if p == '@' else p,
+        path.split('.')
+    ))
+
+
 class Path(object):
     def __init__(self, parser, lineno, path, agg=None):
         self.parser = parser
         self.lineno = lineno
-        self.path = path
+        self.paths = _path_splitter(path or '')
         self.agg = agg
 
     def add(self, path):
-        self.path = '%s.%s' % (self.path, path)
+        self.paths.append(path)
         return self
 
     def json(self):
