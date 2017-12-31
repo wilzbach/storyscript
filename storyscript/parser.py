@@ -98,13 +98,18 @@ class Parser(object):
             self,
             p.lineno(1),
             suite=p[3],
-            args=(p[2], )
+            args=(p[2], ),
+            enter=p[3][0].lineno
         )]
         if len(p) == 5:
+            p[0][0].exit = p[4][0].lineno
             p[0].extend(p[4])
         elif len(p) == 6:
+            p[0][0].exit = p[5][0].lineno
             p[0].append(ast.Method('else', self, p.lineno(4), suite=p[5]))
         elif len(p) == 7:
+            p[0][0].exit = p[4][0].lineno
+            p[4][-1].exit = p[6][0].lineno
             p[0].extend(p[4])
             p[0].append(ast.Method('else', self, p.lineno(5), suite=p[6]))
 
@@ -117,15 +122,18 @@ class Parser(object):
                 self,
                 p.lineno(1),
                 suite=p[3],
-                args=(p[2], )
+                args=(p[2], ),
+                enter=p[3][0].lineno
             )]
         else:
+            p[1][-1].exit = p.lineno(2)
             p[1].append(ast.Method(
                 'unlessif' if 'unless' in p[2] else 'elif',
                 self,
                 p.lineno(2),
                 suite=p[4],
-                args=(p[3], )
+                args=(p[3], ),
+                enter=p[4][0].lineno
             ))
             p[0] = p[1]
 
@@ -341,8 +349,8 @@ class Parser(object):
     # ------------------
     def p_expression_math(self, p):
         """expression : expression OPERATOR expression
-                      | expression LT       expression
-                      | expression GT       expression
+                      | expression GTLT     expression
+                      | expression GTLTE    expression
                       | expression EQ       expression
                       | expression NE       expression"""
         p[0] = p[1].add(p[2], p[3])

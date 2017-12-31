@@ -20,7 +20,9 @@ class Program(object):
             dct[str(method.lineno)] = dict(
                 method=method.method,
                 output=method.output,
-                linenum=method.lineno,
+                ln=method.lineno,
+                enter=str(method.enter) if method.enter else None,
+                exit=str(method.exit) if method.exit else None,
                 args=self._dump_json(method.args),
                 kwargs=self._dump_json(method.kwargs),
                 parent=parent.lineno if parent else None
@@ -58,7 +60,9 @@ class Program(object):
 
 class Method(object):
     def __init__(self, method, parser, lineno,
-                 suite=None, output=None, args=None, kwargs=None):
+                 suite=None, output=None,
+                 args=None, kwargs=None,
+                 enter=None, _exit=None):
         self.method = method
         self.parser = parser
         self.lineno = str(lineno)
@@ -66,6 +70,8 @@ class Method(object):
         self.suite = suite
         self.args = args
         self.kwargs = kwargs
+        self.enter = enter
+        self.exit = _exit
 
 
 _path_bracket = re.compile(r"""(\[(\'|\")*.+?(\'|\")*\])""")

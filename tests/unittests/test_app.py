@@ -1,11 +1,11 @@
 import json
 import os
 
+from pytest import fixture
+
 from storyscript.app import App
 from storyscript.lexer import Lexer
 from storyscript.parser import Parser
-
-from pytest import fixture
 
 
 @fixture

@@ -89,7 +89,7 @@ class Lexer(object):
         'ELSEIF', 'SET',
 
         # Operations
-        'OPERATOR', 'LT', 'GT', 'EQ', 'NE', 'ISNT',
+        'OPERATOR', 'GTLT', 'GTLTE', 'EQ', 'NE', 'ISNT',
         'LPAREN', 'RPAREN',
 
         # Strings
@@ -158,14 +158,14 @@ class Lexer(object):
         r'(\+|-|\*|\/|\<=|\>=)'
         return t
 
-    def t_GT(self, t):
-        r'(\>|((is\s)?greater\sth(e|a)n))'
-        t.value = '>'
+    def t_GTLTE(self, t):
+        r'(is\s)?(great|\<|\>|less)(er)?(\sth(e|a)n)?\sor\s(equal|={1,2})\sto'
+        t.value = '<=' if 'less' in t.value or '<' in t.value else '>='
         return t
 
-    def t_LT(self, t):
-        r'(\<|((is\s)?less\sth(e|a)n))'
-        t.value = '<'
+    def t_GTLT(self, t):
+        r'(\<|\>|((is\s)?(great|\<|\>|less)(er)?(\sth(e|a)n)?))'
+        t.value = '<' if 'less' in t.value or '<' in t.value else '>'
         return t
 
     def t_ISNT(self, t):
@@ -194,7 +194,7 @@ class Lexer(object):
         return t
 
     def t_ELSEIF(self, t):
-        r'(else\s(if|unless))'
+        r'((else\s(if|unless))|elif|elseif)'
         return t
 
     def t_IF(self, t):
