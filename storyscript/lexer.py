@@ -10,16 +10,13 @@ keywords = [
     'with', 'and',
     'has', 'to', 'as', 'into',
     'is', 'like', 'or',
-    'contains',
+    'contains', 'run',
     'if', 'else', 'elif',
     'try', 'catch',
     'while', 'from',
     'set', 'unset',
     'append', 'remove'
 ]
-
-
-all_letters = re.compile(r'^\w+$')
 
 
 class Lexer(object):
@@ -78,8 +75,8 @@ class Lexer(object):
     tokens = tuple(set((
         'ID',
         'PATH',
-        'KWARG',
         'NI', 'INTO',
+        'CONTAINER',
 
         'DIGITS',
         'BOOLEAN',
@@ -100,7 +97,7 @@ class Lexer(object):
 
         # System
         'NEWLINE', 'WS', 'COMMA', 'INDENT', 'DEDENT', 'EOF',
-    ) + tuple([k.upper() for k in keywords if all_letters.match(k)])))
+    ) + tuple([k.upper() for k in keywords])))
 
     REQUIRES_INDENT = ('IF', 'ELSEIF', 'ELSE', 'SUITE')
 
@@ -130,6 +127,11 @@ class Lexer(object):
         r'|(\[(\'[^\']+\'|"[^"]+"|\d+)\]))+'
     ) + INDEXES
 
+    def t_CONTAINER(self, t):
+        r'([\w\-\.]+/)?[\w\-\.]+/[\w\-\.]+((\:|\@)\w+)?'
+        # [?HOSTNAME]/[PROJECT-ID]/[IMAGE][?:TAG|@DIGEST]
+        return t
+
     def t_BOOLEAN(self, t):
         r'(true|false)(?=\s)'
         t.value = (t.value == 'true')
@@ -141,10 +143,6 @@ class Lexer(object):
             '$OBJECT': 'regexp',
             'regexp': re.compile(t.value[1:-1]).pattern,
         }
-        return t
-
-    def t_KWARG(self, t):
-        r'(--[a-z\_]+)'
         return t
 
     def t_EQ(self, t):

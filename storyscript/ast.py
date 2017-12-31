@@ -20,11 +20,11 @@ class Program(object):
             dct[str(method.lineno)] = dict(
                 method=method.method,
                 output=method.output,
+                container=method.container,
                 ln=method.lineno,
                 enter=str(method.enter) if method.enter else None,
                 exit=str(method.exit) if method.exit else None,
                 args=self._dump_json(method.args),
-                kwargs=self._dump_json(method.kwargs),
                 parent=parent.lineno if parent else None
             )
             if method.suite:
@@ -61,15 +61,16 @@ class Program(object):
 class Method(object):
     def __init__(self, method, parser, lineno,
                  suite=None, output=None,
-                 args=None, kwargs=None,
+                 container=None,
+                 args=None,
                  enter=None, _exit=None):
         self.method = method
         self.parser = parser
         self.lineno = str(lineno)
         self.output = output
+        self.container = container
         self.suite = suite
         self.args = args
-        self.kwargs = kwargs
         self.enter = enter
         self.exit = _exit
 
@@ -99,28 +100,16 @@ def _path_splitter(path):
 
 
 class Path(object):
-    def __init__(self, parser, lineno, path, agg=None):
+    def __init__(self, parser, lineno, path):
         self.parser = parser
         self.lineno = lineno
-        self.paths = _path_splitter(path or '')
-        self.agg = agg
-
-    def add(self, path):
-        self.paths.append(path)
-        return self
+        self.paths = _path_splitter(path)
 
     def json(self):
-        if self.agg:
-            return {
-                '$OBJECT': 'path',
-                'paths': self.paths,
-                'agg': self.agg
-            }
-        else:
-            return {
-                '$OBJECT': 'path',
-                'paths': self.paths
-            }
+        return {
+            '$OBJECT': 'path',
+            'paths': self.paths
+        }
 
 
 class String(object):

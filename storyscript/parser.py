@@ -59,12 +59,8 @@ class Parser(object):
         p[0] = ast.Program(self, p[1])
 
     def p_paths(self, p):
-        """paths :       PATH
-                 | paths PATH"""
-        if len(p) == 2:
-            p[0] = ast.Path(self, p.lineno(1), p[1])
-        else:
-            p[0] = p[1].add(p[2])
+        """paths : PATH"""
+        p[0] = ast.Path(self, p.lineno(1), p[1])
 
     # ----------
     # Statements
@@ -141,56 +137,51 @@ class Parser(object):
     # Exceptions
     # ----------
     def p_try(self, p):
-        """stmt : TRY suite CATCH suite
-                | TRY suite CATCH suite ELSE suite"""
-        p[0] = [ast.Method('try', self, p.lineno(1), suite=p[2]),
-                ast.Method('catch', self, p.lineno(3), suite=p[4])]
-        if len(p) == 7:
-            p[0].append(ast.Method('else', self, p.lineno(5), suite=p[6]))
+        """stmt : TRY suite
+                | TRY suite CATCH suite"""
+        p[0] = [ast.Method(
+            'try', self, p.lineno(1),
+            suite=p[2],
+            enter=p[2][0].lineno
+        )]
+        if len(p) == 5:
+            p[0][0].exit = p[4][0].lineno
+            p[0].append(ast.Method(
+                'catch', self, p.lineno(3),
+                suite=p[4]
+            ))
 
-    # ---------------
-    # Delicious Juice
-    # ---------------
-    def p_optional_stmts(self, p):
-        """optional_stmts : stmts
-                          |"""
-        if len(p) == 2:
-            p[0] = p[1]
-
+    # ----------
+    # Containers
+    # ----------
     def p_output(self, p):
         """output : AS PATH
                   |"""
         if len(p) == 3:
-            p[0] = p[2]
+            p[0] = ast.Path(self, p.lineno(1), p[2]).json()
 
-    def p_juice(self, p):
-        """juice : args output NEWLINE
-                 | args output NEWLINE INDENT kwargs optional_stmts DEDENT
-                 |      output NEWLINE INDENT kwargs optional_stmts DEDENT
-                 |      output NEWLINE"""
-        # [suite, args, kwargs, output]
-        if len(p) == 4:
-            p[0] = [None, p[1], None, p[2]]
-        elif len(p) == 8:
-            p[0] = [p[6], p[1], p[5], p[2]]
-        elif len(p) == 7:
-            p[0] = [p[5], None, p[4], p[1]]
-        else:
-            p[0] = [None, None, None, p[1]]
+    def p_params(self, p):
+        """params : args output NEWLINE"""
+        p[0] = dict(args=p[1], output=p[2])
 
-    # -------
-    # Methods
-    # -------
-    def p_methods(self, p):
-        """stmt : PATH juice"""
+    def p_container(self, p):
+        """stmt : PATH params"""
         p[0] = ast.Method(
-            p[1],
+            'run',
             parser=self,
             lineno=p.lineno(1),
-            suite=p[2][0],
-            output=p[2][3],
-            args=p[2][1],
-            kwargs=p[2][2]
+            container=p[1],
+            **p[2]
+        )
+
+    def p_run(self, p):
+        """stmt : RUN CONTAINER params"""
+        p[0] = ast.Method(
+            'run',
+            parser=self,
+            lineno=p.lineno(1),
+            container=p[2],
+            **p[3]
         )
 
     def p_story(self, p):
@@ -202,31 +193,31 @@ class Parser(object):
     # Set/Push/With
     # -------------
     def p_stmt_set_path(self, p):
-        """stmt : SET PATH TO paths NEWLINE
-                | SET PATH TO expressions NEWLINE"""
+        """stmt : SET paths TO paths NEWLINE
+                | SET paths TO expressions NEWLINE"""
         p[0] = ast.Method('set', self, p.lineno(1), args=(p[2], p[4]))
 
     def p_stmt_set_path_is_eq(self, p):
-        """stmt : PATH TO paths NEWLINE
-                | PATH TO expressions NEWLINE
-                | PATH IS paths NEWLINE
-                | PATH IS expressions NEWLINE
-                | PATH EQ paths NEWLINE
-                | PATH EQ expressions NEWLINE"""
+        """stmt : paths TO paths NEWLINE
+                | paths TO expressions NEWLINE
+                | paths IS paths NEWLINE
+                | paths IS expressions NEWLINE
+                | paths EQ paths NEWLINE
+                | paths EQ expressions NEWLINE"""
         p[0] = ast.Method(
             'set',
             parser=self,
-            lineno=p.lineno(1),
+            lineno=p[1].lineno,
             args=(p[1], p[3])
         )
 
     def p_stmt_unset_path(self, p):
-        """stmt : UNSET PATH NEWLINE"""
+        """stmt : UNSET paths NEWLINE"""
         p[0] = ast.Method(
             'unset',
             parser=self,
             lineno=p.lineno(1),
-            args=(p[2], )
+            args=p[2].paths
         )
 
     def p_stmt_append(self, p):
@@ -262,8 +253,8 @@ class Parser(object):
     # While Loops
     # -----------
     def p_stmt_while(self, p):
-        """stmt : WHILE paths               output suite
-                | WHILE expressions         output suite"""
+        """stmt : WHILE paths output suite
+                | WHILE expressions output suite"""
         p[0] = ast.Method(
             'while',
             parser=self,
@@ -397,31 +388,14 @@ class Parser(object):
     # ---------
     def p_args(self, p):
         """args : variable
+                | args variable
                 | args COMMA variable
                 |"""
         if len(p) == 2:
             p[0] = [p[1]]
-        else:
+        elif len(p) == 3:
+            p[1].append(p[2])
+            p[0] = p[1]
+        elif len(p) == 4:
             p[1].append(p[3])
             p[0] = p[1]
-
-    def p_kwarg(self, p):
-        """kwarg : KWARG NEWLINE
-                 | KWARG variable NEWLINE
-                 | KWARG paths NEWLINE"""
-        if len(p) == 3:
-            p[0] = {p[1][2:]: True}
-        else:
-            p[0] = {p[1][2:]: p[2]}
-
-    def p_kwargs(self, p):
-        """kwargs : kwarg
-                  | kwargs kwarg
-                  |"""
-        if len(p) == 2:
-            p[0] = p[1]
-        elif len(p) == 3:
-            k = p[1]['kwarg']
-            p[0] = dict(
-                kwarg=([k] if type(k) is not list else k) + [p[2]['kwarg']]
-            )

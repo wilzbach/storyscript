@@ -36,6 +36,8 @@ def resolve_obj(data, obj):
         return resolve_expression(data, **obj)
     elif 'method' in obj:
         return resolve_method(data, **obj)
+    else:
+        raise Exception('Unknown object')
 
 
 def resolve_method(data, left, right, method):
@@ -59,6 +61,8 @@ def resolve_method(data, left, right, method):
             return _right != _left
         elif method == 'is':
             return _right == _left
+        else:
+            raise Exception('Method not supported')
 
     except Exception as err:
         raise err
