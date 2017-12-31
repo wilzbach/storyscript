@@ -38,6 +38,7 @@ def test_resolve_obj_regexp():
 
 @pytest.mark.parametrize('method,left,right,data,result', [
     ('like', {'value': 'abc'}, {'regexp': '^abc'}, None, True),
+    ('notlike', {'value': 'abc'}, {'regexp': '^abc'}, None, False),
     ('has', {'path': 'a'}, {'value': 'b'}, {'a': {'b': 1}}, True),
     ('contains', {'path': 'a'}, {'value': 'b'}, {'a': {'b': 1}}, True),
     ('contains', {'path': 'a'}, {'value': 'c'}, {'a': {}}, False),
