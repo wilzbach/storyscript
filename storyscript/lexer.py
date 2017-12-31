@@ -219,14 +219,18 @@ class Lexer(object):
 
     @lex.TOKEN(DIGITS)
     def t_DIGITS(self, t):
+        if t.value.find(','):
+            if t.value.find('.') > t.value.find(','):
+                # european style
+                t.value = t.value.replace('.', '').replace(',', '.')
+            else:
+                t.value = t.value.replace(',', '')
         if t.value.endswith('%'):
             t.value = float(t.value[:-1]) / 100
-        elif t.value.find('$') > -1:
-            float(t.value[1:])  # just to test it
-            t.value = t.value[1:]
+        elif '.' in t.value:
+            t.value = float(t.value)
         else:
-            float(t.value)  # just to test it
-            t.value = t.value
+            t.value = int(t.value)
         return t
 
     def t_error(self, t):  # pragma: no cover
