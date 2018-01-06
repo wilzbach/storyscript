@@ -96,9 +96,10 @@ def test_app_lexer(mocker, read_story):
     """
     mocker.patch.object(Lexer, '__init__', return_value=None)
     mocker.patch.object(Lexer, 'input')
+    ts = mocker.patch.object(Lexer, 'token_stream', create=True)
     mocker.patch.object(App, 'get_stories', return_value=['one.story'])
     result = App.lexer('path')
     App.get_stories.assert_called_with('path')
     App.read_story.assert_called_with('one.story')
     Lexer.input.assert_called_with(App.read_story())
-    assert result == {'one.story': Lexer().input()}
+    assert result['one.story'] == ts

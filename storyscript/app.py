@@ -54,8 +54,9 @@ class App:
         Runs only the lexer
         """
         results = {}
-        lexer = Lexer()
         stories = cls.get_stories(storypath)
         for story in stories:
-            results[story] = lexer.input(cls.read_story(story))
+            lexer = Lexer()
+            lexer.input(cls.read_story(story))
+            results[story] = lexer.token_stream
         return results
