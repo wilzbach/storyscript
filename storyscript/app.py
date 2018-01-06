@@ -22,9 +22,10 @@ class App:
         """
         stories = []
         if os.path.isdir(storypath):
-            for file in os.listdir(storypath):
-                if file.endswith('.story'):
-                    stories.append(file)
+            for root, subdirs, files in os.walk(storypath):
+                for file in files:
+                    if file.endswith('.story'):
+                        stories.append(os.path.join(root, file))
             return stories
 
         return [storypath]

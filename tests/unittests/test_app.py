@@ -60,8 +60,9 @@ def test_app_get_stories_directory(mocker):
     Ensures App.get_stories returns stories in a directory
     """
     mocker.patch.object(os.path, 'isdir')
-    mocker.patch.object(os, 'listdir', return_value=['one.story', 'two'])
-    assert App.get_stories('stories') == ['one.story']
+    mocker.patch.object(os, 'walk',
+                        return_value=[('root', [], ['one.story', 'two'])])
+    assert App.get_stories('stories') == ['root/one.story']
 
 
 def test_app_parse(mocker, parser, read_story):
