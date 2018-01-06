@@ -26,18 +26,30 @@ def resolve_obj(data, obj):
     """
     Resolves a Story Object to it's real value
     """
-    if 'path' in obj:
-        return resolve_path(data, obj['path'])
-    elif 'value' in obj:
-        return obj['value']
-    elif 'regexp' in obj:
-        return re.compile(obj['regexp'])
-    elif 'expression' in obj:
-        return resolve_expression(data, **obj)
-    elif 'method' in obj:
-        return resolve_method(data, **obj)
-    else:
-        raise Exception('Unknown object')
+    if type(obj) is dict:
+        typ = obj.get('$OBJECT')
+        if typ == 'path':
+            return resolve_path(data, obj['path'])
+        elif typ == 'value':
+            return obj['value']
+        elif typ == 'regexp':
+            return re.compile(obj['regexp'])
+        elif typ == 'expression':
+            return resolve_expression(
+                data,
+                obj['expression'],
+                obj['values']
+            )
+        elif typ == 'method':
+            return resolve_method(
+                data,
+                obj['left'],
+                obj['right'],
+                obj['method']
+            )
+        else:
+            return resolve_dict(data, obj)
+    return obj
 
 
 def resolve_method(data, left, right, method):
