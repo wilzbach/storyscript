@@ -2,7 +2,7 @@ from json import dumps
 
 import pytest
 
-import storyscript
+from tests.parse import parse
 
 
 @pytest.mark.parametrize('script,args', [
@@ -11,7 +11,7 @@ import storyscript
     ('if false', [False]),
 ])
 def test_bool(script, args):
-    story = storyscript.parse(script + '\n\tpass').json()
+    story = parse(script + '\n\tpass').json()
     print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == args
 
@@ -23,7 +23,7 @@ def test_bool(script, args):
     ('if 1 equals 2', '1 == 2'),
 ])
 def test_eq(script, expression):
-    story = storyscript.parse(script + '\n\tpass').json()
+    story = parse(script + '\n\tpass').json()
     print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == [
         {
@@ -40,7 +40,7 @@ def test_eq(script, expression):
     ('if abc isnt like /apple/', 'notlike'),
 ])
 def test_regexp(script, method):
-    story = storyscript.parse(script + '\n\tpass').json()
+    story = parse(script + '\n\tpass').json()
     print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == [
         {
@@ -63,7 +63,7 @@ def test_regexp(script, method):
     ('if x or y', '{} or {}')
 ])
 def test_and_or(script, expression):
-    story = storyscript.parse(script + '\n\tpass').json()
+    story = parse(script + '\n\tpass').json()
     print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == [
         {
@@ -82,7 +82,7 @@ def test_and_or(script, expression):
     ('if x or (y and z)', '{} or ( {} and {} )')
 ])
 def test_group(script, expression):
-    story = storyscript.parse(script + '\n\tpass').json()
+    story = parse(script + '\n\tpass').json()
     print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == [
         {
@@ -112,7 +112,7 @@ def test_group(script, expression):
 
 ])
 def test_gtlt(script, expression):
-    story = storyscript.parse(script + '\n\tpass').json()
+    story = parse(script + '\n\tpass').json()
     print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == [
         {

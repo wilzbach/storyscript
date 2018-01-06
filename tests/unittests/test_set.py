@@ -2,8 +2,9 @@ from json import dumps
 
 import pytest
 
-import storyscript
 from storyscript import exceptions
+
+from tests.parse import parse
 
 
 @pytest.mark.parametrize('script,args', [
@@ -43,7 +44,7 @@ from storyscript import exceptions
       {'$OBJECT': 'path', 'paths': ['y']}]),
 ])
 def test_set(script, args):
-    story = storyscript.parse(script).json()
+    story = parse(script).json()
     print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == args
 
@@ -61,4 +62,4 @@ def test_set(script, args):
 ])
 def test_errors(script, exception):
     with pytest.raises(exception):
-        print(storyscript.parse(script).json())
+        print(parse(script).json())

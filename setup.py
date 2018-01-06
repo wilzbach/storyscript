@@ -1,4 +1,6 @@
 from setuptools import setup
+from setuptools.command.install import install
+
 
 classifiers = [
     'Development Status :: 4 - Beta',
@@ -20,6 +22,14 @@ requirements = [
 ]
 
 
+class CustomInstallCommand(install):
+    def run(self):
+        print('building lexer and parser')
+        from storyscript import parser
+        parser.Parser(optimize=True)
+        install.run(self)
+
+
 setup(name='storyscript',
       version='0.0.2',
       description='',
@@ -35,6 +45,9 @@ setup(name='storyscript',
       include_package_data=True,
       zip_safe=True,
       install_requires=requirements,
+      cmdclass={
+          'install': CustomInstallCommand,
+      },
       entry_points={
           'console_scripts': ['storyscript=storyscript.cli:Cli.main']
       })

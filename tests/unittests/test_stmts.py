@@ -2,7 +2,7 @@ from json import dumps
 
 import pytest
 
-import storyscript
+from tests.parse import parse
 
 
 def test_multi_stmt():
@@ -10,7 +10,7 @@ def test_multi_stmt():
     apples
     oranges
     """
-    story = storyscript.parse(
+    story = parse(
         test_multi_stmt.__doc__.strip().replace('\n    ', '\n')
     ).json()
     print(dumps(story['script'], indent=2))
@@ -29,7 +29,7 @@ def test_multi_stmt():
 
 ])
 def test_methods(script, method, args):
-    story = storyscript.parse(script).json()
+    story = parse(script).json()
     print(dumps(story['script'], indent=2))
     assert story['script']['1']['method'] == method
     assert story['script']['1']['args'] == args

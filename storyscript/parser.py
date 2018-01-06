@@ -7,25 +7,18 @@ from . import ast
 from .exceptions import ScriptError
 from .lexer import Lexer
 
-try:
-    from . import lextab, yacctab
-except ImportError:  # pragma: no cover
-    lextab, yacctab = 'lextab', 'yacctab'
-
 
 class Parser(object):
-    def __init__(self, lex_optimize=False, lextab=lextab,
-                 yacc_optimize=False, yacctab=yacctab, yacc_debug=False):
-        self.lexer = Lexer()
-        self.lexer.build(optimize=lex_optimize, lextab=lextab)
+    def __init__(self, optimize=True, debug=False):
+        self.lexer = Lexer(optimize)
         self.tokens = self.lexer.tokens
+
         self.parser = yacc.yacc(
             module=self,
-            tabmodule=yacctab,
             start='program',
             outputdir=os.path.dirname(__file__),
-            optimize=yacc_optimize,
-            debug=yacc_debug
+            optimize=optimize,
+            debug=debug
         )
 
     def parse(self, source, debug=False, using_cli=False):

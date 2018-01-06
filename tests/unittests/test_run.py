@@ -2,14 +2,14 @@ from json import dumps
 
 import pytest
 
-import storyscript
+from tests.parse import parse
 
 
 def test_containers():
     """
     run owner/repo arg1 arg2
     """
-    story = storyscript.parse(
+    story = parse(
         test_containers.__doc__.strip().replace('\n    ', '\n')
     ).json()
     print(dumps(story['script'], indent=2))
@@ -25,7 +25,7 @@ def test_containers_output():
     """
     run owner/repo arg1 arg2 as arg3
     """
-    story = storyscript.parse(
+    story = parse(
         test_containers_output.__doc__.strip().replace('\n    ', '\n')
     ).json()
     print(dumps(story['script'], indent=2))
@@ -45,7 +45,7 @@ def test_container_comma():
     """
     run owner/repo:stable arg1, arg2
     """
-    story = storyscript.parse(
+    story = parse(
         test_container_comma.__doc__.strip().replace('\n    ', '\n')
     ).json()
     print(dumps(story['script'], indent=2))
@@ -61,7 +61,7 @@ def test_containers_long():
     """
     run domain.com/owner/repo:latest
     """
-    story = storyscript.parse(
+    story = parse(
         test_containers_long.__doc__.strip().replace('\n    ', '\n')
     ).json()
     print(dumps(story['script'], indent=2))

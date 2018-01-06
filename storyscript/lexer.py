@@ -20,8 +20,8 @@ keywords = [
 
 
 class Lexer(object):
-    def __init__(self):
-        self.build()
+    def __init__(self, optimize=True):
+        self.build(optimize=optimize)
 
     def build(self, **kwargs):
         self.lexer = lex.lex(object=self,

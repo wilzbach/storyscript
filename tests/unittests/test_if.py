@@ -2,7 +2,7 @@ from json import dumps
 
 import pytest
 
-import storyscript
+from tests.parse import parse
 
 
 def test_if_else():
@@ -12,7 +12,7 @@ def test_if_else():
     else
       pass
     """
-    story = storyscript.parse(
+    story = parse(
         test_if_else.__doc__.strip().replace('\n    ', '\n')
     ).json()
     print(dumps(story['script'], indent=2))
@@ -29,7 +29,7 @@ def test_if_elif():
     else if y
       pass
     """
-    story = storyscript.parse(
+    story = parse(
         test_if_elif.__doc__.strip().replace('\n    ', '\n')
     ).json()
     print(dumps(story['script'], indent=2))
@@ -51,7 +51,7 @@ def test_if_elif_elif():
     elif z
       pass
     """
-    story = storyscript.parse(
+    story = parse(
         test_if_elif_elif.__doc__.strip().replace('\n    ', '\n')
     ).json()
     print(dumps(story['script'], indent=2))
@@ -79,7 +79,7 @@ def test_if_elif_elif_else():
     else
       pass
     """
-    story = storyscript.parse(
+    story = parse(
         test_if_elif_elif_else.__doc__.strip().replace('\n    ', '\n')
     ).json()
     print(dumps(story['script'], indent=2))

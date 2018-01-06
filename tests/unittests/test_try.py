@@ -2,7 +2,7 @@ from json import dumps
 
 import pytest
 
-import storyscript
+from tests.parse import parse
 
 
 def test_try():
@@ -10,7 +10,7 @@ def test_try():
     try
       pass
     """
-    story = storyscript.parse(
+    story = parse(
         test_try.__doc__.strip().replace('\n    ', '\n')
     ).json()
     print(dumps(story['script'], indent=2))
@@ -26,7 +26,7 @@ def test_try_catch():
     catch
       pass
     """
-    story = storyscript.parse(
+    story = parse(
         test_try_catch.__doc__.strip().replace('\n    ', '\n')
     ).json()
     print(dumps(story['script'], indent=2))
