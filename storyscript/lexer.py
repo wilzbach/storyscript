@@ -19,14 +19,12 @@ keywords = [
 ]
 
 
-class Lexer(object):
+class Lexer:
     def __init__(self, optimize=True):
         self.build(optimize=optimize)
 
     def build(self, **kwargs):
-        self.lexer = lex.lex(object=self,
-                             outputdir=os.path.dirname(__file__),
-                             **kwargs)
+        self.lexer = lex.lex(object=self, outputdir=os.getcwd(), **kwargs)
         self.lexer.filename = None
         self.token_stream = None
 
