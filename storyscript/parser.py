@@ -8,7 +8,7 @@ from .exceptions import ScriptError
 from .lexer import Lexer
 
 
-class Parser(object):
+class Parser:
     def __init__(self, optimize=True, debug=False):
         self.lexer = Lexer(optimize)
         self.tokens = self.lexer.tokens
@@ -16,7 +16,7 @@ class Parser(object):
         self.parser = yacc.yacc(
             module=self,
             start='program',
-            outputdir=os.path.dirname(__file__),
+            outputdir=os.getcwd(),
             optimize=optimize,
             debug=debug
         )
