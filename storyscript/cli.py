@@ -52,7 +52,7 @@ class Cli:
         results = App.parse(storypath, debug=debug, as_json=json)
         if not silent:
             if not json:
-                click.echo('Script syntax passed!', fg='green')
+                click.echo(click.style('Script syntax passed!', fg='green'))
                 exit()
 
             for file, story_json in results.items():
