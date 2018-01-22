@@ -48,13 +48,15 @@ def test_cli_lexer(mocker, runner, app, echo):
     assert click.echo.call_count == 2
 
 
-def test_cli_parse(runner, echo, app):
+def test_cli_parse(mocker, runner, echo, app):
     """
     Ensures the parse command parses a story
     """
+    mocker.patch.object(click, 'style')
     runner.invoke(Cli.parse, ['/path/to/story'])
     App.parse.assert_called_with('/path/to/story', debug=False, as_json=False)
-    click.echo.assert_called_with('Script syntax passed!', fg='green')
+    click.style.assert_called_with('Script syntax passed!', fg='green')
+    click.echo.assert_called_with(click.style())
 
 
 @mark.parametrize('debug', ['--debug', '-d'])
