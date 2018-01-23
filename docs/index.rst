@@ -90,4 +90,5 @@ to discuss plans and ideas.
    :hidden:
 
    getting-started
+   stories
    syntax
