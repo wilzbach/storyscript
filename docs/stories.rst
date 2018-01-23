@@ -15,3 +15,14 @@ In most cases you will choose a command specific to the action you want to make
 and provide the action. For example, to tweet::
 
     twitter "access-key" "I have been created with StoryScript!"
+
+Commands
+########
+Commands currently available:
+
+* alpine (generic command)
+
+Planned commands:
+
+* Python (runs a Python file)
+* Node (runs a JavaScript file)
