@@ -1,3 +1,4 @@
+import os
 from setuptools import setup
 from setuptools.command.install import install
 
@@ -20,6 +21,14 @@ requirements = [
     'click==6.7',
     'ply==3.4'
 ]
+
+extras = [
+    'sphinx',
+    'guzzle-sphinx-theme'
+]
+
+if os.getenv('READTHEDOCS'):
+    requirements += extras
 
 
 class CustomInstallCommand(install):
@@ -46,10 +55,7 @@ setup(name='storyscript',
       zip_safe=True,
       install_requires=requirements,
       extras_require={
-        'dev': [
-            'sphinx',
-            'guzzle-sphinx-theme'
-        ],
+        'dev': extras
       },
       cmdclass={
           'install': CustomInstallCommand,
