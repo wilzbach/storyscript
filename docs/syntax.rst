@@ -76,6 +76,15 @@ Comparison
       paint
 
 
+Commands
+########
+Commands are written at the beginning of the line, followed by the action::
+
+    command action
+
+Some commands may have complex actions::
+
+    command action "extra" "requirements"
 
 Comments
 #########
