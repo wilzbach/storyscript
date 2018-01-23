@@ -89,4 +89,5 @@ to discuss plans and ideas.
    :maxdepth: 2
    :hidden:
 
+   getting-started
    syntax
