@@ -1,4 +1,3 @@
-import os
 from setuptools import setup
 from setuptools.command.install import install
 
@@ -27,9 +26,6 @@ extras = [
     'guzzle-sphinx-theme'
 ]
 
-if os.getenv('READTHEDOCS'):
-    requirements += extras
-
 
 class CustomInstallCommand(install):
     def run(self):
@@ -55,7 +51,7 @@ setup(name='storyscript',
       zip_safe=True,
       install_requires=requirements,
       extras_require={
-        'dev': extras
+        'docs': extras
       },
       cmdclass={
           'install': CustomInstallCommand,
