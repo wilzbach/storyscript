@@ -92,3 +92,4 @@ to discuss plans and ideas.
    getting-started
    stories
    syntax
+   advanced
