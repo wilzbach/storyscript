@@ -45,6 +45,12 @@ setup(name='storyscript',
       include_package_data=True,
       zip_safe=True,
       install_requires=requirements,
+      extras_require={
+        'dev': [
+            'sphinx',
+            'guzzle-sphinx-theme'
+        ],
+      },
       cmdclass={
           'install': CustomInstallCommand,
       },
