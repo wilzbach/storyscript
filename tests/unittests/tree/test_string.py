@@ -17,6 +17,11 @@ def test_string_add(string):
     assert string.chunks[-1] == 'bit'
 
 
+def test_string_complex(path, string):
+    string.chunks = [path]
+    assert string.complex()
+
+
 def test_string_json(string):
     string.chunks = [' one', ' two ']
     result = string.json()

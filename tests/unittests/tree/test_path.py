@@ -1,12 +1,3 @@
-from pytest import fixture
-
-from storyscript.tree import Path
-
-
-@fixture
-def path():
-    return Path('parser', 'line_number', 'path')
-
 
 def test_path_init(path):
     assert path.parser == 'parser'

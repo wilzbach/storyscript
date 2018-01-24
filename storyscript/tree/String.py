@@ -1,3 +1,6 @@
+from .Path import Path
+
+
 class String:
 
     def __init__(self, data):
@@ -5,6 +8,11 @@ class String:
 
     def add(self, bit):
         self.chunks.append(bit)
+
+    def complex(self):
+        for bit in self.chunks:
+            if isinstance(bit, Path):
+                return True
 
     def json(self):
         stripped_chunk = [bit.strip() for bit in self.chunks]
