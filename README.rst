@@ -4,7 +4,9 @@
 
 StoryScript
 ###########
-StoryScript is a language for orchestrating microservices in an algorithmic program.
+StoryScript is an high-level language that can be used to orchestrate
+microservices in an algorithmic way.
+
 
 What does that mean? That you can do things like this::
 
@@ -19,6 +21,10 @@ Or this::
       data = db get query
       html = erb '/assets/template.erb' data
       request.write html
+
+These stories are compiled into event trees and run by a platform that
+implements StoryScript execution. `Asyncy <https://github.com/Asyncy>`_ is the
+default platform for executing stories.
 
 Getting started
 ----------------
