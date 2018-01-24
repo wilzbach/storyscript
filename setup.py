@@ -51,7 +51,7 @@ setup(name='storyscript',
       zip_safe=True,
       install_requires=requirements,
       extras_require={
-        'docs': extras
+          'docs': extras
       },
       cmdclass={
           'install': CustomInstallCommand,
