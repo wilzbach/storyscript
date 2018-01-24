@@ -55,6 +55,7 @@ transparent and scalable way.
 
 **Asyncy** is the official platform for running Storyscript. Both projects are
 open source, so they can be used without fears of technological locks.
+The Asyncy platform can be ran in your local environment for debugging and testing.
 
 Where's the catch?
 -------------------

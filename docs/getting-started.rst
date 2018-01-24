@@ -36,3 +36,8 @@ And parse it::
 
     storyscript parse simple.story
     >>> Script syntax passed!
+
+And to view the event tree::
+
+    storyscript parse simple.story --json
+    >>> {...}

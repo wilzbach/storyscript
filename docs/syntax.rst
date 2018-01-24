@@ -1,6 +1,6 @@
 Syntax
 =======
-Storyscript supports strings, numbers, variables, arrays and flow control.
+Storyscript supports strings, numbers, variables, arrays, objects and flow control.
 
 
 Numbers
@@ -46,6 +46,18 @@ Arrays are defined with comma-separated values::
 
     colors are "red", "green", "blue"
 
+Objects
+#######
+`Under development`. Objects are defined through JSON::
+
+    children = {"John": 15, "Eric": 12}
+
+CoffeeScript-like whitespace is also supported::
+
+    children =
+      "John": 15
+      "Eric": 12
+
 
 Flow control
 #############
@@ -75,6 +87,8 @@ Comparison
     if color is "red" or color is "blue"
       paint
 
+Parentheses and simple algebra are supported.
+
 
 Commands
 ########
@@ -84,7 +98,7 @@ Commands are written at the beginning of the line, followed by the action::
 
 Some commands may have complex actions::
 
-    command action "extra" "requirements"
+    command action "arg1" "arg2"
 
 Comments
 #########
