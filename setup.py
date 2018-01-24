@@ -21,6 +21,11 @@ requirements = [
     'ply==3.4'
 ]
 
+extras = [
+    'sphinx',
+    'guzzle-sphinx-theme'
+]
+
 
 class CustomInstallCommand(install):
     def run(self):
@@ -45,6 +50,9 @@ setup(name='storyscript',
       include_package_data=True,
       zip_safe=True,
       install_requires=requirements,
+      extras_require={
+          'docs': extras
+      },
       cmdclass={
           'install': CustomInstallCommand,
       },
