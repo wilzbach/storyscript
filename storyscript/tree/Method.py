@@ -12,8 +12,24 @@ class Method:
         self.enter = enter
         self.exit = exit
 
-    def args_json(self):
-        pass
+    def args_json(self, args):
+        if type(args) in (bool, int, float):
+            return args
+        elif hasattr(args, 'json'):
+            return args.json()
+        elif type(args) is dict:
+            items = {}
+            for key, value in args.items():
+                items[key] = self.args_json(value)
+            return items
+        elif type(args) is list:
+            items = []
+            for value in args:
+                if hasattr(value, 'json'):
+                    items.append(value.json())
+                else:
+                    items.append(value)
+            return items
 
     def json(self):
         return {'method': self.method,

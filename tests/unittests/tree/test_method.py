@@ -1,10 +1,14 @@
-from pytest import mark
+from pytest import fixture, mark
 
 from storyscript.tree import Method
 
 
-def test_method_init():
-    method = Method('method', 'parser', 1)
+@fixture
+def method():
+    return Method('method', 'parser', 1)
+
+
+def test_method_init(method):
     assert method.method == 'method'
     assert method.parser == 'parser'
     assert method.lineno == '1'
@@ -25,9 +29,38 @@ def test_method_init_kwargs(keyword_argument):
     assert getattr(method, keyword_argument) == 'value'
 
 
-def test_method_json(mocker):
+@mark.parametrize('arg', [3, 3.4, True, False, None])
+def test_method_args_json(arg, method):
+    assert method.args_json(arg) == arg
+
+
+def test_method_args_json_json(mocker, method):
+    args = mocker.MagicMock(json=mocker.MagicMock())
+    result = method.args_json(args)
+    assert result == args.json()
+
+
+def test_method_args_json_dict(method):
+    args = {'one': 1, 'two': 2}
+    assert method.args_json(args) == args
+
+
+def test_method_args_json_dict_objects(mocker, method):
+    item = mocker.MagicMock(json=mocker.MagicMock())
+    assert method.args_json({'item': item}) == {'item': item.json()}
+
+
+def test_method_args_json_list(method):
+    assert method.args_json(['one', 'two']) == ['one', 'two']
+
+
+def test_method_args_json_list_objects(mocker, method):
+    item = mocker.MagicMock(json=mocker.MagicMock())
+    assert method.args_json([item]) == [item.json()]
+
+
+def test_method_json(mocker, method):
     mocker.patch.object(Method, 'args_json')
-    method = Method('method', 'parser', 1)
     assert method.json() == {
         'method': method.method,
         'ln': method.lineno,
