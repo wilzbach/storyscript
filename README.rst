@@ -1,6 +1,6 @@
 .. image:: https://s3.amazonaws.com/asnycy/storyscript.png
 
-|Travis| |Codecov| |Pypi| |Bettercode|
+|Travis| |Codecov| |Pypi| |Bettercode| |Readthedocs|
 
 StoryScript
 ###########
@@ -40,7 +40,7 @@ Parse a story::
 Documentation
 -------------
 
-You can find the complete documentation `here <http://storyscript.readthedocs.io/en>`_
+You can find the complete documentation `here <http://storyscript.readthedocs.io/en/latest/>`_
 
 Current status
 --------------
@@ -82,4 +82,7 @@ For other issues, `submit a support ticket <mailto:help@storyscripts.org>`_
    :target: https://bettercodehub.com/results/asyncy/storyscript
 
 .. |Pypi| image:: https://img.shields.io/pypi/v/storyscript.svg
-   :target: https://pypi.python.org/pypi/storyscript
+   :target: https://pypi.python.org/pypi/storyscriptd
+
+.. |Readthedocs| image:: https://readthedocs.org/projects/storyscript/badge/?version=latest
+  :target: https://storyscript.readthedocs.io/en/latest/
