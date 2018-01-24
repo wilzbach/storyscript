@@ -15,6 +15,20 @@ class String:
                 return True
 
     def json(self):
+        result = {'$OBJECT': 'string'}
+        if self.complex():
+            string = []
+            values = []
+            for bit in self.chunks:
+                if isinstance(bit, Path):
+                    values.append(bit.json())
+                    string.append('{}')
+                else:
+                    string.append(bit)
+            result['values'] = values
+            result['string'] = ''.join(string).strip()
+            return result
         stripped_chunk = [bit.strip() for bit in self.chunks]
         joined_string = ' '.join(stripped_chunk)
-        return {'$OBJECT': 'string', 'string': joined_string}
+        result['string'] = joined_string
+        return result
