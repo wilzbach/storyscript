@@ -3,7 +3,7 @@ Getting Started
 
 Installing
 ----------
-StoryScript is a Python package. The suggested installation is in a virtual
+Storyscript is a Python package. The suggested installation is in a virtual
 environment::
 
     virtualenv --python=python3 path/to/my/stories

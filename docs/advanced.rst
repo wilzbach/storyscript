@@ -3,7 +3,7 @@ Advanced Concepts
 
 Under the hood
 ##############
-Under the hood, StoryScript is just a way to declare when and how a container
+Under the hood, Storyscript is just a way to declare when and how a container
 should be executed. Commands are infact docker containers, and actions are
 passed as arguments to the container.
 
@@ -21,7 +21,7 @@ Then in your story::
 
 Standard implementation
 #######################
-The standard StoryScript implementation is executed with the Asyncy platform,
+The standard Storyscript implementation is executed with the Asyncy platform,
 and this documentation refers to that.
 
 Currently, this is also the only implementation, however is possible to make

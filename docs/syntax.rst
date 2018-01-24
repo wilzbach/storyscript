@@ -1,6 +1,6 @@
 Syntax
 =======
-StoryScript supports strings, numbers, variables, arrays and flow control.
+Storyscript supports strings, numbers, variables, arrays and flow control.
 
 
 Numbers
