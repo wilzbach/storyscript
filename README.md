@@ -1,47 +1,51 @@
-# StoryScript
-
 ![StoryScript logo](https://s3.amazonaws.com/asnycy/storyscript.png)
-
-> A language for orchestrating microservices in an algorithmic program.
 
 [![Travis CI](https://secure.travis-ci.org/asyncy/storyscript.svg?branch=master)](http://travis-ci.org/asyncy/storyscript) [![Codecov](https://codecov.io/gh/asyncy/storyscript/branch/master/graphs/badge.svg)](https://codecov.io/github/asyncy/storyscript) [![Pypi](https://img.shields.io/pypi/v/storyscript.svg)](https://pypi.python.org/pypi?%3Aaction=pkg_edit&name=storyscript) [![BCH compliance](https://bettercodehub.com/edge/badge/asyncy/storyscript?branch=master)](https://bettercodehub.com/results/asyncy/storyscript)
 
-## The story behind StoryScript.
+# StoryScript
 
-The **inspiration** behind StoryScript began with feedback from business owners who were looking for high-level marketing automation. After receiving many creative stories there was a common thread that became abundantly clear: **logic operations** (`if/then`, `for each`, and `while`) and **microservices** (email, SMS, and social media posts).
+StoryScript is a language for orchestrating microservices in an algorithmic program.
 
-> How can you write an executable algorithm that a nontechnical person can understand?
+What does that mean? That you can do things like this:
 
-Stories began taking shape into systematic algorithms with a defined structure. StoryScript emerged as **a language to programmatically orchestrate a series of events**.
+```python
+invoices = database get "invoices" "month={{today.month}}"
+if today is first of month
+  send invoices
+```
 
-> Why a new language and not NodeJS (or another language?
+Or this:
 
-The architecture behind OOP programming languages focus on executing functions not high-level event orchestration. Stories have asynchronous operations that traditional languages are not equipped to execute.
+```python
+stream http server as request
+  query = parse-request request
+  data = db get query
+  html = erb '/assets/template.erb' data
+  request.write html
+```
 
-> How to execute a StoryScript?
+## Getting started
 
-Programs written in StoryScript are compiled into event logic trees which computers can follow in the defined logical progression. This concept increases readability, transparency, scalability while reducing technical debt, debugging time, and dev-ops system management. [Asyncy](https://asyncy.com) ~was built~ is being built as the platform to executing StoryScripts.
+Install with pip:
 
+```
+pip install storyscript
+```
 
-> Why a language and not a UI?
+Parse a story:
+```
+storyscript parse path/to/my_first_story.story
+```
 
-Code is portable, sharable, version controlled, non-vendor specific, transparent and predictable.
+## Documentation
 
-## Writing a story in StoryScript.
+You can find the complete documentation [here](http://storyscript.readthedocs.io/en)
 
-Read our [syntax documentation here](https://github.com/asyncy/storyscript/blob/master/DOCS.md).
+## Current status
 
+StoryScript is at an early development stage and  is part of a larger project, [Asyncy](https://github.com/Asyncy). 
 
-# Issues
-
-For problems directly related to the CLI, [add an issue on GitHub](https://github.com/asyncy/storyscript/issues/new).
-
-For other issues, [submit a support ticket](mailto:help@storyscripts.org)
-
-[Contributors](https://github.com/asyncy/storyscript/contributors)
-
-
-# Contribute
+## Contributing
 
 There are a variety of ways you can contribute to StoryScript.
 
@@ -50,31 +54,10 @@ There are a variety of ways you can contribute to StoryScript.
   - [`help wanted`](https://github.com/asyncy/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) are issues that we are looking for feedback on.
 1. Join our [Slack community](https://join.slack.com/t/asyncy/shared_invite/enQtMjgxODI2NzEyMjc5LWJiZDg1YzFkYzVhZmVlYTk2MGRmYjcxNzYwMmU4NWYwYTZkZDhlMzkwNTIxOGQ1ZjVjZGJhZDgxNzhmMjZkODA) to discuss plans and ideas.
 
-### Goals
-
-The goals of this package are:
-
-1. Compile StoryScripts into a `json` formatted event logical tree.
-1. Lint and syntax check StoryScript files.
-
-
-### Installation
-
-```
-pip install storyscript
-```
-
-
-### Usage
-
-```
-storyscript -f path/to/my_first_story.story
-```
-
-### Testing
-
-```sh
-tox
-```
-
 Please follow our [contribution guidelines](https://github.com/asyncy/storyscript/blob/master/CONTRIBUTING.md).
+
+[Contributors](https://github.com/asyncy/storyscript/contributors) list
+
+## Issues
+
+For problems directly related to the CLI, [add an issue on GitHub](https://github.com/asyncy/storyscript/issues/new). For other issues, [submit a support ticket](mailto:help@storyscripts.org)
