@@ -11,3 +11,16 @@ class Method:
         self.args = args
         self.enter = enter
         self.exit = exit
+
+    def args_json(self):
+        pass
+
+    def json(self):
+        return {'method': self.method,
+                'ln': self.lineno,
+                'output': self.output,
+                'container': self.container,
+                'args': self.args_json(),
+                'enter': self.enter,
+                'exit': self.exit
+                }
