@@ -8,9 +8,12 @@ class Expression:
 
     def json(self, evals=None, values=None):
         if evals is None:
-            if hasattr(self.expressions[0][1], 'json'):
-                return self.expressions[0][1].json()
-            return self.expressions[0][1]
+            if len(self.expressions) == 1:
+                if hasattr(self.expressions[0][1], 'json'):
+                    return self.expressions[0][1].json()
+                return self.expressions[0][1]
+            evals = []
+            values = []
 
         for mixin, expression in self.expressions:
             if mixin != '':

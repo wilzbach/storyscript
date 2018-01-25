@@ -43,6 +43,11 @@ def test_expression_json_no_evals(expression):
     assert expression.json() == 'one'
 
 
+def test_expression_json_no_evals_expressions(item, expression):
+    expression.expressions = [('1', item), ('2', 'two')]
+    expression.json()
+
+
 def test_expression_json_no_evals_json(item, expression):
     expression.expressions = [('', item)]
     result = expression.json()
