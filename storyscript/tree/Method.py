@@ -36,7 +36,7 @@ class Method:
                 'ln': self.lineno,
                 'output': self.output,
                 'container': self.container,
-                'args': self.args_json(),
+                'args': self.args_json(self.args),
                 'enter': self.enter,
                 'exit': self.exit
                 }

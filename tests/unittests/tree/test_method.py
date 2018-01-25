@@ -56,7 +56,9 @@ def test_method_args_json_list_objects(mocker, method):
 
 def test_method_json(mocker, method):
     mocker.patch.object(Method, 'args_json')
-    assert method.json() == {
+    result = method.json()
+    method.args_json.assert_called_with(method.args)
+    assert result == {
         'method': method.method,
         'ln': method.lineno,
         'output': method.output,
