@@ -22,7 +22,6 @@ def test_expression_add(expression):
     assert expression.expressions[-1] == ('method', 'expression')
 
 
-
 def test_expression_json(expression):
     expression.expressions.append(('', 'two'))
     result = expression.json(evals=[], values=[])
