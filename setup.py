@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 from setuptools.command.install import install
 
 
@@ -41,7 +41,7 @@ setup(name='storyscript',
       author_email='noreply@storyscript.org',
       url='http://storyscript.org',
       license='MIT',
-      packages=['storyscript'],
+      packages=find_packages(),
       include_package_data=True,
       zip_safe=True,
       install_requires=requirements,
