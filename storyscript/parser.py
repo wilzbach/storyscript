@@ -158,23 +158,14 @@ class Parser:
         p[0] = dict(args=p[1], output=p[2])
 
     def p_container(self, p):
-        """stmt : PATH params"""
+        """stmt : PATH params
+                | CONTAINER params"""
         p[0] = ast.Method(
             'run',
             parser=self,
             lineno=p.lineno(1),
             container=p[1],
             **p[2]
-        )
-
-    def p_run(self, p):
-        """stmt : RUN CONTAINER params"""
-        p[0] = ast.Method(
-            'run',
-            parser=self,
-            lineno=p.lineno(1),
-            container=p[2],
-            **p[3]
         )
 
     def p_story(self, p):

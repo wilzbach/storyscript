@@ -7,7 +7,7 @@ from tests.parse import parse
 
 def test_containers():
     """
-    run owner/repo arg1 arg2
+    owner/repo arg1 arg2
     """
     story = parse(
         test_containers.__doc__.strip().replace('\n    ', '\n')
@@ -23,7 +23,7 @@ def test_containers():
 
 def test_containers_output():
     """
-    run owner/repo arg1 arg2 as arg3
+    owner/repo arg1 arg2 as arg3
     """
     story = parse(
         test_containers_output.__doc__.strip().replace('\n    ', '\n')
@@ -43,7 +43,7 @@ def test_containers_output():
 
 def test_container_comma():
     """
-    run owner/repo:stable arg1, arg2
+    owner/repo:stable arg1, arg2
     """
     story = parse(
         test_container_comma.__doc__.strip().replace('\n    ', '\n')
@@ -59,7 +59,7 @@ def test_container_comma():
 
 def test_containers_long():
     """
-    run domain.com/owner/repo:latest
+    domain.com/owner/repo:latest
     """
     story = parse(
         test_containers_long.__doc__.strip().replace('\n    ', '\n')
