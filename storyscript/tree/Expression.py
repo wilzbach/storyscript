@@ -1,15 +1,15 @@
 class Expression:
 
     def __init__(self, expression):
-        self.expression = [('', expression)]
+        self.expressions = [('', expression)]
 
     def json(self, evals=None, values=None):
         if evals is None:
-            if hasattr(self.expression[0][1], 'json'):
-                return self.expression[0][1].json()
-            return self.expression[0][1]
+            if hasattr(self.expressions[0][1], 'json'):
+                return self.expressions[0][1].json()
+            return self.expressions[0][1]
 
-        for mixin, expression in self.expression:
+        for mixin, expression in self.expressions:
             if mixin != '':
                 evals.append(mixin)
 
