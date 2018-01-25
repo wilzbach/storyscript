@@ -12,6 +12,12 @@ class Method:
         self.enter = enter
         self.exit = exit
 
+        if self.enter:
+            self.enter = str(self.enter)
+
+        if self.exit:
+            self.exit = str(self.exit)
+
     def args_json(self, args):
         if type(args) in (bool, int, float, type(None)):
             return args

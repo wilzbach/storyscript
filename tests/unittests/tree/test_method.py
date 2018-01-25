@@ -16,12 +16,19 @@ def test_method_init(method):
 
 
 @mark.parametrize('keyword_argument',
-                  ['suite', 'output', 'container', 'args', 'enter', 'exit']
+                  ['suite', 'output', 'container', 'args']
                   )
 def test_method_init_kwargs(keyword_argument):
     kwargs = {keyword_argument: 'value'}
     method = Method('method', 'parser', 1, **kwargs)
     assert getattr(method, keyword_argument) == 'value'
+
+
+@mark.parametrize('keyword_argument', ['enter', 'exit'])
+def test_method_init_kwargs_stringified(keyword_argument):
+    kwargs = {keyword_argument: 1}
+    method = Method('method', 'parser', 1, **kwargs)
+    assert getattr(method, keyword_argument) == '1'
 
 
 @mark.parametrize('arg', [3, 3.4, True, False, None])
