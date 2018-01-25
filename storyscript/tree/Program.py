@@ -11,7 +11,6 @@ class Program:
 
     def parse_item(self, dictionary, item, parent=None):
         if isinstance(item, Method):
-            print('parse item', item, parent)
             dictionary[item.lineno] = item.json()
             if parent:
                 dictionary[item.lineno]['parent'] = parent.lineno
@@ -22,7 +21,6 @@ class Program:
 
         else:
             for child in item:
-                print('parse item children')
                 self.parse_item(dictionary, child, parent=parent)
 
     def json(self):
