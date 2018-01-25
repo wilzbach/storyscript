@@ -39,6 +39,12 @@ def test_expression_json_mixins(expression):
     assert result['expression'] == 'one mixin two'
 
 
+def test_expression_json_mixins_numbers(expression):
+    expression.expressions.append(('mixin', 2))
+    result = expression.json(evals=[], values=[])
+    assert result['expression'] == 'one mixin 2'
+
+
 def test_expression_json_no_evals(expression):
     assert expression.json() == 'one'
 

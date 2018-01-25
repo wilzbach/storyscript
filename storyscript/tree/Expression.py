@@ -27,7 +27,7 @@ class Expression:
                 values.append(expression.json())
                 evals.append('{}')
             else:
-                evals.append(expression)
+                evals.append(str(expression))
 
         return {
             '$OBJECT': 'expression',
