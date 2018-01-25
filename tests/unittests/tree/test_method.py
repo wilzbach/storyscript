@@ -1,11 +1,6 @@
-from pytest import fixture, mark
+from pytest import mark
 
 from storyscript.tree import Method
-
-
-@fixture
-def method():
-    return Method('method', 'parser', 1)
 
 
 def test_method_init(method):
