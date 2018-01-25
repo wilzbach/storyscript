@@ -251,22 +251,10 @@ class Parser:
     # -----------
     # Expressions
     # -----------
-    def p_expression_path(self, p):
-        """expression : paths"""
-        p[0] = ast.Expression(p[1])
-
-    def p_expression_num(self, p):
-        """expression : DIGITS"""
-        p[0] = ast.Expression(p[1])
-
-    def p_expression_var(self, p):
-        """expression : variable"""
-        p[0] = ast.Expression(p[1])
-
     def p_expressions(self, p):
-        """expressions : expression
-                       | expressions AND expression
-                       | expressions OR  expression"""
+        """expressions : variable
+                       | expressions AND variable
+                       | expressions OR  variable"""
         if len(p) == 4:
             p[0] = p[1].add(p[2], p[3])
         else:
@@ -276,19 +264,19 @@ class Parser:
     # Expressions > Method
     # --------------------
     def p_expression_has(self, p):
-        """expression : paths HAS paths"""
+        """variable : paths HAS paths"""
         p[0] = ast.Expression(ast.Comparison(p[1], 'has', p[3]))
 
     def p_expression_is_isnt(self, p):
-        """expression : ISNT expression"""
+        """variable : ISNT variable"""
         p[0] = ast.Expression(ast.Comparison(p[2], p[1], True))
 
     def p_expression_not_in(self, p):
-        """expression : paths ISNT NI paths"""
+        """variable : paths ISNT NI paths"""
         p[0] = ast.Expression(ast.Comparison(p[1], 'excludes', p[4]))
 
     def p_expression_contains(self, p):
-        """expression : variable CONTAINS variable
+        """variable : variable CONTAINS variable
                       | variable    NI    variable"""
         if p[2] == 'contains':
             p[0] = ast.Expression(ast.Comparison(p[1], 'contains', p[3]))
@@ -296,12 +284,12 @@ class Parser:
             p[0] = ast.Expression(ast.Comparison(p[1], 'in', p[3]))
 
     def p_expression_like(self, p):
-        """expression : paths      LIKE expression
-                      | paths IS   LIKE expression
-                      | paths ISNT LIKE expression
-                      | paths      LIKE REGEX
-                      | paths IS   LIKE REGEX
-                      | paths ISNT LIKE REGEX"""
+        """variable : paths      LIKE variable
+                    | paths IS   LIKE variable
+                    | paths ISNT LIKE variable
+                    | paths      LIKE REGEX
+                    | paths IS   LIKE REGEX
+                    | paths ISNT LIKE REGEX"""
         if len(p) == 5:
             if p[2] == 'isnot':
                 p[0] = ast.Expression(ast.Comparison(p[1], 'notlike', p[4]))
@@ -311,7 +299,7 @@ class Parser:
             p[0] = ast.Expression(ast.Comparison(p[1], 'like', p[3]))
 
     def p_expression_is(self, p):
-        """expression : paths IS   variable
+        """variable : paths IS   variable
                       | paths ISNT variable"""
         p[0] = ast.Expression(ast.Comparison(
             p[1],
@@ -323,15 +311,15 @@ class Parser:
     # Expressions > Math
     # ------------------
     def p_expression_math(self, p):
-        """expression : expression OPERATOR expression
-                      | expression GTLT     expression
-                      | expression GTLTE    expression
-                      | expression EQ       expression
-                      | expression NE       expression"""
+        """variable : variable OPERATOR variable
+                    | variable GTLT     variable
+                    | variable GTLTE    variable
+                    | variable EQ       variable
+                    | variable NE       variable"""
         p[0] = p[1].add(p[2], p[3])
 
     def p_expression_group(self, p):
-        """expression : LPAREN expressions RPAREN"""
+        """variable : LPAREN expressions RPAREN"""
         p[2].expressions.insert(0, ('', '('))
         p[2].expressions.append(('', ')'))
         p[0] = p[2]
@@ -365,7 +353,7 @@ class Parser:
                     | string
                     | BOOLEAN
                     | DIGITS"""
-        p[0] = p[1]
+        p[0] = ast.Expression(p[1])
 
     # ---------
     # Arguments
