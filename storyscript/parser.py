@@ -3,9 +3,9 @@ import sys
 
 from ply import yacc
 
-from . import ast
 from .exceptions import ScriptError
 from .lexer import Lexer
+from .tree import Comparison, Expression, Method, Path, Program, String
 
 
 class Parser:
@@ -49,11 +49,11 @@ class Parser:
     def p_program(self, p):
         """program : story
                    | WS ID ELIF"""
-        p[0] = ast.Program(self, p[1])
+        p[0] = Program(self, p[1])
 
     def p_paths(self, p):
         """paths : PATH"""
-        p[0] = ast.Path(self, p.lineno(1), p[1])
+        p[0] = Path(self, p.lineno(1), p[1])
 
     # ----------
     # Statements
@@ -82,7 +82,7 @@ class Parser:
                 | IF expressions suite else_if
                 | IF expressions suite else_if ELSE suite
                 | IF expressions suite         ELSE suite"""
-        p[0] = [ast.Method(
+        p[0] = [Method(
             p[1].lower(),
             self,
             p.lineno(1),
@@ -95,18 +95,18 @@ class Parser:
             p[0].extend(p[4])
         elif len(p) == 6:
             p[0][0].exit = p[5][0].lineno
-            p[0].append(ast.Method('else', self, p.lineno(4), suite=p[5]))
+            p[0].append(Method('else', self, p.lineno(4), suite=p[5]))
         elif len(p) == 7:
             p[0][0].exit = p[4][0].lineno
             p[4][-1].exit = p[6][0].lineno
             p[0].extend(p[4])
-            p[0].append(ast.Method('else', self, p.lineno(5), suite=p[6]))
+            p[0].append(Method('else', self, p.lineno(5), suite=p[6]))
 
     def p_elseif(self, p):
         """else_if :         ELSEIF expressions suite
                    | else_if ELSEIF expressions suite"""
         if len(p) == 4:
-            p[0] = [ast.Method(
+            p[0] = [Method(
                 'unlessif' if 'unless' in p[1] else 'elif',
                 self,
                 p.lineno(1),
@@ -116,7 +116,7 @@ class Parser:
             )]
         else:
             p[1][-1].exit = p.lineno(2)
-            p[1].append(ast.Method(
+            p[1].append(Method(
                 'unlessif' if 'unless' in p[2] else 'elif',
                 self,
                 p.lineno(2),
@@ -132,14 +132,14 @@ class Parser:
     def p_try(self, p):
         """stmt : TRY suite
                 | TRY suite CATCH suite"""
-        p[0] = [ast.Method(
+        p[0] = [Method(
             'try', self, p.lineno(1),
             suite=p[2],
             enter=p[2][0].lineno
         )]
         if len(p) == 5:
             p[0][0].exit = p[4][0].lineno
-            p[0].append(ast.Method(
+            p[0].append(Method(
                 'catch', self, p.lineno(3),
                 suite=p[4]
             ))
@@ -151,7 +151,7 @@ class Parser:
         """output : AS PATH
                   |"""
         if len(p) == 3:
-            p[0] = ast.Path(self, p.lineno(1), p[2]).json()
+            p[0] = Path(self, p.lineno(1), p[2]).json()
 
     def p_params(self, p):
         """params : args output NEWLINE"""
@@ -159,20 +159,20 @@ class Parser:
 
     def p_container(self, p):
         """stmt : PATH params"""
-        p[0] = ast.Method(
+        p[0] = Method(
             'run',
-            parser=self,
-            lineno=p.lineno(1),
+            self,
+            p.lineno(1),
             container=p[1],
             **p[2]
         )
 
     def p_run(self, p):
         """stmt : RUN CONTAINER params"""
-        p[0] = ast.Method(
+        p[0] = Method(
             'run',
-            parser=self,
-            lineno=p.lineno(1),
+            self,
+            p.lineno(1),
             container=p[2],
             **p[3]
         )
@@ -188,7 +188,7 @@ class Parser:
     def p_stmt_set_path(self, p):
         """stmt : SET paths TO paths NEWLINE
                 | SET paths TO expressions NEWLINE"""
-        p[0] = ast.Method('set', self, p.lineno(1), args=(p[2], p[4]))
+        p[0] = Method('set', self, p.lineno(1), args=(p[2], p[4]))
 
     def p_stmt_set_path_is_eq(self, p):
         """stmt : paths TO paths NEWLINE
@@ -197,47 +197,47 @@ class Parser:
                 | paths IS expressions NEWLINE
                 | paths EQ paths NEWLINE
                 | paths EQ expressions NEWLINE"""
-        p[0] = ast.Method(
+        p[0] = Method(
             'set',
-            parser=self,
-            lineno=p[1].lineno,
+            self,
+            p[1].lineno,
             args=(p[1], p[3])
         )
 
     def p_stmt_unset_path(self, p):
         """stmt : UNSET paths NEWLINE"""
-        p[0] = ast.Method(
+        p[0] = Method(
             'unset',
-            parser=self,
-            lineno=p.lineno(1),
+            self,
+            p.lineno(1),
             args=p[2].paths
         )
 
     def p_stmt_append(self, p):
         """stmt : APPEND variable TO paths NEWLINE
                 | APPEND variable INTO paths NEWLINE"""
-        p[0] = ast.Method(
+        p[0] = Method(
             'append',
-            parser=self,
-            lineno=p.lineno(1),
+            self,
+            p.lineno(1),
             args=(p[2], p[4])
         )
 
     def p_stmt_remove(self, p):
         """stmt : REMOVE variable FROM paths NEWLINE"""
-        p[0] = ast.Method(
+        p[0] = Method(
             'remove',
-            parser=self,
-            lineno=p.lineno(1),
+            self,
+            p.lineno(1),
             args=(p[2], p[4])
         )
 
     def p_stmt_with(self, p):
         """stmt : WITH paths suite"""
-        p[0] = ast.Method(
+        p[0] = Method(
             'with',
-            parser=self,
-            lineno=p.lineno(1),
+            self,
+            p.lineno(1),
             suite=p[3],
             args=(p[2], )
         )
@@ -248,10 +248,10 @@ class Parser:
     def p_stmt_while(self, p):
         """stmt : WHILE paths output suite
                 | WHILE expressions output suite"""
-        p[0] = ast.Method(
+        p[0] = Method(
             'while',
-            parser=self,
-            lineno=p.lineno(1),
+            self,
+            p.lineno(1),
             output=p[3],
             suite=p[4],
             args=(p[2], )
@@ -262,22 +262,23 @@ class Parser:
     # -----------
     def p_expression_path(self, p):
         """expression : paths"""
-        p[0] = ast.Expression(p[1])
+        p[0] = Expression(p[1])
 
     def p_expression_num(self, p):
         """expression : DIGITS"""
-        p[0] = ast.Expression(p[1])
+        p[0] = Expression(p[1])
 
     def p_expression_var(self, p):
         """expression : variable"""
-        p[0] = ast.Expression(p[1])
+        p[0] = Expression(p[1])
 
     def p_expressions(self, p):
         """expressions : expression
                        | expressions AND expression
                        | expressions OR  expression"""
         if len(p) == 4:
-            p[0] = p[1].add(p[2], p[3])
+            p[1].add(p[2], p[3])
+            p[0] = p[1]
         else:
             p[0] = p[1]
 
@@ -286,23 +287,23 @@ class Parser:
     # --------------------
     def p_expression_has(self, p):
         """expression : paths HAS paths"""
-        p[0] = ast.Expression(ast.Comparison(p[1], 'has', p[3]))
+        p[0] = Expression(Comparison(p[1], 'has', p[3]))
 
     def p_expression_is_isnt(self, p):
         """expression : ISNT expression"""
-        p[0] = ast.Expression(ast.Comparison(p[2], p[1], True))
+        p[0] = Expression(Comparison(p[2], p[1], True))
 
     def p_expression_not_in(self, p):
         """expression : paths ISNT NI paths"""
-        p[0] = ast.Expression(ast.Comparison(p[1], 'excludes', p[4]))
+        p[0] = Expression(Comparison(p[1], 'excludes', p[4]))
 
     def p_expression_contains(self, p):
         """expression : variable CONTAINS variable
                       | variable    NI    variable"""
         if p[2] == 'contains':
-            p[0] = ast.Expression(ast.Comparison(p[1], 'contains', p[3]))
+            p[0] = Expression(Comparison(p[1], 'contains', p[3]))
         else:
-            p[0] = ast.Expression(ast.Comparison(p[1], 'in', p[3]))
+            p[0] = Expression(Comparison(p[1], 'in', p[3]))
 
     def p_expression_like(self, p):
         """expression : paths      LIKE expression
@@ -313,16 +314,16 @@ class Parser:
                       | paths ISNT LIKE REGEX"""
         if len(p) == 5:
             if p[2] == 'isnot':
-                p[0] = ast.Expression(ast.Comparison(p[1], 'notlike', p[4]))
+                p[0] = Expression(Comparison(p[1], 'notlike', p[4]))
             else:
-                p[0] = ast.Expression(ast.Comparison(p[1], 'like', p[4]))
+                p[0] = Expression(Comparison(p[1], 'like', p[4]))
         else:
-            p[0] = ast.Expression(ast.Comparison(p[1], 'like', p[3]))
+            p[0] = Expression(Comparison(p[1], 'like', p[3]))
 
     def p_expression_is(self, p):
         """expression : paths IS   variable
                       | paths ISNT variable"""
-        p[0] = ast.Expression(ast.Comparison(
+        p[0] = Expression(Comparison(
             p[1],
             'is' if p[2] == 'is' else 'isnt',
             p[3]
@@ -337,7 +338,8 @@ class Parser:
                       | expression GTLTE    expression
                       | expression EQ       expression
                       | expression NE       expression"""
-        p[0] = p[1].add(p[2], p[3])
+        p[1].add(p[2], p[3])
+        p[0] = p[1]
 
     def p_expression_group(self, p):
         """expression : LPAREN expressions RPAREN"""
@@ -357,7 +359,7 @@ class Parser:
         """string_inner :              string_content
                         | string_inner string_content"""
         if len(p) == 2:
-            p[0] = ast.String(data=p[1])
+            p[0] = String(data=p[1])
         else:
             p[0] = p[1].add(p[2])
 
