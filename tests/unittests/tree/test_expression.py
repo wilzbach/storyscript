@@ -5,11 +5,16 @@ from storyscript.tree import Expression
 
 @fixture
 def expression():
-    return Expression('expression')
+    return Expression('one')
+
+
+@fixture
+def item(mocker):
+    return mocker.MagicMock(json=mocker.MagicMock())
 
 
 def test_expression_init(expression):
-    assert expression.expressions == [('', 'expression')]
+    assert expression.expressions == [('', 'one')]
 
 
 def test_expression_json(expression):
@@ -17,7 +22,7 @@ def test_expression_json(expression):
     result = expression.json(evals=[], values=[])
     assert result == {
         '$OBJECT': 'expression',
-        'expression': 'expression two',
+        'expression': 'one two',
         'values': []
     }
 
@@ -25,16 +30,14 @@ def test_expression_json(expression):
 def test_expression_json_mixins(expression):
     expression.expressions.append(('mixin', 'two'))
     result = expression.json(evals=[], values=[])
-    assert result['expression'] == 'expression mixin two'
+    assert result['expression'] == 'one mixin two'
 
 
 def test_expression_json_no_evals(expression):
-    result = expression.json()
-    assert result == 'expression'
+    assert expression.json() == 'one'
 
 
-def test_expression_json_no_evals_json(mocker, expression):
-    item = mocker.MagicMock(json=mocker.MagicMock())
+def test_expression_json_no_evals_json(item, expression):
     expression.expressions = [('', item)]
     result = expression.json()
     assert result == item.json()
@@ -46,8 +49,7 @@ def test_expression_json_expressions(expression):
     assert result['expression'] == 'one two'
 
 
-def test_expression_json_json(mocker, expression):
-    item = mocker.MagicMock(json=mocker.MagicMock())
+def test_expression_json_json(item, expression):
     expression.expressions = [('', item)]
     result = expression.json(evals=[], values=[])
     assert result['expression'] == '{}'
