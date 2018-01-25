@@ -49,6 +49,44 @@ def test_set(script, args):
     assert story['script']['1']['args'] == args
 
 
+@pytest.mark.parametrize('script,args', [
+    ('x = foo if bar',
+     {'$OBJECT': 'condition',
+      'if': ({'$OBJECT': 'path', 'paths': ['bar']}, True),
+      'then': {'$OBJECT': 'path', 'paths': ['foo']},
+      'else': None}),
+    ('x = foo unless bar',
+     {'$OBJECT': 'condition',
+      'if': ({'$OBJECT': 'path', 'paths': ['bar']}, False),
+      'then': {'$OBJECT': 'path', 'paths': ['foo']},
+      'else': None}),
+    ('x = if foo then bar',
+     {'$OBJECT': 'condition',
+      'if': ({'$OBJECT': 'path', 'paths': ['foo']}, True),
+      'then': {'$OBJECT': 'path', 'paths': ['bar']},
+      'else': None}),
+    ('x = if foo then bar else idk',
+     {'$OBJECT': 'condition',
+      'if': ({'$OBJECT': 'path', 'paths': ['foo']}, True),
+      'then': {'$OBJECT': 'path', 'paths': ['bar']},
+      'else': {'$OBJECT': 'path', 'paths': ['idk']}}),
+    ('x = unless foo then bar else idk',
+     {'$OBJECT': 'condition',
+      'if': ({'$OBJECT': 'path', 'paths': ['foo']}, False),
+      'then': {'$OBJECT': 'path', 'paths': ['bar']},
+      'else': {'$OBJECT': 'path', 'paths': ['idk']}}),
+    ('x = unless foo then bar',
+     {'$OBJECT': 'condition',
+      'if': ({'$OBJECT': 'path', 'paths': ['foo']}, False),
+      'then': {'$OBJECT': 'path', 'paths': ['bar']},
+      'else': None}),
+])
+def test_set_condition(script, args):
+    story = parse(script).json()
+    print(dumps(story['script'], indent=2))
+    assert story['script']['1']['args'][1] == args
+
+
 @pytest.mark.parametrize('script,exception', [
     ("set x to 'a {{b '", SyntaxError),
     ("set x to 'a", SyntaxError),

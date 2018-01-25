@@ -10,7 +10,7 @@ keywords = [
     'with', 'and',
     'has', 'to', 'as', 'into',
     'is', 'like', 'or',
-    'contains',
+    'contains', 'then',
     'if', 'else', 'elif',
     'try', 'catch',
     'while', 'from',

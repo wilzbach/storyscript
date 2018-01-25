@@ -176,23 +176,95 @@ class Parser:
     # -------------
     # Set/Push/With
     # -------------
-    def p_stmt_set_path(self, p):
-        """stmt : SET paths TO paths NEWLINE
-                | SET paths TO expressions NEWLINE"""
-        p[0] = ast.Method('set', self, p.lineno(1), args=(p[2], p[4]))
+    def p_set_eq(self, p):
+        """SEQ : paths TO
+               | paths IS
+               | paths EQ
+               | SET paths TO
+               | SET paths IS
+               | SET paths EQ"""
+        p[0] = p[1] if len(p) == 3 else p[2]
 
-    def p_stmt_set_path_is_eq(self, p):
-        """stmt : paths TO paths NEWLINE
-                | paths TO expressions NEWLINE
-                | paths IS paths NEWLINE
-                | paths IS expressions NEWLINE
-                | paths EQ paths NEWLINE
-                | paths EQ expressions NEWLINE"""
+    def p_stmt_set_path(self, p):
+        """stmt : SEQ expressions NEWLINE"""
         p[0] = ast.Method(
             'set',
             parser=self,
             lineno=p[1].lineno,
-            args=(p[1], p[3])
+            args=(p[1], p[2])
+        )
+
+    def p_stmt_set_path_if(self, p):
+        """stmt : SEQ expressions IF expressions NEWLINE"""
+        p[0] = ast.Method(
+            'set',
+            parser=self,
+            lineno=p[1].lineno,
+            args=(
+                p[1],
+                ast.Condition(
+                    p[3].lower() == 'if',
+                    p[4],
+                    p[2],
+                    None
+                )
+            )
+        )
+
+    def p_stmt_set_path_if_else(self, p):
+        """stmt : SEQ expressions \
+                  IF expressions \
+                  ELSE expressions NEWLINE"""
+        p[0] = ast.Method(
+            'set',
+            parser=self,
+            lineno=p[1].lineno,
+            args=(
+                p[1],
+                ast.Condition(
+                    p[3].lower() == 'if',
+                    p[4],
+                    p[2],
+                    p[6]
+                )
+            )
+        )
+
+    def p_stmt_set_path_if_then(self, p):
+        """stmt : SEQ IF expressions \
+                  THEN expressions NEWLINE"""
+        p[0] = ast.Method(
+            'set',
+            parser=self,
+            lineno=p[1].lineno,
+            args=(
+                p[1],
+                ast.Condition(
+                    p[2].lower() == 'if',
+                    p[3],
+                    p[5],
+                    None
+                )
+            )
+        )
+
+    def p_stmt_set_path_if_then_else(self, p):
+        """stmt : SEQ IF expressions \
+                  THEN expressions \
+                  ELSE expressions NEWLINE"""
+        p[0] = ast.Method(
+            'set',
+            parser=self,
+            lineno=p[1].lineno,
+            args=(
+                p[1],
+                ast.Condition(
+                    p[2].lower() == 'if',
+                    p[3],
+                    p[5],
+                    p[7]
+                )
+            )
         )
 
     def p_stmt_unset_path(self, p):

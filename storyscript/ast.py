@@ -151,6 +151,19 @@ class String(object):
             }
 
 
+class Condition(object):
+    def __init__(self, *args):
+        self.args = args
+
+    def json(self):
+        return {
+            '$OBJECT': 'condition',
+            'if': (self.args[1].json(), self.args[0]),
+            'then': self.args[2].json(),
+            'else': self.args[3].json() if self.args[3] else None
+        }
+
+
 class Expression(object):
     def __init__(self, expression):
         self.expressions = [('', expression)]
