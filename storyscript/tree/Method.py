@@ -38,14 +38,15 @@ class Method:
         return items
 
     def json(self):
-        dictionary = {'method': self.method,
-                'ln': self.lineno,
-                'output': self.output,
-                'container': self.container,
-                'args': self.args_json(self.args),
-                'enter': self.enter,
-                'exit': self.exit
-                }
+        dictionary = {
+            'method': self.method,
+            'ln': self.lineno,
+            'output': self.output,
+            'container': self.container,
+            'args': self.args_json(self.args),
+            'enter': self.enter,
+            'exit': self.exit
+        }
         if self.exit:
             dictionary['exit'] = str(self.exit)
         return dictionary
