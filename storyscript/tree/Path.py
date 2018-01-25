@@ -5,7 +5,7 @@ class Path:
     def __init__(self, parser, line_number, path):
         self.parser = parser
         self.lineno = line_number
-        self.paths = path
+        self.paths = self.split(path)
 
     def split(self, path):
         """
