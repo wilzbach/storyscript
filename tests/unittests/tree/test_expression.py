@@ -17,6 +17,12 @@ def test_expression_init(expression):
     assert expression.expressions == [('', 'one')]
 
 
+def test_expression_add(expression):
+    expression.add('method', 'expression')
+    assert expression.expressions[-1] == ('method', 'expression')
+
+
+
 def test_expression_json(expression):
     expression.expressions.append(('', 'two'))
     result = expression.json(evals=[], values=[])

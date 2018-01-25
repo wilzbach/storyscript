@@ -3,6 +3,9 @@ class Expression:
     def __init__(self, expression):
         self.expressions = [('', expression)]
 
+    def add(self, method, expression):
+        self.expressions.append((method, expression))
+
     def json(self, evals=None, values=None):
         if evals is None:
             if hasattr(self.expressions[0][1], 'json'):
