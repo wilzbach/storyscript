@@ -38,7 +38,7 @@ class Method:
         return items
 
     def json(self):
-        return {'method': self.method,
+        dictionary = {'method': self.method,
                 'ln': self.lineno,
                 'output': self.output,
                 'container': self.container,
@@ -46,3 +46,6 @@ class Method:
                 'enter': self.enter,
                 'exit': self.exit
                 }
+        if self.exit:
+            dictionary['exit'] = str(self.exit)
+        return dictionary

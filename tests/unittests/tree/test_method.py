@@ -75,3 +75,10 @@ def test_method_json(mocker, method):
         'enter': method.enter,
         'exit': method.exit
     }
+
+
+def test_method_json_exit(mocker, method):
+    mocker.patch.object(Method, 'args_json')
+    method.exit = 5
+    result = method.json()
+    assert result['exit'] == '5'
