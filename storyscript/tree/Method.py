@@ -13,7 +13,7 @@ class Method:
         self.exit = exit
 
     def args_json(self, args):
-        if type(args) in (bool, int, float):
+        if type(args) in (bool, int, float, type(None)):
             return args
         elif hasattr(args, 'json'):
             return args.json()
@@ -22,14 +22,14 @@ class Method:
             for key, value in args.items():
                 items[key] = self.args_json(value)
             return items
-        elif type(args) is list:
-            items = []
-            for value in args:
-                if hasattr(value, 'json'):
-                    items.append(value.json())
-                else:
-                    items.append(value)
-            return items
+
+        items = []
+        for value in args:
+            if hasattr(value, 'json'):
+                items.append(value.json())
+            else:
+                items.append(value)
+        return items
 
     def json(self):
         return {'method': self.method,

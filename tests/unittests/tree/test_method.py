@@ -45,8 +45,9 @@ def test_method_args_json_dict_objects(mocker, method):
     assert method.args_json({'item': item}) == {'item': item.json()}
 
 
-def test_method_args_json_list(method):
-    assert method.args_json(['one', 'two']) == ['one', 'two']
+@mark.parametrize('arg', [['one'], ('one',)])
+def test_method_args_json_others(method, arg):
+    assert method.args_json(arg) == ['one']
 
 
 def test_method_args_json_list_objects(mocker, method):
