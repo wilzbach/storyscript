@@ -1,5 +1,3 @@
-from json import dumps
-
 import pytest
 
 from tests.parse import parse
@@ -15,7 +13,6 @@ def test_if_else():
     story = parse(
         test_if_else.__doc__.strip().replace('\n    ', '\n')
     ).json()
-    print(dumps(story['script'], indent=2))
     assert story['script']['1']['method'] == 'if'
     assert story['script']['1']['enter'] == '2'
     assert story['script']['1']['exit'] == '4'
@@ -32,7 +29,6 @@ def test_if_elif():
     story = parse(
         test_if_elif.__doc__.strip().replace('\n    ', '\n')
     ).json()
-    print(dumps(story['script'], indent=2))
     assert story['script']['1']['method'] == 'if'
     assert story['script']['1']['enter'] == '2'
     assert story['script']['1']['exit'] == '3'
@@ -54,7 +50,6 @@ def test_if_elif_elif():
     story = parse(
         test_if_elif_elif.__doc__.strip().replace('\n    ', '\n')
     ).json()
-    print(dumps(story['script'], indent=2))
     assert story['script']['1']['method'] == 'if'
     assert story['script']['1']['enter'] == '2'
     assert story['script']['1']['exit'] == '3'
@@ -82,13 +77,13 @@ def test_if_elif_elif_else():
     story = parse(
         test_if_elif_elif_else.__doc__.strip().replace('\n    ', '\n')
     ).json()
-    print(dumps(story['script'], indent=2))
     assert story['script']['1']['method'] == 'if'
     assert story['script']['1']['enter'] == '2'
     assert story['script']['1']['exit'] == '3'
 
     assert story['script']['3']['method'] == 'elif'
     assert story['script']['3']['enter'] == '4'
+    print(story['script']['3'])
     assert story['script']['3']['exit'] == '5'
 
     assert story['script']['5']['method'] == 'elif'

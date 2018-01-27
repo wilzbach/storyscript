@@ -1,5 +1,3 @@
-from json import dumps
-
 import pytest
 
 from tests.parse import parse
@@ -12,7 +10,6 @@ from tests.parse import parse
 ])
 def test_bool(script, args):
     story = parse(script + '\n\tpass').json()
-    print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == args
 
 
@@ -24,6 +21,8 @@ def test_bool(script, args):
 ])
 def test_eq(script, expression):
     story = parse(script + '\n\tpass').json()
+    from json import dumps
+    print(story['script'])
     print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == [
         {
@@ -41,7 +40,6 @@ def test_eq(script, expression):
 ])
 def test_regexp(script, method):
     story = parse(script + '\n\tpass').json()
-    print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == [
         {
             '$OBJECT': 'method',
@@ -64,7 +62,6 @@ def test_regexp(script, method):
 ])
 def test_and_or(script, expression):
     story = parse(script + '\n\tpass').json()
-    print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == [
         {
             '$OBJECT': 'expression',
@@ -83,7 +80,6 @@ def test_and_or(script, expression):
 ])
 def test_group(script, expression):
     story = parse(script + '\n\tpass').json()
-    print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == [
         {
             '$OBJECT': 'expression',
@@ -113,7 +109,6 @@ def test_group(script, expression):
 ])
 def test_gtlt(script, expression):
     story = parse(script + '\n\tpass').json()
-    print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == [
         {
             '$OBJECT': 'expression',

@@ -1,0 +1,52 @@
+class Method:
+
+    def __init__(self, method, parser, line_number, suite=None, output=None,
+                 container=None, args=None, enter=None, exit=None):
+        self.method = method
+        self.parser = parser
+        self.lineno = str(line_number)
+        self.suite = suite
+        self.output = output
+        self.container = container
+        self.args = args
+        self.enter = enter
+        self.exit = exit
+
+        if self.enter:
+            self.enter = str(self.enter)
+
+        if self.exit:
+            self.exit = str(self.exit)
+
+    def args_json(self, args):
+        if type(args) in (bool, int, float, type(None)):
+            return args
+        elif hasattr(args, 'json'):
+            return args.json()
+        elif type(args) is dict:
+            items = {}
+            for key, value in args.items():
+                items[key] = self.args_json(value)
+            return items
+
+        items = []
+        for value in args:
+            if hasattr(value, 'json'):
+                items.append(value.json())
+            else:
+                items.append(value)
+        return items
+
+    def json(self):
+        dictionary = {
+            'method': self.method,
+            'ln': self.lineno,
+            'output': self.output.json() if self.output else None,
+            'container': self.container,
+            'args': self.args_json(self.args),
+            'enter': self.enter,
+            'exit': self.exit
+        }
+        if self.exit:
+            dictionary['exit'] = str(self.exit)
+        return dictionary
