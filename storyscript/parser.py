@@ -305,9 +305,22 @@ class Parser:
             'while',
             parser=self,
             lineno=p.lineno(1),
+            args=(p[2], ),
             output=p[3],
-            suite=p[4],
-            args=(p[2], )
+            suite=p[4]
+        )
+
+    def p_stmt_while_container(self, p):
+        """stmt : WHILE PATH args output suite
+                | WHILE CONTAINER args output suite"""
+        p[0] = ast.Method(
+            'while',
+            parser=self,
+            lineno=p.lineno(1),
+            container=p[2],
+            args=p[3],
+            output=p[4],
+            suite=p[5]
         )
 
     def p_expressions(self, p):
