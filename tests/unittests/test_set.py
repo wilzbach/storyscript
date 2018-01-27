@@ -50,6 +50,22 @@ def test_set(script, args):
 
 
 @pytest.mark.parametrize('script,args', [
+    ('x = owner/repo arg --flag foobar -n1',
+     [{'$OBJECT': 'path', 'paths': ['arg']},
+      '--flag',
+      {'$OBJECT': 'path', 'paths': ['foobar']},
+      '-n1']),
+    ('x = owner/repo -s=0 --long=1',
+     ['-s', 0, '--long', 1]),
+])
+def test_set_container(script, args):
+    story = parse(script).json()
+    print(dumps(story['script'], indent=2))
+    assert story['script']['1']['output']['paths'] == ['x']
+    assert story['script']['1']['args'] == args
+
+
+@pytest.mark.parametrize('script,args', [
     ('x = foo if bar',
      {'$OBJECT': 'condition',
       'if': ({'$OBJECT': 'path', 'paths': ['bar']}, True),

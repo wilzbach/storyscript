@@ -136,21 +136,17 @@ class Parser:
         """output : AS PATH
                   |"""
         if len(p) == 3:
-            p[0] = ast.Path(self, p.lineno(1), p[2]).json()
-
-    def p_params(self, p):
-        """params : args output NEWLINE"""
-        p[0] = dict(args=p[1], output=p[2])
+            p[0] = ast.Path(self, p.lineno(1), p[2])
 
     def p_container(self, p):
-        """stmt : PATH params
-                | CONTAINER params"""
+        """stmt : PATH args NEWLINE
+                | CONTAINER args NEWLINE"""
         p[0] = ast.Method(
             'run',
             parser=self,
             lineno=p.lineno(1),
             container=p[1],
-            **p[2]
+            args=p[2]
         )
 
     def p_story(self, p):
@@ -169,6 +165,18 @@ class Parser:
                | SET paths IS
                | SET paths EQ"""
         p[0] = p[1] if len(p) == 3 else p[2]
+
+    def p_stmt_set_path_container(self, p):
+        """stmt : SEQ PATH args NEWLINE
+                | SEQ CONTAINER args NEWLINE"""
+        p[0] = ast.Method(
+            'run',
+            parser=self,
+            lineno=p[1].lineno,
+            container=p[2],
+            args=p[3],
+            output=p[1]
+        )
 
     def p_stmt_set_path(self, p):
         """stmt : SEQ expressions NEWLINE"""
@@ -394,10 +402,15 @@ class Parser:
                     | DIGITS"""
         p[0] = ast.Expression(p[1])
 
+    def p_container_arg(self, p):
+        """arg : variable
+               | FLAG"""
+        p[0] = p[1]
+
     def p_args(self, p):
-        """args : variable
-                | args variable
-                | args COMMA variable
+        """args : arg
+                | args arg
+                | args COMMA arg
                 |"""
         if len(p) == 2:
             p[0] = [p[1]]

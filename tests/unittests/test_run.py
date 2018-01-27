@@ -21,26 +21,6 @@ def test_containers():
     ]
 
 
-def test_containers_output():
-    """
-    owner/repo arg1 arg2 as arg3
-    """
-    story = parse(
-        test_containers_output.__doc__.strip().replace('\n    ', '\n')
-    ).json()
-    print(dumps(story['script'], indent=2))
-    assert story['script']['1']['method'] == 'run'
-    assert story['script']['1']['container'] == 'owner/repo'
-    assert story['script']['1']['output'] == {
-        '$OBJECT': 'path',
-        'paths': ['arg3']
-    }
-    assert story['script']['1']['args'] == [
-        {'$OBJECT': 'path', 'paths': ['arg1']},
-        {'$OBJECT': 'path', 'paths': ['arg2']}
-    ]
-
-
 def test_container_comma():
     """
     owner/repo:stable arg1, arg2

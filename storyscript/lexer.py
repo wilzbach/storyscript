@@ -80,6 +80,7 @@ class Lexer:
         'BOOLEAN',
         'REGEX',
         'FROM',
+        'FLAG',
 
         'ELSEIF', 'SET',
 
@@ -128,6 +129,11 @@ class Lexer:
     def t_CONTAINER(self, t):
         r'([\w\-\.]+/)?[\w\-\.]+/[\w\-\.]+((\:|\@)\w+)?'
         # [?HOSTNAME]/[PROJECT-ID]/[IMAGE][?:TAG|@DIGEST]
+        return t
+
+    def t_FLAG(self, t):
+        r'(-{1,2}[\w\-]+=?)'
+        t.value = t.value.replace('=', '')
         return t
 
     def t_BOOLEAN(self, t):

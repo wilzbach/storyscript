@@ -9,6 +9,19 @@ def debug(yes, *this):  # pragma: no cover
         print(this[-1])
 
 
+def _dump_json(obj):
+    if obj is None or type(obj) in (bool, int, float):
+        return obj
+    elif hasattr(obj, 'json'):
+        return obj.json()
+    elif type(obj) is dict:
+        return dict([(key, _dump_json(var))
+                     for key, var in obj.items()])
+    else:
+        return [var.json() if hasattr(var, 'json') else var
+                for var in obj]
+
+
 class Program(object):
     def __init__(self, parser, story):
         self.parser = parser
@@ -17,16 +30,11 @@ class Program(object):
 
     def _json_next(self, dct, method, parent=None):
         if isinstance(method, Method):
-            dct[str(method.lineno)] = dict(
-                method=method.method,
-                output=method.output,
-                container=method.container,
-                ln=method.lineno,
-                enter=str(method.enter) if method.enter else None,
-                exit=str(method.exit) if method.exit else None,
-                args=self._dump_json(method.args),
-                parent=parent.lineno if parent else None
-            )
+            data = method.json()
+            data['parent'] = getattr(parent, 'lineno', None)
+
+            dct[str(method.lineno)] = data
+
             if method.suite:
                 for e in method.suite:
                     self._json_next(dct, e, method)
@@ -34,18 +42,6 @@ class Program(object):
         else:
             for m in method:
                 self._json_next(dct, m, parent)
-
-    def _dump_json(self, obj):
-        if type(obj) in (type(None), bool, int, float):
-            return obj
-        elif hasattr(obj, 'json'):
-            return obj.json()
-        elif type(obj) is dict:
-            return dict([(key, self._dump_json(var))
-                         for key, var in obj.items()])
-        else:
-            return [var.json() if hasattr(var, 'json') else var
-                    for var in obj]
 
     def json(self):
         from . import version
@@ -73,6 +69,17 @@ class Method(object):
         self.args = args
         self.enter = enter
         self.exit = _exit
+
+    def json(self):
+        return dict(
+            method=self.method,
+            output=self.output.json() if self.output else None,
+            container=self.container,
+            ln=self.lineno,
+            enter=str(self.enter) if self.enter else None,
+            exit=str(self.exit) if self.exit else None,
+            args=_dump_json(self.args)
+        )
 
 
 _path_bracket = re.compile(r"""(\[(\'|\")*.+?(\'|\")*\])""")
