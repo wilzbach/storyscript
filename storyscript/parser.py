@@ -55,9 +55,6 @@ class Parser:
         """paths : PATH"""
         p[0] = ast.Path(self, p.lineno(1), p[1])
 
-    # ----------
-    # Statements
-    # ----------
     def p_stmts(self, p):
         """stmts : stmt
                  | stmts stmt"""
@@ -67,16 +64,10 @@ class Parser:
         else:
             p[0] = [p[1]]
 
-    # ----------
-    # Operations
-    # ----------
     def p_suite(self, p):
         """suite : NEWLINE INDENT stmts DEDENT"""
         p[0] = p[3]
 
-    # ----------------------------
-    # IF ... [ELSE IF ..] ... ELSE
-    # ----------------------------
     def p_if(self, p):
         """stmt : IF expressions suite
                 | IF expressions suite else_if
@@ -126,9 +117,6 @@ class Parser:
             ))
             p[0] = p[1]
 
-    # ----------
-    # Exceptions
-    # ----------
     def p_try(self, p):
         """stmt : TRY suite
                 | TRY suite CATCH suite"""
@@ -144,9 +132,6 @@ class Parser:
                 suite=p[4]
             ))
 
-    # ----------
-    # Containers
-    # ----------
     def p_output(self, p):
         """output : AS PATH
                   |"""
@@ -305,9 +290,6 @@ class Parser:
             args=(p[2], )
         )
 
-    # -----------
-    # While Loops
-    # -----------
     def p_stmt_while(self, p):
         """stmt : WHILE paths output suite
                 | WHILE expressions output suite"""
@@ -320,9 +302,6 @@ class Parser:
             args=(p[2], )
         )
 
-    # -----------
-    # Expressions
-    # -----------
     def p_expressions(self, p):
         """expressions : variable
                        | expressions AND variable
@@ -332,9 +311,6 @@ class Parser:
         else:
             p[0] = p[1]
 
-    # --------------------
-    # Expressions > Method
-    # --------------------
     def p_expression_has(self, p):
         """variable : paths HAS paths"""
         p[0] = ast.Expression(ast.Comparison(p[1], 'has', p[3]))
@@ -379,9 +355,6 @@ class Parser:
             p[3]
         ))
 
-    # ------------------
-    # Expressions > Math
-    # ------------------
     def p_expression_math(self, p):
         """variable : variable OPERATOR variable
                     | variable GTLT     variable
@@ -396,9 +369,6 @@ class Parser:
         p[2].expressions.append(('', ')'))
         p[0] = p[2]
 
-    # -------
-    # Strings
-    # -------
     def p_string_content(self, p):
         """string_content : paths
                           | STRING_CONTINUE"""
@@ -417,9 +387,6 @@ class Parser:
                   | STRING_START_TRIPLE string_inner STRING_END"""
         p[0] = p[2]
 
-    # --------
-    # Variable
-    # --------
     def p_variable(self, p):
         """variable : paths
                     | string
@@ -427,9 +394,6 @@ class Parser:
                     | DIGITS"""
         p[0] = ast.Expression(p[1])
 
-    # ---------
-    # Arguments
-    # ---------
     def p_args(self, p):
         """args : variable
                 | args variable

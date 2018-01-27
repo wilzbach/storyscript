@@ -239,9 +239,6 @@ class Lexer:
         r'\#.*'
         pass
 
-    # ------------------------------
-    # Variables
-    # ------------------------------
     t_variable_ignore = r' '
 
     @lex.TOKEN(NAME)
@@ -251,18 +248,12 @@ class Lexer:
     def t_variable_error(self, t):
         self.error('Syntax Error', t)
 
-    # ------------------------------
-    # Strings
-    # ------------------------------
     def t_singleq1_singleq2_tripleq1_tripleq2_escaped(self, t):
         r'\\(.|\n)'
         t.type = 'STRING_CONTINUE'
         t.lexer.lineno += t.value.count('\n')
         return t
 
-    # ------------------------------
-    # '''  '''
-    # ------------------------------
     def t_start_triple_quoted_q1_string(self, t):
         r"'''"
         t.lexer.push_state('tripleq1')
@@ -295,9 +286,6 @@ class Lexer:
     def t_tripleq1_error(self, t):
         self.error('Syntax Error', t)
 
-    # ------------------------------
-    # """  """
-    # ------------------------------
     def t_start_triple_quoted_q2_string(self, t):
         r'"""'
         t.lexer.push_state('tripleq2')
@@ -326,9 +314,6 @@ class Lexer:
     def t_tripleq2_error(self, t):  # pragma: no cover
         self.error('Syntax Error', t)
 
-    # ------------------------------
-    # ' '
-    # ------------------------------
     def t_start_single_quoted_q1_string(self, t):
         r"'"
         t.lexer.push_state('singleq1')
@@ -360,9 +345,6 @@ class Lexer:
             'EOL while scanning single quoted string'
         )
 
-    # ------------------------------
-    # " "
-    # ------------------------------
     def t_start_single_quoted_q2_string(self, t):
         r'"'
         t.lexer.push_state('singleq2')
@@ -394,9 +376,6 @@ class Lexer:
             'EOL while scanning single quoted string'
         )
 
-    # ------------------------------
-    # Indenation Magic
-    # ------------------------------
     def TOKEN(self, type, lineno):
         tok = lex.LexToken()
         tok.type = type
