@@ -25,7 +25,6 @@ def test_bool(script, args):
 ])
 def test_in_contains(script, method):
     story = parse('x = y {} z'.format(script)).json()
-    print (story['script']['1'])
     assert len(story['script']['1']['args']) == 2
     arg1 = story['script']['1']['args'][1]
     assert arg1['$OBJECT'] == 'method'
