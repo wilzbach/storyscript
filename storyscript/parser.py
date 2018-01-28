@@ -235,28 +235,6 @@ class Parser:
             )
         )
 
-    def p_stmt_unset_path(self, p):
-        """stmt : UNSET paths NEWLINE"""
-        p[0] = Method(
-            'unset', self, p.lineno(1),
-            args=p[2].paths
-        )
-
-    def p_stmt_append(self, p):
-        """stmt : APPEND variable TO paths NEWLINE
-                | APPEND variable INTO paths NEWLINE"""
-        p[0] = Method(
-            'append', self, p.lineno(1),
-            args=(p[2], p[4])
-        )
-
-    def p_stmt_remove(self, p):
-        """stmt : REMOVE variable FROM paths NEWLINE"""
-        p[0] = Method(
-            'remove', self, p.lineno(1),
-            args=(p[2], p[4])
-        )
-
     def p_stmt_with(self, p):
         """stmt : WITH paths suite"""
         p[0] = Method(
