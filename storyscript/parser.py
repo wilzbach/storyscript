@@ -236,11 +236,12 @@ class Parser:
         )
 
     def p_stmt_with(self, p):
-        """stmt : WITH paths suite"""
+        """stmt : WITH paths output suite"""
         p[0] = Method(
             'with', self, p.lineno(1),
-            suite=p[3],
-            args=(p[2], )
+            args=(p[2], ),
+            output=p[3],
+            suite=p[4]
         )
 
     def p_stmt_while(self, p):
@@ -265,70 +266,67 @@ class Parser:
         )
 
     def p_expressions(self, p):
-        """expressions : variable
-                       | expressions AND variable
-                       | expressions OR variable"""
+        """expressions : expression
+                       | expressions AND expression
+                       | expressions OR expression"""
         if len(p) == 4:
             p[1].add(p[2], p[3])
             p[0] = p[1]
         else:
             p[0] = p[1]
 
+    def p_expression_variable(self, p):
+        """expression : variable"""
+        p[0] = Expression(p[1])
+
     def p_expression_has(self, p):
-        """variable : paths HAS paths"""
+        """expression : variable HAS variable"""
         p[0] = Expression(Comparison(p[1], 'has', p[3]))
 
     def p_expression_is_isnt(self, p):
-        """variable : ISNT variable"""
-        p[0] = Expression(Comparison(p[2], p[1], True))
+        """expression : NOT variable"""
+        p[0] = Expression(Comparison(p[2], 'is not', True))
 
     def p_expression_not_in(self, p):
-        """variable : paths ISNT NI paths"""
-        p[0] = Expression(Comparison(p[1], 'excludes', p[4]))
+        """expression : variable ISNT IN variable"""
+        p[0] = Expression(Comparison(p[1], 'not in', p[4]))
 
     def p_expression_contains(self, p):
-        """variable : variable CONTAINS variable
-                    | variable NI variable"""
-        if p[2] == 'contains':
-            p[0] = Expression(Comparison(p[1], 'contains', p[3]))
-        else:
-            p[0] = Expression(Comparison(p[1], 'in', p[3]))
+        """expression : variable CONTAINS variable
+                      | variable IN variable"""
+        p[0] = Expression(Comparison(p[1], p[2], p[3]))
 
     def p_expression_like(self, p):
-        """variable : paths LIKE variable
-                    | paths IS LIKE variable
-                    | paths ISNT LIKE variable
-                    | paths LIKE REGEX
-                    | paths IS LIKE REGEX
-                    | paths ISNT LIKE REGEX"""
+        """expression : variable LIKE variable
+                      | variable IS LIKE variable
+                      | variable ISNT LIKE variable
+                      | variable LIKE REGEX
+                      | variable IS LIKE REGEX
+                      | variable ISNT LIKE REGEX"""
         if len(p) == 5:
-            if p[2] == 'isnot':
-                p[0] = Expression(Comparison(p[1], 'notlike', p[4]))
+            if p[2] == 'is not':
+                p[0] = Expression(Comparison(p[1], 'not like', p[4]))
             else:
                 p[0] = Expression(Comparison(p[1], 'like', p[4]))
         else:
             p[0] = Expression(Comparison(p[1], 'like', p[3]))
 
     def p_expression_is(self, p):
-        """variable : paths IS variable
-                    | paths ISNT variable"""
-        p[0] = Expression(Comparison(
-            p[1],
-            'is' if p[2] == 'is' else 'isnt',
-            p[3]
-        ))
+        """expression : variable IS variable
+                      | variable ISNT variable"""
+        p[0] = Expression(Comparison(p[1], p[2], p[3]))
 
     def p_expression_math(self, p):
-        """variable : variable OPERATOR variable
-                    | variable GTLT variable
-                    | variable GTLTE variable
-                    | variable EQ variable
-                    | variable NE variable"""
+        """expression : variable OPERATOR variable
+                      | variable GTLT variable
+                      | variable GTLTE variable
+                      | variable EQ variable
+                      | variable NE variable"""
         p[1].add(p[2], p[3])
         p[0] = p[1]
 
     def p_expression_group(self, p):
-        """variable : LPAREN expressions RPAREN"""
+        """expression : LPAREN expressions RPAREN"""
         p[2].expressions.insert(0, ('', '('))
         p[2].expressions.append(('', ')'))
         p[0] = p[2]
@@ -360,6 +358,7 @@ class Parser:
 
     def p_container_arg(self, p):
         """arg : variable
+               | expression
                | FLAG"""
         p[0] = p[1]
 

@@ -73,19 +73,18 @@ class Lexer:
     tokens = tuple(set((
         'ID',
         'PATH',
-        'NI', 'INTO',
+        'IN', 'INTO', 'CONTAINS',
         'CONTAINER',
 
         'DIGITS',
         'BOOLEAN',
         'REGEX',
-        'FROM',
         'FLAG',
 
         'ELSEIF', 'SET',
 
         # Operations
-        'OPERATOR', 'GTLT', 'GTLTE', 'EQ', 'NE', 'ISNT',
+        'OPERATOR', 'GTLT', 'GTLTE', 'EQ', 'NE', 'ISNT', 'NOT',
         'LPAREN', 'RPAREN',
 
         # Strings
@@ -175,7 +174,7 @@ class Lexer:
 
     def t_ISNT(self, t):
         r'((is\snot)|isnt|not)(?=\s)'
-        t.value = 'isnot'
+        t.value = 'is not'
         return t
 
     def t_CONJ(self, t):
@@ -206,12 +205,16 @@ class Lexer:
         r'(if|unless)'
         return t
 
-    def t_FROM(self, t):
-        r'(for|from)(?=\s)'
+    def t_IN(self, t):
+        r'in(?=\s)'
         return t
 
-    def t_NI(self, t):
-        r'(at|on|in)(?=\s)'
+    def t_CONTAINS(self, t):
+        r'contains(?=\s)'
+        return t
+
+    def t_NOT(self, t):
+        r'not(?=\s)'
         return t
 
     @lex.TOKEN(NAME)
