@@ -36,7 +36,7 @@ class CustomInstallCommand(install):
 
 
 setup(name='storyscript',
-      version='0.0.3',
+      version='0.0.4',
       description='',
       long_description='',
       classifiers=classifiers,
