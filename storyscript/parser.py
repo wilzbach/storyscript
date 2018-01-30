@@ -147,6 +147,16 @@ class Parser:
             args=p[2]
         )
 
+    def p_container_suite(self, p):
+        """stmt : PATH args suite
+                | CONTAINER args suite"""
+        p[0] = Method(
+            'run', self, p.lineno(1),
+            container=p[1],
+            args=p[2],
+            suite=p[3]
+        )
+
     def p_story(self, p):
         """story : stmt  EOF
                  | stmts EOF"""
