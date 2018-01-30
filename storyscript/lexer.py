@@ -8,14 +8,12 @@ from .exceptions import ScriptError
 
 keywords = [
     'with', 'and',
-    'has', 'to', 'as', 'into',
+    'has', 'to', 'as',
     'is', 'like', 'or',
     'contains', 'then',
     'if', 'else', 'elif',
     'try', 'catch',
-    'while', 'from',
-    'set', 'unset',
-    'append', 'remove'
+    'while', 'set',
 ]
 
 
@@ -73,7 +71,7 @@ class Lexer:
     tokens = tuple(set((
         'ID',
         'PATH',
-        'IN', 'INTO', 'CONTAINS',
+        'IN', 'CONTAINS',
         'CONTAINER',
 
         'DIGITS',
