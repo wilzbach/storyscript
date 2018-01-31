@@ -1,125 +1,90 @@
 import re
-
-from . import exceptions
-
-
-any_number = tuple('0123456789')
+from functools import reduce
 
 
-def resolve_path(data, path):
-    """
-    Resolves a path, recursivelly in the data
-    """
-    try:
-        for part in path.split('.'):
-            if part.startswith(any_number):
-                data = data[int(part)]
-            else:
-                data = data[part]
-        return data
-    except Exception:
-        print('Unable to resolve path %s' % path)
-        return None
+class Resolver:
 
+    @staticmethod
+    def _walk(item, index):
+        if index.isdigit():
+            return item[int(index)]
+        return item[index]
 
-def resolve_obj(data, obj):
-    """
-    Resolves a Story Object to it's real value
-    """
-    if type(obj) is dict:
-        typ = obj.get('$OBJECT')
-        if typ == 'path':
-            return resolve_path(data, obj['path'])
-        elif typ == 'value':
-            return obj['value']
-        elif typ == 'regexp':
-            return re.compile(obj['regexp'])
-        elif typ == 'expression':
-            return resolve_expression(
-                data,
-                obj['expression'],
-                obj['values']
-            )
-        elif typ == 'method':
-            return resolve_method(
-                data,
-                obj['left'],
-                obj['right'],
-                obj['method']
-            )
-        else:
-            return resolve_dict(data, obj)
-    return obj
+    @classmethod
+    def handside(cls, item, data):
+        return cls.object(item, data)
 
+    @staticmethod
+    def stringify(value):
+        if type(value) is str:
+            return '"""{}"""'.format(value.replace('"', '\"'))
+        return str(value)
 
-def resolve_method(data, left, right, method):
-    """
-    Resolve method to a boolean
-    """
-    _left = resolve_obj(data, left)
-    _right = resolve_obj(data, right)
-    try:
+    @classmethod
+    def path(cls, path, data):
+        """
+        Resolves a path against some data, for example the path 'a.b'
+        with data {'a': {'b': 'value'}} produces 'value'
+        """
+        try:
+            return reduce(cls._walk, path.split('.'), data)
+        except (KeyError, TypeError):
+            return None
+
+    @classmethod
+    def list(cls, items_list, data):
+        mapping = map(lambda item: cls.object(item, data), items_list)
+        return list(mapping)
+
+    @classmethod
+    def dictionary(cls, dictionary, data):
+        result = {}
+        for key, value in dictionary.items():
+            result[key] = cls.resolve(value, data)
+        return result
+
+    @staticmethod
+    def method(method, left, right):
         if method == 'like':
-            return _right.match(_left) is not None
+            return right.match(left) is not None
         elif method == 'notlike':
-            return _right.match(_left) is None
-        elif method in ('has', 'contains'):
-            return _right in _left
+            return right.match(left) is None
         elif method == 'in':
-            return _left in _right
+            return left in right
         elif method == 'excludes':
-            return _left not in _right
+            return left not in right
         elif method == 'isnt':
-            return _right != _left
+            return right != left
         elif method == 'is':
-            return _right == _left
-        else:
-            raise Exception('Method not supported')
+            return right == left
+        raise ValueError('Method not supported')
 
-    except Exception as err:
-        raise err
+    @classmethod
+    def expression(cls, data, expression, values):
+        mapping = map(cls.stringify, cls.list('values', 'data'))
+        return eval(expression.format(*mapping))
 
+    @classmethod
+    def object(cls, item, data):
+        object_type = item['$OBJECT']
+        if object_type == 'path':
+            return cls.path(item, data)
+        elif object_type == 'regexp':
+            return re.compile(item['regexp'])
+        elif object_type == 'value':
+            return item['value']
+        elif object_type == 'method':
+            left = cls.handside(item['left'], data)
+            right = cls.handside(item['right'], data)
+            return cls.method(item['method'], left, right)
+        elif object_type == 'expression':
+            expression = item['expression']
+            values = item['values']
+            return cls.expression(data, expression, values)
+        return cls.dictionary(item, data)
 
-def resolve_expression(data, expression, values):
-    """
-    Resolve expression to a boolean
-    """
-    try:
-        return eval(expression.format(
-            *map(
-                stringify,
-                resolve_list(data, values)
-            )
-        ))
-
-    except Exception as err:
-        raise err
-
-
-def resolve_list(data, lst):
-    """
-    Resolves a list of arguments [object, object, ...]
-    """
-    return [
-        resolve_obj(data, obj)
-        for obj in lst
-    ]
-
-
-def resolve_dict(data, dct):
-    """
-    Resolves a dictionary of {key:objects}
-    """
-    return dict(
-        (key, resolve_obj(data, value))
-        for key, value in dct.items()
-    )
-
-
-def stringify(obj):
-    """
-    Escapes a string for expression injection
-    """
-    if type(obj) is str:
-        return '"""%s"""' % obj.replace('"', '\"')
-    return str(obj)
+    @classmethod
+    def resolve(cls, item, data):
+        if type(item) is dict:
+            return cls.object(item, data)
+        return item
