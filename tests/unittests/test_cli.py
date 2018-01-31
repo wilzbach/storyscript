@@ -34,7 +34,7 @@ def test_cli_version(mocker, runner, echo):
     Ensures --version outputs the version
     """
     runner.invoke(Cli.main, ['--version'])
-    click.echo.assert_called_with('StoryScript 0.0.3 - http://storyscript.org')
+    click.echo.assert_called_with('StoryScript 0.0.4 - http://storyscript.org')
 
 
 def test_cli_lexer(mocker, runner, app, echo):
