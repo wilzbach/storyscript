@@ -128,6 +128,14 @@ def test_resolver_list(mocker):
     assert result == [Resolver.object()]
 
 
+def test_resolver_object_string(mocker):
+    mocker.patch.object(Resolver, 'string')
+    item = {'$OBJECT': 'string', 'string': 'message'}
+    result = Resolver.object(item, 'data')
+    Resolver.string.assert_called_with('message', 'data')
+    assert result == Resolver.string()
+
+
 def test_resolver_object_path(mocker):
     mocker.patch.object(Resolver, 'path')
     path = {'$OBJECT': 'path', 'path': 'path'}

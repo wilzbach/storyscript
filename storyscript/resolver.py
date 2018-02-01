@@ -78,7 +78,9 @@ class Resolver:
     @classmethod
     def object(cls, item, data):
         object_type = item.get('$OBJECT')
-        if object_type == 'path':
+        if object_type == 'string':
+            return cls.string(item['string'], data)
+        elif object_type == 'path':
             return cls.path(item['path'], data)
         elif object_type == 'regexp':
             return re.compile(item['regexp'])
