@@ -36,7 +36,7 @@ class Resolver:
         with data {'a': {'b': 'value'}} produces 'value'
         """
         try:
-            return reduce(cls._walk, path.split('.'), data)
+            return reduce(cls._walk, path[0].split('.'), data)
         except (KeyError, TypeError):
             return None
 
@@ -81,7 +81,7 @@ class Resolver:
         if object_type == 'string':
             return cls.string(item['string'], data)
         elif object_type == 'path':
-            return cls.path(item['path'], data)
+            return cls.path(item['paths'], data)
         elif object_type == 'regexp':
             return re.compile(item['regexp'])
         elif object_type == 'value':
