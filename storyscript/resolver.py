@@ -21,6 +21,15 @@ class Resolver:
         return str(value)
 
     @classmethod
+    def string(cls, string, data):
+        """
+        Resolves a string against data
+        """
+        if type(data) is list:
+            return string.format(*data)
+        return string.format(data)
+
+    @classmethod
     def path(cls, path, data):
         """
         Resolves a path against some data, for example the path 'a.b'
@@ -69,7 +78,9 @@ class Resolver:
     @classmethod
     def object(cls, item, data):
         object_type = item.get('$OBJECT')
-        if object_type == 'path':
+        if object_type == 'string':
+            return cls.string(item['string'], data)
+        elif object_type == 'path':
             return cls.path(item['path'], data)
         elif object_type == 'regexp':
             return re.compile(item['regexp'])
