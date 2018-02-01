@@ -51,6 +51,8 @@ class Resolver:
             return right.match(left) is None
         elif method == 'in':
             return left in right
+        elif method in ('has', 'contains'):
+            return right in left
         elif method == 'excludes':
             return left not in right
         elif method == 'isnt':
@@ -61,14 +63,14 @@ class Resolver:
 
     @classmethod
     def expression(cls, data, expression, values):
-        mapping = map(cls.stringify, cls.list('values', 'data'))
+        mapping = map(cls.stringify, cls.list(values, data))
         return eval(expression.format(*mapping))
 
     @classmethod
     def object(cls, item, data):
-        object_type = item['$OBJECT']
+        object_type = item.get('$OBJECT')
         if object_type == 'path':
-            return cls.path(item, data)
+            return cls.path(item['path'], data)
         elif object_type == 'regexp':
             return re.compile(item['regexp'])
         elif object_type == 'value':

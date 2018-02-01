@@ -81,6 +81,11 @@ def test_resolver_method_in():
     assert Resolver.method('in', 'left', ['left'])
 
 
+@mark.parametrize('method', ['has', 'contains'])
+def test_resolver_method_has(method):
+    assert Resolver.method(method, ['left'], 'left')
+
+
 def test_resolver_method_excludes():
     assert Resolver.method('in', 'left', ['right']) is False
 
@@ -118,7 +123,7 @@ def test_resolver_object_path(mocker):
     mocker.patch.object(Resolver, 'path')
     path = {'$OBJECT': 'path', 'path': 'path'}
     result = Resolver.object(path, 'data')
-    Resolver.path.assert_called_with(path, 'data')
+    Resolver.path.assert_called_with('path', 'data')
     assert result == Resolver.path()
 
 
