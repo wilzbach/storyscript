@@ -34,23 +34,23 @@ def test_resolver_string_format(data):
 
 
 def test_resolver_path():
-    path = 'a.b.c'
+    path = ['a.b.c']
     data = {'a': {'b': {'c': 'value'}}}
     assert Resolver.path(path, data) == 'value'
 
 
 def test_resolver_path_list():
-    path = 'a.1.b'
+    path = ['a.1.b']
     data = {'a': [0, {'b': 'value'}]}
     assert Resolver.path(path, data) == 'value'
 
 
 def test_resolver_path_key_error():
-    assert Resolver.path('a.b', {}) is None
+    assert Resolver.path(['a.b'], {}) is None
 
 
 def test_resolver_path_type_error():
-    assert Resolver.path('a.b.', {'a': {'b': 'value'}}) is None
+    assert Resolver.path(['a.b.'], {'a': {'b': 'value'}}) is None
 
 
 def test_resolver_dictionary(mocker):
@@ -138,9 +138,9 @@ def test_resolver_object_string(mocker):
 
 def test_resolver_object_path(mocker):
     mocker.patch.object(Resolver, 'path')
-    path = {'$OBJECT': 'path', 'path': 'path'}
+    path = {'$OBJECT': 'path', 'paths': ['example']}
     result = Resolver.object(path, 'data')
-    Resolver.path.assert_called_with('path', 'data')
+    Resolver.path.assert_called_with(['example'], 'data')
     assert result == Resolver.path()
 
 

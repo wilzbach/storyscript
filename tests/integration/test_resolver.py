@@ -6,9 +6,9 @@ from storyscript.resolver import Resolver
 
 
 @pytest.mark.parametrize('path,data,result', [
-    ('a.b.c', {'a': {'b': {'c': 1}}}, 1),
-    ('a', {'a': {'b': {}}}, {'b': {}}),
-    ('a.1.b', {'a': [1, {'b': 1}]}, 1)
+    (['a.b.c'], {'a': {'b': {'c': 1}}}, 1),
+    (['a'], {'a': {'b': {}}}, {'b': {}}),
+    (['a.1.b'], {'a': [1, {'b': 1}]}, 1)
 ])
 def test_resolve_path(path, data, result):
     assert Resolver.path(path, data) == result
@@ -19,21 +19,21 @@ def test_resolve_path_undefined():
 
 
 @pytest.mark.parametrize('obj,data,result', [
-    ({'$OBJECT': 'path', 'path': 'a'}, {'a': 1}, 1),
+    ({'$OBJECT': 'path', 'paths': ['a']}, {'a': 1}, 1),
     ({'$OBJECT': 'value', 'value': 'a'}, None, 'a'),
     ({'$OBJECT': 'value', 'value': 1}, None, 1),
     ({'$OBJECT': 'expression',
       'expression': '{} == 1',
-      'values': [{'$OBJECT': 'path', 'path': 'a'}]}, {'a': 1}, True),
+      'values': [{'$OBJECT': 'path', 'paths': ['a']}]}, {'a': 1}, True),
     ({'$OBJECT': 'expression',
       'expression': '{} > {}',
-      'values': [{'$OBJECT': 'path', 'path': 'a'},
+      'values': [{'$OBJECT': 'path', 'paths': ['a']},
                  {'$OBJECT': 'value', 'value': 2}]},
      {'a': 1}, False),
     ({'$OBJECT': 'method',
       'method': 'is',
       'left': {'$OBJECT': 'value', 'value': 1},
-      'right': {'$OBJECT': 'path', 'path': 'a'}},
+      'right': {'$OBJECT': 'path', 'paths': ['a']}},
      {'a': 1}, 1),
     (1, None, 1),
     (None, None, None),
@@ -66,10 +66,10 @@ def test_resolve_method(method, left, right, result):
 
 
 @pytest.mark.parametrize('items_list, data, result', [
-    ([{'$OBJECT': 'path', 'path': 'a'}], {'a': 1}, [1]),
-    ([{'$OBJECT': 'path', 'path': 'a'}], {}, [None]),
+    ([{'$OBJECT': 'path', 'paths': ['a']}], {'a': 1}, [1]),
+    ([{'$OBJECT': 'path', 'paths': ['a']}], {}, [None]),
     ([], None, []),
-    ([{'$OBJECT': 'path', 'path': 'abc'},
+    ([{'$OBJECT': 'path', 'paths': ['abc']},
       {'$OBJECT': 'value', 'value': 1}],
      {'abc': 0, 'b': 1}, [0, 1]),
 ])
@@ -78,10 +78,10 @@ def test_resolve_list(items_list, data, result):
 
 
 @pytest.mark.parametrize('dictionary, data, result', [
-    ({'k': {'$OBJECT': 'path', 'path': 'a'}}, {'a': 1}, {'k': 1}),
-    ({'k': {'$OBJECT': 'path', 'path': 'a'}}, {}, {'k': None}),
+    ({'k': {'$OBJECT': 'path', 'paths': ['a']}}, {'a': 1}, {'k': 1}),
+    ({'k': {'$OBJECT': 'path', 'paths': ['a']}}, {}, {'k': None}),
     ({}, None, {}),
-    ({'a': {'$OBJECT': 'path', 'path': 'abc'},
+    ({'a': {'$OBJECT': 'path', 'paths': ['abc']},
       'b': {'$OBJECT': 'value', 'value': 1}},
      {'abc': 0, 'b': 1}, {'a': 0, 'b': 1}),
 ])
