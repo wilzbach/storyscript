@@ -21,6 +21,15 @@ class Resolver:
         return str(value)
 
     @classmethod
+    def string(cls, string, data):
+        """
+        Resolves a string against data
+        """
+        if type(data) is list:
+            return string.format(*data)
+        return string.format(data)
+
+    @classmethod
     def path(cls, path, data):
         """
         Resolves a path against some data, for example the path 'a.b'

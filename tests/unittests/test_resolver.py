@@ -24,6 +24,15 @@ def test_resolver_stringify_string_multiline():
     assert Resolver.stringify('one"') == '"""one\""""'
 
 
+def test_resolver_string():
+    assert Resolver.string('hello', 'data') == 'hello'
+
+
+@mark.parametrize('data', ['world', ['world']])
+def test_resolver_string_format(data):
+    assert Resolver.string('hello {}', data) == 'hello world'
+
+
 def test_resolver_path():
     path = 'a.b.c'
     data = {'a': {'b': {'c': 'value'}}}
