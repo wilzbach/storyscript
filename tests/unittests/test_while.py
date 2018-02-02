@@ -20,9 +20,7 @@ def test_while_container():
         '$OBJECT': 'path',
         'paths': ['request']
     }
-    assert story['script']['1']['args'] == [
-        {'$OBJECT': 'path', 'paths': ['server']},
-    ]
+    assert story['script']['1']['args'] == ['server']
 
 
 def test_while_path():

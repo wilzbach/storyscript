@@ -139,22 +139,22 @@ class Parser:
             p[0] = Path(self, p.lineno(1), p[2])
 
     def p_container(self, p):
-        """stmt : PATH args NEWLINE
-                | CONTAINER args NEWLINE"""
+        """stmt : PATH PATH args NEWLINE
+                | CONTAINER PATH args NEWLINE"""
         p[0] = Method(
             'run', self, p.lineno(1),
             container=p[1],
-            args=p[2]
+            args=[p[2]] + (p[3] or [])
         )
 
     def p_container_suite(self, p):
-        """stmt : PATH args suite
-                | CONTAINER args suite"""
+        """stmt : PATH PATH args suite
+                | CONTAINER PATH args suite"""
         p[0] = Method(
             'run', self, p.lineno(1),
             container=p[1],
-            args=p[2],
-            suite=p[3]
+            args=[p[2]] + (p[3] or []),
+            suite=p[4]
         )
 
     def p_story(self, p):
@@ -175,13 +175,13 @@ class Parser:
         p[0] = p[1] if len(p) == 3 else p[2]
 
     def p_stmt_set_path_container(self, p):
-        """stmt : SEQ PATH args NEWLINE
-                | SEQ CONTAINER args NEWLINE"""
+        """stmt : SEQ PATH PATH args NEWLINE
+                | SEQ CONTAINER PATH args NEWLINE"""
         p[0] = Method(
             'run', self, p[1].lineno,
             output=p[1],
             container=p[2],
-            args=p[3]
+            args=[p[3]] + (p[4] or [])
         )
 
     def p_stmt_set_path(self, p):
@@ -265,14 +265,14 @@ class Parser:
         )
 
     def p_stmt_while_container(self, p):
-        """stmt : WHILE PATH args output suite
-                | WHILE CONTAINER args output suite"""
+        """stmt : WHILE PATH PATH args output suite
+                | WHILE CONTAINER PATH args output suite"""
         p[0] = Method(
             'while', self, p.lineno(1),
             container=p[2],
-            args=p[3],
-            output=p[4],
-            suite=p[5]
+            args=[p[3]] + (p[4] or []),
+            output=p[5],
+            suite=p[6]
         )
 
     def p_expressions(self, p):
@@ -383,5 +383,8 @@ class Parser:
             p[1].append(p[2])
             p[0] = p[1]
         elif len(p) == 4:
-            p[1].append(p[3])
+            if p[1]:
+                p[1].append(p[3])
+            else:
+                p[1] = [p[3]]
             p[0] = p[1]

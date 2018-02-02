@@ -12,5 +12,5 @@ def test_conj(conj):
     assert story['script']['1']['method'] == 'run'
     assert story['script']['1']['container'] == 'Hello'
     assert story['script']['1']['args'] == [
-        {'$OBJECT': 'path', 'paths': ['world']}
+        'world'
     ]
