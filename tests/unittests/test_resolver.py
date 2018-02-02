@@ -24,13 +24,28 @@ def test_resolver_stringify_string_multiline():
     assert Resolver.stringify('one"') == '"""one\""""'
 
 
+def test_resolver_values():
+    values = [{'$OBJECT': 'path', 'paths': ['one']},
+              {'$OBJECT': 'path', 'paths': ['two']}]
+    assert Resolver.values(values) == ['one', 'two']
+
+
 def test_resolver_string():
-    assert Resolver.string('hello', 'data') == 'hello'
+    assert Resolver.string('hello', {}) == 'hello'
 
 
-@mark.parametrize('data', ['world', ['world']])
-def test_resolver_string_format(data):
-    assert Resolver.string('hello {}', data) == 'hello world'
+def test_resolver_string_values(mocker):
+    mocker.patch.object(Resolver, 'values', return_value=['one', 'two'])
+    data = {'one': 'beautiful', 'two': 'world'}
+    result = Resolver.string('hello {} {}', data, ['values'])
+    Resolver.values.assert_called_with(['values'])
+    assert result == 'hello beautiful world'
+
+
+def test_resolver_string_empty_values(mocker):
+    mocker.patch.object(Resolver, 'values', return_value=['one', 'two'])
+    with raises(ValueError):
+        Resolver.string('hello {} {}', {}, ['values'])
 
 
 def test_resolver_path():
@@ -133,6 +148,14 @@ def test_resolver_object_string(mocker):
     item = {'$OBJECT': 'string', 'string': 'message'}
     result = Resolver.object(item, 'data')
     Resolver.string.assert_called_with('message', 'data')
+    assert result == Resolver.string()
+
+
+def test_resolver_object_string_values(mocker):
+    mocker.patch.object(Resolver, 'string')
+    item = {'$OBJECT': 'string', 'string': 'message', 'values': 'values'}
+    result = Resolver.object(item, 'data')
+    Resolver.string.assert_called_with('message', 'data', values='values')
     assert result == Resolver.string()
 
 

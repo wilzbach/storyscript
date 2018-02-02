@@ -20,23 +20,39 @@ class Resolver:
             return '"""{}"""'.format(value.replace('"', '\"'))
         return str(value)
 
-    @classmethod
-    def string(cls, string, data):
-        """
-        Resolves a string against data
-        """
-        if type(data) is list:
-            return string.format(*data)
-        return string.format(data)
+    @staticmethod
+    def values(items_list):
+        values = []
+        for value in items_list:
+            values.append(value['paths'][0])
+        return values
 
     @classmethod
-    def path(cls, path, data):
+    def string(cls, string, data, values=None):
+        """
+        Resolves a string to itself. If values are given, the string
+        is formatted against data, using the order in values.
+        """
+        if values:
+            keys = Resolver.values(values)
+            arguments = []
+            for key in keys:
+                if key in data:
+                    arguments.append(data[key])
+
+            if len(arguments) != len(keys):
+                raise ValueError('Not enough string arguments from data')
+            return string.format(*arguments)
+        return string
+
+    @classmethod
+    def path(cls, paths, data):
         """
         Resolves a path against some data, for example the path 'a.b'
         with data {'a': {'b': 'value'}} produces 'value'
         """
         try:
-            return reduce(cls._walk, path[0].split('.'), data)
+            return reduce(cls._walk, paths[0].split('.'), data)
         except (KeyError, TypeError):
             return None
 
@@ -79,6 +95,8 @@ class Resolver:
     def object(cls, item, data):
         object_type = item.get('$OBJECT')
         if object_type == 'string':
+            if 'values' in item:
+                return cls.string(item['string'], data, values=item['values'])
             return cls.string(item['string'], data)
         elif object_type == 'path':
             return cls.path(item['paths'], data)
