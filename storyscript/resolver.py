@@ -28,13 +28,19 @@ class Resolver:
         return values
 
     @classmethod
-    def string(cls, string, data):
+    def string(cls, string, data, values=None):
         """
-        Resolves a string against data
+        Resolves a string to itself. If values are given, the string
+        is formatted against data, using the order in values.
         """
-        if type(data) is list:
-            return string.format(*data)
-        return string.format(data)
+        if values:
+            keys = Resolver.values(values)
+            arguments = []
+            for key in keys:
+                if key in data:
+                    arguments.append(data[key])
+            return string.format(*arguments)
+        return string
 
     @classmethod
     def path(cls, paths, data):
@@ -86,6 +92,8 @@ class Resolver:
     def object(cls, item, data):
         object_type = item.get('$OBJECT')
         if object_type == 'string':
+            if 'values' in item:
+                return cls.string(item['string'], data, values=item['values'])
             return cls.string(item['string'], data)
         elif object_type == 'path':
             return cls.path(item['paths'], data)
