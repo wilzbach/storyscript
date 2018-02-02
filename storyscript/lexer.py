@@ -6,17 +6,6 @@ from ply import lex
 from .exceptions import ScriptError
 
 
-keywords = [
-    'with', 'and',
-    'has', 'to', 'as',
-    'is', 'like', 'or',
-    'contains', 'then',
-    'if', 'else', 'elif',
-    'try', 'catch',
-    'while', 'set',
-]
-
-
 class Lexer:
     def __init__(self, optimize=True):
         self.build(optimize=optimize)
@@ -68,32 +57,60 @@ class Lexer:
               ('tripleq1', 'exclusive'),
               ('tripleq2', 'exclusive'))
 
-    tokens = tuple(set((
-        'ID',
-        'PATH',
-        'IN', 'CONTAINS',
-        'CONTAINER',
+    keywords = (
+        'AND',
+        'AS',
+        'BREAK',
+        'CATCH',
+        'CONTAINS',
+        'CONTINUE',
+        'ELSE',
+        'ELSEIF',
+        'END',
+        'EXIT',
+        'HAS',
+        'IF',
+        'IN',
+        'IS',
+        'ISNT',
+        'LIKE',
+        'NEXT',
+        'NOT',
+        'OR',
+        'PASS',
+        'SET',
+        'THEN',
+        'TO',
+        'TRY',
+        'WHILE',
+        'WITH'
+    )
 
-        'DIGITS',
+    tokens = (
         'BOOLEAN',
-        'REGEX',
+        'COMMA',
+        'CONTAINER',
+        'DEDENT',
+        'DIGITS',
+        'EOF',
+        'EQ',
         'FLAG',
-
-        'ELSEIF', 'SET',
-
-        # Operations
-        'OPERATOR', 'GTLT', 'GTLTE', 'EQ', 'NE', 'ISNT', 'NOT',
-        'LPAREN', 'RPAREN',
-
-        # Strings
-        'STRING_START_TRIPLE',
-        'STRING_START_SINGLE',
+        'GTLT',
+        'GTLTE',
+        'INDENT',
+        'LPAREN',
+        'NE',
+        'NEWLINE',
+        'OPERATOR',
+        'PATH',
+        'REGEX',
+        'RPAREN',
         'STRING_CONTINUE',
         'STRING_END',
-
-        # System
-        'NEWLINE', 'WS', 'COMMA', 'INDENT', 'DEDENT', 'EOF',
-    ) + tuple([k.upper() for k in keywords])))
+        'STRING_START_SINGLE',
+        'STRING_START_TRIPLE',
+        'WS'
+    ) + keywords
 
     REQUIRES_INDENT = ('IF', 'ELSEIF', 'ELSE', 'SUITE')
 
@@ -106,7 +123,6 @@ class Lexer:
         r'|(?:0|[1-9][0-9]*)(?:[eE][+-]?[0-9]+)?))\%?'
     )
 
-    # Token
     t_LPAREN = r'\('
     t_RPAREN = r'\)'
     t_AND = r'\&|and|also'
@@ -144,6 +160,11 @@ class Lexer:
             '$OBJECT': 'regexp',
             'regexp': re.compile(t.value[1:-1]).pattern,
         }
+        return t
+
+    def t_PASS(self, t):
+        r'(pass|skip)'
+        t.value = 'pass'
         return t
 
     def t_EQ(self, t):
@@ -216,11 +237,9 @@ class Lexer:
         return t
 
     @lex.TOKEN(NAME)
-    def t_ID(self, t):
-        if t.value.lower() in keywords:
+    def t_PATH(self, t):
+        if t.value.upper() in self.keywords:
             t.type = t.value.upper()
-        else:
-            t.type = 'PATH'
         return t
 
     @lex.TOKEN(DIGITS)

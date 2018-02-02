@@ -49,7 +49,7 @@ class Parser:
 
     def p_program(self, p):
         """program : story
-                   | WS ID ELIF"""
+                   | WS"""
         p[0] = Program(self, p[1])
 
     def p_paths(self, p):
@@ -137,6 +137,24 @@ class Parser:
                   |"""
         if len(p) == 3:
             p[0] = Path(self, p.lineno(1), p[2])
+
+    def p_next_story(self, p):
+        """stmt : NEXT variable NEWLINE"""
+        p[0] = Method(
+            'next', self, p.lineno(1),
+            args=(p[2], )
+        )
+
+    def p_keyword(self, p):
+        """stmt : CONTINUE args NEWLINE
+                | BREAK args NEWLINE
+                | EXIT NEWLINE
+                | PASS NEWLINE
+                | END NEWLINE"""
+        p[0] = Method(
+            p[1].lower(), self, p.lineno(1),
+            args=(p[2], ) if len(p) == 4 else None
+        )
 
     def p_container(self, p):
         """stmt : PATH PATH args NEWLINE
@@ -254,9 +272,8 @@ class Parser:
             suite=p[4]
         )
 
-    def p_stmt_while(self, p):
-        """stmt : WHILE paths output suite
-                | WHILE expressions output suite"""
+    def p_stmt_while_expression(self, p):
+        """stmt : WHILE expressions output suite"""
         p[0] = Method(
             'while', self, p.lineno(1),
             args=(p[2], ),

@@ -1,5 +1,3 @@
-from json import dumps
-
 import pytest
 
 from storyscript import exceptions
@@ -45,7 +43,6 @@ from tests.parse import parse
 ])
 def test_set(script, args):
     story = parse(script).json()
-    print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'] == args
 
 
@@ -60,7 +57,6 @@ def test_set(script, args):
 ])
 def test_set_container(script, args):
     story = parse(script).json()
-    print(dumps(story['script'], indent=2))
     assert story['script']['1']['output']['paths'] == ['x']
     assert story['script']['1']['args'] == args
 
@@ -105,7 +101,6 @@ def test_set_container(script, args):
 ])
 def test_set_condition(script, args):
     story = parse(script).json()
-    print(dumps(story['script'], indent=2))
     assert story['script']['1']['args'][1] == args
 
 
@@ -122,4 +117,4 @@ def test_set_condition(script, args):
 ])
 def test_errors(script, exception):
     with pytest.raises(exception):
-        print(parse(script).json())
+        parse(script).json()
