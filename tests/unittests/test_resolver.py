@@ -42,6 +42,12 @@ def test_resolver_string_values(mocker):
     assert result == 'hello beautiful world'
 
 
+def test_resolver_string_empty_values(mocker):
+    mocker.patch.object(Resolver, 'values', return_value=['one', 'two'])
+    with raises(ValueError):
+        Resolver.string('hello {} {}', {}, ['values'])
+
+
 def test_resolver_path():
     path = ['a.b.c']
     data = {'a': {'b': {'c': 'value'}}}

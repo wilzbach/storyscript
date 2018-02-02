@@ -39,6 +39,9 @@ class Resolver:
             for key in keys:
                 if key in data:
                     arguments.append(data[key])
+
+            if len(arguments) != len(keys):
+                raise ValueError('Not enough string arguments from data')
             return string.format(*arguments)
         return string
 
