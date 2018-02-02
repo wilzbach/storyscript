@@ -20,6 +20,13 @@ class Resolver:
             return '"""{}"""'.format(value.replace('"', '\"'))
         return str(value)
 
+    @staticmethod
+    def values(items_list):
+        values = []
+        for value in items_list:
+            values.append(value['paths'][0])
+        return values
+
     @classmethod
     def string(cls, string, data):
         """

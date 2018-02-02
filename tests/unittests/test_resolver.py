@@ -24,6 +24,12 @@ def test_resolver_stringify_string_multiline():
     assert Resolver.stringify('one"') == '"""one\""""'
 
 
+def test_resolver_values():
+    values = [{'$OBJECT': 'path', 'paths': ['one']},
+              {'$OBJECT': 'path', 'paths': ['two']}]
+    assert Resolver.values(values) == ['one', 'two']
+
+
 def test_resolver_string():
     assert Resolver.string('hello', 'data') == 'hello'
 
