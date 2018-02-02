@@ -369,7 +369,8 @@ class Parser:
         if len(p) == 2:
             p[0] = String(data=p[1])
         else:
-            p[0] = p[1].add(p[2])
+            p[1].add(p[2])
+            p[0] = p[1]
 
     def p_string(self, p):
         """string : STRING_START_SINGLE string_inner STRING_END
