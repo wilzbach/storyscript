@@ -20,8 +20,15 @@ class Resolver:
             return '"""{}"""'.format(value.replace('"', '\"'))
         return str(value)
 
-    @staticmethod
-    def values(items_list):
+    @classmethod
+    def values(cls, items_list, data=None):
+        """
+        Parses a list of values objects. The list may contain other objects.
+        """
+        if data is not None:
+            mapping = map(lambda item: cls.object(item, data), items_list)
+            return list(mapping)
+
         values = []
         for value in items_list:
             values.append(value['paths'][0])
@@ -57,11 +64,6 @@ class Resolver:
             return None
 
     @classmethod
-    def list(cls, items_list, data):
-        mapping = map(lambda item: cls.object(item, data), items_list)
-        return list(mapping)
-
-    @classmethod
     def dictionary(cls, dictionary, data):
         result = {}
         for key, value in dictionary.items():
@@ -88,7 +90,7 @@ class Resolver:
 
     @classmethod
     def expression(cls, data, expression, values):
-        mapping = map(cls.stringify, cls.list(values, data))
+        mapping = map(cls.stringify, cls.values(values, data=data))
         return eval(expression.format(*mapping))
 
     @classmethod
