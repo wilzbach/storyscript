@@ -206,6 +206,13 @@ def test_resolver_resolve_expression(mocker):
     assert result == Resolver.expression()
 
 
+def test_resolver_list(mocker):
+    mocker.patch.object(Resolver, 'resolve', return_value='done')
+    result = Resolver.list(['items'], {})
+    Resolver.resolve.assert_called_with('items', {})
+    assert result == 'done'
+
+
 def test_resolver_resolve(mocker):
     assert Resolver.resolve('whatever', 'data') == 'whatever'
 

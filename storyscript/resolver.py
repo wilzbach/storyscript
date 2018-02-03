@@ -117,6 +117,13 @@ class Resolver:
         return cls.dictionary(item, data)
 
     @classmethod
+    def list(cls, items, data):
+        result = []
+        for item in items:
+            result.append(cls.resolve(item, data))
+        return ' '.join(result)
+
+    @classmethod
     def resolve(cls, item, data):
         if type(item) is dict:
             return cls.object(item, data)
