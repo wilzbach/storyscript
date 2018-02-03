@@ -222,3 +222,10 @@ def test_resolver_resolve_object(mocker):
     result = Resolver.resolve({}, 'data')
     Resolver.object.assert_called_with({}, 'data')
     assert result == Resolver.object()
+
+
+def test_resolver_resolve_list(mocker):
+    mocker.patch.object(Resolver, 'list')
+    result = Resolver.resolve([], 'data')
+    Resolver.list.assert_called_with([], 'data')
+    assert result == Resolver.list()

@@ -127,4 +127,6 @@ class Resolver:
     def resolve(cls, item, data):
         if type(item) is dict:
             return cls.object(item, data)
+        elif type(item) is list:
+            return cls.list(item, data)
         return item
