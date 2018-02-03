@@ -30,6 +30,13 @@ def test_resolver_values():
     assert Resolver.values(values) == ['one', 'two']
 
 
+def test_resolver_values_with_data(mocker):
+    mocker.patch.object(Resolver, 'object')
+    result = Resolver.values(['one'], data='data')
+    Resolver.object.assert_called_with('one', 'data')
+    assert result == [Resolver.object()]
+
+
 def test_resolver_string():
     assert Resolver.string('hello', {}) == 'hello'
 
@@ -128,19 +135,12 @@ def test_resolver_method_value_error():
 
 
 def test_resolver_expression(mocker):
-    mocker.patch.object(Resolver, 'list', return_value=[1])
+    mocker.patch.object(Resolver, 'values', return_value=[1])
     mocker.patch.object(Resolver, 'stringify', return_value='1')
     result = Resolver.expression('data', '{} == 1', 'values')
-    Resolver.list.assert_called_with('values', 'data')
+    Resolver.values.assert_called_with('values', data='data')
     Resolver.stringify.assert_called_with(1)
     assert result
-
-
-def test_resolver_list(mocker):
-    mocker.patch.object(Resolver, 'object')
-    result = Resolver.list(['one'], 'data')
-    Resolver.object.assert_called_with('one', 'data')
-    assert result == [Resolver.object()]
 
 
 def test_resolver_object_string(mocker):
@@ -206,6 +206,13 @@ def test_resolver_resolve_expression(mocker):
     assert result == Resolver.expression()
 
 
+def test_resolver_list(mocker):
+    mocker.patch.object(Resolver, 'resolve', return_value='done')
+    result = Resolver.list(['items'], {})
+    Resolver.resolve.assert_called_with('items', {})
+    assert result == 'done'
+
+
 def test_resolver_resolve(mocker):
     assert Resolver.resolve('whatever', 'data') == 'whatever'
 
@@ -215,3 +222,10 @@ def test_resolver_resolve_object(mocker):
     result = Resolver.resolve({}, 'data')
     Resolver.object.assert_called_with({}, 'data')
     assert result == Resolver.object()
+
+
+def test_resolver_resolve_list(mocker):
+    mocker.patch.object(Resolver, 'list')
+    result = Resolver.resolve([], 'data')
+    Resolver.list.assert_called_with([], 'data')
+    assert result == Resolver.list()

@@ -74,7 +74,7 @@ def test_resolve_method(method, left, right, result):
      {'abc': 0, 'b': 1}, [0, 1]),
 ])
 def test_resolve_list(items_list, data, result):
-    assert Resolver.list(items_list, data) == result
+    assert Resolver.values(items_list, data=data) == result
 
 
 @pytest.mark.parametrize('dictionary, data, result', [
