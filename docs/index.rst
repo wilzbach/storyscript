@@ -69,11 +69,6 @@ in a different way.
 While this might seem simplistic, is not rare for ground-breaking technologies
 to be just a smarter rearrangement of existing components.
 
-Status of the project
----------------------
-Storyscript is in an early phase. Currently it's only possible to write simple
-stories.
-
 Contributing
 ------------
 There are a variety of ways you can contribute to Storyscript.
