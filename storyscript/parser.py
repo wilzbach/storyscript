@@ -203,7 +203,8 @@ class Parser:
         )
 
     def p_stmt_set_path(self, p):
-        """stmt : SEQ expressions NEWLINE"""
+        """stmt : SEQ expressions NEWLINE
+                | SEQ object NEWLINE"""
         p[0] = Method(
             'set', self, p[1].lineno,
             args=(p[1], p[2])
@@ -357,6 +358,29 @@ class Parser:
         p[2].expressions.insert(0, ('', '('))
         p[2].expressions.append(('', ')'))
         p[0] = p[2]
+
+    def p_object(self, p):
+        """object : LBRACKET object_keys RBRACKET"""
+        p[0] = p[2]
+
+    def p_object_keys(self, p):
+        """object_keys : object_key
+                       | object_keys COMMA object_key"""
+        if len(p) == 4:
+            p[1]['items'].insert(0, p[3]['items'][0])
+        p[0] = p[1]
+
+    def p_object_key(self, p):
+        """object_key : PATH COLON object
+                      | PATH COLON variable
+                      | string COLON object
+                      | string COLON variable"""
+        p[0] = {
+            '$OBJECT': 'dict',
+            'items': [
+                (p[1], p[3])
+            ]
+        }
 
     def p_string_content(self, p):
         """string_content : paths

@@ -24,18 +24,12 @@ class Method:
         elif hasattr(args, 'json'):
             return args.json()
         elif type(args) is dict:
-            items = {}
-            for key, value in args.items():
-                items[key] = self.args_json(value)
-            return items
-
-        items = []
-        for value in args:
-            if hasattr(value, 'json'):
-                items.append(value.json())
-            else:
-                items.append(value)
-        return items
+            return dict({
+                key: self.args_json(value) for key, value in args.items()
+            })
+        elif type(args) in (list, tuple):
+            return list(map(self.args_json, args))
+        return args
 
     def json(self):
         dictionary = {
