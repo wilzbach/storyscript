@@ -55,6 +55,27 @@ def test_resolver_string_empty_values(mocker):
         Resolver.string('hello {} {}', {}, ['values'])
 
 
+def test_resolver_object_str_str():
+    items = [
+        [{'$OBJECT': 'string', 'string': 'example'},
+         {'$OBJECT': 'string', 'string': 'data'}]
+    ]
+    assert dict(Resolver.dict(items, {})) == {
+        'example': 'data'
+    }
+
+
+def test_resolver_object_path_path():
+    items = [
+        [{'$OBJECT': 'path', 'paths': ['a']},
+         {'$OBJECT': 'path', 'paths': ['b']}]
+    ]
+    data = {'a': 'example', 'b': 'data'}
+    assert dict(Resolver.dict(items, data)) == {
+        'example': 'data'
+    }
+
+
 def test_resolver_path():
     path = ['a.b.c']
     data = {'a': {'b': {'c': 'value'}}}
@@ -165,6 +186,14 @@ def test_resolver_object_path(mocker):
     result = Resolver.object(path, 'data')
     Resolver.path.assert_called_with(['example'], 'data')
     assert result == Resolver.path()
+
+
+def test_resolver_object_dict(mocker):
+    mocker.patch.object(Resolver, 'dict')
+    _dict = {'$OBJECT': 'dict', 'items': []}
+    result = Resolver.object(_dict, 'data')
+    Resolver.dict.assert_called_with(_dict['items'], 'data')
+    assert result == dict(Resolver.dict())
 
 
 def test_resolver_object_regexp(mocker):

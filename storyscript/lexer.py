@@ -88,6 +88,7 @@ class Lexer:
 
     tokens = (
         'BOOLEAN',
+        'COLON',
         'COMMA',
         'CONTAINER',
         'DEDENT',
@@ -98,11 +99,13 @@ class Lexer:
         'GTLT',
         'GTLTE',
         'INDENT',
+        'LBRACKET',
         'LPAREN',
         'NE',
         'NEWLINE',
         'OPERATOR',
         'PATH',
+        'RBRACKET',
         'REGEX',
         'RPAREN',
         'STRING_CONTINUE',
@@ -126,6 +129,7 @@ class Lexer:
     t_LPAREN = r'\('
     t_RPAREN = r'\)'
     t_AND = r'\&|and|also'
+    t_COLON = r':'
     t_COMMA = r'\,'
     t_SET = r'set'
 
@@ -293,7 +297,7 @@ class Lexer:
         t.lexer.lineno += t.value.count('\n')
         return t
 
-    def t_tripleq1_variable_START(self, t):
+    def t_tripleq1_variable_start(self, t):
         r'{{'
         t.lexer.push_state('variable')
 
@@ -325,7 +329,7 @@ class Lexer:
         t.lexer.lineno += t.value.count('\n')
         return t
 
-    def t_tripleq2_variable_START(self, t):
+    def t_tripleq2_variable_start(self, t):
         r'{{'
         t.lexer.push_state('variable')
 
@@ -352,7 +356,7 @@ class Lexer:
         t.type = 'STRING_CONTINUE'
         return t
 
-    def t_singleq1_variable_START(self, t):
+    def t_singleq1_variable_start(self, t):
         r'{{'
         t.lexer.push_state('variable')
 
@@ -383,7 +387,7 @@ class Lexer:
         t.type = 'STRING_CONTINUE'
         return t
 
-    def t_singleq2_variable_START(self, t):
+    def t_singleq2_variable_start(self, t):
         r'{{'
         t.lexer.push_state('variable')
 
@@ -401,6 +405,14 @@ class Lexer:
             t,
             'EOL while scanning single quoted string'
         )
+
+    def t_LBRACKET(self, t):
+        r'\{'
+        return t
+
+    def t_RBRACKET(self, t):
+        r'\}'
+        return t
 
     def TOKEN(self, type, lineno):
         tok = lex.LexToken()

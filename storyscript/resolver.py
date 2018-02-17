@@ -114,7 +114,19 @@ class Resolver:
             expression = item['expression']
             values = item['values']
             return cls.expression(data, expression, values)
+        elif object_type == 'dict':
+            return dict(cls.dict(item['items'], data))
         return cls.dictionary(item, data)
+
+    @classmethod
+    def dict(cls, items, data):
+        for k, v in items:
+            k = cls.object(k, data)
+            if k in (list, tuple, dict):
+                # warn or raise?
+                pass
+            else:
+                yield k, cls.object(v, data)
 
     @classmethod
     def list(cls, items, data):
