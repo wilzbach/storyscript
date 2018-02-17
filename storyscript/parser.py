@@ -180,9 +180,6 @@ class Parser:
                  | stmts EOF"""
         p[0] = p[1]
 
-    # -------------
-    # Set/Push/With
-    # -------------
     def p_set_eq(self, p):
         """SEQ : paths TO
                | paths IS
@@ -409,8 +406,7 @@ class Parser:
         p[0] = Expression(p[1])
 
     def p_container_arg(self, p):
-        """arg : variable
-               | expression
+        """arg : expression
                | FLAG"""
         p[0] = p[1]
 

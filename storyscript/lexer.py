@@ -297,7 +297,7 @@ class Lexer:
         t.lexer.lineno += t.value.count('\n')
         return t
 
-    def t_tripleq1_variable_START(self, t):
+    def t_tripleq1_variable_start(self, t):
         r'{{'
         t.lexer.push_state('variable')
 
@@ -329,7 +329,7 @@ class Lexer:
         t.lexer.lineno += t.value.count('\n')
         return t
 
-    def t_tripleq2_variable_START(self, t):
+    def t_tripleq2_variable_start(self, t):
         r'{{'
         t.lexer.push_state('variable')
 
@@ -356,7 +356,7 @@ class Lexer:
         t.type = 'STRING_CONTINUE'
         return t
 
-    def t_singleq1_variable_START(self, t):
+    def t_singleq1_variable_start(self, t):
         r'{{'
         t.lexer.push_state('variable')
 
@@ -387,7 +387,7 @@ class Lexer:
         t.type = 'STRING_CONTINUE'
         return t
 
-    def t_singleq2_variable_START(self, t):
+    def t_singleq2_variable_start(self, t):
         r'{{'
         t.lexer.push_state('variable')
 
