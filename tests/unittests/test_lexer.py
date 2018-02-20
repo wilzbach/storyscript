@@ -1,4 +1,5 @@
 import os
+import re
 
 from ply import lex
 
@@ -25,3 +26,10 @@ def test_lexer_build(mocker):
 
 def test_lexer_keywords():
     assert 'FOR' in Lexer.keywords
+
+
+def test_lexer_for(mocker):
+    mocker.patch.object(Lexer, 'build')
+    lexer = Lexer()
+    assert lexer.t_FOR.__doc__ == r'for(?=\s)'
+    assert lexer.t_FOR('token') == 'token'

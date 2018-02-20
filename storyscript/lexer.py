@@ -233,6 +233,10 @@ class Lexer:
         r'in(?=\s)'
         return t
 
+    def t_FOR(self, t):
+        r'for(?=\s)'
+        return t
+
     def t_CONTAINS(self, t):
         r'contains(?=\s)'
         return t
