@@ -100,6 +100,15 @@ Some commands may have complex actions::
 
     command action "arg1" "arg2"
 
+Delaying
+########
+It's possible to delay the execution of a block to a later moment::
+
+    delay = "15 minutes"
+    wait delay
+        # do things
+
+
 Comments
 #########
 Inline comments are denoted by a single `#`::
