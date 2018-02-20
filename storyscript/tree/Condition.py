@@ -4,10 +4,13 @@ class Condition:
         self.args = args
 
     def json(self):
-        return {
+        dictionary = {
             '$OBJECT': 'condition',
             'condition': self.args[0].json(),
             'is': self.args[1],
             'then': self.args[2].json(),
-            'else': self.args[3].json() if self.args[3] else None
+            'else': None
         }
+        if len(self.args) > 3:
+            dictionary['else'] = self.args[3].json()
+        return dictionary
