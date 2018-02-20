@@ -34,3 +34,6 @@ class Expression:
             'expression': ' '.join(evals),
             'values': values
         }
+
+    def __repr__(self):
+        return 'Expression({})'.format(self.expressions)

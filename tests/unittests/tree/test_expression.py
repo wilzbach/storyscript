@@ -17,6 +17,10 @@ def test_expression_init(expression):
     assert expression.expressions == [('', 'one')]
 
 
+def test_expression_representation(expression):
+    assert '{}'.format(expression) == "Expression([('', 'one')])"
+
+
 def test_expression_add(expression):
     expression.add('method', 'expression')
     assert expression.expressions[-1] == ('method', 'expression')
