@@ -18,3 +18,12 @@ def test_parser_init(mocker):
     assert isinstance(parser.lexer, Lexer)
     assert parser.tokens == Lexer().tokens
     assert parser.parser == yacc.yacc()
+
+
+def test_parser_for_item_in_list(mocker):
+    mocker.patch.object(os, 'getcwd')
+    mocker.patch.object(yacc, 'yacc')
+    mocker.patch.object(Lexer, '__init__', return_value=None)
+    parser = Parser()
+    p = mocker.MagicMock()
+    parser.p_stmt_for_item_in_list(p)
