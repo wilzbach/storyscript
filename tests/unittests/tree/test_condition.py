@@ -3,6 +3,11 @@ from pytest import mark
 from storyscript.tree import Condition
 
 
+
+def test_condition_init():
+    assert Condition('one', 'two').args == ('one', 'two')
+
+
 @mark.parametrize('_else',
                   [0, 1]
                   )
