@@ -20,6 +20,10 @@ def test_program_init(parser, program):
     assert program.story == 'story'
 
 
+def test_program_representation(parser, program):
+    assert '{}'.format(program) == 'Program({}, story)'.format(parser)
+
+
 def test_program_parse_item(mocker, method, program):
     mocker.patch.object(Method, 'json')
     result = {}
