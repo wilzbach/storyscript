@@ -28,3 +28,10 @@ def test_condition(condition):
 def test_condition_json_else(mocker, condition):
     condition.other = mocker.MagicMock()
     assert condition.json()['else'] == condition.other.json()
+
+
+def test_condition_representation(condition):
+    condition.condition = 'condition'
+    condition.consequence = 'consequence'
+    string = '{}'.format(condition)
+    assert string == 'Condition(condition, bool, consequence, None)'

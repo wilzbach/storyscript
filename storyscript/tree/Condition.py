@@ -17,3 +17,7 @@ class Condition:
         if self.other:
             dictionary['else'] = self.other.json()
         return dictionary
+
+    def __repr__(self):
+        args = [self.condition, self.boolean, self.consequence, self.other]
+        return 'Condition({}, {}, {}, {})'.format(*args)
