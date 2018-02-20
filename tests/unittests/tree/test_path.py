@@ -10,6 +10,10 @@ def test_path_init(mocker):
     assert path.paths == Path.split()
 
 
+def test_path_repr(path):
+    assert '{}'.format(path) == "Path(parser, line_number, ['path'])"
+
+
 def test_path_split(path):
     assert path.split("a.b['c']") == ['a', 'b', 'c']
 

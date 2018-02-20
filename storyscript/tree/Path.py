@@ -29,3 +29,6 @@ class Path:
             '$OBJECT': 'path',
             'paths': self.paths
         }
+
+    def __repr__(self):
+        return 'Path({}, {}, {})'.format(self.parser, self.lineno, self.paths)
