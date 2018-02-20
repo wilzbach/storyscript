@@ -9,19 +9,22 @@ def condition(mocker):
 
 
 def test_condition_init():
-    assert Condition('one', 'two').args == ('one', 'two')
+    condition = Condition('one', 'two', 'three')
+    assert condition.condition == 'one'
+    assert condition.boolean == 'two'
+    assert condition.consequence == 'three'
 
 
 def test_condition(condition):
     assert condition.json() == {
         '$OBJECT': 'condition',
-        'condition': condition.args[0].json(),
-        'is': 'bool',
-        'then': condition.args[2].json(),
+        'condition': condition.condition.json(),
+        'is': condition.boolean,
+        'then': condition.consequence.json(),
         'else': None
     }
 
 
 def test_condition_json_else(mocker, condition):
-    condition.args = tuple(list(condition.args) + [mocker.MagicMock()])
-    assert condition.json()['else'] == condition.args[3].json()
+    condition.other = mocker.MagicMock()
+    assert condition.json()['else'] == condition.other.json()
