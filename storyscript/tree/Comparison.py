@@ -21,3 +21,7 @@ class Comparison:
         self._handside_json(result, 'right')
         self._handside_json(result, 'left')
         return result
+
+    def __repr__(self):
+        return 'Comparison({}, {}, {})'.format(self.left, self.method,
+                                               self.right)
