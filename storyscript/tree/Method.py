@@ -44,3 +44,8 @@ class Method:
         if self.exit:
             dictionary['exit'] = str(self.exit)
         return dictionary
+
+    def __repr__(self):
+        args = [self.method, self.parser, self.lineno, self.suite, self.output,
+                self.container, self.args, self.enter, self.exit]
+        return 'Method({}, {}, {}, {}, {}, {}, {}, {}, {})'.format(*args)
