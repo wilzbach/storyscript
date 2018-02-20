@@ -68,6 +68,7 @@ class Lexer:
         'ELSEIF',
         'END',
         'EXIT',
+        'FOR',
         'HAS',
         'IF',
         'IN',

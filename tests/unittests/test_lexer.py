@@ -21,3 +21,7 @@ def test_lexer_build(mocker):
     assert lexer.lexer == lex.lex()
     assert lexer.lexer.filename is None
     assert lexer.token_stream is None
+
+
+def test_lexer_keywords():
+    assert 'FOR' in Lexer.keywords
