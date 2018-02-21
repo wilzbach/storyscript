@@ -15,6 +15,11 @@ def test_method_init(method):
     assert method.exit is None
 
 
+def test_method_representation(method):
+    string = 'Method(method, parser, 1, None, None, None, None, None, None)'
+    assert '{}'.format(method) == string
+
+
 @mark.parametrize('keyword_argument',
                   ['suite', 'output', 'container', 'args']
                   )

@@ -27,3 +27,6 @@ class Program:
         script_dictionary = {}
         self.parse_item(script_dictionary, self.story)
         return {'version': version, 'script': script_dictionary}
+
+    def __repr__(self):
+        return 'Program({}, {})'.format(self.parser, self.story)

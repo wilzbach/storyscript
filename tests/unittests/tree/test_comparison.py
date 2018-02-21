@@ -14,6 +14,10 @@ def test_comparison(comparison):
     assert comparison.right == 'right'
 
 
+def test_comparion_representation(comparison):
+    assert '{}'.format(comparison) == 'Comparison(left, method, right)'
+
+
 def test_comparison_json(comparison):
     result = comparison.json()
     assert result == {'$OBJECT': 'method', 'method': 'method', 'left': 'left',

@@ -12,6 +12,10 @@ def test_string_init(string):
     assert string.chunks == ['data']
 
 
+def test_string_representation(string):
+    assert '{}'.format(string) == "String(['data'])"
+
+
 def test_string_add(string):
     string.add('bit')
     assert string.chunks[-1] == 'bit'

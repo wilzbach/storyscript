@@ -1,20 +1,37 @@
-from pytest import mark
+from pytest import fixture
 
 from storyscript.tree import Condition
 
 
-@mark.parametrize('_else',
-                  [0, 1]
-                  )
-def test_condition(mocker, _else):
-    _if = mocker.MagicMock(json=mocker.MagicMock())
-    _then = mocker.MagicMock(json=mocker.MagicMock())
-    _else = mocker.MagicMock(json=mocker.MagicMock()) if _else else None
-    path = Condition(_if, True, _then, _else)
-    assert path.json() == {
+@fixture
+def condition(mocker):
+    return Condition(mocker.MagicMock(), 'bool', mocker.MagicMock())
+
+
+def test_condition_init():
+    condition = Condition('one', 'two', 'three')
+    assert condition.condition == 'one'
+    assert condition.boolean == 'two'
+    assert condition.consequence == 'three'
+
+
+def test_condition(condition):
+    assert condition.json() == {
         '$OBJECT': 'condition',
-        'condition': _if.json(),
-        'is': True,
-        'then': _then.json(),
-        'else': _else.json() if _else else None
+        'condition': condition.condition.json(),
+        'is': condition.boolean,
+        'then': condition.consequence.json(),
+        'else': None
     }
+
+
+def test_condition_json_else(mocker, condition):
+    condition.other = mocker.MagicMock()
+    assert condition.json()['else'] == condition.other.json()
+
+
+def test_condition_representation(condition):
+    condition.condition = 'condition'
+    condition.consequence = 'consequence'
+    string = '{}'.format(condition)
+    assert string == 'Condition(condition, bool, consequence, None)'

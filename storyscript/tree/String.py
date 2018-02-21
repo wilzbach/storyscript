@@ -32,3 +32,6 @@ class String:
         joined_string = ' '.join(stripped_chunk)
         result['string'] = joined_string
         return result
+
+    def __repr__(self):
+        return 'String({})'.format(self.chunks)

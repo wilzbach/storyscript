@@ -68,6 +68,7 @@ class Lexer:
         'ELSEIF',
         'END',
         'EXIT',
+        'FOR',
         'HAS',
         'IF',
         'IN',
@@ -230,6 +231,10 @@ class Lexer:
 
     def t_IN(self, t):
         r'in(?=\s)'
+        return t
+
+    def t_FOR(self, t):
+        r'for(?=\s)'
         return t
 
     def t_CONTAINS(self, t):

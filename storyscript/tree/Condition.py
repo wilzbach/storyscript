@@ -1,13 +1,23 @@
 class Condition:
 
-    def __init__(self, *args):
-        self.args = args
+    def __init__(self, condition, boolean, consequence, other=None):
+        self.condition = condition
+        self.boolean = boolean
+        self.consequence = consequence
+        self.other = other
 
     def json(self):
-        return {
+        dictionary = {
             '$OBJECT': 'condition',
-            'condition': self.args[0].json(),
-            'is': self.args[1],
-            'then': self.args[2].json(),
-            'else': self.args[3].json() if self.args[3] else None
+            'condition': self.condition.json(),
+            'is': self.boolean,
+            'then': self.consequence.json(),
+            'else': self.other
         }
+        if self.other:
+            dictionary['else'] = self.other.json()
+        return dictionary
+
+    def __repr__(self):
+        args = [self.condition, self.boolean, self.consequence, self.other]
+        return 'Condition({}, {}, {}, {})'.format(*args)
