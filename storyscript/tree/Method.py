@@ -22,7 +22,7 @@ class Method:
         if type(args) in (bool, int, float, type(None)):
             return args
         elif hasattr(args, 'json'):
-            return args.json()
+            return self.args_json(args.json())
         elif type(args) is dict:
             return dict({
                 key: self.args_json(value) for key, value in args.items()
