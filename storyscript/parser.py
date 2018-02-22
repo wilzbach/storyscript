@@ -156,6 +156,15 @@ class Parser:
             args=(p[2], ) if len(p) == 4 else None
         )
 
+    def p_wait(self, p):
+        """stmt : WAIT arg suite
+                | WAIT arg NEWLINE"""
+        p[0] = Method(
+            'wait', self, p.lineno(1),
+            args=(p[2], ),
+            suite=p[3] if type(p[3]) is list else None
+        )
+
     def p_container(self, p):
         """stmt : PATH PATH args NEWLINE
                 | CONTAINER PATH args NEWLINE"""

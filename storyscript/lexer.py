@@ -113,6 +113,7 @@ class Lexer:
         'STRING_END',
         'STRING_START_SINGLE',
         'STRING_START_TRIPLE',
+        'WAIT',
         'WS'
     ) + keywords
 
@@ -243,6 +244,10 @@ class Lexer:
 
     def t_NOT(self, t):
         r'not(?=\s)'
+        return t
+
+    def t_WAIT(self, t):
+        r'wait(?=\s)'
         return t
 
     @lex.TOKEN(NAME)
