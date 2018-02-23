@@ -44,7 +44,7 @@ Arrays
 #######
 Arrays are defined with comma-separated values::
 
-    colors are "red", "green", "blue"
+    colors is ["red", "green", "blue"]
 
 Objects
 #######
