@@ -100,12 +100,14 @@ class Lexer:
         'GTLT',
         'GTLTE',
         'INDENT',
+        'LBRACE',
         'LBRACKET',
         'LPAREN',
         'NE',
         'NEWLINE',
         'OPERATOR',
         'PATH',
+        'RBRACE',
         'RBRACKET',
         'REGEX',
         'RPAREN',
@@ -416,12 +418,20 @@ class Lexer:
             'EOL while scanning single quoted string'
         )
 
-    def t_LBRACKET(self, t):
+    def t_LBRACE(self, t):
         r'\{'
         return t
 
-    def t_RBRACKET(self, t):
+    def t_RBRACE(self, t):
         r'\}'
+        return t
+
+    def t_LBRACKET(self, t):
+        r'\['
+        return t
+
+    def t_RBRACKET(self, t):
+        r'\]'
         return t
 
     def TOKEN(self, type, lineno):

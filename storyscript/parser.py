@@ -209,8 +209,7 @@ class Parser:
         )
 
     def p_stmt_set_path(self, p):
-        """stmt : SEQ expressions NEWLINE
-                | SEQ object NEWLINE"""
+        """stmt : SEQ expressions NEWLINE"""
         p[0] = Method(
             'set', self, p[1].lineno,
             args=(p[1], p[2])
@@ -369,8 +368,24 @@ class Parser:
         p[2].expressions.append(('', ')'))
         p[0] = p[2]
 
+    def p_list(self, p):
+        """list : LBRACKET list_items RBRACKET"""
+        p[0] = {
+            '$OBJECT': 'list',
+            'items': p[2]
+        }
+
+    def p_listitems(self, p):
+        """list_items : variable
+                      | list_items COMMA variable"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[1].append(p[3])
+            p[0] = p[1]
+
     def p_object(self, p):
-        """object : LBRACKET object_keys RBRACKET"""
+        """object : LBRACE object_keys RBRACE"""
         p[0] = p[2]
 
     def p_object_keys(self, p):
@@ -414,6 +429,8 @@ class Parser:
     def p_variable(self, p):
         """variable : paths
                     | string
+                    | list
+                    | object
                     | BOOLEAN
                     | DIGITS"""
         p[0] = Expression(p[1])

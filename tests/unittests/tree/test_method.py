@@ -42,7 +42,7 @@ def test_method_args_json(arg, method):
 
 
 def test_method_args_json_json(mocker, method):
-    args = mocker.MagicMock(json=mocker.MagicMock())
+    args = mocker.MagicMock(json=mocker.MagicMock(return_value=1))
     result = method.args_json(args)
     assert result == args.json()
 
@@ -53,7 +53,7 @@ def test_method_args_json_dict(method):
 
 
 def test_method_args_json_dict_objects(mocker, method):
-    item = mocker.MagicMock(json=mocker.MagicMock())
+    item = mocker.MagicMock(json=mocker.MagicMock(return_value=1))
     assert method.args_json({'item': item}) == {'item': item.json()}
 
 
@@ -63,7 +63,7 @@ def test_method_args_json_others(method, arg):
 
 
 def test_method_args_json_list_objects(mocker, method):
-    item = mocker.MagicMock(json=mocker.MagicMock())
+    item = mocker.MagicMock(json=mocker.MagicMock(return_value=1))
     assert method.args_json([item]) == [item.json()]
 
 
