@@ -70,6 +70,11 @@ class Resolver:
             result[key] = cls.resolve(value, data)
         return result
 
+    @classmethod
+    def list_object(cls, items, data):
+        for item in items:
+            yield cls.resolve(item, data)
+
     @staticmethod
     def method(method, left, right):
         if method == 'like':
@@ -117,7 +122,7 @@ class Resolver:
         elif object_type == 'dict':
             return dict(cls.dict(item['items'], data))
         elif object_type == 'list':
-            return list(cls.list(item['items'], data))
+            return list(cls.list_object(item['items'], data))
         return cls.dictionary(item, data)
 
     @classmethod
@@ -132,11 +137,15 @@ class Resolver:
 
     @classmethod
     def list(cls, items, data):
+        result = []
         for item in items:
-            yield cls.resolve(item, data)
+            result.append(cls.resolve(item, data))
+        return ' '.join(result)
 
     @classmethod
     def resolve(cls, item, data):
         if type(item) is dict:
             return cls.object(item, data)
+        elif type(item) is list:
+            return cls.list(item, data)
         return item
