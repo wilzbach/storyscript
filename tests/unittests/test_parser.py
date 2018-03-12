@@ -2,8 +2,11 @@ import os
 
 from ply import yacc
 
+from pytest import mark
+
 from storyscript.lexer import Lexer
 from storyscript.parser import Parser
+from storyscript.tree import Method
 
 
 def test_parser_init(mocker):
@@ -27,3 +30,28 @@ def test_parser_for_item_in_list(mocker):
     parser = Parser()
     p = mocker.MagicMock()
     parser.p_stmt_for_item_in_list(p)
+
+
+def test_parser_p_wait(magic, patch):
+    patch.object(yacc, 'yacc')
+    patch.object(Lexer, '__init__', return_value=None)
+    patch.init(Method)
+    p = magic()
+    parser = Parser()
+    parser.p_wait(p)
+    args = ('wait', parser, p.lineno(1))
+    kwargs = {'args': (p[2],), 'enter': None, 'suite': None}
+    Method.__init__.assert_called_with(*args, **kwargs)
+
+
+@mark.skip(reason='I should mock an object that behaves like a list')
+def test_parser_p_wait_suite(magic, patch):
+    patch.object(yacc, 'yacc')
+    patch.object(Lexer, '__init__', return_value=None)
+    patch.init(Method)
+    p = magic()
+    parser = Parser()
+    parser.p_wait(p)
+    args = ('wait', parser, p.lineno(1))
+    kwargs = {'args': (p[2],), 'enter': p[3].lineno, 'suite': p[3]}
+    Method.__init__.assert_called_with(*args, **kwargs)
