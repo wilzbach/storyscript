@@ -163,7 +163,7 @@ class Parser:
         kwargs = {'args': (p[2], ), 'enter': None, 'suite': None}
         if type(p[3]) is list:
             kwargs['suite'] = p[3]
-            kwargs['enter'] = p[3].lineno
+            kwargs['enter'] = p[3][0].lineno
         p[0] = Method(*args, **kwargs)
 
     def p_container(self, p):
