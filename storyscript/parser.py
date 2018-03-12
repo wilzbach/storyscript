@@ -159,11 +159,12 @@ class Parser:
     def p_wait(self, p):
         """stmt : WAIT arg suite
                 | WAIT arg NEWLINE"""
-        p[0] = Method(
-            'wait', self, p.lineno(1),
-            args=(p[2], ),
-            suite=p[3] if type(p[3]) is list else None
-        )
+        args = ('wait', self, p.lineno(1))
+        kwargs = {'args': (p[2], ), 'enter': None, 'suite': None}
+        if type(p[3]) is list:
+            kwargs['suite'] = p[3]
+            kwargs['enter'] = p[3].lineno
+        p[0] = Method(*args, **kwargs)
 
     def p_container(self, p):
         """stmt : PATH PATH args NEWLINE
