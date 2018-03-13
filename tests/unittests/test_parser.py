@@ -40,7 +40,7 @@ def test_parser_p_wait(magic, patch):
     parser = Parser()
     parser.p_wait(p)
     args = ('wait', parser, p.lineno(1))
-    kwargs = {'args': (p[2],), 'enter': None, 'suite': None}
+    kwargs = {'args': (p[2],), 'enter': None, 'exit': None, 'suite': None}
     Method.__init__.assert_called_with(*args, **kwargs)
 
 
@@ -53,5 +53,6 @@ def test_parser_p_wait_suite(magic, patch):
     parser = Parser()
     parser.p_wait(p)
     args = ('wait', parser, p.lineno(1))
-    kwargs = {'args': (p[2],), 'enter': p[3].lineno, 'suite': p[3]}
+    kwargs = {'args': (p[2],), 'enter': p[3][0].lineno,
+              'exit': p[3][-1].lineno, 'suite': p[3]}
     Method.__init__.assert_called_with(*args, **kwargs)
