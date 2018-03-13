@@ -160,10 +160,11 @@ class Parser:
         """stmt : WAIT arg suite
                 | WAIT arg NEWLINE"""
         args = ('wait', self, p.lineno(1))
-        kwargs = {'args': (p[2], ), 'enter': None, 'suite': None}
+        kwargs = {'args': (p[2], ), 'enter': None, 'exit': None, 'suite': None}
         if type(p[3]) is list:
             kwargs['suite'] = p[3]
             kwargs['enter'] = p[3][0].lineno
+            kwargs['exit'] = p[3][-1].lineno
         p[0] = Method(*args, **kwargs)
 
     def p_container(self, p):
