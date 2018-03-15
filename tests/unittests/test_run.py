@@ -16,7 +16,7 @@ def test_containers():
     assert story['script']['1']['method'] == 'run'
     assert story['script']['1']['container'] == 'owner/repo'
     assert story['script']['1']['args'] == [
-        'arg1',
+        {'$OBJECT': 'path', 'paths': ['arg1']},
         {'$OBJECT': 'path', 'paths': ['arg2']}
     ]
 
@@ -32,7 +32,7 @@ def test_container_comma():
     assert story['script']['1']['method'] == 'run'
     assert story['script']['1']['container'] == 'owner/repo:stable'
     assert story['script']['1']['args'] == [
-        'arg1',
+        {'$OBJECT': 'path', 'paths': ['arg1']},
         {'$OBJECT': 'path', 'paths': ['arg2']}
     ]
 
@@ -47,7 +47,9 @@ def test_containers_long():
     print(dumps(story['script'], indent=2))
     assert story['script']['1']['method'] == 'run'
     assert story['script']['1']['container'] == 'domain.com/owner/repo:latest'
-    assert story['script']['1']['args'] == ['do']
+    assert story['script']['1']['args'] == [
+        {'$OBJECT': 'path', 'paths': ['do']}
+    ]
 
 
 def test_container_suite():
