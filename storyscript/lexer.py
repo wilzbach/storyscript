@@ -278,7 +278,11 @@ class Lexer:
         self.error('Syntax Error', t)
 
     def t_COMMENT(self, t):
-        r'\#.*'
+        r'\#[^\n]*'
+        pass
+
+    def t_COMMENT_BLOCK(self, t):
+        r'\#{3}.*\#{3}'
         pass
 
     t_variable_ignore = r' '
