@@ -52,6 +52,7 @@ class Lexer:
         )])
 
     states = (('variable', 'exclusive'),
+              ('file', 'exclusive'),
               ('singleq1', 'exclusive'),
               ('singleq2', 'exclusive'),
               ('tripleq1', 'exclusive'),
@@ -96,6 +97,8 @@ class Lexer:
         'DIGITS',
         'EOF',
         'EQ',
+        'FILE_END',
+        'FILE_START',
         'FLAG',
         'GTLT',
         'GTLTE',
@@ -412,6 +415,37 @@ class Lexer:
     t_singleq2_ignore = ''
 
     def t_singleq2_error(self, t):  # pragma: no cover
+        self.error(
+            'Syntax Error',
+            t,
+            'EOL while scanning single quoted string'
+        )
+
+    def t_start_file(self, t):
+        r'\`'
+        t.lexer.push_state('file')
+        t.type = 'FILE_START'
+        t.value = t.value.split('\`', 1)[0]
+        return t
+
+    def t_file_simple(self, t):
+        r'(({|})?[^{}\`])+'
+        t.type = 'STRING_CONTINUE'
+        return t
+
+    def t_file_variable_start(self, t):
+        r'{{'
+        t.lexer.push_state('variable')
+
+    def t_file_end(self, t):
+        r'\`'
+        t.type = 'FILE_END'
+        t.lexer.pop_state()
+        return t
+
+    t_file_ignore = ''
+
+    def t_file_error(self, t):  # pragma: no cover
         self.error(
             'Syntax Error',
             t,
