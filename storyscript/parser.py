@@ -428,9 +428,15 @@ class Parser:
                   | STRING_START_TRIPLE string_inner STRING_END"""
         p[0] = p[2]
 
+    def p_file(self, p):
+        """file : FILE_START string_inner FILE_END"""
+        p[2].type = 'file'
+        p[0] = p[2]
+
     def p_variable(self, p):
         """variable : paths
                     | string
+                    | file
                     | list
                     | object
                     | BOOLEAN

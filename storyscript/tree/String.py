@@ -5,6 +5,7 @@ class String:
 
     def __init__(self, data):
         self.chunks = [data]
+        self.type = None
 
     def add(self, bit):
         self.chunks.append(bit)
@@ -16,6 +17,9 @@ class String:
 
     def json(self):
         result = {'$OBJECT': 'string'}
+        if self.type:
+            result['type'] = self.type
+
         if self.complex():
             string = []
             values = []
