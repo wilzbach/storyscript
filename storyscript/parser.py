@@ -168,22 +168,22 @@ class Parser:
         p[0] = Method(*args, **kwargs)
 
     def p_container(self, p):
-        """stmt : PATH PATH args NEWLINE
-                | CONTAINER PATH args NEWLINE"""
+        """stmt : PATH args NEWLINE
+                | CONTAINER args NEWLINE"""
         p[0] = Method(
             'run', self, p.lineno(1),
             container=p[1],
-            args=[p[2]] + (p[3] or [])
+            args=p[2]
         )
 
     def p_container_suite(self, p):
-        """stmt : PATH PATH args suite
-                | CONTAINER PATH args suite"""
+        """stmt : PATH args suite
+                | CONTAINER args suite"""
         p[0] = Method(
             'run', self, p.lineno(1),
             container=p[1],
-            args=[p[2]] + (p[3] or []),
-            suite=p[4]
+            args=p[2],
+            suite=p[3]
         )
 
     def p_story(self, p):
@@ -201,13 +201,13 @@ class Parser:
         p[0] = p[1] if len(p) == 3 else p[2]
 
     def p_stmt_set_path_container(self, p):
-        """stmt : SEQ PATH PATH args NEWLINE
-                | SEQ CONTAINER PATH args NEWLINE"""
+        """stmt : SEQ PATH args NEWLINE
+                | SEQ CONTAINER args NEWLINE"""
         p[0] = Method(
             'run', self, p[1].lineno,
             output=p[1],
             container=p[2],
-            args=[p[3]] + (p[4] or [])
+            args=p[3]
         )
 
     def p_stmt_set_path(self, p):
