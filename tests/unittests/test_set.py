@@ -51,8 +51,11 @@ def test_set(script, args):
      [{'$OBJECT': 'path', 'paths': ['arg']},
       '--flag',
       {'$OBJECT': 'path', 'paths': ['foobar']},
-      '-n1']),
+      '-n',
+      1]),
     ('x = owner/repo run -s=0 --long=1',
+     [{'$OBJECT': 'path', 'paths': ['run']}, '-s', 0, '--long', 1]),
+    ('x = owner/repo run -s=0\n   --long=1',
      [{'$OBJECT': 'path', 'paths': ['run']}, '-s', 0, '--long', 1]),
 ])
 def test_set_container(script, args):

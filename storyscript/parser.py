@@ -444,7 +444,7 @@ class Parser:
         p[0] = Expression(p[1])
 
     def p_container_arg(self, p):
-        """arg : expression
+        """arg : variable
                | FLAG"""
         p[0] = p[1]
 

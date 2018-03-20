@@ -156,8 +156,8 @@ class Lexer:
         return t
 
     def t_FLAG(self, t):
-        r'(-{1,2}[\w\-]+=?)'
-        t.value = t.value.replace('=', '')
+        r'((\n[\s\t]*)?((-\w)|(-{2}[\w\-]+))\s?\=?)'
+        t.value = t.value.strip().rstrip('=')
         return t
 
     def t_BOOLEAN(self, t):
