@@ -42,7 +42,7 @@ def test_program_parse_item_parent(mocker, method, program):
     mocker.patch.object(Method, 'json', return_value={})
     result = {}
     program.parse_item(result, method, parent=mocker.MagicMock(lineno='100'))
-    assert result[method.lineno]['prev'] == '100'
+    assert result[method.lineno]['parent'] == '100'
 
 
 def test_program_parse_item_suite(mocker, method, program):

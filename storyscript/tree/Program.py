@@ -13,7 +13,7 @@ class Program:
         if isinstance(item, Method):
             dictionary[item.lineno] = item.json()
             if parent:
-                dictionary[item.lineno]['prev'] = parent.lineno
+                dictionary[item.lineno]['parent'] = parent.lineno
 
             if item.suite:
                 child_line_numbers = [
