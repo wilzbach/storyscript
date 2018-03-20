@@ -63,6 +63,7 @@ def test_container_suite():
     print(dumps(story['script'], indent=2))
     assert story['script']['1']['method'] == 'run'
     assert story['script']['1']['container'] == 'alpine'
+    assert story['script']['1']['next'] == '2'
     assert story['script']['2']['method'] == 'run'
     assert story['script']['2']['container'] == 'alpine'
-    assert story['script']['2']['parent'] == '1'
+    assert story['script']['2']['prev'] == '1'

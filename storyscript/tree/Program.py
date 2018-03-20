@@ -13,15 +13,23 @@ class Program:
         if isinstance(item, Method):
             dictionary[item.lineno] = item.json()
             if parent:
-                dictionary[item.lineno]['parent'] = parent.lineno
+                dictionary[item.lineno]['prev'] = parent.lineno
 
             if item.suite:
-                for child in item.suite:
+                child_line_numbers = [
                     self.parse_item(dictionary, child, parent=item)
+                    for child in item.suite
+                ]
+                dictionary[item.lineno]['next'] = child_line_numbers[0]
+
+            return item.lineno
 
         else:
-            for child in item:
+            child_line_numbers = [
                 self.parse_item(dictionary, child, parent=parent)
+                for child in item
+            ]
+            return child_line_numbers[0]
 
     def json(self):
         script_dictionary = {}
