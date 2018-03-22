@@ -23,13 +23,16 @@ def test_parser_init(mocker):
     assert parser.parser == yacc.yacc()
 
 
-def test_parser_for_item_in_list(mocker):
-    mocker.patch.object(os, 'getcwd')
-    mocker.patch.object(yacc, 'yacc')
-    mocker.patch.object(Lexer, '__init__', return_value=None)
+def test_parser_for_item_in_list(patch, magic):
+    patch.object(yacc, 'yacc')
+    patch.init(Lexer)
+    patch.init(Method)
     parser = Parser()
-    p = mocker.MagicMock()
+    p = magic()
     parser.p_stmt_for_item_in_list(p)
+    args = ('for', parser, p.lineno())
+    kwargs = {'args': [p[2], p[4]], 'suite': p[5], 'enter': p[5][0].lineno}
+    Method.__init__.assert_called_with(*args, **kwargs)
 
 
 def test_parser_p_wait(magic, patch):
