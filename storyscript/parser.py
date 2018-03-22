@@ -302,7 +302,8 @@ class Parser:
 
     def p_stmt_for_item_in_list(self, p):
         """stmt : FOR PATH IN variable suite"""
-        p[0] = Method('for', self, p.lineno(1), args=[p[2], p[4]], suite=p[5])
+        p[0] = Method('for', self, p.lineno(1), args=[p[2], p[4]], suite=p[5],
+                      enter=p[5][0].lineno)
 
     def p_expressions(self, p):
         """expressions : expression
