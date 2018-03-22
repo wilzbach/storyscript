@@ -5,6 +5,7 @@ from pytest import fixture, mark
 
 from storyscript.app import App
 from storyscript.cli import Cli
+from storyscript.version import version
 
 
 @fixture
@@ -34,7 +35,8 @@ def test_cli_version(mocker, runner, echo):
     Ensures --version outputs the version
     """
     runner.invoke(Cli.main, ['--version'])
-    click.echo.assert_called_with('StoryScript 0.0.8 - http://storyscript.org')
+    message = 'StoryScript {} - http://storyscript.org'.format(version)
+    click.echo.assert_called_with(message)
 
 
 def test_cli_lexer(mocker, runner, app, echo):
