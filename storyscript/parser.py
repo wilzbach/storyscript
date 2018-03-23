@@ -290,14 +290,25 @@ class Parser:
         )
 
     def p_stmt_while_container(self, p):
-        """stmt : WHILE PATH PATH args output suite
-                | WHILE CONTAINER PATH args output suite"""
+        """stmt : WHILE PATH args output suite
+                | WHILE CONTAINER args output suite"""
         p[0] = Method(
             'while', self, p.lineno(1),
             container=p[2],
-            args=[p[3]] + (p[4] or []),
-            output=p[5],
-            suite=p[6]
+            args=p[3],
+            output=p[4],
+            suite=p[5]
+        )
+
+    def p_stmt_streaming_container(self, p):
+        """stmt : PATH args output suite
+                | CONTAINER args output suite"""
+        p[0] = Method(
+            'run', self, p.lineno(1),
+            container=p[1],
+            args=p[2],
+            output=p[3],
+            suite=p[4]
         )
 
     def p_stmt_for_item_in_list(self, p):
