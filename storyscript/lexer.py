@@ -307,13 +307,18 @@ class Lexer:
         r"'''"
         t.lexer.push_state('tripleq1')
         t.type = 'STRING_START_TRIPLE'
-        t.value = t.value.split("'", 1)[0]
+        t.value = t.value[0]
         return t
 
     def t_tripleq1_simple(self, t):
-        r"((({|})?[^{}'])|('{0,2}[^'{}]+))+"
+        r"([^\{{2}|\'{3}])+\"*?"
         t.type = 'STRING_CONTINUE'
         t.lexer.lineno += t.value.count('\n')
+        return t
+
+    def t_tripleq1_simple2(self, t):
+        r"\'{1,2}(?!\')"
+        t.type = 'STRING_CONTINUE'
         return t
 
     def t_tripleq1_variable_start(self, t):
@@ -339,18 +344,27 @@ class Lexer:
         r'"""'
         t.lexer.push_state('tripleq2')
         t.type = 'STRING_START_TRIPLE'
-        t.value = t.value
+        t.value = t.value[0]
         return t
 
     def t_tripleq2_simple(self, t):
-        r'((({|})?[^{}"])|("{0,2}[^"{}]+))+'
+        r'([^\{{2}|\"{3}])+\"*?'
         t.type = 'STRING_CONTINUE'
         t.lexer.lineno += t.value.count('\n')
+        return t
+
+    def t_tripleq2_simple2(self, t):
+        r'\"{1,2}(?!\")'
+        t.type = 'STRING_CONTINUE'
         return t
 
     def t_tripleq2_variable_start(self, t):
         r'{{'
         t.lexer.push_state('variable')
+
+    def t_tripleq2_variable_end(self, t):
+        r'}}'
+        t.lexer.pop_state()
 
     def t_tripleq2_end(self, t):
         r'"""'
@@ -378,6 +392,10 @@ class Lexer:
     def t_singleq1_variable_start(self, t):
         r'{{'
         t.lexer.push_state('variable')
+
+    def t_singleq1_variable_end(self, t):
+        r'}}'
+        t.lexer.pop_state()
 
     def t_singleq1_end(self, t):
         r"'"
@@ -409,6 +427,10 @@ class Lexer:
     def t_singleq2_variable_start(self, t):
         r'{{'
         t.lexer.push_state('variable')
+
+    def t_singleq2_variable_end(self, t):
+        r'}}'
+        t.lexer.pop_state()
 
     def t_singleq2_end(self, t):
         r'"'
