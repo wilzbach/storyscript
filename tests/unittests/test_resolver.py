@@ -255,6 +255,13 @@ def test_resolver_list(mocker):
     assert result == 'done'
 
 
+def test_resolver_list_booleans(patch):
+    patch.object(Resolver, 'resolve', return_value=True)
+    result = Resolver.list(['items'], {})
+    Resolver.resolve.assert_called_with('items', {})
+    assert result == [True]
+
+
 def test_resolver_resolve(mocker):
     assert Resolver.resolve('whatever', 'data') == 'whatever'
 
