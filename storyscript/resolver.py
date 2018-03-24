@@ -140,6 +140,9 @@ class Resolver:
         result = []
         for item in items:
             result.append(cls.resolve(item, data))
+        if len(result) == 1:
+            if type(result[0]) is bool:
+                return result
         return ' '.join(result)
 
     @classmethod
