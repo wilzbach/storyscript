@@ -406,7 +406,7 @@ class Parser:
         """object_keys : object_key
                        | object_keys COMMA object_key"""
         if len(p) == 4:
-            p[1]['items'].insert(0, p[3]['items'][0])
+            p[1]['items'].append(p[3]['items'][0])
         p[0] = p[1]
 
     def p_object_key(self, p):
