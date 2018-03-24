@@ -287,6 +287,7 @@ class Lexer:
 
     def t_COMMENT_BLOCK(self, t):
         r'\#{3}.*\#{3}'
+        t.lexer.lineno += t.value.count('\n')
         pass
 
     t_variable_ignore = r' '
