@@ -490,7 +490,12 @@ class Lexer:
         t.lexer.pop_state()
         return t
 
-    t_objects_ignore = ' \n\t'
+    def t_objects_newlines(self, t):
+        r'\n'
+        t.lexer.lineno += t.value.count('\n')
+        return None
+
+    t_objects_ignore = ' \t'
 
     def t_objects_error(self, t):  # pragma: no cover
         self.error(
