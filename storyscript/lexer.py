@@ -53,7 +53,6 @@ class Lexer:
 
     states = (('variable', 'exclusive'),
               ('file', 'exclusive'),
-              ('objects', 'inclusive'),
               ('singleq1', 'exclusive'),
               ('singleq2', 'exclusive'),
               ('tripleq1', 'exclusive'),
@@ -482,27 +481,11 @@ class Lexer:
 
     def t_LBRACE(self, t):
         r'\{'
-        t.lexer.push_state('objects')
         return t
 
-    def t_objects_RBRACE(self, t):
+    def t_RBRACE(self, t):
         r'\}'
-        t.lexer.pop_state()
         return t
-
-    def t_objects_newlines(self, t):
-        r'\n'
-        t.lexer.lineno += t.value.count('\n')
-        return None
-
-    t_objects_ignore = ' \t'
-
-    def t_objects_error(self, t):  # pragma: no cover
-        self.error(
-            'Syntax Error',
-            t,
-            'EOL while scanning single quoted string'
-        )
 
     def t_LBRACKET(self, t):
         r'\['

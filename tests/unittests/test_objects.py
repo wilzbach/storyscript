@@ -49,7 +49,7 @@ def test_long_obj():
     story = """foo.bar = {
         'a': 'b',
         'c': 'd'
-    }
+}
     """
     result = parse(story).json()
     assert result['script']['1']['method'] == 'set'
@@ -58,8 +58,10 @@ def test_long_obj():
         {
             '$OBJECT': 'dict',
             'items': [
-                [{'$OBJECT': 'string', 'string': 'a'}, {'$OBJECT': 'string', 'string': 'b'}],
-                [{'$OBJECT': 'string', 'string': 'c'}, {'$OBJECT': 'string', 'string': 'd'}]
+                [{'$OBJECT': 'string', 'string': 'a'},
+                 {'$OBJECT': 'string', 'string': 'b'}],
+                [{'$OBJECT': 'string', 'string': 'c'},
+                 {'$OBJECT': 'string', 'string': 'd'}]
             ]
         }
     ], story

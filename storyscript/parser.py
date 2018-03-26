@@ -382,11 +382,23 @@ class Parser:
         p[2].expressions.append(('', ')'))
         p[0] = p[2]
 
+    def p_wsnl(self, p):
+        """wsnl : NEWLINE
+                | WS
+                | DEDENT
+                | INDENT
+                | wsnl NEWLINE
+                | wsnl WS
+                | wsnl DEDENT
+                | wsnl INDENT
+                | """
+        pass
+
     def p_list(self, p):
-        """list : LBRACKET list_items RBRACKET"""
+        """list : LBRACKET wsnl list_items wsnl RBRACKET"""
         p[0] = {
             '$OBJECT': 'list',
-            'items': p[2]
+            'items': p[3]
         }
 
     def p_listitems(self, p):
@@ -399,14 +411,14 @@ class Parser:
             p[0] = p[1]
 
     def p_object(self, p):
-        """object : LBRACE object_keys RBRACE"""
-        p[0] = p[2]
+        """object : LBRACE wsnl object_keys wsnl RBRACE"""
+        p[0] = p[3]
 
     def p_object_keys(self, p):
         """object_keys : object_key
-                       | object_keys COMMA object_key"""
-        if len(p) == 4:
-            p[1]['items'].append(p[3]['items'][0])
+                       | object_keys COMMA wsnl object_key"""
+        if len(p) == 5:
+            p[1]['items'].append(p[4]['items'][0])
         p[0] = p[1]
 
     def p_object_key(self, p):
