@@ -149,7 +149,6 @@ class Parser:
         """stmt : CONTINUE args NEWLINE
                 | BREAK args NEWLINE
                 | EXIT NEWLINE
-                | PASS NEWLINE
                 | END NEWLINE"""
         p[0] = Method(
             p[1].lower(), self, p.lineno(1),
