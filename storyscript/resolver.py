@@ -55,11 +55,11 @@ class Resolver:
     @classmethod
     def path(cls, paths, data):
         """
-        Resolves a path against some data, for example the path 'a.b'
+        Resolves a path against some data, for example the path ['a', 'b']
         with data {'a': {'b': 'value'}} produces 'value'
         """
         try:
-            return reduce(cls._walk, paths[0].split('.'), data)
+            return reduce(cls._walk, paths, data)
         except (KeyError, TypeError):
             return None
 

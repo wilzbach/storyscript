@@ -77,23 +77,19 @@ def test_resolver_object_path_path():
 
 
 def test_resolver_path():
-    path = ['a.b.c']
+    path = ['a', 'b', 'c']
     data = {'a': {'b': {'c': 'value'}}}
     assert Resolver.path(path, data) == 'value'
 
 
 def test_resolver_path_list():
-    path = ['a.1.b']
-    data = {'a': [0, {'b': 'value'}]}
+    path = ['a', '1', 'b']
+    data = {'a': [None, {'b': 'value'}]}
     assert Resolver.path(path, data) == 'value'
 
 
 def test_resolver_path_key_error():
-    assert Resolver.path(['a.b'], {}) is None
-
-
-def test_resolver_path_type_error():
-    assert Resolver.path(['a.b.'], {'a': {'b': 'value'}}) is None
+    assert Resolver.path(['a', 'b'], {}) is None
 
 
 def test_resolver_dictionary(mocker):
