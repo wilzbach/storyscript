@@ -21,18 +21,14 @@ class Resolver:
         return str(value)
 
     @classmethod
-    def values(cls, items_list, data=None):
+    def values(cls, items_list, data):
         """
         Parses a list of values objects. The list may contain other objects.
         """
-        if data is not None:
-            mapping = map(lambda item: cls.object(item, data), items_list)
-            return list(mapping)
-
-        values = []
-        for value in items_list:
-            values.append(value['paths'][0])
-        return values
+        return [
+            Resolver.resolve(value, data)
+            for value in items_list
+        ]
 
     @classmethod
     def string(cls, string, data, values=None):
@@ -41,15 +37,8 @@ class Resolver:
         is formatted against data, using the order in values.
         """
         if values:
-            keys = Resolver.values(values)
-            arguments = []
-            for key in keys:
-                if key in data:
-                    arguments.append(data[key])
-
-            if len(arguments) != len(keys):
-                raise ValueError('Not enough string arguments from data')
-            return string.format(*arguments)
+            values = Resolver.values(values, data)
+            return string.format(*values)
         return string
 
     @classmethod

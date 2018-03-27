@@ -27,32 +27,11 @@ def test_resolver_stringify_string_multiline():
 def test_resolver_values():
     values = [{'$OBJECT': 'path', 'paths': ['one']},
               {'$OBJECT': 'path', 'paths': ['two']}]
-    assert Resolver.values(values) == ['one', 'two']
-
-
-def test_resolver_values_with_data(mocker):
-    mocker.patch.object(Resolver, 'object')
-    result = Resolver.values(['one'], data='data')
-    Resolver.object.assert_called_with('one', 'data')
-    assert result == [Resolver.object()]
+    assert Resolver.values(values, {'one': 1, 'two': 2}) == [1, 2]
 
 
 def test_resolver_string():
     assert Resolver.string('hello', {}) == 'hello'
-
-
-def test_resolver_string_values(mocker):
-    mocker.patch.object(Resolver, 'values', return_value=['one', 'two'])
-    data = {'one': 'beautiful', 'two': 'world'}
-    result = Resolver.string('hello {} {}', data, ['values'])
-    Resolver.values.assert_called_with(['values'])
-    assert result == 'hello beautiful world'
-
-
-def test_resolver_string_empty_values(mocker):
-    mocker.patch.object(Resolver, 'values', return_value=['one', 'two'])
-    with raises(ValueError):
-        Resolver.string('hello {} {}', {}, ['values'])
 
 
 def test_resolver_object_str_str():
@@ -260,6 +239,19 @@ def test_resolver_list_booleans(patch):
 
 def test_resolver_resolve(mocker):
     assert Resolver.resolve('whatever', 'data') == 'whatever'
+
+
+def test_resolve_many():
+    result = Resolver.resolve({
+        '$OBJECT': 'string',
+        'string': '{}',
+        'values': [{
+            '$OBJECT': 'path',
+            'paths': ['foo', 'bar']
+        }]
+    }, {'foo': {'bar': 'data'}})
+
+    assert result == 'data'
 
 
 def test_resolver_resolve_object(mocker):
