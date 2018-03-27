@@ -79,7 +79,6 @@ class Lexer:
         'NEXT',
         'NOT',
         'OR',
-        'PASS',
         'SET',
         'THEN',
         'TO',
@@ -171,11 +170,6 @@ class Lexer:
             '$OBJECT': 'regexp',
             'regexp': re.compile(t.value[1:-1]).pattern,
         }
-        return t
-
-    def t_PASS(self, t):
-        r'(pass|skip)'
-        t.value = 'pass'
         return t
 
     def t_EQ(self, t):
