@@ -214,6 +214,14 @@ def test_resolver_object_method(patch):
     assert result == Resolver.method()
 
 
+def test_resolver_object_file(patch):
+    patch.object(Resolver, 'file')
+    item = {'$OBJECT': 'file', 'string': 'filename'}
+    result = Resolver.object(item, 'data')
+    Resolver.file.assert_called_with(item, 'data')
+    assert result == Resolver.file()
+
+
 def test_resolver_resolve_expression(patch):
     patch.object(Resolver, 'expression')
     item = {'$OBJECT': 'expression', 'expression': '==', 'values': []}

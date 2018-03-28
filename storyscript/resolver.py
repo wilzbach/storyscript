@@ -42,6 +42,10 @@ class Resolver:
         return string
 
     @classmethod
+    def file(cls):
+        pass
+
+    @classmethod
     def path(cls, paths, data):
         """
         Resolves a path against some data, for example the path ['a', 'b']
@@ -94,6 +98,8 @@ class Resolver:
             if 'values' in item:
                 return cls.string(item['string'], data, values=item['values'])
             return cls.string(item['string'], data)
+        elif object_type == 'file':
+            return cls.file(item, data)
         elif object_type == 'path':
             return cls.path(item['paths'], data)
         elif object_type == 'regexp':
