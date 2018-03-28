@@ -3,6 +3,11 @@ from .String import String
 
 class File(String):
 
+    def __init__(self, data):
+        super().__init__(data)
+        if type(data) is list:
+            self.chunks = data
+
     def json(self):
         json = super().json()
         json['$OBJECT'] = 'file'
