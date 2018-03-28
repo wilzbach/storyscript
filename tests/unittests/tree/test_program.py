@@ -100,12 +100,35 @@ def test_program_parse_suite(magic, program):
 
 
 def test_program_generate(patch, magic, program):
-    line = magic(lineno='1')
-    program.story = [line]
-    patch.object(Program, 'nparse_item')
+    patch.many(Program, ['last_line', 'parse_suite'])
+    Program.last_line.return_value = None
+    item = magic(lineno='1', json=magic(return_value={}, suite=None))
+    program.story = [item]
     result = program.generate()
-    Program.nparse_item.assert_called_with(line)
-    assert result == {'1': Program.nparse_item()}
+    assert Program.last_line.call_count == 1
+    assert item.json.call_count == 1
+    assert result == {'1': {}}
+
+
+def test_program_generate_next_line(patch, magic, program):
+    patch.many(Program, ['last_line', 'parse_suite'])
+    Program.last_line.return_value = '1'
+    item = magic(lineno='1', json=magic(return_value={}, suite=None))
+    program.story = [item, item]
+    result = program.generate()
+    assert result == {'1': {'next': program.last_line()}}
+
+
+def test_program_generate_suite(patch, magic, program):
+    patch.many(Program, ['last_line', 'parse_suite'])
+    Program.last_line.return_value = None
+    Program.parse_suite.return_value = {'2': {}}
+    item = magic(lineno='1', json=magic(return_value={}, suite='suite'))
+    program.story = [item]
+    result = program.generate()
+    Program.parse_suite.assert_called_with(item.suite, '1')
+    assert '1' in result
+    assert result['2'] == {}
 
 
 def test_program_json(patch, program):

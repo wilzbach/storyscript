@@ -57,7 +57,12 @@ class Program:
     def generate(self):
         story = {}
         for item in self.story:
-            story[item.lineno] = self.parse_item(item)
+            previous_line = self.last_line(story)
+            story[item.lineno] = item.json()
+            if previous_line:
+                story[previous_line]['next'] = item.lineno
+            if item.suite:
+                story = {**story, **self.parse_suite(item.suite, item.lineno)}
         return story
 
     def json(self):
