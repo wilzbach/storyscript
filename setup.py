@@ -1,6 +1,8 @@
 from setuptools import find_packages, setup
 from setuptools.command.install import install
 
+from storyscript.version import version
+
 
 classifiers = [
     'Development Status :: 4 - Beta',
@@ -36,7 +38,7 @@ class CustomInstallCommand(install):
 
 
 setup(name='storyscript',
-      version='0.0.8',
+      version=version,
       description='',
       long_description='',
       classifiers=classifiers,

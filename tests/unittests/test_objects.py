@@ -43,3 +43,25 @@ def test_object_variables(eq, res):
             ]
         }
     ], story
+
+
+def test_long_obj():
+    story = """foo.bar = {
+        'a': 'b',
+        'c': 'd'
+}
+    """
+    result = parse(story).json()
+    assert result['script']['1']['method'] == 'set'
+    assert result['script']['1']['args'] == [
+        {'$OBJECT': 'path', 'paths': ['foo', 'bar']},
+        {
+            '$OBJECT': 'dict',
+            'items': [
+                [{'$OBJECT': 'string', 'string': 'a'},
+                 {'$OBJECT': 'string', 'string': 'b'}],
+                [{'$OBJECT': 'string', 'string': 'c'},
+                 {'$OBJECT': 'string', 'string': 'd'}]
+            ]
+        }
+    ], story

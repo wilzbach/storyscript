@@ -6,9 +6,9 @@ from storyscript.resolver import Resolver
 
 
 @pytest.mark.parametrize('path,data,result', [
-    (['a.b.c'], {'a': {'b': {'c': 1}}}, 1),
+    (['a', 'b', 'c'], {'a': {'b': {'c': 1}}}, 1),
     (['a'], {'a': {'b': {}}}, {'b': {}}),
-    (['a.1.b'], {'a': [1, {'b': 1}]}, 1)
+    (['a', '1', 'b'], {'a': [None, {'b': 1}]}, 1)
 ])
 def test_resolve_path(path, data, result):
     assert Resolver.path(path, data) == result

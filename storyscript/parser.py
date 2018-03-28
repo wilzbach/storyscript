@@ -5,8 +5,8 @@ from ply import yacc
 
 from .exceptions import ScriptError
 from .lexer import Lexer
-from .tree import Comparison, Condition, \
-    Expression, Method, Path, Program, String
+from .tree import (Comparison, Condition, Expression, File, Method, Path,
+                   Program, String)
 
 
 class Parser:
@@ -149,7 +149,6 @@ class Parser:
         """stmt : CONTINUE args NEWLINE
                 | BREAK args NEWLINE
                 | EXIT NEWLINE
-                | PASS NEWLINE
                 | END NEWLINE"""
         p[0] = Method(
             p[1].lower(), self, p.lineno(1),
@@ -290,19 +289,31 @@ class Parser:
         )
 
     def p_stmt_while_container(self, p):
-        """stmt : WHILE PATH PATH args output suite
-                | WHILE CONTAINER PATH args output suite"""
+        """stmt : WHILE PATH args output suite
+                | WHILE CONTAINER args output suite"""
         p[0] = Method(
             'while', self, p.lineno(1),
             container=p[2],
-            args=[p[3]] + (p[4] or []),
-            output=p[5],
-            suite=p[6]
+            args=p[3],
+            output=p[4],
+            suite=p[5]
+        )
+
+    def p_stmt_streaming_container(self, p):
+        """stmt : PATH args output suite
+                | CONTAINER args output suite"""
+        p[0] = Method(
+            'run', self, p.lineno(1),
+            container=p[1],
+            args=p[2],
+            output=p[3],
+            suite=p[4]
         )
 
     def p_stmt_for_item_in_list(self, p):
         """stmt : FOR PATH IN variable suite"""
-        p[0] = Method('for', self, p.lineno(1), args=[p[2], p[4]], suite=p[5])
+        p[0] = Method('for', self, p.lineno(1), args=[p[2], p[4]], suite=p[5],
+                      enter=p[5][0].lineno)
 
     def p_expressions(self, p):
         """expressions : expression
@@ -370,11 +381,23 @@ class Parser:
         p[2].expressions.append(('', ')'))
         p[0] = p[2]
 
+    def p_wsnl(self, p):
+        """wsnl : NEWLINE
+                | WS
+                | DEDENT
+                | INDENT
+                | wsnl NEWLINE
+                | wsnl WS
+                | wsnl DEDENT
+                | wsnl INDENT
+                | """
+        pass
+
     def p_list(self, p):
-        """list : LBRACKET list_items RBRACKET"""
+        """list : LBRACKET wsnl list_items wsnl RBRACKET"""
         p[0] = {
             '$OBJECT': 'list',
-            'items': p[2]
+            'items': p[3]
         }
 
     def p_listitems(self, p):
@@ -387,14 +410,14 @@ class Parser:
             p[0] = p[1]
 
     def p_object(self, p):
-        """object : LBRACE object_keys RBRACE"""
-        p[0] = p[2]
+        """object : LBRACE wsnl object_keys wsnl RBRACE"""
+        p[0] = p[3]
 
     def p_object_keys(self, p):
         """object_keys : object_key
-                       | object_keys COMMA object_key"""
-        if len(p) == 4:
-            p[1]['items'].insert(0, p[3]['items'][0])
+                       | object_keys COMMA wsnl object_key"""
+        if len(p) == 5:
+            p[1]['items'].append(p[4]['items'][0])
         p[0] = p[1]
 
     def p_object_key(self, p):
@@ -430,8 +453,7 @@ class Parser:
 
     def p_file(self, p):
         """file : FILE_START string_inner FILE_END"""
-        p[2].type = 'file'
-        p[0] = p[2]
+        p[0] = File(p[2].chunks)
 
     def p_variable(self, p):
         """variable : paths
