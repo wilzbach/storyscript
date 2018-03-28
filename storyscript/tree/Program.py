@@ -46,17 +46,19 @@ class Program:
         ]
         return child_line_numbers[0]
 
-    def parse_suite(self, suite, parent_linenumber):
+    def parse_suite(self, suite, parent_line):
         """
         Parses a set of items that are the children of another line
         """
         lines = {}
         for item in suite:
             previous_line = self.last_line(lines)
-            lines[item.lineno] = item.json()
-            lines[item.lineno]['parent'] = parent_linenumber
             if previous_line:
                 lines[previous_line]['next'] = item.lineno
+            if lines == {}:
+                parent_line['next'] = item.lineno
+            lines[item.lineno] = item.json()
+            lines[item.lineno]['parent'] = parent_line['ln']
         return lines
 
     def generate(self):
@@ -67,7 +69,7 @@ class Program:
             if previous_line:
                 story[previous_line]['next'] = item.lineno
             if item.suite:
-                story = {**story, **self.parse_suite(item.suite, item.lineno)}
+                story = {**story, **self.parse_suite(item.suite, story[item.lineno])}
         return story
 
     def json(self):
