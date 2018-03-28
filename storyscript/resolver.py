@@ -102,6 +102,8 @@ class Resolver:
                 return cls.string(item['string'], data, values=item['values'])
             return cls.string(item['string'], data)
         elif object_type == 'file':
+            if 'values' in item:
+                return cls.file(item['string'], data, values=item['values'])
             return cls.file(item['string'], data)
         elif object_type == 'path':
             return cls.path(item['paths'], data)
