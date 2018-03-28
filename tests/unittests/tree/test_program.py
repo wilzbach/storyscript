@@ -24,6 +24,11 @@ def test_program_representation(parser, program):
     assert '{}'.format(program) == 'Program({}, story)'.format(parser)
 
 
+def test_program_sorted_lines(program):
+    lines= {'1': {}, '2': {}, '21': {}, '3': {}}
+    assert program.sorted_lines(lines) == ['1', '2', '3', '21']
+
+
 def test_program_parse_item(patch, method, program):
     patch.object(Method, 'json')
     result = {}

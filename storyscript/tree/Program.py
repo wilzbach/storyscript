@@ -9,6 +9,9 @@ class Program:
         self.parser = parser
         self.story = story
 
+    def sorted_lines(self, lines):
+        return sorted(lines.keys(), key=lambda x: int(x))
+
     def parse_item(self, dictionary, item, parent=None):
         if isinstance(item, Method):
             dictionary[item.lineno] = item.json()
