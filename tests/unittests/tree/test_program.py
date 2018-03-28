@@ -49,6 +49,13 @@ def test_program_next_line_none(patch, program):
     assert program.next_line(lines, '1') is None
 
 
+def test_program_last_line(patch, program):
+    patch.object(Program, 'sorted_lines')
+    result = program.last_line('lines')
+    Program.sorted_lines.assert_called_with('lines')
+    assert result == Program.sorted_lines()[-1]
+
+
 def test_program_children(patch, program):
     patch.object(Program, 'parse_item')
     program.children({}, ['child'], parent=None)

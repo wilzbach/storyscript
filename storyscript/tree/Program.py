@@ -12,6 +12,9 @@ class Program:
     def sorted_lines(self, lines):
         return sorted(lines.keys(), key=lambda x: int(x))
 
+    def last_line(self, lines):
+        return self.sorted_lines(lines)[-1]
+
     def next_line(self, lines, line_number):
         sorted_lines = self.sorted_lines(lines)
         next_line_index = sorted_lines.index(line_number) + 1
