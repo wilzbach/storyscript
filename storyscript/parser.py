@@ -451,14 +451,9 @@ class Parser:
                   | STRING_START_TRIPLE string_inner STRING_END"""
         p[0] = p[2]
 
-    def p_file_inner(self, p):
-        """file_inner : paths
-                      | STRING_CONTINUE"""
-        p[0] = File(p[1])
-
     def p_file(self, p):
-        """file : FILE_START file_inner FILE_END"""
-        p[0] = p[2]
+        """file : FILE_START string_inner FILE_END"""
+        p[0] = File(p[2].chunks)
 
     def p_variable(self, p):
         """variable : paths

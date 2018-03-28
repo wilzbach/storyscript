@@ -61,20 +61,11 @@ def test_parser_p_wait_suite(magic, patch):
     Method.__init__.assert_called_with(*args, **kwargs)
 
 
-def test_parser_p_file_inner(patch, magic):
+def test_parser_p_file(patch, magic):
     patch.object(yacc, 'yacc')
     patch.init(Lexer)
     patch.init(File)
     p = magic()
     parser = Parser()
-    parser.p_file_inner(p)
-    File.__init__.assert_called_with(p[1])
-
-
-def test_parser_p_file(patch, magic):
-    patch.object(yacc, 'yacc')
-    patch.init(Lexer)
-    p = magic()
-    parser = Parser()
     parser.p_file(p)
-    assert p[0] == p[2]
+    File.__init__.assert_called_with(p[2].chunks)
