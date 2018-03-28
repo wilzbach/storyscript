@@ -44,6 +44,16 @@ class Program:
         ]
         return child_line_numbers[0]
 
+    def parse_suite(self, suite, parent_linenumber):
+        """
+        Parses a set of items that are the children of another line
+        """
+        lines = {}
+        for item in suite:
+            lines[item.lineno] = item.json()
+            lines[item.lineno]['parent'] = parent_linenumber
+        return lines
+
     def generate(self):
         story = {}
         for item in self.story:

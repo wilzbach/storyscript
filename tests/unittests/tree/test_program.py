@@ -92,6 +92,13 @@ def test_program_parse_item_suite(patch, method, program):
     assert result['2'] == child.json()
 
 
+def test_program_parse_suite(magic, program):
+    item = magic(lineno='2', json=magic(return_value={}))
+    result = program.parse_suite([item], '1')
+    assert item.json.call_count == 1
+    assert result == {'2': {'parent': '1'}}
+
+
 def test_program_generate(patch, magic, program):
     line = magic(lineno='1')
     program.story = [line]
