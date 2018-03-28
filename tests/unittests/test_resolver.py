@@ -5,8 +5,8 @@ from pytest import mark, raises
 from storyscript.resolver import Resolver
 
 
-def test_resolver_handside(mocker):
-    mocker.patch.object(Resolver, 'object')
+def test_resolver_handside(patch):
+    patch.object(Resolver, 'object')
     result = Resolver.handside('item', 'data')
     Resolver.object.assert_called_with('item', 'data')
     assert result == Resolver.object()
@@ -44,6 +44,17 @@ def test_resolver_object_str_str():
     }
 
 
+def test_resolver_file():
+    assert Resolver.file('filename', {}) == 'filename'
+
+
+def test_resolver_file_values(patch):
+    patch.object(Resolver, 'values', return_value=['a'])
+    result = Resolver.file('{}.py', {}, values=['values'])
+    Resolver.values.assert_called_with(['values'], {})
+    assert result == 'a.py'
+
+
 def test_resolver_object_path_path():
     items = [
         [{'$OBJECT': 'path', 'paths': ['a']},
@@ -71,8 +82,8 @@ def test_resolver_path_key_error():
     assert Resolver.path(['a', 'b'], {}) is None
 
 
-def test_resolver_dictionary(mocker):
-    mocker.patch.object(Resolver, 'resolve')
+def test_resolver_dictionary(patch):
+    patch.object(Resolver, 'resolve')
     result = Resolver.dictionary({'key': 'value'}, 'data')
     Resolver.resolve.assert_called_with('value', 'data')
     assert result == {'key': Resolver.resolve()}
@@ -82,8 +93,8 @@ def test_resolver_dictionary_empty():
     assert Resolver.dictionary({}, 'data') == {}
 
 
-def test_resolver_list_object(mocker):
-    mocker.patch.object(Resolver, 'resolve', return_value='done')
+def test_resolver_list_object(patch):
+    patch.object(Resolver, 'resolve', return_value='done')
     result = Resolver.list_object(['item'], {})
     assert list(result) == ['done']
 
@@ -136,49 +147,49 @@ def test_resolver_method_value_error():
         Resolver.method('unknown', 'left', 'right')
 
 
-def test_resolver_expression(mocker):
-    mocker.patch.object(Resolver, 'values', return_value=[1])
-    mocker.patch.object(Resolver, 'stringify', return_value='1')
+def test_resolver_expression(patch):
+    patch.object(Resolver, 'values', return_value=[1])
+    patch.object(Resolver, 'stringify', return_value='1')
     result = Resolver.expression('data', '{} == 1', 'values')
     Resolver.values.assert_called_with('values', data='data')
     Resolver.stringify.assert_called_with(1)
     assert result
 
 
-def test_resolver_object_string(mocker):
-    mocker.patch.object(Resolver, 'string')
+def test_resolver_object_string(patch):
+    patch.object(Resolver, 'string')
     item = {'$OBJECT': 'string', 'string': 'message'}
     result = Resolver.object(item, 'data')
     Resolver.string.assert_called_with('message', 'data')
     assert result == Resolver.string()
 
 
-def test_resolver_object_string_values(mocker):
-    mocker.patch.object(Resolver, 'string')
+def test_resolver_object_string_values(patch):
+    patch.object(Resolver, 'string')
     item = {'$OBJECT': 'string', 'string': 'message', 'values': 'values'}
     result = Resolver.object(item, 'data')
     Resolver.string.assert_called_with('message', 'data', values='values')
     assert result == Resolver.string()
 
 
-def test_resolver_object_path(mocker):
-    mocker.patch.object(Resolver, 'path')
+def test_resolver_object_path(patch):
+    patch.object(Resolver, 'path')
     path = {'$OBJECT': 'path', 'paths': ['example']}
     result = Resolver.object(path, 'data')
     Resolver.path.assert_called_with(['example'], 'data')
     assert result == Resolver.path()
 
 
-def test_resolver_object_dict(mocker):
-    mocker.patch.object(Resolver, 'dict')
+def test_resolver_object_dict(patch):
+    patch.object(Resolver, 'dict')
     _dict = {'$OBJECT': 'dict', 'items': []}
     result = Resolver.object(_dict, 'data')
     Resolver.dict.assert_called_with(_dict['items'], 'data')
     assert result == dict(Resolver.dict())
 
 
-def test_resolver_object_regexp(mocker):
-    mocker.patch.object(re, 'compile')
+def test_resolver_object_regexp(patch):
+    patch.object(re, 'compile')
     expression = {'$OBJECT': 'regexp', 'regexp': 'regular'}
     Resolver.object(expression, 'data')
     re.compile.assert_called_with('regular')
@@ -190,23 +201,23 @@ def test_resolver_object_value():
     assert result == 'x'
 
 
-def test_resolver_object_dictionary(mocker):
-    mocker.patch.object(Resolver, 'dictionary')
+def test_resolver_object_dictionary(patch):
+    patch.object(Resolver, 'dictionary')
     result = Resolver.object({'$OBJECT': 'dictionary'}, 'data')
     Resolver.dictionary.assert_called_with({'$OBJECT': 'dictionary'}, 'data')
     assert result == Resolver.dictionary()
 
 
-def test_resolver_object_list(mocker):
-    mocker.patch.object(Resolver, 'list_object')
+def test_resolver_object_list(patch):
+    patch.object(Resolver, 'list_object')
     result = Resolver.object({'$OBJECT': 'list', 'items': []}, 'data')
     Resolver.list_object.assert_called_with([], 'data')
     assert result == []
 
 
-def test_resolver_object_method(mocker):
-    mocker.patch.object(Resolver, 'method')
-    mocker.patch.object(Resolver, 'handside', return_value='hand')
+def test_resolver_object_method(patch):
+    patch.object(Resolver, 'method')
+    patch.object(Resolver, 'handside', return_value='hand')
     item = {'$OBJECT': 'method', 'method': 'method', 'left': 'left',
             'right': 'right'}
     result = Resolver.object(item, 'data')
@@ -214,8 +225,24 @@ def test_resolver_object_method(mocker):
     assert result == Resolver.method()
 
 
-def test_resolver_resolve_expression(mocker):
-    mocker.patch.object(Resolver, 'expression')
+def test_resolver_object_file(patch):
+    patch.object(Resolver, 'file')
+    item = {'$OBJECT': 'file', 'string': 'filename'}
+    result = Resolver.object(item, 'data')
+    Resolver.file.assert_called_with(item['string'], 'data')
+    assert result == Resolver.file()
+
+
+def test_resolver_object_file_values(patch):
+    patch.object(Resolver, 'file')
+    item = {'$OBJECT': 'file', 'string': 'filename', 'values': ['values']}
+    result = Resolver.object(item, 'data')
+    Resolver.file.assert_called_with(item['string'], 'data', values=['values'])
+    assert result == Resolver.file()
+
+
+def test_resolver_resolve_expression(patch):
+    patch.object(Resolver, 'expression')
     item = {'$OBJECT': 'expression', 'expression': '==', 'values': []}
     result = Resolver.resolve(item, 'data')
     Resolver.expression.assert_called_with('data', item['expression'],
@@ -223,8 +250,8 @@ def test_resolver_resolve_expression(mocker):
     assert result == Resolver.expression()
 
 
-def test_resolver_list(mocker):
-    mocker.patch.object(Resolver, 'resolve', return_value='done')
+def test_resolver_list(patch):
+    patch.object(Resolver, 'resolve', return_value='done')
     result = Resolver.list(['items'], {})
     Resolver.resolve.assert_called_with('items', {})
     assert result == 'done'
@@ -237,7 +264,7 @@ def test_resolver_list_booleans(patch):
     assert result == [True]
 
 
-def test_resolver_resolve(mocker):
+def test_resolver_resolve(patch):
     assert Resolver.resolve('whatever', 'data') == 'whatever'
 
 
@@ -254,15 +281,15 @@ def test_resolve_many():
     assert result == 'data'
 
 
-def test_resolver_resolve_object(mocker):
-    mocker.patch.object(Resolver, 'object')
+def test_resolver_resolve_object(patch):
+    patch.object(Resolver, 'object')
     result = Resolver.resolve({}, 'data')
     Resolver.object.assert_called_with({}, 'data')
     assert result == Resolver.object()
 
 
-def test_resolver_resolve_list(mocker):
-    mocker.patch.object(Resolver, 'list')
+def test_resolver_resolve_list(patch):
+    patch.object(Resolver, 'list')
     result = Resolver.resolve([], 'data')
     Resolver.list.assert_called_with([], 'data')
     assert result == Resolver.list()

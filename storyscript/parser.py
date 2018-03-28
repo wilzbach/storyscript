@@ -5,8 +5,8 @@ from ply import yacc
 
 from .exceptions import ScriptError
 from .lexer import Lexer
-from .tree import Comparison, Condition, \
-    Expression, Method, Path, Program, String
+from .tree import (Comparison, Condition, Expression, File, Method, Path,
+                   Program, String)
 
 
 class Parser:
@@ -453,8 +453,7 @@ class Parser:
 
     def p_file(self, p):
         """file : FILE_START string_inner FILE_END"""
-        p[2].type = 'file'
-        p[0] = p[2]
+        p[0] = File(p[2].chunks)
 
     def p_variable(self, p):
         """variable : paths
