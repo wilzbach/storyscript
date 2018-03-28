@@ -12,6 +12,10 @@ class Program:
     def sorted_lines(self, lines):
         return sorted(lines.keys(), key=lambda x: int(x))
 
+    def children(self, dictionary, children, parent=None):
+        for child in children:
+            self.parse_item(dictionary, child, parent=parent)
+
     def parse_item(self, dictionary, item, parent=None):
         if isinstance(item, Method):
             dictionary[item.lineno] = item.json()

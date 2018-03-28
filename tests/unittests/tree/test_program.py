@@ -29,6 +29,12 @@ def test_program_sorted_lines(program):
     assert program.sorted_lines(lines) == ['1', '2', '3', '21']
 
 
+def test_program_children(patch, program):
+    patch.object(Program, 'parse_item')
+    program.children({}, ['child'], parent=None)
+    Program.parse_item.assert_called_with({}, 'child', parent=None)
+
+
 def test_program_parse_item(patch, method, program):
     patch.object(Method, 'json')
     result = {}
