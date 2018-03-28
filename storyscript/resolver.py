@@ -42,8 +42,11 @@ class Resolver:
         return string
 
     @classmethod
-    def file(cls):
-        pass
+    def file(cls, filename, data, values=None):
+        if values:
+            values = Resolver.values(values, data)
+            return filename.format(*values)
+        return filename
 
     @classmethod
     def path(cls, paths, data):
@@ -99,7 +102,7 @@ class Resolver:
                 return cls.string(item['string'], data, values=item['values'])
             return cls.string(item['string'], data)
         elif object_type == 'file':
-            return cls.file(item, data)
+            return cls.file(item['string'], data)
         elif object_type == 'path':
             return cls.path(item['paths'], data)
         elif object_type == 'regexp':

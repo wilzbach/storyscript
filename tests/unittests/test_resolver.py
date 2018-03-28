@@ -44,6 +44,17 @@ def test_resolver_object_str_str():
     }
 
 
+def test_resolver_file():
+    assert Resolver.file('filename', {}) == 'filename'
+
+
+def test_resolver_file_values(patch):
+    patch.object(Resolver, 'values', return_value=['a'])
+    result = Resolver.file('{}.py', {}, values=['values'])
+    Resolver.values.assert_called_with(['values'], {})
+    assert result == 'a.py'
+
+
 def test_resolver_object_path_path():
     items = [
         [{'$OBJECT': 'path', 'paths': ['a']},
@@ -218,7 +229,7 @@ def test_resolver_object_file(patch):
     patch.object(Resolver, 'file')
     item = {'$OBJECT': 'file', 'string': 'filename'}
     result = Resolver.object(item, 'data')
-    Resolver.file.assert_called_with(item, 'data')
+    Resolver.file.assert_called_with(item['string'], 'data')
     assert result == Resolver.file()
 
 
