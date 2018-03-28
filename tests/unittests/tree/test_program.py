@@ -101,16 +101,18 @@ def test_program_parse_item_suite(patch, method, program):
 
 def test_program_parse_suite(patch, magic, program):
     patch.object(Program, 'last_line', return_value=None)
+    parent = {'ln': '1'}
     item = magic(lineno='2', json=magic(return_value={}))
-    result = program.parse_suite([item], '1')
+    result = program.parse_suite([item], parent)
     assert item.json.call_count == 1
     assert result == {'2': {'parent': '1'}}
 
 
 def test_program_parse_suite_next_line(patch, magic, program):
     patch.object(Program, 'last_line', return_value='2')
+    parent = {'ln': '1'}
     item = magic(lineno='2', json=magic(return_value={}))
-    result = program.parse_suite([item], '1')
+    result = program.parse_suite([item], parent)
     assert Program.last_line.call_count == 1
     assert result['2']['next'] == '2'
 
@@ -142,7 +144,7 @@ def test_program_generate_suite(patch, magic, program):
     item = magic(lineno='1', json=magic(return_value={}, suite='suite'))
     program.story = [item]
     result = program.generate()
-    Program.parse_suite.assert_called_with(item.suite, '1')
+    Program.parse_suite.assert_called_with(item.suite, {})
     assert '1' in result
     assert result['2'] == {}
 
