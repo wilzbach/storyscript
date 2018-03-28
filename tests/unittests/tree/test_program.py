@@ -5,8 +5,8 @@ from storyscript.version import version
 
 
 @fixture
-def parser(mocker):
-    return mocker.MagicMock()
+def parser(magic):
+    return magic()
 
 
 @fixture
@@ -24,29 +24,29 @@ def test_program_representation(parser, program):
     assert '{}'.format(program) == 'Program({}, story)'.format(parser)
 
 
-def test_program_parse_item(mocker, method, program):
-    mocker.patch.object(Method, 'json')
+def test_program_parse_item(patch, method, program):
+    patch.object(Method, 'json')
     result = {}
     program.parse_item(result, method)
     assert result[method.lineno] == method.json()
 
 
-def test_program_parse_item_recursion(mocker, method, program):
-    mocker.patch.object(Method, 'json')
+def test_program_parse_item_recursion(patch, method, program):
+    patch.object(Method, 'json')
     result = {}
     program.parse_item(result, [[method]])
     assert result[method.lineno] == method.json()
 
 
-def test_program_parse_item_parent(mocker, method, program):
-    mocker.patch.object(Method, 'json', return_value={})
+def test_program_parse_item_parent(patch, magic, method, program):
+    patch.object(Method, 'json', return_value={})
     result = {}
-    program.parse_item(result, method, parent=mocker.MagicMock(lineno='100'))
+    program.parse_item(result, method, parent=magic(lineno='100'))
     assert result[method.lineno]['parent'] == '100'
 
 
-def test_program_parse_item_suite(mocker, method, program):
-    mocker.patch.object(Method, 'json')
+def test_program_parse_item_suite(patch, method, program):
+    patch.object(Method, 'json')
     child = Method('method', 'parser', 2)
     method.suite = [child]
     result = {}
@@ -54,8 +54,8 @@ def test_program_parse_item_suite(mocker, method, program):
     assert result['2'] == child.json()
 
 
-def test_program_json(mocker, program):
-    mocker.patch.object(Program, 'parse_item')
+def test_program_json(patch, program):
+    patch.object(Program, 'parse_item')
     result = program.json()
     Program.parse_item.assert_called_with({}, program.story)
     assert result == {'version': version, 'script': {}}
