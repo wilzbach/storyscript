@@ -95,7 +95,7 @@ def test_program_generate(patch, magic, program):
 
 
 def test_program_json(patch, program):
-    patch.object(Program, 'parse_item')
+    patch.object(Program, 'generate')
     result = program.json()
-    Program.parse_item.assert_called_with({}, program.story)
-    assert result == {'version': version, 'script': {}}
+    assert Program.generate.call_count == 1
+    assert result == {'version': version, 'script': program.generate()}

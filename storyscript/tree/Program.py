@@ -48,9 +48,7 @@ class Program:
         return story
 
     def json(self):
-        script_dictionary = {}
-        self.parse_item(script_dictionary, self.story)
-        return {'version': version, 'script': script_dictionary}
+        return {'version': version, 'script': self.generate()}
 
     def __repr__(self):
         return 'Program({}, {})'.format(self.parser, self.story)
