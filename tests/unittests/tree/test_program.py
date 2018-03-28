@@ -25,8 +25,28 @@ def test_program_representation(parser, program):
 
 
 def test_program_sorted_lines(program):
-    lines= {'1': {}, '2': {}, '21': {}, '3': {}}
+    lines = {'1': {}, '2': {}, '21': {}, '3': {}}
     assert program.sorted_lines(lines) == ['1', '2', '3', '21']
+
+
+def test_program_next_line(patch, program):
+    patch.object(Program, 'sorted_lines', return_value=['1', '2'])
+    lines = {'1': {'ln': '1'}, '2': {'ln': '2'}}
+    result = program.next_line(lines, '1')
+    Program.sorted_lines.assert_called_with(lines)
+    assert result == lines['2']
+
+
+def test_program_next_line_jump(patch, program):
+    patch.object(Program, 'sorted_lines', return_value=['1', '3'])
+    lines = {'1': {'ln': '1'}, '3': {'ln': '3'}}
+    assert program.next_line(lines, '1') == lines['3']
+
+
+def test_program_next_line_none(patch, program):
+    patch.object(Program, 'sorted_lines', return_value=['1'])
+    lines = {'1': {'ln': '1'}}
+    assert program.next_line(lines, '1') is None
 
 
 def test_program_children(patch, program):
