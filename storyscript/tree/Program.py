@@ -52,8 +52,11 @@ class Program:
         """
         lines = {}
         for item in suite:
+            previous_line = self.last_line(lines)
             lines[item.lineno] = item.json()
             lines[item.lineno]['parent'] = parent_linenumber
+            if previous_line:
+                lines[previous_line]['next'] = item.lineno
         return lines
 
     def generate(self):
