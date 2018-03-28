@@ -41,6 +41,12 @@ class Program:
         ]
         return child_line_numbers[0]
 
+    def generate(self):
+        story = {}
+        for item in self.story:
+            story[item.lineno] = self.parse_item(item)
+        return story
+
     def json(self):
         script_dictionary = {}
         self.parse_item(script_dictionary, self.story)

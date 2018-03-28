@@ -85,6 +85,15 @@ def test_program_parse_item_suite(patch, method, program):
     assert result['2'] == child.json()
 
 
+def test_program_generate(patch, magic, program):
+    line = magic(lineno='1')
+    program.story = [line]
+    patch.object(Program, 'nparse_item')
+    result = program.generate()
+    Program.nparse_item.assert_called_with(line)
+    assert result == {'1': Program.nparse_item()}
+
+
 def test_program_json(patch, program):
     patch.object(Program, 'parse_item')
     result = program.json()
