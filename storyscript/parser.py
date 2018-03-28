@@ -5,8 +5,8 @@ from ply import yacc
 
 from .exceptions import ScriptError
 from .lexer import Lexer
-from .tree import Comparison, Condition, \
-    Expression, Method, Path, Program, String
+from .tree import (Comparison, Condition, Expression, File, Method, Path,
+                   Program, String)
 
 
 class Parser:
@@ -451,9 +451,13 @@ class Parser:
                   | STRING_START_TRIPLE string_inner STRING_END"""
         p[0] = p[2]
 
+    def p_file_inner(self, p):
+        """file_inner : paths
+                      | STRING_CONTINUE"""
+        p[0] = File(p[1])
+
     def p_file(self, p):
-        """file : FILE_START string_inner FILE_END"""
-        p[2].type = 'file'
+        """file : FILE_START file_inner FILE_END"""
         p[0] = p[2]
 
     def p_variable(self, p):
