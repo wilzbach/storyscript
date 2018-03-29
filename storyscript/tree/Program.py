@@ -17,13 +17,6 @@ class Program:
         if sorted_lines:
             return sorted_lines[-1]
 
-    def next_line(self, lines, line_number):
-        sorted_lines = self.sorted_lines(lines)
-        next_line_index = sorted_lines.index(line_number) + 1
-        if next_line_index < len(sorted_lines):
-            next_line = sorted_lines[next_line_index]
-            return lines[str(next_line)]
-
     def children(self, dictionary, children, parent=None):
         for child in children:
             self.parse_item(dictionary, child, parent=parent)
