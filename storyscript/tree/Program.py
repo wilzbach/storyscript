@@ -38,6 +38,15 @@ class Program:
             self.lines[item.lineno] = item.json()
             self.lines[item.lineno]['parent'] = parent_line
 
+    def parse_item(self, item):
+        """
+        Parses a single item
+        """
+        self.set_as_next_line(item.lineno)
+        self.lines[item.lineno] = item.json()
+        if item.suite:
+            self.parse_suite(item.suite, item.lineno)
+
     def generate(self):
         for item in self.story:
             self.set_as_next_line(item.lineno)
