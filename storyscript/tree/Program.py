@@ -48,11 +48,10 @@ class Program:
             self.parse_suite(item.suite, item.lineno)
 
     def generate(self):
+        if type(self.story) is not list:
+            return self.parse_item(self.story)
         for item in self.story:
-            self.set_as_next_line(item.lineno)
-            self.lines[item.lineno] = item.json()
-            if item.suite:
-                self.parse_suite(item.suite, item.lineno)
+            self.parse_item(item)
 
     def json(self):
         self.generate()

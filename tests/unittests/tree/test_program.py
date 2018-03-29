@@ -80,14 +80,18 @@ def test_program_parse_item_suite(patch, magic, program):
     Program.parse_suite.assert_called_with(item.suite, item.lineno)
 
 
-def test_program_generate(patch, magic, program):
-    patch.many(Program, ['set_as_next_line', 'parse_suite'])
-    item = magic(lineno='1', json=magic(return_value={}, suite=None))
-    program.story = [item]
+def test_program_generate(patch, program):
+    patch.object(Program, 'parse_item')
+    program.story = ['item']
     program.generate()
-    Program.set_as_next_line.assert_called_with(item.lineno)
-    assert item.json.call_count == 1
-    assert program.lines == {'1': {}}
+    program.parse_item.assert_called_with('item')
+
+
+def test_program_generate_one_item(patch, program):
+    patch.object(Program, 'parse_item')
+    program.story = 'item'
+    program.generate()
+    program.parse_item.assert_called_with('item')
 
 
 def test_program_json(patch, program):
