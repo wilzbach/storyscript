@@ -21,24 +21,6 @@ class Program:
         for child in children:
             self.parse_item(dictionary, child, parent=parent)
 
-    def parse_item(self, dictionary, item, parent=None):
-        if isinstance(item, Method):
-            dictionary[item.lineno] = item.json()
-            if parent:
-                dictionary[item.lineno]['parent'] = parent.lineno
-            if item.suite:
-                child_line_numbers = [
-                    self.parse_item(dictionary, child, parent=item)
-                    for child in item.suite
-                ]
-                dictionary[item.lineno]['next'] = child_line_numbers[0]
-            return item.lineno
-        child_line_numbers = [
-            self.parse_item(dictionary, child, parent=parent)
-            for child in item
-        ]
-        return child_line_numbers[0]
-
     def parse_suite(self, suite, parent_line):
         """
         Parses a set of items that are the children of another line

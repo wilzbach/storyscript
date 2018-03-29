@@ -49,36 +49,6 @@ def test_program_children(patch, program):
     Program.parse_item.assert_called_with({}, 'child', parent=None)
 
 
-def test_program_parse_item(patch, method, program):
-    patch.object(Method, 'json')
-    result = {}
-    program.parse_item(result, method)
-    assert result[method.lineno] == method.json()
-
-
-def test_program_parse_item_recursion(patch, method, program):
-    patch.object(Method, 'json')
-    result = {}
-    program.parse_item(result, [[method]])
-    assert result[method.lineno] == method.json()
-
-
-def test_program_parse_item_parent(patch, magic, method, program):
-    patch.object(Method, 'json', return_value={})
-    result = {}
-    program.parse_item(result, method, parent=magic(lineno='100'))
-    assert result[method.lineno]['parent'] == '100'
-
-
-def test_program_parse_item_suite(patch, method, program):
-    patch.object(Method, 'json')
-    child = Method('method', 'parser', 2)
-    method.suite = [child]
-    result = {}
-    program.parse_item(result, method)
-    assert result['2'] == child.json()
-
-
 def test_program_parse_suite(patch, magic, program):
     patch.object(Program, 'last_line', return_value=None)
     parent = {'ln': '1'}
