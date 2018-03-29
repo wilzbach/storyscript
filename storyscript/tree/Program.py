@@ -33,14 +33,10 @@ class Program:
         """
         Parses a set of items that are the children of another line
         """
-        lines = {}
         for item in suite:
             self.set_as_next_line(item.lineno)
-            if lines == {}:
-                parent_line['next'] = item.lineno
-            lines[item.lineno] = item.json()
-            lines[item.lineno]['parent'] = parent_line['ln']
-        return lines
+            self.lines[item.lineno] = item.json()
+            self.lines[item.lineno]['parent'] = parent_line['ln']
 
     def generate(self):
         story = {}

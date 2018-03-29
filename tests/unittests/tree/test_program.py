@@ -57,12 +57,11 @@ def test_program_set_as_next_line_none(patch, program):
 
 def test_program_parse_suite(patch, magic, program):
     patch.object(Program, 'set_as_next_line')
-    parent = {'ln': '1'}
     item = magic(lineno='2', json=magic(return_value={}))
-    result = program.parse_suite([item], parent)
+    result = program.parse_suite([item], {'ln': '1'})
     Program.set_as_next_line.assert_called_with(item.lineno)
     assert item.json.call_count == 1
-    assert result == {'2': {'parent': '1'}}
+    assert program.lines == {'2': {'parent': '1'}}
 
 
 def test_program_generate(patch, magic, program):
