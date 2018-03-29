@@ -42,6 +42,10 @@ class Program:
         """
         Parses a single item
         """
+        if type(item) is list:
+            for i in item:
+                self.parse_item(i)
+            return
         self.set_as_next_line(item.lineno)
         self.lines[item.lineno] = item.json()
         if item.suite:
