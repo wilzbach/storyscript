@@ -39,13 +39,11 @@ class Program:
             self.lines[item.lineno]['parent'] = parent_line['ln']
 
     def generate(self):
-        story = {}
         for item in self.story:
             self.set_as_next_line(item.lineno)
-            story[item.lineno] = item.json()
+            self.lines[item.lineno] = item.json()
             if item.suite:
-                story = {**story, **self.parse_suite(item.suite, story[item.lineno])}
-        return story
+                self.parse_suite(item.suite, item.lineno)
 
     def json(self):
         return {'version': version, 'script': self.generate()}

@@ -66,25 +66,20 @@ def test_program_parse_suite(patch, magic, program):
 
 def test_program_generate(patch, magic, program):
     patch.many(Program, ['set_as_next_line', 'parse_suite'])
-    Program.last_line.return_value = None
     item = magic(lineno='1', json=magic(return_value={}, suite=None))
     program.story = [item]
-    result = program.generate()
+    program.generate()
     Program.set_as_next_line.assert_called_with(item.lineno)
     assert item.json.call_count == 1
-    assert result == {'1': {}}
+    assert program.lines == {'1': {}}
 
 
 def test_program_generate_suite(patch, magic, program):
-    patch.many(Program, ['last_line', 'parse_suite'])
-    Program.last_line.return_value = None
-    Program.parse_suite.return_value = {'2': {}}
+    patch.many(Program, ['set_as_next_line', 'parse_suite'])
     item = magic(lineno='1', json=magic(return_value={}, suite='suite'))
     program.story = [item]
-    result = program.generate()
-    Program.parse_suite.assert_called_with(item.suite, {})
-    assert '1' in result
-    assert result['2'] == {}
+    program.generate()
+    Program.parse_suite.assert_called_with(item.suite, item.lineno)
 
 
 def test_program_json(patch, program):
