@@ -25,9 +25,9 @@ def test_program_representation(parser, program):
     assert '{}'.format(program) == 'Program({}, story)'.format(parser)
 
 
-def test_program_sorted_lines(program):
+def test_program_sorted_lines():
     lines = {'1': {}, '2': {}, '21': {}, '3': {}}
-    assert program.sorted_lines(lines) == ['1', '2', '3', '21']
+    assert Program.sorted_lines(lines) == ['1', '2', '3', '21']
 
 
 def test_program_last_line(patch, program):

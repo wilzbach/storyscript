@@ -10,7 +10,8 @@ class Program:
         self.story = story
         self.lines = {}
 
-    def sorted_lines(self, lines):
+    @staticmethod
+    def sorted_lines(lines):
         return sorted(lines.keys(), key=lambda x: int(x))
 
     def last_line(self, lines):
@@ -39,9 +40,9 @@ class Program:
         story = {}
         for item in self.story:
             previous_line = self.last_line(story)
-            story[item.lineno] = item.json()
             if previous_line:
                 story[previous_line]['next'] = item.lineno
+            story[item.lineno] = item.json()
             if item.suite:
                 story = {**story, **self.parse_suite(item.suite, story[item.lineno])}
         return story
