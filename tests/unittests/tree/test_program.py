@@ -42,6 +42,19 @@ def test_program_last_line_none(program):
     assert program.last_line() is None
 
 
+def test_program_set_as_next_line(patch, program):
+    patch.object(Program, 'last_line', return_value='1')
+    program.lines = {'1': {}}
+    program.set_as_next_line('2')
+    assert Program.last_line.call_count == 1
+    assert program.lines['1']['next'] == '2'
+
+
+def test_program_set_as_next_line_none(patch, program):
+    patch.object(Program, 'last_line', return_value=None)
+    program.set_as_next_line('1')
+
+
 def test_program_parse_suite(patch, magic, program):
     patch.object(Program, 'last_line', return_value=None)
     parent = {'ln': '1'}

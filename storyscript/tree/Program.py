@@ -21,6 +21,14 @@ class Program:
         if self.lines:
             return self.sorted_lines(self.lines)[-1]
 
+    def set_as_next_line(self, line_number):
+        """
+        Sets the current line as the next line for the previous one
+        """
+        previous_line = self.last_line()
+        if previous_line:
+            self.lines[previous_line]['next'] = line_number
+
     def parse_suite(self, suite, parent_line):
         """
         Parses a set of items that are the children of another line
