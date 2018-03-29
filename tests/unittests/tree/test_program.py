@@ -73,6 +73,13 @@ def test_program_parse_item(patch, magic, program):
     assert program.lines == {'1': {}}
 
 
+def test_program_parse_item_list(patch, magic, program):
+    patch.many(Program, ['set_as_next_line', 'parse_suite'])
+    item = magic(lineno='1', json=magic(return_value={}, suite=None))
+    program.parse_item([item, item])
+    assert program.lines == {'1': {}}
+
+
 def test_program_parse_item_suite(patch, magic, program):
     patch.many(Program, ['set_as_next_line', 'parse_suite'])
     item = magic(lineno='1', json=magic(return_value={}, suite='suite'))
