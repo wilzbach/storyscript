@@ -35,9 +35,7 @@ class Program:
         """
         lines = {}
         for item in suite:
-            previous_line = self.last_line(lines)
-            if previous_line:
-                lines[previous_line]['next'] = item.lineno
+            self.set_as_next_line(item.lineno)
             if lines == {}:
                 parent_line['next'] = item.lineno
             lines[item.lineno] = item.json()
