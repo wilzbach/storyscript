@@ -86,4 +86,4 @@ def test_program_json(patch, program):
     patch.object(Program, 'generate')
     result = program.json()
     assert Program.generate.call_count == 1
-    assert result == {'version': version, 'script': program.generate()}
+    assert result == {'version': version, 'script': program.lines}

@@ -46,7 +46,8 @@ class Program:
                 self.parse_suite(item.suite, item.lineno)
 
     def json(self):
-        return {'version': version, 'script': self.generate()}
+        self.generate()
+        return {'version': version, 'script': self.lines}
 
     def __repr__(self):
         return 'Program({}, {})'.format(self.parser, self.story)
