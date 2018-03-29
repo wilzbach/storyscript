@@ -18,6 +18,7 @@ def test_program_init(parser, program):
     assert program.parser == parser
     assert program.parser.program == program
     assert program.story == 'story'
+    assert program.lines == {}
 
 
 def test_program_representation(parser, program):

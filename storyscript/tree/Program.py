@@ -8,6 +8,7 @@ class Program:
         parser.program = self
         self.parser = parser
         self.story = story
+        self.lines = {}
 
     def sorted_lines(self, lines):
         return sorted(lines.keys(), key=lambda x: int(x))
