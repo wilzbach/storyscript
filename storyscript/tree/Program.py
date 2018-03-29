@@ -17,10 +17,6 @@ class Program:
         if sorted_lines:
             return sorted_lines[-1]
 
-    def children(self, dictionary, children, parent=None):
-        for child in children:
-            self.parse_item(dictionary, child, parent=parent)
-
     def parse_suite(self, suite, parent_line):
         """
         Parses a set of items that are the children of another line

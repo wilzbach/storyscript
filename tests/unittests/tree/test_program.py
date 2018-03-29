@@ -43,12 +43,6 @@ def test_program_last_line_none(patch, program):
     assert result is None
 
 
-def test_program_children(patch, program):
-    patch.object(Program, 'parse_item')
-    program.children({}, ['child'], parent=None)
-    Program.parse_item.assert_called_with({}, 'child', parent=None)
-
-
 def test_program_parse_suite(patch, magic, program):
     patch.object(Program, 'last_line', return_value=None)
     parent = {'ln': '1'}
