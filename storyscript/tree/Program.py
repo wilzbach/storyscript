@@ -36,7 +36,7 @@ class Program:
         for item in suite:
             self.set_as_next_line(item.lineno)
             self.lines[item.lineno] = item.json()
-            self.lines[item.lineno]['parent'] = parent_line['ln']
+            self.lines[item.lineno]['parent'] = parent_line
 
     def generate(self):
         for item in self.story:
