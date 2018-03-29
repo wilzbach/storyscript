@@ -32,13 +32,14 @@ def test_program_sorted_lines():
 
 def test_program_last_line(patch, program):
     patch.object(Program, 'sorted_lines')
-    result = program.last_line('lines')
+    program.lines = 'lines'
+    result = program.last_line()
     Program.sorted_lines.assert_called_with('lines')
     assert result == Program.sorted_lines()[-1]
 
 
 def test_program_last_line_none(program):
-    assert program.last_line({}) is None
+    assert program.last_line() is None
 
 
 def test_program_parse_suite(patch, magic, program):

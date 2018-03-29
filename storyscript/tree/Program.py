@@ -14,12 +14,12 @@ class Program:
     def sorted_lines(lines):
         return sorted(lines.keys(), key=lambda x: int(x))
 
-    def last_line(self, lines):
+    def last_line(self):
         """
         Returns the last line from current generated lines
         """
-        if lines:
-            return self.sorted_lines(lines)[-1]
+        if self.lines:
+            return self.sorted_lines(self.lines)[-1]
 
     def parse_suite(self, suite, parent_line):
         """
