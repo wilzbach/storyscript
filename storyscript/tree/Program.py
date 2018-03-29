@@ -34,6 +34,10 @@ class Program:
         Parses a set of items that are the children of another line
         """
         for item in suite:
+            if type(item) is list:
+                for i in item:
+                    self.parse_item(i)
+                continue
             self.set_as_next_line(item.lineno)
             self.lines[item.lineno] = item.json()
             self.lines[item.lineno]['parent'] = parent_line

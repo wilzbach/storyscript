@@ -64,6 +64,12 @@ def test_program_parse_suite(patch, magic, program):
     assert program.lines == {'2': {'parent': '1'}}
 
 
+def test_program_parse_suite_nested(magic, program):
+    item = magic(lineno='2', json=magic(return_value={}))
+    program.parse_suite([[item]], '1')
+    assert program.lines == {'2': {}}
+
+
 def test_program_parse_item(patch, magic, program):
     patch.many(Program, ['set_as_next_line', 'parse_suite'])
     item = magic(lineno='1', json=magic(return_value={}, suite=None))
