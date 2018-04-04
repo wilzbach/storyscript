@@ -24,6 +24,11 @@ def test_grammar_terminal(grammar):
     assert grammar.terminals == ['name: value']
 
 
+def test_grammar_rule(grammar):
+    grammar.rule('name', ['one', 'two'])
+    assert grammar.rules == ['name: one|two']
+
+
 def test_grammar_build(patch, grammar):
     patch.object(Grammar, 'start')
     assert grammar.build() == grammar.start()
