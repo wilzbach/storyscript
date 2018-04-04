@@ -17,7 +17,7 @@ class Grammar:
         """
         Adds a terminal token to the terminals list
         """
-        self.terminals.append('{}: {}'.format(name, value))
+        self.terminals.append('{}: {}'.format(name.upper(), value))
 
     def rule(self, name, definitions):
         string = '|'.join(definitions)

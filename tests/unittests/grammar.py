@@ -20,8 +20,16 @@ def test_grammar_start(grammar):
 
 
 def test_grammar_terminal(grammar):
+    """
+    Ensures the terminal method can create a terminal token
+    """
+    grammar.terminal('NAME', 'value')
+    assert grammar.terminals == ['NAME: value']
+
+
+def test_grammar_terminal_uppercase(grammar):
     grammar.terminal('name', 'value')
-    assert grammar.terminals == ['name: value']
+    assert grammar.terminals == ['NAME: value']
 
 
 def test_grammar_rule(grammar):
