@@ -19,6 +19,11 @@ def test_grammar_start(grammar):
     assert grammar.start() == 'start:'
 
 
+def test_grammar_terminal(grammar):
+    grammar.terminal('name', 'value')
+    assert grammar.terminals == ['name: value']
+
+
 def test_grammar_build(patch, grammar):
     patch.object(Grammar, 'start')
     assert grammar.build() == grammar.start()
