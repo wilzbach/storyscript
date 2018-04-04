@@ -12,6 +12,7 @@ def grammar():
 def test_grammar_init():
     grammar = Grammar()
     assert grammar.terminals == []
+    assert grammar.rules == []
 
 
 def test_grammar_start(grammar):

@@ -5,6 +5,7 @@ class Grammar:
 
     def __init__(self):
         self.terminals = []
+        self.rules = []
 
     def start(self):
         """
