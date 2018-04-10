@@ -61,6 +61,12 @@ def test_grammar_load(grammar):
     assert grammar.imports == ['%import terminal']
 
 
+def test_grammar_loads(patch, grammar):
+    patch.object(Grammar, 'load')
+    grammar.loads(['one', 'two'])
+    assert Grammar.load.call_count == 2
+
+
 def test_grammar_build(grammar):
     grammar.start_line = 'start'
     grammar.rules = ['rules']

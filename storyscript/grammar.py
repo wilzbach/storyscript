@@ -37,6 +37,10 @@ class Grammar:
     def load(self, terminal):
         self.imports.append('%import {}'.format(terminal))
 
+    def loads(self, terminals):
+        for terminal in terminals:
+            self.load(terminal)
+
     def build(self):
         rules = '\n'.join(self.rules)
         terminals = '\n'.join(self.terminals)
