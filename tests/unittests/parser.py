@@ -24,6 +24,12 @@ def test_parser_init_algo():
     assert parser.algo == 'algo'
 
 
+def test_parser_line(magic, parser):
+    grammar = magic()
+    parser.line(grammar)
+    grammar.rule.assert_called_with('line', ['values'])
+
+
 def test_parser_grammar(patch, parser):
     patch.init(Grammar)
     patch.many(Grammar, ['start', 'rule', 'terminal', 'ignore', 'load',

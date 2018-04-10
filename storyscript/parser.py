@@ -11,6 +11,9 @@ class Parser:
         self.source = source
         self.algo = algo
 
+    def line(self, grammar):
+        grammar.rule('line', ['values'])
+
     def grammar(self):
         grammar = Grammar()
         grammar.start('line')
