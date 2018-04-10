@@ -27,6 +27,11 @@ def test_grammar_terminal(grammar):
     assert grammar.terminals == ['NAME: value']
 
 
+def test_grammar_terminal_priority(grammar):
+    grammar.terminal('NAME', 'value', priority=1)
+    assert grammar.terminals == ['NAME.1: value']
+
+
 def test_grammar_terminal_uppercase(grammar):
     grammar.terminal('name', 'value')
     assert grammar.terminals == ['NAME: value']

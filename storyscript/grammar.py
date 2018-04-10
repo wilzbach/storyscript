@@ -13,11 +13,14 @@ class Grammar:
         """
         return 'start:'
 
-    def terminal(self, name, value):
+    def terminal(self, name, value, priority=None):
         """
         Adds a terminal token to the terminals list
         """
-        self.terminals.append('{}: {}'.format(name.upper(), value))
+        string = '{}: {}'
+        if priority:
+            string = '{}.{}: {}'.format('{}', priority, '{}')
+        self.terminals.append(string.format(name.upper(), value))
 
     def rule(self, name, definitions):
         string = '|'.join(definitions)
