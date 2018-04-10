@@ -4,6 +4,7 @@
 class Grammar:
 
     def __init__(self):
+        self.start_line = None
         self.terminals = []
         self.rules = []
         self.ignores = []
@@ -13,7 +14,7 @@ class Grammar:
         """
         Produces the start rule
         """
-        return 'start: {}+'.format(rule)
+        self.start_line = 'start: {}+'.format(rule)
 
     def terminal(self, name, value, priority=None, insensitive=False):
         """

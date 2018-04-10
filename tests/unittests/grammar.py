@@ -11,6 +11,7 @@ def grammar():
 
 def test_grammar_init():
     grammar = Grammar()
+    assert grammar.start_line is None
     assert grammar.terminals == []
     assert grammar.rules == []
     assert grammar.ignores == []
@@ -18,7 +19,8 @@ def test_grammar_init():
 
 
 def test_grammar_start(grammar):
-    assert grammar.start('rule') == 'start: rule+'
+    grammar.start('rule')
+    assert grammar.start_line == 'start: rule+'
 
 
 def test_grammar_terminal(grammar):
