@@ -37,4 +37,9 @@ class Grammar:
         self.imports.append('%import {}'.format(terminal))
 
     def build(self):
-        return self.start()
+        start = self.start('line')
+        rules = '\n'.join(self.rules)
+        terminals = '\n'.join(self.terminals)
+        ignores = '\n'.join(self.ignores)
+        imports = '\n'.join(self.imports)
+        return '{}\n{}\n{}\n{}\n{}'.format(start, rules, terminals, ignores, imports)

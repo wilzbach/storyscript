@@ -60,5 +60,10 @@ def test_grammar_load(grammar):
 
 
 def test_grammar_build(patch, grammar):
-    patch.object(Grammar, 'start')
-    assert grammar.build() == grammar.start()
+    patch.object(Grammar, 'start', return_value='start')
+    grammar.rules = ['rules']
+    grammar.terminals = ['terminals']
+    grammar.ignores = ['ignores']
+    grammar.imports = ['imports']
+    result = grammar.build()
+    assert result == 'start\nrules\nterminals\nignores\nimports'
