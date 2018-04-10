@@ -39,10 +39,12 @@ def test_parser_values(magic, parser):
 
 def test_parser_grammar(patch, parser):
     patch.init(Grammar)
-    patch.many(Grammar, ['start', 'rule', 'terminal', 'ignore', 'load',
-                         'build'])
+    patch.many(Grammar, ['start', 'build'])
+    patch.many(parser, ['line', 'values'])
     result = parser.grammar()
     Grammar.start.assert_called_with('line')
+    assert parser.line.call_count == 1
+    assert parser.values.call_count == 1
     assert Grammar.build.call_count == 1
     assert result == Grammar.build()
 

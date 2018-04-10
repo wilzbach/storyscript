@@ -21,6 +21,8 @@ class Parser:
     def grammar(self):
         grammar = Grammar()
         grammar.start('line')
+        self.line(grammar)
+        self.values(grammar)
         return grammar.build()
 
     def parse(self):
