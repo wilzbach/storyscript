@@ -13,6 +13,7 @@ def test_grammar_init():
     grammar = Grammar()
     assert grammar.terminals == []
     assert grammar.rules == []
+    assert grammar.ignores == []
 
 
 def test_grammar_start(grammar):
@@ -40,6 +41,11 @@ def test_grammar_terminal_uppercase(grammar):
 def test_grammar_rule(grammar):
     grammar.rule('name', ['one', 'two'])
     assert grammar.rules == ['name: one|two']
+
+
+def test_grammar_ignore(grammar):
+    grammar.ignore('terminal')
+    assert grammar.ignores == ['%ignore terminal']
 
 
 def test_grammar_build(patch, grammar):

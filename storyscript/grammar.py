@@ -6,6 +6,7 @@ class Grammar:
     def __init__(self):
         self.terminals = []
         self.rules = []
+        self.ignores = []
 
     def start(self):
         """
@@ -25,6 +26,9 @@ class Grammar:
     def rule(self, name, definitions):
         string = '|'.join(definitions)
         self.rules.append('{}: {}'.format(name, string))
+
+    def ignore(self, terminal):
+        self.ignores.append('%ignore {}'.format(terminal))
 
     def build(self):
         return self.start()
