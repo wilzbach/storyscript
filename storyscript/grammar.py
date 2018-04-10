@@ -15,13 +15,15 @@ class Grammar:
         """
         return 'start: {}+'.format(rule)
 
-    def terminal(self, name, value, priority=None):
+    def terminal(self, name, value, priority=None, insensitive=False):
         """
         Adds a terminal token to the terminals list
         """
         string = '{}: {}'
         if priority:
             string = '{}.{}: {}'.format('{}', priority, '{}')
+        if insensitive:
+            string = '{}i'.format(string)
         self.terminals.append(string.format(name.upper(), value))
 
     def rule(self, name, definitions):

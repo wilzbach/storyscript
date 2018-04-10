@@ -25,18 +25,23 @@ def test_grammar_terminal(grammar):
     """
     Ensures the terminal method can create a terminal token
     """
-    grammar.terminal('NAME', 'value')
-    assert grammar.terminals == ['NAME: value']
+    grammar.terminal('NAME', '"value"')
+    assert grammar.terminals == ['NAME: "value"']
 
 
 def test_grammar_terminal_priority(grammar):
-    grammar.terminal('NAME', 'value', priority=1)
-    assert grammar.terminals == ['NAME.1: value']
+    grammar.terminal('NAME', '"value"', priority=1)
+    assert grammar.terminals == ['NAME.1: "value"']
+
+
+def test_grammar_terminal_insensitive(grammar):
+    grammar.terminal('NAME', '"value"', insensitive=True)
+    assert grammar.terminals == ['NAME: "value"i']
 
 
 def test_grammar_terminal_uppercase(grammar):
-    grammar.terminal('name', 'value')
-    assert grammar.terminals == ['NAME: value']
+    grammar.terminal('name', '"value"')
+    assert grammar.terminals == ['NAME: "value"']
 
 
 def test_grammar_rule(grammar):
