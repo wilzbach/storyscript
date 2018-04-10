@@ -61,8 +61,8 @@ def test_grammar_load(grammar):
     assert grammar.imports == ['%import terminal']
 
 
-def test_grammar_build(patch, grammar):
-    patch.object(Grammar, 'start', return_value='start')
+def test_grammar_build(grammar):
+    grammar.start_line = 'start'
     grammar.rules = ['rules']
     grammar.terminals = ['terminals']
     grammar.ignores = ['ignores']
