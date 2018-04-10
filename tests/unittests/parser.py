@@ -33,8 +33,10 @@ def test_parser_line(magic, parser):
 def test_parser_values(magic, parser):
     grammar = magic()
     parser.values(grammar)
-    grammar.rule.assert_called_with('values', ['INT'])
-    grammar.load.assert_called_with('common.INT')
+    definitions = ['INT', 'STRING_INNER WORD STRING_INNER']
+    loads = ['common.INT', 'common.WORD', 'common.STRING_INNER']
+    grammar.rule.assert_called_with('values', definitions)
+    grammar.loads.assert_called_with(loads)
 
 
 def test_parser_grammar(patch, parser):

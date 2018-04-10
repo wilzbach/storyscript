@@ -15,8 +15,8 @@ class Parser:
         grammar.rule('line', ['values'])
 
     def values(self, grammar):
-        grammar.rule('values', ['INT'])
-        grammar.load('common.INT')
+        grammar.rule('values', ['INT', 'STRING_INNER WORD STRING_INNER'])
+        grammar.loads(['common.INT', 'common.WORD', 'common.STRING_INNER'])
 
     def grammar(self):
         grammar = Grammar()
