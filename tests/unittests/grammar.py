@@ -14,6 +14,7 @@ def test_grammar_init():
     assert grammar.terminals == []
     assert grammar.rules == []
     assert grammar.ignores == []
+    assert grammar.imports == []
 
 
 def test_grammar_start(grammar):
@@ -46,6 +47,11 @@ def test_grammar_rule(grammar):
 def test_grammar_ignore(grammar):
     grammar.ignore('terminal')
     assert grammar.ignores == ['%ignore terminal']
+
+
+def test_grammar_load(grammar):
+    grammar.load('terminal')
+    assert grammar.imports == ['%import terminal']
 
 
 def test_grammar_build(patch, grammar):

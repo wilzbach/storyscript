@@ -7,6 +7,7 @@ class Grammar:
         self.terminals = []
         self.rules = []
         self.ignores = []
+        self.imports = []
 
     def start(self):
         """
@@ -29,6 +30,9 @@ class Grammar:
 
     def ignore(self, terminal):
         self.ignores.append('%ignore {}'.format(terminal))
+
+    def load(self, terminal):
+        self.imports.append('%import {}'.format(terminal))
 
     def build(self):
         return self.start()
