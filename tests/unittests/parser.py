@@ -41,6 +41,6 @@ def test_parser_build(patch, parser):
     patch.object(Lark, 'parse')
     patch.object(Parser, 'grammar')
     result = parser.parse()
-    Lark.__init__.assert_called_with(Parser.grammar())
+    Lark.__init__.assert_called_with(Parser.grammar(), parser=parser.algo)
     Lark.parse.assert_called_with('source')
     assert result == Lark.parse()

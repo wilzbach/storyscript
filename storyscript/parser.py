@@ -16,5 +16,5 @@ class Parser:
         return grammar.build()
 
     def parse(self):
-        lark = Lark(self.grammar())
+        lark = Lark(self.grammar(), parser=self.algo)
         return lark.parse(self.source)
