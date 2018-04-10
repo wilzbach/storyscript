@@ -9,11 +9,11 @@ class Grammar:
         self.ignores = []
         self.imports = []
 
-    def start(self):
+    def start(self, rule):
         """
         Produces the start rule
         """
-        return 'start:'
+        return 'start: {}+'.format(rule)
 
     def terminal(self, name, value, priority=None):
         """

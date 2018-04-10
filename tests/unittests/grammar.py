@@ -18,7 +18,7 @@ def test_grammar_init():
 
 
 def test_grammar_start(grammar):
-    assert grammar.start() == 'start:'
+    assert grammar.start('rule') == 'start: rule+'
 
 
 def test_grammar_terminal(grammar):
