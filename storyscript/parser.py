@@ -14,6 +14,10 @@ class Parser:
     def line(self, grammar):
         grammar.rule('line', ['values'])
 
+    def values(self, grammar):
+        grammar.rule('values', ['INT'])
+        grammar.load('common.INT')
+
     def grammar(self):
         grammar = Grammar()
         grammar.start('line')

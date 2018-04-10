@@ -30,6 +30,13 @@ def test_parser_line(magic, parser):
     grammar.rule.assert_called_with('line', ['values'])
 
 
+def test_parser_values(magic, parser):
+    grammar = magic()
+    parser.values(grammar)
+    grammar.rule.assert_called_with('values', ['INT'])
+    grammar.load.assert_called_with('common.INT')
+
+
 def test_parser_grammar(patch, parser):
     patch.init(Grammar)
     patch.many(Grammar, ['start', 'rule', 'terminal', 'ignore', 'load',
