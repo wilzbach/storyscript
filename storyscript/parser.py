@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from lark import Lark
+
 from .grammar import Grammar
 
 
@@ -12,3 +14,7 @@ class Parser:
         grammar = Grammar()
         grammar.start('line')
         return grammar.build()
+
+    def parse(self):
+        lark = Lark(self.grammar())
+        return lark.parse()
