@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from lark import Lark
+from lark.common import UnexpectedToken
 
 from .grammar import Grammar
 
@@ -17,4 +18,8 @@ class Parser:
 
     def parse(self):
         lark = Lark(self.grammar(), parser=self.algo)
-        return lark.parse(self.source)
+        try:
+            tree = lark.parse(self.source)
+        except UnexpectedToken:
+            return None
+        return tree

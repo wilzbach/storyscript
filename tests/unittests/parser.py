@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from lark import Lark
+from lark.common import UnexpectedToken
 
-from pytest import fixture
+from pytest import fixture, raises
 
 from storyscript.grammar import Grammar
 from storyscript.parser import Parser
@@ -33,7 +34,7 @@ def test_parser_grammar(patch, parser):
     assert result == Grammar.build()
 
 
-def test_parser_build(patch, parser):
+def test_parser_parse(patch, parser):
     """
     Ensures the build method can build the grammar
     """
@@ -44,3 +45,10 @@ def test_parser_build(patch, parser):
     Lark.__init__.assert_called_with(Parser.grammar(), parser=parser.algo)
     Lark.parse.assert_called_with('source')
     assert result == Lark.parse()
+
+
+def test_parser_parse_unexpected_token(patch, parser):
+    patch.init(Lark)
+    patch.object(Lark, 'parse', side_effect=UnexpectedToken('', '', '', ''))
+    patch.object(Parser, 'grammar')
+    assert parser.parse() is None
