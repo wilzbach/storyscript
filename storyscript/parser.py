@@ -12,7 +12,7 @@ class Parser:
         self.algo = algo
 
     def line(self, grammar):
-        grammar.rule('line', ['values', 'assignments', 'if_statement'])
+        grammar.rule('line', ['values', 'assignments', 'statements'])
 
     def values(self, grammar):
         grammar.rule('values', ['INT', 'STRING_INNER WORD STRING_INNER',
@@ -29,6 +29,9 @@ class Parser:
         grammar.terminal('IF', '"if"')
         grammar.load('common.WS')
 
+    def statements(self, grammar):
+        grammar.rule('statements', ['if_statement'])
+
     def grammar(self):
         grammar = Grammar()
         grammar.start('line')
@@ -36,6 +39,7 @@ class Parser:
         self.values(grammar)
         self.assignments(grammar)
         self.if_statement(grammar)
+        self.statements(grammar)
         return grammar.build()
 
     def parse(self):

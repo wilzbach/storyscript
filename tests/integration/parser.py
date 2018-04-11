@@ -40,5 +40,6 @@ def test_parser_assignments_int():
 def test_parser_if_statement():
     parser = Parser('if var')
     result = parser.parse()
-    assert result.children[0].children[0].children[0] == Token('IF', 'if')
-    assert result.children[0].children[0].children[2] == Token('WORD', 'var')
+    node = result.children[0].children[0].children[0]
+    assert node.children[0] == Token('IF', 'if')
+    assert node.children[2] == Token('WORD', 'var')

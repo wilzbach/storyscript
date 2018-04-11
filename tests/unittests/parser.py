@@ -32,7 +32,7 @@ def test_parser_init_algo():
 def test_parser_line(grammar, parser):
     parser.line(grammar)
     grammar.rule.assert_called_with('line', ['values', 'assignments',
-                                             'if_statement'])
+                                             'statements'])
 
 
 def test_parser_values(grammar, parser):
@@ -56,16 +56,23 @@ def test_parser_if_statement(grammar, parser):
     grammar.load.assert_called_with('common.WS')
 
 
+def test_parser_statements(grammar, parser):
+    parser.statements(grammar)
+    grammar.rule.assert_called_with('statements', ['if_statement'])
+
+
 def test_parser_grammar(patch, parser):
     patch.init(Grammar)
     patch.many(Grammar, ['start', 'build'])
-    patch.many(parser, ['line', 'values', 'assignments', 'if_statement'])
+    patch.many(parser, ['line', 'values', 'assignments', 'if_statement',
+                        'statements'])
     result = parser.grammar()
     Grammar.start.assert_called_with('line')
     assert parser.line.call_count == 1
     assert parser.values.call_count == 1
     assert parser.assignments.call_count == 1
     assert parser.if_statement.call_count == 1
+    assert parser.statements.call_count == 1
     assert Grammar.build.call_count == 1
     assert result == Grammar.build()
 
