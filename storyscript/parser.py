@@ -12,7 +12,7 @@ class Parser:
         self.algo = algo
 
     def line(self, grammar):
-        grammar.rule('line', ['values'])
+        grammar.rule('line', ['values', 'assignments'])
 
     def values(self, grammar):
         grammar.rule('values', ['INT', 'STRING_INNER WORD STRING_INNER',
@@ -20,11 +20,16 @@ class Parser:
         grammar.terminal('DQS', '("\\\""|/[^"]/)')
         grammar.loads(['common.INT', 'common.WORD', 'common.STRING_INNER'])
 
+    def assignments(self, grammar):
+        grammar.rule('assignments', ['WORD EQUALS values'])
+        grammar.terminal('equals', '"="')
+
     def grammar(self):
         grammar = Grammar()
         grammar.start('line')
         self.line(grammar)
         self.values(grammar)
+        self.assignments(grammar)
         return grammar.build()
 
     def parse(self):

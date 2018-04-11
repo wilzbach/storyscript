@@ -42,14 +42,21 @@ def test_parser_values(grammar, parser):
     grammar.loads.assert_called_with(loads)
 
 
+def test_parser_assignments(grammar, parser):
+    parser.assignments(grammar)
+    grammar.rule.assert_called_with('assignments', ['WORD EQUALS values'])
+    grammar.terminal.assert_called_with('equals', '"="')
+
+
 def test_parser_grammar(patch, parser):
     patch.init(Grammar)
     patch.many(Grammar, ['start', 'build'])
-    patch.many(parser, ['line', 'values'])
+    patch.many(parser, ['line', 'values', 'assignments'])
     result = parser.grammar()
     Grammar.start.assert_called_with('line')
     assert parser.line.call_count == 1
     assert parser.values.call_count == 1
+    assert parser.assignments.call_count == 1
     assert Grammar.build.call_count == 1
     assert result == Grammar.build()
 
