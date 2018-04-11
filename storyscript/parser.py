@@ -12,7 +12,7 @@ class Parser:
         self.algo = algo
 
     def line(self, grammar):
-        grammar.rule('line', ['values', 'assignments'])
+        grammar.rule('line', ['values', 'assignments', 'if_statement'])
 
     def values(self, grammar):
         grammar.rule('values', ['INT', 'STRING_INNER WORD STRING_INNER',
@@ -24,12 +24,18 @@ class Parser:
         grammar.rule('assignments', ['WORD EQUALS values'])
         grammar.terminal('equals', '"="')
 
+    def if_statement(self, grammar):
+        grammar.rule('if_statement', ['IF WS WORD'])
+        grammar.terminal('IF', '"if"')
+        grammar.load('common.WS')
+
     def grammar(self):
         grammar = Grammar()
         grammar.start('line')
         self.line(grammar)
         self.values(grammar)
         self.assignments(grammar)
+        self.if_statement(grammar)
         return grammar.build()
 
     def parse(self):

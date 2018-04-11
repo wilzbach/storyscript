@@ -35,3 +35,10 @@ def test_parser_assignments_int():
     assert node.children[0] == Token('WORD', 'var')
     assert node.children[1] == Token('EQUALS', '=')
     assert node.children[2].children[0] == Token('INT', '3')
+
+
+def test_parser_if_statement():
+    parser = Parser('if var')
+    result = parser.parse()
+    assert result.children[0].children[0].children[0] == Token('IF', 'if')
+    assert result.children[0].children[0].children[2] == Token('WORD', 'var')
