@@ -13,6 +13,11 @@ def parser():
     return Parser('source')
 
 
+@fixture
+def grammar(magic):
+    return magic()
+
+
 def test_parser_init():
     parser = Parser('source')
     assert parser.source == 'source'
@@ -24,14 +29,12 @@ def test_parser_init_algo():
     assert parser.algo == 'algo'
 
 
-def test_parser_line(magic, parser):
-    grammar = magic()
+def test_parser_line(grammar, parser):
     parser.line(grammar)
-    grammar.rule.assert_called_with('line', ['values'])
+    grammar.rule.assert_called_with('line', ['values', 'assignments'])
 
 
-def test_parser_values(magic, parser):
-    grammar = magic()
+def test_parser_values(grammar, parser):
     parser.values(grammar)
     definitions = ['INT', 'STRING_INNER WORD STRING_INNER', 'DQS WORD DQS']
     loads = ['common.INT', 'common.WORD', 'common.STRING_INNER']
