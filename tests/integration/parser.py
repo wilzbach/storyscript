@@ -10,7 +10,8 @@ def test_parser_values():
     assert result.children[0].children[0].children[0] == Token('INT', 3)
 
 
-def test_parser_values_string():
-    parser = Parser("'red'")
+@mark.parametrize('string', ["'red'", '"red"'])
+def test_parser_values_string(string):
+    parser = Parser(string)
     result = parser.parse()
     assert result.children[0].children[0].children[1] == Token('WORD', 'red')
