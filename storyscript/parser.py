@@ -20,8 +20,14 @@ class Parser:
         grammar.terminal('DOUBLE_QUOTES', '("\\\""|/[^"]/)')
         grammar.loads(['common.WORD', 'common.STRING_INNER'])
 
+    def list(self, grammar):
+        grammar.rule('list', ['OSB (values (COMMA values)*)? CSB'])
+        grammar.terminal('COMMA', '","')
+        grammar.terminal('OSB', '"["')
+        grammar.terminal('CSB', '"]"')
+
     def values(self, grammar):
-        grammar.rule('values', ['INT', 'string'])
+        grammar.rule('values', ['INT', 'string', 'list'])
         grammar.loads(['common.INT'])
 
     def assignments(self, grammar):
@@ -39,7 +45,7 @@ class Parser:
     def grammar(self):
         grammar = Grammar()
         grammar.start('line')
-        for rule in ['line', 'string', 'values', 'assignments',
+        for rule in ['line', 'string', 'values', 'list', 'assignments',
                      'if_statement', 'statements']:
             getattr(self, rule)(grammar)
         return grammar.build()

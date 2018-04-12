@@ -20,6 +20,22 @@ def test_parser_values_string(string):
     assert node.children[1] == Token('WORD', 'red')
 
 
+def test_parser_list():
+    parser = Parser('[3,4]')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0]
+    assert node.children[1].children[0] == Token('INT', 3)
+    assert node.children[3].children[0] == Token('INT', 4)
+
+
+def test_parser_list_empty():
+    parser = Parser('[]')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0]
+    assert node.children[0] == Token('OSB', '[')
+    assert node.children[1] == Token('CSB', ']')
+
+
 def test_parser_assignments():
     parser = Parser('var="hello"')
     result = parser.parse()

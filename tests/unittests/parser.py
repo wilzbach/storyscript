@@ -46,8 +46,15 @@ def test_parser_string(grammar, parser):
 
 def test_parser_values(grammar, parser):
     parser.values(grammar)
-    grammar.rule.assert_called_with('values', ['INT', 'string'])
+    grammar.rule.assert_called_with('values', ['INT', 'string', 'list'])
     grammar.loads.assert_called_with(['common.INT'])
+
+
+def test_parser_list(grammar, parser):
+    parser.list(grammar)
+    definitions = ['OSB (values (COMMA values)*)? CSB']
+    grammar.rule.assert_called_with('list', definitions)
+    assert grammar.terminal.call_count == 3
 
 
 def test_parser_assignments(grammar, parser):
@@ -71,13 +78,14 @@ def test_parser_statements(grammar, parser):
 def test_parser_grammar(patch, parser):
     patch.init(Grammar)
     patch.many(Grammar, ['start', 'build'])
-    patch.many(parser, ['line', 'string', 'values', 'assignments',
+    patch.many(parser, ['line', 'string', 'values', 'list', 'assignments',
                         'if_statement', 'statements'])
     result = parser.grammar()
     Grammar.start.assert_called_with('line')
     assert parser.line.call_count == 1
     assert parser.string.call_count == 1
     assert parser.values.call_count == 1
+    assert parser.list.call_count == 1
     assert parser.assignments.call_count == 1
     assert parser.if_statement.call_count == 1
     assert parser.statements.call_count == 1
