@@ -14,11 +14,15 @@ class Parser:
     def line(self, grammar):
         grammar.rule('line', ['values', 'assignments', 'statements'])
 
+    def string(self, grammar):
+        grammar.rule('string', ['STRING_INNER WORD STRING_INNER',
+                                'DOUBLE_QUOTES WORD DOUBLE_QUOTES'])
+        grammar.terminal('DOUBLE_QUOTES', '("\\\""|/[^"]/)')
+        grammar.loads(['common.WORD', 'common.STRING_INNER'])
+
     def values(self, grammar):
-        grammar.rule('values', ['INT', 'STRING_INNER WORD STRING_INNER',
-                                'DQS WORD DQS'])
-        grammar.terminal('DQS', '("\\\""|/[^"]/)')
-        grammar.loads(['common.INT', 'common.WORD', 'common.STRING_INNER'])
+        grammar.rule('values', ['INT', 'string'])
+        grammar.loads(['common.INT'])
 
     def assignments(self, grammar):
         grammar.rule('assignments', ['WORD EQUALS values'])
@@ -36,6 +40,7 @@ class Parser:
         grammar = Grammar()
         grammar.start('line')
         self.line(grammar)
+        self.string(grammar)
         self.values(grammar)
         self.assignments(grammar)
         self.if_statement(grammar)

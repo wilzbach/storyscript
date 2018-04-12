@@ -16,7 +16,8 @@ def test_parser_values():
 def test_parser_values_string(string):
     parser = Parser(string)
     result = parser.parse()
-    assert result.children[0].children[0].children[1] == Token('WORD', 'red')
+    node = result.children[0].children[0].children[0]
+    assert node.children[1] == Token('WORD', 'red')
 
 
 def test_parser_assignments():
@@ -25,7 +26,7 @@ def test_parser_assignments():
     node = result.children[0].children[0]
     assert node.children[0] == Token('WORD', 'var')
     assert node.children[1] == Token('EQUALS', '=')
-    assert node.children[2].children[1] == Token('WORD', 'hello')
+    assert node.children[2].children[0].children[1] == Token('WORD', 'hello')
 
 
 def test_parser_assignments_int():

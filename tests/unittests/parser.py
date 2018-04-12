@@ -35,12 +35,19 @@ def test_parser_line(grammar, parser):
                                              'statements'])
 
 
+def test_parser_string(grammar, parser):
+    parser.string(grammar)
+    definitions = ['STRING_INNER WORD STRING_INNER',
+                   'DOUBLE_QUOTES WORD DOUBLE_QUOTES']
+    grammar.rule.assert_called_with('string', definitions)
+    grammar.terminal.assert_called_with('DOUBLE_QUOTES', '("\\\""|/[^"]/)')
+    grammar.loads.assert_called_with(['common.WORD', 'common.STRING_INNER'])
+
+
 def test_parser_values(grammar, parser):
     parser.values(grammar)
-    definitions = ['INT', 'STRING_INNER WORD STRING_INNER', 'DQS WORD DQS']
-    loads = ['common.INT', 'common.WORD', 'common.STRING_INNER']
-    grammar.rule.assert_called_with('values', definitions)
-    grammar.loads.assert_called_with(loads)
+    grammar.rule.assert_called_with('values', ['INT', 'string'])
+    grammar.loads.assert_called_with(['common.INT'])
 
 
 def test_parser_assignments(grammar, parser):
@@ -64,11 +71,12 @@ def test_parser_statements(grammar, parser):
 def test_parser_grammar(patch, parser):
     patch.init(Grammar)
     patch.many(Grammar, ['start', 'build'])
-    patch.many(parser, ['line', 'values', 'assignments', 'if_statement',
-                        'statements'])
+    patch.many(parser, ['line', 'string', 'values', 'assignments',
+                        'if_statement', 'statements'])
     result = parser.grammar()
     Grammar.start.assert_called_with('line')
     assert parser.line.call_count == 1
+    assert parser.string.call_count == 1
     assert parser.values.call_count == 1
     assert parser.assignments.call_count == 1
     assert parser.if_statement.call_count == 1
