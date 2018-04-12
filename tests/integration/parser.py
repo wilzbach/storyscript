@@ -70,3 +70,13 @@ def test_parser_for_statement():
     assert node[2] == Token('WORD', 'var')
     assert node[4] == Token('IN', 'in')
     assert node[6] == Token('WORD', 'items')
+
+
+def test_parser_foreach_statement():
+    parser = Parser('foreach items as item')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0].children
+    assert node[0] == Token('FOREACH', 'foreach')
+    assert node[2] == Token('WORD', 'items')
+    assert node[4] == Token('AS', 'as')
+    assert node[6] == Token('WORD', 'item')

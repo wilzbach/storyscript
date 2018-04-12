@@ -77,9 +77,16 @@ def test_parser_for_statement(grammar, parser):
     assert grammar.terminal.call_count == 2
 
 
+def test_parser_foreach_statement(grammar, parser):
+    parser.foreach_statement(grammar)
+    definitions = ['FOREACH WS WORD WS AS WS WORD']
+    grammar.rule.assert_called_with('foreach_statement', definitions)
+    assert grammar.terminal.call_count == 2
+
+
 def test_parser_statements(grammar, parser):
     parser.statements(grammar)
-    definitions = ['if_statement', 'for_statement']
+    definitions = ['if_statement', 'for_statement', 'foreach_statement']
     grammar.rule.assert_called_with('statements', definitions)
 
 
@@ -87,7 +94,8 @@ def test_parser_grammar(patch, parser):
     patch.init(Grammar)
     patch.many(Grammar, ['start', 'build'])
     patch.many(parser, ['line', 'string', 'values', 'list', 'assignments',
-                        'if_statement', 'for_statement', 'statements'])
+                        'if_statement', 'for_statement', 'foreach_statement',
+                        'statements'])
     result = parser.grammar()
     Grammar.start.assert_called_with('line')
     assert parser.line.call_count == 1
@@ -97,6 +105,7 @@ def test_parser_grammar(patch, parser):
     assert parser.assignments.call_count == 1
     assert parser.if_statement.call_count == 1
     assert parser.for_statement.call_count == 1
+    assert parser.foreach_statement.call_count == 1
     assert parser.statements.call_count == 1
     assert Grammar.build.call_count == 1
     assert result == Grammar.build()

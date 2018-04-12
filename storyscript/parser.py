@@ -44,14 +44,21 @@ class Parser:
         grammar.terminal('FOR', '"for"')
         grammar.terminal('IN', '"in"')
 
+    def foreach_statement(self, grammar):
+        grammar.rule('foreach_statement', ['FOREACH WS WORD WS AS WS WORD'])
+        grammar.terminal('FOREACH', '"foreach"')
+        grammar.terminal('AS', '"as"')
+
     def statements(self, grammar):
-        grammar.rule('statements', ['if_statement', 'for_statement'])
+        grammar.rule('statements', ['if_statement', 'for_statement',
+                                    'foreach_statement'])
 
     def grammar(self):
         grammar = Grammar()
         grammar.start('line')
         for rule in ['line', 'string', 'values', 'list', 'assignments',
-                     'if_statement', 'for_statement', 'statements']:
+                     'if_statement', 'for_statement', 'foreach_statement',
+                     'statements']:
             getattr(self, rule)(grammar)
         return grammar.build()
 
