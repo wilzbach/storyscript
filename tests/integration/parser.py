@@ -60,3 +60,13 @@ def test_parser_if_statement():
     node = result.children[0].children[0].children[0]
     assert node.children[0] == Token('IF', 'if')
     assert node.children[2] == Token('WORD', 'var')
+
+
+def test_parser_for_statement():
+    parser = Parser('for var in items')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0].children
+    assert node[0] == Token('FOR', 'for')
+    assert node[2] == Token('WORD', 'var')
+    assert node[4] == Token('IN', 'in')
+    assert node[6] == Token('WORD', 'items')

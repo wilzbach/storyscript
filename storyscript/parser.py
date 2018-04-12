@@ -39,14 +39,19 @@ class Parser:
         grammar.terminal('IF', '"if"')
         grammar.load('common.WS')
 
+    def for_statement(self, grammar):
+        grammar.rule('for_statement', ['FOR WS WORD WS IN WS WORD'])
+        grammar.terminal('FOR', '"for"')
+        grammar.terminal('IN', '"in"')
+
     def statements(self, grammar):
-        grammar.rule('statements', ['if_statement'])
+        grammar.rule('statements', ['if_statement', 'for_statement'])
 
     def grammar(self):
         grammar = Grammar()
         grammar.start('line')
         for rule in ['line', 'string', 'values', 'list', 'assignments',
-                     'if_statement', 'statements']:
+                     'if_statement', 'for_statement', 'statements']:
             getattr(self, rule)(grammar)
         return grammar.build()
 

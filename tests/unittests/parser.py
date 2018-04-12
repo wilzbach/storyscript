@@ -70,16 +70,24 @@ def test_parser_if_statement(grammar, parser):
     grammar.load.assert_called_with('common.WS')
 
 
+def test_parser_for_statement(grammar, parser):
+    parser.for_statement(grammar)
+    definitions = ['FOR WS WORD WS IN WS WORD']
+    grammar.rule.assert_called_with('for_statement', definitions)
+    assert grammar.terminal.call_count == 2
+
+
 def test_parser_statements(grammar, parser):
     parser.statements(grammar)
-    grammar.rule.assert_called_with('statements', ['if_statement'])
+    definitions = ['if_statement', 'for_statement']
+    grammar.rule.assert_called_with('statements', definitions)
 
 
 def test_parser_grammar(patch, parser):
     patch.init(Grammar)
     patch.many(Grammar, ['start', 'build'])
     patch.many(parser, ['line', 'string', 'values', 'list', 'assignments',
-                        'if_statement', 'statements'])
+                        'if_statement', 'for_statement', 'statements'])
     result = parser.grammar()
     Grammar.start.assert_called_with('line')
     assert parser.line.call_count == 1
@@ -88,6 +96,7 @@ def test_parser_grammar(patch, parser):
     assert parser.list.call_count == 1
     assert parser.assignments.call_count == 1
     assert parser.if_statement.call_count == 1
+    assert parser.for_statement.call_count == 1
     assert parser.statements.call_count == 1
     assert Grammar.build.call_count == 1
     assert result == Grammar.build()
