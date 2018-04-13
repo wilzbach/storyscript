@@ -80,3 +80,19 @@ def test_parser_foreach_statement():
     assert node[2] == Token('WORD', 'items')
     assert node[4] == Token('AS', 'as')
     assert node[6] == Token('WORD', 'item')
+
+
+def test_parser_wait_statement():
+    parser = Parser('wait time')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0].children
+    assert node[0] == Token('WAIT', 'wait')
+    assert node[2] == Token('WORD', 'time')
+
+
+def test_parser_wait_statement_string():
+    parser = Parser('wait "seconds"')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0].children
+    assert node[0] == Token('WAIT', 'wait')
+    assert node[2].children[1] == Token('WORD', 'seconds')

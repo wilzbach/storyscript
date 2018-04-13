@@ -49,16 +49,20 @@ class Parser:
         grammar.terminal('FOREACH', '"foreach"')
         grammar.terminal('AS', '"as"')
 
+    def wait_statement(self, grammar):
+        grammar.rule('wait_statement', ['WAIT WS WORD', 'WAIT WS string'])
+        grammar.terminal('WAIT', '"wait"')
+
     def statements(self, grammar):
         grammar.rule('statements', ['if_statement', 'for_statement',
-                                    'foreach_statement'])
+                                    'foreach_statement', 'wait_statement'])
 
     def grammar(self):
         grammar = Grammar()
         grammar.start('line')
         for rule in ['line', 'string', 'values', 'list', 'assignments',
                      'if_statement', 'for_statement', 'foreach_statement',
-                     'statements']:
+                     'wait_statement', 'statements']:
             getattr(self, rule)(grammar)
         return grammar.build()
 
