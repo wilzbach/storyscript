@@ -44,7 +44,7 @@ def test_parser_line(grammar, parser):
 def test_parser_number(grammar, parser):
     parser.number(grammar)
     grammar.rule.assert_called_with('number', ['FLOAT', 'INT'])
-    grammar.loads.assert_called_with(['common.INT', 'common.FLOAT'])
+    grammar.loads.assert_called_with(['INT', 'FLOAT'])
 
 
 def test_parser_string(grammar, parser):
@@ -53,7 +53,7 @@ def test_parser_string(grammar, parser):
                    'DOUBLE_QUOTES WORD DOUBLE_QUOTES']
     grammar.rule.assert_called_with('string', definitions)
     grammar.terminal.assert_called_with('DOUBLE_QUOTES', '("\\\""|/[^"]/)')
-    grammar.loads.assert_called_with(['common.WORD', 'common.STRING_INNER'])
+    grammar.loads.assert_called_with(['WORD', 'STRING_INNER'])
 
 
 def test_parser_values(patch, grammar, parser):
@@ -80,7 +80,7 @@ def test_parser_if_statement(grammar, parser):
     parser.if_statement(grammar)
     grammar.rule.assert_called_with('if_statement', ['IF WS WORD'])
     grammar.terminal.assert_called_with('IF', '"if"')
-    grammar.load.assert_called_with('common.WS')
+    grammar.load.assert_called_with('WS')
 
 
 def test_parser_for_statement(grammar, parser):

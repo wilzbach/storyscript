@@ -21,13 +21,13 @@ class Parser:
 
     def number(self, grammar):
         grammar.rule('number', ['FLOAT', 'INT'])
-        grammar.loads(['common.INT', 'common.FLOAT'])
+        grammar.loads(['INT', 'FLOAT'])
 
     def string(self, grammar):
         grammar.rule('string', ['STRING_INNER WORD STRING_INNER',
                                 'DOUBLE_QUOTES WORD DOUBLE_QUOTES'])
         grammar.terminal('DOUBLE_QUOTES', '("\\\""|/[^"]/)')
-        grammar.loads(['common.WORD', 'common.STRING_INNER'])
+        grammar.loads(['WORD', 'STRING_INNER'])
 
     def list(self, grammar):
         grammar.rule('list', ['OSB (values (COMMA values)*)? CSB'])
@@ -46,7 +46,7 @@ class Parser:
     def if_statement(self, grammar):
         grammar.rule('if_statement', ['IF WS WORD'])
         grammar.terminal('IF', '"if"')
-        grammar.load('common.WS')
+        grammar.load('WS')
 
     def for_statement(self, grammar):
         grammar.rule('for_statement', ['FOR WS WORD WS IN WS WORD'])
