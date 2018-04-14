@@ -97,10 +97,12 @@ def test_parser_wait_statement(grammar, parser):
     grammar.terminal.assert_called_with('WAIT', '"wait"')
 
 
-def test_parser_statements(grammar, parser):
+def test_parser_statements(patch, grammar, parser):
+    patch.object(Parser, 'add_rules')
     parser.statements(grammar)
     definitions = ['if_statement', 'for_statement', 'foreach_statement',
                    'wait_statement']
+    Parser.add_rules.assert_called_with(grammar, definitions)
     grammar.rule.assert_called_with('statements', definitions)
 
 

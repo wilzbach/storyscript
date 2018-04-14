@@ -59,8 +59,10 @@ class Parser:
         grammar.terminal('WAIT', '"wait"')
 
     def statements(self, grammar):
-        grammar.rule('statements', ['if_statement', 'for_statement',
-                                    'foreach_statement', 'wait_statement'])
+        statements = ['if_statement', 'for_statement', 'foreach_statement',
+                      'wait_statement']
+        self.add_rules(grammar, statements)
+        grammar.rule('statements', statements)
 
     def comment(self, grammar):
         grammar.rule('comment', ['COMMENT WS?'])
