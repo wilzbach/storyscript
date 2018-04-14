@@ -72,7 +72,7 @@ class Parser:
         return Grammar()
 
     def build_grammar(self):
-        grammar = Grammar()
+        grammar = self.grammar()
         grammar.start('line')
         for rule in ['line', 'string', 'values', 'list', 'assignments',
                      'statements', 'comment']:

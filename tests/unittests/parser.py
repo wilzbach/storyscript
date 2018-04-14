@@ -119,12 +119,11 @@ def test_parser_grammar(patch, parser):
 
 
 def test_parser_build_grammar(patch, parser):
-    patch.init(Grammar)
-    patch.many(Grammar, ['start', 'build'])
     patch.many(Parser, ['line', 'string', 'values', 'list', 'assignments',
-                        'statements', 'comment'])
+                        'statements', 'comment', 'grammar'])
     result = parser.build_grammar()
-    Grammar.start.assert_called_with('line')
+    assert Parser.grammar.call_count == 1
+    Parser.grammar().start.assert_called_with('line')
     assert parser.line.call_count == 1
     assert parser.string.call_count == 1
     assert parser.values.call_count == 1
@@ -132,8 +131,8 @@ def test_parser_build_grammar(patch, parser):
     assert parser.assignments.call_count == 1
     assert parser.statements.call_count == 1
     assert parser.comment.call_count == 1
-    assert Grammar.build.call_count == 1
-    assert result == Grammar.build()
+    assert Parser.grammar().build.call_count == 1
+    assert result == Parser.grammar().build()
 
 
 def test_parser_parse(patch, parser):
