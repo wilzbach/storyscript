@@ -9,7 +9,8 @@ from storyscript.parser import Parser
 def test_parser_values():
     parser = Parser('3')
     result = parser.parse()
-    assert result.children[0].children[0].children[0] == Token('INT', 3)
+    node = result.children[0].children[0].children[0].children[0]
+    assert  node == Token('INT', 3)
 
 
 @mark.parametrize('string', ["'red'", '"red"'])
@@ -24,8 +25,8 @@ def test_parser_list():
     parser = Parser('[3,4]')
     result = parser.parse()
     node = result.children[0].children[0].children[0]
-    assert node.children[1].children[0] == Token('INT', 3)
-    assert node.children[3].children[0] == Token('INT', 4)
+    assert node.children[1].children[0].children[0] == Token('INT', 3)
+    assert node.children[3].children[0].children[0] == Token('INT', 4)
 
 
 def test_parser_list_empty():
@@ -51,7 +52,7 @@ def test_parser_assignments_int():
     node = result.children[0].children[0]
     assert node.children[0] == Token('WORD', 'var')
     assert node.children[1] == Token('EQUALS', '=')
-    assert node.children[2].children[0] == Token('INT', '3')
+    assert node.children[2].children[0].children[0] == Token('INT', '3')
 
 
 def test_parser_if_statement():

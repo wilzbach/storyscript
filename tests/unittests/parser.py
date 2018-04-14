@@ -41,6 +41,12 @@ def test_parser_line(grammar, parser):
                                              'statements', 'comment'])
 
 
+def test_parser_number(grammar, parser):
+    parser.number(grammar)
+    grammar.rule.assert_called_with('number', ['FLOAT', 'INT'])
+    grammar.loads.assert_called_with(['common.INT', 'common.FLOAT'])
+
+
 def test_parser_string(grammar, parser):
     parser.string(grammar)
     definitions = ['STRING_INNER WORD STRING_INNER',
@@ -53,9 +59,8 @@ def test_parser_string(grammar, parser):
 def test_parser_values(patch, grammar, parser):
     patch.object(Parser, 'add_rules')
     parser.values(grammar)
-    Parser.add_rules.assert_called_with(grammar, ['string', 'list'])
-    grammar.rule.assert_called_with('values', ['INT', 'string', 'list'])
-    grammar.loads.assert_called_with(['common.INT'])
+    Parser.add_rules.assert_called_with(grammar, ['number', 'string', 'list'])
+    grammar.rule.assert_called_with('values', ['number', 'string', 'list'])
 
 
 def test_parser_list(grammar, parser):

@@ -19,6 +19,10 @@ class Parser:
         grammar.rule('line', ['values', 'assignments', 'statements',
                               'comment'])
 
+    def number(self, grammar):
+        grammar.rule('number', ['FLOAT', 'INT'])
+        grammar.loads(['common.INT', 'common.FLOAT'])
+
     def string(self, grammar):
         grammar.rule('string', ['STRING_INNER WORD STRING_INNER',
                                 'DOUBLE_QUOTES WORD DOUBLE_QUOTES'])
@@ -32,9 +36,8 @@ class Parser:
         grammar.terminal('CSB', '"]"')
 
     def values(self, grammar):
-        self.add_rules(grammar, ['string', 'list'])
-        grammar.rule('values', ['INT', 'string', 'list'])
-        grammar.loads(['common.INT'])
+        self.add_rules(grammar, ['number', 'string', 'list'])
+        grammar.rule('values', ['number', 'string', 'list'])
 
     def assignments(self, grammar):
         grammar.rule('assignments', ['WORD EQUALS values'])
