@@ -112,6 +112,12 @@ def test_parser_comment(grammar, parser):
     grammar.terminal.assert_called_with('COMMENT', '/#(.*)/')
 
 
+def test_parser_grammar(patch, parser):
+    patch.init(Grammar)
+    grammar = parser.grammar()
+    assert isinstance(grammar, Grammar)
+
+
 def test_parser_build_grammar(patch, parser):
     patch.init(Grammar)
     patch.many(Grammar, ['start', 'build'])
