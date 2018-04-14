@@ -12,7 +12,8 @@ class Parser:
         self.algo = algo
 
     def line(self, grammar):
-        grammar.rule('line', ['values', 'assignments', 'statements'])
+        grammar.rule('line', ['values', 'assignments', 'statements',
+                              'comment'])
 
     def string(self, grammar):
         grammar.rule('string', ['STRING_INNER WORD STRING_INNER',
@@ -57,12 +58,16 @@ class Parser:
         grammar.rule('statements', ['if_statement', 'for_statement',
                                     'foreach_statement', 'wait_statement'])
 
+    def comment(self, grammar):
+        grammar.rule('comment', ['COMMENT WS?'])
+        grammar.terminal('COMMENT', '/#(.*)/')
+
     def grammar(self):
         grammar = Grammar()
         grammar.start('line')
         for rule in ['line', 'string', 'values', 'list', 'assignments',
                      'if_statement', 'for_statement', 'foreach_statement',
-                     'wait_statement', 'statements']:
+                     'wait_statement', 'statements', 'comment']:
             getattr(self, rule)(grammar)
         return grammar.build()
 

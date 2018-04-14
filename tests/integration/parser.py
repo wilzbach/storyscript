@@ -96,3 +96,11 @@ def test_parser_wait_statement_string():
     node = result.children[0].children[0].children[0].children
     assert node[0] == Token('WAIT', 'wait')
     assert node[2].children[1] == Token('WORD', 'seconds')
+
+
+@mark.parametrize('comment', ['# one', '#one'])
+def test_parser_comment(comment):
+    parser = Parser(comment)
+    result = parser.parse()
+    node = result.children[0].children[0].children[0]
+    assert node == Token('COMMENT', comment)

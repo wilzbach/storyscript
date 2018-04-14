@@ -32,7 +32,7 @@ def test_parser_init_algo():
 def test_parser_line(grammar, parser):
     parser.line(grammar)
     grammar.rule.assert_called_with('line', ['values', 'assignments',
-                                             'statements'])
+                                             'statements', 'comment'])
 
 
 def test_parser_string(grammar, parser):
@@ -98,12 +98,16 @@ def test_parser_statements(grammar, parser):
     grammar.rule.assert_called_with('statements', definitions)
 
 
+def test_parser_comment(grammar, parser):
+    parser.comment(grammar)
+    grammar.rule.assert_called_with('comment', ['COMMENT WS?'])
+    grammar.terminal.assert_called_with('COMMENT', '/#(.*)/')
 def test_parser_grammar(patch, parser):
     patch.init(Grammar)
     patch.many(Grammar, ['start', 'build'])
     patch.many(parser, ['line', 'string', 'values', 'list', 'assignments',
                         'if_statement', 'for_statement', 'foreach_statement',
-                        'wait_statement', 'statements'])
+                        'wait_statement', 'statements', 'comment'])
     result = parser.grammar()
     Grammar.start.assert_called_with('line')
     assert parser.line.call_count == 1
@@ -116,6 +120,7 @@ def test_parser_grammar(patch, parser):
     assert parser.foreach_statement.call_count == 1
     assert parser.wait_statement.call_count == 1
     assert parser.statements.call_count == 1
+    assert parser.comment.call_count == 1
     assert Grammar.build.call_count == 1
     assert result == Grammar.build()
 
