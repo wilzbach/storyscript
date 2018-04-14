@@ -68,7 +68,7 @@ class Parser:
         grammar.rule('comment', ['COMMENT WS?'])
         grammar.terminal('COMMENT', '/#(.*)/')
 
-    def grammar(self):
+    def build_grammar(self):
         grammar = Grammar()
         grammar.start('line')
         for rule in ['line', 'string', 'values', 'list', 'assignments',
@@ -77,7 +77,7 @@ class Parser:
         return grammar.build()
 
     def parse(self):
-        lark = Lark(self.grammar(), parser=self.algo)
+        lark = Lark(self.build_grammar(), parser=self.algo)
         try:
             tree = lark.parse(self.source)
         except UnexpectedToken:

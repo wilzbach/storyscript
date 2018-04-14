@@ -112,12 +112,12 @@ def test_parser_comment(grammar, parser):
     grammar.terminal.assert_called_with('COMMENT', '/#(.*)/')
 
 
-def test_parser_grammar(patch, parser):
+def test_parser_build_grammar(patch, parser):
     patch.init(Grammar)
     patch.many(Grammar, ['start', 'build'])
     patch.many(Parser, ['line', 'string', 'values', 'list', 'assignments',
                         'statements', 'comment'])
-    result = parser.grammar()
+    result = parser.build_grammar()
     Grammar.start.assert_called_with('line')
     assert parser.line.call_count == 1
     assert parser.string.call_count == 1
@@ -136,9 +136,10 @@ def test_parser_parse(patch, parser):
     """
     patch.init(Lark)
     patch.object(Lark, 'parse')
-    patch.object(Parser, 'grammar')
+    patch.object(Parser, 'build_grammar')
     result = parser.parse()
-    Lark.__init__.assert_called_with(Parser.grammar(), parser=parser.algo)
+    Lark.__init__.assert_called_with(Parser.build_grammar(),
+                                     parser=parser.algo)
     Lark.parse.assert_called_with('source')
     assert result == Lark.parse()
 
@@ -146,5 +147,5 @@ def test_parser_parse(patch, parser):
 def test_parser_parse_unexpected_token(patch, parser):
     patch.init(Lark)
     patch.object(Lark, 'parse', side_effect=UnexpectedToken('', '', '', ''))
-    patch.object(Parser, 'grammar')
+    patch.object(Parser, 'build_grammar')
     assert parser.parse() is None
