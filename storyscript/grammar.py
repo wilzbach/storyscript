@@ -35,7 +35,7 @@ class Grammar:
         self.ignores.append('%ignore {}'.format(terminal))
 
     def load(self, terminal):
-        self.imports.append('%import {}'.format(terminal))
+        self.imports.append('%import common.{}'.format(terminal))
 
     def loads(self, terminals):
         for terminal in terminals:

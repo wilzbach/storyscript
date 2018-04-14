@@ -58,7 +58,7 @@ def test_grammar_ignore(grammar):
 
 def test_grammar_load(grammar):
     grammar.load('terminal')
-    assert grammar.imports == ['%import terminal']
+    assert grammar.imports == ['%import common.terminal']
 
 
 def test_grammar_loads(patch, grammar):
