@@ -74,9 +74,9 @@ class Parser:
     def build_grammar(self):
         grammar = self.grammar()
         grammar.start('line')
-        for rule in ['line', 'string', 'values', 'list', 'assignments',
-                     'statements', 'comment']:
-            getattr(self, rule)(grammar)
+        rules = ['line', 'string', 'values', 'list', 'assignments',
+                 'statements', 'comment']
+        self.add_rules(grammar, rules)
         return grammar.build()
 
     def parse(self):
