@@ -29,6 +29,12 @@ def test_parser_init_algo():
     assert parser.algo == 'algo'
 
 
+def test_parser_add_rules(patch, magic, grammar, parser):
+    parser.rule = magic()
+    parser.add_rules(grammar, ['rule'])
+    parser.rule.assert_called_with(grammar)
+
+
 def test_parser_line(grammar, parser):
     parser.line(grammar)
     grammar.rule.assert_called_with('line', ['values', 'assignments',
@@ -102,6 +108,8 @@ def test_parser_comment(grammar, parser):
     parser.comment(grammar)
     grammar.rule.assert_called_with('comment', ['COMMENT WS?'])
     grammar.terminal.assert_called_with('COMMENT', '/#(.*)/')
+
+
 def test_parser_grammar(patch, parser):
     patch.init(Grammar)
     patch.many(Grammar, ['start', 'build'])
