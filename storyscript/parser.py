@@ -32,6 +32,7 @@ class Parser:
         grammar.terminal('CSB', '"]"')
 
     def values(self, grammar):
+        self.add_rules(grammar, ['string', 'list'])
         grammar.rule('values', ['INT', 'string', 'list'])
         grammar.loads(['common.INT'])
 
@@ -74,8 +75,7 @@ class Parser:
     def build_grammar(self):
         grammar = self.grammar()
         grammar.start('line')
-        rules = ['line', 'string', 'values', 'list', 'assignments',
-                 'statements', 'comment']
+        rules = ['line', 'values', 'assignments', 'statements', 'comment']
         self.add_rules(grammar, rules)
         return grammar.build()
 

@@ -50,8 +50,10 @@ def test_parser_string(grammar, parser):
     grammar.loads.assert_called_with(['common.WORD', 'common.STRING_INNER'])
 
 
-def test_parser_values(grammar, parser):
+def test_parser_values(patch, grammar, parser):
+    patch.object(Parser, 'add_rules')
     parser.values(grammar)
+    Parser.add_rules.assert_called_with(grammar, ['string', 'list'])
     grammar.rule.assert_called_with('values', ['INT', 'string', 'list'])
     grammar.loads.assert_called_with(['common.INT'])
 
@@ -123,8 +125,7 @@ def test_parser_build_grammar(patch, parser):
     result = parser.build_grammar()
     assert Parser.grammar.call_count == 1
     Parser.grammar().start.assert_called_with('line')
-    rules = ['line', 'string', 'values', 'list', 'assignments',
-             'statements', 'comment']
+    rules = ['line', 'values', 'assignments', 'statements', 'comment']
     Parser.add_rules.assert_called_with(Parser.grammar(), rules)
     assert Parser.grammar().build.call_count == 1
     assert result == Parser.grammar().build()
