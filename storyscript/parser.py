@@ -17,10 +17,14 @@ class Parser:
 
     def line(self, grammar):
         grammar.rule('line', ['values', 'assignments', 'statements',
-                              'comment'])
+                              'comment', 'suite'])
 
     def spaces(self, grammar):
-        grammar.terminal('WS', '(" "|/\t/)+')
+        grammar.terminal('WS', '(" ")+')
+        grammar.terminal('TAB', r'/\n[\t]+/')
+
+    def suite(self, grammar):
+        grammar.rule('suite', ['TAB line'])
 
     def number(self, grammar):
         grammar.rule('number', ['FLOAT', 'INT'])
@@ -81,7 +85,7 @@ class Parser:
         grammar = self.grammar()
         grammar.start('line')
         rules = ['line', 'spaces', 'values', 'assignments', 'statements',
-                 'comment']
+                 'comment', 'suite']
         self.add_rules(grammar, rules)
         return grammar.build()
 

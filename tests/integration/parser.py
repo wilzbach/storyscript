@@ -20,7 +20,7 @@ def test_parser_values(int_token):
     parser = Parser('3')
     result = parser.parse()
     node = result.children[0].children[0].children[0].children[0]
-    assert  node == int_token
+    assert node == int_token
 
 
 @mark.parametrize('string', ["'red'", '"red"'])
@@ -115,3 +115,22 @@ def test_parser_comment(comment):
     result = parser.parse()
     node = result.children[0].children[0].children[0]
     assert node == Token('COMMENT', comment)
+
+
+def test_parser_suite(var_token):
+    parser = Parser('if expr\n\tvar=3')
+    result = parser.parse()
+    node = result.children
+    assert node[0].children[0].children[0].children[0] == Token('IF', 'if')
+    assert node[1].children[0].children[0] == Token('TAB', '\n\t')
+    assert node[1].children[0].children[1].children[0].children[0] == var_token
+
+
+def test_parser_suite_double(var_token):
+    parser = Parser('if expr\n\tif value\n\t\tvar=4')
+    result = parser.parse()
+    node = result.children
+    if_statement = node[1].children[0].children[1].children[0].children[0]
+    assert if_statement.children[0] == Token('IF', 'if')
+    assert node[2].children[0].children[0] == Token('TAB', '\n\t\t')
+    assert node[2].children[0].children[1].children[0].children[0] == var_token
