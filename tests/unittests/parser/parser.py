@@ -36,7 +36,7 @@ def test_parser_add_rules(patch, magic, grammar, parser):
 
 def test_parser_line(grammar, parser):
     parser.line(grammar)
-    rules = ['values', 'assignments', 'statements', 'comment', 'suite']
+    rules = ['values', 'assignments', 'statements', 'comment', 'block']
     grammar.rule.assert_called_with('line', rules)
 
 
@@ -45,9 +45,9 @@ def test_parser_spaces(grammar, parser):
     grammar.terminal.call_count == 2
 
 
-def test_parser_suite(grammar, parser):
-    parser.suite(grammar)
-    grammar.rule.assert_called_with('suite', ['TAB line'])
+def test_parser_block(grammar, parser):
+    parser.block(grammar)
+    grammar.rule.assert_called_with('block', ['TAB line'])
 
 
 def test_parser_number(grammar, parser):
@@ -139,7 +139,7 @@ def test_parser_build_grammar(patch, parser):
     assert Parser.grammar.call_count == 1
     Parser.grammar().start.assert_called_with('line')
     rules = ['line', 'spaces', 'values', 'assignments', 'statements',
-             'comment', 'suite']
+             'comment', 'block']
     Parser.add_rules.assert_called_with(Parser.grammar(), rules)
     assert Parser.grammar().build.call_count == 1
     assert result == Parser.grammar().build()
