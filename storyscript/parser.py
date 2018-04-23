@@ -19,6 +19,9 @@ class Parser:
         grammar.rule('line', ['values', 'assignments', 'statements',
                               'comment'])
 
+    def spaces(self, grammar):
+        grammar.terminal('WS', '(" "|/\t/)+')
+
     def number(self, grammar):
         grammar.rule('number', ['FLOAT', 'INT'])
         grammar.loads(['INT', 'FLOAT'])
@@ -46,7 +49,6 @@ class Parser:
     def if_statement(self, grammar):
         grammar.rule('if_statement', ['IF WS WORD'])
         grammar.terminal('IF', '"if"')
-        grammar.load('WS')
 
     def for_statement(self, grammar):
         grammar.rule('for_statement', ['FOR WS WORD WS IN WS WORD'])
@@ -78,7 +80,8 @@ class Parser:
     def build_grammar(self):
         grammar = self.grammar()
         grammar.start('line')
-        rules = ['line', 'values', 'assignments', 'statements', 'comment']
+        rules = ['line', 'spaces', 'values', 'assignments', 'statements',
+                 'comment']
         self.add_rules(grammar, rules)
         return grammar.build()
 

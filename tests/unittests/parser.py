@@ -41,6 +41,11 @@ def test_parser_line(grammar, parser):
                                              'statements', 'comment'])
 
 
+def test_parser_spaces(grammar, parser):
+    parser.spaces(grammar)
+    grammar.terminal.assert_called_with('WS', '(" "|/\t/)+')
+
+
 def test_parser_number(grammar, parser):
     parser.number(grammar)
     grammar.rule.assert_called_with('number', ['FLOAT', 'INT'])
@@ -80,7 +85,6 @@ def test_parser_if_statement(grammar, parser):
     parser.if_statement(grammar)
     grammar.rule.assert_called_with('if_statement', ['IF WS WORD'])
     grammar.terminal.assert_called_with('IF', '"if"')
-    grammar.load.assert_called_with('WS')
 
 
 def test_parser_for_statement(grammar, parser):
@@ -130,7 +134,8 @@ def test_parser_build_grammar(patch, parser):
     result = parser.build_grammar()
     assert Parser.grammar.call_count == 1
     Parser.grammar().start.assert_called_with('line')
-    rules = ['line', 'values', 'assignments', 'statements', 'comment']
+    rules = ['line', 'spaces', 'values', 'assignments', 'statements',
+             'comment']
     Parser.add_rules.assert_called_with(Parser.grammar(), rules)
     assert Parser.grammar().build.call_count == 1
     assert result == Parser.grammar().build()
