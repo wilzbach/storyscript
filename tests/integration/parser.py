@@ -1,16 +1,26 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
 
-from pytest import mark
+from pytest import fixture, mark
 
 from storyscript.parser import Parser
 
 
-def test_parser_values():
+@fixture
+def int_token():
+    return Token('INT', 3)
+
+
+@fixture
+def var_token():
+    return Token('WORD', 'var')
+
+
+def test_parser_values(int_token):
     parser = Parser('3')
     result = parser.parse()
     node = result.children[0].children[0].children[0].children[0]
-    assert  node == Token('INT', 3)
+    assert  node == int_token
 
 
 @mark.parametrize('string', ["'red'", '"red"'])
@@ -21,11 +31,11 @@ def test_parser_values_string(string):
     assert node.children[1] == Token('WORD', 'red')
 
 
-def test_parser_list():
+def test_parser_list(int_token):
     parser = Parser('[3,4]')
     result = parser.parse()
     node = result.children[0].children[0].children[0]
-    assert node.children[1].children[0].children[0] == Token('INT', 3)
+    assert node.children[1].children[0].children[0] == int_token
     assert node.children[3].children[0].children[0] == Token('INT', 4)
 
 
@@ -37,38 +47,38 @@ def test_parser_list_empty():
     assert node.children[1] == Token('CSB', ']')
 
 
-def test_parser_assignments():
+def test_parser_assignments(var_token):
     parser = Parser('var="hello"')
     result = parser.parse()
     node = result.children[0].children[0]
-    assert node.children[0] == Token('WORD', 'var')
+    assert node.children[0] == var_token
     assert node.children[1] == Token('EQUALS', '=')
     assert node.children[2].children[0].children[1] == Token('WORD', 'hello')
 
 
-def test_parser_assignments_int():
+def test_parser_assignments_int(int_token, var_token):
     parser = Parser('var=3')
     result = parser.parse()
     node = result.children[0].children[0]
-    assert node.children[0] == Token('WORD', 'var')
+    assert node.children[0] == var_token
     assert node.children[1] == Token('EQUALS', '=')
-    assert node.children[2].children[0].children[0] == Token('INT', '3')
+    assert node.children[2].children[0].children[0] == int_token
 
 
-def test_parser_if_statement():
+def test_parser_if_statement(var_token):
     parser = Parser('if var')
     result = parser.parse()
     node = result.children[0].children[0].children[0]
     assert node.children[0] == Token('IF', 'if')
-    assert node.children[2] == Token('WORD', 'var')
+    assert node.children[2] == var_token
 
 
-def test_parser_for_statement():
+def test_parser_for_statement(var_token):
     parser = Parser('for var in items')
     result = parser.parse()
     node = result.children[0].children[0].children[0].children
     assert node[0] == Token('FOR', 'for')
-    assert node[2] == Token('WORD', 'var')
+    assert node[2] == var_token
     assert node[4] == Token('IN', 'in')
     assert node[6] == Token('WORD', 'items')
 
