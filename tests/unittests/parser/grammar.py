@@ -41,6 +41,11 @@ def test_grammar_terminal_insensitive(grammar):
     assert grammar.terminals == ['NAME: "value"i']
 
 
+def test_grammar_terminal_inline(grammar):
+    grammar.terminal('NAME', '"value"', inline=True)
+    assert grammar.terminals == ['_NAME: "value"']
+
+
 def test_grammar_terminal_uppercase(grammar):
     grammar.terminal('name', '"value"')
     assert grammar.terminals == ['NAME: "value"']

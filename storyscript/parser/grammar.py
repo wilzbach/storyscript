@@ -16,7 +16,8 @@ class Grammar:
         """
         self.start_line = 'start: {}+'.format(rule)
 
-    def terminal(self, name, value, priority=None, insensitive=False):
+    def terminal(self, name, value, priority=None, insensitive=False,
+                 inline=False):
         """
         Adds a terminal token to the terminals list
         """
@@ -25,6 +26,8 @@ class Grammar:
             string = '{}.{}: {}'.format('{}', priority, '{}')
         if insensitive:
             string = '{}i'.format(string)
+        if inline:
+            string = '_{}'.format(string)
         self.terminals.append(string.format(name.upper(), value))
 
     def rule(self, name, definitions):
