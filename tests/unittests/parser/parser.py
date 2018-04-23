@@ -42,12 +42,13 @@ def test_parser_line(grammar, parser):
 
 def test_parser_spaces(grammar, parser):
     parser.spaces(grammar)
-    grammar.terminal.call_count == 2
+    assert grammar.terminal.call_count == 4
 
 
 def test_parser_block(grammar, parser):
     parser.block(grammar)
-    grammar.rule.assert_called_with('block', ['TAB line'])
+    rules = ['line _NL [_INDENT block+ _DEDENT]']
+    grammar.rule.assert_called_with('block', rules)
 
 
 def test_parser_number(grammar, parser):

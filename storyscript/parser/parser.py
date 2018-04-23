@@ -21,10 +21,12 @@ class Parser:
 
     def spaces(self, grammar):
         grammar.terminal('WS', '(" ")+')
-        grammar.terminal('TAB', r'/\n[\t]+/')
+        grammar.terminal('NL', r'/(\r?\n[\t ]*)+/', inline=True)
+        grammar.terminal('INDENT', '"<INDENT>"', inline=True)
+        grammar.terminal('DEDENT', '"<DEDENT>"', inline=True)
 
     def block(self, grammar):
-        grammar.rule('block', ['TAB line'])
+        grammar.rule('block', ['line _NL [_INDENT block+ _DEDENT]'])
 
     def number(self, grammar):
         grammar.rule('number', ['FLOAT', 'INT'])
