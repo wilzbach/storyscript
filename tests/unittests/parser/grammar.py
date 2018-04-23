@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from pytest import fixture
 
-from storyscript.grammar import Grammar
+from storyscript.parser import Grammar
 
 
 @fixture

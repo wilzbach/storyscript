@@ -4,8 +4,7 @@ from lark.common import UnexpectedToken
 
 from pytest import fixture, raises
 
-from storyscript.grammar import Grammar
-from storyscript.parser import Parser
+from storyscript.parser import Grammar, Parser
 
 
 @fixture
