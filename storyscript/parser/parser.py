@@ -90,14 +90,14 @@ class Parser:
         grammar.rule('comment', ['COMMENT'])
         grammar.terminal('COMMENT', '/#(.*)/')
 
-    def grammar(self):
+    def get_grammar(self):
         return Grammar()
 
     def indenter(self):
         return CustomIndenter()
 
     def build_grammar(self):
-        grammar = self.grammar()
+        grammar = self.get_grammar()
         grammar.start('_NL? block')
         rules = ['line', 'spaces', 'values', 'assignments', 'statements',
                  'comment', 'block', 'comparisons']

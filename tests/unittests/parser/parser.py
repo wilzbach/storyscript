@@ -133,10 +133,9 @@ def test_parser_comment(grammar, parser):
     grammar.terminal.assert_called_with('COMMENT', '/#(.*)/')
 
 
-def test_parser_grammar(patch, parser):
+def test_parser_get_grammar(patch, parser):
     patch.init(Grammar)
-    grammar = parser.grammar()
-    assert isinstance(grammar, Grammar)
+    assert isinstance(parser.get_grammar(), Grammar)
 
 
 def test_parser_indenter(patch, parser):
@@ -145,15 +144,14 @@ def test_parser_indenter(patch, parser):
 
 
 def test_parser_build_grammar(patch, parser):
-    patch.many(Parser, ['grammar', 'add_rules'])
+    patch.many(Parser, ['get_grammar', 'add_rules'])
     result = parser.build_grammar()
-    assert Parser.grammar.call_count == 1
-    Parser.grammar().start.assert_called_with('_NL? block')
+    Parser.get_grammar().start.assert_called_with('_NL? block')
     rules = ['line', 'spaces', 'values', 'assignments', 'statements',
              'comment', 'block', 'comparisons']
-    Parser.add_rules.assert_called_with(Parser.grammar(), rules)
-    assert Parser.grammar().build.call_count == 1
-    assert result == Parser.grammar().build()
+    Parser.add_rules.assert_called_with(Parser.get_grammar(), rules)
+    assert Parser.get_grammar().build.call_count == 1
+    assert result == Parser.get_grammar().build()
 
 
 def test_parser_parse(patch, parser):
