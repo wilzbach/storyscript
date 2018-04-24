@@ -146,12 +146,13 @@ def test_parser_indenter(patch, parser):
 def test_parser_build_grammar(patch, parser):
     patch.many(Parser, ['get_grammar', 'add_rules'])
     result = parser.build_grammar()
-    Parser.get_grammar().start.assert_called_with('_NL? block')
+    assert parser.grammar == parser.get_grammar()
+    parser.grammar.start.assert_called_with('_NL? block')
     rules = ['line', 'spaces', 'values', 'assignments', 'statements',
              'comment', 'block', 'comparisons']
-    Parser.add_rules.assert_called_with(Parser.get_grammar(), rules)
-    assert Parser.get_grammar().build.call_count == 1
-    assert result == Parser.get_grammar().build()
+    Parser.add_rules.assert_called_with(parser.grammar, rules)
+    assert parser.grammar.build.call_count == 1
+    assert result == parser.grammar.build()
 
 
 def test_parser_parse(patch, parser):

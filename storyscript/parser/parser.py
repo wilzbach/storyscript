@@ -97,12 +97,12 @@ class Parser:
         return CustomIndenter()
 
     def build_grammar(self):
-        grammar = self.get_grammar()
-        grammar.start('_NL? block')
+        self.grammar = self.get_grammar()
+        self.grammar.start('_NL? block')
         rules = ['line', 'spaces', 'values', 'assignments', 'statements',
                  'comment', 'block', 'comparisons']
-        self.add_rules(grammar, rules)
-        return grammar.build()
+        self.add_rules(self.grammar, rules)
+        return self.grammar.build()
 
     def parse(self):
         lark = Lark(self.build_grammar(), parser=self.algo,
