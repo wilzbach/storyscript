@@ -2,6 +2,10 @@
 
 
 class Grammar:
+    """
+    Advanced EBNF grammar generator that provides for a readable and testable
+    way of creating a grammar.
+    """
 
     def __init__(self):
         self.start_line = None
