@@ -78,7 +78,7 @@ class Parser:
         grammar.rule('statements', statements)
 
     def comment(self, grammar):
-        grammar.rule('comment', ['COMMENT WS?'])
+        grammar.rule('comment', ['COMMENT'])
         grammar.terminal('COMMENT', '/#(.*)/')
 
     def grammar(self):

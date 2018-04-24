@@ -124,7 +124,7 @@ def test_parser_statements(patch, grammar, parser):
 
 def test_parser_comment(grammar, parser):
     parser.comment(grammar)
-    grammar.rule.assert_called_with('comment', ['COMMENT WS?'])
+    grammar.rule.assert_called_with('comment', ['COMMENT'])
     grammar.terminal.assert_called_with('COMMENT', '/#(.*)/')
 
 
