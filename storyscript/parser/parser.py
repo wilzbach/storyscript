@@ -83,6 +83,9 @@ class Parser:
     def grammar(self):
         return Grammar()
 
+    def indenter(self):
+        return CustomIndenter()
+
     def build_grammar(self):
         grammar = self.grammar()
         grammar.start('line')
