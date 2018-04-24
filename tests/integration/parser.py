@@ -117,7 +117,7 @@ def test_parser_comment(comment):
     assert node == Token('COMMENT', comment)
 
 
-def test_parser_suite(var_token):
+def test_parser_block_if(var_token):
     parser = Parser('if expr\n\tvar=3\n')
     result = parser.parse()
     node = result.children[0].children
@@ -125,7 +125,7 @@ def test_parser_suite(var_token):
     assert node[1].children[0].children[0].children[0] == var_token
 
 
-def test_parser_suite_double(var_token):
+def test_parser_block_nested_if_block(var_token):
     parser = Parser('if expr\n\tif things\n\tvar=3\n')
     result = parser.parse()
     node = result.children[0].children
