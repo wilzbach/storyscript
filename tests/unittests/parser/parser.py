@@ -88,27 +88,27 @@ def test_parser_assignments(grammar, parser):
 
 def test_parser_if_statement(grammar, parser):
     parser.if_statement(grammar)
-    grammar.rule.assert_called_with('if_statement', ['IF WS WORD'])
+    grammar.rule.assert_called_with('if_statement', ['IF _WS WORD'])
     grammar.terminal.assert_called_with('IF', '"if"')
 
 
 def test_parser_for_statement(grammar, parser):
     parser.for_statement(grammar)
-    definitions = ['FOR WS WORD WS IN WS WORD']
+    definitions = ['FOR _WS WORD _WS IN _WS WORD']
     grammar.rule.assert_called_with('for_statement', definitions)
     assert grammar.terminal.call_count == 2
 
 
 def test_parser_foreach_statement(grammar, parser):
     parser.foreach_statement(grammar)
-    definitions = ['FOREACH WS WORD WS AS WS WORD']
+    definitions = ['FOREACH _WS WORD _WS AS _WS WORD']
     grammar.rule.assert_called_with('foreach_statement', definitions)
     assert grammar.terminal.call_count == 2
 
 
 def test_parser_wait_statement(grammar, parser):
     parser.wait_statement(grammar)
-    definitions = ['WAIT WS WORD', 'WAIT WS string']
+    definitions = ['WAIT _WS WORD', 'WAIT _WS string']
     grammar.rule.assert_called_with('wait_statement', definitions)
     grammar.terminal.assert_called_with('WAIT', '"wait"')
 

@@ -21,7 +21,7 @@ class Parser:
                               'comment', 'block'])
 
     def spaces(self, grammar):
-        grammar.terminal('WS', '(" ")+')
+        grammar.terminal('WS', '(" ")+', inline=True)
         grammar.terminal('NL', r'/(\r?\n[\t ]*)+/', inline=True)
         grammar.terminal('INDENT', '"<INDENT>"', inline=True)
         grammar.terminal('DEDENT', '"<DEDENT>"', inline=True)
@@ -55,21 +55,21 @@ class Parser:
         grammar.terminal('equals', '"="')
 
     def if_statement(self, grammar):
-        grammar.rule('if_statement', ['IF WS WORD'])
+        grammar.rule('if_statement', ['IF _WS WORD'])
         grammar.terminal('IF', '"if"')
 
     def for_statement(self, grammar):
-        grammar.rule('for_statement', ['FOR WS WORD WS IN WS WORD'])
+        grammar.rule('for_statement', ['FOR _WS WORD _WS IN _WS WORD'])
         grammar.terminal('FOR', '"for"')
         grammar.terminal('IN', '"in"')
 
     def foreach_statement(self, grammar):
-        grammar.rule('foreach_statement', ['FOREACH WS WORD WS AS WS WORD'])
+        grammar.rule('foreach_statement', ['FOREACH _WS WORD _WS AS _WS WORD'])
         grammar.terminal('FOREACH', '"foreach"')
         grammar.terminal('AS', '"as"')
 
     def wait_statement(self, grammar):
-        grammar.rule('wait_statement', ['WAIT WS WORD', 'WAIT WS string'])
+        grammar.rule('wait_statement', ['WAIT _WS WORD', 'WAIT _WS string'])
         grammar.terminal('WAIT', '"wait"')
 
     def statements(self, grammar):
