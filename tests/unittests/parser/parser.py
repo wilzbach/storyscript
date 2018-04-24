@@ -86,6 +86,11 @@ def test_parser_assignments(grammar, parser):
     grammar.terminal.assert_called_with('equals', '"="')
 
 
+def test_parser_comparisons(grammar, parser):
+    parser.comparisons(grammar)
+    assert grammar.terminal.call_count == 6
+
+
 def test_parser_if_statement(grammar, parser):
     parser.if_statement(grammar)
     grammar.rule.assert_called_with('if_statement', ['IF _WS WORD'])
@@ -145,7 +150,7 @@ def test_parser_build_grammar(patch, parser):
     assert Parser.grammar.call_count == 1
     Parser.grammar().start.assert_called_with('_NL? block')
     rules = ['line', 'spaces', 'values', 'assignments', 'statements',
-             'comment', 'block']
+             'comment', 'block', 'comparisons']
     Parser.add_rules.assert_called_with(Parser.grammar(), rules)
     assert Parser.grammar().build.call_count == 1
     assert result == Parser.grammar().build()

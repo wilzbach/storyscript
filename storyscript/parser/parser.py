@@ -54,6 +54,14 @@ class Parser:
         grammar.rule('assignments', ['WORD EQUALS values'])
         grammar.terminal('equals', '"="')
 
+    def comparisons(self, grammar):
+        grammar.terminal('GREATER', '">"')
+        grammar.terminal('GREATER_EQUAL', '">="')
+        grammar.terminal('LESSER', '"<"')
+        grammar.terminal('LESSER_EQUAL', '"<="')
+        grammar.terminal('NOT', '"!="')
+        grammar.terminal('EQUAL', '"=="')
+
     def if_statement(self, grammar):
         grammar.rule('if_statement', ['IF _WS WORD'])
         grammar.terminal('IF', '"if"')
@@ -92,7 +100,7 @@ class Parser:
         grammar = self.grammar()
         grammar.start('_NL? block')
         rules = ['line', 'spaces', 'values', 'assignments', 'statements',
-                 'comment', 'block']
+                 'comment', 'block', 'comparisons']
         self.add_rules(grammar, rules)
         return grammar.build()
 
