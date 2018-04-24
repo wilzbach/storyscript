@@ -89,7 +89,7 @@ class Parser:
 
     def build_grammar(self):
         grammar = self.grammar()
-        grammar.start('line')
+        grammar.start('_NL? block')
         rules = ['line', 'spaces', 'values', 'assignments', 'statements',
                  'comment', 'block']
         self.add_rules(grammar, rules)

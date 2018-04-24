@@ -17,66 +17,66 @@ def var_token():
 
 
 def test_parser_values(int_token):
-    parser = Parser('3')
+    parser = Parser('3\n')
     result = parser.parse()
-    node = result.children[0].children[0].children[0].children[0]
+    node = result.children[0].children[0].children[0].children[0].children[0]
     assert node == int_token
 
 
-@mark.parametrize('string', ["'red'", '"red"'])
+@mark.parametrize('string', ["'red'\n", '"red"\n'])
 def test_parser_values_string(string):
     parser = Parser(string)
     result = parser.parse()
-    node = result.children[0].children[0].children[0]
+    node = result.children[0].children[0].children[0].children[0]
     assert node.children[1] == Token('WORD', 'red')
 
 
 def test_parser_list(int_token):
-    parser = Parser('[3,4]')
+    parser = Parser('[3,4]\n')
     result = parser.parse()
-    node = result.children[0].children[0].children[0]
+    node = result.children[0].children[0].children[0].children[0]
     assert node.children[1].children[0].children[0] == int_token
     assert node.children[3].children[0].children[0] == Token('INT', 4)
 
 
 def test_parser_list_empty():
-    parser = Parser('[]')
+    parser = Parser('[]\n')
     result = parser.parse()
-    node = result.children[0].children[0].children[0]
+    node = result.children[0].children[0].children[0].children[0]
     assert node.children[0] == Token('OSB', '[')
     assert node.children[1] == Token('CSB', ']')
 
 
 def test_parser_assignments(var_token):
-    parser = Parser('var="hello"')
+    parser = Parser('var="hello"\n')
     result = parser.parse()
-    node = result.children[0].children[0]
+    node = result.children[0].children[0].children[0]
     assert node.children[0] == var_token
     assert node.children[1] == Token('EQUALS', '=')
     assert node.children[2].children[0].children[1] == Token('WORD', 'hello')
 
 
 def test_parser_assignments_int(int_token, var_token):
-    parser = Parser('var=3')
+    parser = Parser('var=3\n')
     result = parser.parse()
-    node = result.children[0].children[0]
+    node = result.children[0].children[0].children[0]
     assert node.children[0] == var_token
     assert node.children[1] == Token('EQUALS', '=')
     assert node.children[2].children[0].children[0] == int_token
 
 
 def test_parser_if_statement(var_token):
-    parser = Parser('if var')
+    parser = Parser('if var\n')
     result = parser.parse()
-    node = result.children[0].children[0].children[0]
+    node = result.children[0].children[0].children[0].children[0]
     assert node.children[0] == Token('IF', 'if')
     assert node.children[2] == var_token
 
 
 def test_parser_for_statement(var_token):
-    parser = Parser('for var in items')
+    parser = Parser('for var in items\n')
     result = parser.parse()
-    node = result.children[0].children[0].children[0].children
+    node = result.children[0].children[0].children[0].children[0].children
     assert node[0] == Token('FOR', 'for')
     assert node[2] == var_token
     assert node[4] == Token('IN', 'in')
@@ -84,9 +84,9 @@ def test_parser_for_statement(var_token):
 
 
 def test_parser_foreach_statement():
-    parser = Parser('foreach items as item')
+    parser = Parser('foreach items as item\n')
     result = parser.parse()
-    node = result.children[0].children[0].children[0].children
+    node = result.children[0].children[0].children[0].children[0].children
     assert node[0] == Token('FOREACH', 'foreach')
     assert node[2] == Token('WORD', 'items')
     assert node[4] == Token('AS', 'as')
@@ -94,43 +94,41 @@ def test_parser_foreach_statement():
 
 
 def test_parser_wait_statement():
-    parser = Parser('wait time')
+    parser = Parser('wait time\n')
     result = parser.parse()
-    node = result.children[0].children[0].children[0].children
+    node = result.children[0].children[0].children[0].children[0].children
     assert node[0] == Token('WAIT', 'wait')
     assert node[2] == Token('WORD', 'time')
 
 
 def test_parser_wait_statement_string():
-    parser = Parser('wait "seconds"')
+    parser = Parser('wait "seconds"\n')
     result = parser.parse()
-    node = result.children[0].children[0].children[0].children
+    node = result.children[0].children[0].children[0].children[0].children
     assert node[0] == Token('WAIT', 'wait')
     assert node[2].children[1] == Token('WORD', 'seconds')
 
 
-@mark.parametrize('comment', ['# one', '#one'])
+@mark.parametrize('comment', ['# one\n', '#one\n'])
 def test_parser_comment(comment):
     parser = Parser(comment)
     result = parser.parse()
-    node = result.children[0].children[0].children[0]
+    node = result.children[0].children[0].children[0].children[0]
     assert node == Token('COMMENT', comment)
 
 
 def test_parser_suite(var_token):
-    parser = Parser('if expr\n\tvar=3')
+    parser = Parser('if expr\n\tvar=3\n')
     result = parser.parse()
-    node = result.children
+    node = result.children[0].children
     assert node[0].children[0].children[0].children[0] == Token('IF', 'if')
-    assert node[1].children[0].children[0] == Token('TAB', '\n\t')
-    assert node[1].children[0].children[1].children[0].children[0] == var_token
+    assert node[1].children[0].children[0].children[0] == var_token
 
 
 def test_parser_suite_double(var_token):
-    parser = Parser('if expr\n\tif value\n\t\tvar=4')
+    parser = Parser('if expr\n\tif things\n\tvar=3\n')
     result = parser.parse()
-    node = result.children
-    if_statement = node[1].children[0].children[1].children[0].children[0]
-    assert if_statement.children[0] == Token('IF', 'if')
-    assert node[2].children[0].children[0] == Token('TAB', '\n\t\t')
-    assert node[2].children[0].children[1].children[0].children[0] == var_token
+    node = result.children[0].children
+    things_node = node[1].children[0].children[0].children[0].children[2]
+    assert things_node == Token('WORD', 'things')
+    assert node[2].children[0].children[0].children[0] == var_token

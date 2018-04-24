@@ -143,7 +143,7 @@ def test_parser_build_grammar(patch, parser):
     patch.many(Parser, ['grammar', 'add_rules'])
     result = parser.build_grammar()
     assert Parser.grammar.call_count == 1
-    Parser.grammar().start.assert_called_with('line')
+    Parser.grammar().start.assert_called_with('_NL? block')
     rules = ['line', 'spaces', 'values', 'assignments', 'statements',
              'comment', 'block']
     Parser.add_rules.assert_called_with(Parser.grammar(), rules)
