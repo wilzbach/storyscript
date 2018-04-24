@@ -65,6 +65,11 @@ def test_parser_newline(parser, g):
     g.terminal.assert_called_with('NL', r'/(\r?\n[\t ]*)+/', inline=True)
 
 
+def test_parser_indent(parser, g):
+    parser.indent()
+    g.terminal.assert_called_with('INDENT', '"<INDENT>"', inline=True)
+
+
 def test_parser_spaces(grammar, parser):
     parser.spaces(grammar)
     assert grammar.terminal.call_count == 4
