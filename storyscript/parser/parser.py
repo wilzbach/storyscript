@@ -38,6 +38,9 @@ class Parser:
     def indent(self):
         self.grammar.terminal('INDENT', '"<INDENT>"', inline=True)
 
+    def dedent(self):
+        self.grammar.terminal('DEDENT', '"<DEDENT>"', inline=True)
+
     def spaces(self, grammar):
         grammar.terminal('WS', '(" ")+', inline=True)
         grammar.terminal('NL', r'/(\r?\n[\t ]*)+/', inline=True)

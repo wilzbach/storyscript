@@ -70,6 +70,11 @@ def test_parser_indent(parser, g):
     g.terminal.assert_called_with('INDENT', '"<INDENT>"', inline=True)
 
 
+def test_parser_dedent(parser, g):
+    parser.dedent()
+    g.terminal.assert_called_with('DEDENT', '"<DEDENT>"', inline=True)
+
+
 def test_parser_spaces(grammar, parser):
     parser.spaces(grammar)
     assert grammar.terminal.call_count == 4
