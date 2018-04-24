@@ -25,9 +25,9 @@ class Parser:
         self.block()
         self.comparisons()
 
-    def line(self, grammar):
-        grammar.rule('line', ['values', 'assignments', 'statements',
-                              'comment', 'block'])
+    def line(self):
+        rules = ['values', 'assignments', 'statements', 'comment', 'block']
+        self.grammar.rule('line', rules)
 
     def spaces(self, grammar):
         grammar.terminal('WS', '(" ")+', inline=True)

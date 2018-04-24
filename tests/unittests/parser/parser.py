@@ -13,6 +13,13 @@ def parser():
 
 
 @fixture
+def g(magic, parser):
+    grammar = magic()
+    parser.grammar = grammar
+    return grammar
+
+
+@fixture
 def grammar(magic):
     return magic()
 
@@ -42,10 +49,10 @@ def test_parser_add_rules(patch, parser):
     assert Parser.comparisons.call_count == 1
 
 
-def test_parser_line(grammar, parser):
-    parser.line(grammar)
+def test_parser_line(parser, g):
+    parser.line()
     rules = ['values', 'assignments', 'statements', 'comment', 'block']
-    grammar.rule.assert_called_with('line', rules)
+    g.rule.assert_called_with('line', rules)
 
 
 def test_parser_spaces(grammar, parser):
