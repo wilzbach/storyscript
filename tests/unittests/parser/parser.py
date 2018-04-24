@@ -75,7 +75,7 @@ def test_parser_values(patch, grammar, parser):
 
 def test_parser_list(grammar, parser):
     parser.list(grammar)
-    definitions = ['_OSB (values (COMMA values)*)? _CSB']
+    definitions = ['_OSB (values (_COMMA values)*)? _CSB']
     grammar.rule.assert_called_with('list', definitions)
     assert grammar.terminal.call_count == 3
 

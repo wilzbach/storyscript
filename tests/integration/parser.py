@@ -37,7 +37,7 @@ def test_parser_list(int_token):
     result = parser.parse()
     node = result.children[0].children[0].children[0].children[0]
     assert node.children[0].children[0].children[0] == int_token
-    assert node.children[2].children[0].children[0] == Token('INT', 4)
+    assert node.children[1].children[0].children[0] == Token('INT', 4)
 
 
 def test_parser_list_empty():
