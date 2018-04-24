@@ -59,11 +59,11 @@ def test_parser_number(grammar, parser):
 
 def test_parser_string(grammar, parser):
     parser.string(grammar)
-    definitions = ['STRING_INNER WORD STRING_INNER',
-                   'DOUBLE_QUOTES WORD DOUBLE_QUOTES']
+    definitions = ['_STRING_INNER WORD _STRING_INNER',
+                   '_DOUBLE_QUOTES WORD _DOUBLE_QUOTES']
     grammar.rule.assert_called_with('string', definitions)
-    grammar.terminal.assert_called_with('DOUBLE_QUOTES', '("\\\""|/[^"]/)')
-    grammar.loads.assert_called_with(['WORD', 'STRING_INNER'])
+    assert grammar.terminal.call_count == 2
+    grammar.loads.assert_called_with(['WORD'])
 
 
 def test_parser_values(patch, grammar, parser):

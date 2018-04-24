@@ -34,10 +34,11 @@ class Parser:
         grammar.loads(['INT', 'FLOAT'])
 
     def string(self, grammar):
-        grammar.rule('string', ['STRING_INNER WORD STRING_INNER',
-                                'DOUBLE_QUOTES WORD DOUBLE_QUOTES'])
-        grammar.terminal('DOUBLE_QUOTES', '("\\\""|/[^"]/)')
-        grammar.loads(['WORD', 'STRING_INNER'])
+        grammar.rule('string', ['_STRING_INNER WORD _STRING_INNER',
+                                '_DOUBLE_QUOTES WORD _DOUBLE_QUOTES'])
+        grammar.terminal('DOUBLE_QUOTES', '("\\\""|/[^"]/)', inline=True)
+        grammar.terminal('STRING_INNER', """("\\\'"|/[^']/)""", inline=True)
+        grammar.loads(['WORD'])
 
     def list(self, grammar):
         grammar.rule('list', ['_OSB (values (_COMMA values)*)? _CSB'])
