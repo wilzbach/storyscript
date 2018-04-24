@@ -28,10 +28,18 @@ def test_parser_init_algo():
     assert parser.algo == 'algo'
 
 
-def test_parser_add_rules(patch, magic, grammar, parser):
-    parser.rule = magic()
-    parser.add_rules(grammar, ['rule'])
-    parser.rule.assert_called_with(grammar)
+def test_parser_add_rules(patch, parser):
+    patch.many(Parser, ['line', 'spaces', 'values', 'assignments',
+                        'statements', 'comment', 'block', 'comparisons'])
+    parser.add_rules()
+    assert Parser.line.call_count == 1
+    assert Parser.spaces.call_count == 1
+    assert Parser.values.call_count == 1
+    assert Parser.assignments.call_count == 1
+    assert Parser.statements.call_count == 1
+    assert Parser.comment.call_count == 1
+    assert Parser.block.call_count == 1
+    assert Parser.comparisons.call_count == 1
 
 
 def test_parser_line(grammar, parser):

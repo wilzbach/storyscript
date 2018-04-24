@@ -12,9 +12,18 @@ class Parser:
         self.source = source
         self.algo = algo
 
-    def add_rules(self, grammar, rules):
-        for rule in rules:
-            getattr(self, rule)(grammar)
+    def add_rules(self):
+        """
+        Adds all the rules. Used after the Grammar instance is available
+        """
+        self.line()
+        self.spaces()
+        self.values()
+        self.assignments()
+        self.statements()
+        self.comment()
+        self.block()
+        self.comparisons()
 
     def line(self, grammar):
         grammar.rule('line', ['values', 'assignments', 'statements',
