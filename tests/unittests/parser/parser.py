@@ -55,6 +55,11 @@ def test_parser_line(parser, g):
     g.rule.assert_called_with('line', rules)
 
 
+def test_parser_whitespace(parser, g):
+    parser.whitespace()
+    g.terminal.assert_called_with('WS', '(" ")+', inline=True)
+
+
 def test_parser_spaces(grammar, parser):
     parser.spaces(grammar)
     assert grammar.terminal.call_count == 4

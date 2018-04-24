@@ -29,6 +29,9 @@ class Parser:
         rules = ['values', 'assignments', 'statements', 'comment', 'block']
         self.grammar.rule('line', rules)
 
+    def whitespace(self):
+        self.grammar.terminal('WS', '(" ")+', inline=True)
+
     def spaces(self, grammar):
         grammar.terminal('WS', '(" ")+', inline=True)
         grammar.terminal('NL', r'/(\r?\n[\t ]*)+/', inline=True)
