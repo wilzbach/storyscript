@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
+from lark.tree import Tree
 
 from pytest import fixture, mark
 
@@ -35,16 +36,16 @@ def test_parser_list(int_token):
     parser = Parser('[3,4]\n')
     result = parser.parse()
     node = result.children[0].children[0].children[0].children[0]
-    assert node.children[1].children[0].children[0] == int_token
-    assert node.children[3].children[0].children[0] == Token('INT', 4)
+    assert node.children[0].children[0].children[0] == int_token
+    assert node.children[2].children[0].children[0] == Token('INT', 4)
 
 
 def test_parser_list_empty():
     parser = Parser('[]\n')
     result = parser.parse()
+    print(result.pretty())
     node = result.children[0].children[0].children[0].children[0]
-    assert node.children[0] == Token('OSB', '[')
-    assert node.children[1] == Token('CSB', ']')
+    assert node == Tree('list', [])
 
 
 def test_parser_assignments(var_token):

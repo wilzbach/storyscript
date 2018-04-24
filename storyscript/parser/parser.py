@@ -40,10 +40,10 @@ class Parser:
         grammar.loads(['WORD', 'STRING_INNER'])
 
     def list(self, grammar):
-        grammar.rule('list', ['OSB (values (COMMA values)*)? CSB'])
+        grammar.rule('list', ['_OSB (values (COMMA values)*)? _CSB'])
         grammar.terminal('COMMA', '","')
-        grammar.terminal('OSB', '"["')
-        grammar.terminal('CSB', '"]"')
+        grammar.terminal('OSB', '"["', inline=True)
+        grammar.terminal('CSB', '"]"', inline=True)
 
     def values(self, grammar):
         self.add_rules(grammar, ['number', 'string', 'list'])
