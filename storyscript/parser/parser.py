@@ -3,6 +3,7 @@ from lark import Lark
 from lark.common import UnexpectedToken
 
 from .grammar import Grammar
+from .indenter import CustomIndenter
 
 
 class Parser:
@@ -95,7 +96,8 @@ class Parser:
         return grammar.build()
 
     def parse(self):
-        lark = Lark(self.build_grammar(), parser=self.algo)
+        lark = Lark(self.build_grammar(), parser=self.algo,
+                    postlex=self.indenter())
         try:
             tree = lark.parse(self.source)
         except UnexpectedToken:

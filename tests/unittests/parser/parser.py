@@ -157,10 +157,11 @@ def test_parser_parse(patch, parser):
     """
     patch.init(Lark)
     patch.object(Lark, 'parse')
-    patch.object(Parser, 'build_grammar')
+    patch.many(Parser, ['build_grammar', 'indenter'])
     result = parser.parse()
     Lark.__init__.assert_called_with(Parser.build_grammar(),
-                                     parser=parser.algo)
+                                     parser=parser.algo,
+                                     postlex=Parser.indenter())
     Lark.parse.assert_called_with('source')
     assert result == Lark.parse()
 
@@ -168,5 +169,5 @@ def test_parser_parse(patch, parser):
 def test_parser_parse_unexpected_token(patch, parser):
     patch.init(Lark)
     patch.object(Lark, 'parse', side_effect=UnexpectedToken('', '', '', ''))
-    patch.object(Parser, 'build_grammar')
+    patch.many(Parser, ['build_grammar', 'indenter'])
     assert parser.parse() is None
