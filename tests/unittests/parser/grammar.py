@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pytest import fixture
+from pytest import fixture, mark
 
 from storyscript.parser import Grammar
 
@@ -23,32 +23,28 @@ def test_grammar_start(grammar):
     assert grammar.start_line == 'start: rule+'
 
 
-def test_grammar_token(grammar):
+@mark.parametrize('token_name', ['NAME', 'name'])
+def test_grammar_token(grammar, token_name):
     """
     Ensures the token method can create a token
     """
-    grammar.token('NAME', '"value"')
+    grammar.token(token_name, 'value')
     assert grammar.tokens_list == ['NAME: "value"']
 
 
 def test_grammar_token_priority(grammar):
-    grammar.token('NAME', '"value"', priority=1)
+    grammar.token('NAME', 'value', priority=1)
     assert grammar.tokens_list == ['NAME.1: "value"']
 
 
 def test_grammar_token_insensitive(grammar):
-    grammar.token('NAME', '"value"', insensitive=True)
+    grammar.token('NAME', 'value', insensitive=True)
     assert grammar.tokens_list == ['NAME: "value"i']
 
 
 def test_grammar_token_inline(grammar):
-    grammar.token('NAME', '"value"', inline=True)
+    grammar.token('NAME', 'value', inline=True)
     assert grammar.tokens_list == ['_NAME: "value"']
-
-
-def test_grammar_token_uppercase(grammar):
-    grammar.token('name', '"value"')
-    assert grammar.tokens_list == ['NAME: "value"']
 
 
 def test_grammar_tokens(patch, grammar):

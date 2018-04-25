@@ -31,9 +31,9 @@ class Grammar:
         """
         Adds a terminal token to the terminals list
         """
-        string = '{}: {}'
+        string = '{}: "{}"'
         if priority:
-            string = '{}.{}: {}'.format('{}', priority, '{}')
+            string = '{}.{}: "{}"'.format('{}', priority, '{}')
         if insensitive:
             string = '{}i'.format(string)
         if inline:
