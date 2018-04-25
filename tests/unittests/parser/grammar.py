@@ -47,6 +47,11 @@ def test_grammar_token_inline(grammar):
     assert grammar.tokens_list == ['_NAME: "value"']
 
 
+def test_grammar_token_regexp(grammar):
+    grammar.token('NAME', 'regexp', regexp=True)
+    assert grammar.tokens_list == ['NAME: regexp']
+
+
 def test_grammar_tokens(patch, grammar):
     patch.object(Grammar, 'token')
     grammar.tokens(('token', 'value'), kwargs='yes')

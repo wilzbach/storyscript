@@ -27,11 +27,13 @@ class Grammar:
         self.start_line = 'start: {}+'.format(rule)
 
     def token(self, name, value, priority=None, insensitive=False,
-              inline=False):
+              inline=False, regexp=False):
         """
         Adds a terminal token to the terminals list
         """
         string = '{}: "{}"'
+        if regexp:
+            string = '{}: {}'
         if priority:
             string = '{}.{}: "{}"'.format('{}', priority, '{}')
         if insensitive:
