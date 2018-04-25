@@ -15,7 +15,7 @@ class Grammar:
 
     def __init__(self):
         self.start_line = None
-        self.tokens = []
+        self.tokens_list = []
         self.rules = []
         self.ignores = []
         self.imports = []
@@ -38,7 +38,7 @@ class Grammar:
             string = '{}i'.format(string)
         if inline:
             string = '_{}'.format(string)
-        self.tokens.append(string.format(name.upper(), value))
+        self.tokens_list.append(string.format(name.upper(), value))
 
     def rule(self, name, definitions):
         string = '|'.join(definitions)
@@ -56,7 +56,7 @@ class Grammar:
 
     def build(self):
         rules = '\n'.join(self.rules)
-        tokens = '\n'.join(self.tokens)
+        tokens = '\n'.join(self.tokens_list)
         ignores = '\n'.join(self.ignores)
         imports = '\n'.join(self.imports)
         args = (self.start_line, rules, tokens, ignores, imports)

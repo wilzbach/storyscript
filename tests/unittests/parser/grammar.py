@@ -12,7 +12,7 @@ def grammar():
 def test_grammar_init():
     grammar = Grammar()
     assert grammar.start_line is None
-    assert grammar.tokens == []
+    assert grammar.tokens_list == []
     assert grammar.rules == []
     assert grammar.ignores == []
     assert grammar.imports == []
@@ -28,27 +28,27 @@ def test_grammar_token(grammar):
     Ensures the token method can create a token
     """
     grammar.token('NAME', '"value"')
-    assert grammar.tokens == ['NAME: "value"']
+    assert grammar.tokens_list == ['NAME: "value"']
 
 
 def test_grammar_token_priority(grammar):
     grammar.token('NAME', '"value"', priority=1)
-    assert grammar.tokens == ['NAME.1: "value"']
+    assert grammar.tokens_list == ['NAME.1: "value"']
 
 
 def test_grammar_token_insensitive(grammar):
     grammar.token('NAME', '"value"', insensitive=True)
-    assert grammar.tokens == ['NAME: "value"i']
+    assert grammar.tokens_list == ['NAME: "value"i']
 
 
 def test_grammar_token_inline(grammar):
     grammar.token('NAME', '"value"', inline=True)
-    assert grammar.tokens == ['_NAME: "value"']
+    assert grammar.tokens_list == ['_NAME: "value"']
 
 
 def test_grammar_token_uppercase(grammar):
     grammar.token('name', '"value"')
-    assert grammar.tokens == ['NAME: "value"']
+    assert grammar.tokens_list == ['NAME: "value"']
 
 
 def test_grammar_rule(grammar):
@@ -75,7 +75,7 @@ def test_grammar_loads(patch, grammar):
 def test_grammar_build(grammar):
     grammar.start_line = 'start'
     grammar.rules = ['rules']
-    grammar.tokens = ['tokens']
+    grammar.tokens_list = ['tokens']
     grammar.ignores = ['ignores']
     grammar.imports = ['imports']
     result = grammar.build()
