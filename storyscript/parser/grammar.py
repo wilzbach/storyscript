@@ -51,12 +51,12 @@ class Grammar:
     def ignore(self, terminal):
         self.ignores.append('%ignore {}'.format(terminal))
 
-    def load(self, terminal):
-        self.imports.append('%import common.{}'.format(terminal))
+    def load(self, token):
+        self.imports.append('%import common.{}'.format(token))
 
-    def loads(self, terminals):
-        for terminal in terminals:
-            self.load(terminal)
+    def loads(self, tokens):
+        for token in tokens:
+            self.load(token)
 
     def build(self):
         rules = '\n'.join(self.rules)

@@ -68,14 +68,14 @@ def test_grammar_ignore(grammar):
 
 
 def test_grammar_load(grammar):
-    grammar.load('terminal')
-    assert grammar.imports == ['%import common.terminal']
+    grammar.load('token')
+    assert grammar.imports == ['%import common.token']
 
 
 def test_grammar_loads(patch, grammar):
     patch.object(Grammar, 'load')
-    grammar.loads(['one', 'two'])
-    assert Grammar.load.call_count == 2
+    grammar.loads(['one'])
+    Grammar.load.assert_called_with('one')
 
 
 def test_grammar_build(grammar):
