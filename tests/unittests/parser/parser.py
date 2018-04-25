@@ -84,10 +84,10 @@ def test_parser_spaces(patch, parser):
     assert Parser.dedent.call_count == 1
 
 
-def test_parser_block(grammar, parser):
-    parser.block(grammar)
+def test_parser_block(parser, g):
+    parser.block()
     rules = ['line _NL [_INDENT block+ _DEDENT]']
-    grammar.rule.assert_called_with('block', rules)
+    g.rule.assert_called_with('block', rules)
 
 
 def test_parser_number(grammar, parser):
