@@ -15,7 +15,7 @@ class Grammar:
 
     def __init__(self):
         self.start_line = None
-        self.terminals = []
+        self.tokens = []
         self.rules = []
         self.ignores = []
         self.imports = []
@@ -26,8 +26,8 @@ class Grammar:
         """
         self.start_line = 'start: {}+'.format(rule)
 
-    def terminal(self, name, value, priority=None, insensitive=False,
-                 inline=False):
+    def token(self, name, value, priority=None, insensitive=False,
+              inline=False):
         """
         Adds a terminal token to the terminals list
         """
@@ -38,7 +38,7 @@ class Grammar:
             string = '{}i'.format(string)
         if inline:
             string = '_{}'.format(string)
-        self.terminals.append(string.format(name.upper(), value))
+        self.tokens.append(string.format(name.upper(), value))
 
     def rule(self, name, definitions):
         string = '|'.join(definitions)
@@ -56,8 +56,8 @@ class Grammar:
 
     def build(self):
         rules = '\n'.join(self.rules)
-        terminals = '\n'.join(self.terminals)
+        tokens = '\n'.join(self.tokens)
         ignores = '\n'.join(self.ignores)
         imports = '\n'.join(self.imports)
-        args = (self.start_line, rules, terminals, ignores, imports)
+        args = (self.start_line, rules, tokens, ignores, imports)
         return '{}\n{}\n{}\n{}\n{}'.format(*args)

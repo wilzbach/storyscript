@@ -12,7 +12,7 @@ def grammar():
 def test_grammar_init():
     grammar = Grammar()
     assert grammar.start_line is None
-    assert grammar.terminals == []
+    assert grammar.tokens == []
     assert grammar.rules == []
     assert grammar.ignores == []
     assert grammar.imports == []
@@ -23,32 +23,32 @@ def test_grammar_start(grammar):
     assert grammar.start_line == 'start: rule+'
 
 
-def test_grammar_terminal(grammar):
+def test_grammar_token(grammar):
     """
-    Ensures the terminal method can create a terminal token
+    Ensures the token method can create a token
     """
-    grammar.terminal('NAME', '"value"')
-    assert grammar.terminals == ['NAME: "value"']
+    grammar.token('NAME', '"value"')
+    assert grammar.tokens == ['NAME: "value"']
 
 
-def test_grammar_terminal_priority(grammar):
-    grammar.terminal('NAME', '"value"', priority=1)
-    assert grammar.terminals == ['NAME.1: "value"']
+def test_grammar_token_priority(grammar):
+    grammar.token('NAME', '"value"', priority=1)
+    assert grammar.tokens == ['NAME.1: "value"']
 
 
-def test_grammar_terminal_insensitive(grammar):
-    grammar.terminal('NAME', '"value"', insensitive=True)
-    assert grammar.terminals == ['NAME: "value"i']
+def test_grammar_token_insensitive(grammar):
+    grammar.token('NAME', '"value"', insensitive=True)
+    assert grammar.tokens == ['NAME: "value"i']
 
 
-def test_grammar_terminal_inline(grammar):
-    grammar.terminal('NAME', '"value"', inline=True)
-    assert grammar.terminals == ['_NAME: "value"']
+def test_grammar_token_inline(grammar):
+    grammar.token('NAME', '"value"', inline=True)
+    assert grammar.tokens == ['_NAME: "value"']
 
 
-def test_grammar_terminal_uppercase(grammar):
-    grammar.terminal('name', '"value"')
-    assert grammar.terminals == ['NAME: "value"']
+def test_grammar_token_uppercase(grammar):
+    grammar.token('name', '"value"')
+    assert grammar.tokens == ['NAME: "value"']
 
 
 def test_grammar_rule(grammar):
@@ -75,8 +75,8 @@ def test_grammar_loads(patch, grammar):
 def test_grammar_build(grammar):
     grammar.start_line = 'start'
     grammar.rules = ['rules']
-    grammar.terminals = ['terminals']
+    grammar.tokens = ['tokens']
     grammar.ignores = ['ignores']
     grammar.imports = ['imports']
     result = grammar.build()
-    assert result == 'start\nrules\nterminals\nignores\nimports'
+    assert result == 'start\nrules\ntokens\nignores\nimports'
