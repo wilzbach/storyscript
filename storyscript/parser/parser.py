@@ -50,9 +50,9 @@ class Parser:
     def block(self):
         self.grammar.rule('block', ['line _NL [_INDENT block+ _DEDENT]'])
 
-    def number(self, grammar):
-        grammar.rule('number', ['FLOAT', 'INT'])
-        grammar.loads(['INT', 'FLOAT'])
+    def number(self):
+        self.grammar.rule('number', ['FLOAT', 'INT'])
+        self.grammar.loads(['INT', 'FLOAT'])
 
     def string(self, grammar):
         grammar.rule('string', ['_STRING_INNER WORD _STRING_INNER',

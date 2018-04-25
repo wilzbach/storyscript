@@ -90,10 +90,10 @@ def test_parser_block(parser, g):
     g.rule.assert_called_with('block', rules)
 
 
-def test_parser_number(grammar, parser):
-    parser.number(grammar)
-    grammar.rule.assert_called_with('number', ['FLOAT', 'INT'])
-    grammar.loads.assert_called_with(['INT', 'FLOAT'])
+def test_parser_number(parser, g):
+    parser.number()
+    g.rule.assert_called_with('number', ['FLOAT', 'INT'])
+    g.loads.assert_called_with(['INT', 'FLOAT'])
 
 
 def test_parser_string(grammar, parser):
