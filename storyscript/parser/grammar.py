@@ -3,8 +3,14 @@
 
 class Grammar:
     """
-    Advanced EBNF grammar generator that provides for a readable and testable
-    way of creating a grammar.
+    Advanced EBNF grammar generator that provides for a readable, nicer and
+    testable way of creating a grammar.
+
+    A grammar is made by rules and rules are made by combinations of tokens.
+    Tokens can be literals or regular expressions.
+
+    Tokens can also be imported from an available grammar, or ignored
+    completely, meaning they will not appear in the parsed tree.
     """
 
     def __init__(self):
