@@ -75,9 +75,13 @@ def test_parser_dedent(parser, g):
     g.terminal.assert_called_with('DEDENT', '"<DEDENT>"', inline=True)
 
 
-def test_parser_spaces(grammar, parser):
-    parser.spaces(grammar)
-    assert grammar.terminal.call_count == 4
+def test_parser_spaces(patch, parser):
+    patch.many(Parser, ['whitespace', 'newline', 'indent', 'dedent'])
+    parser.spaces()
+    assert Parser.whitespace.call_count == 1
+    assert Parser.newline.call_count == 1
+    assert Parser.indent.call_count == 1
+    assert Parser.dedent.call_count == 1
 
 
 def test_parser_block(grammar, parser):

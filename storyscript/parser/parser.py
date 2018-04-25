@@ -41,11 +41,11 @@ class Parser:
     def dedent(self):
         self.grammar.terminal('DEDENT', '"<DEDENT>"', inline=True)
 
-    def spaces(self, grammar):
-        grammar.terminal('WS', '(" ")+', inline=True)
-        grammar.terminal('NL', r'/(\r?\n[\t ]*)+/', inline=True)
-        grammar.terminal('INDENT', '"<INDENT>"', inline=True)
-        grammar.terminal('DEDENT', '"<DEDENT>"', inline=True)
+    def spaces(self):
+        self.whitespace()
+        self.newline()
+        self.indent()
+        self.dedent()
 
     def block(self, grammar):
         grammar.rule('block', ['line _NL [_INDENT block+ _DEDENT]'])
