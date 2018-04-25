@@ -12,7 +12,7 @@ def grammar():
 def test_grammar_init():
     grammar = Grammar()
     assert grammar.start_line is None
-    assert grammar.tokens_list == []
+    assert grammar._tokens == {}
     assert grammar.rules == []
     assert grammar.ignores == []
     assert grammar.imports == []
