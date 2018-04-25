@@ -60,4 +60,4 @@ class Grammar:
         ignores = '\n'.join(self.ignores)
         imports = '\n'.join(self.imports)
         args = (self.start_line, rules, tokens, ignores, imports)
-        return '{}\n{}\n{}\n{}\n{}'.format(*args)
+        return '{}\n{}\n\n{}\n\n{}\n\n{}'.format(*args)

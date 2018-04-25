@@ -79,4 +79,4 @@ def test_grammar_build(grammar):
     grammar.ignores = ['ignores']
     grammar.imports = ['imports']
     result = grammar.build()
-    assert result == 'start\nrules\ntokens\nignores\nimports'
+    assert result == 'start\nrules\n\ntokens\n\nignores\n\nimports'
