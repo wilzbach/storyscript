@@ -40,6 +40,10 @@ class Grammar:
             string = '_{}'.format(string)
         self.tokens_list.append(string.format(name.upper(), value))
 
+    def tokens(self, *args, **kwargs):
+        for token_args in args:
+            self.token(*token_args, **kwargs)
+
     def rule(self, name, definitions):
         string = '|'.join(definitions)
         self.rules.append('{}: {}'.format(name, string))

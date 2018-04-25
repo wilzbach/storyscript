@@ -51,6 +51,12 @@ def test_grammar_token_uppercase(grammar):
     assert grammar.tokens_list == ['NAME: "value"']
 
 
+def test_grammar_tokens(patch, grammar):
+    patch.object(Grammar, 'token')
+    grammar.tokens(('token', 'value'), kwargs='yes')
+    Grammar.token.assert_called_with('token', 'value', kwargs='yes')
+
+
 def test_grammar_rule(grammar):
     grammar.rule('name', ['one', 'two'])
     assert grammar.rules == ['name: one|two']
