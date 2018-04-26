@@ -31,16 +31,17 @@ class Grammar:
         """
         Adds a terminal token to the terminals list
         """
-        string = '{}: "{}"'
-        if regexp:
-            string = '{}: {}'
+        name_string = name.upper()
+        value_string = '"{}"'.format(value)
         if priority:
-            string = '{}.{}: "{}"'.format('{}', priority, '{}')
-        if insensitive:
-            string = '{}i'.format(string)
+            name_string = '{}.{}'.format(name_string, priority)
         if inline:
-            string = '_{}'.format(string)
-        self.tokens_list.append(string.format(name.upper(), value))
+            name_string = '_{}'.format(name_string)
+        if regexp:
+            value_string = '{}'.format(value)
+        if insensitive:
+            value_string = '{}i'.format(value_string)
+        self._tokens[name] = (name_string, value_string)
 
     def tokens(self, *args, **kwargs):
         for token_args in args:

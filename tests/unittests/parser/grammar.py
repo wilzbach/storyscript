@@ -29,27 +29,27 @@ def test_grammar_token(grammar, token_name):
     Ensures the token method can create a token
     """
     grammar.token(token_name, 'value')
-    assert grammar.tokens_list == ['NAME: "value"']
+    assert grammar._tokens[token_name] == ('NAME', '"value"')
 
 
 def test_grammar_token_priority(grammar):
     grammar.token('NAME', 'value', priority=1)
-    assert grammar.tokens_list == ['NAME.1: "value"']
+    assert grammar._tokens['NAME'] == ('NAME.1', '"value"')
 
 
 def test_grammar_token_insensitive(grammar):
     grammar.token('NAME', 'value', insensitive=True)
-    assert grammar.tokens_list == ['NAME: "value"i']
+    assert grammar._tokens['NAME'] == ('NAME', '"value"i')
 
 
 def test_grammar_token_inline(grammar):
     grammar.token('NAME', 'value', inline=True)
-    assert grammar.tokens_list == ['_NAME: "value"']
+    assert grammar._tokens['NAME'] == ('_NAME', '"value"')
 
 
 def test_grammar_token_regexp(grammar):
     grammar.token('NAME', 'regexp', regexp=True)
-    assert grammar.tokens_list == ['NAME: regexp']
+    assert grammar._tokens['NAME'] == ('NAME', 'regexp')
 
 
 def test_grammar_tokens(patch, grammar):
