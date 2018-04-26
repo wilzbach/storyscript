@@ -16,7 +16,7 @@ class Grammar:
     def __init__(self):
         self.start_line = None
         self._tokens = {}
-        self.rules = []
+        self._rules = {}
         self.ignores = []
         self.imports = []
 
