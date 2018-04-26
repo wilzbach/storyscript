@@ -88,6 +88,11 @@ def test_grammar_loads(patch, grammar):
     Grammar.load.assert_called_with('one')
 
 
+def test_grammar_build_rules(grammar):
+    grammar._rules = {'rule': ['definition', 'more'], 'r2': ['definition']}
+    assert grammar.build_rules() == 'rule: definition | more\nr2: definition\n'
+
+
 def test_grammar_build(grammar):
     grammar.start_line = 'start'
     grammar.rules = ['rules']

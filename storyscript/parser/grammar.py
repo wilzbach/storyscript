@@ -65,7 +65,6 @@ class Grammar:
     def rules(self, name, *definitions):
         for definition in definitions:
             self.rule(name, definition)
-        self.rules.append('{}: {}'.format(name, string))
 
     def ignore(self, terminal):
         self.ignores.append('%ignore {}'.format(terminal))
@@ -76,6 +75,12 @@ class Grammar:
     def loads(self, tokens):
         for token in tokens:
             self.load(token)
+
+    def build_rules(self):
+        string = ''
+        for name, definitions in self._rules.items():
+            string += '{}: {}\n'.format(name, ' | '.join(definitions))
+        return string
 
     def build(self):
         rules = '\n'.join(self.rules)
