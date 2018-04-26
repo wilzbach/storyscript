@@ -67,11 +67,11 @@ def test_grammar_tokens(patch, grammar):
     Grammar.token.assert_called_with('token', 'value', kwargs='yes')
 
 
-def test_grammar_rule(grammar):
-    grammar._tokens = {'token': 'TOKEN'}
+def test_grammar_rule(patch, grammar):
+    patch.object(Grammar, 'resolve', return_value='resolved')
     grammar.rule('name', ('literal', 'token'))
     grammar.rule('name', ('literal2', ))
-    assert grammar._rules['name'] == ['literal TOKEN', 'literal2']
+    assert grammar._rules['name'] == ['resolved resolved', 'resolved']
 
 
 def test_grammar_rules(patch, grammar):

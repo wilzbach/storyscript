@@ -62,10 +62,7 @@ class Grammar:
         """
         string = ''
         for token in definition:
-            if token in self._tokens:
-                string = '{}{} '.format(string, token.upper())
-            else:
-                string = '{}{} '.format(string, token)
+            string = '{}{} '.format(string, self.resolve(token))
         if name not in self._rules:
             self._rules[name] = []
         self._rules[name].append(string[:-1])
