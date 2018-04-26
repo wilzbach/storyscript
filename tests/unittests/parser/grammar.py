@@ -98,11 +98,13 @@ def test_grammar_build_rules(grammar):
     assert grammar.build_rules() == 'rule: definition | more\nr2: definition\n'
 
 
-def test_grammar_build(grammar):
+def test_grammar_build(patch, grammar):
+    patch.object(Grammar, 'build_tokens', return_value='tokens')
+    patch.object(Grammar, 'build_rules', return_value='rules')
     grammar.start_line = 'start'
-    grammar.rules = ['rules']
-    grammar.tokens_list = ['tokens']
     grammar.ignores = ['ignores']
     grammar.imports = ['imports']
     result = grammar.build()
-    assert result == 'start\nrules\n\ntokens\n\nignores\n\nimports'
+    assert Grammar.build_tokens.call_count == 1
+    assert Grammar.build_rules.call_count == 1
+    assert result == 'start\nrules\ntokens\nignores\n\nimports'

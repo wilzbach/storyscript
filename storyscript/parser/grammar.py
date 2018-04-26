@@ -89,9 +89,9 @@ class Grammar:
         return string
 
     def build(self):
-        rules = '\n'.join(self.rules)
-        tokens = '\n'.join(self.tokens_list)
+        tokens = self.build_tokens()
+        rules = self.build_rules()
         ignores = '\n'.join(self.ignores)
         imports = '\n'.join(self.imports)
         args = (self.start_line, rules, tokens, ignores, imports)
-        return '{}\n{}\n\n{}\n\n{}\n\n{}'.format(*args)
+        return '{}\n{}\n{}\n{}\n\n{}'.format(*args)
