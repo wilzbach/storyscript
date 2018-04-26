@@ -59,8 +59,9 @@ def test_grammar_tokens(patch, grammar):
 
 
 def test_grammar_rule(grammar):
-    grammar.rule('name', ['one', 'two'])
-    assert grammar.rules == ['name: one|two']
+    grammar._tokens = {'token': 'TOKEN'}
+    grammar.rule('name', ('literal', 'token'))
+    assert grammar.rules == ['name: literal TOKEN']
 
 
 def test_grammar_ignore(grammar):
