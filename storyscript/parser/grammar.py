@@ -20,6 +20,14 @@ class Grammar:
         self.ignores = []
         self.imports = []
 
+    def resolve(self, item_name):
+        """
+        Resolves an item's reference to its real name.
+        """
+        if item_name in self._tokens:
+            return item_name.upper()
+        return item_name
+
     def start(self, rule):
         """
         Produces the start rule

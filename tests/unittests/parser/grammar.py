@@ -18,6 +18,15 @@ def test_grammar_init():
     assert grammar.imports == []
 
 
+def test_grammar_resolve(grammar):
+    assert grammar.resolve('item') == 'item'
+
+
+def test_grammar_resolve_token(grammar):
+    grammar._tokens = {'token': ('TOKEN', 'value')}
+    assert grammar.resolve('token') == 'TOKEN'
+
+
 def test_grammar_start(grammar):
     grammar.start('rule')
     assert grammar.start_line == 'start: rule+'
