@@ -76,6 +76,12 @@ class Grammar:
         for token in tokens:
             self.load(token)
 
+    def build_tokens(self):
+        string = ''
+        for name, token in self._tokens.items():
+            string += '{}: {}\n'.format(token[0], token[1])
+        return string
+
     def build_rules(self):
         string = ''
         for name, definitions in self._rules.items():
