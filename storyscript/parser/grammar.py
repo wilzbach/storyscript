@@ -48,13 +48,19 @@ class Grammar:
             self.token(*token_args, **kwargs)
 
     def rule(self, name, definition):
+        """
+        Adds a rule with the given name and definition, which must be an
+        iterable of tokens or literals.
+        """
         string = ''
         for token in definition:
             if token in self._tokens:
                 string = '{}{} '.format(string, token.upper())
             else:
                 string = '{}{} '.format(string, token)
-        self.rules.append('{}: {}'.format(name, string[:-1]))
+        if name not in self._rules:
+            self._rules[name] = []
+        self._rules[name].append(string[:-1])
         self.rules.append('{}: {}'.format(name, string))
 
     def ignore(self, terminal):
