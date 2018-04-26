@@ -65,6 +65,13 @@ def test_grammar_rule(grammar):
     assert grammar._rules['name'] == ['literal TOKEN', 'literal2']
 
 
+def test_grammar_rules(patch, grammar):
+    patch.object(Grammar, 'rule')
+    grammar.rules('name', ('literal', ), ('literal2', ))
+    Grammar.rule.assert_called_with('name', ('literal2', ))
+    assert Grammar.rule.call_count == 2
+
+
 def test_grammar_ignore(grammar):
     grammar.ignore('terminal')
     assert grammar.ignores == ['%ignore terminal']

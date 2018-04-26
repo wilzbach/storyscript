@@ -61,6 +61,10 @@ class Grammar:
         if name not in self._rules:
             self._rules[name] = []
         self._rules[name].append(string[:-1])
+
+    def rules(self, name, *definitions):
+        for definition in definitions:
+            self.rule(name, definition)
         self.rules.append('{}: {}'.format(name, string))
 
     def ignore(self, terminal):
