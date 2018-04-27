@@ -154,11 +154,11 @@ def test_parser_foreach_statement(parser, g):
     g.tokens.assert_called_with(('foreach', 'foreach'), ('as', 'as'))
 
 
-def test_parser_wait_statement(grammar, parser):
-    parser.wait_statement(grammar)
-    definitions = ['WAIT _WS WORD', 'WAIT _WS string']
-    grammar.rule.assert_called_with('wait_statement', definitions)
-    grammar.terminal.assert_called_with('WAIT', '"wait"')
+def test_parser_wait_statement(parser, g):
+    parser.wait_statement()
+    definitions = (('wait', 'ws', 'word'), ('wait', 'ws', 'string'))
+    g.rules.assert_called_with('wait_statement', *definitions)
+    g.token.assert_called_with('wait', 'wait')
 
 
 def test_parser_statements(patch, grammar, parser):
