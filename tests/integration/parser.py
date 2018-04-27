@@ -24,12 +24,18 @@ def test_parser_values(int_token):
     assert node == int_token
 
 
-@mark.parametrize('string', ["'red'\n", '"red"\n'])
-def test_parser_values_string(string):
-    parser = Parser(string)
+def test_parser_values_single_quoted_string():
+    parser = Parser("'red'\n")
     result = parser.parse()
     node = result.children[0].children[0].children[0].children[0]
-    assert node.children[0] == Token('WORD', 'red')
+    assert node.children[0] == Token('SINGLE_QUOTED', "'red'")
+
+
+def test_parser_values_double_quoted_string():
+    parser = Parser('"red"\n')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0].children[0]
+    assert node.children[0] == Token('DOUBLE_QUOTED', '"red"')
 
 
 def test_parser_boolean_true():
@@ -67,7 +73,8 @@ def test_parser_assignments(var_token):
     node = result.children[0].children[0].children[0]
     assert node.children[0] == var_token
     assert node.children[1] == Token('EQUALS', '=')
-    assert node.children[2].children[0].children[0] == Token('WORD', 'hello')
+    token = Token('DOUBLE_QUOTED', '"hello"')
+    assert node.children[2].children[0].children[0] ==  token
 
 
 def test_parser_assignments_int(int_token, var_token):
@@ -120,7 +127,7 @@ def test_parser_wait_statement_string():
     result = parser.parse()
     node = result.children[0].children[0].children[0].children[0].children
     assert node[0] == Token('WAIT', 'wait')
-    assert node[1].children[0] == Token('WORD', 'seconds')
+    assert node[1].children[0] == Token('DOUBLE_QUOTED', '"seconds"')
 
 
 def test_parser_next_statement():
