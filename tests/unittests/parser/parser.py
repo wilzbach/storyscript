@@ -140,11 +140,11 @@ def test_parser_if_statement(parser, g):
     g.token.assert_called_with('if', 'if')
 
 
-def test_parser_for_statement(grammar, parser):
-    parser.for_statement(grammar)
-    definitions = ['FOR _WS WORD _WS IN _WS WORD']
-    grammar.rule.assert_called_with('for_statement', definitions)
-    assert grammar.terminal.call_count == 2
+def test_parser_for_statement(parser, g):
+    parser.for_statement()
+    definition = ('for', 'ws', 'word', 'in', 'ws', 'word')
+    g.rule.assert_called_with('for_statement', definition)
+    g.tokens.assert_called_with(('for', 'for'), ('in', 'in'))
 
 
 def test_parser_foreach_statement(grammar, parser):
