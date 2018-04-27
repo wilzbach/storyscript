@@ -98,6 +98,11 @@ class Parser:
         definitions = (('wait', 'ws', 'word'), ('wait', 'ws', 'string'))
         self.grammar.rules('wait_statement', *definitions)
 
+    def next_statement(self):
+        self.grammar.token('next', 'next')
+        definitions = (('next', 'ws', 'word'), ('next', 'ws', 'filepath'))
+        self.grammar.rules('next_statement', *definitions)
+
     def statements(self):
         statements = (['if_statement'], ['for_statement'],
                       ['foreach_statement'], ['wait_statement'])

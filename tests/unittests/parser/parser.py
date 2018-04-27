@@ -151,6 +151,13 @@ def test_parser_wait_statement(parser, grammar):
     grammar.token.assert_called_with('wait', 'wait')
 
 
+def test_parser_next_statement(parser, grammar):
+    parser.next_statement()
+    grammar.token.assert_called_with('next', 'next')
+    definitions = (('next', 'ws', 'word'), ('next', 'ws', 'filepath'))
+    grammar.rules.assert_called_with('next_statement', *definitions)
+
+
 def test_parser_statements(patch, parser, grammar):
     patch.many(Parser, ['if_statement', 'for_statement', 'foreach_statement',
                         'wait_statement'])
