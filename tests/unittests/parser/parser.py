@@ -88,7 +88,7 @@ def test_parser_values(patch, parser, g):
     assert Parser.number.call_count == 1
     assert Parser.string.call_count == 1
     assert Parser.list.call_count == 1
-    g.rules.assert_called_with('values', ('number'), ('string'), ('list'))
+    g.rules.assert_called_with('values', ['number'], ['string'], ['list'])
 
 
 def test_parser_list(parser, g):

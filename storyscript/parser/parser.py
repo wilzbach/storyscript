@@ -55,7 +55,7 @@ class Parser:
         self.number()
         self.string()
         self.list()
-        self.grammar.rules('values', ('number'), ('string'), ('list'))
+        self.grammar.rules('values', ['number'], ['string'], ['list'])
 
     def assignments(self):
         self.grammar.rule('assignments', ('word', 'equals', 'values'))
