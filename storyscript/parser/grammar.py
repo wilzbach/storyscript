@@ -57,16 +57,19 @@ class Grammar:
         for token_args in args:
             self.token(*token_args, **kwargs)
 
-    def rule(self, name, definition):
+    def rule(self, name, definition, raw=False):
         """
         Adds a rule with the given name and definition, which must be an
         iterable of tokens or literals.
         """
+        if name not in self._rules:
+            self._rules[name] = []
+        if raw:
+            self._rules[name].append(definition)
+            return
         string = ''
         for token in definition:
             string = '{}{} '.format(string, self.resolve(token))
-        if name not in self._rules:
-            self._rules[name] = []
         self._rules[name].append(string[:-1])
 
     def rules(self, name, *definitions):

@@ -84,6 +84,11 @@ def test_grammar_rule(patch, grammar):
     assert grammar._rules['name'] == ['resolved resolved', 'resolved']
 
 
+def test_grammar_rule_raw(patch, grammar):
+    grammar.rule('name', 'raw definition', raw=True)
+    assert grammar._rules['name'] == ['raw definition']
+
+
 def test_grammar_rules(patch, grammar):
     patch.object(Grammar, 'rule')
     grammar.rules('name', ('literal', ), ('literal2', ))
