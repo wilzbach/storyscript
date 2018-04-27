@@ -13,8 +13,9 @@ class Parser:
         self.algo = algo
 
     def line(self):
-        rules = ['values', 'assignments', 'statements', 'comment', 'block']
-        self.grammar.rule('line', rules)
+        definitions = (['values'], ['assignments'],[ 'statements'],
+                       ['comment'], ['block'])
+        self.grammar.rules('line', *definitions)
 
     def whitespaces(self):
         tokens = (('ws', '(" ")+'), ('nl', r'/(\r?\n[\t ]*)+/'))

@@ -32,8 +32,9 @@ def test_parser_init_algo():
 
 def test_parser_line(parser, grammar):
     parser.line()
-    rules = ['values', 'assignments', 'statements', 'comment', 'block']
-    grammar.rule.assert_called_with('line', rules)
+    defintions = (['values'], ['assignments'], ['statements'], ['comment'],
+                  ['block'])
+    grammar.rules.assert_called_with('line', *defintions)
 
 
 def test_parser_whitespaces(parser, grammar):
