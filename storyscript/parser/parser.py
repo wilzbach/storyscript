@@ -97,8 +97,8 @@ class Parser:
         self.grammar.rules('statements', *statements)
 
     def comment(self):
-        self.grammar.rule('comment', ('comment'))
         self.grammar.token('comment', '/#(.*)/', regexp=True)
+        self.grammar.rule('comment', ['comment'])
 
     def get_grammar(self):
         return Grammar()
