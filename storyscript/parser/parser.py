@@ -70,9 +70,11 @@ class Parser:
         grammar.terminal('OSB', '"["', inline=True)
         grammar.terminal('CSB', '"]"', inline=True)
 
-    def values(self, grammar):
-        self.add_rules(grammar, ['number', 'string', 'list'])
-        grammar.rule('values', ['number', 'string', 'list'])
+    def values(self):
+        self.number()
+        self.string()
+        self.list()
+        self.grammar.rules('values', ('number'), ('string'), ('list'))
 
     def assignments(self, grammar):
         grammar.rule('assignments', ['WORD EQUALS values'])

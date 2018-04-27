@@ -107,11 +107,13 @@ def test_parser_string(parser, g):
     g.load.assert_called_with('WORD')
 
 
-def test_parser_values(patch, grammar, parser):
-    patch.object(Parser, 'add_rules')
-    parser.values(grammar)
-    Parser.add_rules.assert_called_with(grammar, ['number', 'string', 'list'])
-    grammar.rule.assert_called_with('values', ['number', 'string', 'list'])
+def test_parser_values(patch, parser, g):
+    patch.many(Parser, ['number', 'string', 'list'])
+    parser.values()
+    assert Parser.number.call_count == 1
+    assert Parser.string.call_count == 1
+    assert Parser.list.call_count == 1
+    g.rules.assert_called_with('values', ('number'), ('string'), ('list'))
 
 
 def test_parser_list(grammar, parser):
