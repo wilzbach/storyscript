@@ -64,8 +64,10 @@ class Parser:
         self.number()
         self.string()
         self.boolean()
+        self.filepath()
         self.list()
-        defintions = (['number'], ['string'], ['boolean'], ['list'])
+        defintions = (['number'], ['string'], ['boolean'], ['filepath'],
+                      ['list'])
         self.grammar.rules('values', *defintions)
 
     def assignments(self):

@@ -91,13 +91,14 @@ def test_parser_filepath(parser, grammar):
 
 
 def test_parser_values(patch, parser, grammar):
-    patch.many(Parser, ['number', 'string', 'list', 'boolean'])
+    patch.many(Parser, ['number', 'string', 'list', 'filepath', 'boolean'])
     parser.values()
     assert Parser.number.call_count == 1
     assert Parser.string.call_count == 1
     assert Parser.boolean.call_count == 1
+    assert Parser.filepath.call_count == 1
     assert Parser.list.call_count == 1
-    definitions = (['number'], ['string'], ['boolean'], ['list'])
+    definitions = (['number'], ['string'], ['boolean'], ['filepath'], ['list'])
     grammar.rules.assert_called_with('values', *definitions)
 
 

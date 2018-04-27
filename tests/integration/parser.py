@@ -39,6 +39,13 @@ def test_parser_boolean_true():
     assert node.children[0] == Token('TRUE', 'true')
 
 
+def test_parser_filepath():
+    parser = Parser('`/path`\n')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0].children[0]
+    assert node == Token('FILEPATH', '`/path`')
+
+
 def test_parser_list(int_token):
     parser = Parser('[3,4]\n')
     result = parser.parse()
