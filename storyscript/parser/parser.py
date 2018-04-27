@@ -97,10 +97,10 @@ class Parser:
         self.grammar.rule('for_statement', definition)
         self.grammar.tokens(('for', 'for'), ('in', 'in'))
 
-    def foreach_statement(self, grammar):
-        grammar.rule('foreach_statement', ['FOREACH _WS WORD _WS AS _WS WORD'])
-        grammar.terminal('FOREACH', '"foreach"')
-        grammar.terminal('AS', '"as"')
+    def foreach_statement(self):
+        definition = ('foreach', 'ws', 'word', 'ws', 'as', 'ws', 'word')
+        self.grammar.rule('foreach_statement', definition)
+        self.grammar.tokens(('foreach', 'foreach'), ('as', 'as'))
 
     def wait_statement(self, grammar):
         grammar.rule('wait_statement', ['WAIT _WS WORD', 'WAIT _WS string'])

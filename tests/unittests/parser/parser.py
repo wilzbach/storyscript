@@ -147,11 +147,11 @@ def test_parser_for_statement(parser, g):
     g.tokens.assert_called_with(('for', 'for'), ('in', 'in'))
 
 
-def test_parser_foreach_statement(grammar, parser):
-    parser.foreach_statement(grammar)
-    definitions = ['FOREACH _WS WORD _WS AS _WS WORD']
-    grammar.rule.assert_called_with('foreach_statement', definitions)
-    assert grammar.terminal.call_count == 2
+def test_parser_foreach_statement(parser, g):
+    parser.foreach_statement()
+    definition = ('foreach', 'ws', 'word', 'ws', 'as', 'ws', 'word')
+    g.rule.assert_called_with('foreach_statement', definition)
+    g.tokens.assert_called_with(('foreach', 'foreach'), ('as', 'as'))
 
 
 def test_parser_wait_statement(grammar, parser):
