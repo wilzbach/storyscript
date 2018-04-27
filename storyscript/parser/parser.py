@@ -73,9 +73,9 @@ class Parser:
         self.grammar.token('if', 'if')
 
     def for_statement(self):
-        definition = ('for', 'ws', 'word', 'in', 'ws', 'word')
-        self.grammar.rule('for_statement', definition)
         self.grammar.tokens(('for', 'for'), ('in', 'in'))
+        definition = ('for', 'ws', 'word', 'ws', 'in', 'ws', 'word')
+        self.grammar.rule('for_statement', definition)
 
     def foreach_statement(self):
         definition = ('foreach', 'ws', 'word', 'ws', 'as', 'ws', 'word')

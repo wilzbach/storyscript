@@ -119,7 +119,7 @@ def test_parser_if_statement(parser, grammar):
 
 def test_parser_for_statement(parser, grammar):
     parser.for_statement()
-    definition = ('for', 'ws', 'word', 'in', 'ws', 'word')
+    definition = ('for', 'ws', 'word', 'ws', 'in', 'ws', 'word')
     grammar.rule.assert_called_with('for_statement', definition)
     grammar.tokens.assert_called_with(('for', 'for'), ('in', 'in'))
 
