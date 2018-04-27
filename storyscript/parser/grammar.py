@@ -26,6 +26,8 @@ class Grammar:
         """
         if item_name in self._tokens:
             return item_name.upper()
+        if item_name in self.imports:
+            return item_name.upper()
         return item_name
 
     def start(self, rule):
