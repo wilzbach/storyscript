@@ -38,14 +38,10 @@ class Parser:
         self.grammar.rules('number', ['int'], ['float'])
 
     def string(self):
-        self.grammar.load('word')
-        self.grammar.tokens(('single_quotes', """("\\\'"|/[^']/)"""),
-                            ('double_quotes', '("\\\""|/[^"]/)'),
-                            inline=True, regexp=True)
-        self.grammar.rules('string',
-            ('single_quotes', 'word', 'single_quotes'),
-            ('double_quotes', 'word', 'double_quotes')
-        )
+        tokens = (('single_quoted', "/'([^']*)'/"),
+                  ('double_quoted', '/"([^"]*)"/'))
+        self.grammar.tokens(*tokens, regexp=True)
+        self.grammar.rules('string', ['single_quoted'], ['double_quoted'])
 
     def boolean(self):
         self.grammar.tokens(('true', 'true'), ('false', 'false'))
