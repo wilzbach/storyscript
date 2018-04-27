@@ -86,13 +86,14 @@ def test_parser_boolean(parser, grammar):
 
 
 def test_parser_values(patch, parser, grammar):
-    patch.many(Parser, ['number', 'string', 'list'])
+    patch.many(Parser, ['number', 'string', 'list', 'boolean'])
     parser.values()
     assert Parser.number.call_count == 1
     assert Parser.string.call_count == 1
+    assert Parser.boolean.call_count == 1
     assert Parser.list.call_count == 1
-    grammar.rules.assert_called_with('values', ['number'], ['string'],
-                                     ['list'])
+    definitions = (['number'], ['string'], ['boolean'], ['list'])
+    grammar.rules.assert_called_with('values', *definitions)
 
 
 def test_parser_list(parser, grammar):

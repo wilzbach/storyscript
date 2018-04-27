@@ -32,6 +32,13 @@ def test_parser_values_string(string):
     assert node.children[0] == Token('WORD', 'red')
 
 
+def test_parser_boolean_true():
+    parser = Parser('true\n')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0].children[0]
+    assert node.children[0] == Token('TRUE', 'true')
+
+
 def test_parser_list(int_token):
     parser = Parser('[3,4]\n')
     result = parser.parse()

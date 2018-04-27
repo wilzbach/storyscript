@@ -60,8 +60,10 @@ class Parser:
     def values(self):
         self.number()
         self.string()
+        self.boolean()
         self.list()
-        self.grammar.rules('values', ['number'], ['string'], ['list'])
+        defintions = (['number'], ['string'], ['boolean'], ['list'])
+        self.grammar.rules('values', *defintions)
 
     def assignments(self):
         self.grammar.token('equals', '=')
