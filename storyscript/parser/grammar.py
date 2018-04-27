@@ -25,7 +25,7 @@ class Grammar:
         Resolves an item's reference to its real name.
         """
         if item_name in self._tokens:
-            return item_name.upper()
+            return self._tokens[item_name][0]
         if item_name in self.imports:
             return item_name.upper()
         return item_name

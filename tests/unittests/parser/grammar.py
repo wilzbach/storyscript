@@ -27,6 +27,11 @@ def test_grammar_resolve_token(grammar):
     assert grammar.resolve('token') == 'TOKEN'
 
 
+def test_grammar_resolve_token_inline(grammar):
+    grammar._tokens = {'token': ('_TOKEN', 'value')}
+    assert grammar.resolve('token') == '_TOKEN'
+
+
 def test_grammar_resolve_imports(grammar):
     grammar.imports = {'token': '%import common.TOKEN'}
     assert grammar.resolve('token') == 'TOKEN'
