@@ -47,6 +47,10 @@ class Parser:
             ('double_quotes', 'word', 'double_quotes')
         )
 
+    def boolean(self):
+        self.grammar.tokens(('true', 'true'), ('false', 'false'))
+        self.grammar.rules('boolean', ['true'], ['false'])
+
     def list(self):
         self.grammar.tokens(('comma', ','), ('osb', '['), ('csb', ']'),
                             inline=True)

@@ -79,6 +79,12 @@ def test_parser_string(parser, grammar):
     grammar.tokens.assert_called_with(*tokens, inline=True, regexp=True)
 
 
+def test_parser_boolean(parser, grammar):
+    parser.boolean()
+    grammar.tokens.assert_called_with(('true', 'true'), ('false', 'false'))
+    grammar.rule.assert_called_with('boolean', ['true'], ['false'])
+
+
 def test_parser_values(patch, parser, grammar):
     patch.many(Parser, ['number', 'string', 'list'])
     parser.values()
