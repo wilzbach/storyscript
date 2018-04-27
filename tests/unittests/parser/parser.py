@@ -102,11 +102,12 @@ def test_parser_values(patch, parser, g):
     g.rules.assert_called_with('values', ('number'), ('string'), ('list'))
 
 
-def test_parser_list(grammar, parser):
-    parser.list(grammar)
-    definitions = ['_OSB (values (_COMMA values)*)? _CSB']
-    grammar.rule.assert_called_with('list', definitions)
-    assert grammar.terminal.call_count == 3
+def test_parser_list(parser, g):
+    parser.list()
+    definition = ('osb', '(values', '(comma', 'values)*)?', 'csb')
+    g.rule.assert_called_with('list', definition)
+    g.tokens.assert_called_with(('comma', ','), ('osb', '['), ('csb', ']'),
+                                inline=True)
 
 
 def test_parser_assignments(parser, g):

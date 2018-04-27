@@ -51,11 +51,11 @@ class Parser:
                             inline=True, regexp=True)
         self.grammar.load('WORD')
 
-    def list(self, grammar):
-        grammar.rule('list', ['_OSB (values (_COMMA values)*)? _CSB'])
-        grammar.terminal('COMMA', '","', inline=True)
-        grammar.terminal('OSB', '"["', inline=True)
-        grammar.terminal('CSB', '"]"', inline=True)
+    def list(self):
+        definition = ('osb', '(values', '(comma', 'values)*)?', 'csb')
+        self.grammar.rule('list', definition)
+        self.grammar.tokens(('comma', ','), ('osb', '['), ('csb', ']'),
+                            inline=True)
 
     def values(self):
         self.number()
