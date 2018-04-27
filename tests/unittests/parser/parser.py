@@ -13,15 +13,10 @@ def parser():
 
 
 @fixture
-def g(magic, parser):
+def grammar(magic, parser):
     grammar = magic()
     parser.grammar = grammar
     return grammar
-
-
-@fixture
-def grammar(magic):
-    return magic()
 
 
 def test_parser_init():
@@ -35,21 +30,22 @@ def test_parser_init_algo():
     assert parser.algo == 'algo'
 
 
-def test_parser_line(parser, g):
+def test_parser_line(parser, grammar):
     parser.line()
     rules = ['values', 'assignments', 'statements', 'comment', 'block']
-    g.rule.assert_called_with('line', rules)
+    grammar.rule.assert_called_with('line', rules)
 
 
-def test_parser_whitespaces(parser, g):
+def test_parser_whitespaces(parser, grammar):
     parser.whitespaces()
-    g.tokens.assert_called_with(('ws', '(" ")+'), ('nl', r'/(\r?\n[\t ]*)+/'), inline=True, regexp=True)
+    tokens = (('ws', '(" ")+'), ('nl', r'/(\r?\n[\t ]*)+/'))
+    grammar.tokens.assert_called_with(*tokens, inline=True, regexp=True)
 
 
-def test_parser_indentation(parser, g):
+def test_parser_indentation(parser, grammar):
     parser.indentation()
     tokens = (('indent', '<INDENT>'), ('dedent', '<DEDENT>'))
-    g.tokens.assert_called_with(*tokens, inline=True)
+    grammar.tokens.assert_called_with(*tokens, inline=True)
 
 
 def test_parser_spaces(patch, parser):
@@ -59,87 +55,89 @@ def test_parser_spaces(patch, parser):
     assert Parser.indentation.call_count == 1
 
 
-def test_parser_block(parser, g):
+def test_parser_block(parser, grammar):
     parser.block()
     rules = ['line _NL [_INDENT block+ _DEDENT]']
-    g.rule.assert_called_with('block', rules)
+    grammar.rule.assert_called_with('block', rules)
 
 
-def test_parser_number(parser, g):
+def test_parser_number(parser, grammar):
     parser.number()
-    g.rule.assert_called_with('number', ['FLOAT', 'INT'])
-    g.loads.assert_called_with(['INT', 'FLOAT'])
+    grammar.rule.assert_called_with('number', ['FLOAT', 'INT'])
+    grammar.loads.assert_called_with(['INT', 'FLOAT'])
 
 
-def test_parser_string(parser, g):
+def test_parser_string(parser, grammar):
     parser.string()
     definitions = (('single_quotes', 'word', 'single_quotes'),
                    ('double_quotes', 'word', 'double_quotes'))
     tokens = (('single_quotes', """("\\\'"|/[^']/)"""),
               ('double_quotes', '("\\\""|/[^"]/)'))
-    g.rules.assert_called_with('string', *definitions)
-    g.tokens.assert_called_with(*tokens, inline=True, regexp=True)
-    g.load.assert_called_with('WORD')
+    grammar.rules.assert_called_with('string', *definitions)
+    grammar.tokens.assert_called_with(*tokens, inline=True, regexp=True)
+    grammar.load.assert_called_with('WORD')
 
 
-def test_parser_values(patch, parser, g):
+def test_parser_values(patch, parser, grammar):
     patch.many(Parser, ['number', 'string', 'list'])
     parser.values()
     assert Parser.number.call_count == 1
     assert Parser.string.call_count == 1
     assert Parser.list.call_count == 1
-    g.rules.assert_called_with('values', ['number'], ['string'], ['list'])
+    grammar.rules.assert_called_with('values', ['number'], ['string'],
+                                     ['list'])
 
 
-def test_parser_list(parser, g):
+def test_parser_list(parser, grammar):
     parser.list()
     definition = ('osb', '(values', '(comma', 'values)*)?', 'csb')
-    g.rule.assert_called_with('list', definition)
-    g.tokens.assert_called_with(('comma', ','), ('osb', '['), ('csb', ']'),
-                                inline=True)
+    grammar.rule.assert_called_with('list', definition)
+    grammar.tokens.assert_called_with(('comma', ','), ('osb', '['),
+                                      ('csb', ']'), inline=True)
 
 
-def test_parser_assignments(parser, g):
+def test_parser_assignments(parser, grammar):
     parser.assignments()
-    g.rule.assert_called_with('assignments', ('word', 'equals', 'values'))
-    g.token.assert_called_with('equals', '=')
+    grammar.rule.assert_called_with('assignments', ('word', 'equals',
+                                    'values'))
+    grammar.token.assert_called_with('equals', '=')
 
 
-def test_parser_comparisons(parser, g):
+def test_parser_comparisons(parser, grammar):
     parser.comparisons()
     tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
               ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
-    g.tokens.assert_called_with(*tokens)
+    grammar.tokens.assert_called_with(*tokens)
 
 
-def test_parser_if_statement(parser, g):
+def test_parser_if_statement(parser, grammar):
     parser.if_statement()
-    g.rule.assert_called_with('if_statement', ('if', 'ws', 'word'))
-    g.token.assert_called_with('if', 'if')
+    grammar.rule.assert_called_with('if_statement', ('if', 'ws', 'word'))
+    grammar.token.assert_called_with('if', 'if')
 
 
-def test_parser_for_statement(parser, g):
+def test_parser_for_statement(parser, grammar):
     parser.for_statement()
     definition = ('for', 'ws', 'word', 'in', 'ws', 'word')
-    g.rule.assert_called_with('for_statement', definition)
-    g.tokens.assert_called_with(('for', 'for'), ('in', 'in'))
+    grammar.rule.assert_called_with('for_statement', definition)
+    grammar.tokens.assert_called_with(('for', 'for'), ('in', 'in'))
 
 
-def test_parser_foreach_statement(parser, g):
+def test_parser_foreach_statement(parser, grammar):
     parser.foreach_statement()
     definition = ('foreach', 'ws', 'word', 'ws', 'as', 'ws', 'word')
-    g.rule.assert_called_with('foreach_statement', definition)
-    g.tokens.assert_called_with(('foreach', 'foreach'), ('as', 'as'))
+    grammar.rule.assert_called_with('foreach_statement', definition)
+    grammar.tokens.assert_called_with(('foreach', 'foreach'), ('as', 'as'))
 
 
-def test_parser_wait_statement(parser, g):
+def test_parser_wait_statement(parser, grammar):
     parser.wait_statement()
     definitions = (('wait', 'ws', 'word'), ('wait', 'ws', 'string'))
-    g.rules.assert_called_with('wait_statement', *definitions)
-    g.token.assert_called_with('wait', 'wait')
+    grammar.rules.assert_called_with('wait_statement', *definitions)
+    grammar.token.assert_called_with('wait', 'wait')
 
 
-def test_parser_statements(patch, parser, g):
+def test_parser_statements(patch, parser, grammar):
     patch.many(Parser, ['if_statement', 'for_statement', 'foreach_statement',
                         'wait_statement'])
     parser.statements()
@@ -149,13 +147,13 @@ def test_parser_statements(patch, parser, g):
     assert Parser.wait_statement.call_count == 1
     child_rules = (['if_statement'], ['for_statement'], ['foreach_statement'],
                     ['wait_statement'])
-    g.rules.assert_called_with('statements', *child_rules)
+    grammar.rules.assert_called_with('statements', *child_rules)
 
 
-def test_parser_comment(parser, g):
+def test_parser_comment(parser, grammar):
     parser.comment()
-    g.rule.assert_called_with('comment', ('comment'))
-    g.token.assert_called_with('comment', '/#(.*)/', regexp=True)
+    grammar.rule.assert_called_with('comment', ('comment'))
+    grammar.token.assert_called_with('comment', '/#(.*)/', regexp=True)
 
 
 def test_parser_get_grammar(patch, parser):
