@@ -30,7 +30,8 @@ class Parser:
         self.indentation()
 
     def block(self):
-        self.grammar.rule('block', ['line _NL [_INDENT block+ _DEDENT]'])
+        definition = 'line _NL [_INDENT block+ _DEDENT]'
+        self.grammar.rule('block', definition, raw=True)
 
     def number(self):
         self.grammar.rule('number', ['FLOAT', 'INT'])

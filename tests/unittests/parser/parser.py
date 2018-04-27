@@ -58,8 +58,8 @@ def test_parser_spaces(patch, parser):
 
 def test_parser_block(parser, grammar):
     parser.block()
-    rules = ['line _NL [_INDENT block+ _DEDENT]']
-    grammar.rule.assert_called_with('block', rules)
+    definition = 'line _NL [_INDENT block+ _DEDENT]'
+    grammar.rule.assert_called_with('block', definition, raw=True)
 
 
 def test_parser_number(parser, grammar):
