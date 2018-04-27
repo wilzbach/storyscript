@@ -77,7 +77,7 @@ class Grammar:
         self.ignores.append('%ignore {}'.format(terminal))
 
     def load(self, token):
-        self.imports['token'] = '%import common.{}'.format(token.upper())
+        self.imports[token] = '%import common.{}'.format(token.upper())
 
     def loads(self, tokens):
         for token in tokens:
