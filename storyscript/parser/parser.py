@@ -22,11 +22,9 @@ class Parser:
     def newline(self):
         self.grammar.terminal('NL', r'/(\r?\n[\t ]*)+/', inline=True)
 
-    def indent(self):
-        self.grammar.terminal('INDENT', '"<INDENT>"', inline=True)
-
-    def dedent(self):
-        self.grammar.terminal('DEDENT', '"<DEDENT>"', inline=True)
+    def indentation(self):
+        tokens = (('indent', '<INDENT>'), ('dedent', '<DEDENT>'))
+        self.grammar.tokens(*tokens, inline=True)
 
     def spaces(self):
         self.whitespace()

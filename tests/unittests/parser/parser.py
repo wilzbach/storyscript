@@ -51,14 +51,10 @@ def test_parser_newline(parser, g):
     g.terminal.assert_called_with('NL', r'/(\r?\n[\t ]*)+/', inline=True)
 
 
-def test_parser_indent(parser, g):
-    parser.indent()
-    g.terminal.assert_called_with('INDENT', '"<INDENT>"', inline=True)
-
-
-def test_parser_dedent(parser, g):
-    parser.dedent()
-    g.terminal.assert_called_with('DEDENT', '"<DEDENT>"', inline=True)
+def test_parser_indentation(parser, g):
+    parser.indentation()
+    tokens = (('indent', '<INDENT>'), ('dedent', '<DEDENT>'))
+    g.tokens.assert_called_with(*tokens, inline=True)
 
 
 def test_parser_spaces(patch, parser):
