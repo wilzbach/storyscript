@@ -34,8 +34,8 @@ class Parser:
         self.grammar.rule('block', definition, raw=True)
 
     def number(self):
-        self.grammar.rule('number', ['FLOAT', 'INT'])
-        self.grammar.loads(['INT', 'FLOAT'])
+        self.grammar.loads(['int', 'float'])
+        self.grammar.rules('number', ['int'], ['float'])
 
     def string(self):
         self.grammar.rules('string',

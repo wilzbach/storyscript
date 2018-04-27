@@ -64,8 +64,8 @@ def test_parser_block(parser, grammar):
 
 def test_parser_number(parser, grammar):
     parser.number()
-    grammar.rule.assert_called_with('number', ['FLOAT', 'INT'])
-    grammar.loads.assert_called_with(['INT', 'FLOAT'])
+    grammar.loads.assert_called_with(['int', 'float'])
+    grammar.rules.assert_called_with('number', ['int'], ['float'])
 
 
 def test_parser_string(parser, grammar):
