@@ -112,7 +112,7 @@ def test_grammar_build(patch, grammar):
     patch.object(Grammar, 'build_rules', return_value='rules')
     grammar.start_line = 'start'
     grammar.ignores = ['ignores']
-    grammar.imports = ['imports']
+    grammar.imports = {'key': 'imports'}
     result = grammar.build()
     assert Grammar.build_tokens.call_count == 1
     assert Grammar.build_rules.call_count == 1

@@ -97,6 +97,6 @@ class Grammar:
         tokens = self.build_tokens()
         rules = self.build_rules()
         ignores = '\n'.join(self.ignores)
-        imports = '\n'.join(self.imports)
+        imports = '\n'.join(self.imports.values())
         args = (self.start_line, rules, tokens, ignores, imports)
         return '{}\n{}\n{}\n{}\n\n{}'.format(*args)
