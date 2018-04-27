@@ -54,12 +54,15 @@ class Parser:
         self.grammar.rule('number', ['FLOAT', 'INT'])
         self.grammar.loads(['INT', 'FLOAT'])
 
-    def string(self, grammar):
-        grammar.rule('string', ['_STRING_INNER WORD _STRING_INNER',
-                                '_DOUBLE_QUOTES WORD _DOUBLE_QUOTES'])
-        grammar.terminal('DOUBLE_QUOTES', '("\\\""|/[^"]/)', inline=True)
-        grammar.terminal('STRING_INNER', """("\\\'"|/[^']/)""", inline=True)
-        grammar.loads(['WORD'])
+    def string(self):
+        self.grammar.rules('string',
+            ('single_quotes', 'word', 'single_quotes'),
+            ('double_quotes', 'word', 'double_quotes')
+        )
+        self.grammar.tokens(('single_quotes', """("\\\'"|/[^']/)"""),
+                            ('double_quotes', '("\\\""|/[^"]/)'),
+                            inline=True, regexp=True)
+        self.grammar.load('WORD')
 
     def list(self, grammar):
         grammar.rule('list', ['_OSB (values (_COMMA values)*)? _CSB'])

@@ -96,13 +96,15 @@ def test_parser_number(parser, g):
     g.loads.assert_called_with(['INT', 'FLOAT'])
 
 
-def test_parser_string(grammar, parser):
-    parser.string(grammar)
-    definitions = ['_STRING_INNER WORD _STRING_INNER',
-                   '_DOUBLE_QUOTES WORD _DOUBLE_QUOTES']
-    grammar.rule.assert_called_with('string', definitions)
-    assert grammar.terminal.call_count == 2
-    grammar.loads.assert_called_with(['WORD'])
+def test_parser_string(parser, g):
+    parser.string()
+    definitions = (('single_quotes', 'word', 'single_quotes'),
+                   ('double_quotes', 'word', 'double_quotes'))
+    tokens = (('single_quotes', """("\\\'"|/[^']/)"""),
+              ('double_quotes', '("\\\""|/[^"]/)'))
+    g.rules.assert_called_with('string', *definitions)
+    g.tokens.assert_called_with(*tokens, inline=True, regexp=True)
+    g.load.assert_called_with('WORD')
 
 
 def test_parser_values(patch, grammar, parser):
