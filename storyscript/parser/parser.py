@@ -78,9 +78,9 @@ class Parser:
         self.grammar.rule('for_statement', definition)
 
     def foreach_statement(self):
+        self.grammar.tokens(('foreach', 'foreach'), ('as', 'as'))
         definition = ('foreach', 'ws', 'word', 'ws', 'as', 'ws', 'word')
         self.grammar.rule('foreach_statement', definition)
-        self.grammar.tokens(('foreach', 'foreach'), ('as', 'as'))
 
     def wait_statement(self):
         definitions = (('wait', 'ws', 'word'), ('wait', 'ws', 'string'))
