@@ -82,7 +82,7 @@ def test_parser_string(parser, grammar):
 def test_parser_boolean(parser, grammar):
     parser.boolean()
     grammar.tokens.assert_called_with(('true', 'true'), ('false', 'false'))
-    grammar.rule.assert_called_with('boolean', ['true'], ['false'])
+    grammar.rules.assert_called_with('boolean', ['true'], ['false'])
 
 
 def test_parser_filepath(parser, grammar):
