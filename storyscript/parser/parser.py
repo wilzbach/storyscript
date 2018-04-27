@@ -60,8 +60,8 @@ class Parser:
         self.grammar.rules('values', ['number'], ['string'], ['list'])
 
     def assignments(self):
-        self.grammar.rule('assignments', ('word', 'equals', 'values'))
         self.grammar.token('equals', '=')
+        self.grammar.rule('assignments', ('word', 'equals', 'values'))
 
     def comparisons(self):
         tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
