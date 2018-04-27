@@ -123,10 +123,10 @@ def test_parser_list(grammar, parser):
     assert grammar.terminal.call_count == 3
 
 
-def test_parser_assignments(grammar, parser):
-    parser.assignments(grammar)
-    grammar.rule.assert_called_with('assignments', ['WORD EQUALS values'])
-    grammar.terminal.assert_called_with('equals', '"="')
+def test_parser_assignments(parser, g):
+    parser.assignments()
+    g.rule.assert_called_with('assignments', ('word', 'equals', 'values'))
+    g.token.assert_called_with('equals', '=')
 
 
 def test_parser_comparisons(grammar, parser):

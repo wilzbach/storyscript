@@ -76,9 +76,9 @@ class Parser:
         self.list()
         self.grammar.rules('values', ('number'), ('string'), ('list'))
 
-    def assignments(self, grammar):
-        grammar.rule('assignments', ['WORD EQUALS values'])
-        grammar.terminal('equals', '"="')
+    def assignments(self):
+        self.grammar.rule('assignments', ('word', 'equals', 'values'))
+        self.grammar.token('equals', '=')
 
     def comparisons(self, grammar):
         grammar.terminal('GREATER', '">"')
