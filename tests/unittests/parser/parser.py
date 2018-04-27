@@ -85,6 +85,11 @@ def test_parser_boolean(parser, grammar):
     grammar.rule.assert_called_with('boolean', ['true'], ['false'])
 
 
+def test_parser_filepath(parser, grammar):
+    parser.filepath()
+    grammar.token.assert_called_with('filepath', '/`([^"]*)`/', regexp=True)
+
+
 def test_parser_values(patch, parser, grammar):
     patch.many(Parser, ['number', 'string', 'list', 'boolean'])
     parser.values()

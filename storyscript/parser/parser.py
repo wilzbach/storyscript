@@ -51,6 +51,9 @@ class Parser:
         self.grammar.tokens(('true', 'true'), ('false', 'false'))
         self.grammar.rules('boolean', ['true'], ['false'])
 
+    def filepath(self):
+        self.grammar.token('filepath', '/`([^"]*)`/', regexp=True)
+
     def list(self):
         self.grammar.tokens(('comma', ','), ('osb', '['), ('csb', ']'),
                             inline=True)
