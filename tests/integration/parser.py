@@ -123,6 +123,22 @@ def test_parser_wait_statement_string():
     assert node[1].children[0] == Token('WORD', 'seconds')
 
 
+def test_parser_next_statement():
+    parser = Parser('next word\n')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0].children[0]
+    assert node.children[0] == Token('NEXT', 'next')
+    assert node.children[1] == Token('WORD', 'word')
+
+
+def test_parser_next_statement_filepath():
+    parser = Parser('next `path`\n')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0].children[0]
+    assert node.children[0] == Token('NEXT', 'next')
+    assert node.children[1] == Token('FILEPATH', '`path`')
+
+
 @mark.parametrize('comment', ['# one', '#one'])
 def test_parser_comment(comment):
     parser = Parser('{}\n'.format(comment))

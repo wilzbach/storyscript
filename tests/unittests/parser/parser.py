@@ -160,14 +160,15 @@ def test_parser_next_statement(parser, grammar):
 
 def test_parser_statements(patch, parser, grammar):
     patch.many(Parser, ['if_statement', 'for_statement', 'foreach_statement',
-                        'wait_statement'])
+                        'wait_statement', 'next_statement'])
     parser.statements()
     assert Parser.if_statement.call_count == 1
     assert Parser.for_statement.call_count == 1
     assert Parser.foreach_statement.call_count == 1
     assert Parser.wait_statement.call_count == 1
+    assert Parser.next_statement.call_count == 1
     child_rules = (['if_statement'], ['for_statement'], ['foreach_statement'],
-                    ['wait_statement'])
+                    ['wait_statement'], ['next_statement'])
     grammar.rules.assert_called_with('statements', *child_rules)
 
 

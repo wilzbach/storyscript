@@ -105,11 +105,13 @@ class Parser:
 
     def statements(self):
         statements = (['if_statement'], ['for_statement'],
-                      ['foreach_statement'], ['wait_statement'])
+                      ['foreach_statement'], ['wait_statement'],
+                      ['next_statement'])
         self.if_statement()
         self.for_statement()
         self.foreach_statement()
         self.wait_statement()
+        self.next_statement()
         self.grammar.rules('statements', *statements)
 
     def comment(self):
