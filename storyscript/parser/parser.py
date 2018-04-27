@@ -25,10 +25,8 @@ class Parser:
         self.grammar.tokens(*tokens, inline=True)
 
     def spaces(self):
-        self.whitespace()
-        self.newline()
-        self.indent()
-        self.dedent()
+        self.whitespaces()
+        self.indentation()
 
     def block(self):
         self.grammar.rule('block', ['line _NL [_INDENT block+ _DEDENT]'])

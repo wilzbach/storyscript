@@ -53,12 +53,10 @@ def test_parser_indentation(parser, g):
 
 
 def test_parser_spaces(patch, parser):
-    patch.many(Parser, ['whitespace', 'newline', 'indent', 'dedent'])
+    patch.many(Parser, ['whitespaces', 'indentation'])
     parser.spaces()
-    assert Parser.whitespace.call_count == 1
-    assert Parser.newline.call_count == 1
-    assert Parser.indent.call_count == 1
-    assert Parser.dedent.call_count == 1
+    assert Parser.whitespaces.call_count == 1
+    assert Parser.indentation.call_count == 1
 
 
 def test_parser_block(parser, g):
