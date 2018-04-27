@@ -147,8 +147,8 @@ def test_parser_statements(patch, parser, g):
     assert Parser.for_statement.call_count == 1
     assert Parser.foreach_statement.call_count == 1
     assert Parser.wait_statement.call_count == 1
-    child_rules = (('if_statement'), ('for_statement'), ('foreach_statement'),
-                    ('wait_statement'))
+    child_rules = (['if_statement'], ['for_statement'], ['foreach_statement'],
+                    ['wait_statement'])
     g.rules.assert_called_with('statements', *child_rules)
 
 

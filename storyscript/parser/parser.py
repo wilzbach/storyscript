@@ -86,8 +86,8 @@ class Parser:
         self.grammar.token('wait', 'wait')
 
     def statements(self):
-        statements = (('if_statement'), ('for_statement'),
-                      ('foreach_statement'), ('wait_statement'))
+        statements = (['if_statement'], ['for_statement'],
+                      ['foreach_statement'], ['wait_statement'])
         self.if_statement()
         self.for_statement()
         self.foreach_statement()
