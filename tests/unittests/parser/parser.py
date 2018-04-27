@@ -134,10 +134,10 @@ def test_parser_comparisons(grammar, parser):
     assert grammar.terminal.call_count == 6
 
 
-def test_parser_if_statement(grammar, parser):
-    parser.if_statement(grammar)
-    grammar.rule.assert_called_with('if_statement', ['IF _WS WORD'])
-    grammar.terminal.assert_called_with('IF', '"if"')
+def test_parser_if_statement(parser, g):
+    parser.if_statement()
+    g.rule.assert_called_with('if_statement', ('if', 'ws', 'word'))
+    g.token.assert_called_with('if', 'if')
 
 
 def test_parser_for_statement(grammar, parser):

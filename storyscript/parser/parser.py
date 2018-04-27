@@ -88,9 +88,9 @@ class Parser:
         grammar.terminal('NOT', '"!="')
         grammar.terminal('EQUAL', '"=="')
 
-    def if_statement(self, grammar):
-        grammar.rule('if_statement', ['IF _WS WORD'])
-        grammar.terminal('IF', '"if"')
+    def if_statement(self):
+        self.grammar.rule('if_statement', ('if', 'ws', 'word'))
+        self.grammar.token('if', 'if')
 
     def for_statement(self, grammar):
         grammar.rule('for_statement', ['FOR _WS WORD _WS IN _WS WORD'])
