@@ -161,13 +161,17 @@ def test_parser_wait_statement(parser, g):
     g.token.assert_called_with('wait', 'wait')
 
 
-def test_parser_statements(patch, grammar, parser):
-    patch.object(Parser, 'add_rules')
-    parser.statements(grammar)
-    definitions = ['if_statement', 'for_statement', 'foreach_statement',
-                   'wait_statement']
-    Parser.add_rules.assert_called_with(grammar, definitions)
-    grammar.rule.assert_called_with('statements', definitions)
+def test_parser_statements(patch, parser, g):
+    patch.many(Parser, ['if_statement', 'for_statement', 'foreach_statement',
+                        'wait_statement'])
+    parser.statements()
+    assert Parser.if_statement.call_count == 1
+    assert Parser.for_statement.call_count == 1
+    assert Parser.foreach_statement.call_count == 1
+    assert Parser.wait_statement.call_count == 1
+    child_rules = (('if_statement'), ('for_statement'), ('foreach_statement'),
+                    ('wait_statement'))
+    g.rules.assert_called_with('statements', *child_rules)
 
 
 def test_parser_comment(grammar, parser):

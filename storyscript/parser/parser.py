@@ -107,11 +107,14 @@ class Parser:
         self.grammar.rules('wait_statement', *definitions)
         self.grammar.token('wait', 'wait')
 
-    def statements(self, grammar):
-        statements = ['if_statement', 'for_statement', 'foreach_statement',
-                      'wait_statement']
-        self.add_rules(grammar, statements)
-        grammar.rule('statements', statements)
+    def statements(self):
+        statements = (('if_statement'), ('for_statement'),
+                      ('foreach_statement'), ('wait_statement'))
+        self.if_statement()
+        self.for_statement()
+        self.foreach_statement()
+        self.wait_statement()
+        self.grammar.rules('statements', *statements)
 
     def comment(self, grammar):
         grammar.rule('comment', ['COMMENT'])
