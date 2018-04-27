@@ -16,11 +16,9 @@ class Parser:
         rules = ['values', 'assignments', 'statements', 'comment', 'block']
         self.grammar.rule('line', rules)
 
-    def whitespace(self):
-        self.grammar.terminal('WS', '(" ")+', inline=True)
-
-    def newline(self):
-        self.grammar.terminal('NL', r'/(\r?\n[\t ]*)+/', inline=True)
+    def whitespaces(self):
+        tokens = (('ws', '(" ")+'), ('nl', r'/(\r?\n[\t ]*)+/'))
+        self.grammar.tokens(*tokens, inline=True, regexp=True)
 
     def indentation(self):
         tokens = (('indent', '<INDENT>'), ('dedent', '<DEDENT>'))

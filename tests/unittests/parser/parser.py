@@ -41,14 +41,9 @@ def test_parser_line(parser, g):
     g.rule.assert_called_with('line', rules)
 
 
-def test_parser_whitespace(parser, g):
-    parser.whitespace()
-    g.terminal.assert_called_with('WS', '(" ")+', inline=True)
-
-
-def test_parser_newline(parser, g):
-    parser.newline()
-    g.terminal.assert_called_with('NL', r'/(\r?\n[\t ]*)+/', inline=True)
+def test_parser_whitespaces(parser, g):
+    parser.whitespaces()
+    g.tokens.assert_called_with(('ws', '(" ")+'), ('nl', r'/(\r?\n[\t ]*)+/'), inline=True, regexp=True)
 
 
 def test_parser_indentation(parser, g):
