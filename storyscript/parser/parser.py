@@ -38,14 +38,14 @@ class Parser:
         self.grammar.rules('number', ['int'], ['float'])
 
     def string(self):
+        self.grammar.load('word')
+        self.grammar.tokens(('single_quotes', """("\\\'"|/[^']/)"""),
+                            ('double_quotes', '("\\\""|/[^"]/)'),
+                            inline=True, regexp=True)
         self.grammar.rules('string',
             ('single_quotes', 'word', 'single_quotes'),
             ('double_quotes', 'word', 'double_quotes')
         )
-        self.grammar.tokens(('single_quotes', """("\\\'"|/[^']/)"""),
-                            ('double_quotes', '("\\\""|/[^"]/)'),
-                            inline=True, regexp=True)
-        self.grammar.load('WORD')
 
     def list(self):
         definition = ('osb', '(values', '(comma', 'values)*)?', 'csb')

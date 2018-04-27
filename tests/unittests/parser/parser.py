@@ -70,13 +70,13 @@ def test_parser_number(parser, grammar):
 
 def test_parser_string(parser, grammar):
     parser.string()
+    grammar.load.assert_called_with('word')
     definitions = (('single_quotes', 'word', 'single_quotes'),
                    ('double_quotes', 'word', 'double_quotes'))
     tokens = (('single_quotes', """("\\\'"|/[^']/)"""),
               ('double_quotes', '("\\\""|/[^"]/)'))
     grammar.rules.assert_called_with('string', *definitions)
     grammar.tokens.assert_called_with(*tokens, inline=True, regexp=True)
-    grammar.load.assert_called_with('WORD')
 
 
 def test_parser_values(patch, parser, grammar):
