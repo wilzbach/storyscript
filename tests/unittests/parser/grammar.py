@@ -14,8 +14,8 @@ def test_grammar_init():
     assert grammar.start_line is None
     assert grammar._tokens == {}
     assert grammar._rules == {}
+    assert grammar.imports == {}
     assert grammar.ignores == []
-    assert grammar.imports == []
 
 
 def test_grammar_resolve(grammar):
@@ -88,7 +88,7 @@ def test_grammar_ignore(grammar):
 
 def test_grammar_load(grammar):
     grammar.load('token')
-    assert grammar.imports == ['%import common.token']
+    assert grammar.imports['token'] == '%import common.TOKEN'
 
 
 def test_grammar_loads(patch, grammar):

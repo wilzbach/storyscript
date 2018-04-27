@@ -17,8 +17,8 @@ class Grammar:
         self.start_line = None
         self._tokens = {}
         self._rules = {}
+        self.imports = {}
         self.ignores = []
-        self.imports = []
 
     def resolve(self, item_name):
         """
@@ -75,7 +75,7 @@ class Grammar:
         self.ignores.append('%ignore {}'.format(terminal))
 
     def load(self, token):
-        self.imports.append('%import common.{}'.format(token))
+        self.imports['token'] = '%import common.{}'.format(token.upper())
 
     def loads(self, tokens):
         for token in tokens:
