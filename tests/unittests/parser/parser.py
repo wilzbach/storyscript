@@ -105,9 +105,11 @@ def test_parser_assignments(parser, g):
     g.token.assert_called_with('equals', '=')
 
 
-def test_parser_comparisons(grammar, parser):
-    parser.comparisons(grammar)
-    assert grammar.terminal.call_count == 6
+def test_parser_comparisons(parser, g):
+    parser.comparisons()
+    tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
+              ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
+    g.tokens.assert_called_with(*tokens)
 
 
 def test_parser_if_statement(parser, g):

@@ -61,13 +61,10 @@ class Parser:
         self.grammar.rule('assignments', ('word', 'equals', 'values'))
         self.grammar.token('equals', '=')
 
-    def comparisons(self, grammar):
-        grammar.terminal('GREATER', '">"')
-        grammar.terminal('GREATER_EQUAL', '">="')
-        grammar.terminal('LESSER', '"<"')
-        grammar.terminal('LESSER_EQUAL', '"<="')
-        grammar.terminal('NOT', '"!="')
-        grammar.terminal('EQUAL', '"=="')
+    def comparisons(self):
+        tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
+                  ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
+        self.grammar.tokens(*tokens)
 
     def if_statement(self):
         self.grammar.rule('if_statement', ('if', 'ws', 'word'))
