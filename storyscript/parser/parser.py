@@ -48,10 +48,10 @@ class Parser:
         )
 
     def list(self):
-        definition = ('osb', '(values', '(comma', 'values)*)?', 'csb')
-        self.grammar.rule('list', definition)
         self.grammar.tokens(('comma', ','), ('osb', '['), ('csb', ']'),
                             inline=True)
+        definition = '_OSB (values (_COMMA values)*)? _CSB'
+        self.grammar.rule('list', definition, raw=True)
 
     def values(self):
         self.number()

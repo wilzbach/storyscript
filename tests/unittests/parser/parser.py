@@ -91,10 +91,10 @@ def test_parser_values(patch, parser, grammar):
 
 def test_parser_list(parser, grammar):
     parser.list()
-    definition = ('osb', '(values', '(comma', 'values)*)?', 'csb')
-    grammar.rule.assert_called_with('list', definition)
-    grammar.tokens.assert_called_with(('comma', ','), ('osb', '['),
-                                      ('csb', ']'), inline=True)
+    tokens = (('comma', ','), ('osb', '['), ('csb', ']'))
+    grammar.tokens.assert_called_with(*tokens, inline=True)
+    definition ='_OSB (values (_COMMA values)*)? _CSB'
+    grammar.rule.assert_called_with('list', definition, raw=True)
 
 
 def test_parser_assignments(parser, grammar):
