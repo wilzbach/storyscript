@@ -67,6 +67,7 @@ class Parser:
         self.grammar.rules('values', *defintions)
 
     def assignments(self):
+        self.grammar.load('word')
         self.grammar.token('equals', '=')
         self.grammar.rule('assignments', ('word', 'equals', 'values'))
 

@@ -110,6 +110,7 @@ def test_parser_list(parser, grammar):
 
 def test_parser_assignments(parser, grammar):
     parser.assignments()
+    grammar.load.assert_called_with('word')
     grammar.rule.assert_called_with('assignments', ('word', 'equals',
                                     'values'))
     grammar.token.assert_called_with('equals', '=')
