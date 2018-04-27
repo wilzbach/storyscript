@@ -35,20 +35,6 @@ def test_parser_init_algo():
     assert parser.algo == 'algo'
 
 
-def test_parser_add_rules(patch, parser):
-    patch.many(Parser, ['line', 'spaces', 'values', 'assignments',
-                        'statements', 'comment', 'block', 'comparisons'])
-    parser.add_rules()
-    assert Parser.line.call_count == 1
-    assert Parser.spaces.call_count == 1
-    assert Parser.values.call_count == 1
-    assert Parser.assignments.call_count == 1
-    assert Parser.statements.call_count == 1
-    assert Parser.comment.call_count == 1
-    assert Parser.block.call_count == 1
-    assert Parser.comparisons.call_count == 1
-
-
 def test_parser_line(parser, g):
     parser.line()
     rules = ['values', 'assignments', 'statements', 'comment', 'block']
@@ -191,14 +177,20 @@ def test_parser_indenter(patch, parser):
 
 
 def test_parser_build_grammar(patch, parser):
-    patch.many(Parser, ['get_grammar', 'add_rules'])
+    patch.many(Parser, ['line', 'spaces', 'values', 'assignments',
+                        'statements', 'comment', 'block', 'comparisons',
+                        'get_grammar'])
     result = parser.build_grammar()
     assert parser.grammar == parser.get_grammar()
     parser.grammar.start.assert_called_with('_NL? block')
-    rules = ['line', 'spaces', 'values', 'assignments', 'statements',
-             'comment', 'block', 'comparisons']
-    Parser.add_rules.assert_called_with(parser.grammar, rules)
-    assert parser.grammar.build.call_count == 1
+    assert Parser.line.call_count == 1
+    assert Parser.spaces.call_count == 1
+    assert Parser.values.call_count == 1
+    assert Parser.assignments.call_count == 1
+    assert Parser.statements.call_count == 1
+    assert Parser.comment.call_count == 1
+    assert Parser.block.call_count == 1
+    assert Parser.comparisons.call_count == 1
     assert result == parser.grammar.build()
 
 

@@ -12,19 +12,6 @@ class Parser:
         self.source = source
         self.algo = algo
 
-    def add_rules(self):
-        """
-        Adds all the rules. Used after the Grammar instance is available
-        """
-        self.line()
-        self.spaces()
-        self.values()
-        self.assignments()
-        self.statements()
-        self.comment()
-        self.block()
-        self.comparisons()
-
     def line(self):
         rules = ['values', 'assignments', 'statements', 'comment', 'block']
         self.grammar.rule('line', rules)
@@ -129,9 +116,14 @@ class Parser:
     def build_grammar(self):
         self.grammar = self.get_grammar()
         self.grammar.start('_NL? block')
-        rules = ['line', 'spaces', 'values', 'assignments', 'statements',
-                 'comment', 'block', 'comparisons']
-        self.add_rules(self.grammar, rules)
+        self.line()
+        self.spaces()
+        self.values()
+        self.assignments()
+        self.statements()
+        self.comment()
+        self.block()
+        self.comparisons()
         return self.grammar.build()
 
     def parse(self):
