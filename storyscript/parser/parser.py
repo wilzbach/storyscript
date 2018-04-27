@@ -116,9 +116,9 @@ class Parser:
         self.wait_statement()
         self.grammar.rules('statements', *statements)
 
-    def comment(self, grammar):
-        grammar.rule('comment', ['COMMENT'])
-        grammar.terminal('COMMENT', '/#(.*)/')
+    def comment(self):
+        self.grammar.rule('comment', ('comment'))
+        self.grammar.token('comment', '/#(.*)/', regexp=True)
 
     def get_grammar(self):
         return Grammar()
