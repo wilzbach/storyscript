@@ -94,6 +94,16 @@ def test_parser_if_statement(var_token):
     assert node.children[1] == var_token
 
 
+def test_parser_if_statement_comparison(var_token):
+    parser = Parser('if var == another\n')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0].children[0]
+    assert node.children[0] == Token('IF', 'if')
+    assert node.children[1] == var_token
+    assert node.children[2].children[0] == Token('EQUAL', '==')
+    assert node.children[3] == Token('WORD', 'another')
+
+
 def test_parser_for_statement(var_token):
     parser = Parser('for var in items\n')
     result = parser.parse()

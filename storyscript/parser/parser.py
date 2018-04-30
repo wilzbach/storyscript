@@ -81,7 +81,9 @@ class Parser:
 
     def if_statement(self):
         self.grammar.token('if', 'if')
-        self.grammar.rule('if_statement', ('if', 'ws', 'word'))
+        definitions = (('if', 'ws', 'word'),
+                       ('if', 'ws', 'word', 'ws', 'comparisons', 'ws', 'word'))
+        self.grammar.rules('if_statement', *definitions)
 
     def for_statement(self):
         self.grammar.tokens(('for', 'for'), ('in', 'in'))

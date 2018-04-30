@@ -128,7 +128,9 @@ def test_parser_comparisons(parser, grammar):
 
 def test_parser_if_statement(parser, grammar):
     parser.if_statement()
-    grammar.rule.assert_called_with('if_statement', ('if', 'ws', 'word'))
+    definitions = (('if', 'ws', 'word'),
+                   ('if', 'ws', 'word', 'ws', 'comparisons', 'ws', 'word'))
+    grammar.rules.assert_called_with('if_statement', *definitions)
     grammar.token.assert_called_with('if', 'if')
 
 
