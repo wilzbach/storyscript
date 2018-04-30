@@ -111,6 +111,12 @@ class Parser:
         self.next_statement()
         self.grammar.rules('statements', *statements)
 
+    def options(self):
+        self.grammar.token('dash', '-')
+        definitions = (('dash', 'dash', 'word', 'ws', 'word'),
+                       ('dash', 'dash', 'word', 'ws', 'values'))
+        self.grammar.rules('options', *definitions)
+
     def comment(self):
         self.grammar.token('comment', '/#(.*)/', regexp=True)
         self.grammar.rule('comment', ['comment'])

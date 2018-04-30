@@ -171,6 +171,13 @@ def test_parser_statements(patch, parser, grammar):
     grammar.rules.assert_called_with('statements', *child_rules)
 
 
+def test_parser_options(parser, grammar):
+    parser.options()
+    definitions = (('dash', 'dash', 'word', 'ws', 'word'),
+                   ('dash', 'dash', 'word', 'ws', 'values'))
+    grammar.rules.assert_called_with('options', *definitions)
+
+
 def test_parser_comment(parser, grammar):
     parser.comment()
     grammar.rule.assert_called_with('comment', ['comment'])
