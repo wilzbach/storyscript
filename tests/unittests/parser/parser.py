@@ -121,6 +121,9 @@ def test_parser_comparisons(parser, grammar):
     tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
               ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
     grammar.tokens.assert_called_with(*tokens)
+    definitions = (['greater'], ['greater_equal'], ['lesser'], ['lesser_equal'],
+                   ['not'], ['equal'])
+    grammar.rules.assert_called_with('comparisons', *definitions)
 
 
 def test_parser_if_statement(parser, grammar):

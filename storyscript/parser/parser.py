@@ -75,6 +75,9 @@ class Parser:
         tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
                   ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
         self.grammar.tokens(*tokens)
+        definitions = (['greater'], ['greater_equal'], ['lesser'],
+                       ['lesser_equal'], ['not'], ['equal'])
+        self.grammar.rules('comparisons', *definitions)
 
     def if_statement(self):
         self.grammar.token('if', 'if')
@@ -144,11 +147,11 @@ class Parser:
         self.line()
         self.spaces()
         self.values()
+        self.comparisons()
         self.assignments()
         self.statements()
         self.comment()
         self.block()
-        self.comparisons()
         self.command()
         return self.grammar.build()
 
