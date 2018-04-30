@@ -14,7 +14,7 @@ class Parser:
 
     def line(self):
         definitions = (['values'], ['assignments'],[ 'statements'],
-                       ['comment'], ['block'])
+                       ['comment'], ['command'], ['block'])
         self.grammar.rules('line', *definitions)
 
     def whitespaces(self):
@@ -122,6 +122,12 @@ class Parser:
         definitions = (['ws', 'values'], ['ws', 'word'], ['ws', 'options'])
         self.grammar.rules('arguments', *definitions)
 
+    def command(self):
+        self.arguments()
+        self.grammar.token('run', 'run')
+        rule = 'RUN _WS WORD arguments*|WORD arguments*'
+        self.grammar.rule('command', rule, raw=True)
+
     def comment(self):
         self.grammar.token('comment', '/#(.*)/', regexp=True)
         self.grammar.rule('comment', ['comment'])
@@ -143,6 +149,7 @@ class Parser:
         self.comment()
         self.block()
         self.comparisons()
+        self.command()
         return self.grammar.build()
 
     def parse(self):

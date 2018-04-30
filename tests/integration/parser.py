@@ -146,6 +146,31 @@ def test_parser_next_statement_filepath():
     assert node.children[1] == Token('FILEPATH', '`path`')
 
 
+def test_parser_command():
+    parser = Parser('run container\n')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0]
+    assert node.children[0] == Token('RUN', 'run')
+    assert node.children[1] == Token('WORD', 'container')
+
+
+def test_parser_command_option():
+    parser = Parser('run container --awesome yes\n')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0].children[2].children[0]
+    assert node.children[2] == Token('WORD', 'awesome')
+    assert node.children[3] == Token('WORD', 'yes')
+
+
+def test_parser_command_arguments():
+    parser = Parser('run container command "secret"\n')
+    result = parser.parse()
+    node = result.children[0].children[0].children[0]
+    assert node.children[2].children[0] == Token('WORD', 'command')
+    token = node.children[3].children[0].children[0].children[0]
+    assert token == Token('DOUBLE_QUOTED', '"secret"')
+
+
 @mark.parametrize('comment', ['# one', '#one'])
 def test_parser_comment(comment):
     parser = Parser('{}\n'.format(comment))

@@ -33,7 +33,7 @@ def test_parser_init_algo():
 def test_parser_line(parser, grammar):
     parser.line()
     defintions = (['values'], ['assignments'], ['statements'], ['comment'],
-                  ['block'])
+                  ['command'], ['block'])
     grammar.rules.assert_called_with('line', *defintions)
 
 
@@ -186,6 +186,14 @@ def test_parser_arguments(patch, parser, grammar):
     grammar.rules.assert_called_with('arguments', *definitions)
 
 
+def test_parser_command(patch, parser, grammar):
+    patch.object(Parser, 'arguments')
+    parser.command()
+    assert Parser.arguments.call_count == 1
+    rule = 'RUN _WS WORD arguments*|WORD arguments*'
+    grammar.rule.assert_called_with('command', rule, raw=True)
+
+
 def test_parser_comment(parser, grammar):
     parser.comment()
     grammar.rule.assert_called_with('comment', ['comment'])
@@ -205,7 +213,7 @@ def test_parser_indenter(patch, parser):
 def test_parser_build_grammar(patch, parser):
     patch.many(Parser, ['line', 'spaces', 'values', 'assignments',
                         'statements', 'comment', 'block', 'comparisons',
-                        'get_grammar'])
+                        'command', 'get_grammar'])
     result = parser.build_grammar()
     assert parser.grammar == parser.get_grammar()
     parser.grammar.start.assert_called_with('_NL? block')
@@ -217,6 +225,7 @@ def test_parser_build_grammar(patch, parser):
     assert Parser.comment.call_count == 1
     assert Parser.block.call_count == 1
     assert Parser.comparisons.call_count == 1
+    assert Parser.command.call_count == 1
     assert result == parser.grammar.build()
 
 
