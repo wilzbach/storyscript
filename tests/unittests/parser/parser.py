@@ -178,6 +178,14 @@ def test_parser_options(parser, grammar):
     grammar.rules.assert_called_with('options', *definitions)
 
 
+def test_parser_arguments(patch, parser, grammar):
+    patch.object(Parser, 'options')
+    parser.arguments()
+    assert Parser.options.call_count == 1
+    definitions = (['ws', 'values'], ['ws', 'word'], ['ws', 'options'])
+    grammar.rules.assert_called_with('arguments', *definitions)
+
+
 def test_parser_comment(parser, grammar):
     parser.comment()
     grammar.rule.assert_called_with('comment', ['comment'])

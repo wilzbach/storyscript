@@ -117,6 +117,11 @@ class Parser:
                        ('dash', 'dash', 'word', 'ws', 'values'))
         self.grammar.rules('options', *definitions)
 
+    def arguments(self):
+        self.options()
+        definitions = (['ws', 'values'], ['ws', 'word'], ['ws', 'options'])
+        self.grammar.rules('arguments', *definitions)
+
     def comment(self):
         self.grammar.token('comment', '/#(.*)/', regexp=True)
         self.grammar.rule('comment', ['comment'])
