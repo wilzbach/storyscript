@@ -114,6 +114,10 @@ class Parser:
         self.grammar.rules('next_statement', *definitions)
 
     def statements(self):
+        """
+        Defines all possible statements. Statements must be followed by an
+        indented block.
+        """
         statements = (['if_statement'], ['for_statement'],
                       ['foreach_statement'], ['wait_statement'],
                       ['next_statement'], ['else_statement'],
