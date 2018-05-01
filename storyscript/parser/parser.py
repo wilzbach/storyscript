@@ -57,8 +57,14 @@ class Parser:
         self.grammar.rule('list', definition, raw=True)
 
     def key_value(self):
-        self.grammar.token('colon', ':')
+        self.grammar.token('colon', ':', inline=True)
         self.grammar.rule('key_value', ('string', 'colon', 'values'))
+
+    def objects(self):
+        self.key_value()
+        self.grammar.tokens(('ocb', '{'), ('ccb', '}'), inline=True)
+        rule = '_OCB (key_value (_COMMA key_value)*)? _CCB'
+        self.grammar.rule('objects', rule, raw=True)
 
     def values(self):
         self.number()
@@ -66,8 +72,9 @@ class Parser:
         self.boolean()
         self.filepath()
         self.list()
+        self.objects()
         defintions = (['number'], ['string'], ['boolean'], ['filepath'],
-                      ['list'])
+                      ['list'], ['objects'])
         self.grammar.rules('values', *defintions)
 
     def operator(self):

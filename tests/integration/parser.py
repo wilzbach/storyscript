@@ -76,6 +76,16 @@ def test_parser_list_empty():
     assert node == Tree('list', [])
 
 
+def test_parser_object():
+    parser = Parser("{'color':'red','shape':1}\n")
+    result = parser.parse()
+    print(result.pretty())
+    node = result.children[0].children[0].children[0].children[0].children[0]
+    assert node.children[0].children[0] == Token('SINGLE_QUOTED', "'color'")
+    value = node.children[1].children[0].children[0]
+    assert value == Token('SINGLE_QUOTED', "'red'")
+
+
 def test_parser_assignments(var_token):
     parser = Parser('var="hello"\n')
     result = parser.parse()

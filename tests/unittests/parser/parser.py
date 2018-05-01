@@ -89,14 +89,17 @@ def test_parser_filepath(parser, grammar):
 
 
 def test_parser_values(patch, parser, grammar):
-    patch.many(Parser, ['number', 'string', 'list', 'filepath', 'boolean'])
+    patch.many(Parser, ['number', 'string', 'list', 'objects', 'filepath',
+                        'boolean'])
     parser.values()
     assert Parser.number.call_count == 1
     assert Parser.string.call_count == 1
     assert Parser.boolean.call_count == 1
     assert Parser.filepath.call_count == 1
     assert Parser.list.call_count == 1
-    definitions = (['number'], ['string'], ['boolean'], ['filepath'], ['list'])
+    assert Parser.objects.call_count == 1
+    definitions = (['number'], ['string'], ['boolean'], ['filepath'], ['list'],
+                   ['objects'])
     grammar.rules.assert_called_with('values', *definitions)
 
 
@@ -128,8 +131,17 @@ def test_parser_list(parser, grammar):
 
 def test_parser_key_value(parser, grammar):
     parser.key_value()
-    grammar.token.assert_called_with('colon', ':')
+    grammar.token.assert_called_with('colon', ':', inline=True)
     grammar.rule.assert_called_with('key_value', ('string', 'colon', 'values'))
+
+
+def test_parser_objects(patch, parser, grammar):
+    patch.object(Parser, 'key_value')
+    parser.objects()
+    assert Parser.key_value.call_count == 1
+    grammar.tokens.assert_called_with(('ocb', '{'), ('ccb', '}'), inline=True)
+    rule = '_OCB (key_value (_COMMA key_value)*)? _CCB'
+    grammar.rule.assert_called_with('objects', rule, raw=True)
 
 
 def test_parser_assignments(parser, grammar):
