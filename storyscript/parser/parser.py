@@ -56,6 +56,10 @@ class Parser:
         definition = '_OSB (values (_COMMA values)*)? _CSB'
         self.grammar.rule('list', definition, raw=True)
 
+    def key_value(self):
+        self.grammar.token('colon', ':')
+        self.grammar.rule('key_value', ('string', 'colon', 'values'))
+
     def values(self):
         self.number()
         self.string()

@@ -126,6 +126,12 @@ def test_parser_list(parser, grammar):
     grammar.rule.assert_called_with('list', definition, raw=True)
 
 
+def test_parser_key_value(parser, grammar):
+    parser.key_value()
+    grammar.token.assert_called_with('colon', ':')
+    grammar.rule.assert_called_with('key_value', ('string', 'colon', 'values'))
+
+
 def test_parser_assignments(parser, grammar):
     parser.assignments()
     grammar.load.assert_called_with('word')
