@@ -13,8 +13,8 @@ class Parser:
         self.algo = algo
 
     def line(self):
-        definitions = (['values'], ['assignments'],[ 'statements'],
-                       ['comment'], ['command'], ['block'])
+        definitions = (['values'], ['assignments'], ['operation'],
+                       ['statements'], ['comment'], ['command'], ['block'])
         self.grammar.rules('line', *definitions)
 
     def whitespaces(self):
@@ -71,6 +71,12 @@ class Parser:
                             ('multiplier', '*'), ('division', '/'))
         definitions = (['plus'], ['minus'], ['multiplier'], ['division'])
         self.grammar.rules('operator', *definitions)
+
+    def operation(self):
+        self.operator()
+        definitions = (('values', 'ws', 'operator', 'ws', 'values'),
+                       ('values', 'operator', 'values'))
+        self.grammar.rules('operation', *definitions)
 
     def assignments(self):
         self.grammar.load('word')
@@ -172,6 +178,7 @@ class Parser:
         self.values()
         self.comparisons()
         self.assignments()
+        self.operation()
         self.statements()
         self.comment()
         self.block()

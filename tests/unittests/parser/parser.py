@@ -32,8 +32,8 @@ def test_parser_init_algo():
 
 def test_parser_line(parser, grammar):
     parser.line()
-    defintions = (['values'], ['assignments'], ['statements'], ['comment'],
-                  ['command'], ['block'])
+    defintions = (['values'], ['assignments'], ['operation'], ['statements'],
+                  ['comment'], ['command'], ['block'])
     grammar.rules.assert_called_with('line', *defintions)
 
 
@@ -107,6 +107,15 @@ def test_parser_operator(parser, grammar):
     grammar.tokens.assert_called_with(*tokens)
     definitions = (['plus'], ['minus'], ['multiplier'], ['division'])
     grammar.rules.assert_called_with('operator', *definitions)
+
+
+def test_parser_operation(patch, parser, grammar):
+    patch.object(Parser, 'operator')
+    parser.operation()
+    assert Parser.operator.call_count == 1
+    definitions = (('values', 'ws', 'operator', 'ws', 'values'),
+                   ('values', 'operator', 'values'))
+    grammar.rules.assert_called_with('operation', *definitions)
 
 
 def test_parser_list(parser, grammar):
@@ -241,7 +250,7 @@ def test_parser_indenter(patch, parser):
 
 
 def test_parser_build_grammar(patch, parser):
-    patch.many(Parser, ['line', 'spaces', 'values', 'assignments',
+    patch.many(Parser, ['line', 'spaces', 'values', 'assignments', 'operation',
                         'statements', 'comment', 'block', 'comparisons',
                         'command', 'get_grammar'])
     result = parser.build_grammar()
@@ -251,6 +260,7 @@ def test_parser_build_grammar(patch, parser):
     assert Parser.spaces.call_count == 1
     assert Parser.values.call_count == 1
     assert Parser.assignments.call_count == 1
+    assert Parser.operation.call_count == 1
     assert Parser.statements.call_count == 1
     assert Parser.comment.call_count == 1
     assert Parser.block.call_count == 1

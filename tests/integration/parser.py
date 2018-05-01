@@ -45,6 +45,15 @@ def test_parser_boolean_true():
     assert node.children[0] == Token('TRUE', 'true')
 
 
+def test_parser_sum(int_token):
+    parser = Parser('3 + 3\n')
+    result = parser.parse()
+    node = result.children[0].children[0]
+    assert node.children[0].children[0].children[0].children[0] == int_token
+    assert node.children[0].children[1].children[0] == Token('PLUS', '+')
+    assert node.children[0].children[2].children[0].children[0] == int_token
+
+
 def test_parser_filepath():
     parser = Parser('`/path`\n')
     result = parser.parse()
