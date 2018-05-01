@@ -140,6 +140,12 @@ def test_parser_else_statement(parser, grammar):
     grammar.rule.assert_called_with('else_statement', ['else'])
 
 
+def test_parser_elseif_statement(parser, grammar):
+    parser.elseif_statement()
+    rule = 'ELSE _WS? IF _WS WORD [_WS comparisons _WS WORD]?'
+    grammar.rule.assert_called_with('elseif_statement', rule, raw=True)
+
+
 def test_parser_for_statement(parser, grammar):
     parser.for_statement()
     definition = ('for', 'ws', 'word', 'ws', 'in', 'ws', 'word')
@@ -170,7 +176,8 @@ def test_parser_next_statement(parser, grammar):
 
 def test_parser_statements(patch, parser, grammar):
     patch.many(Parser, ['if_statement', 'for_statement', 'foreach_statement',
-                        'wait_statement', 'next_statement', 'else_statement'])
+                        'wait_statement', 'next_statement', 'else_statement',
+                        'elseif_statement'])
     parser.statements()
     assert Parser.if_statement.call_count == 1
     assert Parser.for_statement.call_count == 1
@@ -178,8 +185,10 @@ def test_parser_statements(patch, parser, grammar):
     assert Parser.wait_statement.call_count == 1
     assert Parser.next_statement.call_count == 1
     assert Parser.else_statement.call_count == 1
+    assert Parser.elseif_statement.call_count == 1
     child_rules = (['if_statement'], ['for_statement'], ['foreach_statement'],
-                    ['wait_statement'], ['next_statement'], ['else_statement'])
+                    ['wait_statement'], ['next_statement'], ['else_statement'],
+                    ['elseif_statement'])
     grammar.rules.assert_called_with('statements', *child_rules)
 
 
