@@ -85,6 +85,10 @@ class Parser:
                        ('if', 'ws', 'word', 'ws', 'comparisons', 'ws', 'word'))
         self.grammar.rules('if_statement', *definitions)
 
+    def else_statement(self):
+        self.grammar.token('else', 'else')
+        self.grammar.rule('else_statement', ['else'])
+
     def for_statement(self):
         self.grammar.tokens(('for', 'for'), ('in', 'in'))
         definition = ('for', 'ws', 'word', 'ws', 'in', 'ws', 'word')
@@ -108,8 +112,9 @@ class Parser:
     def statements(self):
         statements = (['if_statement'], ['for_statement'],
                       ['foreach_statement'], ['wait_statement'],
-                      ['next_statement'])
+                      ['next_statement'], ['else_statement'])
         self.if_statement()
+        self.else_statement()
         self.for_statement()
         self.foreach_statement()
         self.wait_statement()

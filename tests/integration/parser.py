@@ -204,3 +204,10 @@ def test_parser_block_nested_if_block(var_token):
     things_node = node[1].children[0].children[0].children[0].children[1]
     assert things_node == Token('WORD', 'things')
     assert node[2].children[0].children[0].children[0] == var_token
+
+
+def test_parser_block_if_else(var_token):
+    parser = Parser('if expr\n\tvar=3\nelse\n\tvar=4\n')
+    result = parser.parse()
+    node = result.children[1].children[0].children[0].children[0]
+    assert node.children[0] == Token('ELSE', 'else')
