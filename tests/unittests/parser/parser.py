@@ -100,6 +100,15 @@ def test_parser_values(patch, parser, grammar):
     grammar.rules.assert_called_with('values', *definitions)
 
 
+def test_parser_operator(parser, grammar):
+    parser.operator()
+    tokens = (('plus', '+'), ('minus', '-'), ('multiplier', '*'),
+              ('division', '/'))
+    grammar.tokens.assert_called_with(*tokens)
+    definitions = (['plus'], ['minus'], ['multiplier'], ['division'])
+    grammar.rules.assert_called_with('operator', *definitions)
+
+
 def test_parser_list(parser, grammar):
     parser.list()
     tokens = (('comma', ','), ('osb', '['), ('csb', ']'))

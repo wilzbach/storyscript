@@ -66,6 +66,12 @@ class Parser:
                       ['list'])
         self.grammar.rules('values', *defintions)
 
+    def operator(self):
+        self.grammar.tokens(('plus', '+'), ('minus', '-'),
+                            ('multiplier', '*'), ('division', '/'))
+        definitions = (['plus'], ['minus'], ['multiplier'], ['division'])
+        self.grammar.rules('operator', *definitions)
+
     def assignments(self):
         self.grammar.load('word')
         self.grammar.token('equals', '=')
