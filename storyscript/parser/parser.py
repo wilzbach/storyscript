@@ -89,8 +89,14 @@ class Parser:
                        ('values', 'operator', 'values'))
         self.grammar.rules('operation', *definitions)
 
-    def assignments(self):
+    def path_fragment(self):
         self.grammar.load('word')
+        self.grammar.token('dot', '.',inline=True)
+        definitions = (('dot', 'word'), ('osb', 'int', 'csb'),
+                       ('osb', 'string', 'csb'))
+        self.grammar.rules('path_fragment', *definitions)
+
+    def assignments(self):
         self.grammar.token('equals', '=')
         self.grammar.rule('assignments', ('word', 'equals', 'values'))
 

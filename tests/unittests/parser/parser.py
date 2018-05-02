@@ -144,6 +144,15 @@ def test_parser_objects(patch, parser, grammar):
     grammar.rule.assert_called_with('objects', rule, raw=True)
 
 
+def test_parser_path_fragment(parser, grammar):
+    parser.path_fragment()
+    grammar.load.assert_called_with('word')
+    grammar.token.assert_called_with('dot', '.', inline=True)
+    definitions = (('dot', 'word'), ('osb', 'int', 'csb'),
+                   ('osb', 'string', 'csb'))
+    grammar.rules.assert_called_with('path_fragment', *definitions)
+
+
 def test_parser_assignments(parser, grammar):
     parser.assignments()
     grammar.load.assert_called_with('word')
