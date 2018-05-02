@@ -96,9 +96,14 @@ class Parser:
                        ('osb', 'string', 'csb'))
         self.grammar.rules('path_fragment', *definitions)
 
+    def path(self):
+        self.path_fragment()
+        self.grammar.rule('path', 'WORD (path_fragment)*', raw=True)
+
     def assignments(self):
+        self.path()
         self.grammar.token('equals', '=')
-        self.grammar.rule('assignments', ('word', 'equals', 'values'))
+        self.grammar.rule('assignments', ('path', 'equals', 'values'))
 
     def comparisons(self):
         tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),

@@ -153,10 +153,18 @@ def test_parser_path_fragment(parser, grammar):
     grammar.rules.assert_called_with('path_fragment', *definitions)
 
 
-def test_parser_assignments(parser, grammar):
+def test_parser_path(patch, parser, grammar):
+    patch.object(Parser, 'path_fragment')
+    parser.path()
+    Parser.path_fragment.call_count == 1
+    grammar.rule.assert_called_with('path', 'WORD (path_fragment)*', raw=True)
+
+
+def test_parser_assignments(patch, parser, grammar):
+    patch.object(Parser, 'path')
     parser.assignments()
-    grammar.load.assert_called_with('word')
-    grammar.rule.assert_called_with('assignments', ('word', 'equals',
+    assert Parser.path.call_count == 1
+    grammar.rule.assert_called_with('assignments', ('path', 'equals',
                                     'values'))
     grammar.token.assert_called_with('equals', '=')
 
