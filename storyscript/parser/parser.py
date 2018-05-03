@@ -4,6 +4,7 @@ from lark.common import UnexpectedToken
 
 from .grammar import Grammar
 from .indenter import CustomIndenter
+from .transformer import Transformer
 
 
 class Parser:
@@ -14,6 +15,9 @@ class Parser:
 
     def indenter(self):
         return CustomIndenter()
+
+    def transformer(self):
+        return Transformer()
 
     def parse(self, source):
         lark = Lark(self.grammar.build(), parser=self.algo,

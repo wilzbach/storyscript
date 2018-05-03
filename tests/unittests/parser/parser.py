@@ -4,7 +4,7 @@ from lark.common import UnexpectedToken
 
 from pytest import fixture, raises
 
-from storyscript.parser import CustomIndenter, Grammar, Parser
+from storyscript.parser import CustomIndenter, Grammar, Parser, Transformer
 
 
 @fixture
@@ -30,6 +30,11 @@ def test_parser_init_algo(patch):
 def test_parser_indenter(patch, parser):
     patch.init(CustomIndenter)
     assert isinstance(parser.indenter(), CustomIndenter)
+
+
+def test_parser_indenter(patch, parser):
+    patch.init(Transformer)
+    assert isinstance(parser.transformer(), Transformer)
 
 
 def test_parser_parse(patch, parser):
