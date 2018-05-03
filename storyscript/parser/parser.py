@@ -2,7 +2,6 @@
 from lark import Lark
 from lark.common import UnexpectedToken
 
-from .ebnf import Ebnf
 from .grammar import Grammar
 from .indenter import CustomIndenter
 
