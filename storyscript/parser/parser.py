@@ -206,11 +206,11 @@ class Parser:
         self.command()
         return self.grammar.build()
 
-    def parse(self):
+    def parse(self, source):
         lark = Lark(self.build_grammar(), parser=self.algo,
                     postlex=self.indenter())
         try:
-            tree = lark.parse(self.source)
+            tree = lark.parse(source)
         except UnexpectedToken:
             return None
         return tree
