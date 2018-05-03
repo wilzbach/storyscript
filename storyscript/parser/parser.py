@@ -8,8 +8,7 @@ from .indenter import CustomIndenter
 
 class Parser:
 
-    def __init__(self, source, algo='lalr'):
-        self.source = source
+    def __init__(self, algo='lalr'):
         self.algo = algo
 
     def line(self):

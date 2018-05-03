@@ -9,7 +9,7 @@ from storyscript.parser import CustomIndenter, Grammar, Parser
 
 @fixture
 def parser():
-    return Parser('source')
+    return Parser()
 
 
 @fixture
@@ -20,13 +20,12 @@ def grammar(magic, parser):
 
 
 def test_parser_init():
-    parser = Parser('source')
-    assert parser.source == 'source'
+    parser = Parser()
     assert parser.algo == 'lalr'
 
 
 def test_parser_init_algo():
-    parser = Parser('source', algo='algo')
+    parser = Parser(algo='algo')
     assert parser.algo == 'algo'
 
 
