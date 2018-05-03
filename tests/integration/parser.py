@@ -31,13 +31,13 @@ def test_parser_values(parser, int_token):
 def test_parser_values_single_quoted_string(parser):
     result = parser.parse("'red'\n")
     node = result.children[0].children[0].children[0].children[0]
-    assert node.children[0] == Token('SINGLE_QUOTED', "'red'")
+    assert node[0] == Token('SINGLE_QUOTED', "'red'")
 
 
 def test_parser_values_double_quoted_string(parser):
     result = parser.parse('"red"\n')
     node = result.children[0].children[0].children[0].children[0]
-    assert node.children[0] == Token('DOUBLE_QUOTED', '"red"')
+    assert node[0] == Token('DOUBLE_QUOTED', '"red"')
 
 
 def test_parser_boolean_true(parser):
@@ -77,8 +77,8 @@ def test_parser_object(parser):
     result = parser.parse("{'color':'red','shape':1}\n")
     print(result.pretty())
     node = result.children[0].children[0].children[0].children[0].children[0]
-    assert node.children[0].children[0] == Token('SINGLE_QUOTED', "'color'")
-    value = node.children[1].children[0].children[0]
+    assert node.children[0][0] == Token('SINGLE_QUOTED', "'color'")
+    value = node.children[1].children[0][0]
     assert value == Token('SINGLE_QUOTED', "'red'")
 
 
@@ -88,7 +88,7 @@ def test_parser_assignments(parser, var_token):
     assert node.children[0].children[0] == var_token
     assert node.children[1] == Token('EQUALS', '=')
     token = Token('DOUBLE_QUOTED', '"hello"')
-    assert node.children[2].children[0].children[0] == token
+    assert node.children[2].children[0][0] == token
 
 
 def test_parser_assignments_int(parser, int_token, var_token):
@@ -152,7 +152,7 @@ def test_parser_wait_statement_string(parser):
     result = parser.parse('wait "seconds"\n')
     node = result.children[0].children[0].children[0].children[0].children
     assert node[0] == Token('WAIT', 'wait')
-    assert node[1].children[0] == Token('DOUBLE_QUOTED', '"seconds"')
+    assert node[1][0] == Token('DOUBLE_QUOTED', '"seconds"')
 
 
 def test_parser_next_statement(parser):
@@ -187,7 +187,7 @@ def test_parser_command_arguments(parser):
     result = parser.parse('run container command "secret"\n')
     node = result.children[0].children[0].children[0]
     assert node.children[2].children[0] == Token('WORD', 'command')
-    token = node.children[3].children[0].children[0].children[0]
+    token = node.children[3].children[0].children[0][0]
     assert token == Token('DOUBLE_QUOTED', '"secret"')
 
 

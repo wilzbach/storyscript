@@ -3,4 +3,6 @@ from lark import Transformer as LarkTransformer
 
 
 class Transformer(LarkTransformer):
-    pass
+
+    def string(self, matches):
+        return matches
