@@ -90,7 +90,7 @@ def test_parser_assignments(var_token):
     parser = Parser('var="hello"\n')
     result = parser.parse()
     node = result.children[0].children[0].children[0]
-    assert node.children[0] == var_token
+    assert node.children[0].children[0] == var_token
     assert node.children[1] == Token('EQUALS', '=')
     token = Token('DOUBLE_QUOTED', '"hello"')
     assert node.children[2].children[0].children[0] ==  token
@@ -100,9 +100,19 @@ def test_parser_assignments_int(int_token, var_token):
     parser = Parser('var=3\n')
     result = parser.parse()
     node = result.children[0].children[0].children[0]
-    assert node.children[0] == var_token
+    assert node.children[0].children[0] == var_token
     assert node.children[1] == Token('EQUALS', '=')
     assert node.children[2].children[0].children[0] == int_token
+
+
+def test_parser_path_assignment():
+    parser = Parser('rainbow.colors[0]="blue"\n')
+    result = parser.parse()
+    print(result.pretty())
+    node = result.children[0].children[0].children[0].children[0]
+    assert node.children[0] == Token('WORD', 'rainbow')
+    assert node.children[1].children[0] == Token('WORD', 'colors')
+    assert node.children[2].children[0] == Token('INT', 0)
 
 
 def test_parser_if_statement(var_token):
@@ -213,7 +223,7 @@ def test_parser_block_if(var_token):
     result = parser.parse()
     node = result.children[0].children
     assert node[0].children[0].children[0].children[0] == Token('IF', 'if')
-    assert node[1].children[0].children[0].children[0] == var_token
+    assert node[1].children[0].children[0].children[0].children[0] == var_token
 
 
 def test_parser_block_nested_if_block(var_token):
@@ -222,7 +232,7 @@ def test_parser_block_nested_if_block(var_token):
     node = result.children[0].children
     things_node = node[1].children[0].children[0].children[0].children[1]
     assert things_node == Token('WORD', 'things')
-    assert node[2].children[0].children[0].children[0] == var_token
+    assert node[2].children[0].children[0].children[0].children[0] == var_token
 
 
 def test_parser_block_if_else():
