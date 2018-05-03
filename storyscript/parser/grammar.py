@@ -4,6 +4,11 @@ from .ebnf import Ebnf
 
 class Grammar:
 
+    """
+    Defines Storyscript's grammar using the Ebnf module, producing the complete
+    EBNF grammar for it.
+    """
+
     def __init__(self):
         self.ebnf = Ebnf()
 
