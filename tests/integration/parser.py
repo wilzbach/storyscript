@@ -8,6 +8,11 @@ from storyscript.parser import Parser
 
 
 @fixture
+def parser():
+    return Parser()
+
+
+@fixture
 def int_token():
     return Token('INT', 3)
 
