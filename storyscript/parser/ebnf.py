@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-class Grammar:
+class Ebnf:
     """
     Advanced EBNF grammar generator that provides for a readable, nicer and
     testable way of creating a grammar.
