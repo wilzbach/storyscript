@@ -4,14 +4,14 @@ from lark.common import UnexpectedToken
 
 from pytest import fixture, raises
 
-from storyscript.parser import CustomIndenter, Grammar, Parser
+from storyscript.parser import CustomIndenter, Ebnf, Parser
 
 
 @fixture
-def grammar(magic, parser):
-    grammar = magic()
-    parser.grammar = grammar
-    return grammar
+def ebnf(magic, parser):
+    ebnf = magic()
+    parser.ebnf = ebnf
+    return ebnf
 
 
 def test_parser_init():
@@ -24,23 +24,23 @@ def test_parser_init_algo():
     assert parser.algo == 'algo'
 
 
-def test_parser_line(parser, grammar):
+def test_parser_line(parser, ebnf):
     parser.line()
     defintions = (['values'], ['assignments'], ['operation'], ['statements'],
                   ['comment'], ['command'], ['block'])
-    grammar.rules.assert_called_with('line', *defintions)
+    ebnf.rules.assert_called_with('line', *defintions)
 
 
-def test_parser_whitespaces(parser, grammar):
+def test_parser_whitespaces(parser, ebnf):
     parser.whitespaces()
     tokens = (('ws', '(" ")+'), ('nl', r'/(\r?\n[\t ]*)+/'))
-    grammar.tokens.assert_called_with(*tokens, inline=True, regexp=True)
+    ebnf.tokens.assert_called_with(*tokens, inline=True, regexp=True)
 
 
-def test_parser_indentation(parser, grammar):
+def test_parser_indentation(parser, ebnf):
     parser.indentation()
     tokens = (('indent', '<INDENT>'), ('dedent', '<DEDENT>'))
-    grammar.tokens.assert_called_with(*tokens, inline=True)
+    ebnf.tokens.assert_called_with(*tokens, inline=True)
 
 
 def test_parser_spaces(patch, parser):
@@ -50,39 +50,39 @@ def test_parser_spaces(patch, parser):
     assert Parser.indentation.call_count == 1
 
 
-def test_parser_block(parser, grammar):
+def test_parser_block(parser, ebnf):
     parser.block()
     definition = 'line _NL [_INDENT block+ _DEDENT]'
-    grammar.rule.assert_called_with('block', definition, raw=True)
+    ebnf.rule.assert_called_with('block', definition, raw=True)
 
 
-def test_parser_number(parser, grammar):
+def test_parser_number(parser, ebnf):
     parser.number()
-    grammar.loads.assert_called_with(['int', 'float'])
-    grammar.rules.assert_called_with('number', ['int'], ['float'])
+    ebnf.loads.assert_called_with(['int', 'float'])
+    ebnf.rules.assert_called_with('number', ['int'], ['float'])
 
 
-def test_parser_string(parser, grammar):
+def test_parser_string(parser, ebnf):
     parser.string()
     tokens = (('single_quoted', "/'([^']*)'/"),
               ('double_quoted', '/"([^"]*)"/'))
-    grammar.tokens.assert_called_with(*tokens, regexp=True)
+    ebnf.tokens.assert_called_with(*tokens, regexp=True)
     definitions = (['single_quoted'], ['double_quoted'])
-    grammar.rules.assert_called_with('string', *definitions)
+    ebnf.rules.assert_called_with('string', *definitions)
 
 
-def test_parser_boolean(parser, grammar):
+def test_parser_boolean(parser, ebnf):
     parser.boolean()
-    grammar.tokens.assert_called_with(('true', 'true'), ('false', 'false'))
-    grammar.rules.assert_called_with('boolean', ['true'], ['false'])
+    ebnf.tokens.assert_called_with(('true', 'true'), ('false', 'false'))
+    ebnf.rules.assert_called_with('boolean', ['true'], ['false'])
 
 
-def test_parser_filepath(parser, grammar):
+def test_parser_filepath(parser, ebnf):
     parser.filepath()
-    grammar.token.assert_called_with('filepath', '/`([^"]*)`/', regexp=True)
+    ebnf.token.assert_called_with('filepath', '/`([^"]*)`/', regexp=True)
 
 
-def test_parser_values(patch, parser, grammar):
+def test_parser_values(patch, parser, ebnf):
     patch.many(Parser, ['number', 'string', 'list', 'objects', 'filepath',
                         'boolean'])
     parser.values()
@@ -94,134 +94,134 @@ def test_parser_values(patch, parser, grammar):
     assert Parser.objects.call_count == 1
     definitions = (['number'], ['string'], ['boolean'], ['filepath'], ['list'],
                    ['objects'])
-    grammar.rules.assert_called_with('values', *definitions)
+    ebnf.rules.assert_called_with('values', *definitions)
 
 
-def test_parser_operator(parser, grammar):
+def test_parser_operator(parser, ebnf):
     parser.operator()
     tokens = (('plus', '+'), ('minus', '-'), ('multiplier', '*'),
               ('division', '/'))
-    grammar.tokens.assert_called_with(*tokens)
+    ebnf.tokens.assert_called_with(*tokens)
     definitions = (['plus'], ['minus'], ['multiplier'], ['division'])
-    grammar.rules.assert_called_with('operator', *definitions)
+    ebnf.rules.assert_called_with('operator', *definitions)
 
 
-def test_parser_operation(patch, parser, grammar):
+def test_parser_operation(patch, parser, ebnf):
     patch.object(Parser, 'operator')
     parser.operation()
     assert Parser.operator.call_count == 1
     definitions = (('values', 'ws', 'operator', 'ws', 'values'),
                    ('values', 'operator', 'values'))
-    grammar.rules.assert_called_with('operation', *definitions)
+    ebnf.rules.assert_called_with('operation', *definitions)
 
 
-def test_parser_list(parser, grammar):
+def test_parser_list(parser, ebnf):
     parser.list()
     tokens = (('comma', ','), ('osb', '['), ('csb', ']'))
-    grammar.tokens.assert_called_with(*tokens, inline=True)
+    ebnf.tokens.assert_called_with(*tokens, inline=True)
     definition = '_OSB (values (_COMMA values)*)? _CSB'
-    grammar.rule.assert_called_with('list', definition, raw=True)
+    ebnf.rule.assert_called_with('list', definition, raw=True)
 
 
-def test_parser_key_value(parser, grammar):
+def test_parser_key_value(parser, ebnf):
     parser.key_value()
-    grammar.token.assert_called_with('colon', ':', inline=True)
-    grammar.rule.assert_called_with('key_value', ('string', 'colon', 'values'))
+    ebnf.token.assert_called_with('colon', ':', inline=True)
+    ebnf.rule.assert_called_with('key_value', ('string', 'colon', 'values'))
 
 
-def test_parser_objects(patch, parser, grammar):
+def test_parser_objects(patch, parser, ebnf):
     patch.object(Parser, 'key_value')
     parser.objects()
     assert Parser.key_value.call_count == 1
-    grammar.tokens.assert_called_with(('ocb', '{'), ('ccb', '}'), inline=True)
+    ebnf.tokens.assert_called_with(('ocb', '{'), ('ccb', '}'), inline=True)
     rule = '_OCB (key_value (_COMMA key_value)*)? _CCB'
-    grammar.rule.assert_called_with('objects', rule, raw=True)
+    ebnf.rule.assert_called_with('objects', rule, raw=True)
 
 
-def test_parser_path_fragment(parser, grammar):
+def test_parser_path_fragment(parser, ebnf):
     parser.path_fragment()
-    grammar.load.assert_called_with('word')
-    grammar.token.assert_called_with('dot', '.', inline=True)
+    ebnf.load.assert_called_with('word')
+    ebnf.token.assert_called_with('dot', '.', inline=True)
     definitions = (('dot', 'word'), ('osb', 'int', 'csb'),
                    ('osb', 'string', 'csb'))
-    grammar.rules.assert_called_with('path_fragment', *definitions)
+    ebnf.rules.assert_called_with('path_fragment', *definitions)
 
 
-def test_parser_path(patch, parser, grammar):
+def test_parser_path(patch, parser, ebnf):
     patch.object(Parser, 'path_fragment')
     parser.path()
     Parser.path_fragment.call_count == 1
-    grammar.rule.assert_called_with('path', 'WORD (path_fragment)*', raw=True)
+    ebnf.rule.assert_called_with('path', 'WORD (path_fragment)*', raw=True)
 
 
-def test_parser_assignments(patch, parser, grammar):
+def test_parser_assignments(patch, parser, ebnf):
     patch.object(Parser, 'path')
     parser.assignments()
     assert Parser.path.call_count == 1
-    grammar.rule.assert_called_with('assignments', ('path', 'equals',
+    ebnf.rule.assert_called_with('assignments', ('path', 'equals',
                                     'values'))
-    grammar.token.assert_called_with('equals', '=')
+    ebnf.token.assert_called_with('equals', '=')
 
 
-def test_parser_comparisons(parser, grammar):
+def test_parser_comparisons(parser, ebnf):
     parser.comparisons()
     tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
               ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
-    grammar.tokens.assert_called_with(*tokens)
+    ebnf.tokens.assert_called_with(*tokens)
     definitions = (['greater'], ['greater_equal'], ['lesser'],
                    ['lesser_equal'], ['not'], ['equal'])
-    grammar.rules.assert_called_with('comparisons', *definitions)
+    ebnf.rules.assert_called_with('comparisons', *definitions)
 
 
-def test_parser_if_statement(parser, grammar):
+def test_parser_if_statement(parser, ebnf):
     parser.if_statement()
     definitions = (('if', 'ws', 'word'),
                    ('if', 'ws', 'word', 'ws', 'comparisons', 'ws', 'word'))
-    grammar.rules.assert_called_with('if_statement', *definitions)
-    grammar.token.assert_called_with('if', 'if')
+    ebnf.rules.assert_called_with('if_statement', *definitions)
+    ebnf.token.assert_called_with('if', 'if')
 
 
-def test_parser_else_statement(parser, grammar):
+def test_parser_else_statement(parser, ebnf):
     parser.else_statement()
-    grammar.token.assert_called_with('else', 'else')
-    grammar.rule.assert_called_with('else_statement', ['else'])
+    ebnf.token.assert_called_with('else', 'else')
+    ebnf.rule.assert_called_with('else_statement', ['else'])
 
 
-def test_parser_elseif_statement(parser, grammar):
+def test_parser_elseif_statement(parser, ebnf):
     parser.elseif_statement()
     rule = 'ELSE _WS? IF _WS WORD [_WS comparisons _WS WORD]?'
-    grammar.rule.assert_called_with('elseif_statement', rule, raw=True)
+    ebnf.rule.assert_called_with('elseif_statement', rule, raw=True)
 
 
-def test_parser_for_statement(parser, grammar):
+def test_parser_for_statement(parser, ebnf):
     parser.for_statement()
     definition = ('for', 'ws', 'word', 'ws', 'in', 'ws', 'word')
-    grammar.rule.assert_called_with('for_statement', definition)
-    grammar.tokens.assert_called_with(('for', 'for'), ('in', 'in'))
+    ebnf.rule.assert_called_with('for_statement', definition)
+    ebnf.tokens.assert_called_with(('for', 'for'), ('in', 'in'))
 
 
-def test_parser_foreach_statement(parser, grammar):
+def test_parser_foreach_statement(parser, ebnf):
     parser.foreach_statement()
     definition = ('foreach', 'ws', 'word', 'ws', 'as', 'ws', 'word')
-    grammar.rule.assert_called_with('foreach_statement', definition)
-    grammar.tokens.assert_called_with(('foreach', 'foreach'), ('as', 'as'))
+    ebnf.rule.assert_called_with('foreach_statement', definition)
+    ebnf.tokens.assert_called_with(('foreach', 'foreach'), ('as', 'as'))
 
 
-def test_parser_wait_statement(parser, grammar):
+def test_parser_wait_statement(parser, ebnf):
     parser.wait_statement()
     definitions = (('wait', 'ws', 'word'), ('wait', 'ws', 'string'))
-    grammar.rules.assert_called_with('wait_statement', *definitions)
-    grammar.token.assert_called_with('wait', 'wait')
+    ebnf.rules.assert_called_with('wait_statement', *definitions)
+    ebnf.token.assert_called_with('wait', 'wait')
 
 
-def test_parser_next_statement(parser, grammar):
+def test_parser_next_statement(parser, ebnf):
     parser.next_statement()
-    grammar.token.assert_called_with('next', 'next')
+    ebnf.token.assert_called_with('next', 'next')
     definitions = (('next', 'ws', 'word'), ('next', 'ws', 'filepath'))
-    grammar.rules.assert_called_with('next_statement', *definitions)
+    ebnf.rules.assert_called_with('next_statement', *definitions)
 
 
-def test_parser_statements(patch, parser, grammar):
+def test_parser_statements(patch, parser, ebnf):
     patch.many(Parser, ['if_statement', 'for_statement', 'foreach_statement',
                         'wait_statement', 'next_statement', 'else_statement',
                         'elseif_statement'])
@@ -236,41 +236,41 @@ def test_parser_statements(patch, parser, grammar):
     child_rules = (['if_statement'], ['for_statement'], ['foreach_statement'],
                    ['wait_statement'], ['next_statement'], ['else_statement'],
                    ['elseif_statement'])
-    grammar.rules.assert_called_with('statements', *child_rules)
+    ebnf.rules.assert_called_with('statements', *child_rules)
 
 
-def test_parser_options(parser, grammar):
+def test_parser_options(parser, ebnf):
     parser.options()
     definitions = (('dash', 'dash', 'word', 'ws', 'word'),
                    ('dash', 'dash', 'word', 'ws', 'values'))
-    grammar.rules.assert_called_with('options', *definitions)
+    ebnf.rules.assert_called_with('options', *definitions)
 
 
-def test_parser_arguments(patch, parser, grammar):
+def test_parser_arguments(patch, parser, ebnf):
     patch.object(Parser, 'options')
     parser.arguments()
     assert Parser.options.call_count == 1
     definitions = (['ws', 'values'], ['ws', 'word'], ['ws', 'options'])
-    grammar.rules.assert_called_with('arguments', *definitions)
+    ebnf.rules.assert_called_with('arguments', *definitions)
 
 
-def test_parser_command(patch, parser, grammar):
+def test_parser_command(patch, parser, ebnf):
     patch.object(Parser, 'arguments')
     parser.command()
     assert Parser.arguments.call_count == 1
     rule = 'RUN _WS WORD arguments*|WORD arguments*'
-    grammar.rule.assert_called_with('command', rule, raw=True)
+    ebnf.rule.assert_called_with('command', rule, raw=True)
 
 
-def test_parser_comment(parser, grammar):
+def test_parser_comment(parser, ebnf):
     parser.comment()
-    grammar.rule.assert_called_with('comment', ['comment'])
-    grammar.token.assert_called_with('comment', '/#(.*)/', regexp=True)
+    ebnf.rule.assert_called_with('comment', ['comment'])
+    ebnf.token.assert_called_with('comment', '/#(.*)/', regexp=True)
 
 
-def test_parser_get_grammar(patch, parser):
-    patch.init(Grammar)
-    assert isinstance(parser.get_grammar(), Grammar)
+def test_parser_get_ebnf(patch, parser):
+    patch.init(Ebnf)
+    assert isinstance(parser.get_ebnf(), Ebnf)
 
 
 def test_parser_indenter(patch, parser):
@@ -281,10 +281,10 @@ def test_parser_indenter(patch, parser):
 def test_parser_build_grammar(patch, parser):
     patch.many(Parser, ['line', 'spaces', 'values', 'assignments', 'operation',
                         'statements', 'comment', 'block', 'comparisons',
-                        'command', 'get_grammar'])
+                        'command', 'get_ebnf'])
     result = parser.build_grammar()
-    assert parser.grammar == parser.get_grammar()
-    parser.grammar.start.assert_called_with('_NL? block')
+    assert parser.ebnf == parser.get_ebnf()
+    parser.ebnf.start.assert_called_with('_NL? block')
     assert Parser.line.call_count == 1
     assert Parser.spaces.call_count == 1
     assert Parser.values.call_count == 1
@@ -295,7 +295,7 @@ def test_parser_build_grammar(patch, parser):
     assert Parser.block.call_count == 1
     assert Parser.comparisons.call_count == 1
     assert Parser.command.call_count == 1
-    assert result == parser.grammar.build()
+    assert result == parser.ebnf.build()
 
 
 def test_parser_parse(patch, parser):

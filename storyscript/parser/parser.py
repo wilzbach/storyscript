@@ -2,7 +2,7 @@
 from lark import Lark
 from lark.common import UnexpectedToken
 
-from .grammar import Grammar
+from .ebnf import Ebnf
 from .indenter import CustomIndenter
 
 
@@ -14,15 +14,15 @@ class Parser:
     def line(self):
         definitions = (['values'], ['assignments'], ['operation'],
                        ['statements'], ['comment'], ['command'], ['block'])
-        self.grammar.rules('line', *definitions)
+        self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
         tokens = (('ws', '(" ")+'), ('nl', r'/(\r?\n[\t ]*)+/'))
-        self.grammar.tokens(*tokens, inline=True, regexp=True)
+        self.ebnf.tokens(*tokens, inline=True, regexp=True)
 
     def indentation(self):
         tokens = (('indent', '<INDENT>'), ('dedent', '<DEDENT>'))
-        self.grammar.tokens(*tokens, inline=True)
+        self.ebnf.tokens(*tokens, inline=True)
 
     def spaces(self):
         self.whitespaces()
@@ -30,40 +30,40 @@ class Parser:
 
     def block(self):
         definition = 'line _NL [_INDENT block+ _DEDENT]'
-        self.grammar.rule('block', definition, raw=True)
+        self.ebnf.rule('block', definition, raw=True)
 
     def number(self):
-        self.grammar.loads(['int', 'float'])
-        self.grammar.rules('number', ['int'], ['float'])
+        self.ebnf.loads(['int', 'float'])
+        self.ebnf.rules('number', ['int'], ['float'])
 
     def string(self):
         tokens = (('single_quoted', "/'([^']*)'/"),
                   ('double_quoted', '/"([^"]*)"/'))
-        self.grammar.tokens(*tokens, regexp=True)
-        self.grammar.rules('string', ['single_quoted'], ['double_quoted'])
+        self.ebnf.tokens(*tokens, regexp=True)
+        self.ebnf.rules('string', ['single_quoted'], ['double_quoted'])
 
     def boolean(self):
-        self.grammar.tokens(('true', 'true'), ('false', 'false'))
-        self.grammar.rules('boolean', ['true'], ['false'])
+        self.ebnf.tokens(('true', 'true'), ('false', 'false'))
+        self.ebnf.rules('boolean', ['true'], ['false'])
 
     def filepath(self):
-        self.grammar.token('filepath', '/`([^"]*)`/', regexp=True)
+        self.ebnf.token('filepath', '/`([^"]*)`/', regexp=True)
 
     def list(self):
-        self.grammar.tokens(('comma', ','), ('osb', '['), ('csb', ']'),
+        self.ebnf.tokens(('comma', ','), ('osb', '['), ('csb', ']'),
                             inline=True)
         definition = '_OSB (values (_COMMA values)*)? _CSB'
-        self.grammar.rule('list', definition, raw=True)
+        self.ebnf.rule('list', definition, raw=True)
 
     def key_value(self):
-        self.grammar.token('colon', ':', inline=True)
-        self.grammar.rule('key_value', ('string', 'colon', 'values'))
+        self.ebnf.token('colon', ':', inline=True)
+        self.ebnf.rule('key_value', ('string', 'colon', 'values'))
 
     def objects(self):
         self.key_value()
-        self.grammar.tokens(('ocb', '{'), ('ccb', '}'), inline=True)
+        self.ebnf.tokens(('ocb', '{'), ('ccb', '}'), inline=True)
         rule = '_OCB (key_value (_COMMA key_value)*)? _CCB'
-        self.grammar.rule('objects', rule, raw=True)
+        self.ebnf.rule('objects', rule, raw=True)
 
     def values(self):
         self.number()
@@ -74,77 +74,77 @@ class Parser:
         self.objects()
         defintions = (['number'], ['string'], ['boolean'], ['filepath'],
                       ['list'], ['objects'])
-        self.grammar.rules('values', *defintions)
+        self.ebnf.rules('values', *defintions)
 
     def operator(self):
-        self.grammar.tokens(('plus', '+'), ('minus', '-'),
-                            ('multiplier', '*'), ('division', '/'))
+        self.ebnf.tokens(('plus', '+'), ('minus', '-'), ('multiplier', '*'),
+                         ('division', '/'))
         definitions = (['plus'], ['minus'], ['multiplier'], ['division'])
-        self.grammar.rules('operator', *definitions)
+        self.ebnf.rules('operator', *definitions)
 
     def operation(self):
         self.operator()
         definitions = (('values', 'ws', 'operator', 'ws', 'values'),
                        ('values', 'operator', 'values'))
-        self.grammar.rules('operation', *definitions)
+        self.ebnf.rules('operation', *definitions)
 
     def path_fragment(self):
-        self.grammar.load('word')
-        self.grammar.token('dot', '.',inline=True)
+        self.ebnf.load('word')
+        self.ebnf.token('dot', '.',inline=True)
         definitions = (('dot', 'word'), ('osb', 'int', 'csb'),
                        ('osb', 'string', 'csb'))
-        self.grammar.rules('path_fragment', *definitions)
+        self.ebnf.rules('path_fragment', *definitions)
 
     def path(self):
         self.path_fragment()
-        self.grammar.rule('path', 'WORD (path_fragment)*', raw=True)
+        self.ebnf.rule('path', 'WORD (path_fragment)*', raw=True)
 
     def assignments(self):
         self.path()
-        self.grammar.token('equals', '=')
-        self.grammar.rule('assignments', ('path', 'equals', 'values'))
+        self.ebnf.token('equals', '=')
+        self.ebnf.rule('assignments', ('path', 'equals', 'values'))
 
     def comparisons(self):
         tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
                   ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
-        self.grammar.tokens(*tokens)
+        self.ebnf.tokens(*tokens)
         definitions = (['greater'], ['greater_equal'], ['lesser'],
                        ['lesser_equal'], ['not'], ['equal'])
-        self.grammar.rules('comparisons', *definitions)
+        self.ebnf.rules('comparisons', *definitions)
 
     def if_statement(self):
-        self.grammar.token('if', 'if')
+        self.ebnf.token('if', 'if')
         definitions = (('if', 'ws', 'word'),
                        ('if', 'ws', 'word', 'ws', 'comparisons', 'ws', 'word'))
-        self.grammar.rules('if_statement', *definitions)
+        self.ebnf.rules('if_statement', *definitions)
 
     def else_statement(self):
-        self.grammar.token('else', 'else')
-        self.grammar.rule('else_statement', ['else'])
+        self.ebnf.token('else', 'else')
+        self.ebnf.rule('else_statement', ['else'])
 
     def elseif_statement(self):
         rule = 'ELSE _WS? IF _WS WORD [_WS comparisons _WS WORD]?'
-        self.grammar.rule('elseif_statement', rule, raw=True)
+        self.ebnf.rule('elseif_statement', rule, raw=True)
 
     def for_statement(self):
-        self.grammar.tokens(('for', 'for'), ('in', 'in'))
+        self.ebnf.tokens(('for', 'for'), ('in', 'in'))
         definition = ('for', 'ws', 'word', 'ws', 'in', 'ws', 'word')
-        self.grammar.rule('for_statement', definition)
+        self.ebnf.rule('for_statement', definition)
 
     def foreach_statement(self):
-        self.grammar.tokens(('foreach', 'foreach'), ('as', 'as'))
+        self.ebnf.tokens(('foreach', 'foreach'), ('as', 'as'))
         definition = ('foreach', 'ws', 'word', 'ws', 'as', 'ws', 'word')
-        self.grammar.rule('foreach_statement', definition)
+        self.ebnf.rule('foreach_statement', definition)
 
     def wait_statement(self):
-        self.grammar.token('wait', 'wait')
+        self.ebnf.token('wait', 'wait')
         definitions = (('wait', 'ws', 'word'), ('wait', 'ws', 'string'))
-        self.grammar.rules('wait_statement', *definitions)
+        self.ebnf.rules('wait_statement', *definitions)
 
     def next_statement(self):
-        self.grammar.token('next', 'next')
+        self.ebnf.token('next', 'next')
         definitions = (('next', 'ws', 'word'), ('next', 'ws', 'filepath'))
-        self.grammar.rules('next_statement', *definitions)
+        self.ebnf.rules('next_statement', *definitions)
 
     def statements(self):
         """
@@ -162,38 +162,38 @@ class Parser:
         self.foreach_statement()
         self.wait_statement()
         self.next_statement()
-        self.grammar.rules('statements', *statements)
+        self.ebnf.rules('statements', *statements)
 
     def options(self):
-        self.grammar.token('dash', '-')
+        self.ebnf.token('dash', '-')
         definitions = (('dash', 'dash', 'word', 'ws', 'word'),
                        ('dash', 'dash', 'word', 'ws', 'values'))
-        self.grammar.rules('options', *definitions)
+        self.ebnf.rules('options', *definitions)
 
     def arguments(self):
         self.options()
         definitions = (['ws', 'values'], ['ws', 'word'], ['ws', 'options'])
-        self.grammar.rules('arguments', *definitions)
+        self.ebnf.rules('arguments', *definitions)
 
     def command(self):
         self.arguments()
-        self.grammar.token('run', 'run')
+        self.ebnf.token('run', 'run')
         rule = 'RUN _WS WORD arguments*|WORD arguments*'
-        self.grammar.rule('command', rule, raw=True)
+        self.ebnf.rule('command', rule, raw=True)
 
     def comment(self):
-        self.grammar.token('comment', '/#(.*)/', regexp=True)
-        self.grammar.rule('comment', ['comment'])
+        self.ebnf.token('comment', '/#(.*)/', regexp=True)
+        self.ebnf.rule('comment', ['comment'])
 
-    def get_grammar(self):
-        return Grammar()
+    def get_ebnf(self):
+        return Ebnf()
 
     def indenter(self):
         return CustomIndenter()
 
     def build_grammar(self):
-        self.grammar = self.get_grammar()
-        self.grammar.start('_NL? block')
+        self.ebnf = self.get_ebnf()
+        self.ebnf.start('_NL? block')
         self.line()
         self.spaces()
         self.values()
@@ -204,7 +204,7 @@ class Parser:
         self.comment()
         self.block()
         self.command()
-        return self.grammar.build()
+        return self.ebnf.build()
 
     def parse(self, source):
         lark = Lark(self.build_grammar(), parser=self.algo,
