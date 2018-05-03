@@ -8,11 +8,6 @@ from storyscript.parser import CustomIndenter, Grammar, Parser
 
 
 @fixture
-def parser():
-    return Parser()
-
-
-@fixture
 def grammar(magic, parser):
     grammar = magic()
     parser.grammar = grammar
@@ -124,7 +119,7 @@ def test_parser_list(parser, grammar):
     parser.list()
     tokens = (('comma', ','), ('osb', '['), ('csb', ']'))
     grammar.tokens.assert_called_with(*tokens, inline=True)
-    definition ='_OSB (values (_COMMA values)*)? _CSB'
+    definition = '_OSB (values (_COMMA values)*)? _CSB'
     grammar.rule.assert_called_with('list', definition, raw=True)
 
 
@@ -173,8 +168,8 @@ def test_parser_comparisons(parser, grammar):
     tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
               ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
     grammar.tokens.assert_called_with(*tokens)
-    definitions = (['greater'], ['greater_equal'], ['lesser'], ['lesser_equal'],
-                   ['not'], ['equal'])
+    definitions = (['greater'], ['greater_equal'], ['lesser'],
+                   ['lesser_equal'], ['not'], ['equal'])
     grammar.rules.assert_called_with('comparisons', *definitions)
 
 
@@ -239,8 +234,8 @@ def test_parser_statements(patch, parser, grammar):
     assert Parser.else_statement.call_count == 1
     assert Parser.elseif_statement.call_count == 1
     child_rules = (['if_statement'], ['for_statement'], ['foreach_statement'],
-                    ['wait_statement'], ['next_statement'], ['else_statement'],
-                    ['elseif_statement'])
+                   ['wait_statement'], ['next_statement'], ['else_statement'],
+                   ['elseif_statement'])
     grammar.rules.assert_called_with('statements', *child_rules)
 
 
