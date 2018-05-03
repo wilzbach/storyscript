@@ -26,4 +26,4 @@ class Parser:
             tree = lark.parse(source)
         except UnexpectedToken:
             return None
-        return tree
+        return self.transformer().transform(tree)

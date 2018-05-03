@@ -32,7 +32,7 @@ def test_parser_indenter(patch, parser):
     assert isinstance(parser.indenter(), CustomIndenter)
 
 
-def test_parser_indenter(patch, parser):
+def test_parser_transfomer(patch, parser):
     patch.init(Transformer)
     assert isinstance(parser.transformer(), Transformer)
 
@@ -43,17 +43,18 @@ def test_parser_parse(patch, parser):
     """
     patch.init(Lark)
     patch.object(Lark, 'parse')
-    patch.object(Parser, 'indenter')
+    patch.many(Parser, ['indenter', 'transformer'])
     result = parser.parse('source')
     Lark.__init__.assert_called_with(parser.grammar.build(),
                                      parser=parser.algo,
                                      postlex=Parser.indenter())
     Lark.parse.assert_called_with('source')
-    assert result == Lark.parse()
+    Parser.transformer().transform.assert_called_with(Lark.parse())
+    assert result == Parser.transformer().transform()
 
 
 def test_parser_parse_unexpected_token(patch, parser):
     patch.init(Lark)
     patch.object(Lark, 'parse', side_effect=UnexpectedToken('', '', '', ''))
-    patch.object(Parser, 'indenter')
+    patch.many(Parser, ['indenter', 'transformer'])
     assert parser.parse('source') is None
