@@ -51,15 +51,10 @@ def test_parser_parse(patch, parser):
     """
     Ensures the build method can build the grammar
     """
-    patch.init(Lark)
-    patch.object(Lark, 'parse')
-    patch.many(Parser, ['indenter', 'transformer'])
+    patch.many(Parser, ['lark', 'transformer'])
     result = parser.parse('source')
-    Lark.__init__.assert_called_with(parser.grammar.build(),
-                                     parser=parser.algo,
-                                     postlex=Parser.indenter())
-    Lark.parse.assert_called_with('source')
-    Parser.transformer().transform.assert_called_with(Lark.parse())
+    Parser.lark().parse.assert_called_with('source')
+    Parser.transformer().transform.assert_called_with(Parser.lark().parse())
     assert result == Parser.transformer().transform()
 
 
