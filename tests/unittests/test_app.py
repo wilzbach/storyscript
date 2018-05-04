@@ -87,3 +87,13 @@ def test_app_parse_json(mocker, parser, read_story):
     kwargs = {'indent': 2, 'separators': (',', ': ')}
     json.dumps.assert_called_with(Parser.parse().json(), **kwargs)
     assert result == {'one.story': json.dumps()}
+
+
+def test_app_lexer(patch, read_story):
+    patch.init(Parser)
+    patch.object(Parser, 'lex')
+    patch.object(App, 'get_stories', return_value=['one.story'])
+    result = App.lex('/path')
+    App.read_story.assert_called_with('one.story')
+    Parser.lex.assert_called_with(App.read_story())
+    assert result == {'one.story': Parser.lex()}

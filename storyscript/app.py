@@ -46,3 +46,12 @@ class App:
                                            indent=2,
                                            separators=(',', ': '))
         return results
+
+    @classmethod
+    def lex(cls, path):
+        parser = Parser()
+        stories = cls.get_stories(path)
+        results = {}
+        for story in stories:
+            results[story] = parser.lex(cls.read_story(story))
+        return results
