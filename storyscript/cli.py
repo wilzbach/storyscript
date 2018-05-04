@@ -44,3 +44,16 @@ class Cli:
             for file, story_json in results.items():
                 click.echo('File: {}'.format(file))
                 click.echo(story_json)
+
+    @staticmethod
+    @main.command()
+    @click.argument('storypath')
+    def lex(storypath):
+        """
+        Shows lexer tokens for given stories
+        """
+        results = App.lex(storypath)
+        for file, tokens in results.items():
+            click.echo('File: {}'.format(file))
+            for n, token in enumerate(tokens):
+                click.echo('{} {} {}'.format(n, token.type, token.value))

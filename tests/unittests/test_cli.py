@@ -79,3 +79,15 @@ def test_cli_parse_json(mocker, runner, echo, app, option):
     runner.invoke(Cli.parse, ['/path/to/story', option])
     click.echo.assert_called_with('json')
     assert click.echo.call_count == 2
+
+
+def test_cli_lexer(patch, magic, runner, app, echo):
+    """
+    Ensures the lex command outputs lexer tokens
+    """
+    token = magic(type='token', value='value')
+    patch.object(App, 'lex', return_value={'one.story': [token]})
+    runner.invoke(Cli.lex, ['/path'])
+    app.lex.assert_called_with('/path')
+    click.echo.assert_called_with('0 token value')
+    assert click.echo.call_count == 2
