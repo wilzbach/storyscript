@@ -60,6 +60,18 @@ def test_parser_parse_unexpected_token(patch, parser):
     assert parser.parse('source') is None
 
 
+def test_parser_lex(patch, parser):
+    patch.init(Lark)
+    patch.object(Lark, 'lex')
+    patch.object(Parser, 'indenter')
+    result = parser.lex('source')
+    Lark.__init__.assert_called_with(parser.grammar.build(),
+                                     parser=parser.algo,
+                                     postlex=Parser.indenter())
+    Lark.lex.assert_called_with('source')
+    assert result == Lark.lex()
+
+
 def test_parser_json(patch, parser):
     patch.object(Parser, 'parse')
     result = parser.json('source')
