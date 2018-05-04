@@ -27,3 +27,6 @@ class Parser:
         except UnexpectedToken:
             return None
         return self.transformer().transform(tree)
+
+    def json(self, source):
+        return self.parse(source).json()
