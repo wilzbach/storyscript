@@ -39,24 +39,15 @@ def test_cli_version(mocker, runner, echo):
     click.echo.assert_called_with(message)
 
 
-def test_cli_parse(mocker, runner, echo, app):
+def test_cli_parse(patch, runner, echo, app):
     """
     Ensures the parse command parses a story
     """
-    mocker.patch.object(click, 'style')
-    runner.invoke(Cli.parse, ['/path/to/story'])
-    App.parse.assert_called_with('/path/to/story', debug=False, as_json=False)
+    patch.object(click, 'style')
+    runner.invoke(Cli.parse, ['/path'])
+    App.parse.assert_called_with('/path', json=False)
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
-
-
-@mark.parametrize('debug', ['--debug', '-d'])
-def test_cli_parse_debug(runner, app, debug):
-    """
-    Ensures --debug is passed where needed
-    """
-    runner.invoke(Cli.parse, ['/path/to/story', debug])
-    App.parse.assert_called_with('/path/to/story', debug=True, as_json=False)
 
 
 @mark.parametrize('option', ['--silent', '-s'])
@@ -64,8 +55,8 @@ def test_cli_parse_silent(runner, echo, app, option):
     """
     Ensures --silent makes everything quiet
     """
-    result = runner.invoke(Cli.parse, ['/path/to/story', option])
-    App.parse.assert_called_with('/path/to/story', debug=False, as_json=False)
+    result = runner.invoke(Cli.parse, ['/path', option])
+    App.parse.assert_called_with('/path', json=False)
     assert result.output == ''
     assert click.echo.call_count == 0
 
@@ -76,7 +67,8 @@ def test_cli_parse_json(mocker, runner, echo, app, option):
     Ensures --json outputs json
     """
     App.parse.return_value = {'story.one': 'json'}
-    runner.invoke(Cli.parse, ['/path/to/story', option])
+    runner.invoke(Cli.parse, ['/path', option])
+    App.parse.assert_called_with('/path', json=True)
     click.echo.assert_called_with('json')
     assert click.echo.call_count == 2
 

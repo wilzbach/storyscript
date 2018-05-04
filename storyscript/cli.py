@@ -7,7 +7,6 @@ from .version import version as app_version
 class Cli:
 
     version_help = 'Prints Storyscript version'
-    debug_help = 'Debug mode'
     silent_help = 'Silent mode. Return syntax errors only.'
 
     @click.group(invoke_without_command=True)
@@ -30,12 +29,11 @@ class Cli:
     @click.argument('storypath')
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
-    @click.option('--debug', '-d', is_flag=True, help=debug_help)
-    def parse(storypath, json, silent, debug):
+    def parse(storypath, json, silent):
         """
         Parses stories and prints the resulting json
         """
-        results = App.parse(storypath, debug=debug, as_json=json)
+        results = App.parse(storypath, json=json)
         if not silent:
             if not json:
                 click.echo(click.style('Script syntax passed!', fg='green'))
