@@ -19,6 +19,10 @@ class Parser:
     def transformer(self):
         return Transformer()
 
+    def lark(self):
+        grammar = self.grammar.build()
+        return Lark(grammar, parser=self.algo, postlex=self.indenter())
+
     def parse(self, source):
         lark = Lark(self.grammar.build(), parser=self.algo,
                     postlex=self.indenter())

@@ -37,6 +37,16 @@ def test_parser_transfomer(patch, parser):
     assert isinstance(parser.transformer(), Transformer)
 
 
+def test_parser_lark(patch, parser):
+    patch.init(Lark)
+    patch.object(Parser, 'indenter')
+    result = parser.lark()
+    Lark.__init__.assert_called_with(parser.grammar.build(),
+                                     parser=parser.algo,
+                                     postlex=Parser.indenter())
+    assert isinstance(result, Lark)
+
+
 def test_parser_parse(patch, parser):
     """
     Ensures the build method can build the grammar
