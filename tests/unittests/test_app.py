@@ -64,29 +64,29 @@ def test_app_get_stories_directory(mocker):
     assert App.get_stories('stories') == ['root/one.story']
 
 
-def test_app_parse(mocker, parser, read_story):
+def test_app_parse(patch, parser, read_story):
     """
-    Ensures App.parse runs the parser
+    Ensures App.parse runs Parser.parse
     """
-    mocker.patch.object(App, 'get_stories', return_value=['one.story'])
+    patch.init(Parser)
+    patch.object(Parser, 'parse')
+    patch.object(App, 'get_stories', return_value=['one.story'])
     result = App.parse('path')
-    kwargs = {'debug': False, 'using_cli': True}
     App.get_stories.assert_called_with('path')
     App.read_story.assert_called_with('one.story')
-    Parser().parse.assert_called_with(App.read_story(), **kwargs)
+    Parser().parse.assert_called_with(App.read_story(), json=False)
     assert result == {'one.story': Parser().parse()}
 
 
-def test_app_parse_json(mocker, parser, read_story):
+def test_app_parse_json(patch, parser, read_story):
     """
-    Ensures App.parse runs the parser
+    Ensures App.parse runs Parser.parse with json
     """
-    mocker.patch.object(json, 'dumps')
-    mocker.patch.object(App, 'get_stories', return_value=['one.story'])
-    result = App.parse('/path/to/story', as_json=True)
-    kwargs = {'indent': 2, 'separators': (',', ': ')}
-    json.dumps.assert_called_with(Parser.parse().json(), **kwargs)
-    assert result == {'one.story': json.dumps()}
+    patch.init(Parser)
+    patch.object(Parser, 'parse')
+    patch.object(App, 'get_stories', return_value=['one.story'])
+    App.parse('path', json=True)
+    Parser().parse.assert_called_with(App.read_story(), json=True)
 
 
 def test_app_lexer(patch, read_story):
