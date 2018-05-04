@@ -1,7 +1,6 @@
 import json
 import os
 
-from .lexer import Lexer
 from .parser import Parser
 
 
@@ -46,17 +45,4 @@ class App:
                 results[file] = json.dumps(result.json(),
                                            indent=2,
                                            separators=(',', ': '))
-        return results
-
-    @classmethod
-    def lexer(cls, storypath):
-        """
-        Runs only the lexer
-        """
-        results = {}
-        stories = cls.get_stories(storypath)
-        for story in stories:
-            lexer = Lexer()
-            lexer.input(cls.read_story(story))
-            results[story] = lexer.token_stream
         return results

@@ -4,7 +4,6 @@ import os
 from pytest import fixture
 
 from storyscript.app import App
-from storyscript.lexer import Lexer
 from storyscript.parser import Parser
 
 
@@ -88,18 +87,3 @@ def test_app_parse_json(mocker, parser, read_story):
     kwargs = {'indent': 2, 'separators': (',', ': ')}
     json.dumps.assert_called_with(Parser.parse().json(), **kwargs)
     assert result == {'one.story': json.dumps()}
-
-
-def test_app_lexer(mocker, read_story):
-    """
-    Ensures App.lexer runs the lexer
-    """
-    mocker.patch.object(Lexer, '__init__', return_value=None)
-    mocker.patch.object(Lexer, 'input')
-    ts = mocker.patch.object(Lexer, 'token_stream', create=True)
-    mocker.patch.object(App, 'get_stories', return_value=['one.story'])
-    result = App.lexer('path')
-    App.get_stories.assert_called_with('path')
-    App.read_story.assert_called_with('one.story')
-    Lexer.input.assert_called_with(App.read_story())
-    assert result['one.story'] == ts
