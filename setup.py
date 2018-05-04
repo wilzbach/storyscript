@@ -20,21 +20,13 @@ classifiers = [
 
 requirements = [
     'click==6.7',
-    'ply==3.4'
+    'lark-parser>=0.5.4'
 ]
 
 extras = [
     'sphinx',
     'guzzle-sphinx-theme'
 ]
-
-
-class CustomInstallCommand(install):
-    def run(self):
-        print('building lexer and parser')
-        from storyscript import parser
-        parser.Parser(optimize=True)
-        install.run(self)
 
 
 setup(name='storyscript',
@@ -54,9 +46,6 @@ setup(name='storyscript',
       install_requires=requirements,
       extras_require={
           'docs': extras
-      },
-      cmdclass={
-          'install': CustomInstallCommand,
       },
       entry_points={
           'console_scripts': ['storyscript=storyscript.cli:Cli.main']
