@@ -66,15 +66,10 @@ def test_parser_parse_unexpected_token(patch, parser):
 
 
 def test_parser_lex(patch, parser):
-    patch.init(Lark)
-    patch.object(Lark, 'lex')
-    patch.object(Parser, 'indenter')
+    patch.many(Parser, ['lark', 'indenter'])
     result = parser.lex('source')
-    Lark.__init__.assert_called_with(parser.grammar.build(),
-                                     parser=parser.algo,
-                                     postlex=Parser.indenter())
-    Lark.lex.assert_called_with('source')
-    assert result == Lark.lex()
+    Parser.lark().lex.assert_called_with('source')
+    assert result == Parser.lark().lex()
 
 
 def test_parser_json(patch, parser):

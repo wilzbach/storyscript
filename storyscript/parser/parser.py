@@ -32,9 +32,7 @@ class Parser:
         return self.transformer().transform(tree)
 
     def lex(self, source):
-        lark = Lark(self.grammar.build(), parser=self.algo,
-                    postlex=self.indenter())
-        return lark.lex(source)
+        return self.lark().lex(source)
 
     def json(self, source):
         return self.parse(source).json()
