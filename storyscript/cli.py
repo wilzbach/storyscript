@@ -28,20 +28,6 @@ class Cli:
     @staticmethod
     @main.command()
     @click.argument('storypath')
-    def lexer(storypath):
-        """
-        Shows lexer tokens for given stories
-        """
-        results = App.lexer(storypath)
-        message = '{} {}'
-        for file, tokens in results.items():
-            click.echo('File: {}'.format(file))
-            for x, tok in enumerate(tokens):
-                click.echo(message.format(x, tok))
-
-    @staticmethod
-    @main.command()
-    @click.argument('storypath')
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
     @click.option('--debug', '-d', is_flag=True, help=debug_help)
