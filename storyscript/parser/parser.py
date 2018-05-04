@@ -23,16 +23,16 @@ class Parser:
         grammar = self.grammar.build()
         return Lark(grammar, parser=self.algo, postlex=self.indenter())
 
-    def parse(self, source):
+    def parse(self, source, json=False):
         lark = self.lark()
         try:
             tree = lark.parse(source)
         except UnexpectedToken:
             return None
-        return self.transformer().transform(tree)
+        transformed_tree = self.transformer().transform(tree)
+        if json:
+            return transformed_tree.json()
+        return transformed_tree
 
     def lex(self, source):
         return self.lark().lex(source)
-
-    def json(self, source):
-        return self.parse(source).json()
