@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from lark.lexer import Token
 from lark.tree import Tree as LarkTree
 
 from pytest import fixture
@@ -16,4 +17,14 @@ def test_tree():
 
 
 def test_tree_json(tree):
-    assert tree.json() == 'json'
+    assert tree.json() == {}
+
+
+def test_tree_json_child_tokens(magic, tree):
+    tree.children = [Token('type', 'value')]
+    assert tree.json() == {'type': 'value'}
+
+
+def test_tree_json_child_tree(magic, tree):
+    tree.children = [Tree('name', [Token('type', 'value')])]
+    assert tree.json() == {'name': {'type': 'value'}}
