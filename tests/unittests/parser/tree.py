@@ -28,17 +28,12 @@ def test_tree_command():
 
 
 def test_tree_json(tree):
-    assert tree.json() == {'script': {}}
+    assert tree.json() == {'version': version, 'script': {}}
 
 
 def test_tree_json_child_tokens(magic, tree):
     tree.children = [Token('type', 'value')]
-    assert tree.json() == {'type': 'value', 'script': {}}
-
-
-def test_tree_json_tree_start(magic, tree):
-    tree.children = [Tree('start', [])]
-    assert tree.json() == {'version': version, 'script': {}}
+    assert tree.json() == {'type': 'value', 'script': {}, 'version': version}
 
 
 def test_tree_json_command(patch, tree):

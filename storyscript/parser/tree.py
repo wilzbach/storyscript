@@ -20,12 +20,10 @@ class Tree(LarkTree):
         dictionary['script'][self.children[0].line] = command
 
     def json(self):
-        dictionary = {'script': {}}
+        dictionary = {'script': {}, 'version': version}
         for child in self.children:
             if isinstance(child, Tree):
-                if child.data == 'start':
-                    dictionary['version'] = version
-                elif child.data == 'command':
+                if child.data == 'command':
                     child.command()
                 else:
                     dictionary[child.data] = child.json()
