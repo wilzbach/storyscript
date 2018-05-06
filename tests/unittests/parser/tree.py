@@ -54,3 +54,10 @@ def test_tree_json_command(patch, tree):
     tree.children = [Tree('command', [])]
     tree.json()
     assert Tree.command.call_count == 1
+
+
+def test_tree_json_command(patch, tree):
+    patch.object(Tree, 'if_statement')
+    tree.children = [Tree('if_statement', [])]
+    tree.json()
+    assert Tree.if_statement.call_count == 1
