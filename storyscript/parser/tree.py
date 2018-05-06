@@ -8,12 +8,22 @@ from ..version import version
 class Tree(LarkTree):
 
     def json(self):
-        dictionary = {}
+        dictionary = {'script': {}}
         for child in self.children:
             if isinstance(child, Tree):
                 if child.data == 'start':
                     dictionary['version'] = version
-                    dictionary['script'] = {}
+                elif child.data == 'command':
+                    command = {
+                        'method': 'run',
+                        'ln': child.children[0].line,
+                        'container': child.children[1].value,
+                        'args': [],
+                        'output': None,
+                        'enter': None,
+                        'exit': None
+                    }
+                    dictionary['script'][child.children[0].line] = command
                 else:
                     dictionary[child.data] = child.json()
             elif isinstance(child, Token):
