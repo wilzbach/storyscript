@@ -39,8 +39,6 @@ class Tree(LarkTree):
                     child.command()
                 elif child.data == 'if_statement':
                     child.if_statement()
-                else:
-                    dictionary[child.data] = child.json()
             elif isinstance(child, Token):
                 dictionary[child.type] = child.value
         return dictionary

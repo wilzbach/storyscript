@@ -44,11 +44,6 @@ def test_tree_json(tree):
     assert tree.json() == {'version': version, 'script': {}}
 
 
-def test_tree_json_child_tokens(magic, tree):
-    tree.children = [Token('type', 'value')]
-    assert tree.json() == {'type': 'value', 'script': {}, 'version': version}
-
-
 def test_tree_json_command(patch, tree):
     patch.object(Tree, 'command')
     tree.children = [Tree('command', [])]
