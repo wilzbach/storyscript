@@ -13,17 +13,30 @@ def tree():
     return Tree('data', [])
 
 
+@fixture
+def dictionary():
+    return {'script': {}}
+
+
 def test_tree():
     assert issubclass(Tree, LarkTree)
 
 
-def test_tree_command():
+def test_tree_command(dictionary):
     tree = Tree('command', [Token('RUN', 'run', line='1'),
-           Token('WORD', 'container')])
-    dictionary = {'script': {}}
+                Token('WORD', 'container')])
     tree.command(dictionary)
     expected = {'method': 'run', 'ln': '1', 'container': 'container',
                 'args': [], 'output': None, 'enter': None, 'exit': None}
+    assert dictionary['script'] == {'1': expected}
+
+
+def test_tree_if(dictionary):
+    tree = Tree('if_statement', [Token('IF', 'if', line='1'),
+                Token('WORD', 'word')])
+    tree.if_statement(dictionary)
+    expected = {'method': 'if', 'ln': '1', 'args': [], 'container': None,
+                'output': None, 'enter': None, 'exit': None}
     assert dictionary['script'] == {'1': expected}
 
 
@@ -39,5 +52,5 @@ def test_tree_json_child_tokens(magic, tree):
 def test_tree_json_command(patch, tree):
     patch.object(Tree, 'command')
     tree.children = [Tree('command', [])]
-    result = tree.json()
+    tree.json()
     assert Tree.command.call_count == 1

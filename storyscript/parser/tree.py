@@ -8,7 +8,7 @@ from ..version import version
 class Tree(LarkTree):
 
     def command(self, dictionary):
-        command = {
+        line = {
             'method': 'run',
             'ln': self.children[0].line,
             'container': self.children[1].value,
@@ -17,7 +17,19 @@ class Tree(LarkTree):
             'enter': None,
             'exit': None
         }
-        dictionary['script'][self.children[0].line] = command
+        dictionary['script'][self.children[0].line] = line
+
+    def if_statement(self, dictionary):
+        line = {
+            'method': 'if',
+            'ln': self.children[0].line,
+            'container': None,
+            'args': [],
+            'output': None,
+            'enter': None,
+            'exit': None
+        }
+        dictionary['script'][self.children[0].line] = line
 
     def json(self):
         dictionary = {'script': {}, 'version': version}
