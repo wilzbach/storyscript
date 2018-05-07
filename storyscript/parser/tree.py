@@ -39,11 +39,16 @@ class Tree(LarkTree):
 
     def node(self, path):
         """
-        Finds a node
+        Finds a subtree or a nested subtree, using path
         """
-        for item in self.children:
-            if item.data == path:
-                return item
+        shards = path.split('.')
+        current = None
+        for shard in shards:
+            if current is None:
+                current = self.walk(self, shard)
+            else:
+                current = self.walk(current, shard)
+        return current
 
     def json(self):
         dictionary = {'script': {}, 'version': version}
