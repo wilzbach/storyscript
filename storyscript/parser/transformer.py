@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+
 from lark import Transformer as LarkTransformer
 
 from .tree import Tree
@@ -6,8 +8,5 @@ from .tree import Tree
 
 class Transformer(LarkTransformer):
 
-    def start(self, matches):
-        return Tree('line', matches)
-
-    def string(self, matches):
-        return matches
+    def __getattr__(self, attribute, *args):
+        return lambda matches: Tree(attribute, matches)
