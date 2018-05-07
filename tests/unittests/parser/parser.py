@@ -58,12 +58,6 @@ def test_parser_parse(patch, parser):
     assert result == Parser.transformer().transform()
 
 
-def test_parser_parse_json(patch, parser):
-    patch.many(Parser, ['lark', 'transformer'])
-    result = parser.parse('source', json=True)
-    assert result == Parser.transformer().transform().json()
-
-
 def test_parser_parse_unexpected_token(patch, parser):
     patch.init(Lark)
     patch.object(Lark, 'parse', side_effect=UnexpectedToken('', '', '', ''))
