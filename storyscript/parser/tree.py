@@ -31,6 +31,12 @@ class Tree(LarkTree):
         }
         dictionary['script'][self.children[0].line] = line
 
+    @staticmethod
+    def walk(tree, path):
+        for item in tree.children:
+            if item.data == path:
+                return item
+
     def node(self, path):
         """
         Finds a node
