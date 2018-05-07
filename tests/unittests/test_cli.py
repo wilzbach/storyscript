@@ -14,13 +14,13 @@ def runner():
 
 
 @fixture
-def echo(mocker):
-    mocker.patch.object(click, 'echo')
+def echo(patch):
+    patch.object(click, 'echo')
 
 
 @fixture
-def app(mocker):
-    mocker.patch.object(App, 'parse')
+def app(patch):
+    patch.object(App, 'compile')
     return App
 
 
@@ -45,7 +45,7 @@ def test_cli_parse(patch, runner, echo, app):
     """
     patch.object(click, 'style')
     runner.invoke(Cli.parse, ['/path'])
-    App.parse.assert_called_with('/path', json=False)
+    App.compile.assert_called_with('/path')
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
 
@@ -56,19 +56,19 @@ def test_cli_parse_silent(runner, echo, app, option):
     Ensures --silent makes everything quiet
     """
     result = runner.invoke(Cli.parse, ['/path', option])
-    App.parse.assert_called_with('/path', json=False)
+    App.compile.assert_called_with('/path')
     assert result.output == ''
     assert click.echo.call_count == 0
 
 
 @mark.parametrize('option', ['--json', '-j'])
-def test_cli_parse_json(mocker, runner, echo, app, option):
+def test_cli_parse_json(runner, echo, app, option):
     """
     Ensures --json outputs json
     """
-    App.parse.return_value = {'story.one': 'json'}
+    App.compile.return_value = {'story.one': 'json'}
     runner.invoke(Cli.parse, ['/path', option])
-    App.parse.assert_called_with('/path', json=True)
+    App.compile.assert_called_with('/path')
     click.echo.assert_called_with('json')
     assert click.echo.call_count == 2
 

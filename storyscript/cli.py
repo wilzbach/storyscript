@@ -33,7 +33,7 @@ class Cli:
         """
         Parses stories and prints the resulting json
         """
-        results = App.parse(storypath, json=json)
+        results = App.compile(storypath)
         if not silent:
             if not json:
                 click.echo(click.style('Script syntax passed!', fg='green'))
