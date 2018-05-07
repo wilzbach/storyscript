@@ -59,6 +59,11 @@ def test_tree_node(patch):
     assert result == Tree.walk()
 
 
+def test_tree_child():
+    tree = Tree('rule', ['child'])
+    assert tree.child(0) == 'child'
+
+
 def test_tree_json(tree):
     assert tree.json() == {'version': version, 'script': {}}
 

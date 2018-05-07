@@ -50,6 +50,9 @@ class Tree(LarkTree):
                 current = self.walk(current, shard)
         return current
 
+    def child(self, index):
+        return self.children[index]
+
     def json(self):
         dictionary = {'script': {}, 'version': version}
         for child in self.children:
