@@ -4,6 +4,7 @@ import os
 from pytest import fixture
 
 from storyscript.app import App
+from storyscript.compiler import Compiler
 from storyscript.parser import Parser
 
 
@@ -64,29 +65,20 @@ def test_app_get_stories_directory(mocker):
     assert App.get_stories('stories') == ['root/one.story']
 
 
-def test_app_parse(patch, parser, read_story):
+def test_app_compile(patch, parser, read_story):
     """
     Ensures App.parse runs Parser.parse
     """
     patch.init(Parser)
     patch.object(Parser, 'parse')
+    patch.object(Compiler, 'compile')
     patch.object(App, 'get_stories', return_value=['one.story'])
-    result = App.parse('path')
+    result = App.compile('path')
     App.get_stories.assert_called_with('path')
     App.read_story.assert_called_with('one.story')
-    Parser().parse.assert_called_with(App.read_story(), json=False)
-    assert result == {'one.story': Parser().parse()}
-
-
-def test_app_parse_json(patch, parser, read_story):
-    """
-    Ensures App.parse runs Parser.parse with json
-    """
-    patch.init(Parser)
-    patch.object(Parser, 'parse')
-    patch.object(App, 'get_stories', return_value=['one.story'])
-    App.parse('path', json=True)
-    Parser().parse.assert_called_with(App.read_story(), json=True)
+    Parser().parse.assert_called_with(App.read_story())
+    Compiler.compile.assert_called_with(Parser.parse())
+    assert result == {'one.story': Compiler.compile()}
 
 
 def test_app_lexer(patch, read_story):

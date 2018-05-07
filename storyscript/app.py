@@ -1,5 +1,6 @@
 import os
 
+from .compiler import Compiler
 from .parser import Parser
 
 
@@ -29,12 +30,13 @@ class App:
         return [storypath]
 
     @classmethod
-    def parse(cls, path, json=False):
+    def compile(cls, path):
         results = {}
         parser = Parser()
         stories = cls.get_stories(path)
         for story in stories:
-            results[story] = parser.parse(cls.read_story(story), json=json)
+            tree = parser.parse(cls.read_story(story))
+            results[story] = Compiler.compile(tree)
         return results
 
     @classmethod
