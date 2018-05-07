@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from .version import version
+
+
 class Compiler:
 
     """
@@ -7,4 +10,5 @@ class Compiler:
 
     @staticmethod
     def compile(tree):
-        return {}
+        dictionary = {'script': {}, 'version': version}
+        return dictionary
