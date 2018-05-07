@@ -31,6 +31,14 @@ class Tree(LarkTree):
         }
         dictionary['script'][self.children[0].line] = line
 
+    def node(self, path):
+        """
+        Finds a node
+        """
+        for item in self.children:
+            if item.data == path:
+                return item
+
     def json(self):
         dictionary = {'script': {}, 'version': version}
         for child in self.children:

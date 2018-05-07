@@ -44,6 +44,12 @@ def test_tree_json(tree):
     assert tree.json() == {'version': version, 'script': {}}
 
 
+def test_tree_node():
+    inner_tree = Tree('inner', [Token('WORD', 'word')])
+    tree = Tree('rule', [inner_tree])
+    assert tree.node('inner') == inner_tree
+
+
 def test_tree_json(tree):
     assert tree.json() == {'version': version, 'script': {}}
 
