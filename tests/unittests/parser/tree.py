@@ -2,7 +2,7 @@
 from lark.lexer import Token
 from lark.tree import Tree as LarkTree
 
-from pytest import fixture
+from pytest import fixture, mark
 
 from storyscript.parser import Tree
 from storyscript.version import version
@@ -44,15 +44,13 @@ def test_tree_json(tree):
     assert tree.json() == {'version': version, 'script': {}}
 
 
-def test_tree_json_command(patch, tree):
-    patch.object(Tree, 'command')
-    tree.children = [Tree('command', [])]
-    tree.json()
-    assert Tree.command.call_count == 1
+def test_tree_json(tree):
+    assert tree.json() == {'version': version, 'script': {}}
 
 
-def test_tree_json_command(patch, tree):
-    patch.object(Tree, 'if_statement')
-    tree.children = [Tree('if_statement', [])]
+@mark.parametrize('rule', ['command', 'if_statement'])
+def test_tree_json_rule(patch, tree, rule):
+    patch.object(Tree, rule)
+    tree.children = [Tree(rule, [])]
     tree.json()
-    assert Tree.if_statement.call_count == 1
+    assert getattr(Tree, rule).call_count == 1

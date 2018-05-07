@@ -35,10 +35,8 @@ class Tree(LarkTree):
         dictionary = {'script': {}, 'version': version}
         for child in self.children:
             if isinstance(child, Tree):
-                if child.data == 'command':
-                    child.command()
-                elif child.data == 'if_statement':
-                    child.if_statement()
+                if child.data in ['command', 'if_statement']:
+                    getattr(child, child.data)()
             elif isinstance(child, Token):
                 dictionary[child.type] = child.value
         return dictionary
