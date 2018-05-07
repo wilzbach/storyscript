@@ -30,13 +30,20 @@ class App:
         return [storypath]
 
     @classmethod
-    def compile(cls, path):
-        results = {}
+    def parse(cls, path):
         parser = Parser()
         stories = cls.get_stories(path)
+        results = {}
         for story in stories:
-            tree = parser.parse(cls.read_story(story))
-            results[story] = Compiler.compile(tree)
+            results[story] = parser.parse(cls.read_story(story))
+        return results
+
+    @classmethod
+    def compile(cls, path):
+        results = {}
+        parsed_stories = cls.parse(path)
+        for name, tree in parsed_stories.items():
+            results[name] = Compiler.compile(tree)
         return results
 
     @classmethod

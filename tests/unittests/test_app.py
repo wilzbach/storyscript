@@ -65,20 +65,27 @@ def test_app_get_stories_directory(mocker):
     assert App.get_stories('stories') == ['root/one.story']
 
 
-def test_app_compile(patch, parser, read_story):
+def test_app_parse(patch, parser, read_story):
     """
     Ensures App.parse runs Parser.parse
     """
     patch.init(Parser)
     patch.object(Parser, 'parse')
-    patch.object(Compiler, 'compile')
     patch.object(App, 'get_stories', return_value=['one.story'])
-    result = App.compile('path')
+    result = App.parse('path')
     App.get_stories.assert_called_with('path')
     App.read_story.assert_called_with('one.story')
     Parser().parse.assert_called_with(App.read_story())
-    Compiler.compile.assert_called_with(Parser.parse())
-    assert result == {'one.story': Compiler.compile()}
+    assert result == {'one.story': Parser.parse()}
+
+
+def test_app_compile(patch):
+    patch.object(Compiler, 'compile')
+    patch.object(App, 'parse', return_value={'hello.story': 'tree'})
+    result = App.compile('path')
+    App.parse.assert_called_with('path')
+    Compiler.compile.assert_called_with('tree')
+    assert result == {'hello.story': Compiler.compile()}
 
 
 def test_app_lexer(patch, read_story):
