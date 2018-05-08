@@ -16,6 +16,11 @@ def test_compiler_string():
     assert Compiler.string(tree) == {'$OBJECT': 'string', 'string': 'blue'}
 
 
+def test_compiler_file():
+    token = Token('FILEPATH', '`path`')
+    assert Compiler.file(token) == {'$OBJECT': 'file', 'string': 'path'}
+
+
 def test_compiler_line():
     tree = Tree('outer', [Tree('path', [Token('WORD', 'word', line=1)])])
     assert Compiler.line(tree) == '1'

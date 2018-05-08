@@ -18,6 +18,10 @@ class Compiler:
     def string(tree):
         return {'$OBJECT': 'string', 'string': tree.child(0).value[1:-1]}
 
+    @staticmethod
+    def file(token):
+        return {'$OBJECT': 'file', 'string': token.value[1:-1]}
+
     @classmethod
     def line(cls, tree):
         """
