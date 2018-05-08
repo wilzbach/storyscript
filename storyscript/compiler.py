@@ -33,13 +33,11 @@ class Compiler:
     def assignment(tree):
         return {
             'method': 'set',
-            'ln': str(tree.node('path').children[0].line),
+            'ln': Compiler.line(tree),
             'container': None,
             'args': [
-                {'$OBJECT': 'path', 'paths': [
-                 tree.node('path').child(0).value]},
-                {'$OBJECT': 'string',
-                 'string': tree.child(2).node('string').child(0).value[1:-1]}
+                Compiler.path(tree.node('path')),
+                Compiler.string(tree.child(2).node('string'))
             ],
             'output': None,
             'enter': None,

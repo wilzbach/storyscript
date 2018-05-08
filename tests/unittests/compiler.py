@@ -11,7 +11,6 @@ def test_compiler_path():
     assert Compiler.path(tree) == {'$OBJECT': 'path', 'paths': ['var']}
 
 
-def test_compiler_assignment():
 def test_compiler_string():
     tree = Tree('string', [Token('DOUBLE_QUOTED', '"blue"')])
     assert Compiler.string(tree) == {'$OBJECT': 'string', 'string': 'blue'}
@@ -22,13 +21,18 @@ def test_compiler_line():
     assert Compiler.line(tree) == '1'
 
 
-    tree = Tree('assignments', [Tree('path', [Token('WORD', 'color', line=1)]),
-                Token('EQUALS', '='), Tree('values', [Tree('string',
-                [Token('DOUBLE_QUOTED', '"blue"')])])])
-    expected = {'method': 'set', 'ln': '1', 'output': None, 'container': None,
-                'enter': None, 'exit': None, 'args': [{'$OBJECT': 'path',
-                'paths': ['color']}, {'$OBJECT': 'string', 'string': 'blue'}]}
-    assert Compiler.assignment(tree) == expected
+def test_compiler_assignment(patch):
+    patch.many(Compiler, ['path', 'string', 'line'])
+    tree = Tree('assignments', [Tree('path', ['path']), Token('EQUALS', '='),
+                                Tree('values', [Tree('string', ['string'])])])
+    result = Compiler.assignment(tree)
+    Compiler.line.assert_called_with(tree)
+    Compiler.path.assert_called_with(Tree('path', ['path']))
+    Compiler.string.assert_called_with(Tree('string', ['string']))
+    expected = {'method': 'set', 'ln': Compiler.line(), 'output': None,
+                'container': None, 'enter': None, 'exit': None,
+                'args': [Compiler.path(), Compiler.string()]}
+    assert result == expected
 
 
 def test_compiler_command():
