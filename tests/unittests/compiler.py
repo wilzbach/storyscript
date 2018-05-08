@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
 
+from pytest import mark
+
 from storyscript.compiler import Compiler
 from storyscript.parser import Tree
 from storyscript.version import version
@@ -91,6 +93,17 @@ def test_compiler_compile(patch):
     result = Compiler.compile('tree')
     Compiler.parse_tree.assert_called_with('tree')
     assert result == {'script': Compiler.parse_tree(), 'version': version}
+
+
+@mark.parametrize('method_name', ['command', 'next_statement'])
+def test_parse_subtree(patch, method_name):
+    patch.many(Compiler, ['line', method_name])
+    tree = Tree(method_name, [])
+    result = Compiler.parse_subtree(tree)
+    Compiler.line.assert_called_with(tree)
+    method = getattr(Compiler, method_name)
+    method.assert_called_with(tree)
+    assert result == {Compiler.line(): method()}
 
 
 def test_compiler_parse_tree(patch):

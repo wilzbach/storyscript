@@ -88,6 +88,15 @@ class Compiler:
         return dictionary
 
     @classmethod
+    def parse_subtree(cls, tree):
+        """
+        Parses a tree that can have nested subtrees.
+        """
+        if tree.data in ['command', 'next_statement']:
+            return {cls.line(tree):  getattr(cls, tree.data)(tree)}
+        return cls.parse_tree(tree)
+
+    @classmethod
     def parse_tree(cls, tree):
         script = {}
         subtrees = ['command', 'next_statement']
