@@ -44,11 +44,11 @@ class Compiler:
             'exit': None
         }
 
-    @staticmethod
-    def command(tree):
+    @classmethod
+    def command(cls, tree):
         dictionary = {
             'method': 'run',
-            'ln': tree.children[0].line,
+            'ln': Compiler.line(tree),
             'container': tree.children[0].value,
             'args': None,
             'output': None,

@@ -35,14 +35,17 @@ def test_compiler_assignment(patch):
     assert result == expected
 
 
-def test_compiler_command():
+def test_compiler_command(patch):
     """
     Ensures that command trees can be compiled
     """
-    tree = Tree('command', [Token('WORD', 'alpine', line=1)])
-    expected = {'method': 'run', 'ln': 1, 'container': 'alpine', 'args': None,
-                'output': None, 'enter': None, 'exit': None}
-    assert Compiler.command(tree) == expected
+    patch.object(Compiler, 'line')
+    tree = Tree('command', [Token('WORD', 'alpine')])
+    result = Compiler.command(tree)
+    Compiler.line.assert_called_with(tree)
+    expected = {'method': 'run', 'ln': Compiler.line(), 'container': 'alpine',
+                'args': None, 'output': None, 'enter': None, 'exit': None}
+    assert result == expected
 
 
 def test_compiler_compile(patch):
