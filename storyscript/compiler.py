@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from lark.lexer import Token
+
 from .version import version
 
 
@@ -15,6 +17,17 @@ class Compiler:
     @staticmethod
     def string(tree):
         return {'$OBJECT': 'string', 'string': tree.child(0).value[1:-1]}
+
+    @classmethod
+    def line(cls, tree):
+        """
+        Finds the line number of a tree, by finding the first token in the tree
+        and returning its line
+        """
+        for item in tree.children:
+            if isinstance(item, Token):
+                return str(item.line)
+            return cls.line(item)
 
     @staticmethod
     def assignment(tree):
