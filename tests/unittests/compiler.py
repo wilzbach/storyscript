@@ -110,20 +110,8 @@ def test_compiler_parse_tree(patch):
     """
     Ensures that the parse_tree method can parse a complete tree
     """
-    patch.many(Compiler, ['command', 'line'])
-    Compiler.line.return_value = '1'
+    patch.object(Compiler, 'parse_subtree', return_value={'1': 'subtree'})
     subtree = Tree('command', ['token'])
-    tree = Tree('start', [Tree('block', [Tree('line', [subtree])])])
-    result = Compiler.parse_tree(tree)
-    Compiler.line.assert_called_with(subtree)
-    Compiler.command.assert_called_with(subtree)
-    assert result == {'1': Compiler.command()}
-
-
-def test_compiler_parse_tree_next(patch):
-    patch.many(Compiler, ['next_statement', 'line'])
-    Compiler.line.return_value = '1'
-    subtree = Tree('next_statement', ['token'])
     tree = Tree('start', [Tree('block', [Tree('line', [subtree])])])
     result = Compiler.parse_tree(tree)
     Compiler.line.assert_called_with(subtree)

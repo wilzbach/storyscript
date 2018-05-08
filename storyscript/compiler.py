@@ -93,19 +93,15 @@ class Compiler:
         Parses a tree that can have nested subtrees.
         """
         if tree.data in ['command', 'next_statement']:
-            return {cls.line(tree):  getattr(cls, tree.data)(tree)}
+            return {cls.line(tree): getattr(cls, tree.data)(tree)}
         return cls.parse_tree(tree)
 
     @classmethod
     def parse_tree(cls, tree):
         script = {}
-        subtrees = ['command', 'next_statement']
         for item in tree.children:
             if isinstance(item, Tree):
-                if item.data in subtrees:
-                    script[cls.line(item)] = getattr(cls, item.data)(item)
-                else:
-                    script = {**cls.parse_tree(item), **script}
+                script = {**cls.parse_subtree(item), **script}
         return script
 
     @staticmethod
