@@ -17,6 +17,16 @@ def test_compiler_parse_tree():
     assert Compiler.parse_tree('tree') == {}
 
 
+def test_compiler_assignment():
+    tree = Tree('assignments', [Tree('path', [Token('WORD', 'color', line=1)]),
+                Token('EQUALS', '='), Tree('values', [Tree('string',
+                [Token('DOUBLE_QUOTED', '"blue"')])])])
+    expected = {'method': 'set', 'ln': '1', 'output': None, 'container': None,
+                'enter': None, 'exit': None, 'args': [{'$OBJECT': 'path',
+                'paths': ['color']}, {'$OBJECT': 'string', 'string': 'blue'}]}
+    assert Compiler.assignment(tree) == expected
+
+
 def test_compiler_command():
     """
     Ensures that command trees can be compiled
