@@ -16,6 +16,10 @@ class Compiler:
         return {'$OBJECT': 'path', 'paths': [tree.child(0).value]}
 
     @staticmethod
+    def number(tree):
+        return int(tree.child(0).value)
+
+    @staticmethod
     def string(tree):
         return {'$OBJECT': 'string', 'string': tree.child(0).value[1:-1]}
 

@@ -13,6 +13,11 @@ def test_compiler_path():
     assert Compiler.path(tree) == {'$OBJECT': 'path', 'paths': ['var']}
 
 
+def test_compiler_number():
+    tree = Tree('number', [Token('INT', '1')])
+    assert Compiler.number(tree) == 1
+
+
 def test_compiler_string():
     tree = Tree('string', [Token('DOUBLE_QUOTED', '"blue"')])
     assert Compiler.string(tree) == {'$OBJECT': 'string', 'string': 'blue'}
