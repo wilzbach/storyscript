@@ -16,6 +16,16 @@ def test_compiler_string():
     assert Compiler.string(tree) == {'$OBJECT': 'string', 'string': 'blue'}
 
 
+def test_compiler_boolean():
+    tree = Tree('boolean', [Token('TRUE', 'true')])
+    assert Compiler.boolean(tree) is True
+
+
+def test_compiler_boolean_false():
+    tree = Tree('boolean', [Token('FALSE', 'false')])
+    assert Compiler.boolean(tree) is False
+
+
 def test_compiler_file():
     token = Token('FILEPATH', '`path`')
     assert Compiler.file(token) == {'$OBJECT': 'file', 'string': 'path'}

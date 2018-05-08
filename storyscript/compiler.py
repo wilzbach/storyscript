@@ -19,6 +19,12 @@ class Compiler:
         return {'$OBJECT': 'string', 'string': tree.child(0).value[1:-1]}
 
     @staticmethod
+    def boolean(tree):
+        if tree.child(0).value == 'true':
+            return True
+        return False
+
+    @staticmethod
     def file(token):
         return {'$OBJECT': 'file', 'string': token.value[1:-1]}
 
