@@ -63,7 +63,7 @@ class Compiler:
         }
 
     @classmethod
-    def next(cls, tree):
+    def next_statement(cls, tree):
         return {
             'method': 'next',
             'ln': cls.line(tree),
@@ -90,10 +90,11 @@ class Compiler:
     @classmethod
     def parse_tree(cls, tree):
         script = {}
+        subtrees = ['command', 'next_statement']
         for item in tree.children:
             if isinstance(item, Tree):
-                if item.data == 'command':
-                    script[cls.line(item)] = cls.command(item)
+                if item.data in subtrees:
+                    script[cls.line(item)] = getattr(cls, item.data)(item)
                 else:
                     script = {**cls.parse_tree(item), **script}
         return script

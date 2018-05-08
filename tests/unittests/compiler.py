@@ -64,7 +64,7 @@ def test_compiler_next(patch):
     patch.many(Compiler, ['file', 'line'])
     tree = Tree('next_statement', [Token('NEXT', 'next', line=1),
                                    Token('FILEPATH', '`path`')])
-    result = Compiler.next(tree)
+    result = Compiler.next_statement(tree)
     Compiler.line.assert_called_with(tree)
     Compiler.file.assert_called_with(tree.children[1])
     expected = {'method': 'next', 'ln': Compiler.line(), 'output': None,
@@ -105,3 +105,14 @@ def test_compiler_parse_tree(patch):
     Compiler.line.assert_called_with(subtree)
     Compiler.command.assert_called_with(subtree)
     assert result == {'1': Compiler.command()}
+
+
+def test_compiler_parse_tree_next(patch):
+    patch.many(Compiler, ['next_statement', 'line'])
+    Compiler.line.return_value = '1'
+    subtree = Tree('next_statement', ['token'])
+    tree = Tree('start', [Tree('block', [Tree('line', [subtree])])])
+    result = Compiler.parse_tree(tree)
+    Compiler.line.assert_called_with(subtree)
+    Compiler.next_statement.assert_called_with(subtree)
+    assert result == {'1': Compiler.next_statement()}
