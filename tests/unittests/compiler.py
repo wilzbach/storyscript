@@ -48,6 +48,18 @@ def test_compiler_list(patch):
     assert result == expected
 
 
+def test_compiler_object(patch):
+    patch.many(Compiler, ['string', 'number'])
+    tree = Tree('objects', [Tree('key_value', [Tree('string', 'key'),
+                Tree('values', [Tree('number', ['value'])])])])
+    result = Compiler.objects(tree)
+    Compiler.string.assert_called_with(Tree('string', 'key'))
+    Compiler.number.assert_called_with(Tree('number', ['value']))
+    expected = {'$OBJECT': 'dict', 'items': [[Compiler.string(),
+                Compiler.number()]]}
+    assert result == expected
+
+
 def test_compiler_line():
     tree = Tree('outer', [Tree('path', [Token('WORD', 'word', line=1)])])
     assert Compiler.line(tree) == '1'

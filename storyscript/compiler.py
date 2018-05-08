@@ -41,6 +41,18 @@ class Compiler:
         return {'$OBJECT': 'list', 'items': items}
 
     @classmethod
+    def objects(cls, tree):
+        return {
+            '$OBJECT': 'dict',
+            'items': [
+                [
+                    cls.string(tree.node('key_value.string')),
+                    cls.number(tree.node('key_value').child(1).node('number'))
+                ]
+            ]
+        }
+
+    @classmethod
     def line(cls, tree):
         """
         Finds the line number of a tree, by finding the first token in the tree
