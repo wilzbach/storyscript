@@ -68,7 +68,7 @@ def test_compiler_next(patch):
     Compiler.line.assert_called_with(tree)
     Compiler.file.assert_called_with(tree.children[1])
     expected = {'method': 'next', 'ln': Compiler.line(), 'output': None,
-                'args': [Compiler.file()], 'container': None,  'enter': None,
+                'args': [Compiler.file()], 'container': None, 'enter': None,
                 'exit': None}
     assert result == expected
 
@@ -93,5 +93,15 @@ def test_compiler_compile(patch):
     assert result == {'script': Compiler.parse_tree(), 'version': version}
 
 
-def test_compiler_parse_tree():
-    assert Compiler.parse_tree('tree') == {}
+def test_compiler_parse_tree(patch):
+    """
+    Ensures that the parse_tree method can parse a complete tree
+    """
+    patch.many(Compiler, ['command', 'line'])
+    Compiler.line.return_value = '1'
+    subtree = Tree('command', ['token'])
+    tree = Tree('start', [Tree('block', [Tree('line', [subtree])])])
+    result = Compiler.parse_tree(tree)
+    Compiler.line.assert_called_with(subtree)
+    Compiler.command.assert_called_with(subtree)
+    assert result == {'1': Compiler.command()}

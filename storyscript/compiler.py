@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
 
+from .parser import Tree
 from .version import version
 
 
@@ -88,7 +89,14 @@ class Compiler:
 
     @classmethod
     def parse_tree(cls, tree):
-        return {}
+        script = {}
+        for item in tree.children:
+            if isinstance(item, Tree):
+                if item.data == 'command':
+                    script[cls.line(item)] = cls.command(item)
+                else:
+                    script = {**cls.parse_tree(item), **script}
+        return script
 
     @staticmethod
     def compile(tree):
