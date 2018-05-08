@@ -12,6 +12,11 @@ def test_compiler_path():
 
 
 def test_compiler_assignment():
+def test_compiler_string():
+    tree = Tree('string', [Token('DOUBLE_QUOTED', '"blue"')])
+    assert Compiler.string(tree) == {'$OBJECT': 'string', 'string': 'blue'}
+
+
     tree = Tree('assignments', [Tree('path', [Token('WORD', 'color', line=1)]),
                 Token('EQUALS', '='), Tree('values', [Tree('string',
                 [Token('DOUBLE_QUOTED', '"blue"')])])])
