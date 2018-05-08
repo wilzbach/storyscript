@@ -114,6 +114,4 @@ def test_compiler_parse_tree(patch):
     subtree = Tree('command', ['token'])
     tree = Tree('start', [Tree('block', [Tree('line', [subtree])])])
     result = Compiler.parse_tree(tree)
-    Compiler.line.assert_called_with(subtree)
-    Compiler.next_statement.assert_called_with(subtree)
-    assert result == {'1': Compiler.next_statement()}
+    assert result == {'1': 'subtree'}
