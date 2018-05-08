@@ -6,6 +6,11 @@ from storyscript.parser import Tree
 from storyscript.version import version
 
 
+def test_compiler_path():
+    tree = Tree('path', [Token('WORD', 'var')])
+    assert Compiler.path(tree) == {'$OBJECT': 'path', 'paths': ['var']}
+
+
 def test_compiler_assignment():
     tree = Tree('assignments', [Tree('path', [Token('WORD', 'color', line=1)]),
                 Token('EQUALS', '='), Tree('values', [Tree('string',

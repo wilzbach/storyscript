@@ -9,6 +9,10 @@ class Compiler:
     """
 
     @staticmethod
+    def path(tree):
+        return {'$OBJECT': 'path', 'paths': [tree.child(0).value]}
+
+    @staticmethod
     def assignment(tree):
         return {
             'method': 'set',
