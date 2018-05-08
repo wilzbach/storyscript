@@ -50,6 +50,19 @@ def test_compiler_assignment(patch):
     assert result == expected
 
 
+def test_compiler_next(patch):
+    patch.many(Compiler, ['file', 'line'])
+    tree = Tree('next_statement', [Token('NEXT', 'next', line=1),
+                                   Token('FILEPATH', '`path`')])
+    result = Compiler.next(tree)
+    Compiler.line.assert_called_with(tree)
+    Compiler.file.assert_called_with(tree.children[1])
+    expected = {'method': 'next', 'ln': Compiler.line(), 'output': None,
+                'args': [Compiler.file()], 'container': None,  'enter': None,
+                'exit': None}
+    assert result == expected
+
+
 def test_compiler_command(patch):
     """
     Ensures that command trees can be compiled

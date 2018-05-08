@@ -56,6 +56,18 @@ class Compiler:
         }
 
     @classmethod
+    def next(cls, tree):
+        return {
+            'method': 'next',
+            'ln': cls.line(tree),
+            'container': None,
+            'output': None,
+            'args': [cls.file(tree.children[1])],
+            'enter': None,
+            'exit': None
+        }
+
+    @classmethod
     def command(cls, tree):
         dictionary = {
             'method': 'run',
