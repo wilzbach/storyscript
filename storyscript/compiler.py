@@ -48,7 +48,7 @@ class Compiler:
             return cls.line(item)
 
     @staticmethod
-    def assignment(tree):
+    def assignments(tree):
         return {
             'method': 'set',
             'ln': Compiler.line(tree),
@@ -92,7 +92,7 @@ class Compiler:
         """
         Parses a tree that can have nested subtrees.
         """
-        if tree.data in ['command', 'next_statement']:
+        if tree.data in ['command', 'next_statement', 'assignments']:
             return {cls.line(tree): getattr(cls, tree.data)(tree)}
         return cls.parse_tree(tree)
 

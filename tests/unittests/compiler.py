@@ -48,11 +48,11 @@ def test_compiler_line():
     assert Compiler.line(tree) == '1'
 
 
-def test_compiler_assignment(patch):
+def test_compiler_assignments(patch):
     patch.many(Compiler, ['path', 'string', 'line'])
     tree = Tree('assignments', [Tree('path', ['path']), Token('EQUALS', '='),
                                 Tree('values', [Tree('string', ['string'])])])
-    result = Compiler.assignment(tree)
+    result = Compiler.assignments(tree)
     Compiler.line.assert_called_with(tree)
     Compiler.path.assert_called_with(Tree('path', ['path']))
     Compiler.string.assert_called_with(Tree('string', ['string']))
@@ -95,7 +95,7 @@ def test_compiler_compile(patch):
     assert result == {'script': Compiler.parse_tree(), 'version': version}
 
 
-@mark.parametrize('method_name', ['command', 'next_statement'])
+@mark.parametrize('method_name', ['command', 'next_statement', 'assignments'])
 def test_parse_subtree(patch, method_name):
     patch.many(Compiler, ['line', method_name])
     tree = Tree(method_name, [])
