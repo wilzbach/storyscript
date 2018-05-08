@@ -23,6 +23,13 @@ class Compiler:
         return {'$OBJECT': 'file', 'string': token.value[1:-1]}
 
     @classmethod
+    def list(cls, tree):
+        items = []
+        for value in tree.children:
+            items.append(cls.string(value.child(0)))
+        return {'$OBJECT': 'list', 'items': items}
+
+    @classmethod
     def line(cls, tree):
         """
         Finds the line number of a tree, by finding the first token in the tree

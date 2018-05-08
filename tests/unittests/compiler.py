@@ -21,6 +21,16 @@ def test_compiler_file():
     assert Compiler.file(token) == {'$OBJECT': 'file', 'string': 'path'}
 
 
+def test_compiler_list(patch):
+    patch.object(Compiler, 'string')
+    value = Tree('string', [Token('DOUBLE_QUOTED', '"color"')])
+    tree = Tree('list', [Tree('values', [value])])
+    result = Compiler.list(tree)
+    Compiler.string.assert_called_with(value)
+    expected = {'$OBJECT': 'list', 'items': [Compiler.string()]}
+    assert result == expected
+
+
 def test_compiler_line():
     tree = Tree('outer', [Tree('path', [Token('WORD', 'word', line=1)])])
     assert Compiler.line(tree) == '1'
