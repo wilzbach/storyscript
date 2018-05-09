@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+
 from lark.lexer import Token
 
 from pytest import mark
@@ -21,6 +23,17 @@ def test_compiler_number():
 def test_compiler_string():
     tree = Tree('string', [Token('DOUBLE_QUOTED', '"blue"')])
     assert Compiler.string(tree) == {'$OBJECT': 'string', 'string': 'blue'}
+
+
+def test_compiler_string_templating(patch):
+    patch.object(Compiler, 'path')
+    patch.object(re, 'findall', return_value=['color'])
+    tree = Tree('string', [Token('DOUBLE_QUOTED', '"{{color}}"')])
+    result = Compiler.string(tree)
+    re.findall.assert_called_with(r'{{([^}]*)}}', '{{color}}')
+    Compiler.path.assert_called_with(Tree('path', [Token('WORD', 'color')]))
+    assert result['string'] == '{}'
+    assert result['values'] == [Compiler.path()]
 
 
 def test_compiler_boolean():

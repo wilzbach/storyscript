@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+
 from lark.lexer import Token
 
 from .parser import Tree
@@ -19,9 +21,19 @@ class Compiler:
     def number(tree):
         return int(tree.child(0).value)
 
-    @staticmethod
-    def string(tree):
-        return {'$OBJECT': 'string', 'string': tree.child(0).value[1:-1]}
+    @classmethod
+    def string(cls, tree):
+        item = {'$OBJECT': 'string', 'string': tree.child(0).value[1:-1]}
+        matches = re.findall(r'{{([^}]*)}}', item['string'])
+        if matches == []:
+            return item
+        values = []
+        for match in matches:
+            values.append(cls.path(Tree('path', [Token('WORD', match)])))
+            find = '{}{}{}'.format('{{', match, '}}')
+            item['string'] = item['string'].replace(find, '{}')
+        item['values'] = values
+        return item
 
     @staticmethod
     def boolean(tree):
