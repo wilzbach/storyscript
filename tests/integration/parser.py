@@ -18,8 +18,8 @@ def int_token():
 
 
 @fixture
-def var_token():
-    return Token('WORD', 'var')
+def name_token():
+    return Token('NAME', 'var')
 
 
 def test_parser_values(parser, int_token):
@@ -79,19 +79,19 @@ def test_parser_object(parser):
     assert value == Token('SINGLE_QUOTED', "'red'")
 
 
-def test_parser_assignments(parser, var_token):
+def test_parser_assignments(parser, name_token):
     result = parser.parse('var="hello"\n')
     node = result.node('start.block.line.assignments')
-    assert node.node('path').child(0) == var_token
+    assert node.node('path').child(0) == name_token
     assert node.child(1) == Token('EQUALS', '=')
     token = Token('DOUBLE_QUOTED', '"hello"')
     assert node.child(2).node('string').child(0) == token
 
 
-def test_parser_assignments_int(parser, int_token, var_token):
+def test_parser_assignments_int(parser, int_token, name_token):
     result = parser.parse('var=3\n')
     node = result.node('start.block.line.assignments')
-    assert node.node('path').child(0) == var_token
+    assert node.node('path').child(0) == name_token
     assert node.child(1) == Token('EQUALS', '=')
     assert node.child(2).node('number').child(0) == int_token
 
@@ -99,50 +99,50 @@ def test_parser_assignments_int(parser, int_token, var_token):
 def test_parser_path_assignment(parser):
     result = parser.parse('rainbow.colors[0]="blue"\n')
     node = result.node('start.block.line.assignments.path')
-    assert node.child(0) == Token('WORD', 'rainbow')
-    assert node.child(1).child(0) == Token('WORD', 'colors')
+    assert node.child(0) == Token('NAME', 'rainbow')
+    assert node.child(1).child(0) == Token('NAME', 'colors')
     assert node.child(2).child(0) == Token('INT', 0)
 
 
-def test_parser_if_statement(parser, var_token):
+def test_parser_if_statement(parser, name_token):
     result = parser.parse('if var\n')
     node = result.node('start.block.line.statements.if_statement')
     assert node.child(0) == Token('IF', 'if')
-    assert node.child(1) == var_token
+    assert node.child(1) == name_token
 
 
-def test_parser_if_statement_comparison(parser, var_token):
+def test_parser_if_statement_comparison(parser, name_token):
     result = parser.parse('if var == another\n')
     node = result.node('start.block.line.statements.if_statement')
     assert node.child(0) == Token('IF', 'if')
-    assert node.child(1) == var_token
+    assert node.child(1) == name_token
     assert node.child(2).children[0] == Token('EQUAL', '==')
-    assert node.child(3) == Token('WORD', 'another')
+    assert node.child(3) == Token('NAME', 'another')
 
 
-def test_parser_for_statement(parser, var_token):
+def test_parser_for_statement(parser, name_token):
     result = parser.parse('for var in items\n')
     node = result.node('start.block.line.statements.for_statement')
     assert node.child(0) == Token('FOR', 'for')
-    assert node.child(1) == var_token
+    assert node.child(1) == name_token
     assert node.child(2) == Token('IN', 'in')
-    assert node.child(3) == Token('WORD', 'items')
+    assert node.child(3) == Token('NAME', 'items')
 
 
 def test_parser_foreach_statement(parser):
     result = parser.parse('foreach items as item\n')
     node = result.node('start.block.line.statements.foreach_statement')
     assert node.child(0) == Token('FOREACH', 'foreach')
-    assert node.child(1) == Token('WORD', 'items')
+    assert node.child(1) == Token('NAME', 'items')
     assert node.child(2) == Token('AS', 'as')
-    assert node.child(3) == Token('WORD', 'item')
+    assert node.child(3) == Token('NAME', 'item')
 
 
 def test_parser_wait_statement(parser):
     result = parser.parse('wait time\n')
     node = result.node('start.block.line.statements.wait_statement')
     assert node.child(0) == Token('WAIT', 'wait')
-    assert node.child(1) == Token('WORD', 'time')
+    assert node.child(1) == Token('NAME', 'time')
 
 
 def test_parser_wait_statement_string(parser):
@@ -156,7 +156,7 @@ def test_parser_next_statement(parser):
     result = parser.parse('next word\n')
     node = result.node('start.block.line.statements.next_statement')
     assert node.child(0) == Token('NEXT', 'next')
-    assert node.child(1) == Token('WORD', 'word')
+    assert node.child(1) == Token('NAME', 'word')
 
 
 def test_parser_next_statement_filepath(parser):
@@ -167,24 +167,28 @@ def test_parser_next_statement_filepath(parser):
 
 
 def test_parser_command(parser):
-    result = parser.parse('run container\n')
+    result = parser.parse('org/container-name\n')
     node = result.node('start.block.line.command')
-    assert node.child(0) == Token('RUN', 'run')
-    assert node.child(1) == Token('WORD', 'container')
+    assert node.child(0).child(0) == Token('NAME', 'org')
+    assert node.child(1).child(0) == Token('BSLASH', '/')
+    assert node.child(2).child(0) == Token('NAME', 'container')
+    assert node.child(3).child(0) == Token('DASH', '-')
+    assert node.child(4).child(0) == Token('NAME', 'name')
 
 
 def test_parser_command_option(parser):
-    result = parser.parse('run container --awesome yes\n')
-    node = result.node('start.block.line.command').child(2).node('options')
-    assert node.child(2) == Token('WORD', 'awesome')
-    assert node.child(3) == Token('WORD', 'yes')
+    result = parser.parse('container --awesome yes\n')
+    node = result.node('start.block.line.command').child(1).node('options')
+    assert node.child(2) == Token('NAME', 'awesome')
+    assert node.child(3) == Token('NAME', 'yes')
 
 
 def test_parser_command_arguments(parser):
-    result = parser.parse('run container command "secret"\n')
+    result = parser.parse('container command "secret"\n')
+    print(result.pretty())
     node = result.node('start.block.line.command')
-    assert node.child(2).child(0) == Token('WORD', 'command')
-    token = node.child(3).node('values.string').child(0)
+    assert node.child(1).child(0) == Token('NAME', 'command')
+    token = node.child(2).node('values.string').child(0)
     assert token == Token('DOUBLE_QUOTED', '"secret"')
 
 
@@ -195,21 +199,21 @@ def test_parser_comment(parser, comment):
     assert node.child(0) == Token('COMMENT', comment)
 
 
-def test_parser_block_if(parser, var_token):
+def test_parser_block_if(parser, name_token):
     result = parser.parse('if expr\n\tvar=3\n')
     node = result.node('block')
     if_token = node.node('line.statements.if_statement').child(0)
     assert if_token == Token('IF', 'if')
     token = node.child(1).node('block.line.assignments.path').child(0)
-    assert token == var_token
+    assert token == name_token
 
 
-def test_parser_block_nested_if_block(parser, var_token):
+def test_parser_block_nested_if_block(parser, name_token):
     result = parser.parse('if expr\n\tif things\n\tvar=3\n')
     node = result.node('block')
     things_node = node.child(1).node('line.statements.if_statement').child(1)
-    assert things_node == Token('WORD', 'things')
-    assert node.child(2).node('line.assignments.path').child(0) == var_token
+    assert things_node == Token('NAME', 'things')
+    assert node.child(2).node('line.assignments.path').child(0) == name_token
 
 
 def test_parser_block_if_else(parser):
