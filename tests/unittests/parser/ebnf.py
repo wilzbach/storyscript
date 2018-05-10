@@ -32,6 +32,11 @@ def test_ebnf_resolve_token_inline(ebnf):
     assert ebnf.resolve('token') == '_TOKEN'
 
 
+def test_ebnf_resolve_token_priority(ebnf):
+    ebnf._tokens = {'token': ('TOKEN.1', 'value')}
+    assert ebnf.resolve('token') == 'TOKEN'
+
+
 def test_ebnf_resolve_imports(ebnf):
     ebnf.imports = {'token': '%import common.TOKEN'}
     assert ebnf.resolve('token') == 'TOKEN'

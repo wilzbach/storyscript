@@ -25,7 +25,7 @@ class Ebnf:
         Resolves an item's reference to its real name.
         """
         if item_name in self._tokens:
-            return self._tokens[item_name][0]
+            return self._tokens[item_name][0].split('.')[0]
         if item_name in self.imports:
             return item_name.upper()
         return item_name
