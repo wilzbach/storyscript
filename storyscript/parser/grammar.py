@@ -13,8 +13,8 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['assignments'], ['operation'],
-                       ['statements'], ['comment'], ['command'], ['block'])
+        definitions = (['values'], ['assignments'], ['operation'], ['statements'],
+                       ['comment'], ['command'], ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
@@ -90,15 +90,15 @@ class Grammar:
         self.ebnf.rules('operation', *definitions)
 
     def path_fragment(self):
-        self.ebnf.load('word')
         self.ebnf.token('dot', '.', inline=True)
-        definitions = (('dot', 'word'), ('osb', 'int', 'csb'),
+        definitions = (('dot', 'name'), ('osb', 'int', 'csb'),
                        ('osb', 'string', 'csb'))
         self.ebnf.rules('path_fragment', *definitions)
 
     def path(self):
+        self.ebnf.token('name', '/[a-zA-Z]+/', regexp=True)
         self.path_fragment()
-        self.ebnf.rule('path', 'WORD (path_fragment)*', raw=True)
+        self.ebnf.rule('path', 'NAME (path_fragment)*', raw=True)
 
     def assignments(self):
         self.path()
@@ -115,8 +115,8 @@ class Grammar:
 
     def if_statement(self):
         self.ebnf.token('if', 'if')
-        definitions = (('if', 'ws', 'word'),
-                       ('if', 'ws', 'word', 'ws', 'comparisons', 'ws', 'word'))
+        definitions = (('if', 'ws', 'name'),
+                       ('if', 'ws', 'name', 'ws', 'comparisons', 'ws', 'name'))
         self.ebnf.rules('if_statement', *definitions)
 
     def else_statement(self):
@@ -124,27 +124,27 @@ class Grammar:
         self.ebnf.rule('else_statement', ['else'])
 
     def elseif_statement(self):
-        rule = 'ELSE _WS? IF _WS WORD [_WS comparisons _WS WORD]?'
+        rule = 'ELSE _WS? IF _WS NAME [_WS comparisons _WS NAME]?'
         self.ebnf.rule('elseif_statement', rule, raw=True)
 
     def for_statement(self):
         self.ebnf.tokens(('for', 'for'), ('in', 'in'))
-        definition = ('for', 'ws', 'word', 'ws', 'in', 'ws', 'word')
+        definition = ('for', 'ws', 'name', 'ws', 'in', 'ws', 'name')
         self.ebnf.rule('for_statement', definition)
 
     def foreach_statement(self):
         self.ebnf.tokens(('foreach', 'foreach'), ('as', 'as'))
-        definition = ('foreach', 'ws', 'word', 'ws', 'as', 'ws', 'word')
+        definition = ('foreach', 'ws', 'name', 'ws', 'as', 'ws', 'name')
         self.ebnf.rule('foreach_statement', definition)
 
     def wait_statement(self):
         self.ebnf.token('wait', 'wait')
-        definitions = (('wait', 'ws', 'word'), ('wait', 'ws', 'string'))
+        definitions = (('wait', 'ws', 'name'), ('wait', 'ws', 'string'))
         self.ebnf.rules('wait_statement', *definitions)
 
     def next_statement(self):
         self.ebnf.token('next', 'next')
-        definitions = (('next', 'ws', 'word'), ('next', 'ws', 'filepath'))
+        definitions = (('next', 'ws', 'name'), ('next', 'ws', 'filepath'))
         self.ebnf.rules('next_statement', *definitions)
 
     def statements(self):
@@ -167,13 +167,13 @@ class Grammar:
 
     def options(self):
         self.ebnf.token('dash', '-')
-        definitions = (('dash', 'dash', 'word', 'ws', 'word'),
-                       ('dash', 'dash', 'word', 'ws', 'values'))
+        definitions = (('dash', 'dash', 'name', 'ws', 'name'),
+                       ('dash', 'dash', 'name', 'ws', 'values'))
         self.ebnf.rules('options', *definitions)
 
     def arguments(self):
         self.options()
-        definitions = (['ws', 'values'], ['ws', 'word'], ['ws', 'options'])
+        definitions = (['ws', 'values'], ['ws', 'name'], ['ws', 'options'])
         self.ebnf.rules('arguments', *definitions)
 
     def command(self):

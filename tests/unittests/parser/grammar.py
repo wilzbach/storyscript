@@ -139,9 +139,8 @@ def test_grammar_objects(patch, grammar, ebnf):
 
 def test_grammar_path_fragment(grammar, ebnf):
     grammar.path_fragment()
-    ebnf.load.assert_called_with('word')
     ebnf.token.assert_called_with('dot', '.', inline=True)
-    definitions = (('dot', 'word'), ('osb', 'int', 'csb'),
+    definitions = (('dot', 'name'), ('osb', 'int', 'csb'),
                    ('osb', 'string', 'csb'))
     ebnf.rules.assert_called_with('path_fragment', *definitions)
 
@@ -149,8 +148,9 @@ def test_grammar_path_fragment(grammar, ebnf):
 def test_grammar_path(patch, grammar, ebnf):
     patch.object(Grammar, 'path_fragment')
     grammar.path()
+    ebnf.token.assert_called_with('name', '/[a-zA-Z]+/', regexp=True)
     Grammar.path_fragment.call_count == 1
-    ebnf.rule.assert_called_with('path', 'WORD (path_fragment)*', raw=True)
+    ebnf.rule.assert_called_with('path', 'NAME (path_fragment)*', raw=True)
 
 
 def test_grammar_assignments(patch, grammar, ebnf):
@@ -173,8 +173,8 @@ def test_grammar_comparisons(grammar, ebnf):
 
 def test_grammar_if_statement(grammar, ebnf):
     grammar.if_statement()
-    definitions = (('if', 'ws', 'word'),
-                   ('if', 'ws', 'word', 'ws', 'comparisons', 'ws', 'word'))
+    definitions = (('if', 'ws', 'name'),
+                   ('if', 'ws', 'name', 'ws', 'comparisons', 'ws', 'name'))
     ebnf.rules.assert_called_with('if_statement', *definitions)
     ebnf.token.assert_called_with('if', 'if')
 
@@ -187,27 +187,27 @@ def test_grammar_else_statement(grammar, ebnf):
 
 def test_grammar_elseif_statement(grammar, ebnf):
     grammar.elseif_statement()
-    rule = 'ELSE _WS? IF _WS WORD [_WS comparisons _WS WORD]?'
+    rule = 'ELSE _WS? IF _WS NAME [_WS comparisons _WS NAME]?'
     ebnf.rule.assert_called_with('elseif_statement', rule, raw=True)
 
 
 def test_grammar_for_statement(grammar, ebnf):
     grammar.for_statement()
-    definition = ('for', 'ws', 'word', 'ws', 'in', 'ws', 'word')
+    definition = ('for', 'ws', 'name', 'ws', 'in', 'ws', 'name')
     ebnf.rule.assert_called_with('for_statement', definition)
     ebnf.tokens.assert_called_with(('for', 'for'), ('in', 'in'))
 
 
 def test_grammar_foreach_statement(grammar, ebnf):
     grammar.foreach_statement()
-    definition = ('foreach', 'ws', 'word', 'ws', 'as', 'ws', 'word')
+    definition = ('foreach', 'ws', 'name', 'ws', 'as', 'ws', 'name')
     ebnf.rule.assert_called_with('foreach_statement', definition)
     ebnf.tokens.assert_called_with(('foreach', 'foreach'), ('as', 'as'))
 
 
 def test_grammar_wait_statement(grammar, ebnf):
     grammar.wait_statement()
-    definitions = (('wait', 'ws', 'word'), ('wait', 'ws', 'string'))
+    definitions = (('wait', 'ws', 'name'), ('wait', 'ws', 'string'))
     ebnf.rules.assert_called_with('wait_statement', *definitions)
     ebnf.token.assert_called_with('wait', 'wait')
 
@@ -215,7 +215,7 @@ def test_grammar_wait_statement(grammar, ebnf):
 def test_grammar_next_statement(grammar, ebnf):
     grammar.next_statement()
     ebnf.token.assert_called_with('next', 'next')
-    definitions = (('next', 'ws', 'word'), ('next', 'ws', 'filepath'))
+    definitions = (('next', 'ws', 'name'), ('next', 'ws', 'filepath'))
     ebnf.rules.assert_called_with('next_statement', *definitions)
 
 
@@ -239,8 +239,8 @@ def test_grammar_statements(patch, grammar, ebnf):
 
 def test_grammar_options(grammar, ebnf):
     grammar.options()
-    definitions = (('dash', 'dash', 'word', 'ws', 'word'),
-                   ('dash', 'dash', 'word', 'ws', 'values'))
+    definitions = (('dash', 'dash', 'name', 'ws', 'name'),
+                   ('dash', 'dash', 'name', 'ws', 'values'))
     ebnf.rules.assert_called_with('options', *definitions)
 
 
@@ -248,7 +248,7 @@ def test_grammar_arguments(patch, grammar, ebnf):
     patch.object(Grammar, 'options')
     grammar.arguments()
     assert Grammar.options.call_count == 1
-    definitions = (['ws', 'values'], ['ws', 'word'], ['ws', 'options'])
+    definitions = (['ws', 'values'], ['ws', 'name'], ['ws', 'options'])
     ebnf.rules.assert_called_with('arguments', *definitions)
 
 
