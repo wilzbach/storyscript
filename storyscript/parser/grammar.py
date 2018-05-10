@@ -175,6 +175,9 @@ class Grammar:
         definitions = (['ws', 'values'], ['ws', 'name'], ['ws', 'options'])
         self.ebnf.rules('arguments', *definitions)
 
+    def container(self):
+        self.ebnf.rules('container', *(['name'], ['dash'], ['bslash']))
+
     def command(self):
         self.arguments()
         self.ebnf.token('run', 'run')

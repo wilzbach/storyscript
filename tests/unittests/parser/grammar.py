@@ -252,6 +252,12 @@ def test_grammar_arguments(patch, grammar, ebnf):
     ebnf.rules.assert_called_with('arguments', *definitions)
 
 
+def test_grammar_container(grammar, ebnf):
+    grammar.container()
+    definitions = (['name'], ['dash'], ['bslash'])
+    grammar.ebnf.rules.assert_called_with('container', *definitions)
+
+
 def test_grammar_command(patch, grammar, ebnf):
     patch.object(Grammar, 'arguments')
     grammar.command()
