@@ -99,9 +99,9 @@ def test_grammar_values(patch, grammar, ebnf):
 def test_grammar_operator(grammar, ebnf):
     grammar.operator()
     tokens = (('plus', '+'), ('minus', '-'), ('multiplier', '*'),
-              ('division', '/'))
+              ('bslash', '/'))
     ebnf.tokens.assert_called_with(*tokens)
-    definitions = (['plus'], ['minus'], ['multiplier'], ['division'])
+    definitions = (['plus'], ['minus'], ['multiplier'], ['bslash'])
     ebnf.rules.assert_called_with('operator', *definitions)
 
 

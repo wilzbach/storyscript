@@ -79,8 +79,8 @@ class Grammar:
 
     def operator(self):
         self.ebnf.tokens(('plus', '+'), ('minus', '-'), ('multiplier', '*'),
-                         ('division', '/'))
-        definitions = (['plus'], ['minus'], ['multiplier'], ['division'])
+                         ('bslash', '/'))
+        definitions = (['plus'], ['minus'], ['multiplier'], ['bslash'])
         self.ebnf.rules('operator', *definitions)
 
     def operation(self):
