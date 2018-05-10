@@ -259,11 +259,11 @@ def test_grammar_container(grammar, ebnf):
 
 
 def test_grammar_command(patch, grammar, ebnf):
-    patch.object(Grammar, 'arguments')
+    patch.many(Grammar, ['arguments', 'container'])
     grammar.command()
     assert Grammar.arguments.call_count == 1
-    rule = 'RUN _WS WORD arguments*|WORD arguments*'
-    ebnf.rule.assert_called_with('command', rule, raw=True)
+    assert Grammar.container.call_count == 1
+    ebnf.rule.assert_called_with('command', 'container+ arguments*', raw=True)
 
 
 def test_grammar_comment(grammar, ebnf):

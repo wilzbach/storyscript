@@ -13,8 +13,8 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['assignments'], ['operation'], ['statements'],
-                       ['comment'], ['command'], ['block'])
+        definitions = (['values'], ['assignments'], ['operation'],
+                       ['statements'], ['comment'], ['command'], ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
@@ -180,9 +180,8 @@ class Grammar:
 
     def command(self):
         self.arguments()
-        self.ebnf.token('run', 'run')
-        rule = 'RUN _WS WORD arguments*|WORD arguments*'
-        self.ebnf.rule('command', rule, raw=True)
+        self.container()
+        self.ebnf.rule('command', 'container+ arguments*', raw=True)
 
     def comment(self):
         self.ebnf.token('comment', '/#(.*)/', regexp=True)
