@@ -32,8 +32,13 @@ class Grammar:
     def nested_block(self):
         self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
 
+    def elseif_statement(self):
+        rule = 'ELSE _WS? IF _WS NAME [_WS comparisons _WS NAME]?'
+        self.ebnf.rule('elseif_statement', rule, raw=True)
+
     def elseif_block(self):
         self.nested_block()
+        self.elseif_statement()
         definition = ('elseif_statement', 'nl', 'nested_block')
         self.ebnf.rule('elseif_block', definition)
 
@@ -152,10 +157,6 @@ class Grammar:
     def else_statement(self):
         self.ebnf.token('else', 'else')
         self.ebnf.rule('else_statement', ['else'])
-
-    def elseif_statement(self):
-        rule = 'ELSE _WS? IF _WS NAME [_WS comparisons _WS NAME]?'
-        self.ebnf.rule('elseif_statement', rule, raw=True)
 
     def for_statement(self):
         self.ebnf.tokens(('for', 'for'), ('in', 'in'))
