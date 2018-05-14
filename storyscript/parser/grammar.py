@@ -52,6 +52,10 @@ class Grammar:
         definition =  '(for_statement|foreach_statement) _NL nested_block'
         self.ebnf.rule('for_block', definition, raw=True)
 
+    def wait_block(self):
+        self.wait_statement()
+        self.ebnf.rule('wait_block', ('wait_statement', 'nl', 'nested_block'))
+
     def block(self):
         definition = 'line _NL [_INDENT block+ _DEDENT]'
         self.ebnf.rule('block', definition, raw=True)
