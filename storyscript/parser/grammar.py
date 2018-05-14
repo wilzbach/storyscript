@@ -13,7 +13,7 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['assignments'], ['operation'],
+        definitions = (['values'], ['assignments'], ['operation'], ['next'],
                        ['comment'], ['command'], ['block'])
         self.ebnf.rules('line', *definitions)
 
@@ -175,10 +175,10 @@ class Grammar:
         definitions = (('wait', 'ws', 'name'), ('wait', 'ws', 'string'))
         self.ebnf.rules('wait_statement', *definitions)
 
-    def next_statement(self):
+    def next(self):
         self.ebnf.token('next', 'next')
         definitions = (('next', 'ws', 'name'), ('next', 'ws', 'filepath'))
-        self.ebnf.rules('next_statement', *definitions)
+        self.ebnf.rules('next', *definitions)
 
     def options(self):
         definitions = (('dash', 'dash', 'name', 'ws', 'name'),
@@ -210,6 +210,7 @@ class Grammar:
         self.comparisons()
         self.assignments()
         self.operation()
+        self.next()
         self.comment()
         self.block()
         self.command()
