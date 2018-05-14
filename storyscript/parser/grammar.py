@@ -46,6 +46,12 @@ class Grammar:
         definition = 'if_statement _NL nested_block elseif_block* else_block?'
         self.ebnf.rule('if_block', definition, raw=True)
 
+    def for_block(self):
+        self.for_statement()
+        self.foreach_statement()
+        definition =  '(for_statement|foreach_statement) _NL nested_block'
+        self.ebnf.rule('for_block', definition, raw=True)
+
     def block(self):
         definition = 'line _NL [_INDENT block+ _DEDENT]'
         self.ebnf.rule('block', definition, raw=True)
