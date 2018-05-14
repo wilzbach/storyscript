@@ -63,6 +63,12 @@ def test_grammar_elseif_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('elseif_block', definition)
 
 
+def test_grammar_else_block(grammar, ebnf):
+    grammar.else_block()
+    definition = ('else_statement', 'nl', 'nested_block')
+    ebnf.rule.assert_called_with('else_block', definition)
+
+
 def test_grammar_block(grammar, ebnf):
     grammar.block()
     definition = 'line _NL [_INDENT block+ _DEDENT]'
