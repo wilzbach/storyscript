@@ -219,24 +219,6 @@ def test_grammar_next_statement(grammar, ebnf):
     ebnf.rules.assert_called_with('next_statement', *definitions)
 
 
-def test_grammar_statements(patch, grammar, ebnf):
-    patch.many(Grammar, ['if_statement', 'for_statement', 'foreach_statement',
-                         'wait_statement', 'next_statement', 'else_statement',
-                         'elseif_statement'])
-    grammar.statements()
-    assert Grammar.if_statement.call_count == 1
-    assert Grammar.for_statement.call_count == 1
-    assert Grammar.foreach_statement.call_count == 1
-    assert Grammar.wait_statement.call_count == 1
-    assert Grammar.next_statement.call_count == 1
-    assert Grammar.else_statement.call_count == 1
-    assert Grammar.elseif_statement.call_count == 1
-    child_rules = (['if_statement'], ['for_statement'], ['foreach_statement'],
-                   ['wait_statement'], ['next_statement'], ['else_statement'],
-                   ['elseif_statement'])
-    ebnf.rules.assert_called_with('statements', *child_rules)
-
-
 def test_grammar_options(grammar, ebnf):
     grammar.options()
     definitions = (('dash', 'dash', 'name', 'ws', 'name'),
@@ -274,8 +256,8 @@ def test_grammar_comment(grammar, ebnf):
 
 def test_grammar_build(patch, grammar):
     patch.many(Grammar, ['line', 'spaces', 'values', 'assignments',
-                         'operation', 'statements', 'comment', 'block',
-                         'comparisons', 'command'])
+                         'operation', 'comment', 'block', 'comparisons',
+                         'command'])
     result = grammar.build()
     grammar.ebnf.start.assert_called_with('_NL? block')
     assert Grammar.line.call_count == 1
@@ -283,7 +265,6 @@ def test_grammar_build(patch, grammar):
     assert Grammar.values.call_count == 1
     assert Grammar.assignments.call_count == 1
     assert Grammar.operation.call_count == 1
-    assert Grammar.statements.call_count == 1
     assert Grammar.comment.call_count == 1
     assert Grammar.block.call_count == 1
     assert Grammar.comparisons.call_count == 1

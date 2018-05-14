@@ -147,24 +147,6 @@ class Grammar:
         definitions = (('next', 'ws', 'name'), ('next', 'ws', 'filepath'))
         self.ebnf.rules('next_statement', *definitions)
 
-    def statements(self):
-        """
-        Defines all possible statements. Statements must be followed by an
-        indented block.
-        """
-        statements = (['if_statement'], ['for_statement'],
-                      ['foreach_statement'], ['wait_statement'],
-                      ['next_statement'], ['else_statement'],
-                      ['elseif_statement'])
-        self.if_statement()
-        self.else_statement()
-        self.elseif_statement()
-        self.for_statement()
-        self.foreach_statement()
-        self.wait_statement()
-        self.next_statement()
-        self.ebnf.rules('statements', *statements)
-
     def options(self):
         definitions = (('dash', 'dash', 'name', 'ws', 'name'),
                        ('dash', 'dash', 'name', 'ws', 'values'))
@@ -195,7 +177,6 @@ class Grammar:
         self.comparisons()
         self.assignments()
         self.operation()
-        self.statements()
         self.comment()
         self.block()
         self.command()
