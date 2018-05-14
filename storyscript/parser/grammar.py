@@ -32,6 +32,11 @@ class Grammar:
     def nested_block(self):
         self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
 
+    def elseif_block(self):
+        self.nested_block()
+        definition = ('elseif_statement', 'nl', 'nested_block')
+        self.ebnf.rule('elseif_block', definition)
+
     def block(self):
         definition = 'line _NL [_INDENT block+ _DEDENT]'
         self.ebnf.rule('block', definition, raw=True)

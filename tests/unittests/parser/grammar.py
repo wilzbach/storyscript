@@ -55,6 +55,14 @@ def test_grammar_nested_block(grammar, ebnf):
     ebnf.rule.assert_called_with('nested_block', definition, raw=True)
 
 
+def test_grammar_elseif_block(patch, grammar, ebnf):
+    patch.object(Grammar, 'nested_block')
+    grammar.elseif_block()
+    assert grammar.nested_block.call_count == 1
+    definition = ('elseif_statement', 'nl', 'nested_block')
+    ebnf.rule.assert_called_with('elseif_block', definition)
+
+
 def test_grammar_block(grammar, ebnf):
     grammar.block()
     definition = 'line _NL [_INDENT block+ _DEDENT]'
