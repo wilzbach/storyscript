@@ -14,7 +14,7 @@ class Grammar:
 
     def line(self):
         definitions = (['values'], ['assignments'], ['operation'],
-                       ['statements'], ['comment'], ['command'], ['block'])
+                       ['comment'], ['command'], ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
