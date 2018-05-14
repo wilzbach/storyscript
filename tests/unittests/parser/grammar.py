@@ -83,7 +83,7 @@ def test_grammar_for_block(patch, grammar, ebnf):
     grammar.for_block()
     assert Grammar.for_statement.call_count == 1
     assert Grammar.foreach_statement.call_count == 1
-    definition =  '(for_statement|foreach_statement) _NL nested_block'
+    definition = '(for_statement|foreach_statement) _NL nested_block'
     ebnf.rule.assert_called_with('for_block', definition, raw=True)
 
 
@@ -95,9 +95,13 @@ def test_grammar_wait_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('wait_block', definition)
 
 
-def test_grammar_block(grammar, ebnf):
+def test_grammar_block(patch, grammar, ebnf):
+    patch.many(Grammar, ['if_block', 'wait_block', 'for_block'])
     grammar.block()
-    definition = 'line _NL [_INDENT block+ _DEDENT]'
+    assert Grammar.if_block.call_count == 1
+    assert Grammar.for_block.call_count == 1
+    assert Grammar.wait_block.call_count == 1
+    definition = 'line _NL nested_block?|if_block|for_block|wait_block'
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 
