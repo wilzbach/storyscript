@@ -29,6 +29,9 @@ class Grammar:
         self.whitespaces()
         self.indentation()
 
+    def nested_block(self):
+        self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
+
     def block(self):
         definition = 'line _NL [_INDENT block+ _DEDENT]'
         self.ebnf.rule('block', definition, raw=True)

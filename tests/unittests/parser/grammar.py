@@ -49,6 +49,12 @@ def test_grammar_spaces(patch, grammar):
     assert Grammar.indentation.call_count == 1
 
 
+def test_grammar_nested_block(grammar, ebnf):
+    grammar.nested_block()
+    definition = '_INDENT block+ _DEDENT'
+    ebnf.rule.assert_called_with('nested_block', definition, raw=True)
+
+
 def test_grammar_block(grammar, ebnf):
     grammar.block()
     definition = 'line _NL [_INDENT block+ _DEDENT]'
