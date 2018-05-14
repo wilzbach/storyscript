@@ -40,6 +40,12 @@ class Grammar:
     def else_block(self):
         self.ebnf.rule('else_block', ('else_statement', 'nl', 'nested_block'))
 
+    def if_block(self):
+        self.elseif_block()
+        self.else_block()
+        definition = 'if_statement _NL nested_block elseif_block* else_block?'
+        self.ebnf.rule('if_block', definition, raw=True)
+
     def block(self):
         definition = 'line _NL [_INDENT block+ _DEDENT]'
         self.ebnf.rule('block', definition, raw=True)
