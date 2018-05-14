@@ -50,7 +50,14 @@ class Grammar:
         self.else_statement()
         self.ebnf.rule('else_block', ('else_statement', 'nl', 'nested_block'))
 
+    def if_statement(self):
+        self.ebnf.token('if', 'if')
+        definitions = (('if', 'ws', 'name'),
+                       ('if', 'ws', 'name', 'ws', 'comparisons', 'ws', 'name'))
+        self.ebnf.rules('if_statement', *definitions)
+
     def if_block(self):
+        self.if_statement()
         self.elseif_block()
         self.else_block()
         definition = 'if_statement _NL nested_block elseif_block* else_block?'
@@ -152,12 +159,6 @@ class Grammar:
         definitions = (['greater'], ['greater_equal'], ['lesser'],
                        ['lesser_equal'], ['not'], ['equal'])
         self.ebnf.rules('comparisons', *definitions)
-
-    def if_statement(self):
-        self.ebnf.token('if', 'if')
-        definitions = (('if', 'ws', 'name'),
-                       ('if', 'ws', 'name', 'ws', 'comparisons', 'ws', 'name'))
-        self.ebnf.rules('if_statement', *definitions)
 
     def for_statement(self):
         self.ebnf.tokens(('for', 'for'), ('in', 'in'))

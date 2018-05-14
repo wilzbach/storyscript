@@ -73,8 +73,9 @@ def test_grammar_else_block(patch, grammar, ebnf):
 
 
 def test_grammar_if_block(patch, grammar, ebnf):
-    patch.many(Grammar, ['elseif_block', 'else_block'])
+    patch.many(Grammar, ['if_statement', 'elseif_block', 'else_block'])
     grammar.if_block()
+    assert Grammar.if_statement.call_count == 1
     assert Grammar.elseif_block.call_count == 1
     assert Grammar.else_block.call_count == 1
     definition = 'if_statement _NL nested_block elseif_block* else_block?'
