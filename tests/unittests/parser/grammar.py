@@ -64,6 +64,14 @@ def test_grammar_elseif_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('elseif_block', definition)
 
 
+def test_grammar_else_block(patch, grammar, ebnf):
+    patch.object(Grammar, 'else_statement')
+    grammar.else_block()
+    assert Grammar.else_statement.call_count == 1
+    definition = ('else_statement', 'nl', 'nested_block')
+    ebnf.rule.assert_called_with('else_block', definition)
+
+
 def test_grammar_if_block(patch, grammar, ebnf):
     patch.many(Grammar, ['elseif_block', 'else_block'])
     grammar.if_block()
@@ -71,12 +79,6 @@ def test_grammar_if_block(patch, grammar, ebnf):
     assert Grammar.else_block.call_count == 1
     definition = 'if_statement _NL nested_block elseif_block* else_block?'
     ebnf.rule.assert_called_with('if_block', definition, raw=True)
-
-
-def test_grammar_else_block(grammar, ebnf):
-    grammar.else_block()
-    definition = ('else_statement', 'nl', 'nested_block')
-    ebnf.rule.assert_called_with('else_block', definition)
 
 
 def test_grammar_for_block(patch, grammar, ebnf):
