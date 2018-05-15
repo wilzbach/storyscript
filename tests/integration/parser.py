@@ -115,10 +115,8 @@ def test_parser_for_block(parser, name_token):
 def test_parser_foreach_block(parser):
     result = parser.parse('foreach items as item\n\tvar=3\n')
     node = result.node('start.block.for_block')
-    assert node.node('foreach_statement').child(0) == Token('FOREACH', 'foreach')
-    assert node.node('foreach_statement').child(1) == Token('NAME', 'items')
-    assert node.node('foreach_statement').child(2) == Token('AS', 'as')
-    assert node.node('foreach_statement').child(3) == Token('NAME', 'item')
+    assert node.node('foreach_statement').child(0) == Token('NAME', 'items')
+    assert node.node('foreach_statement').child(1) == Token('NAME', 'item')
     assert node.node('nested_block').data == 'nested_block'
 
 

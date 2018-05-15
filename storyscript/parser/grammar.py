@@ -166,7 +166,7 @@ class Grammar:
         self.ebnf.rule('for_statement', definition)
 
     def foreach_statement(self):
-        self.ebnf.tokens(('foreach', 'foreach'), ('as', 'as'))
+        self.ebnf.tokens(('foreach', 'foreach'), ('as', 'as'), inline=True)
         definition = ('foreach', 'ws', 'name', 'ws', 'as', 'ws', 'name')
         self.ebnf.rule('foreach_statement', definition)
 

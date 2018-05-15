@@ -256,7 +256,8 @@ def test_grammar_foreach_statement(grammar, ebnf):
     grammar.foreach_statement()
     definition = ('foreach', 'ws', 'name', 'ws', 'as', 'ws', 'name')
     ebnf.rule.assert_called_with('foreach_statement', definition)
-    ebnf.tokens.assert_called_with(('foreach', 'foreach'), ('as', 'as'))
+    tokens = (('foreach', 'foreach'), ('as', 'as'))
+    ebnf.tokens.assert_called_with(*tokens, inline=True)
 
 
 def test_grammar_wait_statement(grammar, ebnf):
