@@ -120,37 +120,37 @@ def test_compiler_command(magic, patch):
 
 
 def test_compiler_if_block(magic, patch):
-    patch.many(Compiler, ['line', 'path', 'parse_subtree'])
+    patch.many(Compiler, ['line', 'path', 'subtree'])
     tree = magic()
     result = Compiler.if_block(tree)
     Compiler.line.assert_called_with(tree)
     Compiler.path.assert_called_with(tree.node('if_statement'))
-    Compiler.parse_subtree.assert_called_with(tree.node('nested_block'))
+    Compiler.subtree.assert_called_with(tree.node('nested_block'))
     expected = {'method': 'if', 'ln': Compiler.line(), 'container': None,
                 'output': None, 'args': [Compiler.path()]}
-    assert result == {**{Compiler.line(): expected}, **Compiler.parse_subtree()}
+    assert result == {**{Compiler.line(): expected}, **Compiler.subtree()}
 
 
 def test_compiler_for_block(patch, magic):
-    patch.many(Compiler, ['line', 'path', 'parse_subtree'])
+    patch.many(Compiler, ['line', 'path', 'subtree'])
     tree = magic()
     result = Compiler.for_block(tree)
     Compiler.line.assert_called_with(tree)
     Compiler.path.assert_called_with(tree.node('for_statement'))
-    Compiler.parse_subtree.assert_called_with(tree.node('nested_block'))
+    Compiler.subtree.assert_called_with(tree.node('nested_block'))
     expected = {'method': 'for', 'ln': Compiler.line(), 'output': None,
                 'container': None, 'args': [
                 tree.node('for_statement').child(0).value, Compiler.path()]}
-    assert result == {**{Compiler.line(): expected}, **Compiler.parse_subtree()}
+    assert result == {**{Compiler.line(): expected}, **Compiler.subtree()}
 
 
-@mark.parametrize('method_name',
-    ['command', 'next', 'assignments', 'if_block', 'for_block']
-)
-def test_parse_subtree(patch, method_name):
+@mark.parametrize('method_name', [
+    'command', 'next', 'assignments', 'if_block', 'for_block'
+])
+def test_subtree(patch, method_name):
     patch.object(Compiler, method_name)
     tree = Tree(method_name, [])
-    result = Compiler.parse_subtree(tree)
+    result = Compiler.subtree(tree)
     method = getattr(Compiler, method_name)
     method.assert_called_with(tree)
     assert result == method()
@@ -160,7 +160,7 @@ def test_compiler_parse_tree(patch):
     """
     Ensures that the parse_tree method can parse a complete tree
     """
-    patch.object(Compiler, 'parse_subtree', return_value={'1': 'subtree'})
+    patch.object(Compiler, 'subtree', return_value={'1': 'subtree'})
     subtree = Tree('command', ['token'])
     tree = Tree('start', [Tree('block', [Tree('line', [subtree])])])
     result = Compiler.parse_tree(tree)

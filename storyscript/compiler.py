@@ -136,7 +136,7 @@ class Compiler:
             'output': None
         }
         partial = {line: dictionary}
-        return {**partial, **cls.parse_subtree(tree.node('nested_block'))}
+        return {**partial, **cls.subtree(tree.node('nested_block'))}
 
     @classmethod
     def for_block(cls, tree):
@@ -151,11 +151,11 @@ class Compiler:
             ],
             'output': None
         }
-        partial = {line : dictionary}
-        return {**partial, **cls.parse_subtree(tree.node('nested_block'))}
+        partial = {line: dictionary}
+        return {**partial, **cls.subtree(tree.node('nested_block'))}
 
     @classmethod
-    def parse_subtree(cls, tree):
+    def subtree(cls, tree):
         """
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
@@ -174,7 +174,7 @@ class Compiler:
         script = {}
         for item in tree.children:
             if isinstance(item, Tree):
-                script = {**cls.parse_subtree(item), **script}
+                script = {**cls.subtree(item), **script}
         return script
 
     @staticmethod
