@@ -155,13 +155,26 @@ class Compiler:
         return {**partial, **cls.subtree(tree.node('nested_block'))}
 
     @classmethod
+    def wait_block(cls, tree):
+        line = cls.line(tree)
+        dictionary = {
+            'method': 'wait',
+            'ln': line,
+            'container': None,
+            'output': None,
+            'args': [cls.path(tree.node('wait_statement').child(1))]
+        }
+        partial = {line: dictionary}
+        return {**partial, **cls.subtree(tree.node('nested_block'))}
+
+    @classmethod
     def subtree(cls, tree):
         """
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
         """
         allowed_nodes = ['command', 'next', 'assignments', 'if_block',
-                         'for_block']
+                         'for_block', 'wait_block']
         if tree.data in allowed_nodes:
             return getattr(cls, tree.data)(tree)
         return cls.parse_tree(tree)
