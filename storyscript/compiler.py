@@ -137,9 +137,10 @@ class Compiler:
 
     @classmethod
     def for_block(cls, tree):
+        line = cls.line(tree)
         dictionary = {
             'method': 'for',
-            'ln': Compiler.line(tree),
+            'ln': line,
             'container': None,
             'args': [
                 tree.node('for_statement').child(0).value,
@@ -147,7 +148,8 @@ class Compiler:
             ],
             'output': None
         }
-        return dictionary
+        partial = {line : dictionary}
+        return {**partial, **cls.parse_subtree(tree.node('nested_block'))}
 
     @classmethod
     def parse_subtree(cls, tree):

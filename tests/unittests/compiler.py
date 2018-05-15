@@ -130,16 +130,17 @@ def test_compiler_if_block(patch):
     assert result == expected
 
 
-def test_compiler_for_block(patch):
-    patch.many(Compiler, ['line', 'path'])
-    tree = Tree('for_block', [Tree('for_statement', [Token('NAME', 'item'),
-                                                     Token('NAME', 'items')])])
+def test_compiler_for_block(patch, magic):
+    patch.many(Compiler, ['line', 'path', 'parse_subtree'])
+    tree = magic()
     result = Compiler.for_block(tree)
     Compiler.line.assert_called_with(tree)
     Compiler.path.assert_called_with(tree.node('for_statement'))
+    Compiler.parse_subtree.assert_called_with(tree.node('nested_block'))
     expected = {'method': 'for', 'ln': Compiler.line(), 'output': None,
-                'container': None, 'args': ['item', Compiler.path()]}
-    assert result == expected
+                'container': None, 'args': [
+                tree.node('for_statement').child(0).value, Compiler.path()]}
+    assert result == {**{Compiler.line(): expected}, **Compiler.parse_subtree()}
 
 
 @mark.parametrize('method_name',
