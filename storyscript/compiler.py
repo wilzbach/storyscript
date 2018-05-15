@@ -98,16 +98,18 @@ class Compiler:
         return {line: dictionary}
 
     @classmethod
-    def next_statement(cls, tree):
-        return {
+    def next(cls, tree):
+        line = cls.line(tree)
+        dictionary = {
             'method': 'next',
-            'ln': cls.line(tree),
+            'ln': line,
             'container': None,
             'output': None,
             'args': [cls.file(tree.children[1])],
             'enter': None,
             'exit': None
         }
+        return {line: dictionary}
 
     @classmethod
     def command(cls, tree):
@@ -153,8 +155,8 @@ class Compiler:
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
         """
-        allowed_nodes = ['command', 'next_statement', 'assignments',
-                         'if_block', 'for_block']
+        allowed_nodes = ['command', 'next', 'assignments', 'if_block',
+                         'for_block']
         if tree.data in allowed_nodes:
             return getattr(cls, tree.data)(tree)
         return cls.parse_tree(tree)

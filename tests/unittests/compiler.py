@@ -95,15 +95,14 @@ def test_compiler_assignments(patch):
 
 def test_compiler_next(patch):
     patch.many(Compiler, ['file', 'line'])
-    tree = Tree('next_statement', [Token('NEXT', 'next', line=1),
-                                   Token('FILEPATH', '`path`')])
-    result = Compiler.next_statement(tree)
+    tree = Tree('next', [Token('NEXT', 'next'), Token('FILEPATH', '`path`')])
+    result = Compiler.next(tree)
     Compiler.line.assert_called_with(tree)
     Compiler.file.assert_called_with(tree.children[1])
     expected = {'method': 'next', 'ln': Compiler.line(), 'output': None,
                 'args': [Compiler.file()], 'container': None, 'enter': None,
                 'exit': None}
-    assert result == expected
+    assert result == {Compiler.line(): expected}
 
 
 def test_compiler_command(patch):
@@ -144,7 +143,7 @@ def test_compiler_for_block(patch):
 
 
 @mark.parametrize('method_name',
-    ['command', 'next_statement', 'assignments', 'if_block', 'for_block']
+    ['command', 'next', 'assignments', 'if_block', 'for_block']
 )
 def test_parse_subtree(patch, method_name):
     patch.object(Compiler, method_name)
