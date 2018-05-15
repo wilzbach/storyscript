@@ -137,7 +137,9 @@ def test_compiler_compile(patch):
     assert result == {'script': Compiler.parse_tree(), 'version': version}
 
 
-@mark.parametrize('method_name', ['command', 'next_statement', 'assignments'])
+@mark.parametrize('method_name',
+    ['command', 'next_statement', 'assignments', 'if_block']
+)
 def test_parse_subtree(patch, method_name):
     patch.many(Compiler, ['line', method_name])
     tree = Tree(method_name, [])
