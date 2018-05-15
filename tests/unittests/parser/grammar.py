@@ -249,7 +249,7 @@ def test_grammar_for_statement(grammar, ebnf):
     grammar.for_statement()
     definition = ('for', 'ws', 'name', 'ws', 'in', 'ws', 'name')
     ebnf.rule.assert_called_with('for_statement', definition)
-    ebnf.tokens.assert_called_with(('for', 'for'), ('in', 'in'))
+    ebnf.tokens.assert_called_with(('for', 'for'), ('in', 'in'), inline=True)
 
 
 def test_grammar_foreach_statement(grammar, ebnf):

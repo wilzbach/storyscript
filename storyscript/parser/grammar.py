@@ -161,7 +161,7 @@ class Grammar:
         self.ebnf.rules('comparisons', *definitions)
 
     def for_statement(self):
-        self.ebnf.tokens(('for', 'for'), ('in', 'in'))
+        self.ebnf.tokens(('for', 'for'), ('in', 'in'), inline=True)
         definition = ('for', 'ws', 'name', 'ws', 'in', 'ws', 'name')
         self.ebnf.rule('for_statement', definition)
 

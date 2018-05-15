@@ -107,10 +107,8 @@ def test_parser_path_assignment(parser):
 def test_parser_for_block(parser, name_token):
     result = parser.parse('for var in items\n\tvar=3\n')
     node = result.node('start.block.for_block')
-    assert node.node('for_statement').child(0) == Token('FOR', 'for')
-    assert node.node('for_statement').child(1) == name_token
-    assert node.node('for_statement').child(2) == Token('IN', 'in')
-    assert node.node('for_statement').child(3) == Token('NAME', 'items')
+    assert node.node('for_statement').child(0) == name_token
+    assert node.node('for_statement').child(1) == Token('NAME', 'items')
     assert node.node('nested_block').data == 'nested_block'
 
 
