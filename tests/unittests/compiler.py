@@ -114,7 +114,7 @@ def test_compiler_command(magic, patch):
     result = Compiler.command(tree)
     Compiler.line.assert_called_with(tree)
     expected = {'method': 'run', 'ln': Compiler.line(), 'args': None,
-                'container': tree.child(0).value, 'output': None,
+                'container': tree.child(0).child(0).value, 'output': None,
                 'enter': None, 'exit': None}
     assert result == {Compiler.line(): expected}
 

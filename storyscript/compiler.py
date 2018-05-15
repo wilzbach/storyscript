@@ -117,7 +117,7 @@ class Compiler:
         dictionary = {
             'method': 'run',
             'ln': line,
-            'container': tree.child(0).value,
+            'container': tree.child(0).child(0).value,
             'args': None,
             'output': None,
             'enter': None,
