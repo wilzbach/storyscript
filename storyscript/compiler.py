@@ -23,6 +23,10 @@ class Compiler:
 
     @classmethod
     def string(cls, tree):
+        """
+        Compiles a string tree. If the string has templated values, they
+        are processed and compiled.
+        """
         item = {'$OBJECT': 'string', 'string': tree.child(0).value[1:-1]}
         matches = re.findall(r'{{([^}]*)}}', item['string'])
         if matches == []:
