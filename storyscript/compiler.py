@@ -121,7 +121,7 @@ class Compiler:
             'method': 'if',
             'ln': cls.line(tree),
             'container': None,
-            'args': [cls.path(tree)],
+            'args': [cls.path(tree.node('if_statement'))],
             'output': None
         }
         return dictionary

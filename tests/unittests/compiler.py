@@ -124,7 +124,7 @@ def test_compiler_if_block(patch):
                                                    Token('NAME', 'expr')])])
     result = Compiler.if_block(tree)
     Compiler.line.assert_called_with(tree)
-    Compiler.path.assert_called_with(tree)
+    Compiler.path.assert_called_with(tree.node('if_statement'))
     expected = {'method': 'if', 'ln': Compiler.line(), 'container': None,
                 'output': None, 'args': [Compiler.path()]}
     assert result == expected
