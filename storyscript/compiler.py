@@ -145,7 +145,8 @@ class Compiler:
         """
         Parses a tree that can have nested subtrees.
         """
-        allowed_nodes = ['command', 'next_statement', 'assignments', 'if_block']
+        allowed_nodes = ['command', 'next_statement', 'assignments',
+                         'if_block', 'for_block']
         if tree.data in allowed_nodes:
             return {cls.line(tree): getattr(cls, tree.data)(tree)}
         return cls.parse_tree(tree)
