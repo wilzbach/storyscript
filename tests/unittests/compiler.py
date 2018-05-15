@@ -90,7 +90,7 @@ def test_compiler_assignments(patch):
     expected = {'method': 'set', 'ln': Compiler.line(), 'output': None,
                 'container': None, 'enter': None, 'exit': None,
                 'args': [Compiler.path(), Compiler.string()]}
-    assert result == expected
+    assert result == {Compiler.line(): expected}
 
 
 def test_compiler_next(patch):

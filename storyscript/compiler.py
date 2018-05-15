@@ -80,11 +80,12 @@ class Compiler:
                 return str(item.line)
             return cls.line(item)
 
-    @staticmethod
-    def assignments(tree):
-        return {
+    @classmethod
+    def assignments(cls, tree):
+        line = cls.line(tree)
+        dictionary = {
             'method': 'set',
-            'ln': Compiler.line(tree),
+            'ln': line,
             'container': None,
             'args': [
                 Compiler.path(tree.node('path')),
@@ -94,6 +95,7 @@ class Compiler:
             'enter': None,
             'exit': None
         }
+        return {line: dictionary}
 
     @classmethod
     def next_statement(cls, tree):
