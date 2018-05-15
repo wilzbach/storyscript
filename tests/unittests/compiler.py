@@ -147,13 +147,12 @@ def test_compiler_for_block(patch):
     ['command', 'next_statement', 'assignments', 'if_block', 'for_block']
 )
 def test_parse_subtree(patch, method_name):
-    patch.many(Compiler, ['line', method_name])
+    patch.object(Compiler, method_name)
     tree = Tree(method_name, [])
     result = Compiler.parse_subtree(tree)
-    Compiler.line.assert_called_with(tree)
     method = getattr(Compiler, method_name)
     method.assert_called_with(tree)
-    assert result == {Compiler.line(): method()}
+    assert result == method()
 
 
 def test_compiler_parse_tree(patch):
