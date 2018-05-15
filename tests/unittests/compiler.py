@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 import re
 
 from lark.lexer import Token
@@ -142,13 +143,6 @@ def test_compiler_for_block(patch):
     assert result == expected
 
 
-def test_compiler_compile(patch):
-    patch.object(Compiler, 'parse_tree')
-    result = Compiler.compile('tree')
-    Compiler.parse_tree.assert_called_with('tree')
-    assert result == {'script': Compiler.parse_tree(), 'version': version}
-
-
 @mark.parametrize('method_name',
     ['command', 'next_statement', 'assignments', 'if_block', 'for_block']
 )
@@ -171,3 +165,13 @@ def test_compiler_parse_tree(patch):
     tree = Tree('start', [Tree('block', [Tree('line', [subtree])])])
     result = Compiler.parse_tree(tree)
     assert result == {'1': 'subtree'}
+
+
+def test_compiler_compile(patch):
+    patch.object(json, 'dumps')
+    patch.object(Compiler, 'parse_tree')
+    result = Compiler.compile('tree')
+    Compiler.parse_tree.assert_called_with('tree')
+    dictionary = {'script': Compiler.parse_tree(), 'version': version}
+    json.dumps.assert_called_with(dictionary)
+    assert result == json.dumps()

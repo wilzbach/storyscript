@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 import re
 
 from lark.lexer import Token
@@ -137,7 +138,7 @@ class Compiler:
             'ln': Compiler.line(tree),
             'container': None,
             'args': [
-                tree.node('for_statement').child(0),
+                tree.node('for_statement').child(0).value,
                 cls.path(tree.node('for_statement'))
             ],
             'output': None
@@ -170,4 +171,4 @@ class Compiler:
     @staticmethod
     def compile(tree):
         dictionary = {'script': Compiler.parse_tree(tree), 'version': version}
-        return dictionary
+        return json.dumps(dictionary)
