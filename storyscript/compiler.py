@@ -126,14 +126,16 @@ class Compiler:
 
     @classmethod
     def if_block(cls, tree):
+        line = cls.line(tree)
         dictionary = {
             'method': 'if',
-            'ln': cls.line(tree),
+            'ln': line,
             'container': None,
             'args': [cls.path(tree.node('if_statement'))],
             'output': None
         }
-        return dictionary
+        partial = {line: dictionary}
+        return {**partial, **cls.parse_subtree(tree.node('nested_block'))}
 
     @classmethod
     def for_block(cls, tree):
