@@ -127,6 +127,20 @@ class Compiler:
         return dictionary
 
     @classmethod
+    def for_block(cls, tree):
+        dictionary = {
+            'method': 'for',
+            'ln': Compiler.line(tree),
+            'container': None,
+            'args': [
+                tree.node('for_statement').child(0),
+                cls.path(tree.node('for_statement'))
+            ],
+            'output': None
+        }
+        return dictionary
+
+    @classmethod
     def parse_subtree(cls, tree):
         """
         Parses a tree that can have nested subtrees.

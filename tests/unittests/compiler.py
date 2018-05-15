@@ -130,6 +130,18 @@ def test_compiler_if_block(patch):
     assert result == expected
 
 
+def test_compiler_for_block(patch):
+    patch.many(Compiler, ['line', 'path'])
+    tree = Tree('for_block', [Tree('for_statement', [Token('NAME', 'item'),
+                                                     Token('NAME', 'items')])])
+    result = Compiler.for_block(tree)
+    Compiler.line.assert_called_with(tree)
+    Compiler.path.assert_called_with(tree.node('for_statement'))
+    expected = {'method': 'for', 'ln': Compiler.line(), 'output': None,
+                'container': None, 'args': ['item', Compiler.path()]}
+    assert result == expected
+
+
 def test_compiler_compile(patch):
     patch.object(Compiler, 'parse_tree')
     result = Compiler.compile('tree')
