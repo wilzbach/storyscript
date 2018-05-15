@@ -143,7 +143,8 @@ class Compiler:
     @classmethod
     def parse_subtree(cls, tree):
         """
-        Parses a tree that can have nested subtrees.
+        Parses a subtree, checking whether it should be compiled directly
+        or keep parsing for deeper trees.
         """
         allowed_nodes = ['command', 'next_statement', 'assignments',
                          'if_block', 'for_block']
@@ -153,6 +154,9 @@ class Compiler:
 
     @classmethod
     def parse_tree(cls, tree):
+        """
+        Parses a tree looking for subtrees.
+        """
         script = {}
         for item in tree.children:
             if isinstance(item, Tree):
