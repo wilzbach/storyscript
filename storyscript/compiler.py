@@ -175,8 +175,9 @@ class Compiler:
             ],
             'output': None
         }
-        partial = {line: dictionary}
-        return {**partial, **cls.subtree(tree.node('nested_block'))}
+        nested_block = tree.node('nested_block')
+        partial = {line: cls.enter(dictionary, nested_block)}
+        return {**partial, **cls.subtree(nested_block)}
 
     @classmethod
     def wait_block(cls, tree):

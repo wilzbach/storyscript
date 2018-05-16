@@ -164,16 +164,18 @@ def test_compiler_if_block(magic, patch):
 
 
 def test_compiler_for_block(patch, magic):
-    patch.many(Compiler, ['line', 'path', 'subtree'])
+    patch.many(Compiler, ['line', 'enter', 'path', 'subtree'])
     tree = magic()
     result = Compiler.for_block(tree)
     Compiler.line.assert_called_with(tree)
     Compiler.path.assert_called_with(tree.node('for_statement'))
-    Compiler.subtree.assert_called_with(tree.node('nested_block'))
-    expected = {'method': 'for', 'ln': Compiler.line(), 'output': None,
-                'container': None, 'args': [
+    line = {'method': 'for', 'ln': Compiler.line(), 'output': None,
+            'container': None, 'args': [
                 tree.node('for_statement').child(0).value, Compiler.path()]}
-    assert result == {**{Compiler.line(): expected}, **Compiler.subtree()}
+    Compiler.enter.assert_called_with(line, tree.node())
+    Compiler.subtree.assert_called_with(tree.node())
+    assert result == {**{Compiler.line(): Compiler.enter()},
+                      **Compiler.subtree()}
 
 
 def test_compiler_wait_block(patch, magic):
