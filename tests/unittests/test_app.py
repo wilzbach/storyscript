@@ -4,7 +4,7 @@ import os
 from pytest import fixture
 
 from storyscript.app import App
-from storyscript.lexer import Lexer
+from storyscript.compiler import Compiler
 from storyscript.parser import Parser
 
 
@@ -65,41 +65,34 @@ def test_app_get_stories_directory(mocker):
     assert App.get_stories('stories') == ['root/one.story']
 
 
-def test_app_parse(mocker, parser, read_story):
+def test_app_parse(patch, parser, read_story):
     """
-    Ensures App.parse runs the parser
+    Ensures App.parse runs Parser.parse
     """
-    mocker.patch.object(App, 'get_stories', return_value=['one.story'])
+    patch.init(Parser)
+    patch.object(Parser, 'parse')
+    patch.object(App, 'get_stories', return_value=['one.story'])
     result = App.parse('path')
-    kwargs = {'debug': False, 'using_cli': True}
     App.get_stories.assert_called_with('path')
     App.read_story.assert_called_with('one.story')
-    Parser().parse.assert_called_with(App.read_story(), **kwargs)
-    assert result == {'one.story': Parser().parse()}
+    Parser().parse.assert_called_with(App.read_story())
+    assert result == {'one.story': Parser.parse()}
 
 
-def test_app_parse_json(mocker, parser, read_story):
-    """
-    Ensures App.parse runs the parser
-    """
-    mocker.patch.object(json, 'dumps')
-    mocker.patch.object(App, 'get_stories', return_value=['one.story'])
-    result = App.parse('/path/to/story', as_json=True)
-    kwargs = {'indent': 2, 'separators': (',', ': ')}
-    json.dumps.assert_called_with(Parser.parse().json(), **kwargs)
-    assert result == {'one.story': json.dumps()}
+def test_app_compile(patch):
+    patch.object(Compiler, 'compile')
+    patch.object(App, 'parse', return_value={'hello.story': 'tree'})
+    result = App.compile('path')
+    App.parse.assert_called_with('path')
+    Compiler.compile.assert_called_with('tree')
+    assert result == {'hello.story': Compiler.compile()}
 
 
-def test_app_lexer(mocker, read_story):
-    """
-    Ensures App.lexer runs the lexer
-    """
-    mocker.patch.object(Lexer, '__init__', return_value=None)
-    mocker.patch.object(Lexer, 'input')
-    ts = mocker.patch.object(Lexer, 'token_stream', create=True)
-    mocker.patch.object(App, 'get_stories', return_value=['one.story'])
-    result = App.lexer('path')
-    App.get_stories.assert_called_with('path')
+def test_app_lexer(patch, read_story):
+    patch.init(Parser)
+    patch.object(Parser, 'lex')
+    patch.object(App, 'get_stories', return_value=['one.story'])
+    result = App.lex('/path')
     App.read_story.assert_called_with('one.story')
-    Lexer.input.assert_called_with(App.read_story())
-    assert result['one.story'] == ts
+    Parser.lex.assert_called_with(App.read_story())
+    assert result == {'one.story': Parser.lex()}

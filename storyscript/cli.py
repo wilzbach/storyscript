@@ -7,7 +7,6 @@ from .version import version as app_version
 class Cli:
 
     version_help = 'Prints Storyscript version'
-    debug_help = 'Debug mode'
     silent_help = 'Silent mode. Return syntax errors only.'
 
     @click.group(invoke_without_command=True)
@@ -28,28 +27,13 @@ class Cli:
     @staticmethod
     @main.command()
     @click.argument('storypath')
-    def lexer(storypath):
-        """
-        Shows lexer tokens for given stories
-        """
-        results = App.lexer(storypath)
-        message = '{} {}'
-        for file, tokens in results.items():
-            click.echo('File: {}'.format(file))
-            for x, tok in enumerate(tokens):
-                click.echo(message.format(x, tok))
-
-    @staticmethod
-    @main.command()
-    @click.argument('storypath')
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
-    @click.option('--debug', '-d', is_flag=True, help=debug_help)
-    def parse(storypath, json, silent, debug):
+    def parse(storypath, json, silent):
         """
         Parses stories and prints the resulting json
         """
-        results = App.parse(storypath, debug=debug, as_json=json)
+        results = App.compile(storypath)
         if not silent:
             if not json:
                 click.echo(click.style('Script syntax passed!', fg='green'))
@@ -58,3 +42,16 @@ class Cli:
             for file, story_json in results.items():
                 click.echo('File: {}'.format(file))
                 click.echo(story_json)
+
+    @staticmethod
+    @main.command()
+    @click.argument('storypath')
+    def lex(storypath):
+        """
+        Shows lexer tokens for given stories
+        """
+        results = App.lex(storypath)
+        for file, tokens in results.items():
+            click.echo('File: {}'.format(file))
+            for n, token in enumerate(tokens):
+                click.echo('{} {} {}'.format(n, token.type, token.value))

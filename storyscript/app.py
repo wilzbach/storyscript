@@ -1,7 +1,6 @@
-import json
 import os
 
-from .lexer import Lexer
+from .compiler import Compiler
 from .parser import Parser
 
 
@@ -31,32 +30,27 @@ class App:
         return [storypath]
 
     @classmethod
-    def parse(cls, storypath, debug=False, as_json=False):
-        """
-        Parses a story
-        """
-        results = {}
+    def parse(cls, path):
         parser = Parser()
-        stories = cls.get_stories(storypath)
-        for file in stories:
-            story = cls.read_story(file)
-            result = parser.parse(story, debug=debug, using_cli=True)
-            results[file] = result
-            if as_json:
-                results[file] = json.dumps(result.json(),
-                                           indent=2,
-                                           separators=(',', ': '))
+        stories = cls.get_stories(path)
+        results = {}
+        for story in stories:
+            results[story] = parser.parse(cls.read_story(story))
         return results
 
     @classmethod
-    def lexer(cls, storypath):
-        """
-        Runs only the lexer
-        """
+    def compile(cls, path):
         results = {}
-        stories = cls.get_stories(storypath)
+        parsed_stories = cls.parse(path)
+        for name, tree in parsed_stories.items():
+            results[name] = Compiler.compile(tree)
+        return results
+
+    @classmethod
+    def lex(cls, path):
+        parser = Parser()
+        stories = cls.get_stories(path)
+        results = {}
         for story in stories:
-            lexer = Lexer()
-            lexer.input(cls.read_story(story))
-            results[story] = lexer.token_stream
+            results[story] = parser.lex(cls.read_story(story))
         return results

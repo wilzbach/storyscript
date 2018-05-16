@@ -14,13 +14,13 @@ def runner():
 
 
 @fixture
-def echo(mocker):
-    mocker.patch.object(click, 'echo')
+def echo(patch):
+    patch.object(click, 'echo')
 
 
 @fixture
-def app(mocker):
-    mocker.patch.object(App, 'parse')
+def app(patch):
+    patch.object(App, 'compile')
     return App
 
 
@@ -39,35 +39,15 @@ def test_cli_version(mocker, runner, echo):
     click.echo.assert_called_with(message)
 
 
-def test_cli_lexer(mocker, runner, app, echo):
-    """
-    Ensures the lexer command outputs lexer tokens
-    """
-    mocker.patch.object(App, 'lexer', return_value={'one.story': ['run']})
-    runner.invoke(Cli.lexer, ['/path/to/story'])
-    app.lexer.assert_called_with('/path/to/story')
-    click.echo.assert_called_with('0 run')
-    assert click.echo.call_count == 2
-
-
-def test_cli_parse(mocker, runner, echo, app):
+def test_cli_parse(patch, runner, echo, app):
     """
     Ensures the parse command parses a story
     """
-    mocker.patch.object(click, 'style')
-    runner.invoke(Cli.parse, ['/path/to/story'])
-    App.parse.assert_called_with('/path/to/story', debug=False, as_json=False)
+    patch.object(click, 'style')
+    runner.invoke(Cli.parse, ['/path'])
+    App.compile.assert_called_with('/path')
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
-
-
-@mark.parametrize('debug', ['--debug', '-d'])
-def test_cli_parse_debug(runner, app, debug):
-    """
-    Ensures --debug is passed where needed
-    """
-    runner.invoke(Cli.parse, ['/path/to/story', debug])
-    App.parse.assert_called_with('/path/to/story', debug=True, as_json=False)
 
 
 @mark.parametrize('option', ['--silent', '-s'])
@@ -75,18 +55,31 @@ def test_cli_parse_silent(runner, echo, app, option):
     """
     Ensures --silent makes everything quiet
     """
-    result = runner.invoke(Cli.parse, ['/path/to/story', option])
-    App.parse.assert_called_with('/path/to/story', debug=False, as_json=False)
+    result = runner.invoke(Cli.parse, ['/path', option])
+    App.compile.assert_called_with('/path')
     assert result.output == ''
     assert click.echo.call_count == 0
 
 
 @mark.parametrize('option', ['--json', '-j'])
-def test_cli_parse_json(mocker, runner, echo, app, option):
+def test_cli_parse_json(runner, echo, app, option):
     """
     Ensures --json outputs json
     """
-    App.parse.return_value = {'story.one': 'json'}
-    runner.invoke(Cli.parse, ['/path/to/story', option])
+    App.compile.return_value = {'story.one': 'json'}
+    runner.invoke(Cli.parse, ['/path', option])
+    App.compile.assert_called_with('/path')
     click.echo.assert_called_with('json')
+    assert click.echo.call_count == 2
+
+
+def test_cli_lexer(patch, magic, runner, app, echo):
+    """
+    Ensures the lex command outputs lexer tokens
+    """
+    token = magic(type='token', value='value')
+    patch.object(App, 'lex', return_value={'one.story': [token]})
+    runner.invoke(Cli.lex, ['/path'])
+    app.lex.assert_called_with('/path')
+    click.echo.assert_called_with('0 token value')
     assert click.echo.call_count == 2
