@@ -4,11 +4,16 @@ import re
 
 from lark.lexer import Token
 
-from pytest import mark
+from pytest import fixture, mark
 
 from storyscript.compiler import Compiler
 from storyscript.parser import Tree
 from storyscript.version import version
+
+
+@fixture
+def tree(magic):
+    return magic()
 
 
 def test_compiler_path():
@@ -52,25 +57,25 @@ def test_compiler_file():
     assert Compiler.file(token) == {'$OBJECT': 'file', 'string': 'path'}
 
 
-def test_compiler_list(patch):
-    patch.object(Compiler, 'string')
-    value = Tree('string', [Token('DOUBLE_QUOTED', '"color"')])
-    tree = Tree('list', [Tree('values', [value])])
+def test_compiler_list(patch, tree):
+    patch.object(Compiler, 'values')
+    tree.children = ['value']
     result = Compiler.list(tree)
-    Compiler.string.assert_called_with(value)
-    expected = {'$OBJECT': 'list', 'items': [Compiler.string()]}
-    assert result == expected
+    Compiler.values.assert_called_with('value')
+    assert result == {'$OBJECT': 'list', 'items': [Compiler.values()]}
 
 
-def test_compiler_object(patch):
-    patch.many(Compiler, ['string', 'number'])
-    tree = Tree('objects', [Tree('key_value', [Tree('string', 'key'),
-                Tree('values', [Tree('number', ['value'])])])])
+def test_compiler_objects(patch, magic, tree):
+    patch.many(Compiler, ['string', 'values'])
+    subtree = magic()
+    tree.children = [subtree]
     result = Compiler.objects(tree)
-    Compiler.string.assert_called_with(Tree('string', 'key'))
-    Compiler.number.assert_called_with(Tree('number', ['value']))
+    subtree.node.assert_called_with('string')
+    subtree.child.assert_called_with(1)
+    Compiler.string.assert_called_with(subtree.node())
+    Compiler.values.assert_called_with(subtree.child())
     expected = {'$OBJECT': 'dict', 'items': [[Compiler.string(),
-                Compiler.number()]]}
+                                              Compiler.values()]]}
     assert result == expected
 
 
@@ -100,17 +105,16 @@ def test_compiler_line():
     assert Compiler.line(tree) == '1'
 
 
-def test_compiler_assignments(patch):
-    patch.many(Compiler, ['path', 'string', 'line'])
-    tree = Tree('assignments', [Tree('path', ['path']), Token('EQUALS', '='),
-                                Tree('values', [Tree('string', ['string'])])])
+def test_compiler_assignments(patch, tree):
+    patch.many(Compiler, ['path', 'values', 'line'])
     result = Compiler.assignments(tree)
     Compiler.line.assert_called_with(tree)
-    Compiler.path.assert_called_with(Tree('path', ['path']))
-    Compiler.string.assert_called_with(Tree('string', ['string']))
+    Compiler.path.assert_called_with(tree.node('path'))
+    tree.child.assert_called_with(2)
+    Compiler.values.assert_called_with(tree.child())
     expected = {'method': 'set', 'ln': Compiler.line(), 'output': None,
                 'container': None, 'enter': None, 'exit': None,
-                'args': [Compiler.path(), Compiler.string()]}
+                'args': [Compiler.path(), Compiler.values()]}
     assert result == {Compiler.line(): expected}
 
 

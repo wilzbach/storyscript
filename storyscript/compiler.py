@@ -54,20 +54,17 @@ class Compiler:
     def list(cls, tree):
         items = []
         for value in tree.children:
-            items.append(cls.string(value.child(0)))
+            items.append(cls.values(value))
         return {'$OBJECT': 'list', 'items': items}
 
     @classmethod
     def objects(cls, tree):
-        return {
-            '$OBJECT': 'dict',
-            'items': [
-                [
-                    cls.string(tree.node('key_value.string')),
-                    cls.number(tree.node('key_value').child(1).node('number'))
-                ]
-            ]
-        }
+        items = []
+        for item in tree.children:
+            key = cls.string(item.node('string'))
+            value = cls.values(item.child(1))
+            items.append([key, value])
+        return {'$OBJECT': 'dict', 'items': items}
 
     @classmethod
     def values(cls, tree):
@@ -108,7 +105,7 @@ class Compiler:
             'container': None,
             'args': [
                 Compiler.path(tree.node('path')),
-                Compiler.string(tree.child(2).node('string'))
+                Compiler.values(tree.child(2))
             ],
             'output': None,
             'enter': None,

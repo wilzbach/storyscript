@@ -100,7 +100,7 @@ class Grammar:
     def list(self):
         self.ebnf.tokens(('comma', ','), ('osb', '['), ('csb', ']'),
                          inline=True)
-        definition = '_OSB (values (_COMMA values)*)? _CSB'
+        definition = '_OSB (values (_COMMA _WS? values)*)? _CSB'
         self.ebnf.rule('list', definition, raw=True)
 
     def key_value(self):
