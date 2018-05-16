@@ -57,14 +57,12 @@ def test_compiler_file():
     assert Compiler.file(token) == {'$OBJECT': 'file', 'string': 'path'}
 
 
-def test_compiler_list(patch):
-    patch.object(Compiler, 'string')
-    value = Tree('string', [Token('DOUBLE_QUOTED', '"color"')])
-    tree = Tree('list', [Tree('values', [value])])
+def test_compiler_list(patch, tree):
+    patch.object(Compiler, 'values')
+    tree.children = ['value']
     result = Compiler.list(tree)
-    Compiler.string.assert_called_with(value)
-    expected = {'$OBJECT': 'list', 'items': [Compiler.string()]}
-    assert result == expected
+    Compiler.values.assert_called_with('value')
+    assert result == {'$OBJECT': 'list', 'items': [Compiler.values()]}
 
 
 def test_compiler_objects(patch, magic, tree):

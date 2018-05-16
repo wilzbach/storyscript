@@ -54,7 +54,7 @@ class Compiler:
     def list(cls, tree):
         items = []
         for value in tree.children:
-            items.append(cls.string(value.child(0)))
+            items.append(cls.values(value))
         return {'$OBJECT': 'list', 'items': items}
 
     @classmethod
