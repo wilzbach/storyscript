@@ -105,6 +105,13 @@ def test_compiler_line():
     assert Compiler.line(tree) == '1'
 
 
+def test_compiler_enter(patch):
+    patch.object(Compiler, 'line')
+    result = Compiler.enter({}, 'nested_block')
+    Compiler.line.assert_called_with('nested_block')
+    assert result == {'enter': Compiler.line()}
+
+
 def test_compiler_assignments(patch, tree):
     patch.many(Compiler, ['path', 'values', 'line'])
     result = Compiler.assignments(tree)

@@ -97,6 +97,14 @@ class Compiler:
             return cls.line(item)
 
     @classmethod
+    def enter(cls, line, nested_block):
+        """
+        Sets the entering line for lines with nested blocks.
+        """
+        line['enter'] = cls.line(nested_block)
+        return line
+
+    @classmethod
     def assignments(cls, tree):
         line = cls.line(tree)
         dictionary = {
