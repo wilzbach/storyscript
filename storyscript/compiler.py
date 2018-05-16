@@ -59,15 +59,12 @@ class Compiler:
 
     @classmethod
     def objects(cls, tree):
-        return {
-            '$OBJECT': 'dict',
-            'items': [
-                [
-                    cls.string(tree.node('key_value.string')),
-                    cls.number(tree.node('key_value').child(1).node('number'))
-                ]
-            ]
-        }
+        items = []
+        for item in tree.children:
+            key = cls.string(item.node('string'))
+            value = cls.values(item.child(1))
+            items.append([key, value])
+        return {'$OBJECT': 'dict', 'items': items}
 
     @classmethod
     def values(cls, tree):

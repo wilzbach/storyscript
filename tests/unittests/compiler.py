@@ -67,15 +67,17 @@ def test_compiler_list(patch):
     assert result == expected
 
 
-def test_compiler_object(patch):
-    patch.many(Compiler, ['string', 'number'])
-    tree = Tree('objects', [Tree('key_value', [Tree('string', 'key'),
-                Tree('values', [Tree('number', ['value'])])])])
+def test_compiler_objects(patch, magic, tree):
+    patch.many(Compiler, ['string', 'values'])
+    subtree = magic()
+    tree.children = [subtree]
     result = Compiler.objects(tree)
-    Compiler.string.assert_called_with(Tree('string', 'key'))
-    Compiler.number.assert_called_with(Tree('number', ['value']))
+    subtree.node.assert_called_with('string')
+    subtree.child.assert_called_with(1)
+    Compiler.string.assert_called_with(subtree.node())
+    Compiler.values.assert_called_with(subtree.child())
     expected = {'$OBJECT': 'dict', 'items': [[Compiler.string(),
-                Compiler.number()]]}
+                                              Compiler.values()]]}
     assert result == expected
 
 
