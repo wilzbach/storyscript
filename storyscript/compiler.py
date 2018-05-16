@@ -108,7 +108,7 @@ class Compiler:
             'container': None,
             'args': [
                 Compiler.path(tree.node('path')),
-                Compiler.string(tree.child(2).node('string'))
+                Compiler.values(tree.child(2))
             ],
             'output': None,
             'enter': None,

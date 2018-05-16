@@ -4,11 +4,16 @@ import re
 
 from lark.lexer import Token
 
-from pytest import mark
+from pytest import fixture, mark
 
 from storyscript.compiler import Compiler
 from storyscript.parser import Tree
 from storyscript.version import version
+
+
+@fixture
+def tree(magic):
+    return magic()
 
 
 def test_compiler_path():
@@ -100,17 +105,16 @@ def test_compiler_line():
     assert Compiler.line(tree) == '1'
 
 
-def test_compiler_assignments(patch):
-    patch.many(Compiler, ['path', 'string', 'line'])
-    tree = Tree('assignments', [Tree('path', ['path']), Token('EQUALS', '='),
-                                Tree('values', [Tree('string', ['string'])])])
+def test_compiler_assignments(patch, tree):
+    patch.many(Compiler, ['path', 'values', 'line'])
     result = Compiler.assignments(tree)
     Compiler.line.assert_called_with(tree)
-    Compiler.path.assert_called_with(Tree('path', ['path']))
-    Compiler.string.assert_called_with(Tree('string', ['string']))
+    Compiler.path.assert_called_with(tree.node('path'))
+    tree.child.assert_called_with(2)
+    Compiler.values.assert_called_with(tree.child())
     expected = {'method': 'set', 'ln': Compiler.line(), 'output': None,
                 'container': None, 'enter': None, 'exit': None,
-                'args': [Compiler.path(), Compiler.string()]}
+                'args': [Compiler.path(), Compiler.values()]}
     assert result == {Compiler.line(): expected}
 
 
