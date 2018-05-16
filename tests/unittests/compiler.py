@@ -74,6 +74,27 @@ def test_compiler_object(patch):
     assert result == expected
 
 
+@mark.parametrize('value_type', [
+    'string', 'boolean', 'list', 'number', 'objects'
+])
+def test_compiler_values(patch, magic, value_type):
+    patch.object(Compiler, value_type)
+    item = magic(data=value_type)
+    tree = magic(child=lambda x: item)
+    result = Compiler.values(tree)
+    getattr(Compiler, value_type).assert_called_with(item)
+    assert result == getattr(Compiler, value_type)()
+
+
+def test_compiler_values_filepath(patch, magic):
+    patch.object(Compiler, 'file')
+    item = magic(type='FILEPATH')
+    tree = magic(child=lambda x: item)
+    result = Compiler.values(tree)
+    Compiler.file.assert_called_with(item)
+    assert result == Compiler.file()
+
+
 def test_compiler_line():
     tree = Tree('outer', [Tree('path', [Token('WORD', 'word', line=1)])])
     assert Compiler.line(tree) == '1'

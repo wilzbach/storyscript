@@ -70,6 +70,25 @@ class Compiler:
         }
 
     @classmethod
+    def values(cls, tree):
+        """
+        Parses a values subtree
+        """
+        subtree = tree.child(0)
+        if subtree.data == 'string':
+            return cls.string(subtree)
+        elif subtree.data == 'boolean':
+            return cls.boolean(subtree)
+        elif subtree.data == 'list':
+            return cls.list(subtree)
+        elif subtree.data == 'number':
+            return cls.number(subtree)
+        elif subtree.data == 'objects':
+            return cls.objects(subtree)
+        elif subtree.type == 'FILEPATH':
+            return cls.file(subtree)
+
+    @classmethod
     def line(cls, tree):
         """
         Finds the line number of a tree, by finding the first token in the tree
