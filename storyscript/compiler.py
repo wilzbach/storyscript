@@ -163,6 +163,23 @@ class Compiler:
         return {**partial, **cls.subtree(tree.node('nested_block'))}
 
     @classmethod
+    def elseif_block(cls, tree):
+        """
+        Compiles elseif_block trees
+        """
+        # cls.path is wrong
+        line = cls.line(tree)
+        dictionary = {
+            'method': 'elif',
+            'ln': line,
+            'container': None,
+            'args': [cls.path(tree.node('elseif_statement'))],
+            'output': None
+        }
+        partial = {line: dictionary}
+        return {**partial, **cls.subtree(tree.node('nested_block'))}
+
+    @classmethod
     def for_block(cls, tree):
         line = cls.line(tree)
         dictionary = {
@@ -199,7 +216,7 @@ class Compiler:
         or keep parsing for deeper trees.
         """
         allowed_nodes = ['command', 'next', 'assignments', 'if_block',
-                         'for_block', 'wait_block']
+                         'elseif_block', 'for_block', 'wait_block']
         if tree.data in allowed_nodes:
             return getattr(cls, tree.data)(tree)
         return cls.parse_tree(tree)

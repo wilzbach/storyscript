@@ -163,6 +163,17 @@ def test_compiler_if_block(magic, patch):
     assert result == {**{Compiler.line(): expected}, **Compiler.subtree()}
 
 
+def test_compiler_elseif_block(patch, tree):
+    patch.many(Compiler, ['line', 'path', 'subtree'])
+    result = Compiler.elseif_block(tree)
+    Compiler.line.assert_called_with(tree)
+    Compiler.path.assert_called_with(tree.node('elseif_statement'))
+    Compiler.subtree.assert_called_with(tree.node('nested_block'))
+    expected = {'method': 'elif', 'ln': Compiler.line(), 'output': None,
+                'container': None, 'args': [Compiler.path()]}
+    assert result == {**{Compiler.line(): expected}, **Compiler.subtree()}
+
+
 def test_compiler_for_block(patch, magic):
     patch.many(Compiler, ['line', 'enter', 'path', 'subtree'])
     tree = magic()
@@ -191,7 +202,8 @@ def test_compiler_wait_block(patch, magic):
 
 
 @mark.parametrize('method_name', [
-    'command', 'next', 'assignments', 'if_block', 'for_block', 'wait_block'
+    'command', 'next', 'assignments', 'if_block', 'elseif_block', 'for_block',
+    'wait_block'
 ])
 def test_subtree(patch, method_name):
     patch.object(Compiler, method_name)
