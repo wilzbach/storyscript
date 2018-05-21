@@ -210,6 +210,16 @@ class Compiler:
         return {**partial, **cls.subtree(tree.node('nested_block'))}
 
     @classmethod
+    def subtrees(cls, *trees):
+        """
+        Parses many subtrees
+        """
+        results = {}
+        for tree in trees:
+            results = {**results, **cls.subtree(tree)}
+        return results
+
+    @classmethod
     def subtree(cls, tree):
         """
         Parses a subtree, checking whether it should be compiled directly

@@ -214,6 +214,13 @@ def test_subtree(patch, method_name):
     assert result == method()
 
 
+def test_compiler_subtrees(patch, tree):
+    patch.object(Compiler, 'subtree', return_value={'tree': 'sub'})
+    result = Compiler.subtrees(tree, tree)
+    Compiler.subtree.assert_called_with(tree)
+    assert result == {**Compiler.subtree()}
+
+
 def test_compiler_parse_tree(patch):
     """
     Ensures that the parse_tree method can parse a complete tree
