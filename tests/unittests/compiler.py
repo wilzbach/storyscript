@@ -152,15 +152,26 @@ def test_compiler_command(magic, patch):
 
 
 def test_compiler_if_block(magic, patch):
-    patch.many(Compiler, ['line', 'path', 'subtree'])
-    tree = magic()
+    patch.many(Compiler, ['line', 'path', 'subtrees'])
+    tree = Tree('if_block', [Tree('if_statement', []),
+                             Tree('nested_block', [])])
     result = Compiler.if_block(tree)
     Compiler.line.assert_called_with(tree)
     Compiler.path.assert_called_with(tree.node('if_statement'))
-    Compiler.subtree.assert_called_with(tree.node('nested_block'))
+    Compiler.subtrees.assert_called_with(tree.node('nested_block'))
     expected = {'method': 'if', 'ln': Compiler.line(), 'container': None,
                 'output': None, 'args': [Compiler.path()]}
-    assert result == {**{Compiler.line(): expected}, **Compiler.subtree()}
+    assert result == {**{Compiler.line(): expected}, **Compiler.subtrees()}
+
+
+def test_compiler_if_block_with_elseif(magic, patch):
+    patch.many(Compiler, ['line', 'path', 'subtrees'])
+    tree = Tree('if_block', [Tree('if_statement', []),
+                             Tree('nested_block', []),
+                             Tree('elseif_block', [])])
+    Compiler.if_block(tree)
+    Compiler.subtrees.assert_called_with(tree.node('nested_block'),
+                                         tree.node('elseif_block'))
 
 
 def test_compiler_elseif_block(patch, tree):

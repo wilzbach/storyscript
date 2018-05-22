@@ -160,14 +160,18 @@ class Compiler:
             'output': None
         }
         partial = {line: dictionary}
-        return {**partial, **cls.subtree(tree.node('nested_block'))}
+        trees = [tree.node('nested_block')]
+        elseif_block = tree.node('elseif_block')
+        if elseif_block:
+            trees.append(elseif_block)
+        subtrees = cls.subtrees(*trees)
+        return {**partial, **subtrees}
 
     @classmethod
     def elseif_block(cls, tree):
         """
         Compiles elseif_block trees
         """
-        # cls.path is wrong
         line = cls.line(tree)
         dictionary = {
             'method': 'elif',
