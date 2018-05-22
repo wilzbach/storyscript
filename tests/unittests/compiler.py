@@ -156,11 +156,11 @@ def test_compiler_if_block(magic, patch):
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', [])])
     result = Compiler.if_block(tree)
-    Compiler.line.assert_called_with(tree)
+    assert Compiler.line.call_count == 2
     Compiler.path.assert_called_with(tree.node('if_statement'))
     Compiler.subtrees.assert_called_with(tree.node('nested_block'))
     expected = {'method': 'if', 'ln': Compiler.line(), 'container': None,
-                'output': None, 'args': [Compiler.path()]}
+                'output': None, 'args': [Compiler.path()], 'enter': Compiler.line()}
     assert result == {**{Compiler.line(): expected}, **Compiler.subtrees()}
 
 
