@@ -130,15 +130,14 @@ def test_compiler_assignments(patch, tree):
     assert result == Compiler.base()
 
 
-def test_compiler_next(patch):
-    patch.many(Compiler, ['file'])
-    tree = Tree('next', [Token('NEXT', 'next'), Token('FILEPATH', '`path`')])
+def test_compiler_next(patch, tree):
+    patch.many(Compiler, ['file', 'base'])
     result = Compiler.next(tree)
-    Compiler.file.assert_called_with(tree.children[1])
-    expected = {'method': 'next', 'ln': tree.line(), 'output': None,
-                'args': [Compiler.file()], 'container': None, 'enter': None,
-                'exit': None}
-    assert result == {tree.line(): expected}
+    tree.child.assert_called_with(1)
+    Compiler.file.assert_called_with(tree.child())
+    args = [Compiler.file()]
+    Compiler.base.assert_called_with('next', tree.line(), args=args)
+    assert result == Compiler.base()
 
 
 def test_compiler_command(patch, tree):

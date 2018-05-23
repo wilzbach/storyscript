@@ -120,17 +120,7 @@ class Compiler:
 
     @classmethod
     def next(cls, tree):
-        line = tree.line()
-        dictionary = {
-            'method': 'next',
-            'ln': line,
-            'container': None,
-            'output': None,
-            'args': [cls.file(tree.children[1])],
-            'enter': None,
-            'exit': None
-        }
-        return {line: dictionary}
+        return cls.base('next', tree.line(), args=[cls.file(tree.child(1))])
 
     @classmethod
     def command(cls, tree):
