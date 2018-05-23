@@ -180,7 +180,7 @@ class Compiler:
 
     @classmethod
     def for_block(cls, tree):
-        line = cls.line(tree)
+        line = tree.line()
         dictionary = {
             'method': 'for',
             'ln': line,
