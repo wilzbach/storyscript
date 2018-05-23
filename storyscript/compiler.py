@@ -130,7 +130,7 @@ class Compiler:
 
     @classmethod
     def command(cls, tree):
-        line = cls.line(tree)
+        line = tree.line()
         dictionary = {
             'method': 'run',
             'ln': line,
