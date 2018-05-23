@@ -118,15 +118,14 @@ def test_compiler_assignments(patch, tree):
 
 
 def test_compiler_next(patch):
-    patch.many(Compiler, ['file', 'line'])
+    patch.many(Compiler, ['file'])
     tree = Tree('next', [Token('NEXT', 'next'), Token('FILEPATH', '`path`')])
     result = Compiler.next(tree)
-    Compiler.line.assert_called_with(tree)
     Compiler.file.assert_called_with(tree.children[1])
-    expected = {'method': 'next', 'ln': Compiler.line(), 'output': None,
+    expected = {'method': 'next', 'ln': tree.line(), 'output': None,
                 'args': [Compiler.file()], 'container': None, 'enter': None,
                 'exit': None}
-    assert result == {Compiler.line(): expected}
+    assert result == {tree.line(): expected}
 
 
 def test_compiler_command(magic, patch):

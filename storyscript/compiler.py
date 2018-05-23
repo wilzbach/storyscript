@@ -116,7 +116,7 @@ class Compiler:
 
     @classmethod
     def next(cls, tree):
-        line = cls.line(tree)
+        line = tree.line()
         dictionary = {
             'method': 'next',
             'ln': line,
