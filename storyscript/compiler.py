@@ -99,7 +99,7 @@ class Compiler:
 
     @classmethod
     def assignments(cls, tree):
-        line = cls.line(tree)
+        line = tree.line()
         dictionary = {
             'method': 'set',
             'ln': line,
