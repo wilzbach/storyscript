@@ -100,11 +100,9 @@ def test_compiler_values_filepath(patch, magic):
     assert result == Compiler.file()
 
 
-def test_compiler_enter(patch):
-    patch.object(Compiler, 'line')
-    result = Compiler.enter({}, 'nested_block')
-    Compiler.line.assert_called_with('nested_block')
-    assert result == {'enter': Compiler.line()}
+def test_compiler_enter(tree):
+    result = Compiler.enter({}, tree)
+    assert result == {'enter': tree.line()}
 
 
 def test_compiler_assignments(patch, tree):

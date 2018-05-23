@@ -94,7 +94,7 @@ class Compiler:
         """
         Sets the entering line for lines with nested blocks.
         """
-        line['enter'] = cls.line(nested_block)
+        line['enter'] = nested_block.line()
         return line
 
     @classmethod
