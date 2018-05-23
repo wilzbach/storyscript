@@ -112,20 +112,11 @@ class Compiler:
 
     @classmethod
     def assignments(cls, tree):
-        line = tree.line()
-        dictionary = {
-            'method': 'set',
-            'ln': line,
-            'container': None,
-            'args': [
-                Compiler.path(tree.node('path')),
-                Compiler.values(tree.child(2))
-            ],
-            'output': None,
-            'enter': None,
-            'exit': None
-        }
-        return {line: dictionary}
+        args = [
+            Compiler.path(tree.node('path')),
+            Compiler.values(tree.child(2))
+        ]
+        return cls.base('set', tree.line(), args=args)
 
     @classmethod
     def next(cls, tree):

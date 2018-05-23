@@ -119,15 +119,15 @@ def test_compiler_enter(tree):
 
 
 def test_compiler_assignments(patch, tree):
-    patch.many(Compiler, ['path', 'values'])
+    patch.many(Compiler, ['base', 'path', 'values'])
     result = Compiler.assignments(tree)
-    Compiler.path.assert_called_with(tree.node('path'))
+    tree.node.assert_called_with('path')
     tree.child.assert_called_with(2)
+    Compiler.path.assert_called_with(tree.node('path'))
     Compiler.values.assert_called_with(tree.child())
-    expected = {'method': 'set', 'ln': tree.line(), 'output': None,
-                'container': None, 'enter': None, 'exit': None,
-                'args': [Compiler.path(), Compiler.values()]}
-    assert result == {tree.line(): expected}
+    args = [Compiler.path(), Compiler.values()]
+    Compiler.base.assert_called_with('set', tree.line(), args=args)
+    assert result == Compiler.base()
 
 
 def test_compiler_next(patch):
