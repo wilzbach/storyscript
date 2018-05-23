@@ -143,17 +143,8 @@ class Compiler:
 
     @classmethod
     def command(cls, tree):
-        line = tree.line()
-        dictionary = {
-            'method': 'run',
-            'ln': line,
-            'container': tree.child(0).child(0).value,
-            'args': None,
-            'output': None,
-            'enter': None,
-            'exit': None
-        }
-        return {line: dictionary}
+        container = tree.child(0).child(0).value
+        return cls.base('run', tree.line(), container=container)
 
     @classmethod
     def if_block(cls, tree):

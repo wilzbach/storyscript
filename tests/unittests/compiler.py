@@ -141,16 +141,15 @@ def test_compiler_next(patch):
     assert result == {tree.line(): expected}
 
 
-def test_compiler_command(magic):
+def test_compiler_command(patch, tree):
     """
     Ensures that command trees can be compiled
     """
-    tree = magic()
+    patch.object(Compiler, 'base')
     result = Compiler.command(tree)
-    expected = {'method': 'run', 'ln': tree.line(), 'args': None,
-                'container': tree.child(0).child(0).value, 'output': None,
-                'enter': None, 'exit': None}
-    assert result == {tree.line(): expected}
+    container = tree.child().child().value
+    Compiler.base.assert_called_with('run', tree.line(), container=container)
+    assert result == Compiler.base()
 
 
 def test_compiler_if_block(magic, patch):
