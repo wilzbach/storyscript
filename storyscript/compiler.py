@@ -131,15 +131,8 @@ class Compiler:
     def if_block(cls, tree):
         line = tree.line()
         nested_block = tree.node('nested_block')
-        dictionary = {
-            'method': 'if',
-            'ln': line,
-            'container': None,
-            'args': [cls.path(tree.node('if_statement'))],
-            'output': None,
-            'enter': nested_block.line()
-        }
-        partial = {line: dictionary}
+        args = [cls.path(tree.node('if_statement'))]
+        partial = cls.base('if', line, args=args, enter=nested_block.line())
         trees = [nested_block]
         elseif_block = tree.node('elseif_block')
         if elseif_block:
