@@ -100,6 +100,19 @@ def test_compiler_values_filepath(patch, magic):
     assert result == Compiler.file()
 
 
+def test_compiler_base():
+    expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
+                      'container': None, 'enter': None, 'exit': None,
+                      'args': None}}
+    assert Compiler.base('method', '1') == expected
+
+
+@mark.parametrize('keywords', ['container', 'args', 'enter', 'exit'])
+def test_compiler_base_keywords(keywords):
+    result = Compiler.base('method', '1', **{keywords: keywords})
+    assert result['1'][keywords] == keywords
+
+
 def test_compiler_enter(tree):
     result = Compiler.enter({}, tree)
     assert result == {'enter': tree.line()}

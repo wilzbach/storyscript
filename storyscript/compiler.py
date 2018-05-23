@@ -85,9 +85,22 @@ class Compiler:
         elif subtree.type == 'FILEPATH':
             return cls.file(subtree)
 
-    @classmethod
+    @staticmethod
+    def base(method, line, container=None, args=None, enter=None, exit=None):
         """
+        Creates the base dictionary for a given line.
         """
+        return {
+            line: {
+                'method': method,
+                'ln': line,
+                'output': None,
+                'container': container,
+                'args': args,
+                'enter': enter,
+                'exit': exit
+            }
+        }
 
     @classmethod
     def enter(cls, line, nested_block):
