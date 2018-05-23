@@ -86,15 +86,8 @@ class Compiler:
             return cls.file(subtree)
 
     @classmethod
-    def line(cls, tree):
         """
-        Finds the line number of a tree, by finding the first token in the tree
-        and returning its line
         """
-        for item in tree.children:
-            if isinstance(item, Token):
-                return str(item.line)
-            return cls.line(item)
 
     @classmethod
     def enter(cls, line, nested_block):

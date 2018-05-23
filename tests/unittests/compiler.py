@@ -100,11 +100,6 @@ def test_compiler_values_filepath(patch, magic):
     assert result == Compiler.file()
 
 
-def test_compiler_line():
-    tree = Tree('outer', [Tree('path', [Token('WORD', 'word', line=1)])])
-    assert Compiler.line(tree) == '1'
-
-
 def test_compiler_enter(patch):
     patch.object(Compiler, 'line')
     result = Compiler.enter({}, 'nested_block')

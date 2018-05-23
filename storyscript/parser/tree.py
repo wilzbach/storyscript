@@ -28,3 +28,13 @@ class Tree(LarkTree):
 
     def child(self, index):
         return self.children[index]
+
+    def line(self):
+        """
+        Finds the line number of a tree, by finding the first token in the tree
+        and returning its line
+        """
+        for child in self.children:
+            if isinstance(child, Token):
+                return str(child.line)
+            return child.line()

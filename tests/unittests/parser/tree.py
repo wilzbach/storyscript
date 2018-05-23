@@ -40,3 +40,8 @@ def test_tree_node(patch):
 def test_tree_child():
     tree = Tree('rule', ['child'])
     assert tree.child(0) == 'child'
+
+
+def test_tree_line():
+    tree = Tree('outer', [Tree('path', [Token('WORD', 'word', line=1)])])
+    assert tree.line() == '1'
