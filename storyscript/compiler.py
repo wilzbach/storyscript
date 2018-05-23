@@ -197,7 +197,7 @@ class Compiler:
 
     @classmethod
     def wait_block(cls, tree):
-        line = cls.line(tree)
+        line = tree.line()
         dictionary = {
             'method': 'wait',
             'ln': line,
