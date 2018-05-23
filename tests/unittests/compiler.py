@@ -153,7 +153,7 @@ def test_compiler_if_block(magic, patch):
 
 
 def test_compiler_if_block_with_elseif(magic, patch):
-    patch.many(Compiler, ['line', 'path', 'subtrees'])
+    patch.many(Compiler, ['path', 'subtrees'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', []),
                              Tree('elseif_block', [])])
@@ -163,14 +163,13 @@ def test_compiler_if_block_with_elseif(magic, patch):
 
 
 def test_compiler_elseif_block(patch, tree):
-    patch.many(Compiler, ['line', 'path', 'subtree'])
+    patch.many(Compiler, ['path', 'subtree'])
     result = Compiler.elseif_block(tree)
-    Compiler.line.assert_called_with(tree)
     Compiler.path.assert_called_with(tree.node('elseif_statement'))
     Compiler.subtree.assert_called_with(tree.node('nested_block'))
-    expected = {'method': 'elif', 'ln': Compiler.line(), 'output': None,
+    expected = {'method': 'elif', 'ln': tree.line(), 'output': None,
                 'container': None, 'args': [Compiler.path()]}
-    assert result == {**{Compiler.line(): expected}, **Compiler.subtree()}
+    assert result == {**{tree.line(): expected}, **Compiler.subtree()}
 
 
 def test_compiler_for_block(patch, magic):

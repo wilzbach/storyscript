@@ -167,7 +167,7 @@ class Compiler:
         """
         Compiles elseif_block trees
         """
-        line = cls.line(tree)
+        line = tree.line()
         dictionary = {
             'method': 'elif',
             'ln': line,
