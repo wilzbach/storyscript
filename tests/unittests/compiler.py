@@ -274,15 +274,14 @@ def test_compiler_subtrees(patch, tree):
     assert result == {**Compiler.subtree()}
 
 
-def test_compiler_parse_tree(patch):
+def test_compiler_parse_tree(compiler, patch):
     """
     Ensures that the parse_tree method can parse a complete tree
     """
     patch.object(Compiler, 'subtree', return_value={'1': 'subtree'})
-    subtree = Tree('command', ['token'])
-    tree = Tree('start', [Tree('block', [Tree('line', [subtree])])])
-    result = Compiler.parse_tree(tree)
-    assert result == {'1': 'subtree'}
+    tree = Tree('start', [Tree('command', ['token'])])
+    compiler.parse_tree(tree)
+    assert compiler.lines == {'1': 'subtree'}
 
 
 def test_compiler_compile(patch):

@@ -211,16 +211,13 @@ class Compiler:
             return getattr(cls, tree.data)(tree)
         return cls.parse_tree(tree)
 
-    @classmethod
-    def parse_tree(cls, tree):
+    def parse_tree(self, tree):
         """
         Parses a tree looking for subtrees.
         """
-        script = {}
         for item in tree.children:
             if isinstance(item, Tree):
-                script = {**cls.subtree(item), **script}
-        return script
+                self.lines = {**self.subtree(item), **self.lines}
 
     @staticmethod
     def compile(tree):
