@@ -113,11 +113,6 @@ def test_compiler_base_keywords(keywords):
     assert result['1'][keywords] == keywords
 
 
-def test_compiler_enter(tree):
-    result = Compiler.enter({}, tree)
-    assert result == {'enter': tree.line()}
-
-
 def test_compiler_assignments(patch, tree):
     patch.many(Compiler, ['base', 'path', 'values'])
     result = Compiler.assignments(tree)

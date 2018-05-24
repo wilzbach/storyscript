@@ -103,14 +103,6 @@ class Compiler:
         }
 
     @classmethod
-    def enter(cls, line, nested_block):
-        """
-        Sets the entering line for lines with nested blocks.
-        """
-        line['enter'] = nested_block.line()
-        return line
-
-    @classmethod
     def assignments(cls, tree):
         args = [
             Compiler.path(tree.node('path')),
