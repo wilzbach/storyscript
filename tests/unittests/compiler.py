@@ -267,11 +267,11 @@ def test_compiler_subtree(patch, method_name):
     assert result == method()
 
 
-def test_compiler_subtrees(patch, tree):
+def test_compiler_subtrees(patch, compiler, tree):
     patch.object(Compiler, 'subtree', return_value={'tree': 'sub'})
-    result = Compiler.subtrees(tree, tree)
-    Compiler.subtree.assert_called_with(tree)
-    assert result == {**Compiler.subtree()}
+    result = compiler.subtrees(tree, tree)
+    compiler.subtree.assert_called_with(tree)
+    assert result == {**compiler.subtree()}
 
 
 def test_compiler_parse_tree(compiler, patch):

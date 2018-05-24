@@ -188,14 +188,13 @@ class Compiler:
         partial = cls.base('wait', line, args=args, enter=nested_block.line())
         return {**partial, **cls.subtree(nested_block)}
 
-    @classmethod
-    def subtrees(cls, *trees):
+    def subtrees(self, *trees):
         """
         Parses many subtrees
         """
         results = {}
         for tree in trees:
-            results = {**results, **cls.subtree(tree)}
+            results = {**results, **self.subtree(tree)}
         return results
 
     @classmethod
