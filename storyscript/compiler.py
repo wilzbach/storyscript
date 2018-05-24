@@ -185,7 +185,8 @@ class Compiler:
         or keep parsing for deeper trees.
         """
         allowed_nodes = ['command', 'next', 'assignments', 'if_block',
-                         'elseif_block', 'for_block', 'wait_block']
+                         'elseif_block', 'else_block', 'for_block',
+                         'wait_block']
         if tree.data in allowed_nodes:
             return getattr(cls, tree.data)(tree)
         return cls.parse_tree(tree)

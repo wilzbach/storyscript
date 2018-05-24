@@ -224,10 +224,10 @@ def test_compiler_wait_block(patch, tree):
 
 
 @mark.parametrize('method_name', [
-    'command', 'next', 'assignments', 'if_block', 'elseif_block', 'for_block',
-    'wait_block'
+    'command', 'next', 'assignments', 'if_block', 'elseif_block', 'else_block',
+    'for_block', 'wait_block'
 ])
-def test_subtree(patch, method_name):
+def test_compiler_subtree(patch, method_name):
     patch.object(Compiler, method_name)
     tree = Tree(method_name, [])
     result = Compiler.subtree(tree)
