@@ -197,8 +197,7 @@ class Compiler:
             results = {**results, **self.subtree(tree)}
         return results
 
-    @classmethod
-    def subtree(cls, tree):
+    def subtree(self, tree):
         """
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
@@ -207,8 +206,8 @@ class Compiler:
                          'elseif_block', 'else_block', 'for_block',
                          'wait_block']
         if tree.data in allowed_nodes:
-            return getattr(cls, tree.data)(tree)
-        return cls.parse_tree(tree)
+            return getattr(self, tree.data)(tree)
+        self.parse_tree(tree)
 
     def parse_tree(self, tree):
         """

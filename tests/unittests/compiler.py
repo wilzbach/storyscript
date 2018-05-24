@@ -258,11 +258,11 @@ def test_compiler_wait_block(patch, tree):
     'command', 'next', 'assignments', 'if_block', 'elseif_block', 'else_block',
     'for_block', 'wait_block'
 ])
-def test_compiler_subtree(patch, method_name):
+def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)
     tree = Tree(method_name, [])
-    result = Compiler.subtree(tree)
-    method = getattr(Compiler, method_name)
+    result = compiler.subtree(tree)
+    method = getattr(compiler, method_name)
     method.assert_called_with(tree)
     assert result == method()
 
