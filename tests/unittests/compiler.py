@@ -16,6 +16,11 @@ def tree(magic):
     return magic()
 
 
+def test_compiler_init():
+    compiler = Compiler()
+    assert compiler.lines == {}
+
+
 def test_compiler_path():
     tree = Tree('path', [Token('WORD', 'var')])
     assert Compiler.path(tree) == {'$OBJECT': 'path', 'paths': ['var']}
