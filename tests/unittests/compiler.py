@@ -40,6 +40,13 @@ def test_compiler_last_line_no_lines(compiler):
     assert compiler.last_line() is None
 
 
+def test_compiler_set_next_line(patch, compiler):
+    patch.object(Compiler, 'last_line', return_value='1')
+    compiler.lines['1'] = {}
+    compiler.set_next_line('2')
+    assert compiler.lines['1']['next'] == '2'
+
+
 def test_compiler_path():
     tree = Tree('path', [Token('WORD', 'var')])
     assert Compiler.path(tree) == {'$OBJECT': 'path', 'paths': ['var']}

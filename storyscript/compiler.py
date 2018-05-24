@@ -26,6 +26,14 @@ class Compiler:
         if self.lines:
             return self.sorted_lines()[-1]
 
+    def set_next_line(self, line_number):
+        """
+        Finds the previous line, and set the current as its next line
+        """
+        previous_line = self.last_line()
+        if previous_line:
+            self.lines[previous_line]['next'] = line_number
+
     @staticmethod
     def path(tree):
         return {'$OBJECT': 'path', 'paths': [tree.child(0).value]}
