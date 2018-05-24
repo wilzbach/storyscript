@@ -198,15 +198,15 @@ def test_compiler_for_block(patch, tree):
     assert result == {**Compiler.base(), **Compiler.subtree()}
 
 
-def test_compiler_wait_block(patch, magic):
-    patch.many(Compiler, ['subtree', 'path'])
-    tree = magic()
+def test_compiler_wait_block(patch, tree):
+    patch.many(Compiler, ['base', 'subtree', 'path'])
     result = Compiler.wait_block(tree)
-    Compiler.subtree.assert_called_with(tree.node('nested_block'))
-    Compiler.path.assert_called_with(tree.node('wait_statement').child(1))
-    expected = {'method': 'wait', 'ln': tree.line(), 'output': None,
-                'container': None, 'args': [Compiler.path()]}
-    assert result == {**{tree.line(): expected}, **Compiler.subtree()}
+    Compiler.path.assert_called_with(tree.node().child(1))
+    args = [Compiler.path()]
+    Compiler.base.assert_called_with('wait', tree.line(), args=args,
+                                     enter=tree.node().line())
+    Compiler.subtree.assert_called_with(tree.node())
+    assert result == {**Compiler.base(), **Compiler.subtree()}
 
 
 @mark.parametrize('method_name', [
