@@ -153,19 +153,13 @@ class Compiler:
 
     @classmethod
     def for_block(cls, tree):
-        line = tree.line()
-        dictionary = {
-            'method': 'for',
-            'ln': line,
-            'container': None,
-            'args': [
-                tree.node('for_statement').child(0).value,
-                cls.path(tree.node('for_statement'))
-            ],
-            'output': None
-        }
+        args = [
+            tree.node('for_statement').child(0).value,
+            cls.path(tree.node('for_statement'))
+        ]
         nested_block = tree.node('nested_block')
-        partial = {line: cls.enter(dictionary, nested_block)}
+        line = tree.line()
+        partial = cls.base('for', line, args=args, enter=nested_block.line())
         return {**partial, **cls.subtree(nested_block)}
 
     @classmethod

@@ -187,17 +187,15 @@ def test_compiler_elseif_block(patch, tree):
     assert result == {** Compiler.base(), **Compiler.subtree()}
 
 
-def test_compiler_for_block(patch, magic):
-    patch.many(Compiler, ['enter', 'path', 'subtree'])
-    tree = magic()
+def test_compiler_for_block(patch, tree):
+    patch.many(Compiler, ['base', 'path', 'subtree'])
     result = Compiler.for_block(tree)
-    Compiler.path.assert_called_with(tree.node('for_statement'))
-    line = {'method': 'for', 'ln': tree.line(), 'output': None,
-            'container': None, 'args': [
-                tree.node('for_statement').child(0).value, Compiler.path()]}
-    Compiler.enter.assert_called_with(line, tree.node())
+    Compiler.path.assert_called_with(tree.node())
+    args = [tree.node().child(0).value, Compiler.path()]
+    Compiler.base.assert_called_with('for', tree.line(), args=args,
+                                     enter=tree.node().line())
     Compiler.subtree.assert_called_with(tree.node())
-    assert result == {**{tree.line(): Compiler.enter()}, **Compiler.subtree()}
+    assert result == {**Compiler.base(), **Compiler.subtree()}
 
 
 def test_compiler_wait_block(patch, magic):
