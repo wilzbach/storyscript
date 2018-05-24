@@ -144,6 +144,12 @@ class Compiler:
         return {**partial, **cls.subtree(nested_block)}
 
     @classmethod
+    def else_block(cls, tree):
+        nested_block = tree.node('nested_block')
+        partial = cls.base('else', tree.line(), enter=nested_block.line())
+        return {**partial, **cls.subtree(nested_block)}
+
+    @classmethod
     def for_block(cls, tree):
         args = [
             tree.node('for_statement').child(0).value,
