@@ -176,13 +176,15 @@ def test_compiler_if_block_with_elseif(patch):
 
 
 def test_compiler_elseif_block(patch, tree):
-    patch.many(Compiler, ['path', 'subtree'])
+    patch.many(Compiler, ['base', 'path', 'subtree'])
     result = Compiler.elseif_block(tree)
-    Compiler.path.assert_called_with(tree.node('elseif_statement'))
-    Compiler.subtree.assert_called_with(tree.node('nested_block'))
-    expected = {'method': 'elif', 'ln': tree.line(), 'output': None,
-                'container': None, 'args': [Compiler.path()]}
-    assert result == {**{tree.line(): expected}, **Compiler.subtree()}
+    assert tree.node.call_count == 2
+    Compiler.path.assert_called_with(tree.node())
+    args = [Compiler.path()]
+    Compiler.base.assert_called_with('elif', tree.line(), args=args,
+                                     enter=tree.node().line())
+    Compiler.subtree.assert_called_with(tree.node())
+    assert result == {** Compiler.base(), **Compiler.subtree()}
 
 
 def test_compiler_for_block(patch, magic):

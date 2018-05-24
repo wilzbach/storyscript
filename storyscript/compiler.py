@@ -146,15 +146,10 @@ class Compiler:
         Compiles elseif_block trees
         """
         line = tree.line()
-        dictionary = {
-            'method': 'elif',
-            'ln': line,
-            'container': None,
-            'args': [cls.path(tree.node('elseif_statement'))],
-            'output': None
-        }
-        partial = {line: dictionary}
-        return {**partial, **cls.subtree(tree.node('nested_block'))}
+        args = [cls.path(tree.node('elseif_statement'))]
+        nested_block = tree.node('nested_block')
+        partial = cls.base('elif', line, args=args, enter=nested_block.line())
+        return {**partial, **cls.subtree(nested_block)}
 
     @classmethod
     def for_block(cls, tree):
