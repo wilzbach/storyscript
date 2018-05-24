@@ -170,6 +170,16 @@ def test_compiler_if_block_with_elseif(patch):
                                          tree.node('elseif_block'))
 
 
+def test_compiler_if_block_with_else(patch):
+    patch.many(Compiler, ['base', 'path', 'subtrees'])
+    tree = Tree('if_block', [Tree('if_statement', []),
+                             Tree('nested_block', []),
+                             Tree('else_block', [])])
+    Compiler.if_block(tree)
+    Compiler.subtrees.assert_called_with(tree.node('nested_block'),
+                                         tree.node('else_block'))
+
+
 def test_compiler_elseif_block(patch, tree):
     patch.many(Compiler, ['base', 'path', 'subtree'])
     result = Compiler.elseif_block(tree)

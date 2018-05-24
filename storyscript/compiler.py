@@ -126,9 +126,9 @@ class Compiler:
         args = [cls.path(tree.node('if_statement'))]
         partial = cls.base('if', line, args=args, enter=nested_block.line())
         trees = [nested_block]
-        elseif_block = tree.node('elseif_block')
-        if elseif_block:
-            trees.append(elseif_block)
+        for block in [tree.node('elseif_block'), tree.node('else_block')]:
+            if block:
+                trees.append(block)
         subtrees = cls.subtrees(*trees)
         return {**partial, **subtrees}
 
