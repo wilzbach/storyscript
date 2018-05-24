@@ -16,6 +16,9 @@ class Compiler:
     def __init__(self):
         self.lines = {}
 
+    def sorted_lines(self):
+        return sorted(self.lines.keys(), key=lambda x: int(x))
+
     @staticmethod
     def path(tree):
         return {'$OBJECT': 'path', 'paths': [tree.child(0).value]}

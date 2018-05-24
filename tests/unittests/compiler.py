@@ -21,6 +21,12 @@ def test_compiler_init():
     assert compiler.lines == {}
 
 
+def test_compiler_sorted_lines():
+    compiler = Compiler()
+    compiler.lines = {'1': '1', '2': '2'}
+    assert compiler.sorted_lines() == ['1', '2']
+
+
 def test_compiler_path():
     tree = Tree('path', [Token('WORD', 'var')])
     assert Compiler.path(tree) == {'$OBJECT': 'path', 'paths': ['var']}
