@@ -19,6 +19,13 @@ class Compiler:
     def sorted_lines(self):
         return sorted(self.lines.keys(), key=lambda x: int(x))
 
+    def last_line(self):
+        """
+        Gets the last line
+        """
+        if self.lines:
+            return self.sorted_lines()[-1]
+
     @staticmethod
     def path(tree):
         return {'$OBJECT': 'path', 'paths': [tree.child(0).value]}

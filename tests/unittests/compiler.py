@@ -12,19 +12,32 @@ from storyscript.version import version
 
 
 @fixture
+def compiler():
+    return Compiler()
+
+
+@fixture
 def tree(magic):
     return magic()
 
 
-def test_compiler_init():
-    compiler = Compiler()
+def test_compiler_init(compiler):
     assert compiler.lines == {}
 
 
-def test_compiler_sorted_lines():
-    compiler = Compiler()
+def test_compiler_sorted_lines(compiler):
     compiler.lines = {'1': '1', '2': '2'}
     assert compiler.sorted_lines() == ['1', '2']
+
+
+def test_compiler_last_line(patch, compiler):
+    patch.object(Compiler, 'sorted_lines')
+    compiler.lines = {'1': '1'}
+    assert compiler.last_line() == compiler.sorted_lines()[-1]
+
+
+def test_compiler_last_line_no_lines(compiler):
+    assert compiler.last_line() is None
 
 
 def test_compiler_path():
