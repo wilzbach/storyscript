@@ -260,8 +260,17 @@ def test_compiler_elseif_block(patch, compiler, tree):
     compiler.path.assert_called_with(tree.node())
     args = [compiler.path()]
     compiler.add_line.assert_called_with('elif', tree.line(), args=args,
-                                         enter=tree.node().line())
-    compiler.subtree.assert_called_with(tree.node())
+                                         enter=tree.node().line(), parent=None)
+    compiler.subtree.assert_called_with(tree.node(), parent=None)
+
+
+def test_compiler_elseif_block_parent(patch, compiler, tree):
+    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line'])
+    compiler.elseif_block(tree, parent='1')
+    args = [compiler.path()]
+    compiler.add_line.assert_called_with('elif', tree.line(), args=args,
+                                         enter=tree.node().line(), parent='1')
+    compiler.subtree.assert_called_with(tree.node(), parent='1')
 
 
 def test_compiler_else_block(patch, compiler, tree):

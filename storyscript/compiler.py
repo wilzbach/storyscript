@@ -154,7 +154,7 @@ class Compiler:
                 trees.append(block)
         self.subtrees(*trees)
 
-    def elseif_block(self, tree):
+    def elseif_block(self, tree, parent=None):
         """
         Compiles elseif_block trees
         """
@@ -162,8 +162,9 @@ class Compiler:
         self.set_next_line(line)
         args = [self.path(tree.node('elseif_statement'))]
         nested_block = tree.node('nested_block')
-        self.add_line('elif', line, args=args, enter=nested_block.line())
-        self.subtree(nested_block)
+        self.add_line('elif', line, args=args, enter=nested_block.line(),
+                      parent=parent)
+        self.subtree(nested_block, parent=parent)
 
     def else_block(self, tree):
         line = tree.line()
