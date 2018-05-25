@@ -120,20 +120,6 @@ def test_parser_foreach_block(parser):
     assert node.node('nested_block').data == 'nested_block'
 
 
-def test_parser_next(parser):
-    result = parser.parse('next word\n')
-    node = result.node('start.block.line.next')
-    assert node.child(0) == Token('NEXT', 'next')
-    assert node.child(1) == Token('NAME', 'word')
-
-
-def test_parser_next_filepath(parser):
-    result = parser.parse('next `path`\n')
-    node = result.node('start.block.line.next')
-    assert node.child(0) == Token('NEXT', 'next')
-    assert node.child(1) == Token('FILEPATH', '`path`')
-
-
 def test_parser_command(parser):
     result = parser.parse('org/container-name\n')
     node = result.node('start.block.line.command')
