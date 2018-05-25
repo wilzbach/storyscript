@@ -152,16 +152,15 @@ class Compiler:
         subtrees = cls.subtrees(*trees)
         return {**partial, **subtrees}
 
-    @classmethod
-    def elseif_block(cls, tree):
+    def elseif_block(self, tree):
         """
         Compiles elseif_block trees
         """
         line = tree.line()
-        args = [cls.path(tree.node('elseif_statement'))]
+        args = [self.path(tree.node('elseif_statement'))]
         nested_block = tree.node('nested_block')
-        partial = cls.base('elif', line, args=args, enter=nested_block.line())
-        return {**partial, **cls.subtree(nested_block)}
+        partial = self.base('elif', line, args=args, enter=nested_block.line())
+        return {**partial, **self.subtree(nested_block)}
 
     def else_block(self, tree):
         line = tree.line()
