@@ -13,8 +13,8 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['assignments'], ['operation'], ['next'],
-                       ['comment'], ['command'], ['block'])
+        definitions = (['values'], ['assignments'], ['operation'], ['comment'],
+                       ['command'], ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
@@ -165,11 +165,6 @@ class Grammar:
         definition = ('foreach', 'ws', 'name', 'ws', 'as', 'ws', 'name')
         self.ebnf.rule('foreach_statement', definition)
 
-    def next(self):
-        self.ebnf.token('next', 'next')
-        definitions = (('next', 'ws', 'name'), ('next', 'ws', 'filepath'))
-        self.ebnf.rules('next', *definitions)
-
     def options(self):
         definitions = (('dash', 'dash', 'name', 'ws', 'name'),
                        ('dash', 'dash', 'name', 'ws', 'values'))
@@ -200,7 +195,6 @@ class Grammar:
         self.comparisons()
         self.assignments()
         self.operation()
-        self.next()
         self.comment()
         self.block()
         self.command()

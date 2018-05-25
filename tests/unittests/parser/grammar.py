@@ -25,8 +25,8 @@ def test_grammar_init():
 
 def test_grammar_line(grammar, ebnf):
     grammar.line()
-    defintions = (['values'], ['assignments'], ['operation'], ['next'],
-                  ['comment'], ['command'], ['block'])
+    defintions = (['values'], ['assignments'], ['operation'], ['comment'],
+                  ['command'], ['block'])
     ebnf.rules.assert_called_with('line', *defintions)
 
 
@@ -251,13 +251,6 @@ def test_grammar_foreach_statement(grammar, ebnf):
     ebnf.tokens.assert_called_with(*tokens, inline=True)
 
 
-def test_grammar_next(grammar, ebnf):
-    grammar.next()
-    ebnf.token.assert_called_with('next', 'next')
-    definitions = (('next', 'ws', 'name'), ('next', 'ws', 'filepath'))
-    ebnf.rules.assert_called_with('next', *definitions)
-
-
 def test_grammar_options(grammar, ebnf):
     grammar.options()
     definitions = (('dash', 'dash', 'name', 'ws', 'name'),
@@ -294,7 +287,7 @@ def test_grammar_comment(grammar, ebnf):
 
 
 def test_grammar_build(patch, grammar):
-    patch.many(Grammar, ['line', 'spaces', 'values', 'assignments', 'next',
+    patch.many(Grammar, ['line', 'spaces', 'values', 'assignments',
                          'operation', 'comment', 'block', 'comparisons',
                          'command'])
     result = grammar.build()
@@ -304,7 +297,6 @@ def test_grammar_build(patch, grammar):
     assert Grammar.values.call_count == 1
     assert Grammar.assignments.call_count == 1
     assert Grammar.operation.call_count == 1
-    assert Grammar.next.call_count == 1
     assert Grammar.comment.call_count == 1
     assert Grammar.block.call_count == 1
     assert Grammar.comparisons.call_count == 1
