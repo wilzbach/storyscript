@@ -193,14 +193,6 @@ class Compiler:
                       parent=parent)
         self.subtree(nested_block, parent=line)
 
-    def wait_block(self, tree):
-        line = tree.line()
-        args = [self.path(tree.node('wait_statement').child(1))]
-        nested_block = tree.node('nested_block')
-        self.set_next_line(line)
-        self.add_line('wait', line, args=args, enter=nested_block.line())
-        self.subtree(nested_block)
-
     def subtrees(self, *trees):
         """
         Parses many subtrees
@@ -214,8 +206,7 @@ class Compiler:
         or keep parsing for deeper trees.
         """
         allowed_nodes = ['command', 'next', 'assignments', 'if_block',
-                         'elseif_block', 'else_block', 'for_block',
-                         'wait_block']
+                         'elseif_block', 'else_block', 'for_block']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent=parent)
             return

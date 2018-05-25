@@ -69,15 +69,10 @@ class Grammar:
         definition = '(for_statement|foreach_statement) _NL nested_block'
         self.ebnf.rule('for_block', definition, raw=True)
 
-    def wait_block(self):
-        self.wait_statement()
-        self.ebnf.rule('wait_block', ('wait_statement', 'nl', 'nested_block'))
-
     def block(self):
         self.if_block()
         self.for_block()
-        self.wait_block()
-        definition = 'line _NL nested_block?|if_block|for_block|wait_block'
+        definition = 'line _NL nested_block?|if_block|for_block'
         self.ebnf.rule('block', definition, raw=True)
 
     def number(self):
@@ -169,11 +164,6 @@ class Grammar:
         self.ebnf.tokens(('foreach', 'foreach'), ('as', 'as'), inline=True)
         definition = ('foreach', 'ws', 'name', 'ws', 'as', 'ws', 'name')
         self.ebnf.rule('foreach_statement', definition)
-
-    def wait_statement(self):
-        self.ebnf.token('wait', 'wait')
-        definitions = (('wait', 'ws', 'name'), ('wait', 'ws', 'string'))
-        self.ebnf.rules('wait_statement', *definitions)
 
     def next(self):
         self.ebnf.token('next', 'next')

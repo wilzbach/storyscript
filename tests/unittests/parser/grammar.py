@@ -91,21 +91,12 @@ def test_grammar_for_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('for_block', definition, raw=True)
 
 
-def test_grammar_wait_block(patch, grammar, ebnf):
-    patch.object(Grammar, 'wait_statement')
-    grammar.wait_block()
-    assert Grammar.wait_statement.call_count == 1
-    definition = ('wait_statement', 'nl', 'nested_block')
-    ebnf.rule.assert_called_with('wait_block', definition)
-
-
 def test_grammar_block(patch, grammar, ebnf):
-    patch.many(Grammar, ['if_block', 'wait_block', 'for_block'])
+    patch.many(Grammar, ['if_block', 'for_block'])
     grammar.block()
     assert Grammar.if_block.call_count == 1
     assert Grammar.for_block.call_count == 1
-    assert Grammar.wait_block.call_count == 1
-    definition = 'line _NL nested_block?|if_block|for_block|wait_block'
+    definition = 'line _NL nested_block?|if_block|for_block'
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 
@@ -258,13 +249,6 @@ def test_grammar_foreach_statement(grammar, ebnf):
     ebnf.rule.assert_called_with('foreach_statement', definition)
     tokens = (('foreach', 'foreach'), ('as', 'as'))
     ebnf.tokens.assert_called_with(*tokens, inline=True)
-
-
-def test_grammar_wait_statement(grammar, ebnf):
-    grammar.wait_statement()
-    definitions = (('wait', 'ws', 'name'), ('wait', 'ws', 'string'))
-    ebnf.rules.assert_called_with('wait_statement', *definitions)
-    ebnf.token.assert_called_with('wait', 'wait')
 
 
 def test_grammar_next(grammar, ebnf):
