@@ -177,37 +177,37 @@ def test_compiler_command(patch, tree):
     assert result == Compiler.base()
 
 
-def test_compiler_if_block(patch):
+def test_compiler_if_block(patch, compiler):
     patch.many(Compiler, ['base', 'path', 'subtrees'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', [])])
-    result = Compiler.if_block(tree)
-    Compiler.path.assert_called_with(tree.node('if_statement'))
+    result = compiler.if_block(tree)
+    compiler.path.assert_called_with(tree.node('if_statement'))
     nested_block = tree.node('nested_block')
-    args = [Compiler.path()]
-    Compiler.base.assert_called_with('if', tree.line(), args=args,
+    args = [compiler.path()]
+    compiler.base.assert_called_with('if', tree.line(), args=args,
                                      enter=nested_block.line())
-    Compiler.subtrees.assert_called_with(nested_block)
-    assert result == {**Compiler.base(), **Compiler.subtrees()}
+    compiler.subtrees.assert_called_with(nested_block)
+    assert result == {**compiler.base(), **compiler.subtrees()}
 
 
-def test_compiler_if_block_with_elseif(patch):
+def test_compiler_if_block_with_elseif(patch, compiler):
     patch.many(Compiler, ['base', 'path', 'subtrees'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', []),
                              Tree('elseif_block', [])])
-    Compiler.if_block(tree)
-    Compiler.subtrees.assert_called_with(tree.node('nested_block'),
+    compiler.if_block(tree)
+    compiler.subtrees.assert_called_with(tree.node('nested_block'),
                                          tree.node('elseif_block'))
 
 
-def test_compiler_if_block_with_else(patch):
+def test_compiler_if_block_with_else(patch, compiler):
     patch.many(Compiler, ['base', 'path', 'subtrees'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', []),
                              Tree('else_block', [])])
-    Compiler.if_block(tree)
-    Compiler.subtrees.assert_called_with(tree.node('nested_block'),
+    compiler.if_block(tree)
+    compiler.subtrees.assert_called_with(tree.node('nested_block'),
                                          tree.node('else_block'))
 
 

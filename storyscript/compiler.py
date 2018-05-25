@@ -139,17 +139,16 @@ class Compiler:
         container = tree.child(0).child(0).value
         return cls.base('run', tree.line(), container=container)
 
-    @classmethod
-    def if_block(cls, tree):
+    def if_block(self, tree):
         line = tree.line()
         nested_block = tree.node('nested_block')
-        args = [cls.path(tree.node('if_statement'))]
-        partial = cls.base('if', line, args=args, enter=nested_block.line())
+        args = [self.path(tree.node('if_statement'))]
+        partial = self.base('if', line, args=args, enter=nested_block.line())
         trees = [nested_block]
         for block in [tree.node('elseif_block'), tree.node('else_block')]:
             if block:
                 trees.append(block)
-        subtrees = cls.subtrees(*trees)
+        subtrees = self.subtrees(*trees)
         return {**partial, **subtrees}
 
     def elseif_block(self, tree):
