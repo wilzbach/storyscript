@@ -245,15 +245,14 @@ def test_compiler_for_block(patch, compiler, tree):
 
 
 def test_compiler_wait_block(patch, compiler, tree):
-    patch.many(Compiler, ['base', 'subtree', 'path', 'set_next_line'])
+    patch.many(Compiler, ['add_line', 'subtree', 'path', 'set_next_line'])
     result = compiler.wait_block(tree)
     compiler.path.assert_called_with(tree.node().child(1))
     args = [Compiler.path()]
-    compiler.base.assert_called_with('wait', tree.line(), args=args,
-                                     enter=tree.node().line())
+    compiler.add_line.assert_called_with('wait', tree.line(), args=args,
+                                         enter=tree.node().line())
     compiler.set_next_line.assert_called_with(tree.line())
     compiler.subtree.assert_called_with(tree.node())
-    assert result == {**compiler.base(), **compiler.subtree()}
 
 
 @mark.parametrize('method_name', [
