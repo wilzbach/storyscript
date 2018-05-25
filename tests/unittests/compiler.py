@@ -288,7 +288,9 @@ def test_compiler_parse_tree(compiler, patch):
 def test_compiler_compile(patch):
     patch.object(json, 'dumps')
     patch.object(Compiler, 'parse_tree')
+    patch.init(Compiler)
     result = Compiler.compile('tree')
+    assert Compiler.__init__.call_count == 1
     Compiler.parse_tree.assert_called_with('tree')
     dictionary = {'script': Compiler.parse_tree(), 'version': version}
     json.dumps.assert_called_with(dictionary)

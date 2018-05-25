@@ -220,5 +220,6 @@ class Compiler:
 
     @staticmethod
     def compile(tree):
-        dictionary = {'script': Compiler.parse_tree(tree), 'version': version}
+        compiler = Compiler()
+        dictionary = {'script': compiler.parse_tree(tree), 'version': version}
         return json.dumps(dictionary)
