@@ -110,7 +110,7 @@ class Compiler:
         """
         Creates the base dictionary for a given line.
         """
-        dictionary =  {
+        dictionary = {
             line: {
                 'method': method,
                 'ln': line,
@@ -158,8 +158,8 @@ class Compiler:
         self.set_next_line(line)
         args = [self.path(tree.node('elseif_statement'))]
         nested_block = tree.node('nested_block')
-        partial = self.base('elif', line, args=args, enter=nested_block.line())
-        return {**partial, **self.subtree(nested_block)}
+        self.add_line('elif', line, args=args, enter=nested_block.line())
+        self.subtree(nested_block)
 
     def else_block(self, tree):
         line = tree.line()
