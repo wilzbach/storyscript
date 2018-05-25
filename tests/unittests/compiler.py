@@ -146,16 +146,15 @@ def test_compiler_add_line_keywords(compiler, keywords):
 
 
 def test_compiler_assignments(patch, compiler, tree):
-    patch.many(Compiler, ['base', 'path', 'values', 'set_next_line'])
-    result = compiler.assignments(tree)
+    patch.many(Compiler, ['add_line', 'path', 'values', 'set_next_line'])
+    compiler.assignments(tree)
     compiler.set_next_line.assert_called_with(tree.line())
     tree.node.assert_called_with('path')
     tree.child.assert_called_with(2)
     compiler.path.assert_called_with(tree.node('path'))
     compiler.values.assert_called_with(tree.child())
     args = [compiler.path(), compiler.values()]
-    compiler.base.assert_called_with('set', tree.line(), args=args)
-    assert result == compiler.base()
+    compiler.add_line.assert_called_with('set', tree.line(), args=args)
 
 
 def test_compiler_next(patch, compiler, tree):
