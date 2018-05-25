@@ -191,10 +191,8 @@ class Compiler:
         """
         Parses many subtrees
         """
-        results = {}
         for tree in trees:
-            results = {**results, **self.subtree(tree)}
-        return results
+            self.subtree(tree)
 
     def subtree(self, tree):
         """

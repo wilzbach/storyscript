@@ -271,7 +271,6 @@ def test_compiler_subtrees(patch, compiler, tree):
     patch.object(Compiler, 'subtree', return_value={'tree': 'sub'})
     result = compiler.subtrees(tree, tree)
     compiler.subtree.assert_called_with(tree)
-    assert result == {**compiler.subtree()}
 
 
 def test_compiler_parse_tree(compiler, patch):
