@@ -130,9 +130,8 @@ class Compiler:
         ]
         return cls.base('set', tree.line(), args=args)
 
-    @classmethod
-    def next(cls, tree):
-        return cls.base('next', tree.line(), args=[cls.file(tree.child(1))])
+    def next(self, tree):
+        return self.base('next', tree.line(), args=[self.file(tree.child(1))])
 
     def command(self, tree):
         line = tree.line()

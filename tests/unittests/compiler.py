@@ -156,14 +156,14 @@ def test_compiler_assignments(patch, tree):
     assert result == Compiler.base()
 
 
-def test_compiler_next(patch, tree):
+def test_compiler_next(patch, compiler, tree):
     patch.many(Compiler, ['file', 'base'])
-    result = Compiler.next(tree)
+    result = compiler.next(tree)
     tree.child.assert_called_with(1)
-    Compiler.file.assert_called_with(tree.child())
-    args = [Compiler.file()]
-    Compiler.base.assert_called_with('next', tree.line(), args=args)
-    assert result == Compiler.base()
+    compiler.file.assert_called_with(tree.child())
+    args = [compiler.file()]
+    compiler.base.assert_called_with('next', tree.line(), args=args)
+    assert result == compiler.base()
 
 
 def test_compiler_command(patch, compiler, tree):
