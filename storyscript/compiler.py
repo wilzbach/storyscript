@@ -34,9 +34,9 @@ class Compiler:
         if previous_line:
             self.lines[previous_line]['next'] = line_number
 
-    def set_exit_line(self, line, methods):
+    def set_exit_line(self, line):
         for line_number in self.sorted_lines()[::-1]:
-            if self.lines[line_number]['method'] in methods:
+            if self.lines[line_number]['method'] in ['if', 'elif']:
                 self.lines[line_number]['exit'] = line
                 break
 
@@ -166,7 +166,7 @@ class Compiler:
         """
         line = tree.line()
         self.set_next_line(line)
-        self.set_exit_line(line, ['if', 'elif'])
+        self.set_exit_line(line)
         args = [self.path(tree.node('elseif_statement'))]
         nested_block = tree.node('nested_block')
         self.add_line('elif', line, args=args, enter=nested_block.line(),
@@ -176,6 +176,7 @@ class Compiler:
     def else_block(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
+        self.set_exit_line(line)
         nested_block = tree.node('nested_block')
         self.add_line('else', line, enter=nested_block.line(), parent=parent)
         self.subtree(nested_block, parent=line)
