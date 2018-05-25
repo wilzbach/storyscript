@@ -140,13 +140,15 @@ class Compiler:
         container = tree.child(0).child(0).value
         self.add_line('run', line, container=container, parent=parent)
 
-    def if_block(self, tree):
+    def if_block(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
         nested_block = tree.node('nested_block')
         args = [self.path(tree.node('if_statement'))]
-        self.add_line('if', line, args=args, enter=nested_block.line())
-        trees = [nested_block]
+        self.add_line('if', line, args=args, enter=nested_block.line(),
+                      parent=parent)
+        self.subtree(nested_block, parent=parent)
+        trees = []
         for block in [tree.node('elseif_block'), tree.node('else_block')]:
             if block:
                 trees.append(block)
