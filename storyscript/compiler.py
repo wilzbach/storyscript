@@ -136,10 +136,6 @@ class Compiler:
         args = [self.path(tree.node('path')), self.values(tree.child(2))]
         self.add_line('set', line, args=args, parent=parent)
 
-    def next(self, tree, parent=None):
-        args = [self.file(tree.child(1))]
-        self.add_line('next', tree.line(), args=args, parent=parent)
-
     def command(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
@@ -205,8 +201,8 @@ class Compiler:
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
         """
-        allowed_nodes = ['command', 'next', 'assignments', 'if_block',
-                         'elseif_block', 'else_block', 'for_block']
+        allowed_nodes = ['command', 'assignments', 'if_block', 'elseif_block',
+                         'else_block', 'for_block']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent=parent)
             return

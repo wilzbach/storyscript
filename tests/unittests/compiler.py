@@ -174,24 +174,6 @@ def test_compiler_assignments_parent(patch, compiler, tree):
                                          parent='1')
 
 
-def test_compiler_next(patch, compiler, tree):
-    patch.many(Compiler, ['file', 'add_line'])
-    compiler.next(tree)
-    tree.child.assert_called_with(1)
-    compiler.file.assert_called_with(tree.child())
-    args = [compiler.file()]
-    compiler.add_line.assert_called_with('next', tree.line(), args=args,
-                                         parent=None)
-
-
-def test_compiler_next_parent(patch, compiler, tree):
-    patch.many(Compiler, ['file', 'add_line'])
-    compiler.next(tree, parent='1')
-    args = [compiler.file()]
-    compiler.add_line.assert_called_with('next', tree.line(), args=args,
-                                         parent='1')
-
-
 def test_compiler_command(patch, compiler, tree):
     """
     Ensures that command trees can be compiled
@@ -319,7 +301,7 @@ def test_compiler_for_block_parent(patch, compiler, tree):
 
 
 @mark.parametrize('method_name', [
-    'command', 'next', 'assignments', 'if_block', 'elseif_block', 'else_block',
+    'command', 'assignments', 'if_block', 'elseif_block', 'else_block',
     'for_block'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
