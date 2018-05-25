@@ -132,7 +132,8 @@ def test_parser_wait_block_string(parser):
     result = parser.parse('wait "seconds"\n\tvar=3\n')
     node = result.node('start.block.wait_block')
     assert node.node('wait_statement').child(0) == Token('WAIT', 'wait')
-    assert node.node('wait_statement').child(1).child(0) == Token('DOUBLE_QUOTED', '"seconds"')
+    wait = node.node('wait_statement')
+    assert wait.child(1).child(0) == Token('DOUBLE_QUOTED', '"seconds"')
     assert node.node('nested_block').data == 'nested_block'
 
 
@@ -187,7 +188,8 @@ def test_parser_if_block(parser, name_token):
     node = result.node('block.if_block')
     assert node.node('if_statement').child(0) == Token('IF', 'if')
     assert node.node('if_statement').child(1) == Token('NAME', 'expr')
-    assert node.node('nested_block.block.line.assignments.path').child(0) == name_token
+    path = node.node('nested_block.block.line.assignments.path')
+    assert path.child(0) == name_token
 
 
 def test_parser_if_block_nested(parser, name_token):
@@ -195,28 +197,22 @@ def test_parser_if_block_nested(parser, name_token):
     node = result.node('block.if_block.nested_block.block.if_block')
     assert node.node('if_statement').child(0) == Token('IF', 'if')
     assert node.node('if_statement').child(1) == Token('NAME', 'things')
-    assert node.node('nested_block.block.line.assignments.path').child(0) == name_token
+    path = node.node('nested_block.block.line.assignments.path')
+    assert path.child(0) == name_token
 
 
 def test_parser_if_block_else(parser):
     result = parser.parse('if expr\n\tvar=3\nelse\n\tvar=4\n')
     node = result.node('block.if_block')
     assert node.child(2).child(0).child(0) == Token('ELSE', 'else')
-    assert node.child(2).child(1).node('block.line.assignments.path').child(0) == Token('NAME', 'var')
+    path = node.child(2).child(1).node('block.line.assignments.path')
+    assert path.child(0) == Token('NAME', 'var')
 
 
 def test_parser_if_block_elseif(parser):
     result = parser.parse('if expr\n\tvar=3\nelse if magic\n\tvar=4\n')
     node = result.node('block.if_block')
-    print(node.child(2).pretty())
     assert node.child(2).child(0).child(0) == Token('ELSE', 'else')
     assert node.child(2).child(0).child(1) == Token('IF', 'if')
-    assert node.child(2).child(1).node('block.line.assignments.path').child(0) == Token('NAME', 'var')
-
-
-"""
-def test_parser_tree(parser):
-    #result = parser.parse('for color in colors\n')
-    print(parser.grammar.build())
-    assert 0
-"""
+    path = node.child(2).child(1).node('block.line.assignments.path')
+    assert path.child(0) == Token('NAME', 'var')

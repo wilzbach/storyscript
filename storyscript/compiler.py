@@ -13,6 +13,32 @@ class Compiler:
     """
     Compiles Storyscript abstract syntax tree to JSON.
     """
+    def __init__(self):
+        self.lines = {}
+
+    def sorted_lines(self):
+        return sorted(self.lines.keys(), key=lambda x: int(x))
+
+    def last_line(self):
+        """
+        Gets the last line
+        """
+        if self.lines:
+            return self.sorted_lines()[-1]
+
+    def set_next_line(self, line_number):
+        """
+        Finds the previous line, and set the current as its next line
+        """
+        previous_line = self.last_line()
+        if previous_line:
+            self.lines[previous_line]['next'] = line_number
+
+    def set_exit_line(self, line):
+        for line_number in self.sorted_lines()[::-1]:
+            if self.lines[line_number]['method'] in ['if', 'elif']:
+                self.lines[line_number]['exit'] = line
+                break
 
     @staticmethod
     def path(tree):
@@ -85,128 +111,131 @@ class Compiler:
         elif subtree.type == 'FILEPATH':
             return cls.file(subtree)
 
-    @classmethod
-    def line(cls, tree):
+    def add_line(self, method, line, container=None, args=None, enter=None,
+                 exit=None, parent=None):
         """
-        Finds the line number of a tree, by finding the first token in the tree
-        and returning its line
+        Creates the base dictionary for a given line.
         """
-        for item in tree.children:
-            if isinstance(item, Token):
-                return str(item.line)
-            return cls.line(item)
-
-    @classmethod
-    def assignments(cls, tree):
-        line = cls.line(tree)
         dictionary = {
-            'method': 'set',
-            'ln': line,
-            'container': None,
-            'args': [
-                Compiler.path(tree.node('path')),
-                Compiler.values(tree.child(2))
-            ],
-            'output': None,
-            'enter': None,
-            'exit': None
+            line: {
+                'method': method,
+                'ln': line,
+                'output': None,
+                'container': container,
+                'args': args,
+                'enter': enter,
+                'exit': exit,
+                'parent': parent
+            }
         }
-        return {line: dictionary}
+        self.lines = {**self.lines, **dictionary}
 
-    @classmethod
-    def next(cls, tree):
-        line = cls.line(tree)
-        dictionary = {
-            'method': 'next',
-            'ln': line,
-            'container': None,
-            'output': None,
-            'args': [cls.file(tree.children[1])],
-            'enter': None,
-            'exit': None
-        }
-        return {line: dictionary}
+    def assignments(self, tree, parent=None):
+        line = tree.line()
+        self.set_next_line(line)
+        args = [self.path(tree.node('path')), self.values(tree.child(2))]
+        self.add_line('set', line, args=args, parent=parent)
 
-    @classmethod
-    def command(cls, tree):
-        line = cls.line(tree)
-        dictionary = {
-            'method': 'run',
-            'ln': line,
-            'container': tree.child(0).child(0).value,
-            'args': None,
-            'output': None,
-            'enter': None,
-            'exit': None
-        }
-        return {line: dictionary}
+    def next(self, tree, parent=None):
+        args = [self.file(tree.child(1))]
+        self.add_line('next', tree.line(), args=args, parent=parent)
 
-    @classmethod
-    def if_block(cls, tree):
-        line = cls.line(tree)
-        dictionary = {
-            'method': 'if',
-            'ln': line,
-            'container': None,
-            'args': [cls.path(tree.node('if_statement'))],
-            'output': None
-        }
-        partial = {line: dictionary}
-        return {**partial, **cls.subtree(tree.node('nested_block'))}
+    def command(self, tree, parent=None):
+        line = tree.line()
+        self.set_next_line(line)
+        container = tree.child(0).child(0).value
+        self.add_line('run', line, container=container, parent=parent)
 
-    @classmethod
-    def for_block(cls, tree):
-        line = cls.line(tree)
-        dictionary = {
-            'method': 'for',
-            'ln': line,
-            'container': None,
-            'args': [
-                tree.node('for_statement').child(0).value,
-                cls.path(tree.node('for_statement'))
-            ],
-            'output': None
-        }
-        partial = {line: dictionary}
-        return {**partial, **cls.subtree(tree.node('nested_block'))}
+    def if_block(self, tree, parent=None):
+        line = tree.line()
+        self.set_next_line(line)
+        nested_block = tree.node('nested_block')
+        args = [self.path(tree.node('if_statement'))]
+        self.add_line('if', line, args=args, enter=nested_block.line(),
+                      parent=parent)
+        self.subtree(nested_block, parent=line)
+        trees = []
+        for block in [tree.node('elseif_block'), tree.node('else_block')]:
+            if block:
+                trees.append(block)
+        self.subtrees(*trees)
 
-    @classmethod
-    def wait_block(cls, tree):
-        line = cls.line(tree)
-        dictionary = {
-            'method': 'wait',
-            'ln': line,
-            'container': None,
-            'output': None,
-            'args': [cls.path(tree.node('wait_statement').child(1))]
-        }
-        partial = {line: dictionary}
-        return {**partial, **cls.subtree(tree.node('nested_block'))}
+    def elseif_block(self, tree, parent=None):
+        """
+        Compiles elseif_block trees
+        """
+        line = tree.line()
+        self.set_next_line(line)
+        self.set_exit_line(line)
+        args = [self.path(tree.node('elseif_statement'))]
+        nested_block = tree.node('nested_block')
+        self.add_line('elif', line, args=args, enter=nested_block.line(),
+                      parent=parent)
+        self.subtree(nested_block, parent=line)
 
-    @classmethod
-    def subtree(cls, tree):
+    def else_block(self, tree, parent=None):
+        line = tree.line()
+        self.set_next_line(line)
+        self.set_exit_line(line)
+        nested_block = tree.node('nested_block')
+        self.add_line('else', line, enter=nested_block.line(), parent=parent)
+        self.subtree(nested_block, parent=line)
+
+    def for_block(self, tree, parent=None):
+        args = [
+            tree.node('for_statement').child(0).value,
+            self.path(tree.node('for_statement'))
+        ]
+        nested_block = tree.node('nested_block')
+        line = tree.line()
+        self.set_next_line(line)
+        self.add_line('for', line, args=args, enter=nested_block.line(),
+                      parent=parent)
+        self.subtree(nested_block, parent=line)
+
+    def wait_block(self, tree):
+        line = tree.line()
+        args = [self.path(tree.node('wait_statement').child(1))]
+        nested_block = tree.node('nested_block')
+        self.set_next_line(line)
+        self.add_line('wait', line, args=args, enter=nested_block.line())
+        self.subtree(nested_block)
+
+    def subtrees(self, *trees):
+        """
+        Parses many subtrees
+        """
+        for tree in trees:
+            self.subtree(tree)
+
+    def subtree(self, tree, parent=None):
         """
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
         """
         allowed_nodes = ['command', 'next', 'assignments', 'if_block',
-                         'for_block', 'wait_block']
+                         'elseif_block', 'else_block', 'for_block',
+                         'wait_block']
         if tree.data in allowed_nodes:
-            return getattr(cls, tree.data)(tree)
-        return cls.parse_tree(tree)
+            getattr(self, tree.data)(tree, parent=parent)
+            return
+        self.parse_tree(tree, parent=parent)
 
-    @classmethod
-    def parse_tree(cls, tree):
+    def parse_tree(self, tree, parent=None):
         """
         Parses a tree looking for subtrees.
         """
-        script = {}
         for item in tree.children:
             if isinstance(item, Tree):
-                script = {**cls.subtree(item), **script}
-        return script
+                self.subtree(item, parent=parent)
 
     @staticmethod
-    def compile(tree):
-        dictionary = {'script': Compiler.parse_tree(tree), 'version': version}
+    def compiler():
+        return Compiler()
+
+    @classmethod
+    def compile(cls, tree):
+        compiler = cls.compiler()
+        compiler.parse_tree(tree)
+        dictionary = {'script': compiler.lines, 'version': version}
         return json.dumps(dictionary)
