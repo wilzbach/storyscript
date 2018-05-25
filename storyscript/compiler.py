@@ -130,8 +130,9 @@ class Compiler:
         args = [self.path(tree.node('path')), self.values(tree.child(2))]
         self.add_line('set', line, args=args, parent=parent)
 
-    def next(self, tree):
-        self.add_line('next', tree.line(), args=[self.file(tree.child(1))])
+    def next(self, tree, parent=None):
+        args = [self.file(tree.child(1))]
+        self.add_line('next', tree.line(), args=args, parent=parent)
 
     def command(self, tree):
         line = tree.line()

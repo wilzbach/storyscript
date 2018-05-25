@@ -171,7 +171,16 @@ def test_compiler_next(patch, compiler, tree):
     tree.child.assert_called_with(1)
     compiler.file.assert_called_with(tree.child())
     args = [compiler.file()]
-    compiler.add_line.assert_called_with('next', tree.line(), args=args)
+    compiler.add_line.assert_called_with('next', tree.line(), args=args,
+                                         parent=None)
+
+
+def test_compiler_next_parent(patch, compiler, tree):
+    patch.many(Compiler, ['file', 'add_line'])
+    compiler.next(tree, parent='1')
+    args = [compiler.file()]
+    compiler.add_line.assert_called_with('next', tree.line(), args=args,
+                                         parent='1')
 
 
 def test_compiler_command(patch, compiler, tree):
