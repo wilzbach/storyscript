@@ -157,6 +157,7 @@ class Compiler:
         Compiles elseif_block trees
         """
         line = tree.line()
+        self.set_next_line(line)
         args = [self.path(tree.node('elseif_statement'))]
         nested_block = tree.node('nested_block')
         partial = self.base('elif', line, args=args, enter=nested_block.line())
