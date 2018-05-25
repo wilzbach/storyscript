@@ -166,12 +166,12 @@ class Compiler:
                       parent=parent)
         self.subtree(nested_block, parent=parent)
 
-    def else_block(self, tree):
+    def else_block(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
         nested_block = tree.node('nested_block')
-        self.add_line('else', line, enter=nested_block.line())
-        self.subtree(nested_block)
+        self.add_line('else', line, enter=nested_block.line(), parent=parent)
+        self.subtree(nested_block, parent=parent)
 
     def for_block(self, tree):
         args = [
