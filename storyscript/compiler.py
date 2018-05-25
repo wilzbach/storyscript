@@ -205,8 +205,8 @@ class Compiler:
                          'elseif_block', 'else_block', 'for_block',
                          'wait_block']
         if tree.data in allowed_nodes:
-            return getattr(self, tree.data)(tree)
-        return self.parse_tree(tree)
+            getattr(self, tree.data)(tree)
+        self.parse_tree(tree)
 
     def parse_tree(self, tree):
         """
