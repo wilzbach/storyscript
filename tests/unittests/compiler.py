@@ -246,7 +246,7 @@ def test_compiler_for_block(patch, compiler, tree):
 
 def test_compiler_wait_block(patch, compiler, tree):
     patch.many(Compiler, ['add_line', 'subtree', 'path', 'set_next_line'])
-    result = compiler.wait_block(tree)
+    compiler.wait_block(tree)
     compiler.path.assert_called_with(tree.node().child(1))
     args = [Compiler.path()]
     compiler.add_line.assert_called_with('wait', tree.line(), args=args,
@@ -269,7 +269,7 @@ def test_compiler_subtree(patch, compiler, method_name):
 
 def test_compiler_subtrees(patch, compiler, tree):
     patch.object(Compiler, 'subtree', return_value={'tree': 'sub'})
-    result = compiler.subtrees(tree, tree)
+    compiler.subtrees(tree, tree)
     compiler.subtree.assert_called_with(tree)
 
 
@@ -279,17 +279,19 @@ def test_compiler_parse_tree(compiler, patch):
     """
     patch.object(Compiler, 'subtree')
     tree = Tree('start', [Tree('command', ['token'])])
-    result = compiler.parse_tree(tree)
+    compiler.parse_tree(tree)
     compiler.subtree.assert_called_with(Tree('command', ['token']))
+
+
+def test_compiler_compiler():
+    assert isinstance(Compiler.compiler(), Compiler)
 
 
 def test_compiler_compile(patch):
     patch.object(json, 'dumps')
-    patch.object(Compiler, 'parse_tree')
-    patch.init(Compiler)
+    patch.many(Compiler, ['parse_tree', 'compiler'])
     result = Compiler.compile('tree')
-    assert Compiler.__init__.call_count == 1
-    Compiler.parse_tree.assert_called_with('tree')
-    dictionary = {'script': Compiler.parse_tree(), 'version': version}
+    Compiler.compiler().parse_tree.assert_called_with('tree')
+    dictionary = {'script': Compiler.compiler().lines, 'version': version}
     json.dumps.assert_called_with(dictionary)
     assert result == json.dumps()

@@ -215,7 +215,12 @@ class Compiler:
                 self.subtree(item)
 
     @staticmethod
-    def compile(tree):
-        compiler = Compiler()
-        dictionary = {'script': compiler.parse_tree(tree), 'version': version}
+    def compiler():
+        return Compiler()
+
+    @classmethod
+    def compile(cls, tree):
+        compiler = cls.compiler()
+        compiler.parse_tree(tree)
+        dictionary = {'script': compiler.lines, 'version': version}
         return json.dumps(dictionary)
