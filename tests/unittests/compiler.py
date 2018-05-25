@@ -154,7 +154,8 @@ def test_compiler_assignments(patch, compiler, tree):
     compiler.path.assert_called_with(tree.node('path'))
     compiler.values.assert_called_with(tree.child())
     args = [compiler.path(), compiler.values()]
-    compiler.add_line.assert_called_with('set', tree.line(), args=args, parent=None)
+    compiler.add_line.assert_called_with('set', tree.line(), args=args,
+                                         parent=None)
 
 
 def test_compiler_assignments_parent(patch, compiler, tree):
@@ -162,7 +163,7 @@ def test_compiler_assignments_parent(patch, compiler, tree):
     compiler.assignments(tree, parent='1')
     args = [compiler.path(), compiler.values()]
     compiler.add_line.assert_called_with('set', tree.line(), args=args,
-                                          parent='1')
+                                         parent='1')
 
 
 def test_compiler_next(patch, compiler, tree):
@@ -218,7 +219,6 @@ def test_compiler_if_block(patch, compiler):
                                          enter=nested_block.line(),
                                          parent=None)
     compiler.subtree.assert_called_with(nested_block, parent=None)
-
 
 
 def test_compiler_if_block_parent(patch, compiler):
@@ -309,6 +309,7 @@ def test_compiler_for_block_parent(patch, compiler, tree):
                                          enter=tree.node().line(), parent='1')
     compiler.subtree.assert_called_with(tree.node(), parent='1')
 
+
 def test_compiler_wait_block(patch, compiler, tree):
     patch.many(Compiler, ['add_line', 'subtree', 'path', 'set_next_line'])
     compiler.wait_block(tree)
@@ -352,7 +353,15 @@ def test_compiler_parse_tree(compiler, patch):
     patch.object(Compiler, 'subtree')
     tree = Tree('start', [Tree('command', ['token'])])
     compiler.parse_tree(tree)
-    compiler.subtree.assert_called_with(Tree('command', ['token']))
+    compiler.subtree.assert_called_with(Tree('command', ['token']),
+                                        parent=None)
+
+
+def test_compiler_parse_tree_parent(compiler, patch):
+    patch.object(Compiler, 'subtree')
+    tree = Tree('start', [Tree('command', ['token'])])
+    compiler.parse_tree(tree, parent='1')
+    compiler.subtree.assert_called_with(Tree('command', ['token']), parent='1')
 
 
 def test_compiler_compiler():

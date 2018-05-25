@@ -212,13 +212,13 @@ class Compiler:
             getattr(self, tree.data)(tree, parent=parent)
         self.parse_tree(tree, parent=parent)
 
-    def parse_tree(self, tree):
+    def parse_tree(self, tree, parent=None):
         """
         Parses a tree looking for subtrees.
         """
         for item in tree.children:
             if isinstance(item, Tree):
-                self.subtree(item)
+                self.subtree(item, parent=parent)
 
     @staticmethod
     def compiler():
