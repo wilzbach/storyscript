@@ -47,6 +47,14 @@ def test_compiler_set_next_line(patch, compiler):
     assert compiler.lines['1']['next'] == '2'
 
 
+def test_compiler_set_exit_line(patch, compiler):
+    patch.object(Compiler, 'sorted_lines', return_value=['1', '2'])
+    compiler.lines = {'1': {}, '2': {'method': 'if'}}
+    compiler.set_exit_line('3', ['if'])
+    assert compiler.sorted_lines.call_count == 1
+    assert compiler.lines['2']['exit'] == '3'
+
+
 def test_compiler_path():
     tree = Tree('path', [Token('WORD', 'var')])
     assert Compiler.path(tree) == {'$OBJECT': 'path', 'paths': ['var']}

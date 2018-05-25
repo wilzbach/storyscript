@@ -34,6 +34,12 @@ class Compiler:
         if previous_line:
             self.lines[previous_line]['next'] = line_number
 
+    def set_exit_line(self, line, methods):
+        for line_number in self.sorted_lines()[::-1]:
+            if self.lines[line_number]['method'] in methods:
+                self.lines[line_number]['exit'] = line
+                break
+
     @staticmethod
     def path(tree):
         return {'$OBJECT': 'path', 'paths': [tree.child(0).value]}
