@@ -136,7 +136,7 @@ class Compiler:
         line = tree.line()
         self.set_next_line(line)
         container = tree.child(0).child(0).value
-        return self.base('run', line, container=container)
+        self.add_line('run', line, container=container)
 
     def if_block(self, tree):
         line = tree.line()
