@@ -144,16 +144,16 @@ def test_compiler_base_keywords(keywords):
     assert result['1'][keywords] == keywords
 
 
-def test_compiler_assignments(patch, tree):
+def test_compiler_assignments(patch, compiler, tree):
     patch.many(Compiler, ['base', 'path', 'values'])
-    result = Compiler.assignments(tree)
+    result = compiler.assignments(tree)
     tree.node.assert_called_with('path')
     tree.child.assert_called_with(2)
-    Compiler.path.assert_called_with(tree.node('path'))
-    Compiler.values.assert_called_with(tree.child())
-    args = [Compiler.path(), Compiler.values()]
-    Compiler.base.assert_called_with('set', tree.line(), args=args)
-    assert result == Compiler.base()
+    compiler.path.assert_called_with(tree.node('path'))
+    compiler.values.assert_called_with(tree.child())
+    args = [compiler.path(), compiler.values()]
+    compiler.base.assert_called_with('set', tree.line(), args=args)
+    assert result == compiler.base()
 
 
 def test_compiler_next(patch, compiler, tree):
