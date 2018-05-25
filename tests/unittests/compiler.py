@@ -170,8 +170,9 @@ def test_compiler_command(patch, compiler, tree):
     """
     Ensures that command trees can be compiled
     """
-    patch.object(Compiler, 'base')
+    patch.many(Compiler, ['base', 'set_next_line'])
     result = compiler.command(tree)
+    compiler.set_next_line.assert_called_with(tree.line())
     container = tree.child().child().value
     compiler.base.assert_called_with('run', tree.line(), container=container)
     assert result == compiler.base()
