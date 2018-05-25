@@ -130,7 +130,7 @@ class Compiler:
         self.add_line('set', line, args=args)
 
     def next(self, tree):
-        return self.base('next', tree.line(), args=[self.file(tree.child(1))])
+        self.add_line('next', tree.line(), args=[self.file(tree.child(1))])
 
     def command(self, tree):
         line = tree.line()
