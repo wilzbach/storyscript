@@ -212,8 +212,7 @@ class Compiler:
         """
         for item in tree.children:
             if isinstance(item, Tree):
-                self.lines = {**self.subtree(item), **self.lines}
-        return self.lines
+                self.subtree(item)
 
     @staticmethod
     def compile(tree):
