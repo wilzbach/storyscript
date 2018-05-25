@@ -143,13 +143,12 @@ class Compiler:
         self.set_next_line(line)
         nested_block = tree.node('nested_block')
         args = [self.path(tree.node('if_statement'))]
-        partial = self.base('if', line, args=args, enter=nested_block.line())
+        self.add_line('if', line, args=args, enter=nested_block.line())
         trees = [nested_block]
         for block in [tree.node('elseif_block'), tree.node('else_block')]:
             if block:
                 trees.append(block)
-        subtrees = self.subtrees(*trees)
-        return {**partial, **subtrees}
+        self.subtrees(*trees)
 
     def elseif_block(self, tree):
         """
