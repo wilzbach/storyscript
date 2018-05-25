@@ -178,10 +178,11 @@ def test_compiler_command(patch, tree):
 
 
 def test_compiler_if_block(patch, compiler):
-    patch.many(Compiler, ['base', 'path', 'subtrees'])
+    patch.many(Compiler, ['base', 'path', 'subtrees', 'set_next_line'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', [])])
     result = compiler.if_block(tree)
+    compiler.set_next_line.assert_called_with(tree.line())
     compiler.path.assert_called_with(tree.node('if_statement'))
     nested_block = tree.node('nested_block')
     args = [compiler.path()]
@@ -192,7 +193,7 @@ def test_compiler_if_block(patch, compiler):
 
 
 def test_compiler_if_block_with_elseif(patch, compiler):
-    patch.many(Compiler, ['base', 'path', 'subtrees'])
+    patch.many(Compiler, ['base', 'path', 'subtrees', 'set_next_line'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', []),
                              Tree('elseif_block', [])])
@@ -202,7 +203,7 @@ def test_compiler_if_block_with_elseif(patch, compiler):
 
 
 def test_compiler_if_block_with_else(patch, compiler):
-    patch.many(Compiler, ['base', 'path', 'subtrees'])
+    patch.many(Compiler, ['base', 'path', 'subtrees', 'set_next_line'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', []),
                              Tree('else_block', [])])

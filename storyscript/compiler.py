@@ -141,6 +141,7 @@ class Compiler:
 
     def if_block(self, tree):
         line = tree.line()
+        self.set_next_line(line)
         nested_block = tree.node('nested_block')
         args = [self.path(tree.node('if_statement'))]
         partial = self.base('if', line, args=args, enter=nested_block.line())
