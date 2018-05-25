@@ -105,12 +105,12 @@ class Compiler:
         elif subtree.type == 'FILEPATH':
             return cls.file(subtree)
 
-    @staticmethod
-    def base(method, line, container=None, args=None, enter=None, exit=None):
+    def add_line(self, method, line, container=None, args=None, enter=None,
+                 exit=None):
         """
         Creates the base dictionary for a given line.
         """
-        return {
+        dictionary =  {
             line: {
                 'method': method,
                 'ln': line,
@@ -121,6 +121,7 @@ class Compiler:
                 'exit': exit
             }
         }
+        self.lines = {**self.lines, **dictionary}
 
     def assignments(self, tree):
         line = tree.line()
