@@ -185,6 +185,7 @@ class Compiler:
         args = [self.path(tree.node('wait_statement').child(1))]
         nested_block = tree.node('nested_block')
         partial = self.base('wait', line, args=args, enter=nested_block.line())
+        self.set_next_line(line)
         return {**partial, **self.subtree(nested_block)}
 
     def subtrees(self, *trees):
