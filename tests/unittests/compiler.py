@@ -218,7 +218,7 @@ def test_compiler_if_block(patch, compiler):
     compiler.add_line.assert_called_with('if', tree.line(), args=args,
                                          enter=nested_block.line(),
                                          parent=None)
-    compiler.subtree.assert_called_with(nested_block, parent=None)
+    compiler.subtree.assert_called_with(nested_block, parent=tree.line())
 
 
 def test_compiler_if_block_parent(patch, compiler):
@@ -231,7 +231,6 @@ def test_compiler_if_block_parent(patch, compiler):
     compiler.add_line.assert_called_with('if', tree.line(), args=args,
                                          enter=nested_block.line(),
                                          parent='1')
-    compiler.subtree.assert_called_with(nested_block, parent='1')
 
 
 def test_compiler_if_block_with_elseif(patch, compiler):
@@ -261,7 +260,7 @@ def test_compiler_elseif_block(patch, compiler, tree):
     args = [compiler.path()]
     compiler.add_line.assert_called_with('elif', tree.line(), args=args,
                                          enter=tree.node().line(), parent=None)
-    compiler.subtree.assert_called_with(tree.node(), parent=None)
+    compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
 
 
 def test_compiler_elseif_block_parent(patch, compiler, tree):
@@ -270,7 +269,6 @@ def test_compiler_elseif_block_parent(patch, compiler, tree):
     args = [compiler.path()]
     compiler.add_line.assert_called_with('elif', tree.line(), args=args,
                                          enter=tree.node().line(), parent='1')
-    compiler.subtree.assert_called_with(tree.node(), parent='1')
 
 
 def test_compiler_else_block(patch, compiler, tree):
@@ -279,7 +277,7 @@ def test_compiler_else_block(patch, compiler, tree):
     compiler.set_next_line.assert_called_with(tree.line())
     compiler.add_line.assert_called_with('else', tree.line(),
                                          enter=tree.node().line(), parent=None)
-    compiler.subtree.assert_called_with(tree.node(), parent=None)
+    compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
 
 
 def test_compiler_else_block_parent(patch, compiler, tree):
@@ -287,7 +285,6 @@ def test_compiler_else_block_parent(patch, compiler, tree):
     compiler.else_block(tree, parent='1')
     compiler.add_line.assert_called_with('else', tree.line(),
                                          enter=tree.node().line(), parent='1')
-    compiler.subtree.assert_called_with(tree.node(), parent='1')
 
 
 def test_compiler_for_block(patch, compiler, tree):
@@ -298,7 +295,7 @@ def test_compiler_for_block(patch, compiler, tree):
     compiler.set_next_line.assert_called_with(tree.line())
     compiler.add_line.assert_called_with('for', tree.line(), args=args,
                                          enter=tree.node().line(), parent=None)
-    compiler.subtree.assert_called_with(tree.node(), parent=None)
+    compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
 
 
 def test_compiler_for_block_parent(patch, compiler, tree):
@@ -307,7 +304,6 @@ def test_compiler_for_block_parent(patch, compiler, tree):
     args = [tree.node().child(0).value, Compiler.path()]
     compiler.add_line.assert_called_with('for', tree.line(), args=args,
                                          enter=tree.node().line(), parent='1')
-    compiler.subtree.assert_called_with(tree.node(), parent='1')
 
 
 def test_compiler_wait_block(patch, compiler, tree):

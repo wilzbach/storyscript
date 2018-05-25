@@ -147,7 +147,7 @@ class Compiler:
         args = [self.path(tree.node('if_statement'))]
         self.add_line('if', line, args=args, enter=nested_block.line(),
                       parent=parent)
-        self.subtree(nested_block, parent=parent)
+        self.subtree(nested_block, parent=line)
         trees = []
         for block in [tree.node('elseif_block'), tree.node('else_block')]:
             if block:
@@ -164,14 +164,14 @@ class Compiler:
         nested_block = tree.node('nested_block')
         self.add_line('elif', line, args=args, enter=nested_block.line(),
                       parent=parent)
-        self.subtree(nested_block, parent=parent)
+        self.subtree(nested_block, parent=line)
 
     def else_block(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
         nested_block = tree.node('nested_block')
         self.add_line('else', line, enter=nested_block.line(), parent=parent)
-        self.subtree(nested_block, parent=parent)
+        self.subtree(nested_block, parent=line)
 
     def for_block(self, tree, parent=None):
         args = [
@@ -183,7 +183,7 @@ class Compiler:
         self.set_next_line(line)
         self.add_line('for', line, args=args, enter=nested_block.line(),
                       parent=parent)
-        self.subtree(nested_block, parent=parent)
+        self.subtree(nested_block, parent=line)
 
     def wait_block(self, tree):
         line = tree.line()
@@ -210,6 +210,7 @@ class Compiler:
                          'wait_block']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent=parent)
+            return
         self.parse_tree(tree, parent=parent)
 
     def parse_tree(self, tree, parent=None):
