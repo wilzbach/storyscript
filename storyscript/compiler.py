@@ -207,7 +207,7 @@ class Compiler:
                          'wait_block']
         if tree.data in allowed_nodes:
             return getattr(self, tree.data)(tree)
-        self.parse_tree(tree)
+        return self.parse_tree(tree)
 
     def parse_tree(self, tree):
         """
@@ -216,6 +216,7 @@ class Compiler:
         for item in tree.children:
             if isinstance(item, Tree):
                 self.lines = {**self.subtree(item), **self.lines}
+        return self.lines
 
     @staticmethod
     def compile(tree):

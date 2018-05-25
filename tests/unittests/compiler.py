@@ -280,8 +280,9 @@ def test_compiler_parse_tree(compiler, patch):
     """
     patch.object(Compiler, 'subtree', return_value={'1': 'subtree'})
     tree = Tree('start', [Tree('command', ['token'])])
-    compiler.parse_tree(tree)
+    result = compiler.parse_tree(tree)
     assert compiler.lines == {'1': 'subtree'}
+    assert result == compiler.lines
 
 
 def test_compiler_compile(patch):
