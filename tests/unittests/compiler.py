@@ -352,6 +352,6 @@ def test_compiler_compile(patch):
     patch.many(Compiler, ['parse_tree', 'compiler'])
     result = Compiler.compile('tree')
     Compiler.compiler().parse_tree.assert_called_with('tree')
-    dictionary = {'script': Compiler.compiler().lines, 'version': version}
+    dictionary = {'tree': Compiler.compiler().lines, 'version': version}
     json.dumps.assert_called_with(dictionary)
     assert result == json.dumps()

@@ -224,5 +224,5 @@ class Compiler:
     def compile(cls, tree):
         compiler = cls.compiler()
         compiler.parse_tree(tree)
-        dictionary = {'script': compiler.lines, 'version': version}
+        dictionary = {'tree': compiler.lines, 'version': version}
         return json.dumps(dictionary)
