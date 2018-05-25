@@ -120,23 +120,6 @@ def test_parser_foreach_block(parser):
     assert node.node('nested_block').data == 'nested_block'
 
 
-def test_parser_wait_block(parser):
-    result = parser.parse('wait time\n\tvar=3\n')
-    node = result.node('start.block.wait_block')
-    assert node.node('wait_statement').child(0) == Token('WAIT', 'wait')
-    assert node.node('wait_statement').child(1) == Token('NAME', 'time')
-    assert node.node('nested_block').data == 'nested_block'
-
-
-def test_parser_wait_block_string(parser):
-    result = parser.parse('wait "seconds"\n\tvar=3\n')
-    node = result.node('start.block.wait_block')
-    assert node.node('wait_statement').child(0) == Token('WAIT', 'wait')
-    wait = node.node('wait_statement')
-    assert wait.child(1).child(0) == Token('DOUBLE_QUOTED', '"seconds"')
-    assert node.node('nested_block').data == 'nested_block'
-
-
 def test_parser_next(parser):
     result = parser.parse('next word\n')
     node = result.node('start.block.line.next')
