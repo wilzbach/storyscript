@@ -173,7 +173,7 @@ class Compiler:
         self.add_line('else', line, enter=nested_block.line(), parent=parent)
         self.subtree(nested_block, parent=parent)
 
-    def for_block(self, tree):
+    def for_block(self, tree, parent=None):
         args = [
             tree.node('for_statement').child(0).value,
             self.path(tree.node('for_statement'))
@@ -181,8 +181,9 @@ class Compiler:
         nested_block = tree.node('nested_block')
         line = tree.line()
         self.set_next_line(line)
-        self.add_line('for', line, args=args, enter=nested_block.line())
-        self.subtree(nested_block)
+        self.add_line('for', line, args=args, enter=nested_block.line(),
+                      parent=parent)
+        self.subtree(nested_block, parent=parent)
 
     def wait_block(self, tree):
         line = tree.line()
