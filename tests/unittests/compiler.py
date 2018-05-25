@@ -166,15 +166,15 @@ def test_compiler_next(patch, tree):
     assert result == Compiler.base()
 
 
-def test_compiler_command(patch, tree):
+def test_compiler_command(patch, compiler, tree):
     """
     Ensures that command trees can be compiled
     """
     patch.object(Compiler, 'base')
-    result = Compiler.command(tree)
+    result = compiler.command(tree)
     container = tree.child().child().value
-    Compiler.base.assert_called_with('run', tree.line(), container=container)
-    assert result == Compiler.base()
+    compiler.base.assert_called_with('run', tree.line(), container=container)
+    assert result == compiler.base()
 
 
 def test_compiler_if_block(patch, compiler):

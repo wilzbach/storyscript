@@ -134,10 +134,9 @@ class Compiler:
     def next(cls, tree):
         return cls.base('next', tree.line(), args=[cls.file(tree.child(1))])
 
-    @classmethod
-    def command(cls, tree):
+    def command(self, tree):
         container = tree.child(0).child(0).value
-        return cls.base('run', tree.line(), container=container)
+        return self.base('run', tree.line(), container=container)
 
     def if_block(self, tree):
         line = tree.line()
