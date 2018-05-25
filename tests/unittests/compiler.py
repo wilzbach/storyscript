@@ -134,12 +134,12 @@ def test_compiler_values_filepath(patch, magic):
 def test_compiler_add_line(compiler):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
                       'container': None, 'enter': None, 'exit': None,
-                      'args': None}}
+                      'args': None, 'parent': None}}
     compiler.add_line('method', '1')
     assert compiler.lines == expected
 
 
-@mark.parametrize('keywords', ['container', 'args', 'enter', 'exit'])
+@mark.parametrize('keywords', ['container', 'args', 'enter', 'exit', 'parent'])
 def test_compiler_add_line_keywords(compiler, keywords):
     compiler.add_line('method', '1', **{keywords: keywords})
     assert compiler.lines['1'][keywords] == keywords

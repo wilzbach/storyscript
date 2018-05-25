@@ -106,7 +106,7 @@ class Compiler:
             return cls.file(subtree)
 
     def add_line(self, method, line, container=None, args=None, enter=None,
-                 exit=None):
+                 exit=None, parent=None):
         """
         Creates the base dictionary for a given line.
         """
@@ -118,7 +118,8 @@ class Compiler:
                 'container': container,
                 'args': args,
                 'enter': enter,
-                'exit': exit
+                'exit': exit,
+                'parent': parent
             }
         }
         self.lines = {**self.lines, **dictionary}
