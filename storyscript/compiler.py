@@ -200,7 +200,7 @@ class Compiler:
         for tree in trees:
             self.subtree(tree)
 
-    def subtree(self, tree):
+    def subtree(self, tree, parent=None):
         """
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
@@ -209,8 +209,8 @@ class Compiler:
                          'elseif_block', 'else_block', 'for_block',
                          'wait_block']
         if tree.data in allowed_nodes:
-            getattr(self, tree.data)(tree)
-        self.parse_tree(tree)
+            getattr(self, tree.data)(tree, parent=parent)
+        self.parse_tree(tree, parent=parent)
 
     def parse_tree(self, tree):
         """

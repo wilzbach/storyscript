@@ -329,7 +329,14 @@ def test_compiler_subtree(patch, compiler, method_name):
     tree = Tree(method_name, [])
     compiler.subtree(tree)
     method = getattr(compiler, method_name)
-    method.assert_called_with(tree)
+    method.assert_called_with(tree, parent=None)
+
+
+def test_compiler_subtree_parent(patch, compiler):
+    patch.object(Compiler, 'command')
+    tree = Tree('command', [])
+    compiler.subtree(tree, parent='1')
+    compiler.command.assert_called_with(tree, parent='1')
 
 
 def test_compiler_subtrees(patch, compiler, tree):
