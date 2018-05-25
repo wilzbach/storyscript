@@ -124,11 +124,11 @@ class Compiler:
         }
         self.lines = {**self.lines, **dictionary}
 
-    def assignments(self, tree):
+    def assignments(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
         args = [self.path(tree.node('path')), self.values(tree.child(2))]
-        self.add_line('set', line, args=args)
+        self.add_line('set', line, args=args, parent=parent)
 
     def next(self, tree):
         self.add_line('next', tree.line(), args=[self.file(tree.child(1))])

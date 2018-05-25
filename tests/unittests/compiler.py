@@ -154,7 +154,15 @@ def test_compiler_assignments(patch, compiler, tree):
     compiler.path.assert_called_with(tree.node('path'))
     compiler.values.assert_called_with(tree.child())
     args = [compiler.path(), compiler.values()]
-    compiler.add_line.assert_called_with('set', tree.line(), args=args)
+    compiler.add_line.assert_called_with('set', tree.line(), args=args, parent=None)
+
+
+def test_compiler_assignments_parent(patch, compiler, tree):
+    patch.many(Compiler, ['add_line', 'path', 'values', 'set_next_line'])
+    compiler.assignments(tree, parent='1')
+    args = [compiler.path(), compiler.values()]
+    compiler.add_line.assert_called_with('set', tree.line(), args=args,
+                                          parent='1')
 
 
 def test_compiler_next(patch, compiler, tree):
