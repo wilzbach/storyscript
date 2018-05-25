@@ -192,7 +192,17 @@ def test_compiler_command(patch, compiler, tree):
     line = tree.line()
     compiler.set_next_line.assert_called_with(line)
     container = tree.child().child().value
-    compiler.add_line.assert_called_with('run', line, container=container)
+    compiler.add_line.assert_called_with('run', line, container=container,
+                                         parent=None)
+
+
+def test_compiler_command_parent(patch, compiler, tree):
+    patch.many(Compiler, ['add_line', 'set_next_line'])
+    compiler.command(tree, parent='1')
+    line = tree.line()
+    container = tree.child().child().value
+    compiler.add_line.assert_called_with('run', line, container=container,
+                                         parent='1')
 
 
 def test_compiler_if_block(patch, compiler):

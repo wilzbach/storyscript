@@ -134,11 +134,11 @@ class Compiler:
         args = [self.file(tree.child(1))]
         self.add_line('next', tree.line(), args=args, parent=parent)
 
-    def command(self, tree):
+    def command(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
         container = tree.child(0).child(0).value
-        self.add_line('run', line, container=container)
+        self.add_line('run', line, container=container, parent=parent)
 
     def if_block(self, tree):
         line = tree.line()
