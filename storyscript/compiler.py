@@ -123,8 +123,10 @@ class Compiler:
         }
 
     def assignments(self, tree):
+        line = tree.line()
+        self.set_next_line(line)
         args = [self.path(tree.node('path')), self.values(tree.child(2))]
-        return self.base('set', tree.line(), args=args)
+        return self.base('set', line, args=args)
 
     def next(self, tree):
         return self.base('next', tree.line(), args=[self.file(tree.child(1))])

@@ -145,8 +145,9 @@ def test_compiler_base_keywords(keywords):
 
 
 def test_compiler_assignments(patch, compiler, tree):
-    patch.many(Compiler, ['base', 'path', 'values'])
+    patch.many(Compiler, ['base', 'path', 'values', 'set_next_line'])
     result = compiler.assignments(tree)
+    compiler.set_next_line.assert_called_with(tree.line())
     tree.node.assert_called_with('path')
     tree.child.assert_called_with(2)
     compiler.path.assert_called_with(tree.node('path'))
