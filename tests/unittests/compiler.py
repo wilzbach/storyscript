@@ -224,8 +224,9 @@ def test_compiler_elseif_block(patch, tree):
 
 
 def test_compiler_else_block(patch, compiler, tree):
-    patch.many(Compiler, ['base', 'path', 'subtree'])
+    patch.many(Compiler, ['base', 'path', 'subtree', 'set_next_line'])
     result = compiler.else_block(tree)
+    compiler.set_next_line.assert_called_with(tree.line())
     compiler.base.assert_called_with('else', tree.line(),
                                      enter=tree.node().line())
     compiler.subtree.assert_called_with(tree.node())
