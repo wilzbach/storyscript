@@ -180,13 +180,12 @@ class Compiler:
         partial = cls.base('for', line, args=args, enter=nested_block.line())
         return {**partial, **cls.subtree(nested_block)}
 
-    @classmethod
-    def wait_block(cls, tree):
+    def wait_block(self, tree):
         line = tree.line()
-        args = [cls.path(tree.node('wait_statement').child(1))]
+        args = [self.path(tree.node('wait_statement').child(1))]
         nested_block = tree.node('nested_block')
-        partial = cls.base('wait', line, args=args, enter=nested_block.line())
-        return {**partial, **cls.subtree(nested_block)}
+        partial = self.base('wait', line, args=args, enter=nested_block.line())
+        return {**partial, **self.subtree(nested_block)}
 
     def subtrees(self, *trees):
         """
