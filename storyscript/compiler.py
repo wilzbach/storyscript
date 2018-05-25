@@ -176,8 +176,8 @@ class Compiler:
         nested_block = tree.node('nested_block')
         line = tree.line()
         self.set_next_line(line)
-        partial = self.base('for', line, args=args, enter=nested_block.line())
-        return {**partial, **self.subtree(nested_block)}
+        self.add_line('for', line, args=args, enter=nested_block.line())
+        self.subtree(nested_block)
 
     def wait_block(self, tree):
         line = tree.line()
