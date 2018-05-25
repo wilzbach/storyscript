@@ -163,11 +163,10 @@ class Compiler:
         partial = cls.base('elif', line, args=args, enter=nested_block.line())
         return {**partial, **cls.subtree(nested_block)}
 
-    @classmethod
-    def else_block(cls, tree):
+    def else_block(self, tree):
         nested_block = tree.node('nested_block')
-        partial = cls.base('else', tree.line(), enter=nested_block.line())
-        return {**partial, **cls.subtree(nested_block)}
+        partial = self.base('else', tree.line(), enter=nested_block.line())
+        return {**partial, **self.subtree(nested_block)}
 
     def for_block(self, tree):
         args = [
