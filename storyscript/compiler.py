@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import json
 import re
 
 from lark.lexer import Token
@@ -224,5 +223,4 @@ class Compiler:
     def compile(cls, tree):
         compiler = cls.compiler()
         compiler.parse_tree(tree)
-        dictionary = {'tree': compiler.lines, 'version': version}
-        return json.dumps(dictionary)
+        return {'tree': compiler.lines, 'version': version}
