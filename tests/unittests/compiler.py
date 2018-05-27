@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import json
 import re
 
 from lark.lexer import Token
@@ -348,10 +347,7 @@ def test_compiler_compiler():
 
 
 def test_compiler_compile(patch):
-    patch.object(json, 'dumps')
     patch.many(Compiler, ['parse_tree', 'compiler'])
     result = Compiler.compile('tree')
     Compiler.compiler().parse_tree.assert_called_with('tree')
-    dictionary = {'script': Compiler.compiler().lines, 'version': version}
-    json.dumps.assert_called_with(dictionary)
-    assert result == json.dumps()
+    assert result == {'tree': Compiler.compiler().lines, 'version': version}
