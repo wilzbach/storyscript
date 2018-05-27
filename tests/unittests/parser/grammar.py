@@ -253,8 +253,8 @@ def test_grammar_foreach_statement(grammar, ebnf):
 
 def test_grammar_arguments(grammar, ebnf):
     grammar.arguments()
-    definitions = (['ws', 'values'], ['ws', 'name'])
-    ebnf.rules.assert_called_with('arguments', *definitions)
+    definition = ('ws', 'name', 'colon', 'values')
+    ebnf.rule.assert_called_with('arguments', definition)
 
 
 def test_grammar_container(grammar, ebnf):

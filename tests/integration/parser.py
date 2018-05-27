@@ -131,11 +131,11 @@ def test_parser_command(parser):
 
 
 def test_parser_command_arguments(parser):
-    result = parser.parse('container command "secret"\n')
+    result = parser.parse('container key:"value"\n')
     node = result.node('start.block.line.command')
-    assert node.child(1).child(0) == Token('NAME', 'command')
-    token = node.child(2).node('values.string').child(0)
-    assert token == Token('DOUBLE_QUOTED', '"secret"')
+    assert node.child(1).child(0) == Token('NAME', 'key')
+    token = node.child(1).child(1).node('string').child(0)
+    assert token == Token('DOUBLE_QUOTED', '"value"')
 
 
 @mark.parametrize('comment', ['# one', '#one'])
