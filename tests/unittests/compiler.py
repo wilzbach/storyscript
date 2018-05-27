@@ -185,6 +185,7 @@ def test_compiler_command(patch, compiler, tree):
     container = tree.child().child().value
     compiler.add_line.assert_called_with('run', line, container=container,
                                          parent=None)
+    assert compiler.services == [tree.child().child().value]
 
 
 def test_compiler_command_parent(patch, compiler, tree):

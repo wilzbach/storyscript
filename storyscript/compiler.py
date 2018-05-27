@@ -137,10 +137,14 @@ class Compiler:
         self.add_line('set', line, args=args, parent=parent)
 
     def command(self, tree, parent=None):
+        """
+        Translates a command tree to the corresponding line
+        """
         line = tree.line()
         self.set_next_line(line)
         container = tree.child(0).child(0).value
         self.add_line('run', line, container=container, parent=parent)
+        self.services.append(container)
 
     def if_block(self, tree, parent=None):
         line = tree.line()
