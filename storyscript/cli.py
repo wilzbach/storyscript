@@ -38,10 +38,7 @@ class Cli:
             if not json:
                 click.echo(click.style('Script syntax passed!', fg='green'))
                 exit()
-
-            for file, story_json in results.items():
-                click.echo('File: {}'.format(file))
-                click.echo(story_json)
+            click.echo(results)
 
     @staticmethod
     @main.command()

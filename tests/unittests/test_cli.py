@@ -66,11 +66,9 @@ def test_cli_parse_json(runner, echo, app, option):
     """
     Ensures --json outputs json
     """
-    App.compile.return_value = {'story.one': 'json'}
     runner.invoke(Cli.parse, ['/path', option])
     App.compile.assert_called_with('/path')
-    click.echo.assert_called_with('json')
-    assert click.echo.call_count == 2
+    click.echo.assert_called_with(App.compile())
 
 
 def test_cli_lexer(patch, magic, runner, app, echo):
