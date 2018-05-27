@@ -14,6 +14,7 @@ class Compiler:
     """
     def __init__(self):
         self.lines = {}
+        self.services = []
 
     def sorted_lines(self):
         return sorted(self.lines.keys(), key=lambda x: int(x))
