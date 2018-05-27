@@ -257,6 +257,11 @@ def test_grammar_arguments(grammar, ebnf):
     ebnf.rule.assert_called_with('arguments', definition)
 
 
+def test_grammar_command(grammar, ebnf):
+    grammar.command()
+    ebnf.rule.assert_called_with('command', ('ws', 'name'))
+
+
 def test_grammar_container(grammar, ebnf):
     grammar.container()
     definitions = (['name'], ['dash'], ['bslash'])
@@ -264,11 +269,13 @@ def test_grammar_container(grammar, ebnf):
 
 
 def test_grammar_service(patch, grammar, ebnf):
-    patch.many(Grammar, ['arguments', 'container'])
+    patch.many(Grammar, ['arguments', 'container', 'command'])
     grammar.service()
     assert Grammar.arguments.call_count == 1
     assert Grammar.container.call_count == 1
-    ebnf.rule.assert_called_with('service', 'container+ arguments*', raw=True)
+    assert Grammar.command.call_count == 1
+    rule = 'container+ command? arguments*'
+    ebnf.rule.assert_called_with('service', rule, raw=True)
 
 
 def test_grammar_comment(grammar, ebnf):

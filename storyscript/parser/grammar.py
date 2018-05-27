@@ -171,10 +171,14 @@ class Grammar:
     def container(self):
         self.ebnf.rules('container', *(['name'], ['dash'], ['bslash']))
 
+    def command(self):
+        self.ebnf.rule('command', ('ws', 'name'))
+
     def service(self):
         self.arguments()
         self.container()
-        self.ebnf.rule('service', 'container+ arguments*', raw=True)
+        self.command()
+        self.ebnf.rule('service', 'container+ command? arguments*', raw=True)
 
     def comment(self):
         self.ebnf.token('comment', '/#(.*)/', regexp=True)
