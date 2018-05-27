@@ -14,7 +14,7 @@ class Grammar:
 
     def line(self):
         definitions = (['values'], ['assignments'], ['operation'], ['comment'],
-                       ['command'], ['block'])
+                       ['service'], ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
@@ -171,10 +171,10 @@ class Grammar:
     def container(self):
         self.ebnf.rules('container', *(['name'], ['dash'], ['bslash']))
 
-    def command(self):
+    def service(self):
         self.arguments()
         self.container()
-        self.ebnf.rule('command', 'container+ arguments*', raw=True)
+        self.ebnf.rule('service', 'container+ arguments*', raw=True)
 
     def comment(self):
         self.ebnf.token('comment', '/#(.*)/', regexp=True)
@@ -190,5 +190,5 @@ class Grammar:
         self.operation()
         self.comment()
         self.block()
-        self.command()
+        self.service()
         return self.ebnf.build()

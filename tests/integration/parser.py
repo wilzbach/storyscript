@@ -120,9 +120,9 @@ def test_parser_foreach_block(parser):
     assert node.node('nested_block').data == 'nested_block'
 
 
-def test_parser_command(parser):
+def test_parser_service(parser):
     result = parser.parse('org/container-name\n')
-    node = result.node('start.block.line.command')
+    node = result.node('start.block.line.service')
     assert node.child(0).child(0) == Token('NAME', 'org')
     assert node.child(1).child(0) == Token('BSLASH', '/')
     assert node.child(2).child(0) == Token('NAME', 'container')
@@ -130,9 +130,9 @@ def test_parser_command(parser):
     assert node.child(4).child(0) == Token('NAME', 'name')
 
 
-def test_parser_command_arguments(parser):
+def test_parser_service_arguments(parser):
     result = parser.parse('container key:"value"\n')
-    node = result.node('start.block.line.command')
+    node = result.node('start.block.line.service')
     assert node.child(1).child(0) == Token('NAME', 'key')
     token = node.child(1).child(1).node('string').child(0)
     assert token == Token('DOUBLE_QUOTED', '"value"')

@@ -26,7 +26,7 @@ def test_grammar_init():
 def test_grammar_line(grammar, ebnf):
     grammar.line()
     defintions = (['values'], ['assignments'], ['operation'], ['comment'],
-                  ['command'], ['block'])
+                  ['service'], ['block'])
     ebnf.rules.assert_called_with('line', *defintions)
 
 
@@ -263,12 +263,12 @@ def test_grammar_container(grammar, ebnf):
     grammar.ebnf.rules.assert_called_with('container', *definitions)
 
 
-def test_grammar_command(patch, grammar, ebnf):
+def test_grammar_service(patch, grammar, ebnf):
     patch.many(Grammar, ['arguments', 'container'])
-    grammar.command()
+    grammar.service()
     assert Grammar.arguments.call_count == 1
     assert Grammar.container.call_count == 1
-    ebnf.rule.assert_called_with('command', 'container+ arguments*', raw=True)
+    ebnf.rule.assert_called_with('service', 'container+ arguments*', raw=True)
 
 
 def test_grammar_comment(grammar, ebnf):
@@ -280,7 +280,7 @@ def test_grammar_comment(grammar, ebnf):
 def test_grammar_build(patch, grammar):
     patch.many(Grammar, ['line', 'spaces', 'values', 'assignments',
                          'operation', 'comment', 'block', 'comparisons',
-                         'command'])
+                         'service'])
     result = grammar.build()
     grammar.ebnf.start.assert_called_with('_NL? block')
     assert Grammar.line.call_count == 1
@@ -291,5 +291,5 @@ def test_grammar_build(patch, grammar):
     assert Grammar.comment.call_count == 1
     assert Grammar.block.call_count == 1
     assert Grammar.comparisons.call_count == 1
-    assert Grammar.command.call_count == 1
+    assert Grammar.service.call_count == 1
     assert result == grammar.ebnf.build()
