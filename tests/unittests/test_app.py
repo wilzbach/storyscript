@@ -78,12 +78,13 @@ def test_app_parse(patch, parser, read_story):
 
 
 def test_app_compile(patch):
-    patch.object(Compiler, 'compile')
-    patch.object(App, 'parse', return_value={'hello.story': 'tree'})
+    patch.object(json, 'dumps')
+    patch.many(App, ['get_stories', 'parse'])
     result = App.compile('path')
-    App.parse.assert_called_with('path')
-    Compiler.compile.assert_called_with('tree')
-    assert result == {'hello.story': Compiler.compile()}
+    App.get_stories.assert_called_with('path')
+    App.parse.assert_called_with(App.get_stories())
+    json.dumps.assert_called_with({'stories': App.parse()}, indent=2)
+    assert result == json.dumps()
 
 
 def test_app_lexer(patch, read_story):
