@@ -77,6 +77,12 @@ def test_app_parse(patch, parser, read_story):
     assert result == {'test.story': Compiler.compile()}
 
 
+def test_app_services():
+    compiled_stories = {'a': {'services': ['one']}, 'b': {'services': ['two']}}
+    result = App.services(compiled_stories)
+    assert result == ['one', 'two']
+
+
 def test_app_compile(patch):
     patch.object(json, 'dumps')
     patch.many(App, ['get_stories', 'parse'])

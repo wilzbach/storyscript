@@ -37,6 +37,13 @@ class App:
             results[story] = Compiler.compile(tree)
         return results
 
+    @staticmethod
+    def services(stories):
+        services = []
+        for storypath, story in stories.items():
+            services += story['services']
+        return services
+
     @classmethod
     def compile(cls, path):
         stories = cls.get_stories(path)
