@@ -22,6 +22,7 @@ def tree(magic):
 
 def test_compiler_init(compiler):
     assert compiler.lines == {}
+    assert compiler.services == []
 
 
 def test_compiler_sorted_lines(compiler):
@@ -184,6 +185,7 @@ def test_compiler_command(patch, compiler, tree):
     container = tree.child().child().value
     compiler.add_line.assert_called_with('run', line, container=container,
                                          parent=None)
+    assert compiler.services == [tree.child().child().value]
 
 
 def test_compiler_command_parent(patch, compiler, tree):
@@ -350,4 +352,6 @@ def test_compiler_compile(patch):
     patch.many(Compiler, ['parse_tree', 'compiler'])
     result = Compiler.compile('tree')
     Compiler.compiler().parse_tree.assert_called_with('tree')
-    assert result == {'tree': Compiler.compiler().lines, 'version': version}
+    expected = {'tree': Compiler.compiler().lines, 'version': version,
+                'services': Compiler.compiler().services}
+    assert result == expected

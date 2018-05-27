@@ -37,10 +37,20 @@ class App:
             results[story] = Compiler.compile(tree)
         return results
 
+    @staticmethod
+    def services(stories):
+        services = []
+        for storypath, story in stories.items():
+            services += story['services']
+        return services
+
     @classmethod
     def compile(cls, path):
         stories = cls.get_stories(path)
-        return json.dumps({'stories': cls.parse(stories)}, indent=2)
+        compiled_stories = cls.parse(stories)
+        services = cls.services(compiled_stories)
+        dictionary = {'stories': compiled_stories, 'services': services}
+        return json.dumps(dictionary, indent=2)
 
     @classmethod
     def lex(cls, path):
