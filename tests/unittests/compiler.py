@@ -174,12 +174,12 @@ def test_compiler_assignments_parent(patch, compiler, tree):
                                          parent='1')
 
 
-def test_compiler_command(patch, compiler, tree):
+def test_compiler_service(patch, compiler, tree):
     """
-    Ensures that command trees can be compiled
+    Ensures that service trees can be compiled
     """
     patch.many(Compiler, ['add_line', 'set_next_line'])
-    compiler.command(tree)
+    compiler.service(tree)
     line = tree.line()
     compiler.set_next_line.assert_called_with(line)
     container = tree.child().child().value
@@ -188,9 +188,9 @@ def test_compiler_command(patch, compiler, tree):
     assert compiler.services == [tree.child().child().value]
 
 
-def test_compiler_command_parent(patch, compiler, tree):
+def test_compiler_service_parent(patch, compiler, tree):
     patch.many(Compiler, ['add_line', 'set_next_line'])
-    compiler.command(tree, parent='1')
+    compiler.service(tree, parent='1')
     line = tree.line()
     container = tree.child().child().value
     compiler.add_line.assert_called_with('run', line, container=container,
@@ -302,7 +302,7 @@ def test_compiler_for_block_parent(patch, compiler, tree):
 
 
 @mark.parametrize('method_name', [
-    'command', 'assignments', 'if_block', 'elseif_block', 'else_block',
+    'service', 'assignments', 'if_block', 'elseif_block', 'else_block',
     'for_block'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
@@ -314,10 +314,10 @@ def test_compiler_subtree(patch, compiler, method_name):
 
 
 def test_compiler_subtree_parent(patch, compiler):
-    patch.object(Compiler, 'command')
-    tree = Tree('command', [])
+    patch.object(Compiler, 'service')
+    tree = Tree('service', [])
     compiler.subtree(tree, parent='1')
-    compiler.command.assert_called_with(tree, parent='1')
+    compiler.service.assert_called_with(tree, parent='1')
 
 
 def test_compiler_subtrees(patch, compiler, tree):
