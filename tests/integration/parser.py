@@ -130,13 +130,6 @@ def test_parser_command(parser):
     assert node.child(4).child(0) == Token('NAME', 'name')
 
 
-def test_parser_command_option(parser):
-    result = parser.parse('container --awesome yes\n')
-    node = result.node('start.block.line.command').child(1).node('options')
-    assert node.child(2) == Token('NAME', 'awesome')
-    assert node.child(3) == Token('NAME', 'yes')
-
-
 def test_parser_command_arguments(parser):
     result = parser.parse('container command "secret"\n')
     node = result.node('start.block.line.command')

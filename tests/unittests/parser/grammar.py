@@ -251,18 +251,9 @@ def test_grammar_foreach_statement(grammar, ebnf):
     ebnf.tokens.assert_called_with(*tokens, inline=True)
 
 
-def test_grammar_options(grammar, ebnf):
-    grammar.options()
-    definitions = (('dash', 'dash', 'name', 'ws', 'name'),
-                   ('dash', 'dash', 'name', 'ws', 'values'))
-    ebnf.rules.assert_called_with('options', *definitions)
-
-
-def test_grammar_arguments(patch, grammar, ebnf):
-    patch.object(Grammar, 'options')
+def test_grammar_arguments(grammar, ebnf):
     grammar.arguments()
-    assert Grammar.options.call_count == 1
-    definitions = (['ws', 'values'], ['ws', 'name'], ['ws', 'options'])
+    definitions = (['ws', 'values'], ['ws', 'name'])
     ebnf.rules.assert_called_with('arguments', *definitions)
 
 

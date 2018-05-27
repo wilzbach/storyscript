@@ -165,14 +165,8 @@ class Grammar:
         definition = ('foreach', 'ws', 'name', 'ws', 'as', 'ws', 'name')
         self.ebnf.rule('foreach_statement', definition)
 
-    def options(self):
-        definitions = (('dash', 'dash', 'name', 'ws', 'name'),
-                       ('dash', 'dash', 'name', 'ws', 'values'))
-        self.ebnf.rules('options', *definitions)
-
     def arguments(self):
-        self.options()
-        definitions = (['ws', 'values'], ['ws', 'name'], ['ws', 'options'])
+        definitions = (['ws', 'values'], ['ws', 'name'])
         self.ebnf.rules('arguments', *definitions)
 
     def container(self):
