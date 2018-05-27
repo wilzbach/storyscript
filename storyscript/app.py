@@ -1,3 +1,4 @@
+import json
 import os
 
 from .compiler import Compiler
@@ -26,16 +27,14 @@ class App:
                     if file.endswith('.story'):
                         stories.append(os.path.join(root, file))
             return stories
-
         return [storypath]
 
     @classmethod
-    def parse(cls, path):
-        parser = Parser()
-        stories = cls.get_stories(path)
+    def parse(cls, stories):
         results = {}
         for story in stories:
-            results[story] = parser.parse(cls.read_story(story))
+            tree = Parser().parse(cls.read_story(story))
+            results[story] = Compiler.compile(tree)
         return results
 
     @classmethod

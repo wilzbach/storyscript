@@ -29,14 +29,14 @@ def story(story_teardown, storypath):
 
 
 @fixture
-def read_story(mocker):
-    mocker.patch.object(App, 'read_story')
+def read_story(patch):
+    patch.object(App, 'read_story')
 
 
 @fixture
-def parser(mocker):
-    mocker.patch.object(Parser, '__init__', return_value=None)
-    mocker.patch.object(Parser, 'parse')
+def parser(patch):
+    patch.init(Parser)
+    patch.object(Parser, 'parse')
 
 
 def test_app_read_story(story, storypath):
@@ -69,14 +69,12 @@ def test_app_parse(patch, parser, read_story):
     """
     Ensures App.parse runs Parser.parse
     """
-    patch.init(Parser)
-    patch.object(Parser, 'parse')
-    patch.object(App, 'get_stories', return_value=['one.story'])
-    result = App.parse('path')
-    App.get_stories.assert_called_with('path')
-    App.read_story.assert_called_with('one.story')
+    patch.object(Compiler, 'compile')
+    result = App.parse(['test.story'])
+    App.read_story.assert_called_with('test.story')
     Parser().parse.assert_called_with(App.read_story())
-    assert result == {'one.story': Parser.parse()}
+    Compiler.compile.assert_called_with(Parser().parse())
+    assert result == {'test.story': Compiler.compile()}
 
 
 def test_app_compile(patch):
