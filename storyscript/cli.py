@@ -9,6 +9,7 @@ class Cli:
 
     version_help = 'Prints Storyscript version'
     silent_help = 'Silent mode. Return syntax errors only.'
+    ebnf_file_help = 'Load the grammar from a file. Useful for development'
 
     @click.group(invoke_without_command=True)
     @click.option('--version', is_flag=True, help=version_help)
@@ -30,7 +31,7 @@ class Cli:
     @click.argument('storypath')
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
-    @click.option('--ebnf-file')
+    @click.option('--ebnf-file', help=ebnf_file_help)
     def parse(storypath, json, silent, ebnf_file):
         """
         Parses stories and prints the resulting json
