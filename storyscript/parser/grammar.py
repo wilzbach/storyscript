@@ -13,8 +13,8 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['assignments'], ['operation'], ['comment'],
-                       ['service'], ['block'])
+        definitions = (['values'], ['operation'], ['comment'], ['statement'],
+                       ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
