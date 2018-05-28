@@ -31,13 +31,13 @@ class App:
         return [storypath]
 
     @classmethod
-    def parse(cls, stories):
+    def parse(cls, stories, ebnf_file=None):
         """
         Parses a list of stories, returning their tree.
         """
         results = {}
         for story in stories:
-            tree = Parser().parse(cls.read_story(story))
+            tree = Parser(ebnf_file=ebnf_file).parse(cls.read_story(story))
             results[story] = Compiler.compile(tree)
         return results
 
