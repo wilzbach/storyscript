@@ -193,7 +193,7 @@ def test_grammar_path_fragment(grammar, ebnf):
 def test_grammar_path(patch, grammar, ebnf):
     patch.object(Grammar, 'path_fragment')
     grammar.path()
-    ebnf.token.assert_called_with('name', '/[a-zA-Z]+/', regexp=True)
+    ebnf.token.assert_called_with('name', '/[a-zA-Z-\/]+/', regexp=True)
     Grammar.path_fragment.call_count == 1
     ebnf.rule.assert_called_with('path', 'NAME (path_fragment)*', raw=True)
 
