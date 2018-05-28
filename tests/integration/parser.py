@@ -79,26 +79,23 @@ def test_parser_object(parser):
     assert value == Token('SINGLE_QUOTED', "'red'")
 
 
-def test_parser_assignments(parser, name_token):
-    result = parser.parse('var="hello"\n')
-    node = result.node('start.block.line.assignments')
+@mark.parametrize('code, token', [
+    ('var="hello"\n', Token('DOUBLE_QUOTED', '"hello"')),
+    ('var = "hello"\n', Token('DOUBLE_QUOTED', '"hello"')),
+    ('var=3\n', Token('INT', 3)),
+    ('var = 3\n', Token('INT', 3))
+])
+def test_parser_statement_assignment_fragment(parser, name_token, code, token):
+    result = parser.parse(code)
+    node = result.node('start.block.line.statement')
     assert node.node('path').child(0) == name_token
-    assert node.child(1) == Token('EQUALS', '=')
-    token = Token('DOUBLE_QUOTED', '"hello"')
-    assert node.child(2).node('string').child(0) == token
+    assert node.child(1).child(0) == Token('EQUALS', '=')
+    assert node.child(1).child(1).child(0).child(0) == token
 
 
-def test_parser_assignments_int(parser, int_token, name_token):
-    result = parser.parse('var=3\n')
-    node = result.node('start.block.line.assignments')
-    assert node.node('path').child(0) == name_token
-    assert node.child(1) == Token('EQUALS', '=')
-    assert node.child(2).node('number').child(0) == int_token
-
-
-def test_parser_path_assignment(parser):
+def test_parser_statement_assignment_fragment_path(parser):
     result = parser.parse('rainbow.colors[0]="blue"\n')
-    node = result.node('start.block.line.assignments.path')
+    node = result.node('start.block.line.statement.path')
     assert node.child(0) == Token('NAME', 'rainbow')
     assert node.child(1).child(0) == Token('NAME', 'colors')
     assert node.child(2).child(0) == Token('INT', 0)
@@ -120,21 +117,18 @@ def test_parser_foreach_block(parser):
     assert node.node('nested_block').data == 'nested_block'
 
 
-def test_parser_service(parser):
-    result = parser.parse('org/container-name\n')
-    node = result.node('start.block.line.service')
-    assert node.child(0).child(0) == Token('NAME', 'org')
-    assert node.child(1).child(0) == Token('BSLASH', '/')
-    assert node.child(2).child(0) == Token('NAME', 'container')
-    assert node.child(3).child(0) == Token('DASH', '-')
-    assert node.child(4).child(0) == Token('NAME', 'name')
+def test_parser_statement_service_fragment(parser):
+    result = parser.parse('org/container-name command\n')
+    node = result.node('start.block.line.statement')
+    assert node.node('path').child(0) == 'org/container-name'
+    assert node.node('service_fragment.command').child(0) == 'command'
 
 
-def test_parser_service_arguments(parser):
+def test_parser_statement_service_fragment_arguments(parser):
     result = parser.parse('container key:"value"\n')
-    node = result.node('start.block.line.service')
-    assert node.child(1).child(0) == Token('NAME', 'key')
-    token = node.child(1).child(1).node('string').child(0)
+    node = result.node('start.block.line.statement.service_fragment.arguments')
+    assert node.child(0) == Token('NAME', 'key')
+    token = node.child(1).node('string').child(0)
     assert token == Token('DOUBLE_QUOTED', '"value"')
 
 
@@ -150,7 +144,7 @@ def test_parser_if_block(parser, name_token):
     node = result.node('block.if_block')
     assert node.node('if_statement').child(0) == Token('IF', 'if')
     assert node.node('if_statement').child(1) == Token('NAME', 'expr')
-    path = node.node('nested_block.block.line.assignments.path')
+    path = node.node('nested_block.block.line.statement.path')
     assert path.child(0) == name_token
 
 
@@ -159,7 +153,7 @@ def test_parser_if_block_nested(parser, name_token):
     node = result.node('block.if_block.nested_block.block.if_block')
     assert node.node('if_statement').child(0) == Token('IF', 'if')
     assert node.node('if_statement').child(1) == Token('NAME', 'things')
-    path = node.node('nested_block.block.line.assignments.path')
+    path = node.node('nested_block.block.line.statement.path')
     assert path.child(0) == name_token
 
 
@@ -167,7 +161,7 @@ def test_parser_if_block_else(parser):
     result = parser.parse('if expr\n\tvar=3\nelse\n\tvar=4\n')
     node = result.node('block.if_block')
     assert node.child(2).child(0).child(0) == Token('ELSE', 'else')
-    path = node.child(2).child(1).node('block.line.assignments.path')
+    path = node.child(2).child(1).node('block.line.statement.path')
     assert path.child(0) == Token('NAME', 'var')
 
 
@@ -176,5 +170,5 @@ def test_parser_if_block_elseif(parser):
     node = result.node('block.if_block')
     assert node.child(2).child(0).child(0) == Token('ELSE', 'else')
     assert node.child(2).child(0).child(1) == Token('IF', 'if')
-    path = node.child(2).child(1).node('block.line.assignments.path')
+    path = node.child(2).child(1).node('block.line.statement.path')
     assert path.child(0) == Token('NAME', 'var')
