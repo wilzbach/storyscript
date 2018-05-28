@@ -32,6 +32,9 @@ class App:
 
     @classmethod
     def parse(cls, stories):
+        """
+        Parses a list of stories, returning their tree.
+        """
         results = {}
         for story in stories:
             tree = Parser().parse(cls.read_story(story))
