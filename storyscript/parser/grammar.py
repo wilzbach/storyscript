@@ -144,7 +144,8 @@ class Grammar:
 
     def assignment_fragment(self):
         self.ebnf.token('equals', '=')
-        self.ebnf.rule('assignment_fragment', 'EQUALS _WS? values', raw=True)
+        rule = 'EQUALS _WS? (values|path)'
+        self.ebnf.rule('assignment_fragment', rule, raw=True)
 
     def statement(self):
         self.path()
