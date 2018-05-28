@@ -111,8 +111,8 @@ class Compiler:
         elif subtree.type == 'FILEPATH':
             return cls.file(subtree)
 
-    def add_line(self, method, line, container=None, args=None, enter=None,
-                 exit=None, parent=None):
+    def add_line(self, method, line, args=None, container=None, command=None,
+                 enter=None, exit=None, parent=None):
         """
         Creates the base dictionary for a given line.
         """
@@ -122,6 +122,7 @@ class Compiler:
                 'ln': line,
                 'output': None,
                 'container': container,
+                'command': command,
                 'args': args,
                 'enter': enter,
                 'exit': exit,
