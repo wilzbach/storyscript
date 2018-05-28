@@ -30,11 +30,12 @@ class Cli:
     @click.argument('storypath')
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
-    def parse(storypath, json, silent):
+    @click.option('--ebnf-file')
+    def parse(storypath, json, silent, ebnf_file):
         """
         Parses stories and prints the resulting json
         """
-        results = App.compile(storypath)
+        results = App.compile(storypath, ebnf_file=ebnf_file)
         if not silent:
             if not json:
                 click.echo(click.style('Script syntax passed!', fg='green'))
