@@ -168,15 +168,11 @@ class Grammar:
     def arguments(self):
         self.ebnf.rule('arguments', ('ws', 'name', 'colon', 'values'))
 
-    def container(self):
-        self.ebnf.rules('container', *(['name'], ['dash'], ['bslash']))
-
     def command(self):
         self.ebnf.rule('command', ('ws', 'name'))
 
     def service(self):
         self.arguments()
-        self.container()
         self.command()
         self.ebnf.rule('service', 'container+ command? arguments*', raw=True)
 
