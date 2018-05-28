@@ -39,9 +39,9 @@ def test_parser_transfomer(patch, parser):
 
 def test_parser_lark(patch, parser):
     patch.init(Lark)
-    patch.object(Parser, 'indenter')
+    patch.many(Parser, ['indenter', 'grammar'])
     result = parser.lark()
-    Lark.__init__.assert_called_with(parser.grammar.build(),
+    Lark.__init__.assert_called_with(parser.grammar(),
                                      parser=parser.algo,
                                      postlex=Parser.indenter())
     assert isinstance(result, Lark)
@@ -59,9 +59,8 @@ def test_parser_parse(patch, parser):
 
 
 def test_parser_parse_unexpected_token(patch, parser):
-    patch.init(Lark)
-    patch.object(Lark, 'parse', side_effect=UnexpectedToken('', '', '', ''))
-    patch.many(Parser, ['indenter', 'transformer'])
+    patch.many(Parser, ['indenter', 'transformer', 'lark'])
+    Parser.lark().parse.side_effect = UnexpectedToken('', '', '', '')
     assert parser.parse('source') is None
 
 

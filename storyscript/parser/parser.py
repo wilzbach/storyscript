@@ -32,8 +32,7 @@ class Parser:
         """
         Get the grammar and initialize Lark.
         """
-        grammar = self.grammar.build()
-        return Lark(grammar, parser=self.algo, postlex=self.indenter())
+        return Lark(self.grammar(), parser=self.algo, postlex=self.indenter())
 
     def parse(self, source):
         """
