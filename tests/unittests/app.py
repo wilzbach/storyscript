@@ -96,11 +96,18 @@ def test_app_compile(patch):
     patch.many(App, ['get_stories', 'parse', 'services'])
     result = App.compile('path')
     App.get_stories.assert_called_with('path')
-    App.parse.assert_called_with(App.get_stories())
+    App.parse.assert_called_with(App.get_stories(), ebnf_file=None)
     App.services.assert_called_with(App.parse())
     dictionary = {'stories': App.parse(), 'services': App.services()}
     json.dumps.assert_called_with(dictionary, indent=2)
     assert result == json.dumps()
+
+
+def test_app_compile_ebnf_file(patch):
+    patch.object(json, 'dumps')
+    patch.many(App, ['get_stories', 'parse', 'services'])
+    App.compile('path', ebnf_file='test.ebnf')
+    App.parse.assert_called_with(App.get_stories(), ebnf_file='test.ebnf')
 
 
 def test_app_lexer(patch, read_story):

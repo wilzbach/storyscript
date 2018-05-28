@@ -52,12 +52,12 @@ class App:
         return services
 
     @classmethod
-    def compile(cls, path):
+    def compile(cls, path, ebnf_file=None):
         """
         Parse and compile stories in path to JSON
         """
         stories = cls.get_stories(path)
-        compiled_stories = cls.parse(stories)
+        compiled_stories = cls.parse(stories, ebnf_file=ebnf_file)
         services = cls.services(compiled_stories)
         dictionary = {'stories': compiled_stories, 'services': services}
         return json.dumps(dictionary, indent=2)
