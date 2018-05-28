@@ -50,6 +50,9 @@ class App:
 
     @classmethod
     def compile(cls, path):
+        """
+        Parse and compile stories in path to JSON
+        """
         stories = cls.get_stories(path)
         compiled_stories = cls.parse(stories)
         services = cls.services(compiled_stories)
