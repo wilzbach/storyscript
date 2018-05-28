@@ -76,4 +76,7 @@ class App:
 
     @staticmethod
     def grammar():
+        """
+        Returns the current grammar
+        """
         return Grammar().build()
