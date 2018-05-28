@@ -198,12 +198,11 @@ def test_grammar_path(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('path', 'NAME (path_fragment)*', raw=True)
 
 
-def test_grammar_assignments(patch, grammar, ebnf):
-    patch.object(Grammar, 'path')
-    grammar.assignments()
-    assert Grammar.path.call_count == 1
-    ebnf.rule.assert_called_with('assignments', ('path', 'equals', 'values'))
+def test_grammar_assignment_fragment(patch, grammar, ebnf):
+    grammar.assignment_fragment()
     ebnf.token.assert_called_with('equals', '=')
+    rule = '_WS? EQUALS values'
+    ebnf.rule.assert_called_with('assignment_fragment', rule, raw=True)
 
 
 def test_grammar_comparisons(grammar, ebnf):
@@ -278,15 +277,13 @@ def test_grammar_comment(grammar, ebnf):
 
 
 def test_grammar_build(patch, grammar):
-    patch.many(Grammar, ['line', 'spaces', 'values', 'assignments',
-                         'operation', 'comment', 'block', 'comparisons',
-                         'service'])
+    patch.many(Grammar, ['line', 'spaces', 'values', 'operation', 'comment',
+                         'block', 'comparisons', 'service'])
     result = grammar.build()
     grammar.ebnf.start.assert_called_with('_NL? block')
     assert Grammar.line.call_count == 1
     assert Grammar.spaces.call_count == 1
     assert Grammar.values.call_count == 1
-    assert Grammar.assignments.call_count == 1
     assert Grammar.operation.call_count == 1
     assert Grammar.comment.call_count == 1
     assert Grammar.block.call_count == 1
