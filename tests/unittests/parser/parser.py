@@ -8,23 +8,23 @@ from storyscript.parser import CustomIndenter, Grammar, Parser, Transformer
 
 
 @fixture
-def parser(magic):
-    parser = Parser()
-    parser.grammar = magic()
-    return parser
+def parser():
+    return Parser()
 
 
-def test_parser_init(patch):
-    patch.init(Grammar)
-    parser = Parser()
-    assert isinstance(parser.grammar, Grammar)
+def test_parser_init(parser):
     assert parser.algo == 'lalr'
+    assert parser.ebnf_file is None
 
 
-def test_parser_init_algo(patch):
-    patch.init(Grammar)
+def test_parser_init_algo():
     parser = Parser(algo='algo')
     assert parser.algo == 'algo'
+
+
+def test_parser_init_ebnf_file():
+    parser = Parser(ebnf_file='grammar.ebnf')
+    assert parser.ebnf_file == 'grammar.ebnf'
 
 
 def test_parser_indenter(patch, parser):

@@ -12,9 +12,9 @@ class Parser:
     Wraps up the parser submodule and exposes parsing and lexing
     functionalities.
     """
-    def __init__(self, algo='lalr'):
+    def __init__(self, algo='lalr', ebnf_file=None):
         self.algo = algo
-        self.grammar = Grammar()
+        self.ebnf_file = ebnf_file
 
     def indenter(self):
         """
