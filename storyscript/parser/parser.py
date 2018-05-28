@@ -28,6 +28,12 @@ class Parser:
         """
         return Transformer()
 
+    def grammar(self):
+        if self.ebnf_file:
+            with open(self.ebnf_file, 'r') as f:
+                return f.read()
+        return Grammar().build()
+
     def lark(self):
         """
         Get the grammar and initialize Lark.

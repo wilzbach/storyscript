@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+
 from lark import Lark
 from lark.common import UnexpectedToken
 
@@ -10,6 +12,16 @@ from storyscript.parser import CustomIndenter, Grammar, Parser, Transformer
 @fixture
 def parser():
     return Parser()
+
+
+@fixture
+def ebnf_file(request):
+    with open('test.ebnf', 'w') as f:
+        f.write('grammar')
+
+    def teardown():
+        os.remove('test.ebnf')
+    request.addfinalizer(teardown)
 
 
 def test_parser_init(parser):
@@ -35,6 +47,19 @@ def test_parser_indenter(patch, parser):
 def test_parser_transfomer(patch, parser):
     patch.init(Transformer)
     assert isinstance(parser.transformer(), Transformer)
+
+
+def test_parser_grammar(patch, parser):
+    patch.init(Grammar)
+    patch.object(Grammar, 'build')
+    result = parser.grammar()
+    assert Grammar.__init__.call_count == 1
+    assert result == Grammar().build()
+
+
+def test_parser_grammar_ebnf_file(parser, ebnf_file):
+    parser.ebnf_file = 'test.ebnf'
+    assert parser.grammar() == 'grammar'
 
 
 def test_parser_lark(patch, parser):
