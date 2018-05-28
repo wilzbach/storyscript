@@ -264,8 +264,8 @@ def test_grammar_foreach_statement(grammar, ebnf):
 
 def test_grammar_arguments(grammar, ebnf):
     grammar.arguments()
-    definition = ('ws', 'name', 'colon', 'values')
-    ebnf.rule.assert_called_with('arguments', definition)
+    rule = '_WS NAME _COLON (values|path)'
+    ebnf.rule.assert_called_with('arguments', rule, raw=True)
 
 
 def test_grammar_command(grammar, ebnf):

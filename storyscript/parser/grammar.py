@@ -175,7 +175,8 @@ class Grammar:
         self.ebnf.rule('foreach_statement', definition)
 
     def arguments(self):
-        self.ebnf.rule('arguments', ('ws', 'name', 'colon', 'values'))
+        rule = '_WS NAME _COLON (values|path)'
+        self.ebnf.rule('arguments', rule, raw=True)
 
     def command(self):
         self.ebnf.rule('command', ('ws', 'name'))
