@@ -53,3 +53,11 @@ class Cli:
             click.echo('File: {}'.format(file))
             for n, token in enumerate(tokens):
                 click.echo('{} {} {}'.format(n, token.type, token.value))
+
+    @staticmethod
+    @main.command()
+    def grammar():
+        """
+        Prints the grammar specification
+        """
+        click.echo(App.grammar())
