@@ -205,6 +205,16 @@ def test_grammar_assignment_fragment(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('assignment_fragment', rule, raw=True)
 
 
+def test_grammar_statement(patch, grammar, ebnf):
+    patch.many(Grammar, ['assignment_fragment', 'service_fragment', 'path'])
+    grammar.statement()
+    assert Grammar.path.call_count == 1
+    assert Grammar.assignment_fragment.call_count == 1
+    assert Grammar.service_fragment.call_count == 1
+    rule = 'path _WS? (service_fragment|assignment_fragment)'
+    ebnf.rule.assert_called_with('statement', rule, raw=True)
+
+
 def test_grammar_comparisons(grammar, ebnf):
     grammar.comparisons()
     tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
@@ -278,13 +288,14 @@ def test_grammar_comment(grammar, ebnf):
 
 def test_grammar_build(patch, grammar):
     patch.many(Grammar, ['line', 'spaces', 'values', 'operation', 'comment',
-                         'block', 'comparisons'])
+                         'block', 'comparisons', 'statement'])
     result = grammar.build()
     grammar.ebnf.start.assert_called_with('_NL? block')
     assert Grammar.line.call_count == 1
     assert Grammar.spaces.call_count == 1
     assert Grammar.values.call_count == 1
     assert Grammar.operation.call_count == 1
+    assert Grammar.statement.call_count == 1
     assert Grammar.comment.call_count == 1
     assert Grammar.block.call_count == 1
     assert Grammar.comparisons.call_count == 1

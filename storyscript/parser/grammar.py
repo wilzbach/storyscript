@@ -146,6 +146,13 @@ class Grammar:
         self.ebnf.token('equals', '=')
         self.ebnf.rule('assignment_fragment', '_WS? EQUALS values', raw=True)
 
+    def statement(self):
+        self.path()
+        self.assignment_fragment()
+        self.service_fragment()
+        rule = 'path _WS? (service_fragment|assignment_fragment)'
+        self.ebnf.rule('statement', rule, raw=True)
+
     def comparisons(self):
         tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
                   ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
@@ -185,6 +192,7 @@ class Grammar:
         self.spaces()
         self.values()
         self.comparisons()
+        self.statement()
         self.operation()
         self.comment()
         self.block()
