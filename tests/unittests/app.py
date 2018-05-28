@@ -6,7 +6,7 @@ from pytest import fixture
 
 from storyscript.app import App
 from storyscript.compiler import Compiler
-from storyscript.parser import Parser
+from storyscript.parser import Grammar, Parser
 
 
 @fixture
@@ -104,3 +104,9 @@ def test_app_lexer(patch, read_story):
     App.read_story.assert_called_with('one.story')
     Parser.lex.assert_called_with(App.read_story())
     assert result == {'one.story': Parser.lex()}
+
+
+def test_app_grammar(patch):
+    patch.init(Grammar)
+    patch.object(Grammar, 'build')
+    assert App.grammar() == Grammar().build()

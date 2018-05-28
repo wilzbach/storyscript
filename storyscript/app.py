@@ -3,7 +3,7 @@ import json
 import os
 
 from .compiler import Compiler
-from .parser import Parser
+from .parser import Grammar, Parser
 
 
 class App:
@@ -61,3 +61,7 @@ class App:
         for story in stories:
             results[story] = parser.lex(cls.read_story(story))
         return results
+
+    @staticmethod
+    def grammar():
+        return Grammar().build()
