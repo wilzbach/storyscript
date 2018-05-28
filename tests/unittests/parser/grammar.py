@@ -211,7 +211,9 @@ def test_grammar_statement(patch, grammar, ebnf):
     assert Grammar.path.call_count == 1
     assert Grammar.assignment_fragment.call_count == 1
     assert Grammar.service_fragment.call_count == 1
-    rule = 'path _WS? (service_fragment|assignment_fragment)'
+    assignment = 'path _WS? assignment_fragment -> assignment'
+    service = 'path service_fragment -> service'
+    rule = '{}|{}'.format(assignment, service)
     ebnf.rule.assert_called_with('statement', rule, raw=True)
 
 

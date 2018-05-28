@@ -150,7 +150,9 @@ class Grammar:
         self.path()
         self.assignment_fragment()
         self.service_fragment()
-        rule = 'path _WS? (service_fragment|assignment_fragment)'
+        assignment = 'path _WS? assignment_fragment -> assignment'
+        service = 'path service_fragment -> service'
+        rule = '{}|{}'.format(assignment, service)
         self.ebnf.rule('statement', rule, raw=True)
 
     def comparisons(self):
