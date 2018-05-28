@@ -15,5 +15,13 @@ class Transformer(LarkTransformer):
             raise StoryscriptSyntaxError(1, token)
         return Tree('service', matches)
 
+    def assignment(self, matches):
+        token = matches[0].children[0]
+        if '/' in token.value:
+            raise StoryscriptSyntaxError(2, token)
+        if '-' in token.value:
+            raise StoryscriptSyntaxError(3, token)
+        return Tree('assignment', matches)
+
     def __getattr__(self, attribute, *args):
         return lambda matches: Tree(attribute, matches)

@@ -10,7 +10,9 @@ class StoryscriptSyntaxError(SyntaxError):
         reasons = [
             'unknown',
             ('Service names can only contain alphanumeric characters, '
-             'dashes and backslashes.')
+             'dashes and backslashes.'),
+            "Variable names can't contain backslashes",
+            "Variable names can't contain dashes"
         ]
         return reasons[self.error_type]
 
