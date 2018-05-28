@@ -40,6 +40,9 @@ class App:
 
     @staticmethod
     def services(stories):
+        """
+        Builds a global list of services from each story's services
+        """
         services = []
         for storypath, story in stories.items():
             services += story['services']
