@@ -170,10 +170,10 @@ class Grammar:
     def command(self):
         self.ebnf.rule('command', ('ws', 'name'))
 
-    def service(self):
+    def service_fragment(self):
         self.arguments()
         self.command()
-        self.ebnf.rule('service', 'container+ command? arguments*', raw=True)
+        self.ebnf.rule('service_fragment', 'command? arguments*', raw=True)
 
     def comment(self):
         self.ebnf.token('comment', '/#(.*)/', regexp=True)
@@ -188,5 +188,4 @@ class Grammar:
         self.operation()
         self.comment()
         self.block()
-        self.service()
         return self.ebnf.build()

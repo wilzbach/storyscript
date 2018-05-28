@@ -261,13 +261,13 @@ def test_grammar_command(grammar, ebnf):
     ebnf.rule.assert_called_with('command', ('ws', 'name'))
 
 
-def test_grammar_service(patch, grammar, ebnf):
+def test_grammar_service_fragment(patch, grammar, ebnf):
     patch.many(Grammar, ['arguments', 'command'])
-    grammar.service()
+    grammar.service_fragment()
     assert Grammar.arguments.call_count == 1
     assert Grammar.command.call_count == 1
-    rule = 'container+ command? arguments*'
-    ebnf.rule.assert_called_with('service', rule, raw=True)
+    rule = 'command? arguments*'
+    ebnf.rule.assert_called_with('service_fragment', rule, raw=True)
 
 
 def test_grammar_comment(grammar, ebnf):
@@ -278,7 +278,7 @@ def test_grammar_comment(grammar, ebnf):
 
 def test_grammar_build(patch, grammar):
     patch.many(Grammar, ['line', 'spaces', 'values', 'operation', 'comment',
-                         'block', 'comparisons', 'service'])
+                         'block', 'comparisons'])
     result = grammar.build()
     grammar.ebnf.start.assert_called_with('_NL? block')
     assert Grammar.line.call_count == 1
@@ -288,5 +288,4 @@ def test_grammar_build(patch, grammar):
     assert Grammar.comment.call_count == 1
     assert Grammar.block.call_count == 1
     assert Grammar.comparisons.call_count == 1
-    assert Grammar.service.call_count == 1
     assert result == grammar.ebnf.build()
