@@ -124,6 +124,8 @@ class Resolver:
             expression = item['expression']
             values = item['values']
             return cls.expression(data, expression, values)
+        elif object_type == 'argument':
+            return cls.argument(item['argument'], data)
         elif object_type == 'dict':
             return dict(cls.dict(item['items'], data))
         elif object_type == 'list':
