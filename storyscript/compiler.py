@@ -142,6 +142,8 @@ class Compiler:
         Translates a command tree to the corresponding line
         """
         command = tree.node('service_fragment.command')
+        if command:
+            command = command.child(0)
         line = tree.line()
         self.set_next_line(line)
         container = tree.child(0).child(0).value

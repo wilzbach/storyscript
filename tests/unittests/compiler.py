@@ -180,6 +180,7 @@ def test_compiler_service(patch, compiler, tree):
     Ensures that service trees can be compiled
     """
     patch.many(Compiler, ['add_line', 'set_next_line'])
+    tree.node.return_value = None
     compiler.service(tree)
     line = tree.line()
     compiler.set_next_line.assert_called_with(line)
@@ -190,8 +191,20 @@ def test_compiler_service(patch, compiler, tree):
     assert compiler.services == [tree.child().child().value]
 
 
+def test_compiler_service_command(patch, compiler, tree):
+    patch.many(Compiler, ['add_line', 'set_next_line'])
+    compiler.service(tree)
+    line = tree.line()
+    container = tree.child().child().value
+    tree.node.assert_called_with('service_fragment.command')
+    compiler.add_line.assert_called_with('run', line, container=container,
+                                         command=tree.node().child(),
+                                         parent=None)
+
+
 def test_compiler_service_parent(patch, compiler, tree):
     patch.many(Compiler, ['add_line', 'set_next_line'])
+    tree.node.return_value = None
     compiler.service(tree, parent='1')
     line = tree.line()
     container = tree.child().child().value
