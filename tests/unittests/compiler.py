@@ -139,6 +139,15 @@ def test_compiler_values_filepath(patch, magic):
     assert result == Compiler.file()
 
 
+def test_compiler_values_path(patch, magic):
+    patch.object(Compiler, 'path')
+    item = magic(type='NAME')
+    tree = magic(child=lambda x: item)
+    result = Compiler.values(tree)
+    Compiler.path.assert_called_with(tree)
+    assert result == Compiler.path()
+
+
 def test_compiler_add_line(compiler):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
                       'container': None, 'command': None, 'enter': None,

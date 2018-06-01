@@ -98,18 +98,21 @@ class Compiler:
         Parses a values subtree
         """
         subtree = tree.child(0)
-        if subtree.data == 'string':
-            return cls.string(subtree)
-        elif subtree.data == 'boolean':
-            return cls.boolean(subtree)
-        elif subtree.data == 'list':
-            return cls.list(subtree)
-        elif subtree.data == 'number':
-            return cls.number(subtree)
-        elif subtree.data == 'objects':
-            return cls.objects(subtree)
-        elif subtree.type == 'FILEPATH':
+        if hasattr(subtree, 'data'):
+            if subtree.data == 'string':
+                return cls.string(subtree)
+            elif subtree.data == 'boolean':
+                return cls.boolean(subtree)
+            elif subtree.data == 'list':
+                return cls.list(subtree)
+            elif subtree.data == 'number':
+                return cls.number(subtree)
+            elif subtree.data == 'objects':
+                return cls.objects(subtree)
+        if subtree.type == 'FILEPATH':
             return cls.file(subtree)
+        elif subtree.type == 'NAME':
+            return cls.path(tree)
 
     def add_line(self, method, line, args=None, container=None, command=None,
                  enter=None, exit=None, parent=None):
