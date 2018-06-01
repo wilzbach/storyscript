@@ -207,37 +207,40 @@ def test_compiler_service(patch, compiler, tree):
     """
     Ensures that service trees can be compiled
     """
-    patch.many(Compiler, ['add_line', 'set_next_line'])
+    patch.many(Compiler, ['add_line', 'set_next_line', 'arguments'])
     tree.node.return_value = None
     compiler.service(tree)
     line = tree.line()
     compiler.set_next_line.assert_called_with(line)
     container = tree.child().child().value
-    tree.node.assert_called_with('service_fragment.command')
+    Compiler.arguments.assert_called_with(tree.node())
     compiler.add_line.assert_called_with('run', line, container=container,
-                                         command=tree.node(), parent=None)
+                                         command=tree.node(), parent=None,
+                                         args=Compiler.arguments())
     assert compiler.services == [tree.child().child().value]
 
 
 def test_compiler_service_command(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'set_next_line'])
+    patch.many(Compiler, ['add_line', 'set_next_line', 'arguments'])
     compiler.service(tree)
     line = tree.line()
     container = tree.child().child().value
-    tree.node.assert_called_with('service_fragment.command')
     compiler.add_line.assert_called_with('run', line, container=container,
                                          command=tree.node().child(),
-                                         parent=None)
+                                         parent=None,
+                                         args=Compiler.arguments())
 
 
 def test_compiler_service_parent(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'set_next_line'])
+    patch.many(Compiler, ['add_line', 'set_next_line', 'arguments'])
     tree.node.return_value = None
     compiler.service(tree, parent='1')
     line = tree.line()
     container = tree.child().child().value
     compiler.add_line.assert_called_with('run', line, container=container,
-                                         command=tree.node(), parent='1')
+                                         command=tree.node(),
+                                         args=Compiler.arguments(),
+                                         parent='1')
 
 
 def test_compiler_if_block(patch, compiler):
