@@ -184,8 +184,9 @@ def test_compiler_service(patch, compiler, tree):
     line = tree.line()
     compiler.set_next_line.assert_called_with(line)
     container = tree.child().child().value
+    tree.node.assert_called_with('service_fragment.command')
     compiler.add_line.assert_called_with('run', line, container=container,
-                                         parent=None)
+                                         command=tree.node(), parent=None)
     assert compiler.services == [tree.child().child().value]
 
 
@@ -195,7 +196,7 @@ def test_compiler_service_parent(patch, compiler, tree):
     line = tree.line()
     container = tree.child().child().value
     compiler.add_line.assert_called_with('run', line, container=container,
-                                         parent='1')
+                                         command=tree.node(), parent='1')
 
 
 def test_compiler_if_block(patch, compiler):
