@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class StoryscriptSyntaxError(SyntaxError):
 
     def __init__(self, error_type, token):
