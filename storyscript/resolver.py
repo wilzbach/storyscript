@@ -61,6 +61,10 @@ class Resolver:
             return None
 
     @classmethod
+    def argument(cls, argument, data):
+        return cls.object(argument, data)
+
+    @classmethod
     def dictionary(cls, dictionary, data):
         result = {}
         for key, value in dictionary.items():

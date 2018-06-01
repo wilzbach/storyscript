@@ -56,6 +56,13 @@ def test_resolver_file_values(patch):
     assert result == 'a.py'
 
 
+def test_resolver_argument(patch):
+    patch.object(Resolver, 'object')
+    result = Resolver.argument('argument', {})
+    Resolver.object.assert_called_with('argument', {})
+    assert result == Resolver.object()
+
+
 def test_resolver_object_path_path():
     items = [
         [{'$OBJECT': 'path', 'paths': ['a']},
