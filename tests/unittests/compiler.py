@@ -158,6 +158,15 @@ def test_compiler_argument(patch, tree):
     assert result == expected
 
 
+def test_compiler_arguments(patch, tree):
+    patch.object(Compiler, 'argument')
+    tree.find_data.return_value = filter(lambda x: x, ['argument'])
+    result = Compiler.arguments(tree)
+    tree.find_data.assert_called_with('arguments')
+    Compiler.argument.assert_called_with('argument')
+    assert result == [Compiler.argument()]
+
+
 def test_compiler_add_line(compiler):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
                       'container': None, 'command': None, 'enter': None,

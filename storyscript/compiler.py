@@ -120,6 +120,16 @@ class Compiler:
         value = cls.values(tree.child(1))
         return {'$OBJECT': 'argument', 'name': name, 'argument': value}
 
+    @classmethod
+    def arguments(cls, tree):
+        """
+        Parses a group of arguments rules
+        """
+        arguments = []
+        for argument in list(tree.find_data('arguments')):
+            arguments.append(cls.argument(argument))
+        return arguments
+
     def add_line(self, method, line, args=None, container=None, command=None,
                  enter=None, exit=None, parent=None):
         """
