@@ -153,7 +153,10 @@ class Compiler:
     def assignment(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
-        args = [self.path(tree.node('path')), self.values(tree.child(2))]
+        args = [
+            self.path(tree.node('path')),
+            self.values(tree.node('assignment_fragment.values'))
+        ]
         self.add_line('set', line, args=args, parent=parent)
 
     def service(self, tree, parent=None):
