@@ -27,7 +27,8 @@ class Tree(LarkTree):
         return current
 
     def child(self, index):
-        return self.children[index]
+        if len(self.children) > index:
+            return self.children[index]
 
     def line(self):
         """

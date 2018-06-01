@@ -42,6 +42,11 @@ def test_tree_child():
     assert tree.child(0) == 'child'
 
 
+def test_tree_child_overflow():
+    tree = Tree('rule', ['child'])
+    assert tree.child(1) is None
+
+
 def test_tree_line():
     tree = Tree('outer', [Tree('path', [Token('WORD', 'word', line=1)])])
     assert tree.line() == '1'
