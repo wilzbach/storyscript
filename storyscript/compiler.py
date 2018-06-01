@@ -150,7 +150,7 @@ class Compiler:
         }
         self.lines = {**self.lines, **dictionary}
 
-    def assignments(self, tree, parent=None):
+    def assignment(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
         args = [self.path(tree.node('path')), self.values(tree.child(2))]
@@ -230,7 +230,7 @@ class Compiler:
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
         """
-        allowed_nodes = ['service', 'assignments', 'if_block', 'elseif_block',
+        allowed_nodes = ['service', 'assignment', 'if_block', 'elseif_block',
                          'else_block', 'for_block']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent=parent)

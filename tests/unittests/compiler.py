@@ -182,9 +182,9 @@ def test_compiler_add_line_keywords(compiler, keywords):
     assert compiler.lines['1'][keywords] == keywords
 
 
-def test_compiler_assignments(patch, compiler, tree):
+def test_compiler_assignment(patch, compiler, tree):
     patch.many(Compiler, ['add_line', 'path', 'values', 'set_next_line'])
-    compiler.assignments(tree)
+    compiler.assignment(tree)
     compiler.set_next_line.assert_called_with(tree.line())
     tree.node.assert_called_with('path')
     tree.child.assert_called_with(2)
@@ -195,9 +195,9 @@ def test_compiler_assignments(patch, compiler, tree):
                                          parent=None)
 
 
-def test_compiler_assignments_parent(patch, compiler, tree):
+def test_compiler_assignment_parent(patch, compiler, tree):
     patch.many(Compiler, ['add_line', 'path', 'values', 'set_next_line'])
-    compiler.assignments(tree, parent='1')
+    compiler.assignment(tree, parent='1')
     args = [compiler.path(), compiler.values()]
     compiler.add_line.assert_called_with('set', tree.line(), args=args,
                                          parent='1')
@@ -348,7 +348,7 @@ def test_compiler_for_block_parent(patch, compiler, tree):
 
 
 @mark.parametrize('method_name', [
-    'service', 'assignments', 'if_block', 'elseif_block', 'else_block',
+    'service', 'assignment', 'if_block', 'elseif_block', 'else_block',
     'for_block'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
