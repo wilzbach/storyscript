@@ -148,6 +148,16 @@ def test_compiler_values_path(patch, magic):
     assert result == Compiler.path()
 
 
+def test_compiler_argument(patch, tree):
+    patch.object(Compiler, 'values')
+    result = Compiler.argument(tree)
+    assert tree.child.call_count == 2
+    Compiler.values.assert_called_with(tree.child())
+    expected = {'$OBJECT': 'argument', 'name': tree.child().value,
+                'argument': Compiler.values()}
+    assert result == expected
+
+
 def test_compiler_add_line(compiler):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
                       'container': None, 'command': None, 'enter': None,

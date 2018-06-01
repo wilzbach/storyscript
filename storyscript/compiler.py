@@ -114,6 +114,12 @@ class Compiler:
         elif subtree.type == 'NAME':
             return cls.path(tree)
 
+    @classmethod
+    def argument(cls, tree):
+        name = tree.child(0).value
+        value = cls.values(tree.child(1))
+        return {'$OBJECT': 'argument', 'name': name, 'argument': value}
+
     def add_line(self, method, line, args=None, container=None, command=None,
                  enter=None, exit=None, parent=None):
         """
