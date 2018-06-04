@@ -181,8 +181,8 @@ def test_compiler_add_line(compiler):
     assert compiler.lines == expected
 
 
-@mark.parametrize('keywords', ['container', 'command', 'args', 'enter', 'exit',
-                               'parent'])
+@mark.parametrize('keywords', ['container', 'command', 'output', 'args',
+                               'enter', 'exit', 'parent'])
 def test_compiler_add_line_keywords(compiler, keywords):
     compiler.add_line('method', '1', **{keywords: keywords})
     assert compiler.lines['1'][keywords] == keywords

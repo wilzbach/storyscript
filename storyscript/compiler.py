@@ -138,7 +138,7 @@ class Compiler:
         return output
 
     def add_line(self, method, line, args=None, container=None, command=None,
-                 enter=None, exit=None, parent=None):
+                 output=None, enter=None, exit=None, parent=None):
         """
         Creates the base dictionary for a given line.
         """
@@ -146,7 +146,7 @@ class Compiler:
             line: {
                 'method': method,
                 'ln': line,
-                'output': None,
+                'output': output,
                 'container': container,
                 'command': command,
                 'args': args,
