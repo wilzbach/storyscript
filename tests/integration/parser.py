@@ -133,6 +133,13 @@ def test_parser_service_arguments(parser):
     assert token == Token('DOUBLE_QUOTED', '"value"')
 
 
+def test_parser_service_output(parser):
+    result = parser.parse('container command as request, response\n')
+    node = result.node('start.block.line.service.service_fragment.output')
+    assert node.child(0) == Token('NAME', 'request')
+    assert node.child(1) == Token('NAME', 'response')
+
+
 @mark.parametrize('comment', ['# one', '#one'])
 def test_parser_comment(parser, comment):
     result = parser.parse('{}\n'.format(comment))

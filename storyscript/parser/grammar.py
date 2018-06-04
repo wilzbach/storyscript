@@ -181,10 +181,16 @@ class Grammar:
     def command(self):
         self.ebnf.rule('command', ('ws', 'name'))
 
+    def output(self):
+        rule = '(_WS _AS _WS NAME (_COMMA _WS? NAME)*)'
+        self.ebnf.rule('output', rule, raw=True)
+
     def service_fragment(self):
         self.arguments()
         self.command()
-        self.ebnf.rule('service_fragment', 'command? arguments*', raw=True)
+        self.output()
+        rule = 'command? arguments* output?'
+        self.ebnf.rule('service_fragment', rule, raw=True)
 
     def int_type(self):
         self.ebnf.token('int_type', 'int')

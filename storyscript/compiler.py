@@ -130,8 +130,15 @@ class Compiler:
             arguments.append(cls.argument(argument))
         return arguments
 
+    @staticmethod
+    def output(tree):
+        output = []
+        for item in tree.children:
+            output.append(item.value)
+        return output
+
     def add_line(self, method, line, args=None, container=None, command=None,
-                 enter=None, exit=None, parent=None):
+                 output=None, enter=None, exit=None, parent=None):
         """
         Creates the base dictionary for a given line.
         """
@@ -139,7 +146,7 @@ class Compiler:
             line: {
                 'method': method,
                 'ln': line,
-                'output': None,
+                'output': output,
                 'container': container,
                 'command': command,
                 'args': args,
@@ -164,14 +171,15 @@ class Compiler:
         Translates a command tree to the corresponding line
         """
         line = tree.line()
+        self.set_next_line(line)
         command = tree.node('service_fragment.command')
         if command:
             command = command.child(0)
         arguments = self.arguments(tree.node('service_fragment'))
-        self.set_next_line(line)
         container = tree.child(0).child(0).value
+        output = self.output(tree.node('service_fragment.output'))
         self.add_line('run', line, container=container, command=command,
-                      args=arguments, parent=parent)
+                      args=arguments, parent=parent, output=output)
         self.services.append(container)
 
     def if_block(self, tree, parent=None):
