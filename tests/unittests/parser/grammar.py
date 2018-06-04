@@ -248,7 +248,7 @@ def test_grammar_elseif_statement(grammar, ebnf):
 
 def test_grammar_foreach_statement(grammar, ebnf):
     grammar.foreach_statement()
-    definition = ('foreach', 'ws', 'name', 'ws', 'as', 'ws', 'name')
+    definition = ('foreach', 'ws', 'name', 'output')
     ebnf.rule.assert_called_with('foreach_statement', definition)
     tokens = (('foreach', 'foreach'), ('as', 'as'))
     ebnf.tokens.assert_called_with(*tokens, inline=True)

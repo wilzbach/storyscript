@@ -103,10 +103,12 @@ def test_parser_assignment_path(parser):
 
 
 def test_parser_foreach_block(parser):
-    result = parser.parse('foreach items as item\n\tvar=3\n')
+    result = parser.parse('foreach items as one, two\n\tvar=3\n')
     node = result.node('start.block.foreach_block')
-    assert node.node('foreach_statement').child(0) == Token('NAME', 'items')
-    assert node.node('foreach_statement').child(1) == Token('NAME', 'item')
+    foreach = node.node('foreach_statement')
+    assert foreach.child(0) == Token('NAME', 'items')
+    assert foreach.node('output').child(0) == Token('NAME', 'one')
+    assert foreach.node('output').child(1) == Token('NAME', 'two')
     assert node.node('nested_block').data == 'nested_block'
 
 
