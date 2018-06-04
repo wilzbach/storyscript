@@ -101,7 +101,8 @@ def test_grammar_block(patch, grammar, ebnf):
 
 def test_grammar_number(grammar, ebnf):
     grammar.number()
-    ebnf.loads.assert_called_with(['int', 'float'])
+    tokens = (('int', '"0".."9"+'), ('float', """INT "." INT? | "." INT"""))
+    ebnf.tokens.assert_called_with(*tokens, regexp=True, priority=2)
     ebnf.rules.assert_called_with('number', ['int'], ['float'])
 
 
@@ -192,7 +193,8 @@ def test_grammar_path_fragment(grammar, ebnf):
 def test_grammar_path(patch, grammar, ebnf):
     patch.object(Grammar, 'path_fragment')
     grammar.path()
-    ebnf.token.assert_called_with('name', '/[a-zA-Z-\/]+/', regexp=True)
+    token = '/[a-zA-Z-\/_0-9]+/'
+    ebnf.token.assert_called_with('name', token, regexp=True, priority=1)
     Grammar.path_fragment.call_count == 1
     ebnf.rule.assert_called_with('path', 'NAME (path_fragment)*', raw=True)
 

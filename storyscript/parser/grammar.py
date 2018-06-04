@@ -75,7 +75,9 @@ class Grammar:
         self.ebnf.rule('block', definition, raw=True)
 
     def number(self):
-        self.ebnf.loads(['int', 'float'])
+        tokens = (('int', '"0".."9"+'),
+                  ('float', """INT "." INT? | "." INT"""))
+        self.ebnf.tokens(*tokens, regexp=True, priority=2)
         self.ebnf.rules('number', ['int'], ['float'])
 
     def string(self):
@@ -137,7 +139,7 @@ class Grammar:
         self.ebnf.rules('path_fragment', *definitions)
 
     def path(self):
-        self.ebnf.token('name', '/[a-zA-Z-\/]+/', regexp=True)
+        self.ebnf.token('name', '/[a-zA-Z-\/_0-9]+/', regexp=True, priority=1)
         self.path_fragment()
         self.ebnf.rule('path', 'NAME (path_fragment)*', raw=True)
 
