@@ -82,21 +82,20 @@ def test_grammar_if_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('if_block', definition, raw=True)
 
 
-def test_grammar_for_block(patch, grammar, ebnf):
-    patch.many(Grammar, ['for_statement', 'foreach_statement'])
-    grammar.for_block()
-    assert Grammar.for_statement.call_count == 1
+def test_grammar_foreach_block(patch, grammar, ebnf):
+    patch.object(Grammar, 'foreach_statement')
+    grammar.foreach_block()
     assert Grammar.foreach_statement.call_count == 1
-    definition = '(for_statement|foreach_statement) _NL nested_block'
-    ebnf.rule.assert_called_with('for_block', definition, raw=True)
+    definition = 'foreach_statement _NL nested_block'
+    ebnf.rule.assert_called_with('foreach_block', definition, raw=True)
 
 
 def test_grammar_block(patch, grammar, ebnf):
-    patch.many(Grammar, ['if_block', 'for_block'])
+    patch.many(Grammar, ['if_block', 'foreach_block'])
     grammar.block()
     assert Grammar.if_block.call_count == 1
-    assert Grammar.for_block.call_count == 1
-    definition = 'line _NL nested_block?|if_block|for_block'
+    assert Grammar.foreach_block.call_count == 1
+    definition = 'line _NL nested_block?|if_block|foreach_block'
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 
@@ -247,16 +246,9 @@ def test_grammar_elseif_statement(grammar, ebnf):
     ebnf.rule.assert_called_with('elseif_statement', rule, raw=True)
 
 
-def test_grammar_for_statement(grammar, ebnf):
-    grammar.for_statement()
-    definition = ('for', 'ws', 'name', 'ws', 'in', 'ws', 'name')
-    ebnf.rule.assert_called_with('for_statement', definition)
-    ebnf.tokens.assert_called_with(('for', 'for'), ('in', 'in'), inline=True)
-
-
 def test_grammar_foreach_statement(grammar, ebnf):
     grammar.foreach_statement()
-    definition = ('foreach', 'ws', 'name', 'ws', 'as', 'ws', 'name')
+    definition = ('foreach', 'ws', 'name', 'output')
     ebnf.rule.assert_called_with('foreach_statement', definition)
     tokens = (('foreach', 'foreach'), ('as', 'as'))
     ebnf.tokens.assert_called_with(*tokens, inline=True)

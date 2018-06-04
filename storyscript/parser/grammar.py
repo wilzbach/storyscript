@@ -63,16 +63,15 @@ class Grammar:
         definition = 'if_statement _NL nested_block elseif_block* else_block?'
         self.ebnf.rule('if_block', definition, raw=True)
 
-    def for_block(self):
-        self.for_statement()
+    def foreach_block(self):
         self.foreach_statement()
-        definition = '(for_statement|foreach_statement) _NL nested_block'
-        self.ebnf.rule('for_block', definition, raw=True)
+        definition = 'foreach_statement _NL nested_block'
+        self.ebnf.rule('foreach_block', definition, raw=True)
 
     def block(self):
         self.if_block()
-        self.for_block()
-        definition = 'line _NL nested_block?|if_block|for_block'
+        self.foreach_block()
+        definition = 'line _NL nested_block?|if_block|foreach_block'
         self.ebnf.rule('block', definition, raw=True)
 
     def number(self):
@@ -164,14 +163,9 @@ class Grammar:
                        ['lesser_equal'], ['not'], ['equal'])
         self.ebnf.rules('comparisons', *definitions)
 
-    def for_statement(self):
-        self.ebnf.tokens(('for', 'for'), ('in', 'in'), inline=True)
-        definition = ('for', 'ws', 'name', 'ws', 'in', 'ws', 'name')
-        self.ebnf.rule('for_statement', definition)
-
     def foreach_statement(self):
         self.ebnf.tokens(('foreach', 'foreach'), ('as', 'as'), inline=True)
-        definition = ('foreach', 'ws', 'name', 'ws', 'as', 'ws', 'name')
+        definition = ('foreach', 'ws', 'name', 'output')
         self.ebnf.rule('foreach_statement', definition)
 
     def arguments(self):
