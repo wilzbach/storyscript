@@ -236,6 +236,7 @@ class Grammar:
         self.comparisons()
         self.statement()
         self.operation()
-        self.comment()
         self.block()
+        self.types()
+        self.comment()
         return self.ebnf.build()
