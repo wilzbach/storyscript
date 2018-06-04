@@ -64,9 +64,8 @@ class Grammar:
         self.ebnf.rule('if_block', definition, raw=True)
 
     def for_block(self):
-        self.for_statement()
         self.foreach_statement()
-        definition = '(for_statement|foreach_statement) _NL nested_block'
+        definition = 'foreach_statement _NL nested_block'
         self.ebnf.rule('for_block', definition, raw=True)
 
     def block(self):
@@ -163,11 +162,6 @@ class Grammar:
         definitions = (['greater'], ['greater_equal'], ['lesser'],
                        ['lesser_equal'], ['not'], ['equal'])
         self.ebnf.rules('comparisons', *definitions)
-
-    def for_statement(self):
-        self.ebnf.tokens(('for', 'for'), ('in', 'in'), inline=True)
-        definition = ('for', 'ws', 'name', 'ws', 'in', 'ws', 'name')
-        self.ebnf.rule('for_statement', definition)
 
     def foreach_statement(self):
         self.ebnf.tokens(('foreach', 'foreach'), ('as', 'as'), inline=True)

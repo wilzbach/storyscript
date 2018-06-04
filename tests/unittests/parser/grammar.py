@@ -83,11 +83,10 @@ def test_grammar_if_block(patch, grammar, ebnf):
 
 
 def test_grammar_for_block(patch, grammar, ebnf):
-    patch.many(Grammar, ['for_statement', 'foreach_statement'])
+    patch.object(Grammar, 'foreach_statement')
     grammar.for_block()
-    assert Grammar.for_statement.call_count == 1
     assert Grammar.foreach_statement.call_count == 1
-    definition = '(for_statement|foreach_statement) _NL nested_block'
+    definition = 'foreach_statement _NL nested_block'
     ebnf.rule.assert_called_with('for_block', definition, raw=True)
 
 
@@ -245,13 +244,6 @@ def test_grammar_elseif_statement(grammar, ebnf):
     grammar.elseif_statement()
     rule = 'ELSE _WS? IF _WS NAME [_WS comparisons _WS NAME]?'
     ebnf.rule.assert_called_with('elseif_statement', rule, raw=True)
-
-
-def test_grammar_for_statement(grammar, ebnf):
-    grammar.for_statement()
-    definition = ('for', 'ws', 'name', 'ws', 'in', 'ws', 'name')
-    ebnf.rule.assert_called_with('for_statement', definition)
-    ebnf.tokens.assert_called_with(('for', 'for'), ('in', 'in'), inline=True)
 
 
 def test_grammar_foreach_statement(grammar, ebnf):
