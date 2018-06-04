@@ -167,6 +167,12 @@ def test_compiler_arguments(patch, tree):
     assert result == [Compiler.argument()]
 
 
+def test_compiler_output(tree):
+    tree.children = [Token('token', 'output')]
+    result = Compiler.output(tree)
+    assert result == ['output']
+
+
 def test_compiler_add_line(compiler):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
                       'container': None, 'command': None, 'enter': None,

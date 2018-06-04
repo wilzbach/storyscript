@@ -130,6 +130,13 @@ class Compiler:
             arguments.append(cls.argument(argument))
         return arguments
 
+    @staticmethod
+    def output(tree):
+        output = []
+        for item in tree.children:
+            output.append(item.value)
+        return output
+
     def add_line(self, method, line, args=None, container=None, command=None,
                  enter=None, exit=None, parent=None):
         """
