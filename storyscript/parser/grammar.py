@@ -139,7 +139,7 @@ class Grammar:
         self.ebnf.rules('path_fragment', *definitions)
 
     def path(self):
-        self.ebnf.token('name', '/[a-zA-Z-\/]+/', regexp=True)
+        self.ebnf.token('name', '/[a-zA-Z-\/_0-9]+/', regexp=True, priority=1)
         self.path_fragment()
         self.ebnf.rule('path', 'NAME (path_fragment)*', raw=True)
 
