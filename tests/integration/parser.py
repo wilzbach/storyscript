@@ -102,17 +102,9 @@ def test_parser_assignment_path(parser):
     assert node.child(2).child(0) == Token('INT', 0)
 
 
-def test_parser_for_block(parser, name_token):
-    result = parser.parse('for var in items\n\tvar=3\n')
-    node = result.node('start.block.for_block')
-    assert node.node('for_statement').child(0) == name_token
-    assert node.node('for_statement').child(1) == Token('NAME', 'items')
-    assert node.node('nested_block').data == 'nested_block'
-
-
 def test_parser_foreach_block(parser):
     result = parser.parse('foreach items as item\n\tvar=3\n')
-    node = result.node('start.block.for_block')
+    node = result.node('start.block.foreach_block')
     assert node.node('foreach_statement').child(0) == Token('NAME', 'items')
     assert node.node('foreach_statement').child(1) == Token('NAME', 'item')
     assert node.node('nested_block').data == 'nested_block'
