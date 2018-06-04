@@ -186,6 +186,30 @@ class Grammar:
         self.command()
         self.ebnf.rule('service_fragment', 'command? arguments*', raw=True)
 
+    def int_type(self):
+        self.ebnf.token('int_type', 'int')
+
+    def float_type(self):
+        self.ebnf.token('float_type', 'float')
+
+    def number_type(self):
+        self.ebnf.token('number_type', 'number')
+
+    def string_type(self):
+        self.ebnf.token('string_type', 'string')
+
+    def list_type(self):
+        self.ebnf.token('list_type', 'list')
+
+    def object_type(self):
+        self.ebnf.token('object_type', 'object')
+
+    def regexp_type(self):
+        self.ebnf.token('regexp_type', 'regexp')
+
+    def function_type(self):
+        self.ebnf.token('function_type', 'function')
+
     def comment(self):
         self.ebnf.token('comment', '/#(.*)/', regexp=True)
         self.ebnf.rule('comment', ['comment'])

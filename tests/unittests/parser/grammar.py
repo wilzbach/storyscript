@@ -282,6 +282,39 @@ def test_grammar_service_fragment(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('service_fragment', rule, raw=True)
 
 
+def test_grammar_int_type(grammar, ebnf):
+    grammar.int_type()
+    ebnf.token.assert_called_with('int_type', 'int')
+
+
+def test_grammar_float_type(grammar, ebnf):
+    grammar.float_type()
+    ebnf.token.assert_called_with('float_type', 'float')
+
+
+def test_grammar_number_type(grammar, ebnf):
+    grammar.number_type()
+    ebnf.token.assert_called_with('number_type', 'number')
+
+
+def test_grammar_string_type(grammar, ebnf):
+    grammar.string_type()
+    ebnf.token.assert_called_with('string_type', 'string')
+
+
+def test_grammar_list_type(grammar, ebnf):
+    grammar.list_type()
+    ebnf.token.assert_called_with('list_type', 'list')
+
+
+def test_grammar_object_type(grammar, ebnf):
+    grammar.object_type()
+    ebnf.token.assert_called_with('object_type', 'object')
+
+
+def test_grammar_regexp_type(grammar, ebnf):
+    grammar.regexp_type()
+    ebnf.token.assert_called_with('regexp_type', 'regexp')
 def test_grammar_comment(grammar, ebnf):
     grammar.comment()
     ebnf.rule.assert_called_with('comment', ['comment'])
