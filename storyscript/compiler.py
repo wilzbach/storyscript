@@ -171,14 +171,15 @@ class Compiler:
         Translates a command tree to the corresponding line
         """
         line = tree.line()
+        self.set_next_line(line)
         command = tree.node('service_fragment.command')
         if command:
             command = command.child(0)
         arguments = self.arguments(tree.node('service_fragment'))
-        self.set_next_line(line)
         container = tree.child(0).child(0).value
+        output = self.output(tree.node('service_fragment.output'))
         self.add_line('run', line, container=container, command=command,
-                      args=arguments, parent=parent)
+                      args=arguments, parent=parent, output=output)
         self.services.append(container)
 
     def if_block(self, tree, parent=None):
