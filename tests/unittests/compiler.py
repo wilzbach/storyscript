@@ -335,28 +335,33 @@ def test_compiler_else_block_parent(patch, compiler, tree):
                                          enter=tree.node().line(), parent='1')
 
 
-def test_compiler_for_block(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line'])
-    compiler.for_block(tree)
-    compiler.path.assert_called_with(tree.node())
-    args = [tree.node().child(0).value, Compiler.path()]
+def test_compiler_foreach_block(patch, compiler, tree):
+    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line',
+                          'output'])
+    compiler.foreach_block(tree)
     compiler.set_next_line.assert_called_with(tree.line())
+    compiler.path.assert_called_with(tree.node())
+    compiler.output.assert_called_with(tree.node())
+    args = [Compiler.path()]
     compiler.add_line.assert_called_with('for', tree.line(), args=args,
-                                         enter=tree.node().line(), parent=None)
+                                         enter=tree.node().line(),
+                                         output=Compiler.output(), parent=None)
     compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
 
 
-def test_compiler_for_block_parent(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line'])
-    compiler.for_block(tree, parent='1')
-    args = [tree.node().child(0).value, Compiler.path()]
+def test_compiler_foreach_block_parent(patch, compiler, tree):
+    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line',
+                          'output'])
+    compiler.foreach_block(tree, parent='1')
+    args = [Compiler.path()]
     compiler.add_line.assert_called_with('for', tree.line(), args=args,
-                                         enter=tree.node().line(), parent='1')
+                                         enter=tree.node().line(),
+                                         output=Compiler.output(), parent='1')
 
 
 @mark.parametrize('method_name', [
     'service', 'assignment', 'if_block', 'elseif_block', 'else_block',
-    'for_block'
+    'foreach_block'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)

@@ -217,16 +217,14 @@ class Compiler:
         self.add_line('else', line, enter=nested_block.line(), parent=parent)
         self.subtree(nested_block, parent=line)
 
-    def for_block(self, tree, parent=None):
-        args = [
-            tree.node('for_statement').child(0).value,
-            self.path(tree.node('for_statement'))
-        ]
-        nested_block = tree.node('nested_block')
+    def foreach_block(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
+        args = [self.path(tree.node('foreach_statement'))]
+        output = self.output(tree.node('foreach_statement.output'))
+        nested_block = tree.node('nested_block')
         self.add_line('for', line, args=args, enter=nested_block.line(),
-                      parent=parent)
+                      parent=parent, output=output)
         self.subtree(nested_block, parent=line)
 
     def subtrees(self, *trees):
@@ -242,7 +240,7 @@ class Compiler:
         or keep parsing for deeper trees.
         """
         allowed_nodes = ['service', 'assignment', 'if_block', 'elseif_block',
-                         'else_block', 'for_block']
+                         'else_block', 'foreach_block']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent=parent)
             return
