@@ -186,6 +186,44 @@ class Grammar:
         self.command()
         self.ebnf.rule('service_fragment', 'command? arguments*', raw=True)
 
+    def int_type(self):
+        self.ebnf.token('int_type', 'int')
+
+    def float_type(self):
+        self.ebnf.token('float_type', 'float')
+
+    def number_type(self):
+        self.ebnf.token('number_type', 'number')
+
+    def string_type(self):
+        self.ebnf.token('string_type', 'string')
+
+    def list_type(self):
+        self.ebnf.token('list_type', 'list')
+
+    def object_type(self):
+        self.ebnf.token('object_type', 'object')
+
+    def regexp_type(self):
+        self.ebnf.token('regexp_type', 'regexp')
+
+    def function_type(self):
+        self.ebnf.token('function_type', 'function')
+
+    def types(self):
+        self.int_type()
+        self.float_type()
+        self.number_type()
+        self.string_type()
+        self.list_type()
+        self.object_type()
+        self.regexp_type()
+        self.function_type()
+        definitions = (['int_type'], ['float_type'], ['string_type'],
+                       ['list_type'], ['object_type'], ['regexp_type'],
+                       ['function_type'])
+        self.ebnf.rules('types', *definitions)
+
     def comment(self):
         self.ebnf.token('comment', '/#(.*)/', regexp=True)
         self.ebnf.rule('comment', ['comment'])
@@ -198,6 +236,7 @@ class Grammar:
         self.comparisons()
         self.statement()
         self.operation()
-        self.comment()
         self.block()
+        self.types()
+        self.comment()
         return self.ebnf.build()
