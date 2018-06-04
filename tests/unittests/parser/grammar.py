@@ -82,20 +82,20 @@ def test_grammar_if_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('if_block', definition, raw=True)
 
 
-def test_grammar_for_block(patch, grammar, ebnf):
+def test_grammar_foreach_block(patch, grammar, ebnf):
     patch.object(Grammar, 'foreach_statement')
-    grammar.for_block()
+    grammar.foreach_block()
     assert Grammar.foreach_statement.call_count == 1
     definition = 'foreach_statement _NL nested_block'
-    ebnf.rule.assert_called_with('for_block', definition, raw=True)
+    ebnf.rule.assert_called_with('foreach_block', definition, raw=True)
 
 
 def test_grammar_block(patch, grammar, ebnf):
-    patch.many(Grammar, ['if_block', 'for_block'])
+    patch.many(Grammar, ['if_block', 'foreach_block'])
     grammar.block()
     assert Grammar.if_block.call_count == 1
-    assert Grammar.for_block.call_count == 1
-    definition = 'line _NL nested_block?|if_block|for_block'
+    assert Grammar.foreach_block.call_count == 1
+    definition = 'line _NL nested_block?|if_block|foreach_block'
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 

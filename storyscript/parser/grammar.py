@@ -63,15 +63,15 @@ class Grammar:
         definition = 'if_statement _NL nested_block elseif_block* else_block?'
         self.ebnf.rule('if_block', definition, raw=True)
 
-    def for_block(self):
+    def foreach_block(self):
         self.foreach_statement()
         definition = 'foreach_statement _NL nested_block'
-        self.ebnf.rule('for_block', definition, raw=True)
+        self.ebnf.rule('foreach_block', definition, raw=True)
 
     def block(self):
         self.if_block()
-        self.for_block()
-        definition = 'line _NL nested_block?|if_block|for_block'
+        self.foreach_block()
+        definition = 'line _NL nested_block?|if_block|foreach_block'
         self.ebnf.rule('block', definition, raw=True)
 
     def number(self):
