@@ -210,6 +210,20 @@ class Grammar:
     def function_type(self):
         self.ebnf.token('function_type', 'function')
 
+    def types(self):
+        self.int_type()
+        self.float_type()
+        self.number_type()
+        self.string_type()
+        self.list_type()
+        self.object_type()
+        self.regexp_type()
+        self.function_type()
+        definitions = (['int_type'], ['float_type'], ['string_type'],
+                       ['list_type'], ['object_type'], ['regexp_type'],
+                       ['function_type'])
+        self.ebnf.rules('types', *definitions)
+
     def comment(self):
         self.ebnf.token('comment', '/#(.*)/', regexp=True)
         self.ebnf.rule('comment', ['comment'])

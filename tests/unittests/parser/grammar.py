@@ -315,6 +315,27 @@ def test_grammar_object_type(grammar, ebnf):
 def test_grammar_regexp_type(grammar, ebnf):
     grammar.regexp_type()
     ebnf.token.assert_called_with('regexp_type', 'regexp')
+
+
+def test_grammar_types(patch, grammar, ebnf):
+    patch.many(Grammar, ['int_type', 'float_type', 'number_type',
+                         'string_type', 'list_type', 'object_type',
+                         'regexp_type', 'function_type'])
+    grammar.types()
+    assert grammar.int_type.call_count == 1
+    assert grammar.float_type.call_count == 1
+    assert grammar.number_type.call_count == 1
+    assert grammar.string_type.call_count == 1
+    assert grammar.list_type.call_count == 1
+    assert grammar.object_type.call_count == 1
+    assert grammar.regexp_type.call_count == 1
+    assert grammar.function_type.call_count == 1
+    definitions = (['int_type'], ['float_type'], ['string_type'],
+                   ['list_type'], ['object_type'], ['regexp_type'],
+                   ['function_type'])
+    ebnf.rules.assert_called_with('types', *definitions)
+
+
 def test_grammar_comment(grammar, ebnf):
     grammar.comment()
     ebnf.rule.assert_called_with('comment', ['comment'])
