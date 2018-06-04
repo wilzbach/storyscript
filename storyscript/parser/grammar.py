@@ -13,8 +13,8 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['assignments'], ['operation'], ['comment'],
-                       ['command'], ['block'])
+        definitions = (['values'], ['operation'], ['comment'], ['statement'],
+                       ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
@@ -138,14 +138,23 @@ class Grammar:
         self.ebnf.rules('path_fragment', *definitions)
 
     def path(self):
-        self.ebnf.token('name', '/[a-zA-Z]+/', regexp=True)
+        self.ebnf.token('name', '/[a-zA-Z-\/]+/', regexp=True)
         self.path_fragment()
         self.ebnf.rule('path', 'NAME (path_fragment)*', raw=True)
 
-    def assignments(self):
-        self.path()
+    def assignment_fragment(self):
         self.ebnf.token('equals', '=')
-        self.ebnf.rule('assignments', ('path', 'equals', 'values'))
+        rule = 'EQUALS _WS? (values|path)'
+        self.ebnf.rule('assignment_fragment', rule, raw=True)
+
+    def statement(self):
+        self.path()
+        self.assignment_fragment()
+        self.service_fragment()
+        assignment = 'path _WS? assignment_fragment -> assignment'
+        service = 'path service_fragment -> service'
+        rule = '{}|{}'.format(assignment, service)
+        self.ebnf.rule('statement', rule, raw=True)
 
     def comparisons(self):
         tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
@@ -165,23 +174,17 @@ class Grammar:
         definition = ('foreach', 'ws', 'name', 'ws', 'as', 'ws', 'name')
         self.ebnf.rule('foreach_statement', definition)
 
-    def options(self):
-        definitions = (('dash', 'dash', 'name', 'ws', 'name'),
-                       ('dash', 'dash', 'name', 'ws', 'values'))
-        self.ebnf.rules('options', *definitions)
-
     def arguments(self):
-        self.options()
-        definitions = (['ws', 'values'], ['ws', 'name'], ['ws', 'options'])
-        self.ebnf.rules('arguments', *definitions)
-
-    def container(self):
-        self.ebnf.rules('container', *(['name'], ['dash'], ['bslash']))
+        rule = '_WS NAME _COLON (values|path)'
+        self.ebnf.rule('arguments', rule, raw=True)
 
     def command(self):
+        self.ebnf.rule('command', ('ws', 'name'))
+
+    def service_fragment(self):
         self.arguments()
-        self.container()
-        self.ebnf.rule('command', 'container+ arguments*', raw=True)
+        self.command()
+        self.ebnf.rule('service_fragment', 'command? arguments*', raw=True)
 
     def comment(self):
         self.ebnf.token('comment', '/#(.*)/', regexp=True)
@@ -193,9 +196,8 @@ class Grammar:
         self.spaces()
         self.values()
         self.comparisons()
-        self.assignments()
+        self.statement()
         self.operation()
         self.comment()
         self.block()
-        self.command()
         return self.ebnf.build()

@@ -98,21 +98,40 @@ class Compiler:
         Parses a values subtree
         """
         subtree = tree.child(0)
-        if subtree.data == 'string':
-            return cls.string(subtree)
-        elif subtree.data == 'boolean':
-            return cls.boolean(subtree)
-        elif subtree.data == 'list':
-            return cls.list(subtree)
-        elif subtree.data == 'number':
-            return cls.number(subtree)
-        elif subtree.data == 'objects':
-            return cls.objects(subtree)
-        elif subtree.type == 'FILEPATH':
+        if hasattr(subtree, 'data'):
+            if subtree.data == 'string':
+                return cls.string(subtree)
+            elif subtree.data == 'boolean':
+                return cls.boolean(subtree)
+            elif subtree.data == 'list':
+                return cls.list(subtree)
+            elif subtree.data == 'number':
+                return cls.number(subtree)
+            elif subtree.data == 'objects':
+                return cls.objects(subtree)
+        if subtree.type == 'FILEPATH':
             return cls.file(subtree)
+        elif subtree.type == 'NAME':
+            return cls.path(tree)
 
-    def add_line(self, method, line, container=None, args=None, enter=None,
-                 exit=None, parent=None):
+    @classmethod
+    def argument(cls, tree):
+        name = tree.child(0).value
+        value = cls.values(tree.child(1))
+        return {'$OBJECT': 'argument', 'name': name, 'argument': value}
+
+    @classmethod
+    def arguments(cls, tree):
+        """
+        Parses a group of arguments rules
+        """
+        arguments = []
+        for argument in list(tree.find_data('arguments')):
+            arguments.append(cls.argument(argument))
+        return arguments
+
+    def add_line(self, method, line, args=None, container=None, command=None,
+                 enter=None, exit=None, parent=None):
         """
         Creates the base dictionary for a given line.
         """
@@ -122,6 +141,7 @@ class Compiler:
                 'ln': line,
                 'output': None,
                 'container': container,
+                'command': command,
                 'args': args,
                 'enter': enter,
                 'exit': exit,
@@ -130,20 +150,28 @@ class Compiler:
         }
         self.lines = {**self.lines, **dictionary}
 
-    def assignments(self, tree, parent=None):
+    def assignment(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
-        args = [self.path(tree.node('path')), self.values(tree.child(2))]
+        args = [
+            self.path(tree.node('path')),
+            self.values(tree.node('assignment_fragment.values'))
+        ]
         self.add_line('set', line, args=args, parent=parent)
 
-    def command(self, tree, parent=None):
+    def service(self, tree, parent=None):
         """
         Translates a command tree to the corresponding line
         """
         line = tree.line()
+        command = tree.node('service_fragment.command')
+        if command:
+            command = command.child(0)
+        arguments = self.arguments(tree.node('service_fragment'))
         self.set_next_line(line)
         container = tree.child(0).child(0).value
-        self.add_line('run', line, container=container, parent=parent)
+        self.add_line('run', line, container=container, command=command,
+                      args=arguments, parent=parent)
         self.services.append(container)
 
     def if_block(self, tree, parent=None):
@@ -205,7 +233,7 @@ class Compiler:
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
         """
-        allowed_nodes = ['command', 'assignments', 'if_block', 'elseif_block',
+        allowed_nodes = ['service', 'assignment', 'if_block', 'elseif_block',
                          'else_block', 'for_block']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent=parent)

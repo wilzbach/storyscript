@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 
 from pytest import mark, raises
@@ -53,6 +54,13 @@ def test_resolver_file_values(patch):
     result = Resolver.file('{}.py', {}, values=['values'])
     Resolver.values.assert_called_with(['values'], {})
     assert result == 'a.py'
+
+
+def test_resolver_argument(patch):
+    patch.object(Resolver, 'object')
+    result = Resolver.argument('argument', {})
+    Resolver.object.assert_called_with('argument', {})
+    assert result == Resolver.object()
 
 
 def test_resolver_object_path_path():
@@ -223,6 +231,14 @@ def test_resolver_object_method(patch):
     result = Resolver.object(item, 'data')
     Resolver.method.assert_called_with('method', 'hand', 'hand')
     assert result == Resolver.method()
+
+
+def test_resolver_object_argument(patch):
+    patch.object(Resolver, 'argument')
+    item = {'$OBJECT': 'argument', 'argument': {}}
+    result = Resolver.object(item, 'data')
+    Resolver.argument.assert_called_with({}, 'data')
+    assert result == Resolver.argument()
 
 
 def test_resolver_object_file(patch):

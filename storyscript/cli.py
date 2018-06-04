@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import click
 
 from .app import App
@@ -8,6 +9,7 @@ class Cli:
 
     version_help = 'Prints Storyscript version'
     silent_help = 'Silent mode. Return syntax errors only.'
+    ebnf_file_help = 'Load the grammar from a file. Useful for development'
 
     @click.group(invoke_without_command=True)
     @click.option('--version', is_flag=True, help=version_help)
@@ -29,11 +31,12 @@ class Cli:
     @click.argument('storypath')
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
-    def parse(storypath, json, silent):
+    @click.option('--ebnf-file', help=ebnf_file_help)
+    def parse(storypath, json, silent, ebnf_file):
         """
         Parses stories and prints the resulting json
         """
-        results = App.compile(storypath)
+        results = App.compile(storypath, ebnf_file=ebnf_file)
         if not silent:
             if not json:
                 click.echo(click.style('Script syntax passed!', fg='green'))
@@ -52,3 +55,11 @@ class Cli:
             click.echo('File: {}'.format(file))
             for n, token in enumerate(tokens):
                 click.echo('{} {} {}'.format(n, token.type, token.value))
+
+    @staticmethod
+    @main.command()
+    def grammar():
+        """
+        Prints the grammar specification
+        """
+        click.echo(App.grammar())

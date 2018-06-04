@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 import os
 
@@ -5,7 +6,7 @@ from pytest import fixture
 
 from storyscript.app import App
 from storyscript.compiler import Compiler
-from storyscript.parser import Parser
+from storyscript.parser import Grammar, Parser
 
 
 @fixture
@@ -72,9 +73,16 @@ def test_app_parse(patch, parser, read_story):
     patch.object(Compiler, 'compile')
     result = App.parse(['test.story'])
     App.read_story.assert_called_with('test.story')
+    Parser.__init__.assert_called_with(ebnf_file=None)
     Parser().parse.assert_called_with(App.read_story())
     Compiler.compile.assert_called_with(Parser().parse())
     assert result == {'test.story': Compiler.compile()}
+
+
+def test_app_parse_ebnf_file(patch, parser, read_story):
+    patch.object(Compiler, 'compile')
+    App.parse(['test.story'], ebnf_file='test.ebnf')
+    Parser.__init__.assert_called_with(ebnf_file='test.ebnf')
 
 
 def test_app_services():
@@ -88,11 +96,18 @@ def test_app_compile(patch):
     patch.many(App, ['get_stories', 'parse', 'services'])
     result = App.compile('path')
     App.get_stories.assert_called_with('path')
-    App.parse.assert_called_with(App.get_stories())
+    App.parse.assert_called_with(App.get_stories(), ebnf_file=None)
     App.services.assert_called_with(App.parse())
     dictionary = {'stories': App.parse(), 'services': App.services()}
     json.dumps.assert_called_with(dictionary, indent=2)
     assert result == json.dumps()
+
+
+def test_app_compile_ebnf_file(patch):
+    patch.object(json, 'dumps')
+    patch.many(App, ['get_stories', 'parse', 'services'])
+    App.compile('path', ebnf_file='test.ebnf')
+    App.parse.assert_called_with(App.get_stories(), ebnf_file='test.ebnf')
 
 
 def test_app_lexer(patch, read_story):
@@ -103,3 +118,9 @@ def test_app_lexer(patch, read_story):
     App.read_story.assert_called_with('one.story')
     Parser.lex.assert_called_with(App.read_story())
     assert result == {'one.story': Parser.lex()}
+
+
+def test_app_grammar(patch):
+    patch.init(Grammar)
+    patch.object(Grammar, 'build')
+    assert App.grammar() == Grammar().build()

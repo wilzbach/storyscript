@@ -29,6 +29,16 @@ def test_tree_walk():
     assert result == inner_tree
 
 
+def test_tree_walk_token():
+    """
+    Ensures that encountered tokens are skipped
+    """
+    inner_tree = Tree('inner', [])
+    tree = Tree('rule', [Token('test', 'test'), inner_tree])
+    result = Tree.walk(tree, 'inner')
+    assert result == inner_tree
+
+
 def test_tree_node(patch):
     patch.object(Tree, 'walk')
     tree = Tree('rule', [])
@@ -40,6 +50,11 @@ def test_tree_node(patch):
 def test_tree_child():
     tree = Tree('rule', ['child'])
     assert tree.child(0) == 'child'
+
+
+def test_tree_child_overflow():
+    tree = Tree('rule', ['child'])
+    assert tree.child(1) is None
 
 
 def test_tree_line():

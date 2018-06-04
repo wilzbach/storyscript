@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+
 from lark import Lark
 from lark.common import UnexpectedToken
 
@@ -8,23 +10,33 @@ from storyscript.parser import CustomIndenter, Grammar, Parser, Transformer
 
 
 @fixture
-def parser(magic):
-    parser = Parser()
-    parser.grammar = magic()
-    return parser
+def parser():
+    return Parser()
 
 
-def test_parser_init(patch):
-    patch.init(Grammar)
-    parser = Parser()
-    assert isinstance(parser.grammar, Grammar)
+@fixture
+def ebnf_file(request):
+    with open('test.ebnf', 'w') as f:
+        f.write('grammar')
+
+    def teardown():
+        os.remove('test.ebnf')
+    request.addfinalizer(teardown)
+
+
+def test_parser_init(parser):
     assert parser.algo == 'lalr'
+    assert parser.ebnf_file is None
 
 
-def test_parser_init_algo(patch):
-    patch.init(Grammar)
+def test_parser_init_algo():
     parser = Parser(algo='algo')
     assert parser.algo == 'algo'
+
+
+def test_parser_init_ebnf_file():
+    parser = Parser(ebnf_file='grammar.ebnf')
+    assert parser.ebnf_file == 'grammar.ebnf'
 
 
 def test_parser_indenter(patch, parser):
@@ -37,11 +49,24 @@ def test_parser_transfomer(patch, parser):
     assert isinstance(parser.transformer(), Transformer)
 
 
+def test_parser_grammar(patch, parser):
+    patch.init(Grammar)
+    patch.object(Grammar, 'build')
+    result = parser.grammar()
+    assert Grammar.__init__.call_count == 1
+    assert result == Grammar().build()
+
+
+def test_parser_grammar_ebnf_file(parser, ebnf_file):
+    parser.ebnf_file = 'test.ebnf'
+    assert parser.grammar() == 'grammar'
+
+
 def test_parser_lark(patch, parser):
     patch.init(Lark)
-    patch.object(Parser, 'indenter')
+    patch.many(Parser, ['indenter', 'grammar'])
     result = parser.lark()
-    Lark.__init__.assert_called_with(parser.grammar.build(),
+    Lark.__init__.assert_called_with(parser.grammar(),
                                      parser=parser.algo,
                                      postlex=Parser.indenter())
     assert isinstance(result, Lark)
@@ -59,9 +84,8 @@ def test_parser_parse(patch, parser):
 
 
 def test_parser_parse_unexpected_token(patch, parser):
-    patch.init(Lark)
-    patch.object(Lark, 'parse', side_effect=UnexpectedToken('', '', '', ''))
-    patch.many(Parser, ['indenter', 'transformer'])
+    patch.many(Parser, ['indenter', 'transformer', 'lark'])
+    Parser.lark().parse.side_effect = UnexpectedToken('', '', '', '')
     assert parser.parse('source') is None
 
 

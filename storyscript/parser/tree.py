@@ -10,8 +10,9 @@ class Tree(LarkTree):
     @staticmethod
     def walk(tree, path):
         for item in tree.children:
-            if item.data == path:
-                return item
+            if isinstance(item, Tree):
+                if item.data == path:
+                    return item
 
     def node(self, path):
         """
@@ -27,7 +28,8 @@ class Tree(LarkTree):
         return current
 
     def child(self, index):
-        return self.children[index]
+        if len(self.children) > index:
+            return self.children[index]
 
     def line(self):
         """

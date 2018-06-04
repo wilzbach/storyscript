@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import click
 from click.testing import CliRunner
 
@@ -45,7 +46,7 @@ def test_cli_parse(patch, runner, echo, app):
     """
     patch.object(click, 'style')
     runner.invoke(Cli.parse, ['/path'])
-    App.compile.assert_called_with('/path')
+    App.compile.assert_called_with('/path', ebnf_file=None)
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
 
@@ -56,7 +57,7 @@ def test_cli_parse_silent(runner, echo, app, option):
     Ensures --silent makes everything quiet
     """
     result = runner.invoke(Cli.parse, ['/path', option])
-    App.compile.assert_called_with('/path')
+    App.compile.assert_called_with('/path', ebnf_file=None)
     assert result.output == ''
     assert click.echo.call_count == 0
 
@@ -67,8 +68,13 @@ def test_cli_parse_json(runner, echo, app, option):
     Ensures --json outputs json
     """
     runner.invoke(Cli.parse, ['/path', option])
-    App.compile.assert_called_with('/path')
+    App.compile.assert_called_with('/path', ebnf_file=None)
     click.echo.assert_called_with(App.compile())
+
+
+def test_clis_parse_ebnf_file(runner, echo, app):
+    runner.invoke(Cli.parse, ['/path', '--ebnf-file', 'test.grammar'])
+    App.compile.assert_called_with('/path', ebnf_file='test.grammar')
 
 
 def test_cli_lexer(patch, magic, runner, app, echo):
@@ -81,3 +87,10 @@ def test_cli_lexer(patch, magic, runner, app, echo):
     app.lex.assert_called_with('/path')
     click.echo.assert_called_with('0 token value')
     assert click.echo.call_count == 2
+
+
+def test_cli_grammar(patch, runner, app, echo):
+    patch.object(App, 'grammar')
+    runner.invoke(Cli.grammar, [])
+    assert app.grammar.call_count == 1
+    click.echo.assert_called_with(app.grammar())

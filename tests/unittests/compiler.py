@@ -139,61 +139,106 @@ def test_compiler_values_filepath(patch, magic):
     assert result == Compiler.file()
 
 
+def test_compiler_values_path(patch, magic):
+    patch.object(Compiler, 'path')
+    item = magic(type='NAME')
+    tree = magic(child=lambda x: item)
+    result = Compiler.values(tree)
+    Compiler.path.assert_called_with(tree)
+    assert result == Compiler.path()
+
+
+def test_compiler_argument(patch, tree):
+    patch.object(Compiler, 'values')
+    result = Compiler.argument(tree)
+    assert tree.child.call_count == 2
+    Compiler.values.assert_called_with(tree.child())
+    expected = {'$OBJECT': 'argument', 'name': tree.child().value,
+                'argument': Compiler.values()}
+    assert result == expected
+
+
+def test_compiler_arguments(patch, tree):
+    patch.object(Compiler, 'argument')
+    tree.find_data.return_value = filter(lambda x: x, ['argument'])
+    result = Compiler.arguments(tree)
+    tree.find_data.assert_called_with('arguments')
+    Compiler.argument.assert_called_with('argument')
+    assert result == [Compiler.argument()]
+
+
 def test_compiler_add_line(compiler):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
-                      'container': None, 'enter': None, 'exit': None,
-                      'args': None, 'parent': None}}
+                      'container': None, 'command': None, 'enter': None,
+                      'exit': None, 'args': None, 'parent': None}}
     compiler.add_line('method', '1')
     assert compiler.lines == expected
 
 
-@mark.parametrize('keywords', ['container', 'args', 'enter', 'exit', 'parent'])
+@mark.parametrize('keywords', ['container', 'command', 'args', 'enter', 'exit',
+                               'parent'])
 def test_compiler_add_line_keywords(compiler, keywords):
     compiler.add_line('method', '1', **{keywords: keywords})
     assert compiler.lines['1'][keywords] == keywords
 
 
-def test_compiler_assignments(patch, compiler, tree):
+def test_compiler_assignment(patch, compiler, tree):
     patch.many(Compiler, ['add_line', 'path', 'values', 'set_next_line'])
-    compiler.assignments(tree)
+    compiler.assignment(tree)
     compiler.set_next_line.assert_called_with(tree.line())
-    tree.node.assert_called_with('path')
-    tree.child.assert_called_with(2)
-    compiler.path.assert_called_with(tree.node('path'))
-    compiler.values.assert_called_with(tree.child())
+    assert tree.node.call_count == 2
+    compiler.path.assert_called_with(tree.node())
+    compiler.values.assert_called_with(tree.node())
     args = [compiler.path(), compiler.values()]
     compiler.add_line.assert_called_with('set', tree.line(), args=args,
                                          parent=None)
 
 
-def test_compiler_assignments_parent(patch, compiler, tree):
+def test_compiler_assignment_parent(patch, compiler, tree):
     patch.many(Compiler, ['add_line', 'path', 'values', 'set_next_line'])
-    compiler.assignments(tree, parent='1')
+    compiler.assignment(tree, parent='1')
     args = [compiler.path(), compiler.values()]
     compiler.add_line.assert_called_with('set', tree.line(), args=args,
                                          parent='1')
 
 
-def test_compiler_command(patch, compiler, tree):
+def test_compiler_service(patch, compiler, tree):
     """
-    Ensures that command trees can be compiled
+    Ensures that service trees can be compiled
     """
-    patch.many(Compiler, ['add_line', 'set_next_line'])
-    compiler.command(tree)
+    patch.many(Compiler, ['add_line', 'set_next_line', 'arguments'])
+    tree.node.return_value = None
+    compiler.service(tree)
     line = tree.line()
     compiler.set_next_line.assert_called_with(line)
     container = tree.child().child().value
+    Compiler.arguments.assert_called_with(tree.node())
     compiler.add_line.assert_called_with('run', line, container=container,
-                                         parent=None)
+                                         command=tree.node(), parent=None,
+                                         args=Compiler.arguments())
     assert compiler.services == [tree.child().child().value]
 
 
-def test_compiler_command_parent(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'set_next_line'])
-    compiler.command(tree, parent='1')
+def test_compiler_service_command(patch, compiler, tree):
+    patch.many(Compiler, ['add_line', 'set_next_line', 'arguments'])
+    compiler.service(tree)
     line = tree.line()
     container = tree.child().child().value
     compiler.add_line.assert_called_with('run', line, container=container,
+                                         command=tree.node().child(),
+                                         parent=None,
+                                         args=Compiler.arguments())
+
+
+def test_compiler_service_parent(patch, compiler, tree):
+    patch.many(Compiler, ['add_line', 'set_next_line', 'arguments'])
+    tree.node.return_value = None
+    compiler.service(tree, parent='1')
+    line = tree.line()
+    container = tree.child().child().value
+    compiler.add_line.assert_called_with('run', line, container=container,
+                                         command=tree.node(),
+                                         args=Compiler.arguments(),
                                          parent='1')
 
 
@@ -302,7 +347,7 @@ def test_compiler_for_block_parent(patch, compiler, tree):
 
 
 @mark.parametrize('method_name', [
-    'command', 'assignments', 'if_block', 'elseif_block', 'else_block',
+    'service', 'assignment', 'if_block', 'elseif_block', 'else_block',
     'for_block'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
@@ -314,10 +359,10 @@ def test_compiler_subtree(patch, compiler, method_name):
 
 
 def test_compiler_subtree_parent(patch, compiler):
-    patch.object(Compiler, 'command')
-    tree = Tree('command', [])
+    patch.object(Compiler, 'service')
+    tree = Tree('service', [])
     compiler.subtree(tree, parent='1')
-    compiler.command.assert_called_with(tree, parent='1')
+    compiler.service.assert_called_with(tree, parent='1')
 
 
 def test_compiler_subtrees(patch, compiler, tree):
