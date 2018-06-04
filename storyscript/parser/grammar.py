@@ -75,7 +75,9 @@ class Grammar:
         self.ebnf.rule('block', definition, raw=True)
 
     def number(self):
-        self.ebnf.loads(['int', 'float'])
+        tokens = (('int', '"0".."9"+'),
+                  ('float', """INT "." INT? | "." INT"""))
+        self.ebnf.tokens(*tokens, regexp=True, priority=2)
         self.ebnf.rules('number', ['int'], ['float'])
 
     def string(self):

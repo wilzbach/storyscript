@@ -101,7 +101,8 @@ def test_grammar_block(patch, grammar, ebnf):
 
 def test_grammar_number(grammar, ebnf):
     grammar.number()
-    ebnf.loads.assert_called_with(['int', 'float'])
+    tokens = (('int', '"0".."9"+'), ('float', """INT "." INT? | "." INT"""))
+    ebnf.tokens.assert_called_with(*tokens, regexp=True, priority=2)
     ebnf.rules.assert_called_with('number', ['int'], ['float'])
 
 
