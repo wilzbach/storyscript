@@ -87,6 +87,11 @@ class Grammar:
         rule = 'FUNCTION_TYPE _WS NAME function_argument* function_output?'
         self.ebnf.rule('function_statement', rule, raw=True)
 
+    def function_block(self):
+        self.function_statement()
+        rule = ('function_statement', 'nl', 'nested_block')
+        self.ebnf.rule('function_block', rule)
+
     def block(self):
         self.if_block()
         self.foreach_block()

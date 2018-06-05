@@ -120,6 +120,13 @@ def test_grammar_function_statement(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('function_statement', rule, raw=True)
 
 
+def test_grammar_function_block(patch, grammar, ebnf):
+    patch.object(Grammar, 'function_statement')
+    grammar.function_block()
+    definition = ('function_statement', 'nl', 'nested_block')
+    ebnf.rule.assert_called_with('function_block', definition)
+
+
 def test_grammar_block(patch, grammar, ebnf):
     patch.many(Grammar, ['if_block', 'foreach_block'])
     grammar.block()
