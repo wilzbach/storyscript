@@ -113,6 +113,8 @@ class Compiler:
                 return cls.number(subtree)
             elif subtree.data == 'objects':
                 return cls.objects(subtree)
+            elif subtree.data == 'types':
+                return cls.types(subtree)
         if subtree.type == 'FILEPATH':
             return cls.file(subtree)
         elif subtree.type == 'NAME':

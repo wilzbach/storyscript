@@ -124,7 +124,7 @@ def test_compiler_types(tree):
 
 
 @mark.parametrize('value_type', [
-    'string', 'boolean', 'list', 'number', 'objects'
+    'string', 'boolean', 'list', 'number', 'objects', 'types'
 ])
 def test_compiler_values(patch, magic, value_type):
     patch.object(Compiler, value_type)
