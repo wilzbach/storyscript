@@ -177,11 +177,11 @@ class Compiler:
         if command:
             command = command.child(0)
         arguments = self.arguments(tree.node('service_fragment'))
-        container = tree.child(0).child(0).value
+        service = tree.child(0).child(0).value
         output = self.output(tree.node('service_fragment.output'))
-        self.add_line('run', line, container=container, command=command,
+        self.add_line('run', line, service=service, command=command,
                       args=arguments, parent=parent, output=output)
-        self.services.append(container)
+        self.services.append(service)
 
     def if_block(self, tree, parent=None):
         line = tree.line()
