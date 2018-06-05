@@ -111,6 +111,15 @@ def test_grammar_function_output(grammar, ebnf):
     ebnf.rule.assert_called_with('function_output', rule, raw=True)
 
 
+def test_grammar_function_statement(patch, grammar, ebnf):
+    patch.many(Grammar, ['function_argument', 'function_output'])
+    grammar.function_statement()
+    assert Grammar.function_argument.call_count == 1
+    assert Grammar.function_output.call_count == 1
+    rule = 'FUNCTION_TYPE _WS NAME function_argument* function_output?'
+    ebnf.rule.assert_called_with('function_statement', rule, raw=True)
+
+
 def test_grammar_block(patch, grammar, ebnf):
     patch.many(Grammar, ['if_block', 'foreach_block'])
     grammar.block()
