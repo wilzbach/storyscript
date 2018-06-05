@@ -224,7 +224,7 @@ def test_compiler_service(patch, compiler, tree):
     service = tree.child().child().value
     Compiler.arguments.assert_called_with(tree.node())
     Compiler.output.assert_called_with(tree.node())
-    compiler.add_line.assert_called_with('run', line, service=service,
+    compiler.add_line.assert_called_with('execute', line, service=service,
                                          command=tree.node(), parent=None,
                                          args=Compiler.arguments(),
                                          output=Compiler.output())
@@ -236,7 +236,7 @@ def test_compiler_service_command(patch, compiler, tree):
     compiler.service(tree)
     line = tree.line()
     service = tree.child().child().value
-    compiler.add_line.assert_called_with('run', line, service=service,
+    compiler.add_line.assert_called_with('execute', line, service=service,
                                          command=tree.node().child(),
                                          parent=None, output=Compiler.output(),
                                          args=Compiler.arguments())
@@ -248,7 +248,7 @@ def test_compiler_service_parent(patch, compiler, tree):
     compiler.service(tree, parent='1')
     line = tree.line()
     service = tree.child().child().value
-    compiler.add_line.assert_called_with('run', line, service=service,
+    compiler.add_line.assert_called_with('execute', line, service=service,
                                          command=tree.node(),
                                          args=Compiler.arguments(),
                                          output=Compiler.output(), parent='1')

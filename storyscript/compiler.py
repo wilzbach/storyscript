@@ -179,7 +179,7 @@ class Compiler:
         arguments = self.arguments(tree.node('service_fragment'))
         service = tree.child(0).child(0).value
         output = self.output(tree.node('service_fragment.output'))
-        self.add_line('run', line, service=service, command=command,
+        self.add_line('execute', line, service=service, command=command,
                       args=arguments, parent=parent, output=output)
         self.services.append(service)
 
