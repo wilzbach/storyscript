@@ -87,7 +87,6 @@ def test_parser_object(parser):
 ])
 def test_parser_assignment(parser, name_token, code, token):
     result = parser.parse(code)
-    print(result.pretty())
     node = result.node('start.block.line.assignment')
     assert node.node('path').child(0) == name_token
     assert node.child(1).child(0) == Token('EQUALS', '=')
@@ -174,3 +173,28 @@ def test_parser_if_block_elseif(parser):
     assert node.child(2).child(0).child(1) == Token('IF', 'if')
     path = node.child(2).child(1).node('block.line.assignment.path')
     assert path.child(0) == Token('NAME', 'var')
+
+
+def test_parser_function(parser):
+    result = parser.parse('function test\n\tvar = 3\n')
+    node = result.node('block.function_block')
+    assert node.node('function_statement').child(1) == Token('NAME', 'test')
+    path = node.node('nested_block.block.line.assignment.path')
+    assert path.child(0) == Token('NAME', 'var')
+
+
+def test_parser_function_arguments(parser):
+    result = parser.parse('function test n:int x:float\n\tvar = 3\n')
+    node = result.node('block.function_block')
+    arguments = list(node.find_data('function_argument'))
+    typed_argument = arguments[0].node('typed_argument')
+    assert typed_argument.child(0) == Token('NAME', 'n')
+    assert typed_argument.node('types').child(0) == Token('INT_TYPE', 'int')
+
+
+def test_parser_function_output(parser):
+    result = parser.parse('function test n:string -> name:int\n\tvar = 1\n')
+    statement = result.node('block.function_block.function_statement')
+    node = statement.node('function_output.typed_argument')
+    assert node.child(0) == Token('NAME', 'name')
+    assert node.node('types').child(0) == Token('INT_TYPE', 'int')
