@@ -133,8 +133,9 @@ class Compiler:
     @staticmethod
     def output(tree):
         output = []
-        for item in tree.children:
-            output.append(item.value)
+        if tree:
+            for item in tree.children:
+                output.append(item.value)
         return output
 
     def add_line(self, method, line, args=None, container=None, command=None,

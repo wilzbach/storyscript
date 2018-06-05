@@ -173,6 +173,10 @@ def test_compiler_output(tree):
     assert result == ['output']
 
 
+def test_compiler_output_none():
+    assert Compiler.output(None) == []
+
+
 def test_compiler_add_line(compiler):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
                       'container': None, 'command': None, 'enter': None,
