@@ -92,6 +92,10 @@ class Compiler:
             items.append([key, value])
         return {'$OBJECT': 'dict', 'items': items}
 
+    @staticmethod
+    def types(tree):
+        return {'$OBJECT': 'type', 'type': tree.child(0).value}
+
     @classmethod
     def values(cls, tree):
         """

@@ -118,6 +118,11 @@ def test_compiler_objects(patch, magic, tree):
     assert result == expected
 
 
+def test_compiler_types(tree):
+    token = tree.child(0)
+    assert Compiler.types(tree) == {'$OBJECT': 'type', 'type': token.value}
+
+
 @mark.parametrize('value_type', [
     'string', 'boolean', 'list', 'number', 'objects'
 ])
