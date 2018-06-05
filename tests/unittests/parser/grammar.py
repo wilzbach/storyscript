@@ -128,11 +128,12 @@ def test_grammar_function_block(patch, grammar, ebnf):
 
 
 def test_grammar_block(patch, grammar, ebnf):
-    patch.many(Grammar, ['if_block', 'foreach_block'])
+    patch.many(Grammar, ['if_block', 'foreach_block', 'function_block'])
     grammar.block()
     assert Grammar.if_block.call_count == 1
     assert Grammar.foreach_block.call_count == 1
-    definition = 'line _NL nested_block?|if_block|foreach_block'
+    assert Grammar.function_block.call_count == 1
+    definition = 'line _NL nested_block?|if_block|foreach_block|function_block'
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 
