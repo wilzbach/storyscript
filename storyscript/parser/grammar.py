@@ -68,6 +68,9 @@ class Grammar:
         definition = 'foreach_statement _NL nested_block'
         self.ebnf.rule('foreach_block', definition, raw=True)
 
+    def typed_argument(self):
+        self.ebnf.rule('typed_argument', ('name', 'colon', 'types'))
+
     def block(self):
         self.if_block()
         self.foreach_block()

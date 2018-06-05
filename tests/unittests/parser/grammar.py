@@ -90,6 +90,12 @@ def test_grammar_foreach_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('foreach_block', definition, raw=True)
 
 
+def test_grammar_typed_argument(grammar, ebnf):
+    grammar.typed_argument()
+    definition = ('name', 'colon', 'types')
+    ebnf.rule.assert_called_with('typed_argument', definition)
+
+
 def test_grammar_block(patch, grammar, ebnf):
     patch.many(Grammar, ['if_block', 'foreach_block'])
     grammar.block()
