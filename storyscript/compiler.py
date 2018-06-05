@@ -241,7 +241,7 @@ class Compiler:
         or keep parsing for deeper trees.
         """
         allowed_nodes = ['service', 'assignment', 'if_block', 'elseif_block',
-                         'else_block', 'foreach_block']
+                         'else_block', 'foreach_block', 'function_block']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent=parent)
             return
