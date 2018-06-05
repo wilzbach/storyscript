@@ -40,7 +40,7 @@ Parse a story::
 Documentation
 -------------
 
-You can find the complete documentation `here <http://storyscript.readthedocs.io/en/latest/>`_
+You can find the complete documentation `here <https://docs.asyncy.com/storyscript/>`_
 
 Current status
 --------------
