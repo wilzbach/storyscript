@@ -179,13 +179,13 @@ def test_compiler_output_none():
 
 def test_compiler_add_line(compiler):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
-                      'container': None, 'command': None, 'enter': None,
+                      'service': None, 'command': None, 'enter': None,
                       'exit': None, 'args': None, 'parent': None}}
     compiler.add_line('method', '1')
     assert compiler.lines == expected
 
 
-@mark.parametrize('keywords', ['container', 'command', 'output', 'args',
+@mark.parametrize('keywords', ['service', 'command', 'output', 'args',
                                'enter', 'exit', 'parent'])
 def test_compiler_add_line_keywords(compiler, keywords):
     compiler.add_line('method', '1', **{keywords: keywords})
