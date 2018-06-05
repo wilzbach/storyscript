@@ -96,6 +96,13 @@ def test_grammar_typed_argument(grammar, ebnf):
     ebnf.rule.assert_called_with('typed_argument', definition)
 
 
+def test_grammar_function_argument(patch, grammar, ebnf):
+    patch.object(Grammar, 'typed_argument')
+    grammar.function_argument()
+    assert Grammar.typed_argument.call_count == 1
+    ebnf.rule.assert_called_with('function_argument', ('ws', 'typed_argument'))
+
+
 def test_grammar_block(patch, grammar, ebnf):
     patch.many(Grammar, ['if_block', 'foreach_block'])
     grammar.block()

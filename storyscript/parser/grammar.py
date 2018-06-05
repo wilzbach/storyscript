@@ -71,6 +71,10 @@ class Grammar:
     def typed_argument(self):
         self.ebnf.rule('typed_argument', ('name', 'colon', 'types'))
 
+    def function_argument(self):
+        self.typed_argument()
+        self.ebnf.rule('function_argument', ('ws', 'typed_argument'))
+
     def block(self):
         self.if_block()
         self.foreach_block()
