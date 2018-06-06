@@ -143,6 +143,13 @@ class Compiler:
         value = cls.values(Tree('anon', [subtree.child(1)]))
         return {'$OBJECT': 'argument', 'name': name, 'argument': value}
 
+    @classmethod
+    def function_arguments(cls, tree):
+        arguments = []
+        for argument in list(tree.find_data('function_argument')):
+            arguments.append(cls.typed_argument(argument))
+        return arguments
+
     @staticmethod
     def output(tree):
         output = []

@@ -180,6 +180,15 @@ def test_compiler_typed_argument(patch, tree):
     assert result == expected
 
 
+def test_compiler_function_arguments(patch, tree):
+    patch.object(Compiler, 'typed_argument')
+    tree.find_data.return_value = filter(lambda x: x, ['function_argument'])
+    result = Compiler.function_arguments(tree)
+    tree.find_data.assert_called_with('function_argument')
+    Compiler.typed_argument.assert_called_with('function_argument')
+    assert result == [Compiler.typed_argument()]
+
+
 def test_compiler_output(tree):
     tree.children = [Token('token', 'output')]
     result = Compiler.output(tree)
