@@ -376,18 +376,24 @@ def test_compiler_foreach_block_parent(patch, compiler, tree):
 
 
 def test_compiler_function_block(patch, compiler, tree):
-    patch.many(Compiler, ['set_next_line', 'add_line', 'subtree'])
+    patch.many(Compiler, ['set_next_line', 'add_line', 'subtree',
+                          'function_output'])
     compiler.function_block(tree)
     compiler.set_next_line.assert_called_with(tree.line())
+    compiler.function_output.assert_called_with(tree.node())
     compiler.add_line.assert_called_with('function', tree.line(),
-                                         enter=tree.node().line(), parent=None)
+                                         output=compiler.function_output(),
+                                         enter=tree.node().line(),
+                                         parent=None)
     compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
 
 
 def test_compiler_function_block_parent(patch, compiler, tree):
-    patch.many(Compiler, ['set_next_line', 'add_line', 'subtree'])
+    patch.many(Compiler, ['set_next_line', 'add_line', 'subtree',
+                          'function_output'])
     compiler.function_block(tree, parent='1')
     compiler.add_line.assert_called_with('function', tree.line(),
+                                         output=compiler.function_output(),
                                          enter=tree.node().line(), parent='1')
 
 
