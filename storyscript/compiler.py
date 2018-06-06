@@ -136,6 +136,13 @@ class Compiler:
             arguments.append(cls.argument(argument))
         return arguments
 
+    @classmethod
+    def typed_argument(cls, tree):
+        subtree = tree.node('typed_argument')
+        name = subtree.child(0).value
+        value = cls.values(Tree('anon', [subtree.child(1)]))
+        return {'$OBJECT': 'argument', 'name': name, 'argument': value}
+
     @staticmethod
     def output(tree):
         output = []

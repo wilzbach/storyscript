@@ -172,6 +172,14 @@ def test_compiler_arguments(patch, tree):
     assert result == [Compiler.argument()]
 
 
+def test_compiler_typed_argument(patch, tree):
+    patch.object(Compiler, 'values')
+    result = Compiler.typed_argument(tree)
+    expected = {'$OBJECT': 'argument', 'name': tree.node().child().value,
+                'argument': Compiler.values()}
+    assert result == expected
+
+
 def test_compiler_output(tree):
     tree.children = [Token('token', 'output')]
     result = Compiler.output(tree)
