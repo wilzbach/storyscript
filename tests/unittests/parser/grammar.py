@@ -90,12 +90,50 @@ def test_grammar_foreach_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('foreach_block', definition, raw=True)
 
 
+def test_grammar_typed_argument(grammar, ebnf):
+    grammar.typed_argument()
+    definition = ('name', 'colon', 'types')
+    ebnf.rule.assert_called_with('typed_argument', definition)
+
+
+def test_grammar_function_argument(patch, grammar, ebnf):
+    patch.object(Grammar, 'typed_argument')
+    grammar.function_argument()
+    assert Grammar.typed_argument.call_count == 1
+    ebnf.rule.assert_called_with('function_argument', ('ws', 'typed_argument'))
+
+
+def test_grammar_function_output(grammar, ebnf):
+    grammar.function_output()
+    ebnf.token.assert_called_with('arrow', 'DASH GREATER', regexp=True,
+                                  inline=True, priority=2)
+    rule = '_WS _ARROW _WS (types|typed_argument)'
+    ebnf.rule.assert_called_with('function_output', rule, raw=True)
+
+
+def test_grammar_function_statement(patch, grammar, ebnf):
+    patch.many(Grammar, ['function_argument', 'function_output'])
+    grammar.function_statement()
+    assert Grammar.function_argument.call_count == 1
+    assert Grammar.function_output.call_count == 1
+    rule = 'FUNCTION_TYPE _WS NAME function_argument* function_output?'
+    ebnf.rule.assert_called_with('function_statement', rule, raw=True)
+
+
+def test_grammar_function_block(patch, grammar, ebnf):
+    patch.object(Grammar, 'function_statement')
+    grammar.function_block()
+    definition = ('function_statement', 'nl', 'nested_block')
+    ebnf.rule.assert_called_with('function_block', definition)
+
+
 def test_grammar_block(patch, grammar, ebnf):
-    patch.many(Grammar, ['if_block', 'foreach_block'])
+    patch.many(Grammar, ['if_block', 'foreach_block', 'function_block'])
     grammar.block()
     assert Grammar.if_block.call_count == 1
     assert Grammar.foreach_block.call_count == 1
-    definition = 'line _NL nested_block?|if_block|foreach_block'
+    assert Grammar.function_block.call_count == 1
+    definition = 'line _NL nested_block?|if_block|foreach_block|function_block'
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 

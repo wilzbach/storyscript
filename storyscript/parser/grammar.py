@@ -68,10 +68,36 @@ class Grammar:
         definition = 'foreach_statement _NL nested_block'
         self.ebnf.rule('foreach_block', definition, raw=True)
 
+    def typed_argument(self):
+        self.ebnf.rule('typed_argument', ('name', 'colon', 'types'))
+
+    def function_argument(self):
+        self.typed_argument()
+        self.ebnf.rule('function_argument', ('ws', 'typed_argument'))
+
+    def function_output(self):
+        self.ebnf.token('arrow', 'DASH GREATER', regexp=True, inline=True,
+                        priority=2)
+        rule = '_WS _ARROW _WS (types|typed_argument)'
+        self.ebnf.rule('function_output', rule, raw=True)
+
+    def function_statement(self):
+        self.function_argument()
+        self.function_output()
+        rule = 'FUNCTION_TYPE _WS NAME function_argument* function_output?'
+        self.ebnf.rule('function_statement', rule, raw=True)
+
+    def function_block(self):
+        self.function_statement()
+        rule = ('function_statement', 'nl', 'nested_block')
+        self.ebnf.rule('function_block', rule)
+
     def block(self):
         self.if_block()
         self.foreach_block()
-        definition = 'line _NL nested_block?|if_block|foreach_block'
+        self.function_block()
+        definition = ('line _NL nested_block?|if_block|foreach_block'
+                      '|function_block')
         self.ebnf.rule('block', definition, raw=True)
 
     def number(self):

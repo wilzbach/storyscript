@@ -92,6 +92,10 @@ class Compiler:
             items.append([key, value])
         return {'$OBJECT': 'dict', 'items': items}
 
+    @staticmethod
+    def types(tree):
+        return {'$OBJECT': 'type', 'type': tree.child(0).value}
+
     @classmethod
     def values(cls, tree):
         """
@@ -109,6 +113,8 @@ class Compiler:
                 return cls.number(subtree)
             elif subtree.data == 'objects':
                 return cls.objects(subtree)
+            elif subtree.data == 'types':
+                return cls.types(subtree)
         if subtree.type == 'FILEPATH':
             return cls.file(subtree)
         elif subtree.type == 'NAME':
@@ -130,6 +136,20 @@ class Compiler:
             arguments.append(cls.argument(argument))
         return arguments
 
+    @classmethod
+    def typed_argument(cls, tree):
+        subtree = tree.node('typed_argument')
+        name = subtree.child(0).value
+        value = cls.values(Tree('anon', [subtree.child(1)]))
+        return {'$OBJECT': 'argument', 'name': name, 'argument': value}
+
+    @classmethod
+    def function_arguments(cls, tree):
+        arguments = []
+        for argument in list(tree.find_data('function_argument')):
+            arguments.append(cls.typed_argument(argument))
+        return arguments
+
     @staticmethod
     def output(tree):
         output = []
@@ -138,8 +158,13 @@ class Compiler:
                 output.append(item.value)
         return output
 
+    @classmethod
+    def function_output(cls, tree):
+        return cls.output(tree.node('function_output.types'))
+
     def add_line(self, method, line, args=None, service=None, command=None,
-                 output=None, enter=None, exit=None, parent=None):
+                 function=None, output=None, enter=None, exit=None,
+                 parent=None):
         """
         Creates the base dictionary for a given line.
         """
@@ -150,6 +175,7 @@ class Compiler:
                 'output': output,
                 'service': service,
                 'command': command,
+                'function': function,
                 'args': args,
                 'enter': enter,
                 'exit': exit,
@@ -228,6 +254,18 @@ class Compiler:
                       parent=parent, output=output)
         self.subtree(nested_block, parent=line)
 
+    def function_block(self, tree, parent=None):
+        line = tree.line()
+        self.set_next_line(line)
+        function = tree.node('function_statement')
+        args = self.function_arguments(function)
+        output = self.function_output(function)
+        nested_block = tree.node('nested_block')
+        self.add_line('function', line, function=function.child(1).value,
+                      output=output, args=args, enter=nested_block.line(),
+                      parent=parent)
+        self.subtree(nested_block, parent=line)
+
     def subtrees(self, *trees):
         """
         Parses many subtrees
@@ -241,7 +279,7 @@ class Compiler:
         or keep parsing for deeper trees.
         """
         allowed_nodes = ['service', 'assignment', 'if_block', 'elseif_block',
-                         'else_block', 'foreach_block']
+                         'else_block', 'foreach_block', 'function_block']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent=parent)
             return

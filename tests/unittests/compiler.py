@@ -118,8 +118,13 @@ def test_compiler_objects(patch, magic, tree):
     assert result == expected
 
 
+def test_compiler_types(tree):
+    token = tree.child(0)
+    assert Compiler.types(tree) == {'$OBJECT': 'type', 'type': token.value}
+
+
 @mark.parametrize('value_type', [
-    'string', 'boolean', 'list', 'number', 'objects'
+    'string', 'boolean', 'list', 'number', 'objects', 'types'
 ])
 def test_compiler_values(patch, magic, value_type):
     patch.object(Compiler, value_type)
@@ -167,6 +172,23 @@ def test_compiler_arguments(patch, tree):
     assert result == [Compiler.argument()]
 
 
+def test_compiler_typed_argument(patch, tree):
+    patch.object(Compiler, 'values')
+    result = Compiler.typed_argument(tree)
+    expected = {'$OBJECT': 'argument', 'name': tree.node().child().value,
+                'argument': Compiler.values()}
+    assert result == expected
+
+
+def test_compiler_function_arguments(patch, tree):
+    patch.object(Compiler, 'typed_argument')
+    tree.find_data.return_value = filter(lambda x: x, ['function_argument'])
+    result = Compiler.function_arguments(tree)
+    tree.find_data.assert_called_with('function_argument')
+    Compiler.typed_argument.assert_called_with('function_argument')
+    assert result == [Compiler.typed_argument()]
+
+
 def test_compiler_output(tree):
     tree.children = [Token('token', 'output')]
     result = Compiler.output(tree)
@@ -177,16 +199,24 @@ def test_compiler_output_none():
     assert Compiler.output(None) == []
 
 
+def test_compiler_function_output(patch, tree):
+    patch.object(Compiler, 'output')
+    result = Compiler.function_output(tree)
+    tree.node.assert_called_with('function_output.types')
+    assert result == Compiler.output()
+
+
 def test_compiler_add_line(compiler):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
-                      'service': None, 'command': None, 'enter': None,
-                      'exit': None, 'args': None, 'parent': None}}
+                      'function': None, 'service': None, 'command': None,
+                      'enter': None, 'exit': None, 'args': None,
+                      'parent': None}}
     compiler.add_line('method', '1')
     assert compiler.lines == expected
 
 
-@mark.parametrize('keywords', ['service', 'command', 'output', 'args',
-                               'enter', 'exit', 'parent'])
+@mark.parametrize('keywords', ['service', 'command', 'function', 'output',
+                               'args', 'enter', 'exit', 'parent'])
 def test_compiler_add_line_keywords(compiler, keywords):
     compiler.add_line('method', '1', **{keywords: keywords})
     assert compiler.lines['1'][keywords] == keywords
@@ -363,9 +393,36 @@ def test_compiler_foreach_block_parent(patch, compiler, tree):
                                          output=Compiler.output(), parent='1')
 
 
+def test_compiler_function_block(patch, compiler, tree):
+    patch.many(Compiler, ['set_next_line', 'add_line', 'subtree',
+                          'function_arguments', 'function_output'])
+    compiler.function_block(tree)
+    compiler.set_next_line.assert_called_with(tree.line())
+    compiler.function_arguments.assert_called_with(tree.node())
+    compiler.function_output.assert_called_with(tree.node())
+    compiler.add_line.assert_called_with('function', tree.line(),
+                                         function=tree.node().child().value,
+                                         args=compiler.function_arguments(),
+                                         output=compiler.function_output(),
+                                         enter=tree.node().line(),
+                                         parent=None)
+    compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
+
+
+def test_compiler_function_block_parent(patch, compiler, tree):
+    patch.many(Compiler, ['set_next_line', 'add_line', 'subtree',
+                          'function_arguments', 'function_output'])
+    compiler.function_block(tree, parent='1')
+    compiler.add_line.assert_called_with('function', tree.line(),
+                                         function=tree.node().child().value,
+                                         args=compiler.function_arguments(),
+                                         output=compiler.function_output(),
+                                         enter=tree.node().line(), parent='1')
+
+
 @mark.parametrize('method_name', [
     'service', 'assignment', 'if_block', 'elseif_block', 'else_block',
-    'foreach_block'
+    'foreach_block', 'function_block'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)
