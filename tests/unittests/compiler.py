@@ -208,14 +208,14 @@ def test_compiler_function_output(patch, tree):
 
 def test_compiler_add_line(compiler):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
-                      'function': None, 'container': None, 'command': None,
+                      'function': None, 'service': None, 'command': None,
                       'enter': None, 'exit': None, 'args': None,
                       'parent': None}}
     compiler.add_line('method', '1')
     assert compiler.lines == expected
 
 
-@mark.parametrize('keywords', ['container', 'command', 'function', 'output',
+@mark.parametrize('keywords', ['service', 'command', 'function', 'output',
                                'args', 'enter', 'exit', 'parent'])
 def test_compiler_add_line_keywords(compiler, keywords):
     compiler.add_line('method', '1', **{keywords: keywords})
@@ -251,10 +251,10 @@ def test_compiler_service(patch, compiler, tree):
     compiler.service(tree)
     line = tree.line()
     compiler.set_next_line.assert_called_with(line)
-    container = tree.child().child().value
+    service = tree.child().child().value
     Compiler.arguments.assert_called_with(tree.node())
     Compiler.output.assert_called_with(tree.node())
-    compiler.add_line.assert_called_with('run', line, container=container,
+    compiler.add_line.assert_called_with('execute', line, service=service,
                                          command=tree.node(), parent=None,
                                          args=Compiler.arguments(),
                                          output=Compiler.output())
@@ -265,8 +265,8 @@ def test_compiler_service_command(patch, compiler, tree):
     patch.many(Compiler, ['add_line', 'set_next_line', 'arguments', 'output'])
     compiler.service(tree)
     line = tree.line()
-    container = tree.child().child().value
-    compiler.add_line.assert_called_with('run', line, container=container,
+    service = tree.child().child().value
+    compiler.add_line.assert_called_with('execute', line, service=service,
                                          command=tree.node().child(),
                                          parent=None, output=Compiler.output(),
                                          args=Compiler.arguments())
@@ -277,8 +277,8 @@ def test_compiler_service_parent(patch, compiler, tree):
     tree.node.return_value = None
     compiler.service(tree, parent='1')
     line = tree.line()
-    container = tree.child().child().value
-    compiler.add_line.assert_called_with('run', line, container=container,
+    service = tree.child().child().value
+    compiler.add_line.assert_called_with('execute', line, service=service,
                                          command=tree.node(),
                                          args=Compiler.arguments(),
                                          output=Compiler.output(), parent='1')
