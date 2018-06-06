@@ -144,6 +144,10 @@ class Compiler:
                 output.append(item.value)
         return output
 
+    @classmethod
+    def function_output(cls, tree):
+        return cls.output(tree.node('function_output.types'))
+
     def add_line(self, method, line, args=None, container=None, command=None,
                  output=None, enter=None, exit=None, parent=None):
         """
