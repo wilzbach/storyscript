@@ -255,9 +255,10 @@ class Compiler:
     def function_block(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
+        args = self.function_arguments(tree.node('function_statement'))
         output = self.function_output(tree.node('function_statement'))
         nested_block = tree.node('nested_block')
-        self.add_line('function', line, output=output,
+        self.add_line('function', line, output=output, args=args,
                       enter=nested_block.line(), parent=parent)
         self.subtree(nested_block, parent=line)
 
