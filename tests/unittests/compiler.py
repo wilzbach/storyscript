@@ -401,6 +401,7 @@ def test_compiler_function_block(patch, compiler, tree):
     compiler.function_arguments.assert_called_with(tree.node())
     compiler.function_output.assert_called_with(tree.node())
     compiler.add_line.assert_called_with('function', tree.line(),
+                                         function=tree.node().child().value,
                                          args=compiler.function_arguments(),
                                          output=compiler.function_output(),
                                          enter=tree.node().line(),
@@ -413,6 +414,7 @@ def test_compiler_function_block_parent(patch, compiler, tree):
                           'function_arguments', 'function_output'])
     compiler.function_block(tree, parent='1')
     compiler.add_line.assert_called_with('function', tree.line(),
+                                         function=tree.node().child().value,
                                          args=compiler.function_arguments(),
                                          output=compiler.function_output(),
                                          enter=tree.node().line(), parent='1')
