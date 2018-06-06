@@ -1,6 +1,6 @@
 .. image:: https://s3.amazonaws.com/asnycy/storyscript.png
 
-|Travis| |Codecov| |Pypi| |Bettercode| |Readthedocs|
+|Travis| |Codecov| |Pypi| |Bettercode| |Docs|
 
 StoryScript
 ###########
@@ -84,5 +84,5 @@ For other issues, `submit a support ticket <mailto:help@storyscripts.org>`_
 .. |Pypi| image:: https://img.shields.io/pypi/v/storyscript.svg
    :target: https://pypi.python.org/pypi/storyscriptd
 
-.. |Readthedocs| image:: https://readthedocs.org/projects/storyscript/badge/?version=latest
-  :target: https://storyscript.readthedocs.io/en/latest/
+.. |Docs| image:: https://img.shields.io/badge/docs-online-brightgreen.svg
+  :target: https://docs.asyncy.com/storyscript
