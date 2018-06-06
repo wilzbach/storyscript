@@ -234,6 +234,14 @@ class Compiler:
                       parent=parent, output=output)
         self.subtree(nested_block, parent=line)
 
+    def function_block(self, tree, parent=None):
+        line = tree.line()
+        self.set_next_line(line)
+        nested_block = tree.node('nested_block')
+        self.add_line('function', line, enter=nested_block.line(),
+                      parent=parent)
+        self.subtree(nested_block, parent=line)
+
     def subtrees(self, *trees):
         """
         Parses many subtrees

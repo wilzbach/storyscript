@@ -368,6 +368,22 @@ def test_compiler_foreach_block_parent(patch, compiler, tree):
                                          output=Compiler.output(), parent='1')
 
 
+def test_compiler_function_block(patch, compiler, tree):
+    patch.many(Compiler, ['set_next_line', 'add_line', 'subtree'])
+    compiler.function_block(tree)
+    compiler.set_next_line.assert_called_with(tree.line())
+    compiler.add_line.assert_called_with('function', tree.line(),
+                                         enter=tree.node().line(), parent=None)
+    compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
+
+
+def test_compiler_function_block_parent(patch, compiler, tree):
+    patch.many(Compiler, ['set_next_line', 'add_line', 'subtree'])
+    compiler.function_block(tree, parent='1')
+    compiler.add_line.assert_called_with('function', tree.line(),
+                                         enter=tree.node().line(), parent='1')
+
+
 @mark.parametrize('method_name', [
     'service', 'assignment', 'if_block', 'elseif_block', 'else_block',
     'foreach_block', 'function_block'
