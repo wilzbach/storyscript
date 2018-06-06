@@ -163,7 +163,8 @@ class Compiler:
         return cls.output(tree.node('function_output.types'))
 
     def add_line(self, method, line, args=None, container=None, command=None,
-                 output=None, enter=None, exit=None, parent=None):
+                 function=None, output=None, enter=None, exit=None,
+                 parent=None):
         """
         Creates the base dictionary for a given line.
         """
@@ -174,6 +175,7 @@ class Compiler:
                 'output': output,
                 'container': container,
                 'command': command,
+                'function': function,
                 'args': args,
                 'enter': enter,
                 'exit': exit,

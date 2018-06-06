@@ -208,14 +208,15 @@ def test_compiler_function_output(patch, tree):
 
 def test_compiler_add_line(compiler):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
-                      'container': None, 'command': None, 'enter': None,
-                      'exit': None, 'args': None, 'parent': None}}
+                      'function': None, 'container': None, 'command': None,
+                      'enter': None, 'exit': None, 'args': None,
+                      'parent': None}}
     compiler.add_line('method', '1')
     assert compiler.lines == expected
 
 
-@mark.parametrize('keywords', ['container', 'command', 'output', 'args',
-                               'enter', 'exit', 'parent'])
+@mark.parametrize('keywords', ['container', 'command', 'function', 'output',
+                               'args', 'enter', 'exit', 'parent'])
 def test_compiler_add_line_keywords(compiler, keywords):
     compiler.add_line('method', '1', **{keywords: keywords})
     assert compiler.lines['1'][keywords] == keywords
