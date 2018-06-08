@@ -266,10 +266,12 @@ def test_grammar_comparisons(grammar, ebnf):
     ebnf.rules.assert_called_with('comparisons', *definitions)
 
 
-def test_grammar_if_statement(grammar, ebnf):
+def test_grammar_if_statement(patch, grammar, ebnf):
+    patch.object(Grammar, 'path_value')
     grammar.if_statement()
+    assert Grammar.path_value.call_count == 1
     ebnf.token.assert_called_with('if', 'if')
-    rule = 'IF _WS (path|values) (_WS comparisons _WS (path|values))?'
+    rule = 'IF _WS path_value (_WS comparisons _WS path_value)?'
     ebnf.rule.assert_called_with('if_statement', rule, raw=True)
 
 
