@@ -5,21 +5,19 @@
 StoryScript
 ###########
 StoryScript is an high-level language that can be used to orchestrate
-microservices in an algorithmic way.
-
-
-What does that mean? That you can do things like this::
+microservices in an algorithmic way. Unlike a traditional language, StoryScript
+describes operations against or with services::
 
     today = date now
     invoices = database get items:"invoices" where:"month={{today.month}}"
     if today.day == 1
       send invoices
 
-Or this::
+You can launch a scalable web application with a five-liner::
 
     stream http-server as request
       query = parse-request request:request
-      data = db get query:query
+      data = database get query:query
       html = erb template:'/assets/template.erb' data:data
       request.write input:html
 
@@ -29,25 +27,26 @@ default platform for executing stories.
 
 Getting started
 ----------------
+Create a Python 3.6 virtualenv::
+
+    virtualenv --python=python3.6 folder
+
+Activate it::
+
+    cd folder
+    source bin/activate
 
 Install with pip::
 
     pip install storyscript
 
-Parse a story::
+Write a simple story::
 
-    storyscript parse path/to/my_first_story.story
+    echo "alpine echo text:'hello world!'" > hello.story
 
-Documentation
--------------
+Compile a story to JSON::
 
-You can find the complete documentation `here <https://docs.asyncy.com/storyscript/>`_
-
-Current status
---------------
-
-StoryScript is at an early development stage and  is part of a larger project,
-`Asyncy <https://github.com/Asyncy>`_
+    storyscript parse -j hello.story
 
 Contributing
 ------------
@@ -57,7 +56,7 @@ where we discuss features and future plans.
 
 You can find open issues on `github <https://github.com/asyncy/storyscript/issues>`_,
 along with `contribution guidelines <https://github.com/asyncy/storyscript/blob/master/CONTRIBUTING.md>`_
-for happy coding
+for happy coding.
 There are `simple issues <https://github.com/asyncy/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22>`_
 for new contributors and `issues that need help <https://github.com/asyncy/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22>`_
 
