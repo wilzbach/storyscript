@@ -14,7 +14,7 @@ class Grammar:
 
     def line(self):
         definitions = (['values'], ['operation'], ['comment'], ['statement'],
-                       ['block'])
+                       ['return_statement'], ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
@@ -218,6 +218,11 @@ class Grammar:
         rule = 'command? arguments* output?'
         self.ebnf.rule('service_fragment', rule, raw=True)
 
+    def return_statement(self):
+        self.ebnf.token('return', 'return', inline=True)
+        rule = '_RETURN _WS (path|values)'
+        self.ebnf.rule('return_statement', rule, raw=True)
+
     def int_type(self):
         self.ebnf.token('int_type', 'int')
 
@@ -267,6 +272,7 @@ class Grammar:
         self.values()
         self.comparisons()
         self.statement()
+        self.return_statement()
         self.operation()
         self.block()
         self.types()
