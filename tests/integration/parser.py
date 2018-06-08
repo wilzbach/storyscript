@@ -144,7 +144,7 @@ def test_parser_if_block(parser, name_token):
     result = parser.parse('if expr\n\tvar=3\n')
     node = result.node('block.if_block')
     assert node.node('if_statement').child(0) == Token('IF', 'if')
-    assert node.node('if_statement').child(1) == Token('NAME', 'expr')
+    assert node.node('if_statement.path').child(0) == Token('NAME', 'expr')
     path = node.node('nested_block.block.line.assignment.path')
     assert path.child(0) == name_token
 
@@ -153,7 +153,7 @@ def test_parser_if_block_nested(parser, name_token):
     result = parser.parse('if expr\n\tif things\n\t\tvar=3\n')
     node = result.node('block.if_block.nested_block.block.if_block')
     assert node.node('if_statement').child(0) == Token('IF', 'if')
-    assert node.node('if_statement').child(1) == Token('NAME', 'things')
+    assert node.node('if_statement.path').child(0) == Token('NAME', 'things')
     path = node.node('nested_block.block.line.assignment.path')
     assert path.child(0) == name_token
 

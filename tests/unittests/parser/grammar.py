@@ -268,10 +268,9 @@ def test_grammar_comparisons(grammar, ebnf):
 
 def test_grammar_if_statement(grammar, ebnf):
     grammar.if_statement()
-    definitions = (('if', 'ws', 'name'),
-                   ('if', 'ws', 'name', 'ws', 'comparisons', 'ws', 'name'))
-    ebnf.rules.assert_called_with('if_statement', *definitions)
     ebnf.token.assert_called_with('if', 'if')
+    rule = 'IF _WS (path|values) (_WS comparisons _WS (path|values))?'
+    ebnf.rule.assert_called_with('if_statement', rule, raw=True)
 
 
 def test_grammar_else_statement(grammar, ebnf):
