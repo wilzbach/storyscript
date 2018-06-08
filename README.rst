@@ -22,8 +22,18 @@ You can launch a scalable web application with a five-liner::
       request.write input:html
 
 These stories are compiled into event trees and run by a platform that
-implements StoryScript execution. `Asyncy <https://github.com/Asyncy>`_ is the
-default platform for executing stories.
+implements StoryScript execution, like `Asyncy <https://github.com/Asyncy>`_
+
+Current status
+--------------
+
+StoryScript is at an alpha stage and is part of the `Asyncy <https://asyncy.com>`_
+project. If you want to learn more about Asyncy, and how to use StoryScript
+with Asyncy, you can visit the `asyncy documentation <https://docs.asyncy.com>`_
+
+At the moment, Asyncy is the only platform that can execute StoryScript, however
+due the open source nature of the project, there might be more platforms that
+support StoryScript in the future.
 
 Getting started
 ----------------
