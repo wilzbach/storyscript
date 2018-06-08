@@ -442,7 +442,7 @@ def test_compiler_function_block_parent(patch, compiler, tree):
 
 @mark.parametrize('method_name', [
     'service', 'assignment', 'if_block', 'elseif_block', 'else_block',
-    'foreach_block', 'function_block'
+    'foreach_block', 'function_block', 'return_statement'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)
