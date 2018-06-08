@@ -244,7 +244,7 @@ class Compiler:
         line = tree.line()
         self.set_next_line(line)
         self.set_exit_line(line)
-        args = [self.path(tree.node('elseif_statement'))]
+        args = self.expression(tree.node('elseif_statement'))
         nested_block = tree.node('nested_block')
         self.add_line('elif', line, args=args, enter=nested_block.line(),
                       parent=parent)

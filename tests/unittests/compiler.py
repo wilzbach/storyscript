@@ -349,13 +349,13 @@ def test_compiler_if_block_with_else(patch, compiler):
 
 
 def test_compiler_elseif_block(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line',
+    patch.many(Compiler, ['add_line', 'expression', 'subtree', 'set_next_line',
                           'set_exit_line'])
     compiler.elseif_block(tree)
     compiler.set_next_line.assert_called_with(tree.line())
     assert tree.node.call_count == 2
-    compiler.path.assert_called_with(tree.node())
-    args = [compiler.path()]
+    compiler.expression.assert_called_with(tree.node())
+    args = compiler.expression()
     compiler.set_exit_line.assert_called_with(tree.line())
     compiler.add_line.assert_called_with('elif', tree.line(), args=args,
                                          enter=tree.node().line(), parent=None)
@@ -363,9 +363,10 @@ def test_compiler_elseif_block(patch, compiler, tree):
 
 
 def test_compiler_elseif_block_parent(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line'])
+    patch.many(Compiler, ['add_line', 'expression', 'subtree',
+                          'set_next_line'])
     compiler.elseif_block(tree, parent='1')
-    args = [compiler.path()]
+    args = compiler.expression()
     compiler.add_line.assert_called_with('elif', tree.line(), args=args,
                                          enter=tree.node().line(), parent='1')
 
