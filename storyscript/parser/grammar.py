@@ -33,7 +33,8 @@ class Grammar:
         self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
 
     def elseif_statement(self):
-        rule = '_ELSE _WS? _IF _WS path_value (_WS comparisons _WS path_value)?'
+        rule = ('_ELSE _WS? _IF _WS path_value '
+                '(_WS comparisons _WS path_value)?')
         self.ebnf.rule('elseif_statement', rule, raw=True)
 
     def elseif_block(self):
