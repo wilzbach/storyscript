@@ -281,7 +281,7 @@ def test_grammar_else_statement(grammar, ebnf):
 
 def test_grammar_elseif_statement(grammar, ebnf):
     grammar.elseif_statement()
-    rule = 'ELSE _WS? IF _WS NAME [_WS comparisons _WS NAME]?'
+    rule = 'ELSE _WS? IF _WS path_value (_WS comparisons _WS path_value)?'
     ebnf.rule.assert_called_with('elseif_statement', rule, raw=True)
 
 
