@@ -3,6 +3,10 @@
 
 class StoryscriptSyntaxError(SyntaxError):
 
+    """
+    Handles syntax errors and provides useful output about them.
+    """
+
     def __init__(self, error_type, token):
         self.error_type = error_type
         self.token = token
