@@ -301,6 +301,24 @@ def test_compiler_service_parent(patch, compiler, tree):
                                          output=Compiler.output(), parent='1')
 
 
+def test_compiler_return_statement(patch, compiler, tree):
+    patch.many(Compiler, ['add_line', 'set_next_line', 'values'])
+    compiler.return_statement(tree)
+    line = tree.line()
+    compiler.set_next_line(line)
+    compiler.values.assert_called_with(tree.child())
+    compiler.add_line.assert_called_with('return', line, parent=None,
+                                         args=[compiler.values()])
+
+
+def test_compiler_return_statement_parent(patch, compiler, tree):
+    patch.many(Compiler, ['add_line', 'set_next_line', 'values'])
+    compiler.return_statement(tree, parent='1')
+    line = tree.line()
+    compiler.add_line.assert_called_with('return', line,
+                                         args=[compiler.values()], parent='1')
+
+
 def test_compiler_if_block(patch, compiler):
     patch.many(Compiler, ['add_line', 'subtree', 'set_next_line',
                           'expression'])

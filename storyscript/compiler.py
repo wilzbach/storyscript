@@ -223,6 +223,15 @@ class Compiler:
                       args=arguments, parent=parent, output=output)
         self.services.append(service)
 
+    def return_statement(self, tree, parent=None):
+        """
+        Compiles a return_statement tree
+        """
+        line = tree.line()
+        self.set_next_line(line)
+        args = [self.values(tree.child(0))]
+        self.add_line('return', line, args=args, parent=parent)
+
     def if_block(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
