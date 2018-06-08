@@ -189,6 +189,23 @@ def test_compiler_function_arguments(patch, tree):
     assert result == [Compiler.typed_argument()]
 
 
+def test_compiler_expression(patch, tree):
+    patch.object(Compiler, 'values')
+    tree.child.return_value = None
+    result = Compiler.expression(tree)
+    Compiler.values.assert_called_with(tree.child())
+    assert result == [Compiler.values()]
+
+
+def test_compiler_expression_comparison(patch, tree):
+    patch.object(Compiler, 'values')
+    result = Compiler.expression(tree)
+    Compiler.values.assert_called_with(tree.child())
+    expression = '{} {} {}'.format('{}', tree.child().child(), '{}')
+    assert result == [{'$OBJECT': 'expression', 'expression': expression,
+                      'values': [Compiler.values(), Compiler.values()]}]
+
+
 def test_compiler_output(tree):
     tree.children = [Token('token', 'output')]
     result = Compiler.output(tree)

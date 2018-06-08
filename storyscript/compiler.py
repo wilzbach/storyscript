@@ -150,6 +150,20 @@ class Compiler:
             arguments.append(cls.typed_argument(argument))
         return arguments
 
+    @classmethod
+    def expression(cls, tree):
+        """
+        Compiles an if_statement to the corresponding expression
+        """
+        left_handside = cls.values(tree.child(1))
+        comparison = tree.child(2)
+        if comparison is None:
+            return [left_handside]
+        right_handside = cls.values(tree.child(3))
+        expression = '{} {} {}'.format('{}', comparison.child(0), '{}')
+        return [{'$OBJECT': 'expression', 'expression': expression,
+                'values': [left_handside, right_handside]}]
+
     @staticmethod
     def output(tree):
         output = []
