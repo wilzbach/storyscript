@@ -275,8 +275,8 @@ def test_grammar_if_statement(patch, grammar, ebnf):
     patch.object(Grammar, 'path_value')
     grammar.if_statement()
     assert Grammar.path_value.call_count == 1
-    ebnf.token.assert_called_with('if', 'if')
-    rule = 'IF _WS path_value (_WS comparisons _WS path_value)?'
+    ebnf.token.assert_called_with('if', 'if', inline=True)
+    rule = '_IF _WS path_value (_WS comparisons _WS path_value)?'
     ebnf.rule.assert_called_with('if_statement', rule, raw=True)
 
 

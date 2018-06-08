@@ -55,8 +55,8 @@ class Grammar:
 
     def if_statement(self):
         self.path_value()
-        self.ebnf.token('if', 'if')
-        rule = 'IF _WS path_value (_WS comparisons _WS path_value)?'
+        self.ebnf.token('if', 'if', inline=True)
+        rule = '_IF _WS path_value (_WS comparisons _WS path_value)?'
         self.ebnf.rule('if_statement', rule, raw=True)
 
     def if_block(self):
