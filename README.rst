@@ -10,17 +10,18 @@ microservices in an algorithmic way.
 
 What does that mean? That you can do things like this::
 
-    invoices = database get "invoices" "month={{today.month}}"
-    if today is first of month
+    today = date now
+    invoices = database get items:"invoices" where:"month={{today.month}}"
+    if today.day == 1
       send invoices
 
 Or this::
 
-    stream http server as request
-      query = parse-request request
-      data = db get query
-      html = erb '/assets/template.erb' data
-      request.write html
+    stream http-server as request
+      query = parse-request request:request
+      data = db get query:query
+      html = erb template:'/assets/template.erb' data:data
+      request.write input:html
 
 These stories are compiled into event trees and run by a platform that
 implements StoryScript execution. `Asyncy <https://github.com/Asyncy>`_ is the
