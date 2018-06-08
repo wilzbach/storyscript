@@ -33,7 +33,8 @@ class Grammar:
         self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
 
     def elseif_statement(self):
-        rule = 'ELSE _WS? IF _WS NAME [_WS comparisons _WS NAME]?'
+        rule = ('_ELSE _WS? _IF _WS path_value '
+                '(_WS comparisons _WS path_value)?')
         self.ebnf.rule('elseif_statement', rule, raw=True)
 
     def elseif_block(self):
@@ -43,18 +44,21 @@ class Grammar:
         self.ebnf.rule('elseif_block', definition)
 
     def else_statement(self):
-        self.ebnf.token('else', 'else')
+        self.ebnf.token('else', 'else', inline=True)
         self.ebnf.rule('else_statement', ['else'])
 
     def else_block(self):
         self.else_statement()
         self.ebnf.rule('else_block', ('else_statement', 'nl', 'nested_block'))
 
+    def path_value(self):
+        self.ebnf.rules('path_value', *(['path'], ['values']))
+
     def if_statement(self):
-        self.ebnf.token('if', 'if')
-        definitions = (('if', 'ws', 'name'),
-                       ('if', 'ws', 'name', 'ws', 'comparisons', 'ws', 'name'))
-        self.ebnf.rules('if_statement', *definitions)
+        self.path_value()
+        self.ebnf.token('if', 'if', inline=True)
+        rule = '_IF _WS path_value (_WS comparisons _WS path_value)?'
+        self.ebnf.rule('if_statement', rule, raw=True)
 
     def if_block(self):
         self.if_statement()

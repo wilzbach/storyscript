@@ -266,23 +266,29 @@ def test_grammar_comparisons(grammar, ebnf):
     ebnf.rules.assert_called_with('comparisons', *definitions)
 
 
-def test_grammar_if_statement(grammar, ebnf):
+def test_grammar_path_value(grammar, ebnf):
+    grammar.path_value()
+    ebnf.rules.assert_called_with('path_value', *(['path'], ['values']))
+
+
+def test_grammar_if_statement(patch, grammar, ebnf):
+    patch.object(Grammar, 'path_value')
     grammar.if_statement()
-    definitions = (('if', 'ws', 'name'),
-                   ('if', 'ws', 'name', 'ws', 'comparisons', 'ws', 'name'))
-    ebnf.rules.assert_called_with('if_statement', *definitions)
-    ebnf.token.assert_called_with('if', 'if')
+    assert Grammar.path_value.call_count == 1
+    ebnf.token.assert_called_with('if', 'if', inline=True)
+    rule = '_IF _WS path_value (_WS comparisons _WS path_value)?'
+    ebnf.rule.assert_called_with('if_statement', rule, raw=True)
 
 
 def test_grammar_else_statement(grammar, ebnf):
     grammar.else_statement()
-    ebnf.token.assert_called_with('else', 'else')
+    ebnf.token.assert_called_with('else', 'else', inline=True)
     ebnf.rule.assert_called_with('else_statement', ['else'])
 
 
 def test_grammar_elseif_statement(grammar, ebnf):
     grammar.elseif_statement()
-    rule = 'ELSE _WS? IF _WS NAME [_WS comparisons _WS NAME]?'
+    rule = '_ELSE _WS? _IF _WS path_value (_WS comparisons _WS path_value)?'
     ebnf.rule.assert_called_with('elseif_statement', rule, raw=True)
 
 

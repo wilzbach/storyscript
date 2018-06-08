@@ -150,6 +150,20 @@ class Compiler:
             arguments.append(cls.typed_argument(argument))
         return arguments
 
+    @classmethod
+    def expression(cls, tree):
+        """
+        Compiles an if_statement to the corresponding expression
+        """
+        left_handside = cls.values(tree.node('path_value').child(0))
+        comparison = tree.child(1)
+        if comparison is None:
+            return [left_handside]
+        right_handside = cls.values(tree.child(2).child(0))
+        expression = '{} {} {}'.format('{}', comparison.child(0), '{}')
+        return [{'$OBJECT': 'expression', 'expression': expression,
+                'values': [left_handside, right_handside]}]
+
     @staticmethod
     def output(tree):
         output = []
@@ -213,7 +227,7 @@ class Compiler:
         line = tree.line()
         self.set_next_line(line)
         nested_block = tree.node('nested_block')
-        args = [self.path(tree.node('if_statement'))]
+        args = self.expression(tree.node('if_statement'))
         self.add_line('if', line, args=args, enter=nested_block.line(),
                       parent=parent)
         self.subtree(nested_block, parent=line)
@@ -230,7 +244,7 @@ class Compiler:
         line = tree.line()
         self.set_next_line(line)
         self.set_exit_line(line)
-        args = [self.path(tree.node('elseif_statement'))]
+        args = self.expression(tree.node('elseif_statement'))
         nested_block = tree.node('nested_block')
         self.add_line('elif', line, args=args, enter=nested_block.line(),
                       parent=parent)

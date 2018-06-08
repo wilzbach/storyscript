@@ -189,6 +189,23 @@ def test_compiler_function_arguments(patch, tree):
     assert result == [Compiler.typed_argument()]
 
 
+def test_compiler_expression(patch, tree):
+    patch.object(Compiler, 'values')
+    tree.child.return_value = None
+    result = Compiler.expression(tree)
+    Compiler.values.assert_called_with(tree.node().child())
+    assert result == [Compiler.values()]
+
+
+def test_compiler_expression_comparison(patch, tree):
+    patch.object(Compiler, 'values')
+    result = Compiler.expression(tree)
+    Compiler.values.assert_called_with(tree.child().child())
+    expression = '{} {} {}'.format('{}', tree.child().child(), '{}')
+    assert result == [{'$OBJECT': 'expression', 'expression': expression,
+                      'values': [Compiler.values(), Compiler.values()]}]
+
+
 def test_compiler_output(tree):
     tree.children = [Token('token', 'output')]
     result = Compiler.output(tree)
@@ -285,14 +302,15 @@ def test_compiler_service_parent(patch, compiler, tree):
 
 
 def test_compiler_if_block(patch, compiler):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line'])
+    patch.many(Compiler, ['add_line', 'subtree', 'set_next_line',
+                          'expression'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', [])])
     compiler.if_block(tree)
     compiler.set_next_line.assert_called_with(tree.line())
-    compiler.path.assert_called_with(tree.node('if_statement'))
+    compiler.expression.assert_called_with(tree.node('if_statement'))
     nested_block = tree.node('nested_block')
-    args = [compiler.path()]
+    args = compiler.expression()
     compiler.add_line.assert_called_with('if', tree.line(), args=args,
                                          enter=nested_block.line(),
                                          parent=None)
@@ -300,20 +318,21 @@ def test_compiler_if_block(patch, compiler):
 
 
 def test_compiler_if_block_parent(patch, compiler):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line'])
+    patch.many(Compiler, ['add_line', 'subtree', 'set_next_line',
+                          'expression'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', [])])
     compiler.if_block(tree, parent='1')
     nested_block = tree.node('nested_block')
-    args = [compiler.path()]
+    args = compiler.expression()
     compiler.add_line.assert_called_with('if', tree.line(), args=args,
                                          enter=nested_block.line(),
                                          parent='1')
 
 
 def test_compiler_if_block_with_elseif(patch, compiler):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'subtrees',
-                          'set_next_line'])
+    patch.many(Compiler, ['add_line', 'subtree', 'subtrees', 'set_next_line',
+                          'expression'])
     tree = Tree('if_block', [Tree('nested_block', []),
                              Tree('elseif_block', [])])
     compiler.if_block(tree)
@@ -321,8 +340,8 @@ def test_compiler_if_block_with_elseif(patch, compiler):
 
 
 def test_compiler_if_block_with_else(patch, compiler):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'subtrees',
-                          'set_next_line'])
+    patch.many(Compiler, ['add_line', 'subtree', 'subtrees', 'set_next_line',
+                          'expression'])
     tree = Tree('if_block', [Tree('nested_block', []),
                              Tree('else_block', [])])
     compiler.if_block(tree)
@@ -330,13 +349,13 @@ def test_compiler_if_block_with_else(patch, compiler):
 
 
 def test_compiler_elseif_block(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line',
+    patch.many(Compiler, ['add_line', 'expression', 'subtree', 'set_next_line',
                           'set_exit_line'])
     compiler.elseif_block(tree)
     compiler.set_next_line.assert_called_with(tree.line())
     assert tree.node.call_count == 2
-    compiler.path.assert_called_with(tree.node())
-    args = [compiler.path()]
+    compiler.expression.assert_called_with(tree.node())
+    args = compiler.expression()
     compiler.set_exit_line.assert_called_with(tree.line())
     compiler.add_line.assert_called_with('elif', tree.line(), args=args,
                                          enter=tree.node().line(), parent=None)
@@ -344,9 +363,10 @@ def test_compiler_elseif_block(patch, compiler, tree):
 
 
 def test_compiler_elseif_block_parent(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line'])
+    patch.many(Compiler, ['add_line', 'expression', 'subtree',
+                          'set_next_line'])
     compiler.elseif_block(tree, parent='1')
-    args = [compiler.path()]
+    args = compiler.expression()
     compiler.add_line.assert_called_with('elif', tree.line(), args=args,
                                          enter=tree.node().line(), parent='1')
 
