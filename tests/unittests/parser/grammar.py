@@ -266,6 +266,11 @@ def test_grammar_comparisons(grammar, ebnf):
     ebnf.rules.assert_called_with('comparisons', *definitions)
 
 
+def test_grammar_path_value(grammar, ebnf):
+    grammar.path_value()
+    ebnf.rules.assert_called_with('path_value', *(['path'], ['values']))
+
+
 def test_grammar_if_statement(patch, grammar, ebnf):
     patch.object(Grammar, 'path_value')
     grammar.if_statement()

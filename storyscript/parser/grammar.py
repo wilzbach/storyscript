@@ -50,6 +50,9 @@ class Grammar:
         self.else_statement()
         self.ebnf.rule('else_block', ('else_statement', 'nl', 'nested_block'))
 
+    def path_value(self):
+        self.ebnf.rules('path_value', *(['path'], ['values']))
+
     def if_statement(self):
         self.path_value()
         self.ebnf.token('if', 'if')
