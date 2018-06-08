@@ -302,14 +302,15 @@ def test_compiler_service_parent(patch, compiler, tree):
 
 
 def test_compiler_if_block(patch, compiler):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line'])
+    patch.many(Compiler, ['add_line', 'subtree', 'set_next_line',
+                          'expression'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', [])])
     compiler.if_block(tree)
     compiler.set_next_line.assert_called_with(tree.line())
-    compiler.path.assert_called_with(tree.node('if_statement'))
+    compiler.expression.assert_called_with(tree.node('if_statement'))
     nested_block = tree.node('nested_block')
-    args = [compiler.path()]
+    args = compiler.expression()
     compiler.add_line.assert_called_with('if', tree.line(), args=args,
                                          enter=nested_block.line(),
                                          parent=None)
@@ -317,20 +318,21 @@ def test_compiler_if_block(patch, compiler):
 
 
 def test_compiler_if_block_parent(patch, compiler):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_next_line'])
+    patch.many(Compiler, ['add_line', 'subtree', 'set_next_line',
+                          'expression'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', [])])
     compiler.if_block(tree, parent='1')
     nested_block = tree.node('nested_block')
-    args = [compiler.path()]
+    args = compiler.expression()
     compiler.add_line.assert_called_with('if', tree.line(), args=args,
                                          enter=nested_block.line(),
                                          parent='1')
 
 
 def test_compiler_if_block_with_elseif(patch, compiler):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'subtrees',
-                          'set_next_line'])
+    patch.many(Compiler, ['add_line', 'subtree', 'subtrees', 'set_next_line',
+                          'expression'])
     tree = Tree('if_block', [Tree('nested_block', []),
                              Tree('elseif_block', [])])
     compiler.if_block(tree)
@@ -338,8 +340,8 @@ def test_compiler_if_block_with_elseif(patch, compiler):
 
 
 def test_compiler_if_block_with_else(patch, compiler):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'subtrees',
-                          'set_next_line'])
+    patch.many(Compiler, ['add_line', 'subtree', 'subtrees', 'set_next_line',
+                          'expression'])
     tree = Tree('if_block', [Tree('nested_block', []),
                              Tree('else_block', [])])
     compiler.if_block(tree)

@@ -227,7 +227,7 @@ class Compiler:
         line = tree.line()
         self.set_next_line(line)
         nested_block = tree.node('nested_block')
-        args = [self.path(tree.node('if_statement'))]
+        args = self.expression(tree.node('if_statement'))
         self.add_line('if', line, args=args, enter=nested_block.line(),
                       parent=parent)
         self.subtree(nested_block, parent=line)
