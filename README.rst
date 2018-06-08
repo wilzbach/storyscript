@@ -1,6 +1,6 @@
 .. image:: https://s3.amazonaws.com/asnycy/storyscript.png
 
-|Travis| |Codecov| |Pypi| |Bettercode| |Docs|
+|Travis| |Codecov| |Pypi| |Bettercode| |Docs| |Devdocs|
 
 StoryScript
 ###########
@@ -58,6 +58,12 @@ Compile a story to JSON::
 
     storyscript parse -j hello.story
 
+Development documentation
+-------------------------
+`Development docs <https://storyscript.readthedocs.io>`_ are provided for those
+who wish to contribute to the project or want to understand how to execute
+compiled stories.
+
 Contributing
 ------------
 If you want to contribute to Storyscript, you can join the community at
@@ -81,7 +87,6 @@ Issues
 For problems directly related to the CLI, `add an issue on GitHub <https://github.com/asyncy/storyscript/issues/new>`_.
 For other issues, `submit a support ticket <mailto:help@storyscripts.org>`_
 
-
 .. |Travis| image:: https://secure.travis-ci.org/asyncy/storyscript.svg?branch=master
    :target: http://travis-ci.org/asyncy/storyscript
 
@@ -92,7 +97,10 @@ For other issues, `submit a support ticket <mailto:help@storyscripts.org>`_
    :target: https://bettercodehub.com/results/asyncy/storyscript
 
 .. |Pypi| image:: https://img.shields.io/pypi/v/storyscript.svg
-   :target: https://pypi.python.org/pypi/storyscriptd
+   :target: https://pypi.python.org/pypi/storyscript
 
 .. |Docs| image:: https://img.shields.io/badge/docs-online-brightgreen.svg
-  :target: https://docs.asyncy.com/storyscript
+   :target: https://docs.asyncy.com/storyscript
+
+.. |Devdocs| image:: https://img.shields.io/badge/devdocs-online-brightgreen.svg
+   :target: https://storyscript.readthedocs.io
