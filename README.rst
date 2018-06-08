@@ -50,20 +50,20 @@ StoryScript is at an early development stage and  is part of a larger project,
 
 Contributing
 ------------
+If you want to contribute to Storyscript, you can join the community at
+`our slack <https://join.slack.com/t/asyncy/shared_invite/enQtMjgxODI2NzEyMjc5LWJiZDg1YzFkYzVhZmVlYTk2MGRmYjcxNzYwMmU4NWYwYTZkZDhlMzkwNTIxOGQ1ZjVjZGJhZDgxNzhmMjZkODA>`_,
+where we discuss features and future plans.
 
-There are a variety of ways you can contribute to StoryScript.
+You can find open issues on `github <https://github.com/asyncy/storyscript/issues>`_,
+along with `contribution guidelines <https://github.com/asyncy/storyscript/blob/master/CONTRIBUTING.md>`_
+for happy coding
+There are `simple issues <https://github.com/asyncy/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22>`_
+for new contributors and `issues that need help <https://github.com/asyncy/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22>`_
 
-1. Review our `issues <https://github.com/asyncy/storyscript/issues>`_  and
-check the labels for
+Contributors
+============
 
-* `good first issue <https://github.com/asyncy/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22>`_ a nice issue to get your feet wet.
-* `help wanted <https://github.com/asyncy/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22>`_ are issues that we are looking for feedback on.
-
-2. Join our `Slack community <https://join.slack.com/t/asyncy/shared_invite/enQtMjgxODI2NzEyMjc5LWJiZDg1YzFkYzVhZmVlYTk2MGRmYjcxNzYwMmU4NWYwYTZkZDhlMzkwNTIxOGQ1ZjVjZGJhZDgxNzhmMjZkODA>`_ to discuss plans and ideas.
-
-Please follow our `contribution guidelines <https://github.com/asyncy/storyscript/blob/master/CONTRIBUTING.md>`_
-
-`Contributors <https://github.com/asyncy/storyscript/contributors>`_ list
+The list of contributors is available `here <https://github.com/asyncy/storyscript/contributors>`_
 
 Issues
 ---------
