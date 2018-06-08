@@ -143,8 +143,8 @@ def test_parser_comment(parser, comment):
 def test_parser_if_block(parser, name_token):
     result = parser.parse('if expr\n\tvar=3\n')
     node = result.node('block.if_block')
-    assert node.node('if_statement').child(0) == Token('IF', 'if')
-    assert node.node('if_statement.path').child(0) == Token('NAME', 'expr')
+    path = node.node('if_statement.path_value.path')
+    assert path.child(0) == Token('NAME', 'expr')
     path = node.node('nested_block.block.line.assignment.path')
     assert path.child(0) == name_token
 
@@ -152,8 +152,8 @@ def test_parser_if_block(parser, name_token):
 def test_parser_if_block_nested(parser, name_token):
     result = parser.parse('if expr\n\tif things\n\t\tvar=3\n')
     node = result.node('block.if_block.nested_block.block.if_block')
-    assert node.node('if_statement').child(0) == Token('IF', 'if')
-    assert node.node('if_statement.path').child(0) == Token('NAME', 'things')
+    path = node.node('if_statement.path_value.path')
+    assert path.child(0) == Token('NAME', 'things')
     path = node.node('nested_block.block.line.assignment.path')
     assert path.child(0) == name_token
 
@@ -161,7 +161,6 @@ def test_parser_if_block_nested(parser, name_token):
 def test_parser_if_block_else(parser):
     result = parser.parse('if expr\n\tvar=3\nelse\n\tvar=4\n')
     node = result.node('block.if_block')
-    assert node.child(2).child(0).child(0) == Token('ELSE', 'else')
     path = node.child(2).child(1).node('block.line.assignment.path')
     assert path.child(0) == Token('NAME', 'var')
 
@@ -169,8 +168,6 @@ def test_parser_if_block_else(parser):
 def test_parser_if_block_elseif(parser):
     result = parser.parse('if expr\n\tvar=3\nelse if magic\n\tvar=4\n')
     node = result.node('block.if_block')
-    assert node.child(2).child(0).child(0) == Token('ELSE', 'else')
-    assert node.child(2).child(0).child(1) == Token('IF', 'if')
     path = node.child(2).child(1).node('block.line.assignment.path')
     assert path.child(0) == Token('NAME', 'var')
 
