@@ -3,6 +3,7 @@ import re
 
 from lark.lexer import Token
 
+from .exceptions import StoryscriptSyntaxError
 from .parser import Tree
 from .version import version
 
@@ -227,6 +228,8 @@ class Compiler:
         """
         Compiles a return_statement tree
         """
+        if parent is None:
+            raise StoryscriptSyntaxError(4, tree)
         line = tree.line()
         self.set_next_line(line)
         args = [self.values(tree.child(0))]

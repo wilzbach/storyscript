@@ -3,9 +3,10 @@ import re
 
 from lark.lexer import Token
 
-from pytest import fixture, mark
+from pytest import fixture, mark, raises
 
 from storyscript.compiler import Compiler
+from storyscript.exceptions import StoryscriptSyntaxError
 from storyscript.parser import Tree
 from storyscript.version import version
 
@@ -301,20 +302,17 @@ def test_compiler_service_parent(patch, compiler, tree):
                                          output=Compiler.output(), parent='1')
 
 
-def test_compiler_return_statement(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'set_next_line', 'values'])
-    compiler.return_statement(tree)
-    line = tree.line()
-    compiler.set_next_line(line)
-    compiler.values.assert_called_with(tree.child())
-    compiler.add_line.assert_called_with('return', line, parent=None,
-                                         args=[compiler.values()])
+def test_compiler_return_statement(compiler, tree):
+    with raises(StoryscriptSyntaxError):
+        compiler.return_statement(tree)
 
 
 def test_compiler_return_statement_parent(patch, compiler, tree):
     patch.many(Compiler, ['add_line', 'set_next_line', 'values'])
     compiler.return_statement(tree, parent='1')
     line = tree.line()
+    compiler.set_next_line(line)
+    compiler.values.assert_called_with(tree.child())
     compiler.add_line.assert_called_with('return', line,
                                          args=[compiler.values()], parent='1')
 
