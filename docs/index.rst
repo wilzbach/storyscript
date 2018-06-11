@@ -86,6 +86,7 @@ to discuss plans and ideas.
    :hidden:
 
    getting-started
+   command-line
    stories
    syntax
    cookbook
