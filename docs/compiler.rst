@@ -68,3 +68,127 @@ Parent
 The parent property identifies nested lines. It can be used to identify all the
 lines inside a block. Care must be taken for further nested blocks.
 
+
+Objects
+-------
+Objects are seen in the *args* of a line. They can be variable names,
+function arguments, string or numeric values::
+
+    {
+        "args": [
+            {
+                "$OBJECT": "objectype",
+                "objectype": "value"
+            }
+        ]
+    }
+
+String
+######
+String object have a string property. If they are string templates, they will
+also have a values list, indicating the variables to use when compiling the string::
+
+    {
+      "$OBJECT": "string",
+      "string": "hello, {}",
+      "values": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "name"
+          ]
+        }
+      ]
+    }
+
+List
+####
+Declares a list. Items will be a list of other objects::
+
+    {
+      "$OBJECT": "list",
+      "items": [...]
+    }
+
+Dict
+####
+Declares an object::
+
+    {
+      "$OBJECT": "dict",
+      "items": [
+        [
+          {
+            "$OBJECT": "string",
+            "string": "key"
+          },
+          {
+            "$OBJECT": "string",
+            "string": "value"
+          }
+        ]
+      ]
+    }
+
+Type
+####
+Type objects declare the use of a type::
+
+    {
+      "$OBJECT": "type",
+      "type": "int"
+    }
+
+Path
+####
+
+::
+
+    {
+        "args": [
+            {
+                "$OBJECT": "path",
+                "paths": [
+                    "varname"
+                ]
+            }
+        ]
+    }
+
+Expression
+##########
+Expression have an expression property indicating the type of expression and
+the two hand-sides of the expression in the values list. These will be two
+other objects: paths or values::
+
+    {
+      "$OBJECT": "expression",
+      "expression": "{} == {}",
+      "values": [
+          {
+            "$OBJECT": "path",
+            "paths": [
+              "foo"
+            ]
+          },
+          1
+      ]
+    }
+
+
+
+Argument
+########
+Argument objects are used in function definition, function calls and services
+to declare arguments:
+::
+
+    {
+      "$OBJECT": "argument",
+      "name": "id",
+      "argument": {
+        "$OBJECT": "type",
+        "type": "int"
+      }
+    }
+
