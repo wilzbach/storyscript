@@ -51,6 +51,17 @@ def test_cli_parse(patch, runner, echo, app):
     click.echo.assert_called_with(click.style())
 
 
+def test_cli_parse_output_file(runner, app, tmpdir):
+    """
+    Ensures the parse command outputs to an output file when
+    available. If no file were to be available (e.g. no file was
+    written), this test would throw an error
+    """
+    tmp_file = tmpdir.join('output_file')
+    runner.invoke(Cli.parse, ['/path', str(tmp_file)])
+    tmp_file.read()  # would expect exception if no file written
+
+
 @mark.parametrize('option', ['--silent', '-s'])
 def test_cli_parse_silent(runner, echo, app, option):
     """
