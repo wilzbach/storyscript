@@ -1,43 +1,38 @@
 Getting Started
 ===============
 
-Installing
-----------
-Storyscript is a Python package. The suggested installation is in a virtual
-environment::
+Installing from Github
+----------------------
+1. Fork the main repository from https://github.com/asyncy/storyscript
 
-    virtualenv --python=python3 path/to/my/stories
+1. Storyscript is a Python project. The suggested installation is inside a virtual environment::
 
-Move to path/to/my/stories, activate the environment, create a folder to place
-stories::
+    virtualenv --python=python3.6 storyscript
 
-    cd path/to/my/stories
+1. Change directory and activate the virtual environment::
+
+    cd storyscript
     source bin/activate
-    mkdir stories
 
+1. Clone your fork::
 
-Install from pip::
+    git clone git@github.com/asyncy/storyscript.git
 
-    pip install storyscript
+1. Cd in storyscript, and install it::
 
-Check the installation::
+    python setup.py install
+
+1. Check the installation::
 
     storyscript --version
 
+1. You have succesfully installed Storyscript! You might need to install development dependencies as well::
 
-Writing a simple story
------------------------
-Let's write a simple story::
+    pip install tox pytest pytest-mock
 
-    if colour equals "blue"
-      alpine echo "hello world"
+1. Check you can run the tests::
 
-And parse it::
+    pytest
+    tox
 
-    storyscript parse simple.story
-    >>> Script syntax passed!
-
-And to view the event tree::
-
-    storyscript parse simple.story --json
-    >>> {...}
+You are now ready to start contributing to Storyscript!
