@@ -44,7 +44,7 @@ class Cli:
             else:
                 click.echo(click.style('Script syntax passed!', fg='green'))
         if output_file_path:
-            output_file = open(output_file_path, "w")
+            output_file = open(output_file_path, 'w')
             output_file.write(results)
             output_file.close()
 
