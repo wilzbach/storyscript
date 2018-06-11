@@ -51,8 +51,5 @@ its tree.
 
    getting-started
    command-line
-   stories
    syntax
-   cookbook
-   advanced
    compiler
