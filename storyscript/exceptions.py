@@ -7,9 +7,9 @@ class StoryscriptSyntaxError(SyntaxError):
     Handles syntax errors and provides useful output about them.
     """
 
-    def __init__(self, error_type, token):
+    def __init__(self, error_type, item):
         self.error_type = error_type
-        self.token = token
+        self.item = item
 
     def reason(self):
         reasons = [
@@ -23,6 +23,8 @@ class StoryscriptSyntaxError(SyntaxError):
         return reasons[self.error_type]
 
     def __str__(self):
-        message = '"{}" not allowed at line {}, column {}.\n\n{}'
-        return message.format(self.token, self.token.line, self.token.column,
+        if hasattr(self.item, 'data'):
+            return '{} at line {}'.format(self.reason(), self.item.line())
+        message = '"{}" not allowed at line {}, column {}.\n\n> {}'
+        return message.format(self.item, self.item.line, self.item.column,
                               self.reason())
