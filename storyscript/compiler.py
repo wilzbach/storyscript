@@ -3,6 +3,7 @@ import re
 
 from lark.lexer import Token
 
+from .exceptions import StoryscriptSyntaxError
 from .parser import Tree
 from .version import version
 
@@ -223,6 +224,17 @@ class Compiler:
                       args=arguments, parent=parent, output=output)
         self.services.append(service)
 
+    def return_statement(self, tree, parent=None):
+        """
+        Compiles a return_statement tree
+        """
+        if parent is None:
+            raise StoryscriptSyntaxError(4, tree)
+        line = tree.line()
+        self.set_next_line(line)
+        args = [self.values(tree.child(0))]
+        self.add_line('return', line, args=args, parent=parent)
+
     def if_block(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
@@ -293,7 +305,8 @@ class Compiler:
         or keep parsing for deeper trees.
         """
         allowed_nodes = ['service', 'assignment', 'if_block', 'elseif_block',
-                         'else_block', 'foreach_block', 'function_block']
+                         'else_block', 'foreach_block', 'function_block',
+                         'return_statement']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent=parent)
             return
