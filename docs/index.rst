@@ -55,3 +55,4 @@ its tree.
    syntax
    cookbook
    advanced
+   compiler
