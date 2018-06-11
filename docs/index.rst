@@ -1,85 +1,49 @@
-Storyscript
-=======================================
+Storyscript development docs
+============================
+Welcome to Storyscript's development documentation. These docs are intended
+for those who want to contribute to Storyscript itself or those working on an
+execution engine for the language.
 
-Storyscript is an high-level language that can be used to orchestrate
-microservices in an algorithmic way.
+Overview
+--------
+Storyscript is a domain-specific language that uses **EBNF** for the grammar
+definition and a **LALR** parser. The abstract tree is then compiled to JSON, which
+will be used by an execution engine to perform the operations described in the
+original story.
 
-In other words, you can write simple texts, "stories", that will be turned into
-applications of all kinds. Let's see an example::
+Unlike other languages, compiling and execution in Storyscript are separated.
+The services are defined only at run-time at the engine's discretion. In a way,
+you could say that what Storyscript really does is to convert a story in a
+machine-friendly format.
 
-    invoices = database get "invoices" "month={{today.month}}"
-    if today is first of month
-      send invoices
+For example, the Asyncy engine uses services as docker containers, so when a
+service is encountered "docker run service-name" is executed by the engine.
 
-*See how it only took us three lines to add automatic invoicing to an
-application.*
+EBNF
+----
+EBNF stands for "Extended Backus-Naur form", and is a language that can define
+the syntax for other languages. It looks like this::
 
-That was just an example of how you can automate tasks, Storyscript however
-has the power to orchestrate entire architectures.
+    boolean: TRUE | FALSE
+    number: INT | FLOAT
 
-If you wish to learn more, this documentation will guide you through the
-concepts behind Storyscript, its syntax and some examples.
+    TRUE: "true"
+    FALSE: "false"
+    INT.2: "0".."9"+
+    FLOAT.2: INT "." INT? | "." INT
 
-Concepts
-##########
-Storyscript began with feedback from business owners who were looking for
-high-level marketing automation. After receiving many creative stories there
-was a common thread that became abundantly clear: logic operations
-(if/then, for each, and while) and microservices (email, SMS, and social media
-posts).
+If you are curious, you can have at look at Storyscript's full EBNF definition
+with the grammar command::
 
-How can you write an executable algorithm that a nontechnical person can understand?
--------------------------------------------------------------------------------------
+    storyscript grammar
 
-Storyscript emerged as the answer. It gives its users the power to deal with
-microservices at high-level, without requiring in-depth software engineering
-know-how.
-
-Why a new language?
--------------------
-
-Code is portable, shareable, version controlled, non-vendor specific,
-transparent and predictable.
-
-Stories have asynchronous operations that traditional languages are not
-equipped to execute, as they focus on executing functions and not high-level
-event orchestration.
+LALR
+----
+LALR stands for "Look-Ahead LR" parser and is what actually parses a story into
+its tree.
 
 
-Executing Storyscript
-----------------------
 
-Storyscript files are compiled into event logic trees which can then be run
-by a platform. This concept allows to arrange microservices in a readable,
-transparent and scalable way.
-
-**Asyncy** is the official platform for running Storyscript. Both projects are
-open source, so they can be used without fears of technological locks.
-The Asyncy platform can be ran in your local environment for debugging and testing.
-
-Where's the catch?
--------------------
-In 2018, we already have the infrastructure and technologies to make
-Storyscript possible.
-
-Infact, apart from the language itself, Storyscript is nothing new. You can
-imagine it as building a new wheel, with the same old components but arranged
-in a different way.
-
-While this might seem simplistic, is not rare for ground-breaking technologies
-to be just a smarter rearrangement of existing components.
-
-Contributing
-------------
-There are a variety of ways you can contribute to Storyscript.
-
-Review our `issues <https://github.com/asyncy/storyscript/issues>`_ and check the labels for
-
-* `good first issue <https://github.com/asyncy/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22>`_ a nice issue to get your feet wet.
-* `help wanted <https://github.com/asyncy/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22>`_ are issues that we are looking for feedback on.
-
-Join our `Slack community <https://join.slack.com/t/asyncy/shared_invite/enQtMjgxODI2NzEyMjc5LWJiZDg1YzFkYzVhZmVlYTk2MGRmYjcxNzYwMmU4NWYwYTZkZDhlMzkwNTIxOGQ1ZjVjZGJhZDgxNzhmMjZkODA>`_
-to discuss plans and ideas.
 
 .. toctree::
    :maxdepth: 2
