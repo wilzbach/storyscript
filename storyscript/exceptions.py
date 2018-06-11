@@ -4,7 +4,8 @@
 class StoryscriptSyntaxError(SyntaxError):
 
     """
-    Handles syntax errors and provides useful output about them.
+    Handles syntax errors and provides useful output about them. It supports
+    both trees and tokens as error items.
     """
 
     def __init__(self, error_type, item):
@@ -12,6 +13,9 @@ class StoryscriptSyntaxError(SyntaxError):
         self.item = item
 
     def reason(self):
+        """
+        Provides a reason for error.
+        """
         reasons = [
             'unknown',
             ('Service names can only contain alphanumeric characters, '
@@ -23,6 +27,10 @@ class StoryscriptSyntaxError(SyntaxError):
         return reasons[self.error_type]
 
     def __str__(self):
+        """
+        Print a message for the item, checking whether it's a tree or a token,
+        using the reason that matches the error type.
+        """
         if hasattr(self.item, 'data'):
             return '{} at line {}'.format(self.reason(), self.item.line())
         message = '"{}" not allowed at line {}, column {}.\n\n> {}'
