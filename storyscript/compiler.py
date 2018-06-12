@@ -177,9 +177,9 @@ class Compiler:
     def function_output(cls, tree):
         return cls.output(tree.node('function_output.types'))
 
-    def add_line(self, method, line, args=None, service=None, command=None,
-                 function=None, output=None, enter=None, exit=None,
-                 parent=None):
+    def make_line(self, method, line, args=None, service=None, command=None,
+                  function=None, output=None, enter=None, exit=None,
+                  parent=None):
         """
         Creates the base dictionary for a given line.
         """
