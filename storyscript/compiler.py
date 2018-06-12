@@ -204,8 +204,10 @@ class Compiler:
         self.make_line(method, line, **kwargs)
 
     def assignment(self, tree, parent=None):
+        """
+        Compiles an assignment tree
+        """
         line = tree.line()
-        self.set_next_line(line)
         args = [
             self.path(tree.node('path')),
             self.values(tree.node('assignment_fragment.values'))
@@ -217,7 +219,6 @@ class Compiler:
         Translates a command tree to the corresponding line
         """
         line = tree.line()
-        self.set_next_line(line)
         command = tree.node('service_fragment.command')
         if command:
             command = command.child(0)
@@ -235,13 +236,11 @@ class Compiler:
         if parent is None:
             raise StoryscriptSyntaxError(4, tree)
         line = tree.line()
-        self.set_next_line(line)
         args = [self.values(tree.child(0))]
         self.add_line('return', line, args=args, parent=parent)
 
     def if_block(self, tree, parent=None):
         line = tree.line()
-        self.set_next_line(line)
         nested_block = tree.node('nested_block')
         args = self.expression(tree.node('if_statement'))
         self.add_line('if', line, args=args, enter=nested_block.line(),
@@ -258,7 +257,6 @@ class Compiler:
         Compiles elseif_block trees
         """
         line = tree.line()
-        self.set_next_line(line)
         self.set_exit_line(line)
         args = self.expression(tree.node('elseif_statement'))
         nested_block = tree.node('nested_block')
@@ -268,7 +266,6 @@ class Compiler:
 
     def else_block(self, tree, parent=None):
         line = tree.line()
-        self.set_next_line(line)
         self.set_exit_line(line)
         nested_block = tree.node('nested_block')
         self.add_line('else', line, enter=nested_block.line(), parent=parent)
@@ -276,7 +273,6 @@ class Compiler:
 
     def foreach_block(self, tree, parent=None):
         line = tree.line()
-        self.set_next_line(line)
         args = [self.path(tree.node('foreach_statement'))]
         output = self.output(tree.node('foreach_statement.output'))
         nested_block = tree.node('nested_block')
@@ -286,7 +282,6 @@ class Compiler:
 
     def function_block(self, tree, parent=None):
         line = tree.line()
-        self.set_next_line(line)
         function = tree.node('function_statement')
         args = self.function_arguments(function)
         output = self.function_output(function)
