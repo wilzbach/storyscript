@@ -91,15 +91,31 @@ def test_compiler_add_line(patch, compiler):
 
 
 def test_compiler_add_line_function(patch, compiler):
+    """
+    Ensures that a line is registered properly.
+    """
     patch.many(Compiler, ['make_line', 'set_next_line'])
     compiler.add_line('function', 'line', function='function')
     assert compiler.functions['function'] == 'line'
 
 
 def test_compiler_add_line_service(patch, compiler):
+    """
+    Ensures that a service is registered properly.
+    """
     patch.many(Compiler, ['make_line', 'set_next_line'])
     compiler.add_line('execute', 'line', service='service')
     assert compiler.services[0] == 'service'
+
+
+def test_compiler_add_line_function_call(patch, compiler):
+    """
+    Ensures that a function call is registered properly.
+    """
+    patch.many(Compiler, ['make_line', 'set_next_line'])
+    compiler.functions['function'] = 1
+    compiler.add_line('execute', 'line', service='function')
+    compiler.make_line.assert_called_with('call', 'line', service='function')
 
 
 def test_compiler_assignment(patch, compiler, tree):

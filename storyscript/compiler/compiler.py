@@ -74,6 +74,10 @@ class Compiler:
         self.lines = {**self.lines, **dictionary}
 
     def add_line(self, method, line, **kwargs):
+        if 'service' in kwargs:
+            if kwargs['service'] in self.functions:
+                method = 'call'
+
         if method == 'function':
             self.functions[kwargs['function']] = line
         elif method == 'execute':
