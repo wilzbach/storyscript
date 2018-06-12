@@ -96,6 +96,12 @@ def test_compiler_add_line_function(patch, compiler):
     assert compiler.functions['function'] == 'line'
 
 
+def test_compiler_add_line_service(patch, compiler):
+    patch.many(Compiler, ['make_line', 'set_next_line'])
+    compiler.add_line('execute', 'line', service='service')
+    assert compiler.services[0] == 'service'
+
+
 def test_compiler_assignment(patch, compiler, tree):
     patch.many(Objects, ['path', 'values'])
     patch.object(Compiler, 'add_line')
@@ -133,7 +139,6 @@ def test_compiler_service(patch, compiler, tree):
                                          command=tree.node(), parent=None,
                                          args=Objects.arguments(),
                                          output=Compiler.output())
-    assert compiler.services == [tree.child().child().value]
 
 
 def test_compiler_service_command(patch, compiler, tree):

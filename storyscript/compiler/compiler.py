@@ -76,6 +76,8 @@ class Compiler:
     def add_line(self, method, line, **kwargs):
         if method == 'function':
             self.functions[kwargs['function']] = line
+        elif method == 'execute':
+            self.services.append(kwargs['service'])
         self.set_next_line(line)
         self.make_line(method, line, **kwargs)
 
@@ -103,7 +105,6 @@ class Compiler:
         output = self.output(tree.node('service_fragment.output'))
         self.add_line('execute', line, service=service, command=command,
                       args=arguments, parent=parent, output=output)
-        self.services.append(service)
 
     def return_statement(self, tree, parent=None):
         """
