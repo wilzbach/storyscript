@@ -3,9 +3,9 @@ import re
 
 from lark.lexer import Token
 
-from .exceptions import StoryscriptSyntaxError
-from .parser import Tree
-from .version import version
+from ..exceptions import StoryscriptSyntaxError
+from ..parser import Tree
+from ..version import version
 
 
 class Compiler:
