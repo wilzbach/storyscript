@@ -90,6 +90,12 @@ def test_compiler_add_line(patch, compiler):
     compiler.make_line.assert_called_with('method', 'line', extras='whatever')
 
 
+def test_compiler_add_line_function(patch, compiler):
+    patch.many(Compiler, ['make_line', 'set_next_line'])
+    compiler.add_line('function', 'line', function='function')
+    assert compiler.functions['function'] == 'line'
+
+
 def test_compiler_assignment(patch, compiler, tree):
     patch.many(Objects, ['path', 'values'])
     patch.object(Compiler, 'add_line')

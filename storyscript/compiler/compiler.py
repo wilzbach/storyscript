@@ -74,6 +74,8 @@ class Compiler:
         self.lines = {**self.lines, **dictionary}
 
     def add_line(self, method, line, **kwargs):
+        if method == 'function':
+            self.functions[kwargs['function']] = line
         self.set_next_line(line)
         self.make_line(method, line, **kwargs)
 
