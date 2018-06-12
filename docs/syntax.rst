@@ -1,124 +1,113 @@
 Syntax
 =======
-Storyscript supports strings, numbers, variables, arrays, objects and flow control.
-
-
-Numbers
-########
-Numbers do not have a particular syntax::
-
-    faces is 2
-    seconds is 15.215
-
+Reference for the current syntax
 
 Strings
-#######
-String can be defined with single or double quotes::
+-------
+::
 
-    color is "blue"
-    food is 'pizza'
+    color = 'blue'
+    color = "blue"
 
-
-They can be multiline::
-
-    food is "
-      pizza
-      and love
-    "
-
-Placeholders use double curly braces::
-
-    sentence is "Cast {{spell}}"
-
-
-Variables
-##########
-Variables can be set in three ways::
-
-    foo is 'foo'
-    foo are 'foo'
-    set foo to 'foo'
-    foo = 'foo'
-
-Arrays
-#######
-Arrays are defined with comma-separated values::
-
-    colors is ["red", "green", "blue"]
-
-Objects
-#######
-`Under development`. Objects are defined through JSON::
-
-    children = {"John": 15, "Eric": 12}
-
-CoffeeScript-like whitespace is also supported::
-
-    children =
-      "John": 15
-      "Eric": 12
-
-
-Flow control
-#############
-if, else if, and else are supported::
-
-    if morning
-      wakeUp
-    else if afternoon
-      doChores
-    else
-      partyHard
-
-Unless is also supported::
-
-    unless evening
-      doChores
-
-While loops::
-
-    while night
-      partyHard
-
-Comparison
+Templating
 ##########
 ::
 
-    if color is "red" or color is "blue"
-      paint
+    where = "Amsterdam"
+    message = "Hello, {{where}}!"
 
-Parentheses and simple algebra are supported.
+Numbers
+-------
+::
 
-
-Commands
-########
-Commands are written at the beginning of the line, followed by the action::
-
-    command action
-
-Some commands may have complex actions::
-
-    command action "arg1" "arg2"
-
-Delaying
-########
-It's possible to delay the execution of a block to a later moment::
-
-    delay = "15 minutes"
-    wait delay
-        # do things
-
+    n = 1
+    pie = 3.14
 
 Comments
-#########
-Inline comments are denoted by a single `#`::
+--------
+::
 
-    # I am a comment
+    # inline
 
-Multiline comments use blocks of #::
+Boolean
+-------
+::
 
-    ###
-    I take a
-    lot
-    of space
-    ###
+    happy = true
+    sad = false
+
+Lists
+-----
+::
+
+    colours = ["blue", 'red', 0]
+
+Objects
+-------
+::
+
+    things = {'foo':'bar','apples':'oranges'}
+
+Conditions
+----------
+::
+
+    if foo
+        bar = foo
+    else if foo > bar
+        bar = foo
+    else
+        bar = foo
+
+Comparisons
+###########
+::
+
+    if foo == bar
+    if foo != bar
+    if foo > bar
+    if foo >= bar
+    if foo < bar
+    if foo <= bar
+
+
+Iterating
+---------
+::
+
+    foreach items as item
+        # ..
+
+
+Or::
+
+    foreach items as key, value
+        # ...
+
+
+Functions
+---------
+::
+
+    function sum a:int b:int -> x:int
+        x = a + b
+        return x
+
+The output is optional::
+
+    function sum a:int b:int
+        # ...
+
+Calling a function::
+
+    sum a:1 b:2
+
+Services
+--------
+::
+
+    service command key:value foo:bar
+
+Output::
+
+    service command key:value as result
