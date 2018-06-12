@@ -13,6 +13,7 @@ class Compiler:
     def __init__(self):
         self.lines = {}
         self.services = []
+        self.functions = {}
 
     def sorted_lines(self):
         return sorted(self.lines.keys(), key=lambda x: int(x))
@@ -154,6 +155,9 @@ class Compiler:
         self.subtree(nested_block, parent=line)
 
     def function_block(self, tree, parent=None):
+        """
+        Compiles a function and its nested block of code.
+        """
         line = tree.line()
         function = tree.node('function_statement')
         args = Objects.function_arguments(function)

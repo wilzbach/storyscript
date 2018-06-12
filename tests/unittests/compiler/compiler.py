@@ -17,6 +17,7 @@ def compiler():
 def test_compiler_init(compiler):
     assert compiler.lines == {}
     assert compiler.services == []
+    assert compiler.functions == {}
 
 
 def test_compiler_sorted_lines(compiler):
