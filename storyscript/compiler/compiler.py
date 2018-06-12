@@ -212,4 +212,4 @@ class Compiler:
         compiler = cls.compiler()
         compiler.parse_tree(tree)
         return {'tree': compiler.lines, 'services': compiler.services,
-                'version': version}
+                'functions': compiler.functions, 'version': version}
