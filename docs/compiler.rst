@@ -20,7 +20,10 @@ the list of services used by each story::
         "services": [
             "alpine",
             "twitter"
-        ]
+        ],
+        "functions": {
+            "name": "line"
+        }
     }
 
 The compiled tree
@@ -398,4 +401,34 @@ always have a parent::
       "enter": null,
       "exit": null,
       "parent": "1"
+    }
+
+
+Call
+####
+Declares a function call, but otherwise identical to the execute method::
+
+
+    {
+      "method": "call",
+      "ln": "4",
+      "output": [],
+      "service": "sum",
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "a",
+          "argument": 1
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "b",
+          "argument": 2
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null
     }
