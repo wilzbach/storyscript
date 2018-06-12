@@ -192,3 +192,210 @@ to declare arguments:
       }
     }
 
+Methods
+-------
+
+Set
+###
+Used when declaring a variable, or assigning a value to a property::
+
+    {
+        "1": {
+          "method": "set",
+          "ln": "1",
+          "args": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "n"
+              ]
+            },
+            1
+          ],
+          "next": "next line"
+        }
+    }
+
+If
+##
+Args can be a path, an expression object or a pure value. When part of block of
+conditionals, the exit property will refer to the next *else if* or *else*::
+
+    {
+      "method": "if",
+      "ln": "1",
+      "output": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "color"
+          ]
+        }
+      ],
+      "enter": "2",
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    }
+
+Elif
+####
+Similar to if::
+
+    {
+      "method": "elif",
+      "ln": "3",
+      "output": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "blue"
+          ]
+        }
+      ],
+      "enter": "4",
+      "exit": null,
+      "parent": null,
+      "next": "4"
+    }
+
+Else
+####
+Similar to if and elif, but exit is always null and no args are available::
+
+    {
+      "method": "else",
+      "ln": "5",
+      "output": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [],
+      "enter": "6",
+      "exit": null,
+      "parent": null,
+      "next": "6"
+    }
+
+For
+###
+Declares a for iteration::
+
+    {
+      "method": "for",
+      "ln": "1",
+      "output": [
+        "item"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "items"
+          ]
+        }
+      ],
+      "enter": "2",
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    }
+
+Execute
+#######
+Used for services. Service arguments will be in *args*::
+
+    {
+      "method": "execute",
+      "ln": "1",
+      "output": [],
+      "service": "alpine",
+      "command": "echo",
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "message",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "text"
+          }
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null
+    }
+
+Function
+########
+Declares a function. Output maybe null::
+
+    {
+      "method": "function",
+      "ln": "1",
+      "output": [
+        "int"
+      ],
+      "service": null,
+      "command": null,
+      "function": "sum",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "a",
+          "argument": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "b",
+          "argument": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    }
+
+Return
+######
+Declares a return statement. Can be used only inside a function, thus will
+always have a parent::
+
+    {
+      "method": "return",
+      "ln": "2",
+      "output": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "x"
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "1"
+    }
