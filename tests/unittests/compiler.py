@@ -240,6 +240,13 @@ def test_compiler_make_line_keywords(compiler, keywords):
     assert compiler.lines['1'][keywords] == keywords
 
 
+def test_compiler_add_line(patch, compiler):
+    patch.many(Compiler, ['make_line', 'set_next_line'])
+    compiler.add_line('method', 'line', extras='whatever')
+    compiler.set_next_line.assert_called_with('line')
+    compiler.make_line.assert_called_with('method', 'line', extras='whatever')
+
+
 def test_compiler_assignment(patch, compiler, tree):
     patch.many(Compiler, ['add_line', 'path', 'values', 'set_next_line'])
     compiler.assignment(tree)
