@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-import re
-
 from lark.lexer import Token
 
 from pytest import fixture, mark, raises
 
-from storyscript.compiler import Compiler
+from storyscript.compiler import Compiler, Objects
 from storyscript.exceptions import StoryscriptSyntaxError
 from storyscript.parser import Tree
 from storyscript.version import version
@@ -14,11 +12,6 @@ from storyscript.version import version
 @fixture
 def compiler():
     return Compiler()
-
-
-@fixture
-def tree(magic):
-    return magic()
 
 
 def test_compiler_init(compiler):
@@ -54,157 +47,6 @@ def test_compiler_set_exit_line(patch, compiler):
     compiler.set_exit_line('3')
     assert compiler.sorted_lines.call_count == 1
     assert compiler.lines['2']['exit'] == '3'
-
-
-def test_compiler_path():
-    tree = Tree('path', [Token('WORD', 'var')])
-    assert Compiler.path(tree) == {'$OBJECT': 'path', 'paths': ['var']}
-
-
-def test_compiler_number():
-    tree = Tree('number', [Token('INT', '1')])
-    assert Compiler.number(tree) == 1
-
-
-def test_compiler_string():
-    tree = Tree('string', [Token('DOUBLE_QUOTED', '"blue"')])
-    assert Compiler.string(tree) == {'$OBJECT': 'string', 'string': 'blue'}
-
-
-def test_compiler_string_templating(patch):
-    patch.object(Compiler, 'path')
-    patch.object(re, 'findall', return_value=['color'])
-    tree = Tree('string', [Token('DOUBLE_QUOTED', '"{{color}}"')])
-    result = Compiler.string(tree)
-    re.findall.assert_called_with(r'{{([^}]*)}}', '{{color}}')
-    Compiler.path.assert_called_with(Tree('path', [Token('WORD', 'color')]))
-    assert result['string'] == '{}'
-    assert result['values'] == [Compiler.path()]
-
-
-def test_compiler_boolean():
-    tree = Tree('boolean', [Token('TRUE', 'true')])
-    assert Compiler.boolean(tree) is True
-
-
-def test_compiler_boolean_false():
-    tree = Tree('boolean', [Token('FALSE', 'false')])
-    assert Compiler.boolean(tree) is False
-
-
-def test_compiler_file():
-    token = Token('FILEPATH', '`path`')
-    assert Compiler.file(token) == {'$OBJECT': 'file', 'string': 'path'}
-
-
-def test_compiler_list(patch, tree):
-    patch.object(Compiler, 'values')
-    tree.children = ['value']
-    result = Compiler.list(tree)
-    Compiler.values.assert_called_with('value')
-    assert result == {'$OBJECT': 'list', 'items': [Compiler.values()]}
-
-
-def test_compiler_objects(patch, magic, tree):
-    patch.many(Compiler, ['string', 'values'])
-    subtree = magic()
-    tree.children = [subtree]
-    result = Compiler.objects(tree)
-    subtree.node.assert_called_with('string')
-    subtree.child.assert_called_with(1)
-    Compiler.string.assert_called_with(subtree.node())
-    Compiler.values.assert_called_with(subtree.child())
-    expected = {'$OBJECT': 'dict', 'items': [[Compiler.string(),
-                                              Compiler.values()]]}
-    assert result == expected
-
-
-def test_compiler_types(tree):
-    token = tree.child(0)
-    assert Compiler.types(tree) == {'$OBJECT': 'type', 'type': token.value}
-
-
-@mark.parametrize('value_type', [
-    'string', 'boolean', 'list', 'number', 'objects', 'types'
-])
-def test_compiler_values(patch, magic, value_type):
-    patch.object(Compiler, value_type)
-    item = magic(data=value_type)
-    tree = magic(child=lambda x: item)
-    result = Compiler.values(tree)
-    getattr(Compiler, value_type).assert_called_with(item)
-    assert result == getattr(Compiler, value_type)()
-
-
-def test_compiler_values_filepath(patch, magic):
-    patch.object(Compiler, 'file')
-    item = magic(type='FILEPATH')
-    tree = magic(child=lambda x: item)
-    result = Compiler.values(tree)
-    Compiler.file.assert_called_with(item)
-    assert result == Compiler.file()
-
-
-def test_compiler_values_path(patch, magic):
-    patch.object(Compiler, 'path')
-    item = magic(type='NAME')
-    tree = magic(child=lambda x: item)
-    result = Compiler.values(tree)
-    Compiler.path.assert_called_with(tree)
-    assert result == Compiler.path()
-
-
-def test_compiler_argument(patch, tree):
-    patch.object(Compiler, 'values')
-    result = Compiler.argument(tree)
-    assert tree.child.call_count == 2
-    Compiler.values.assert_called_with(tree.child())
-    expected = {'$OBJECT': 'argument', 'name': tree.child().value,
-                'argument': Compiler.values()}
-    assert result == expected
-
-
-def test_compiler_arguments(patch, tree):
-    patch.object(Compiler, 'argument')
-    tree.find_data.return_value = filter(lambda x: x, ['argument'])
-    result = Compiler.arguments(tree)
-    tree.find_data.assert_called_with('arguments')
-    Compiler.argument.assert_called_with('argument')
-    assert result == [Compiler.argument()]
-
-
-def test_compiler_typed_argument(patch, tree):
-    patch.object(Compiler, 'values')
-    result = Compiler.typed_argument(tree)
-    expected = {'$OBJECT': 'argument', 'name': tree.node().child().value,
-                'argument': Compiler.values()}
-    assert result == expected
-
-
-def test_compiler_function_arguments(patch, tree):
-    patch.object(Compiler, 'typed_argument')
-    tree.find_data.return_value = filter(lambda x: x, ['function_argument'])
-    result = Compiler.function_arguments(tree)
-    tree.find_data.assert_called_with('function_argument')
-    Compiler.typed_argument.assert_called_with('function_argument')
-    assert result == [Compiler.typed_argument()]
-
-
-def test_compiler_expression(patch, tree):
-    patch.object(Compiler, 'values')
-    tree.child.return_value = None
-    result = Compiler.expression(tree)
-    Compiler.values.assert_called_with(tree.node().child())
-    assert result == [Compiler.values()]
-
-
-def test_compiler_expression_comparison(patch, tree):
-    patch.object(Compiler, 'values')
-    result = Compiler.expression(tree)
-    Compiler.values.assert_called_with(tree.child().child())
-    expression = '{} {} {}'.format('{}', tree.child().child(), '{}')
-    assert result == [{'$OBJECT': 'expression', 'expression': expression,
-                      'values': [Compiler.values(), Compiler.values()]}]
 
 
 def test_compiler_output(tree):
@@ -248,20 +90,22 @@ def test_compiler_add_line(patch, compiler):
 
 
 def test_compiler_assignment(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'path', 'values'])
+    patch.many(Objects, ['path', 'values'])
+    patch.object(Compiler, 'add_line')
     compiler.assignment(tree)
     assert tree.node.call_count == 2
-    compiler.path.assert_called_with(tree.node())
-    compiler.values.assert_called_with(tree.node())
-    args = [compiler.path(), compiler.values()]
+    Objects.path.assert_called_with(tree.node())
+    Objects.values.assert_called_with(tree.node())
+    args = [Objects.path(), Objects.values()]
     compiler.add_line.assert_called_with('set', tree.line(), args=args,
                                          parent=None)
 
 
 def test_compiler_assignment_parent(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'path', 'values'])
+    patch.many(Objects, ['path', 'values'])
+    patch.object(Compiler, 'add_line')
     compiler.assignment(tree, parent='1')
-    args = [compiler.path(), compiler.values()]
+    args = [Objects.path(), Objects.values()]
     compiler.add_line.assert_called_with('set', tree.line(), args=args,
                                          parent='1')
 
@@ -270,40 +114,43 @@ def test_compiler_service(patch, compiler, tree):
     """
     Ensures that service trees can be compiled
     """
-    patch.many(Compiler, ['add_line', 'arguments', 'output'])
+    patch.object(Objects, 'arguments')
+    patch.many(Compiler, ['add_line', 'output'])
     tree.node.return_value = None
     compiler.service(tree)
     line = tree.line()
     service = tree.child().child().value
-    Compiler.arguments.assert_called_with(tree.node())
+    Objects.arguments.assert_called_with(tree.node())
     Compiler.output.assert_called_with(tree.node())
     compiler.add_line.assert_called_with('execute', line, service=service,
                                          command=tree.node(), parent=None,
-                                         args=Compiler.arguments(),
+                                         args=Objects.arguments(),
                                          output=Compiler.output())
     assert compiler.services == [tree.child().child().value]
 
 
 def test_compiler_service_command(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'arguments', 'output'])
+    patch.object(Objects, 'arguments')
+    patch.many(Compiler, ['add_line', 'output'])
     compiler.service(tree)
     line = tree.line()
     service = tree.child().child().value
     compiler.add_line.assert_called_with('execute', line, service=service,
                                          command=tree.node().child(),
                                          parent=None, output=Compiler.output(),
-                                         args=Compiler.arguments())
+                                         args=Objects.arguments())
 
 
 def test_compiler_service_parent(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'arguments', 'output'])
+    patch.object(Objects, 'arguments')
+    patch.many(Compiler, ['add_line', 'output'])
     tree.node.return_value = None
     compiler.service(tree, parent='1')
     line = tree.line()
     service = tree.child().child().value
     compiler.add_line.assert_called_with('execute', line, service=service,
                                          command=tree.node(),
-                                         args=Compiler.arguments(),
+                                         args=Objects.arguments(),
                                          output=Compiler.output(), parent='1')
 
 
@@ -313,22 +160,24 @@ def test_compiler_return_statement(compiler, tree):
 
 
 def test_compiler_return_statement_parent(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'values'])
+    patch.object(Objects, 'values')
+    patch.object(Compiler, 'add_line')
     compiler.return_statement(tree, parent='1')
     line = tree.line()
-    compiler.values.assert_called_with(tree.child())
+    Objects.values.assert_called_with(tree.child())
     compiler.add_line.assert_called_with('return', line,
-                                         args=[compiler.values()], parent='1')
+                                         args=[Objects.values()], parent='1')
 
 
 def test_compiler_if_block(patch, compiler):
-    patch.many(Compiler, ['add_line', 'subtree', 'expression'])
+    patch.object(Objects, 'expression')
+    patch.many(Compiler, ['add_line', 'subtree'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', [])])
     compiler.if_block(tree)
-    compiler.expression.assert_called_with(tree.node('if_statement'))
+    Objects.expression.assert_called_with(tree.node('if_statement'))
     nested_block = tree.node('nested_block')
-    args = compiler.expression()
+    args = Objects.expression()
     compiler.add_line.assert_called_with('if', tree.line(), args=args,
                                          enter=nested_block.line(),
                                          parent=None)
@@ -336,19 +185,21 @@ def test_compiler_if_block(patch, compiler):
 
 
 def test_compiler_if_block_parent(patch, compiler):
-    patch.many(Compiler, ['add_line', 'subtree', 'expression'])
+    patch.object(Objects, 'expression')
+    patch.many(Compiler, ['add_line', 'subtree'])
     tree = Tree('if_block', [Tree('if_statement', []),
                              Tree('nested_block', [])])
     compiler.if_block(tree, parent='1')
     nested_block = tree.node('nested_block')
-    args = compiler.expression()
+    args = Objects.expression()
     compiler.add_line.assert_called_with('if', tree.line(), args=args,
                                          enter=nested_block.line(),
                                          parent='1')
 
 
 def test_compiler_if_block_with_elseif(patch, compiler):
-    patch.many(Compiler, ['add_line', 'subtree', 'subtrees', 'expression'])
+    patch.object(Objects, 'expression')
+    patch.many(Compiler, ['add_line', 'subtree', 'subtrees'])
     tree = Tree('if_block', [Tree('nested_block', []),
                              Tree('elseif_block', [])])
     compiler.if_block(tree)
@@ -356,7 +207,8 @@ def test_compiler_if_block_with_elseif(patch, compiler):
 
 
 def test_compiler_if_block_with_else(patch, compiler):
-    patch.many(Compiler, ['add_line', 'subtree', 'subtrees', 'expression'])
+    patch.object(Objects, 'expression')
+    patch.many(Compiler, ['add_line', 'subtree', 'subtrees'])
     tree = Tree('if_block', [Tree('nested_block', []),
                              Tree('else_block', [])])
     compiler.if_block(tree)
@@ -364,27 +216,29 @@ def test_compiler_if_block_with_else(patch, compiler):
 
 
 def test_compiler_elseif_block(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'expression', 'subtree','set_exit_line'])
+    patch.object(Objects, 'expression')
+    patch.many(Compiler, ['add_line', 'subtree', 'set_exit_line'])
     compiler.elseif_block(tree)
     compiler.set_exit_line.assert_called_with(tree.line())
     assert tree.node.call_count == 2
-    compiler.expression.assert_called_with(tree.node())
-    args = compiler.expression()
+    Objects.expression.assert_called_with(tree.node())
+    args = Objects.expression()
     compiler.add_line.assert_called_with('elif', tree.line(), args=args,
                                          enter=tree.node().line(), parent=None)
     compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
 
 
 def test_compiler_elseif_block_parent(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'expression', 'subtree'])
+    patch.object(Objects, 'expression')
+    patch.many(Compiler, ['add_line', 'subtree'])
     compiler.elseif_block(tree, parent='1')
-    args = compiler.expression()
+    args = Objects.expression()
     compiler.add_line.assert_called_with('elif', tree.line(), args=args,
                                          enter=tree.node().line(), parent='1')
 
 
 def test_compiler_else_block(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'set_exit_line'])
+    patch.many(Compiler, ['add_line', 'subtree', 'set_exit_line'])
     compiler.else_block(tree)
     compiler.set_exit_line.assert_called_with(tree.line())
     compiler.add_line.assert_called_with('else', tree.line(),
@@ -393,18 +247,19 @@ def test_compiler_else_block(patch, compiler, tree):
 
 
 def test_compiler_else_block_parent(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'path', 'subtree'])
+    patch.many(Compiler, ['add_line', 'subtree'])
     compiler.else_block(tree, parent='1')
     compiler.add_line.assert_called_with('else', tree.line(),
                                          enter=tree.node().line(), parent='1')
 
 
 def test_compiler_foreach_block(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'output'])
+    patch.object(Objects, 'path')
+    patch.many(Compiler, ['add_line', 'subtree', 'output'])
     compiler.foreach_block(tree)
-    compiler.path.assert_called_with(tree.node())
+    Objects.path.assert_called_with(tree.node())
     compiler.output.assert_called_with(tree.node())
-    args = [Compiler.path()]
+    args = [Objects.path()]
     compiler.add_line.assert_called_with('for', tree.line(), args=args,
                                          enter=tree.node().line(),
                                          output=Compiler.output(), parent=None)
@@ -412,23 +267,24 @@ def test_compiler_foreach_block(patch, compiler, tree):
 
 
 def test_compiler_foreach_block_parent(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'path', 'subtree', 'output'])
+    patch.object(Objects, 'path')
+    patch.many(Compiler, ['add_line', 'subtree', 'output'])
     compiler.foreach_block(tree, parent='1')
-    args = [Compiler.path()]
+    args = [Objects.path()]
     compiler.add_line.assert_called_with('for', tree.line(), args=args,
                                          enter=tree.node().line(),
                                          output=Compiler.output(), parent='1')
 
 
 def test_compiler_function_block(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'subtree', 'function_arguments',
-                          'function_output'])
+    patch.object(Objects, 'function_arguments')
+    patch.many(Compiler, ['add_line', 'subtree', 'function_output'])
     compiler.function_block(tree)
-    compiler.function_arguments.assert_called_with(tree.node())
+    Objects.function_arguments.assert_called_with(tree.node())
     compiler.function_output.assert_called_with(tree.node())
     compiler.add_line.assert_called_with('function', tree.line(),
                                          function=tree.node().child().value,
-                                         args=compiler.function_arguments(),
+                                         args=Objects.function_arguments(),
                                          output=compiler.function_output(),
                                          enter=tree.node().line(),
                                          parent=None)
@@ -436,12 +292,13 @@ def test_compiler_function_block(patch, compiler, tree):
 
 
 def test_compiler_function_block_parent(patch, compiler, tree):
+    patch.object(Objects, 'function_arguments')
     patch.many(Compiler, ['set_next_line', 'add_line', 'subtree',
-                          'function_arguments', 'function_output'])
+                          'function_output'])
     compiler.function_block(tree, parent='1')
     compiler.add_line.assert_called_with('function', tree.line(),
                                          function=tree.node().child().value,
-                                         args=compiler.function_arguments(),
+                                         args=Objects.function_arguments(),
                                          output=compiler.function_output(),
                                          enter=tree.node().line(), parent='1')
 

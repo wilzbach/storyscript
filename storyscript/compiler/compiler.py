@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-import re
-
-from lark.lexer import Token
-
+from .objects import Objects
 from ..exceptions import StoryscriptSyntaxError
 from ..parser import Tree
 from ..version import version
@@ -40,130 +37,6 @@ class Compiler:
             if self.lines[line_number]['method'] in ['if', 'elif']:
                 self.lines[line_number]['exit'] = line
                 break
-
-    @staticmethod
-    def path(tree):
-        return {'$OBJECT': 'path', 'paths': [tree.child(0).value]}
-
-    @staticmethod
-    def number(tree):
-        return int(tree.child(0).value)
-
-    @classmethod
-    def string(cls, tree):
-        """
-        Compiles a string tree. If the string has templated values, they
-        are processed and compiled.
-        """
-        item = {'$OBJECT': 'string', 'string': tree.child(0).value[1:-1]}
-        matches = re.findall(r'{{([^}]*)}}', item['string'])
-        if matches == []:
-            return item
-        values = []
-        for match in matches:
-            values.append(cls.path(Tree('path', [Token('WORD', match)])))
-            find = '{}{}{}'.format('{{', match, '}}')
-            item['string'] = item['string'].replace(find, '{}')
-        item['values'] = values
-        return item
-
-    @staticmethod
-    def boolean(tree):
-        if tree.child(0).value == 'true':
-            return True
-        return False
-
-    @staticmethod
-    def file(token):
-        return {'$OBJECT': 'file', 'string': token.value[1:-1]}
-
-    @classmethod
-    def list(cls, tree):
-        items = []
-        for value in tree.children:
-            items.append(cls.values(value))
-        return {'$OBJECT': 'list', 'items': items}
-
-    @classmethod
-    def objects(cls, tree):
-        items = []
-        for item in tree.children:
-            key = cls.string(item.node('string'))
-            value = cls.values(item.child(1))
-            items.append([key, value])
-        return {'$OBJECT': 'dict', 'items': items}
-
-    @staticmethod
-    def types(tree):
-        return {'$OBJECT': 'type', 'type': tree.child(0).value}
-
-    @classmethod
-    def values(cls, tree):
-        """
-        Parses a values subtree
-        """
-        subtree = tree.child(0)
-        if hasattr(subtree, 'data'):
-            if subtree.data == 'string':
-                return cls.string(subtree)
-            elif subtree.data == 'boolean':
-                return cls.boolean(subtree)
-            elif subtree.data == 'list':
-                return cls.list(subtree)
-            elif subtree.data == 'number':
-                return cls.number(subtree)
-            elif subtree.data == 'objects':
-                return cls.objects(subtree)
-            elif subtree.data == 'types':
-                return cls.types(subtree)
-        if subtree.type == 'FILEPATH':
-            return cls.file(subtree)
-        elif subtree.type == 'NAME':
-            return cls.path(tree)
-
-    @classmethod
-    def argument(cls, tree):
-        name = tree.child(0).value
-        value = cls.values(tree.child(1))
-        return {'$OBJECT': 'argument', 'name': name, 'argument': value}
-
-    @classmethod
-    def arguments(cls, tree):
-        """
-        Parses a group of arguments rules
-        """
-        arguments = []
-        for argument in list(tree.find_data('arguments')):
-            arguments.append(cls.argument(argument))
-        return arguments
-
-    @classmethod
-    def typed_argument(cls, tree):
-        subtree = tree.node('typed_argument')
-        name = subtree.child(0).value
-        value = cls.values(Tree('anon', [subtree.child(1)]))
-        return {'$OBJECT': 'argument', 'name': name, 'argument': value}
-
-    @classmethod
-    def function_arguments(cls, tree):
-        arguments = []
-        for argument in list(tree.find_data('function_argument')):
-            arguments.append(cls.typed_argument(argument))
-        return arguments
-
-    @classmethod
-    def expression(cls, tree):
-        """
-        Compiles an if_statement to the corresponding expression
-        """
-        left_handside = cls.values(tree.node('path_value').child(0))
-        comparison = tree.child(1)
-        if comparison is None:
-            return [left_handside]
-        right_handside = cls.values(tree.child(2).child(0))
-        expression = '{} {} {}'.format('{}', comparison.child(0), '{}')
-        return [{'$OBJECT': 'expression', 'expression': expression,
-                'values': [left_handside, right_handside]}]
 
     @staticmethod
     def output(tree):
@@ -209,8 +82,8 @@ class Compiler:
         """
         line = tree.line()
         args = [
-            self.path(tree.node('path')),
-            self.values(tree.node('assignment_fragment.values'))
+            Objects.path(tree.node('path')),
+            Objects.values(tree.node('assignment_fragment.values'))
         ]
         self.add_line('set', line, args=args, parent=parent)
 
@@ -222,7 +95,7 @@ class Compiler:
         command = tree.node('service_fragment.command')
         if command:
             command = command.child(0)
-        arguments = self.arguments(tree.node('service_fragment'))
+        arguments = Objects.arguments(tree.node('service_fragment'))
         service = tree.child(0).child(0).value
         output = self.output(tree.node('service_fragment.output'))
         self.add_line('execute', line, service=service, command=command,
@@ -236,13 +109,13 @@ class Compiler:
         if parent is None:
             raise StoryscriptSyntaxError(4, tree)
         line = tree.line()
-        args = [self.values(tree.child(0))]
+        args = [Objects.values(tree.child(0))]
         self.add_line('return', line, args=args, parent=parent)
 
     def if_block(self, tree, parent=None):
         line = tree.line()
         nested_block = tree.node('nested_block')
-        args = self.expression(tree.node('if_statement'))
+        args = Objects.expression(tree.node('if_statement'))
         self.add_line('if', line, args=args, enter=nested_block.line(),
                       parent=parent)
         self.subtree(nested_block, parent=line)
@@ -258,7 +131,7 @@ class Compiler:
         """
         line = tree.line()
         self.set_exit_line(line)
-        args = self.expression(tree.node('elseif_statement'))
+        args = Objects.expression(tree.node('elseif_statement'))
         nested_block = tree.node('nested_block')
         self.add_line('elif', line, args=args, enter=nested_block.line(),
                       parent=parent)
@@ -273,7 +146,7 @@ class Compiler:
 
     def foreach_block(self, tree, parent=None):
         line = tree.line()
-        args = [self.path(tree.node('foreach_statement'))]
+        args = [Objects.path(tree.node('foreach_statement'))]
         output = self.output(tree.node('foreach_statement.output'))
         nested_block = tree.node('nested_block')
         self.add_line('for', line, args=args, enter=nested_block.line(),
@@ -283,7 +156,7 @@ class Compiler:
     def function_block(self, tree, parent=None):
         line = tree.line()
         function = tree.node('function_statement')
-        args = self.function_arguments(function)
+        args = Objects.function_arguments(function)
         output = self.function_output(function)
         nested_block = tree.node('nested_block')
         self.add_line('function', line, function=function.child(1).value,
