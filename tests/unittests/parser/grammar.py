@@ -26,7 +26,7 @@ def test_grammar_init():
 def test_grammar_line(grammar, ebnf):
     grammar.line()
     defintions = (['values'], ['operation'], ['comment'], ['statement'],
-                  ['block'])
+                  ['return_statement'], ['block'])
     ebnf.rules.assert_called_with('line', *defintions)
 
 
@@ -266,23 +266,29 @@ def test_grammar_comparisons(grammar, ebnf):
     ebnf.rules.assert_called_with('comparisons', *definitions)
 
 
-def test_grammar_if_statement(grammar, ebnf):
+def test_grammar_path_value(grammar, ebnf):
+    grammar.path_value()
+    ebnf.rules.assert_called_with('path_value', *(['path'], ['values']))
+
+
+def test_grammar_if_statement(patch, grammar, ebnf):
+    patch.object(Grammar, 'path_value')
     grammar.if_statement()
-    definitions = (('if', 'ws', 'name'),
-                   ('if', 'ws', 'name', 'ws', 'comparisons', 'ws', 'name'))
-    ebnf.rules.assert_called_with('if_statement', *definitions)
-    ebnf.token.assert_called_with('if', 'if')
+    assert Grammar.path_value.call_count == 1
+    ebnf.token.assert_called_with('if', 'if', inline=True)
+    rule = '_IF _WS path_value (_WS comparisons _WS path_value)?'
+    ebnf.rule.assert_called_with('if_statement', rule, raw=True)
 
 
 def test_grammar_else_statement(grammar, ebnf):
     grammar.else_statement()
-    ebnf.token.assert_called_with('else', 'else')
+    ebnf.token.assert_called_with('else', 'else', inline=True)
     ebnf.rule.assert_called_with('else_statement', ['else'])
 
 
 def test_grammar_elseif_statement(grammar, ebnf):
     grammar.elseif_statement()
-    rule = 'ELSE _WS? IF _WS NAME [_WS comparisons _WS NAME]?'
+    rule = '_ELSE _WS? _IF _WS path_value (_WS comparisons _WS path_value)?'
     ebnf.rule.assert_called_with('elseif_statement', rule, raw=True)
 
 
@@ -319,6 +325,13 @@ def test_grammar_service_fragment(patch, grammar, ebnf):
     assert Grammar.output.call_count == 1
     rule = 'command? arguments* output?'
     ebnf.rule.assert_called_with('service_fragment', rule, raw=True)
+
+
+def test_grammar_return_statement(patch, ebnf, grammar):
+    grammar.return_statement()
+    ebnf.token.assert_called_with('return', 'return', inline=True)
+    rule = '_RETURN _WS (path|values)'
+    ebnf.rule.assert_called_with('return_statement', rule, raw=True)
 
 
 def test_grammar_int_type(grammar, ebnf):
@@ -383,7 +396,8 @@ def test_grammar_comment(grammar, ebnf):
 
 def test_grammar_build(patch, grammar):
     patch.many(Grammar, ['line', 'spaces', 'values', 'operation', 'comment',
-                         'block', 'comparisons', 'statement', 'types'])
+                         'block', 'comparisons', 'statement', 'types',
+                         'return_statement'])
     result = grammar.build()
     grammar.ebnf.start.assert_called_with('_NL? block')
     assert Grammar.line.call_count == 1
@@ -391,6 +405,7 @@ def test_grammar_build(patch, grammar):
     assert Grammar.values.call_count == 1
     assert Grammar.operation.call_count == 1
     assert Grammar.statement.call_count == 1
+    assert Grammar.return_statement.call_count == 1
     assert Grammar.block.call_count == 1
     assert Grammar.comparisons.call_count == 1
     assert Grammar.types.call_count == 1

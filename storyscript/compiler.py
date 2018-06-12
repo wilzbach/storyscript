@@ -3,6 +3,7 @@ import re
 
 from lark.lexer import Token
 
+from .exceptions import StoryscriptSyntaxError
 from .parser import Tree
 from .version import version
 
@@ -150,6 +151,20 @@ class Compiler:
             arguments.append(cls.typed_argument(argument))
         return arguments
 
+    @classmethod
+    def expression(cls, tree):
+        """
+        Compiles an if_statement to the corresponding expression
+        """
+        left_handside = cls.values(tree.node('path_value').child(0))
+        comparison = tree.child(1)
+        if comparison is None:
+            return [left_handside]
+        right_handside = cls.values(tree.child(2).child(0))
+        expression = '{} {} {}'.format('{}', comparison.child(0), '{}')
+        return [{'$OBJECT': 'expression', 'expression': expression,
+                'values': [left_handside, right_handside]}]
+
     @staticmethod
     def output(tree):
         output = []
@@ -209,11 +224,22 @@ class Compiler:
                       args=arguments, parent=parent, output=output)
         self.services.append(service)
 
+    def return_statement(self, tree, parent=None):
+        """
+        Compiles a return_statement tree
+        """
+        if parent is None:
+            raise StoryscriptSyntaxError(4, tree)
+        line = tree.line()
+        self.set_next_line(line)
+        args = [self.values(tree.child(0))]
+        self.add_line('return', line, args=args, parent=parent)
+
     def if_block(self, tree, parent=None):
         line = tree.line()
         self.set_next_line(line)
         nested_block = tree.node('nested_block')
-        args = [self.path(tree.node('if_statement'))]
+        args = self.expression(tree.node('if_statement'))
         self.add_line('if', line, args=args, enter=nested_block.line(),
                       parent=parent)
         self.subtree(nested_block, parent=line)
@@ -230,7 +256,7 @@ class Compiler:
         line = tree.line()
         self.set_next_line(line)
         self.set_exit_line(line)
-        args = [self.path(tree.node('elseif_statement'))]
+        args = self.expression(tree.node('elseif_statement'))
         nested_block = tree.node('nested_block')
         self.add_line('elif', line, args=args, enter=nested_block.line(),
                       parent=parent)
@@ -279,7 +305,8 @@ class Compiler:
         or keep parsing for deeper trees.
         """
         allowed_nodes = ['service', 'assignment', 'if_block', 'elseif_block',
-                         'else_block', 'foreach_block', 'function_block']
+                         'else_block', 'foreach_block', 'function_block',
+                         'return_statement']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent=parent)
             return

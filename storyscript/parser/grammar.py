@@ -14,7 +14,7 @@ class Grammar:
 
     def line(self):
         definitions = (['values'], ['operation'], ['comment'], ['statement'],
-                       ['block'])
+                       ['return_statement'], ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
@@ -33,7 +33,8 @@ class Grammar:
         self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
 
     def elseif_statement(self):
-        rule = 'ELSE _WS? IF _WS NAME [_WS comparisons _WS NAME]?'
+        rule = ('_ELSE _WS? _IF _WS path_value '
+                '(_WS comparisons _WS path_value)?')
         self.ebnf.rule('elseif_statement', rule, raw=True)
 
     def elseif_block(self):
@@ -43,18 +44,21 @@ class Grammar:
         self.ebnf.rule('elseif_block', definition)
 
     def else_statement(self):
-        self.ebnf.token('else', 'else')
+        self.ebnf.token('else', 'else', inline=True)
         self.ebnf.rule('else_statement', ['else'])
 
     def else_block(self):
         self.else_statement()
         self.ebnf.rule('else_block', ('else_statement', 'nl', 'nested_block'))
 
+    def path_value(self):
+        self.ebnf.rules('path_value', *(['path'], ['values']))
+
     def if_statement(self):
-        self.ebnf.token('if', 'if')
-        definitions = (('if', 'ws', 'name'),
-                       ('if', 'ws', 'name', 'ws', 'comparisons', 'ws', 'name'))
-        self.ebnf.rules('if_statement', *definitions)
+        self.path_value()
+        self.ebnf.token('if', 'if', inline=True)
+        rule = '_IF _WS path_value (_WS comparisons _WS path_value)?'
+        self.ebnf.rule('if_statement', rule, raw=True)
 
     def if_block(self):
         self.if_statement()
@@ -214,6 +218,11 @@ class Grammar:
         rule = 'command? arguments* output?'
         self.ebnf.rule('service_fragment', rule, raw=True)
 
+    def return_statement(self):
+        self.ebnf.token('return', 'return', inline=True)
+        rule = '_RETURN _WS (path|values)'
+        self.ebnf.rule('return_statement', rule, raw=True)
+
     def int_type(self):
         self.ebnf.token('int_type', 'int')
 
@@ -263,6 +272,7 @@ class Grammar:
         self.values()
         self.comparisons()
         self.statement()
+        self.return_statement()
         self.operation()
         self.block()
         self.types()
