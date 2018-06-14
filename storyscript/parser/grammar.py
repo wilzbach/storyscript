@@ -175,7 +175,7 @@ class Grammar:
 
     def assignment_fragment(self):
         self.ebnf.token('equals', '=')
-        rule = 'EQUALS _WS? (values|path)'
+        rule = 'EQUALS _WS? (values|path|service)'
         self.ebnf.rule('assignment_fragment', rule, raw=True)
 
     def assignment(self):
