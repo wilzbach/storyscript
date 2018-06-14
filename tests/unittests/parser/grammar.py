@@ -244,16 +244,20 @@ def test_grammar_assignment_fragment(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('assignment_fragment', rule, raw=True)
 
 
-def test_grammar_statement(patch, grammar, ebnf):
-    patch.many(Grammar, ['assignment_fragment', 'service_fragment', 'path'])
-    grammar.statement()
+def test_grammar_assignment(patch, grammar, ebnf):
+    patch.many(Grammar, ['path', 'assignment_fragment'])
+    grammar.assignment()
     assert Grammar.path.call_count == 1
     assert Grammar.assignment_fragment.call_count == 1
+    definition = ('path', 'ws', 'assignment_fragment')
+    ebnf.rule.assert_called_with('assignment', definition)
+
+
+def test_grammar_service(patch, grammar, ebnf):
+    patch.object(Grammar, 'service_fragment')
+    grammar.service()
     assert Grammar.service_fragment.call_count == 1
-    assignment = 'path _WS? assignment_fragment -> assignment'
-    service = 'path service_fragment -> service'
-    rule = '{}|{}'.format(assignment, service)
-    ebnf.rule.assert_called_with('statement', rule, raw=True)
+    ebnf.rule.assert_called_with('service', ('path', 'service_fragment'))
 
 
 def test_grammar_comparisons(grammar, ebnf):
