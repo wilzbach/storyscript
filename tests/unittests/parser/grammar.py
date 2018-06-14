@@ -25,8 +25,8 @@ def test_grammar_init():
 
 def test_grammar_line(grammar, ebnf):
     grammar.line()
-    defintions = (['values'], ['operation'], ['comment'], ['statement'],
-                  ['return_statement'], ['block'])
+    defintions = (['values'], ['operation'], ['comment'], ['service'],
+                  ['assignment'], ['return_statement'], ['block'])
     ebnf.rules.assert_called_with('line', *defintions)
 
 
