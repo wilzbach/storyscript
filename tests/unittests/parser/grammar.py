@@ -400,15 +400,16 @@ def test_grammar_comment(grammar, ebnf):
 
 def test_grammar_build(patch, grammar):
     patch.many(Grammar, ['line', 'spaces', 'values', 'operation', 'comment',
-                         'block', 'comparisons', 'statement', 'types',
-                         'return_statement'])
+                         'block', 'comparisons', 'assignment', 'service',
+                         'types', 'return_statement'])
     result = grammar.build()
     grammar.ebnf.start.assert_called_with('_NL? block')
     assert Grammar.line.call_count == 1
     assert Grammar.spaces.call_count == 1
     assert Grammar.values.call_count == 1
     assert Grammar.operation.call_count == 1
-    assert Grammar.statement.call_count == 1
+    assert Grammar.assignment.call_count == 1
+    assert Grammar.service.call_count == 1
     assert Grammar.return_statement.call_count == 1
     assert Grammar.block.call_count == 1
     assert Grammar.comparisons.call_count == 1
