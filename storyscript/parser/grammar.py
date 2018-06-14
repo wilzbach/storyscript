@@ -181,7 +181,7 @@ class Grammar:
     def assignment(self):
         self.path()
         self.assignment_fragment()
-        self.ebnf.rule('assignment', ('path', 'ws', 'assignment_fragment'))
+        self.ebnf.rule('assignment', ('path', 'ws?', 'assignment_fragment'))
 
     def service(self):
         self.service_fragment()

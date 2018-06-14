@@ -249,7 +249,7 @@ def test_grammar_assignment(patch, grammar, ebnf):
     grammar.assignment()
     assert Grammar.path.call_count == 1
     assert Grammar.assignment_fragment.call_count == 1
-    definition = ('path', 'ws', 'assignment_fragment')
+    definition = ('path', 'ws?', 'assignment_fragment')
     ebnf.rule.assert_called_with('assignment', definition)
 
 
