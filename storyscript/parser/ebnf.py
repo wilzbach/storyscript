@@ -24,14 +24,14 @@ class Ebnf:
         """
         Resolves an item's reference to its real name.
         """
-        prefix = None
-        if item_name.startswith('?'):
-            item_name = item_name[1:]
-            prefix = '?'
+        suffix = None
+        if item_name.endswith('?'):
+            item_name = item_name[:-1]
+            suffix = '?'
         if item_name in self._tokens:
             token = self._tokens[item_name][0].split('.')[0]
-            if prefix:
-                return '{}{}'.format(prefix, token)
+            if suffix:
+                return '{}{}'.format(token, suffix)
             return token
         if item_name in self.imports:
             return item_name.upper()
