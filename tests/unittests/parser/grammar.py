@@ -327,7 +327,7 @@ def test_grammar_service_fragment(patch, grammar, ebnf):
     assert Grammar.arguments.call_count == 1
     assert Grammar.command.call_count == 1
     assert Grammar.output.call_count == 1
-    rule = 'command? arguments* output?'
+    rule = '(command arguments*|arguments+) output?'
     ebnf.rule.assert_called_with('service_fragment', rule, raw=True)
 
 
