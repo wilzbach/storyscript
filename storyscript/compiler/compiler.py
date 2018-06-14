@@ -92,7 +92,7 @@ class Compiler:
         line = tree.line()
         args = [
             Objects.path(tree.node('path')),
-            Objects.values(tree.node('assignment_fragment.values'))
+            Objects.values(tree.node('assignment_fragment').child(1))
         ]
         self.add_line('set', line, args=args, parent=parent)
 
