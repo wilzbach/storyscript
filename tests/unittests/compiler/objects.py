@@ -77,6 +77,17 @@ def test_objects_types(tree):
     assert Objects.types(tree) == {'$OBJECT': 'type', 'type': token.value}
 
 
+def test_objects_method(patch, tree):
+    patch.object(Objects, 'arguments')
+    result = Objects.method(tree)
+    Objects.arguments.assert_called_with(tree.node())
+    expected = {'$OBJECT': 'method', 'method': 'execute',
+                'service': tree.child().child().value,
+                'command': tree.node().child().value,
+                'output': None, 'args': Objects.arguments()}
+    assert result == expected
+
+
 @mark.parametrize('value_type', [
     'string', 'boolean', 'list', 'number', 'objects', 'types'
 ])
