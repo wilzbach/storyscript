@@ -100,6 +100,15 @@ def test_objects_values(patch, magic, value_type):
     assert result == getattr(Objects, value_type)()
 
 
+def test_objects_values_method(patch, magic):
+    patch.object(Objects, 'method')
+    item = magic(data='path')
+    tree = magic(child=lambda x: item)
+    result = Objects.values(tree)
+    Objects.method.assert_called_with(tree)
+    assert result == Objects.method()
+
+
 def test_objects_values_filepath(patch, magic):
     patch.object(Objects, 'file')
     item = magic(type='FILEPATH')

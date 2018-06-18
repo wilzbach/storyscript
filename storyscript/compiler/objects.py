@@ -100,6 +100,11 @@ class Objects:
                 return cls.objects(subtree)
             elif subtree.data == 'types':
                 return cls.types(subtree)
+            elif subtree.data == 'path':
+                # NOTE(vesuvium): path trees are sent to Objects.values only
+                # when they are in a service tree. Objects.method however takes
+                # the whole tree.
+                return cls.method(tree)
         if subtree.type == 'FILEPATH':
             return cls.file(subtree)
         elif subtree.type == 'NAME':
