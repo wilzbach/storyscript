@@ -13,8 +13,8 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['operation'], ['comment'], ['statement'],
-                       ['return_statement'], ['block'])
+        definitions = (['values'], ['operation'], ['comment'], ['service'],
+                       ['assignment'], ['return_statement'], ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
@@ -175,17 +175,17 @@ class Grammar:
 
     def assignment_fragment(self):
         self.ebnf.token('equals', '=')
-        rule = 'EQUALS _WS? (values|path)'
+        rule = 'EQUALS _WS? (values|path|service)'
         self.ebnf.rule('assignment_fragment', rule, raw=True)
 
-    def statement(self):
+    def assignment(self):
         self.path()
         self.assignment_fragment()
+        self.ebnf.rule('assignment', ('path', 'ws?', 'assignment_fragment'))
+
+    def service(self):
         self.service_fragment()
-        assignment = 'path _WS? assignment_fragment -> assignment'
-        service = 'path service_fragment -> service'
-        rule = '{}|{}'.format(assignment, service)
-        self.ebnf.rule('statement', rule, raw=True)
+        self.ebnf.rule('service', ('path', 'service_fragment'))
 
     def comparisons(self):
         tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
@@ -215,7 +215,7 @@ class Grammar:
         self.arguments()
         self.command()
         self.output()
-        rule = 'command? arguments* output?'
+        rule = '(command arguments*|arguments+) output?'
         self.ebnf.rule('service_fragment', rule, raw=True)
 
     def return_statement(self):
@@ -271,7 +271,8 @@ class Grammar:
         self.spaces()
         self.values()
         self.comparisons()
-        self.statement()
+        self.assignment()
+        self.service()
         self.return_statement()
         self.operation()
         self.block()

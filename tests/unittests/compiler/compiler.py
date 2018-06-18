@@ -124,7 +124,7 @@ def test_compiler_assignment(patch, compiler, tree):
     compiler.assignment(tree)
     assert tree.node.call_count == 2
     Objects.path.assert_called_with(tree.node())
-    Objects.values.assert_called_with(tree.node())
+    Objects.values.assert_called_with(tree.node().child())
     args = [Objects.path(), Objects.values()]
     compiler.add_line.assert_called_with('set', tree.line(), args=args,
                                          parent=None)
