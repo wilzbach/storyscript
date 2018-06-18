@@ -394,8 +394,9 @@ def test_grammar_types(patch, grammar, ebnf):
 
 def test_grammar_comment(grammar, ebnf):
     grammar.comment()
-    ebnf.rule.assert_called_with('comment', ['comment'])
-    ebnf.token.assert_called_with('comment', '/#(.*)/', regexp=True)
+    token = token = '/(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)/'
+    ebnf.token.assert_called_with('comment', token, regexp=True)
+    ebnf.rule.assert_called_with('comment', 'COMMENT+', raw=True)
 
 
 def test_grammar_build(patch, grammar):

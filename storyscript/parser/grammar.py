@@ -262,8 +262,9 @@ class Grammar:
         self.ebnf.rules('types', *definitions)
 
     def comment(self):
-        self.ebnf.token('comment', '/#(.*)/', regexp=True)
-        self.ebnf.rule('comment', ['comment'])
+        token = '/(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)/'
+        self.ebnf.token('comment', token, regexp=True)
+        self.ebnf.rule('comment', 'COMMENT+', raw=True)
 
     def build(self):
         self.ebnf.start('_NL? block')
