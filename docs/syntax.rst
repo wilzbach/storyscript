@@ -106,7 +106,7 @@ Services
 --------
 ::
 
-    service command key:value foo:bar
+    result = service command key:value foo:bar
 
 Output::
 
