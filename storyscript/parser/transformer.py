@@ -17,7 +17,7 @@ class Transformer(LarkTransformer):
 
     def arguments(self, matches):
         """
-        Transform an argument tree. If dealing with is a short-hand argument, 
+        Transform an argument tree. If dealing with is a short-hand argument,
         expand it.
         """
         if len(matches) == 1:
