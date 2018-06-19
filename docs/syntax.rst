@@ -108,6 +108,11 @@ Services
 
     result = service command key:value foo:bar
 
+Arguments with the value equal to the argument name can be shortened::
+
+    # instead of: service command argument:argument
+    service command :argument
+
 Output::
 
     service command key:value as result
