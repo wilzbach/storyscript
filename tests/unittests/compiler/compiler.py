@@ -374,6 +374,11 @@ def test_compiler_parse_tree_parent(compiler, patch):
     compiler.subtree.assert_called_with(Tree('command', ['token']), parent='1')
 
 
+def test_compiler_get_services(compiler):
+    compiler.services = ['one', 'one']
+    assert compiler.get_services() == ['one']
+
+
 def test_compiler_compiler():
     assert isinstance(Compiler.compiler(), Compiler)
 
