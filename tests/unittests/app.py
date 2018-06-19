@@ -91,6 +91,12 @@ def test_app_services():
     assert result == ['one', 'two']
 
 
+def test_app_services_no_duplicates():
+    compiled_stories = {'a': {'services': ['one']}, 'b': {'services': ['one']}}
+    result = App.services(compiled_stories)
+    assert result == ['one']
+
+
 def test_app_compile(patch):
     patch.object(json, 'dumps')
     patch.many(App, ['get_stories', 'parse', 'services'])

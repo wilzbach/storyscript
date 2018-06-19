@@ -203,6 +203,12 @@ class Compiler:
             if isinstance(item, Tree):
                 self.subtree(item, parent=parent)
 
+    def get_services(self):
+        """
+        Get the services and remove duplicates.
+        """
+        return list(set(self.services))
+
     @staticmethod
     def compiler():
         return Compiler()
@@ -211,5 +217,5 @@ class Compiler:
     def compile(cls, tree):
         compiler = cls.compiler()
         compiler.parse_tree(tree)
-        return {'tree': compiler.lines, 'services': compiler.services,
+        return {'tree': compiler.lines, 'services': compiler.get_services(),
                 'functions': compiler.functions, 'version': version}

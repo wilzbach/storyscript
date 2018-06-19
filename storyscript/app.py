@@ -49,6 +49,8 @@ class App:
         services = []
         for storypath, story in stories.items():
             services += story['services']
+        services = list(set(services))
+        services.sort()
         return services
 
     @classmethod

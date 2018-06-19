@@ -374,15 +374,20 @@ def test_compiler_parse_tree_parent(compiler, patch):
     compiler.subtree.assert_called_with(Tree('command', ['token']), parent='1')
 
 
+def test_compiler_get_services(compiler):
+    compiler.services = ['one', 'one']
+    assert compiler.get_services() == ['one']
+
+
 def test_compiler_compiler():
     assert isinstance(Compiler.compiler(), Compiler)
 
 
 def test_compiler_compile(patch):
-    patch.many(Compiler, ['parse_tree', 'compiler'])
+    patch.many(Compiler, ['parse_tree', 'compiler', 'get_services'])
     result = Compiler.compile('tree')
     Compiler.compiler().parse_tree.assert_called_with('tree')
     expected = {'tree': Compiler.compiler().lines, 'version': version,
-                'services': Compiler.compiler().services,
+                'services': Compiler.compiler().get_services(),
                 'functions': Compiler.compiler().functions}
     assert result == expected
