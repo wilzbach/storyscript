@@ -9,6 +9,21 @@ from ..exceptions import StoryscriptSyntaxError
 
 class Transformer(LarkTransformer):
 
+    """
+    Performs transformations on the tree before it's parsed.
+    All trees are transformed to Storyscript's custom tree. In some cases,
+    additional transformations or checks are performed.
+    """
+
+    def arguments(self, matches):
+        """
+        Transform an argument tree. If dealing with is a short-hand argument,
+        expand it.
+        """
+        if len(matches) == 1:
+            matches = [matches[0].child(0), matches[0]]
+        return Tree('arguments', matches)
+
     def service(self, matches):
         if len(matches[0].children) > 1:
             token = matches[0].children[1].children[0]
