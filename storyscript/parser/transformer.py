@@ -9,6 +9,9 @@ from ..exceptions import StoryscriptSyntaxError
 
 class Transformer(LarkTransformer):
 
+    def arguments(self, matches):
+        return Tree('arguments', matches)
+
     def service(self, matches):
         if len(matches[0].children) > 1:
             token = matches[0].children[1].children[0]
