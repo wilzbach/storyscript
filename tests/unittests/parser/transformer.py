@@ -15,6 +15,12 @@ def test_transformer_arguments():
     assert Transformer().arguments('matches') == Tree('arguments', 'matches')
 
 
+def test_transformer_arguments_short():
+    matches = [Tree('path', ['token'])]
+    expected = ['token', Tree('path', ['token'])]
+    assert Transformer().arguments(matches) == Tree('arguments', expected)
+
+
 def test_transformer_service(magic):
     matches = [magic()]
     assert Transformer().service(matches) == Tree('service', matches)
