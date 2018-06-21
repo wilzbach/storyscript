@@ -83,12 +83,6 @@ def test_parser_parse(patch, parser):
     assert result == Parser.transformer().transform()
 
 
-def test_parser_parse_unexpected_token(patch, parser):
-    patch.many(Parser, ['indenter', 'transformer', 'lark'])
-    Parser.lark().parse.side_effect = UnexpectedToken('', '', '', '')
-    assert parser.parse('source') is None
-
-
 def test_parser_lex(patch, parser):
     patch.many(Parser, ['lark', 'indenter'])
     result = parser.lex('source')

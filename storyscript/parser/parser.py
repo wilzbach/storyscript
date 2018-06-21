@@ -46,10 +46,7 @@ class Parser:
         """
         source = '{}\n'.format(source)
         lark = self.lark()
-        try:
-            tree = lark.parse(source)
-        except UnexpectedToken:
-            return None
+        tree = lark.parse(source)
         return self.transformer().transform(tree)
 
     def lex(self, source):
