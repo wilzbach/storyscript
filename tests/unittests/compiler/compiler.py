@@ -142,10 +142,21 @@ def test_compiler_assignment_parent(patch, compiler, tree):
 def test_compiler_arguments(patch, compiler, tree):
     patch.object(Compiler, 'last_line', return_value='1')
     patch.object(Objects, 'arguments')
-    compiler.lines = {'1': {'args': ['args']}}
+    compiler.lines = {'1': {'method': 'execute', 'args': ['args']}}
     compiler.arguments(tree)
     Objects.arguments.assert_called_with(tree)
     assert compiler.lines['1']['args'] == ['args'] + Objects.arguments()
+
+
+def test_compiler_arguments_not_execute(patch, compiler, tree):
+    """
+    Ensures that the previous line was an execute method.
+    """
+    patch.object(Compiler, 'last_line', return_value='1')
+    patch.object(Objects, 'arguments')
+    compiler.lines = {'1': {'method': 'whatever'}}
+    with raises(StoryscriptSyntaxError):
+        compiler.arguments(tree)
 
 
 def test_compiler_service(patch, compiler, tree):

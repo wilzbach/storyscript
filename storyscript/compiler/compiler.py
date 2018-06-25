@@ -101,6 +101,8 @@ class Compiler:
         Compiles arguments. This is called only for nested arguments.
         """
         line = self.lines[self.last_line()]
+        if line['method'] != 'execute':
+            raise StoryscriptSyntaxError(5, tree)
         line['args'] = line['args'] + Objects.arguments(tree)
 
     def service(self, tree, parent=None):
