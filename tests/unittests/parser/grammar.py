@@ -307,7 +307,7 @@ def test_grammar_foreach_statement(grammar, ebnf):
 
 def test_grammar_arguments(grammar, ebnf):
     grammar.arguments()
-    rule = '_WS NAME? _COLON (values|path)'
+    rule = '_WS? NAME? _COLON (values|path)'
     ebnf.rule.assert_called_with('arguments', rule, raw=True)
 
 
