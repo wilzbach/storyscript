@@ -133,7 +133,8 @@ def test_grammar_block(patch, grammar, ebnf):
     assert Grammar.if_block.call_count == 1
     assert Grammar.foreach_block.call_count == 1
     assert Grammar.function_block.call_count == 1
-    definition = 'line _NL nested_block?|if_block|foreach_block|function_block'
+    definition = ('line _NL nested_block?|if_block|foreach_block|'
+                  'function_block|arguments')
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 
@@ -306,7 +307,7 @@ def test_grammar_foreach_statement(grammar, ebnf):
 
 def test_grammar_arguments(grammar, ebnf):
     grammar.arguments()
-    rule = '_WS NAME? _COLON (values|path)'
+    rule = '_WS? NAME? _COLON (values|path)'
     ebnf.rule.assert_called_with('arguments', rule, raw=True)
 
 

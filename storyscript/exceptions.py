@@ -22,7 +22,8 @@ class StoryscriptSyntaxError(SyntaxError):
              'dashes and backslashes.'),
             "Variable names can't contain backslashes",
             "Variable names can't contain dashes",
-            "Return can't be used outside functions"
+            "Return can't be used outside functions",
+            'Missing service before service arguments'
         ]
         return reasons[self.error_type]
 

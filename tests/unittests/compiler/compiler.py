@@ -139,6 +139,26 @@ def test_compiler_assignment_parent(patch, compiler, tree):
                                          parent='1')
 
 
+def test_compiler_arguments(patch, compiler, tree):
+    patch.object(Compiler, 'last_line', return_value='1')
+    patch.object(Objects, 'arguments')
+    compiler.lines = {'1': {'method': 'execute', 'args': ['args']}}
+    compiler.arguments(tree)
+    Objects.arguments.assert_called_with(tree)
+    assert compiler.lines['1']['args'] == ['args'] + Objects.arguments()
+
+
+def test_compiler_arguments_not_execute(patch, compiler, tree):
+    """
+    Ensures that the previous line was an execute method.
+    """
+    patch.object(Compiler, 'last_line', return_value='1')
+    patch.object(Objects, 'arguments')
+    compiler.lines = {'1': {'method': 'whatever'}}
+    with raises(StoryscriptSyntaxError):
+        compiler.arguments(tree)
+
+
 def test_compiler_service(patch, compiler, tree):
     """
     Ensures that service trees can be compiled
@@ -333,7 +353,7 @@ def test_compiler_function_block_parent(patch, compiler, tree):
 
 @mark.parametrize('method_name', [
     'service', 'assignment', 'if_block', 'elseif_block', 'else_block',
-    'foreach_block', 'function_block', 'return_statement'
+    'foreach_block', 'function_block', 'return_statement', 'arguments'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)

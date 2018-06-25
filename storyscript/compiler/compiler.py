@@ -96,6 +96,15 @@ class Compiler:
         ]
         self.add_line('set', line, args=args, parent=parent)
 
+    def arguments(self, tree, parent=None):
+        """
+        Compiles arguments. This is called only for nested arguments.
+        """
+        line = self.lines[self.last_line()]
+        if line['method'] != 'execute':
+            raise StoryscriptSyntaxError(5, tree)
+        line['args'] = line['args'] + Objects.arguments(tree)
+
     def service(self, tree, parent=None):
         """
         Translates a command tree to the corresponding line
@@ -189,7 +198,7 @@ class Compiler:
         """
         allowed_nodes = ['service', 'assignment', 'if_block', 'elseif_block',
                          'else_block', 'foreach_block', 'function_block',
-                         'return_statement']
+                         'return_statement', 'arguments']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent=parent)
             return

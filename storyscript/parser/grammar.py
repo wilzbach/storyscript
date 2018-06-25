@@ -101,7 +101,7 @@ class Grammar:
         self.foreach_block()
         self.function_block()
         definition = ('line _NL nested_block?|if_block|foreach_block'
-                      '|function_block')
+                      '|function_block|arguments')
         self.ebnf.rule('block', definition, raw=True)
 
     def number(self):
@@ -201,7 +201,7 @@ class Grammar:
         self.ebnf.rule('foreach_statement', definition)
 
     def arguments(self):
-        rule = '_WS NAME? _COLON (values|path)'
+        rule = '_WS? NAME? _COLON (values|path)'
         self.ebnf.rule('arguments', rule, raw=True)
 
     def command(self):
