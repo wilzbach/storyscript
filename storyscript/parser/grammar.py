@@ -214,8 +214,7 @@ class Grammar:
     def service_fragment(self):
         self.arguments()
         self.command()
-        self.output()
-        rule = '(command arguments*|arguments+) output?'
+        rule = '(command arguments*|arguments+)'
         self.ebnf.rule('service_fragment', rule, raw=True)
 
     def return_statement(self):

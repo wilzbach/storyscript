@@ -323,12 +323,11 @@ def test_grammar_output(grammar, ebnf):
 
 
 def test_grammar_service_fragment(patch, grammar, ebnf):
-    patch.many(Grammar, ['arguments', 'command', 'output'])
+    patch.many(Grammar, ['arguments', 'command'])
     grammar.service_fragment()
     assert Grammar.arguments.call_count == 1
     assert Grammar.command.call_count == 1
-    assert Grammar.output.call_count == 1
-    rule = '(command arguments*|arguments+) output?'
+    rule = '(command arguments*|arguments+)'
     ebnf.rule.assert_called_with('service_fragment', rule, raw=True)
 
 
