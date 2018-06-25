@@ -96,6 +96,13 @@ class Compiler:
         ]
         self.add_line('set', line, args=args, parent=parent)
 
+    def arguments(self, tree, parent=None):
+        """
+        Compiles arguments. This is called only for nested arguments.
+        """
+        line = self.lines[self.last_line()]
+        line['args'] = line['args'] + Objects.arguments(tree)
+
     def service(self, tree, parent=None):
         """
         Translates a command tree to the corresponding line
