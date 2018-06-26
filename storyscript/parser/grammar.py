@@ -100,7 +100,7 @@ class Grammar:
         self.if_block()
         self.foreach_block()
         self.function_block()
-        definition = ('line _NL nested_block?|if_block|foreach_block'
+        definition = ('line _NL|if_block|foreach_block'
                       '|function_block|arguments')
         self.ebnf.rule('block', definition, raw=True)
 
