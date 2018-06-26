@@ -25,7 +25,7 @@ def test_grammar_init():
 
 def test_grammar_line(grammar, ebnf):
     grammar.line()
-    defintions = (['values'], ['operation'], ['comment'], ['service'],
+    defintions = (['values'], ['operation'], ['comment'],
                   ['assignment'], ['return_statement'], ['block'])
     ebnf.rules.assert_called_with('line', *defintions)
 
@@ -402,7 +402,7 @@ def test_grammar_comment(grammar, ebnf):
 
 def test_grammar_build(patch, grammar):
     patch.many(Grammar, ['line', 'spaces', 'values', 'operation', 'comment',
-                         'block', 'comparisons', 'assignment', 'service',
+                         'block', 'comparisons', 'assignment',
                          'types', 'return_statement'])
     result = grammar.build()
     grammar.ebnf.start.assert_called_with('_NL? block')
@@ -411,7 +411,6 @@ def test_grammar_build(patch, grammar):
     assert Grammar.values.call_count == 1
     assert Grammar.operation.call_count == 1
     assert Grammar.assignment.call_count == 1
-    assert Grammar.service.call_count == 1
     assert Grammar.return_statement.call_count == 1
     assert Grammar.block.call_count == 1
     assert Grammar.comparisons.call_count == 1

@@ -13,7 +13,7 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['operation'], ['comment'], ['service'],
+        definitions = (['values'], ['operation'], ['comment'],
                        ['assignment'], ['return_statement'], ['block'])
         self.ebnf.rules('line', *definitions)
 
@@ -273,7 +273,6 @@ class Grammar:
         self.values()
         self.comparisons()
         self.assignment()
-        self.service()
         self.return_statement()
         self.operation()
         self.block()
