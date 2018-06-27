@@ -184,10 +184,19 @@ def test_compiler_service_command(patch, compiler, tree):
     compiler.service(tree)
     line = tree.line()
     service = tree.child().child().value
+    assert compiler.outputs[tree.line()] == Compiler.output()
     compiler.add_line.assert_called_with('execute', line, service=service,
                                          command=tree.node().child(),
                                          parent=None, output=Compiler.output(),
                                          args=Objects.arguments())
+
+
+def test_compiler_service_output(patch, compiler, tree):
+    patch.object(Objects, 'arguments')
+    patch.many(Compiler, ['add_line', 'output'])
+    Compiler.output.return_value = None
+    compiler.service(tree)
+    assert compiler.outputs == {}
 
 
 def test_compiler_service_parent(patch, compiler, tree):
