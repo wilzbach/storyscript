@@ -111,11 +111,24 @@ def test_compiler_add_line_function(patch, compiler):
 
 def test_compiler_add_line_service(patch, compiler):
     """
-    Ensures that a service is registered properly.
+    Ensures that a service is registed in Compiler.services
     """
-    patch.many(Compiler, ['make_line', 'set_next_line'])
-    compiler.add_line('execute', 'line', service='service')
+    patch.many(Compiler, ['make_line', 'set_next_line', 'is_output'])
+    Compiler.is_output.return_value = False
+    compiler.add_line('execute', 'line', service='service', parent='parent')
+    compiler.is_output.assert_called_with('parent', 'service')
     assert compiler.services[0] == 'service'
+
+
+def test_compiler_add_line_service_block_output(patch, compiler):
+    """
+    Ensures that a service is not registered if the current service block
+    has defined it as output
+    """
+    patch.many(Compiler, ['make_line', 'set_next_line', 'is_output'])
+    compiler.outputs = {'line': ['service']}
+    compiler.add_line('execute', 'line', service='service', parent='parent')
+    assert compiler.services == []
 
 
 def test_compiler_add_line_function_call(patch, compiler):

@@ -91,7 +91,8 @@ class Compiler:
         if method == 'function':
             self.functions[kwargs['function']] = line
         elif method == 'execute':
-            self.services.append(kwargs['service'])
+            if self.is_output(kwargs['parent'], kwargs['service']) is False:
+                self.services.append(kwargs['service'])
         self.set_next_line(line)
         self.make_line(method, line, **kwargs)
 
