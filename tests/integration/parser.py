@@ -113,14 +113,15 @@ def test_parser_foreach_block(parser):
 
 def test_parser_service(parser):
     result = parser.parse('org/container-name command\n')
-    node = result.node('start.block.line.service')
+    node = result.node('start.block.service_block.service')
     assert node.node('path').child(0) == 'org/container-name'
     assert node.node('service_fragment.command').child(0) == 'command'
 
 
 def test_parser_service_arguments(parser):
     result = parser.parse('container key:"value"\n')
-    node = result.node('start.block.line.service.service_fragment.arguments')
+    tree = 'start.block.service_block.service.service_fragment.arguments'
+    node = result.node(tree)
     assert node.child(0) == Token('NAME', 'key')
     token = node.child(1).node('string').child(0)
     assert token == Token('DOUBLE_QUOTED', '"value"')
@@ -128,7 +129,8 @@ def test_parser_service_arguments(parser):
 
 def test_parser_service_output(parser):
     result = parser.parse('container command as request, response\n')
-    node = result.node('start.block.line.service.service_fragment.output')
+    tree = 'start.block.service_block.service.service_fragment.output'
+    node = result.node(tree)
     assert node.child(0) == Token('NAME', 'request')
     assert node.child(1) == Token('NAME', 'response')
 
