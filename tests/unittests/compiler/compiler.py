@@ -68,6 +68,15 @@ def test_compiler_function_output(patch, tree):
     assert result == Compiler.output()
 
 
+def test_compiler_is_output(patch, compiler):
+    compiler.outputs = {'parent_line': ['service']}
+    assert compiler.is_output('parent_line', 'service') is True
+
+
+def test_compiler_is_output_false(patch, compiler):
+    assert compiler.is_output('parent_line', 'service') is False
+
+
 def test_compiler_make_line(compiler):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
                       'function': None, 'service': None, 'command': None,

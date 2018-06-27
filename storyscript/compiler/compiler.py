@@ -52,6 +52,15 @@ class Compiler:
     def function_output(cls, tree):
         return cls.output(tree.node('function_output.types'))
 
+    def is_output(self, parent_line, service):
+        """
+        Checks whether a service has been defined as output for this block
+        """
+        if parent_line in self.outputs:
+            if service in self.outputs[parent_line]:
+                return True
+        return False
+
     def make_line(self, method, line, args=None, service=None, command=None,
                   function=None, output=None, enter=None, exit=None,
                   parent=None):
