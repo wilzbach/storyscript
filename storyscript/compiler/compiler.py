@@ -14,6 +14,7 @@ class Compiler:
         self.lines = {}
         self.services = []
         self.functions = {}
+        self.outputs = {}
 
     def sorted_lines(self):
         return sorted(self.lines.keys(), key=lambda x: int(x))
@@ -51,6 +52,15 @@ class Compiler:
     def function_output(cls, tree):
         return cls.output(tree.node('function_output.types'))
 
+    def is_output(self, parent_line, service):
+        """
+        Checks whether a service has been defined as output for this block
+        """
+        if parent_line in self.outputs:
+            if service in self.outputs[parent_line]:
+                return True
+        return False
+
     def make_line(self, method, line, args=None, service=None, command=None,
                   function=None, output=None, enter=None, exit=None,
                   parent=None):
@@ -81,7 +91,8 @@ class Compiler:
         if method == 'function':
             self.functions[kwargs['function']] = line
         elif method == 'execute':
-            self.services.append(kwargs['service'])
+            if self.is_output(kwargs['parent'], kwargs['service']) is False:
+                self.services.append(kwargs['service'])
         self.set_next_line(line)
         self.make_line(method, line, **kwargs)
 
@@ -116,6 +127,8 @@ class Compiler:
         arguments = Objects.arguments(tree.node('service_fragment'))
         service = tree.child(0).child(0).value
         output = self.output(tree.node('service_fragment.output'))
+        if output:
+            self.outputs[line] = output
         self.add_line('execute', line, service=service, command=command,
                       args=arguments, parent=parent, output=output)
 
