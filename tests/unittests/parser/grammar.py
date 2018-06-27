@@ -245,7 +245,8 @@ def test_grammar_list(grammar, ebnf):
     grammar.list()
     tokens = (('comma', ','), ('osb', '['), ('csb', ']'))
     ebnf.tokens.assert_called_with(*tokens, inline=True)
-    definition = '_OSB (values (_COMMA _WS? values)*)? _CSB'
+    definition = ('_OSB (_NL _INDENT)? (values (_COMMA (_WS|_NL)? '
+                  'values)*)? (_NL _DEDENT)? _CSB')
     ebnf.rule.assert_called_with('list', definition, raw=True)
 
 
