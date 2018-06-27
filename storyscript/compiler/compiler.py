@@ -14,6 +14,7 @@ class Compiler:
         self.lines = {}
         self.services = []
         self.functions = {}
+        self.outputs = {}
 
     def sorted_lines(self):
         return sorted(self.lines.keys(), key=lambda x: int(x))
