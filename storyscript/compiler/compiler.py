@@ -107,7 +107,7 @@ class Compiler:
 
     def service(self, tree, parent=None):
         """
-        Translates a command tree to the corresponding line
+        Compiles a service tree.
         """
         line = tree.line()
         command = tree.node('service_fragment.command')
@@ -184,6 +184,15 @@ class Compiler:
                       parent=parent)
         self.subtree(nested_block, parent=line)
 
+    def service_block(self, tree, parent=None):
+        """
+        Compiles a service block and the eventual nested block.
+        """
+        self.service(tree.node('service'), parent=parent)
+        nested_block = tree.node('nested_block')
+        if nested_block:
+            self.subtree(nested_block, parent=tree.line())
+
     def subtrees(self, *trees):
         """
         Parses many subtrees
@@ -196,9 +205,9 @@ class Compiler:
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
         """
-        allowed_nodes = ['service', 'assignment', 'if_block', 'elseif_block',
-                         'else_block', 'foreach_block', 'function_block',
-                         'return_statement', 'arguments']
+        allowed_nodes = ['service_block', 'assignment', 'if_block',
+                         'elseif_block', 'else_block', 'foreach_block',
+                         'function_block', 'return_statement', 'arguments']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent=parent)
             return

@@ -351,8 +351,21 @@ def test_compiler_function_block_parent(patch, compiler, tree):
                                          enter=tree.node().line(), parent='1')
 
 
+def test_compiler_service_block(patch, compiler, tree):
+    patch.object(Compiler, 'service')
+    tree.node.return_value = None
+    compiler.service_block(tree)
+    Compiler.service.assert_called_with(tree.node(), parent=None)
+
+
+def test_compiler_service_block_parent(patch, compiler, tree):
+    patch.object(Compiler, 'subtree')
+    compiler.service_block(tree)
+    Compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
+
+
 @mark.parametrize('method_name', [
-    'service', 'assignment', 'if_block', 'elseif_block', 'else_block',
+    'service_block', 'assignment', 'if_block', 'elseif_block', 'else_block',
     'foreach_block', 'function_block', 'return_statement', 'arguments'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
@@ -364,10 +377,10 @@ def test_compiler_subtree(patch, compiler, method_name):
 
 
 def test_compiler_subtree_parent(patch, compiler):
-    patch.object(Compiler, 'service')
-    tree = Tree('service', [])
+    patch.object(Compiler, 'assignment')
+    tree = Tree('assignment', [])
     compiler.subtree(tree, parent='1')
-    compiler.service.assert_called_with(tree, parent='1')
+    compiler.assignment.assert_called_with(tree, parent='1')
 
 
 def test_compiler_subtrees(patch, compiler, tree):

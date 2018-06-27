@@ -13,7 +13,7 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['operation'], ['comment'], ['service'],
+        definitions = (['values'], ['operation'], ['comment'],
                        ['assignment'], ['return_statement'], ['block'])
         self.ebnf.rules('line', *definitions)
 
@@ -96,12 +96,40 @@ class Grammar:
         rule = ('function_statement', 'nl', 'nested_block')
         self.ebnf.rule('function_block', rule)
 
+    def arguments(self):
+        rule = '_WS? NAME? _COLON (values|path)'
+        self.ebnf.rule('arguments', rule, raw=True)
+
+    def command(self):
+        self.ebnf.rule('command', ('ws', 'name'))
+
+    def output(self):
+        rule = '(_WS _AS _WS NAME (_COMMA _WS? NAME)*)'
+        self.ebnf.rule('output', rule, raw=True)
+
+    def service_fragment(self):
+        self.arguments()
+        self.command()
+        self.output()
+        rule = '(command arguments*|arguments+) output?'
+        self.ebnf.rule('service_fragment', rule, raw=True)
+
+    def service(self):
+        self.service_fragment()
+        self.ebnf.rule('service', ('path', 'service_fragment'))
+
+    def service_block(self):
+        self.service()
+        rule = 'service _NL (nested_block)?'
+        self.ebnf.rule('service_block', rule, raw=True)
+
     def block(self):
         self.if_block()
         self.foreach_block()
         self.function_block()
-        definition = ('line _NL nested_block?|if_block|foreach_block'
-                      '|function_block|arguments')
+        self.service_block()
+        definition = ('line _NL|if_block|foreach_block|function_block'
+                      '|arguments|service_block')
         self.ebnf.rule('block', definition, raw=True)
 
     def number(self):
@@ -183,10 +211,6 @@ class Grammar:
         self.assignment_fragment()
         self.ebnf.rule('assignment', ('path', 'ws?', 'assignment_fragment'))
 
-    def service(self):
-        self.service_fragment()
-        self.ebnf.rule('service', ('path', 'service_fragment'))
-
     def comparisons(self):
         tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
                   ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
@@ -199,24 +223,6 @@ class Grammar:
         self.ebnf.tokens(('foreach', 'foreach'), ('as', 'as'), inline=True)
         definition = ('foreach', 'ws', 'name', 'output')
         self.ebnf.rule('foreach_statement', definition)
-
-    def arguments(self):
-        rule = '_WS? NAME? _COLON (values|path)'
-        self.ebnf.rule('arguments', rule, raw=True)
-
-    def command(self):
-        self.ebnf.rule('command', ('ws', 'name'))
-
-    def output(self):
-        rule = '(_WS _AS _WS NAME (_COMMA _WS? NAME)*)'
-        self.ebnf.rule('output', rule, raw=True)
-
-    def service_fragment(self):
-        self.arguments()
-        self.command()
-        self.output()
-        rule = '(command arguments*|arguments+) output?'
-        self.ebnf.rule('service_fragment', rule, raw=True)
 
     def return_statement(self):
         self.ebnf.token('return', 'return', inline=True)
@@ -273,7 +279,6 @@ class Grammar:
         self.values()
         self.comparisons()
         self.assignment()
-        self.service()
         self.return_statement()
         self.operation()
         self.block()

@@ -25,7 +25,7 @@ def test_grammar_init():
 
 def test_grammar_line(grammar, ebnf):
     grammar.line()
-    defintions = (['values'], ['operation'], ['comment'], ['service'],
+    defintions = (['values'], ['operation'], ['comment'],
                   ['assignment'], ['return_statement'], ['block'])
     ebnf.rules.assert_called_with('line', *defintions)
 
@@ -127,14 +127,57 @@ def test_grammar_function_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('function_block', definition)
 
 
+def test_grammar_arguments(grammar, ebnf):
+    grammar.arguments()
+    rule = '_WS? NAME? _COLON (values|path)'
+    ebnf.rule.assert_called_with('arguments', rule, raw=True)
+
+
+def test_grammar_command(grammar, ebnf):
+    grammar.command()
+    ebnf.rule.assert_called_with('command', ('ws', 'name'))
+
+
+def test_grammar_output(grammar, ebnf):
+    grammar.output()
+    rule = '(_WS _AS _WS NAME (_COMMA _WS? NAME)*)'
+    ebnf.rule.assert_called_with('output', rule, raw=True)
+
+
+def test_grammar_service_fragment(patch, grammar, ebnf):
+    patch.many(Grammar, ['arguments', 'command', 'output'])
+    grammar.service_fragment()
+    assert Grammar.arguments.call_count == 1
+    assert Grammar.command.call_count == 1
+    assert Grammar.output.call_count == 1
+    rule = '(command arguments*|arguments+) output?'
+    ebnf.rule.assert_called_with('service_fragment', rule, raw=True)
+
+
+def test_grammar_service(patch, grammar, ebnf):
+    patch.object(Grammar, 'service_fragment')
+    grammar.service()
+    assert Grammar.service_fragment.call_count == 1
+    ebnf.rule.assert_called_with('service', ('path', 'service_fragment'))
+
+
+def test_grammar_service_block(patch, grammar, ebnf):
+    patch.object(Grammar, 'service')
+    grammar.service_block()
+    rule = 'service _NL (nested_block)?'
+    ebnf.rule.assert_called_with('service_block', rule, raw=True)
+
+
 def test_grammar_block(patch, grammar, ebnf):
-    patch.many(Grammar, ['if_block', 'foreach_block', 'function_block'])
+    patch.many(Grammar, ['if_block', 'foreach_block', 'function_block',
+                         'service_block'])
     grammar.block()
     assert Grammar.if_block.call_count == 1
     assert Grammar.foreach_block.call_count == 1
     assert Grammar.function_block.call_count == 1
-    definition = ('line _NL nested_block?|if_block|foreach_block|'
-                  'function_block|arguments')
+    assert Grammar.service_block.call_count == 1
+    definition = ('line _NL|if_block|foreach_block|function_block'
+                  '|arguments|service_block')
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 
@@ -254,13 +297,6 @@ def test_grammar_assignment(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('assignment', definition)
 
 
-def test_grammar_service(patch, grammar, ebnf):
-    patch.object(Grammar, 'service_fragment')
-    grammar.service()
-    assert Grammar.service_fragment.call_count == 1
-    ebnf.rule.assert_called_with('service', ('path', 'service_fragment'))
-
-
 def test_grammar_comparisons(grammar, ebnf):
     grammar.comparisons()
     tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
@@ -303,33 +339,6 @@ def test_grammar_foreach_statement(grammar, ebnf):
     ebnf.rule.assert_called_with('foreach_statement', definition)
     tokens = (('foreach', 'foreach'), ('as', 'as'))
     ebnf.tokens.assert_called_with(*tokens, inline=True)
-
-
-def test_grammar_arguments(grammar, ebnf):
-    grammar.arguments()
-    rule = '_WS? NAME? _COLON (values|path)'
-    ebnf.rule.assert_called_with('arguments', rule, raw=True)
-
-
-def test_grammar_command(grammar, ebnf):
-    grammar.command()
-    ebnf.rule.assert_called_with('command', ('ws', 'name'))
-
-
-def test_grammar_output(grammar, ebnf):
-    grammar.output()
-    rule = '(_WS _AS _WS NAME (_COMMA _WS? NAME)*)'
-    ebnf.rule.assert_called_with('output', rule, raw=True)
-
-
-def test_grammar_service_fragment(patch, grammar, ebnf):
-    patch.many(Grammar, ['arguments', 'command', 'output'])
-    grammar.service_fragment()
-    assert Grammar.arguments.call_count == 1
-    assert Grammar.command.call_count == 1
-    assert Grammar.output.call_count == 1
-    rule = '(command arguments*|arguments+) output?'
-    ebnf.rule.assert_called_with('service_fragment', rule, raw=True)
 
 
 def test_grammar_return_statement(patch, ebnf, grammar):
@@ -402,7 +411,7 @@ def test_grammar_comment(grammar, ebnf):
 
 def test_grammar_build(patch, grammar):
     patch.many(Grammar, ['line', 'spaces', 'values', 'operation', 'comment',
-                         'block', 'comparisons', 'assignment', 'service',
+                         'block', 'comparisons', 'assignment',
                          'types', 'return_statement'])
     result = grammar.build()
     grammar.ebnf.start.assert_called_with('_NL? block')
@@ -411,7 +420,6 @@ def test_grammar_build(patch, grammar):
     assert Grammar.values.call_count == 1
     assert Grammar.operation.call_count == 1
     assert Grammar.assignment.call_count == 1
-    assert Grammar.service.call_count == 1
     assert Grammar.return_statement.call_count == 1
     assert Grammar.block.call_count == 1
     assert Grammar.comparisons.call_count == 1
