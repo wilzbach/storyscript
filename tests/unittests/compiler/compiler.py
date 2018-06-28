@@ -81,56 +81,56 @@ def test_compiler_arguments_not_execute(patch, compiler, tree):
         compiler.arguments(tree)
 
 
-def test_compiler_service(patch, compiler, tree):
+def test_compiler_service(patch, compiler, lines, tree):
     """
     Ensures that service trees can be compiled
     """
     patch.object(Objects, 'arguments')
-    patch.many(Compiler, ['add_line', 'output'])
+    patch.object(Compiler, 'output')
     tree.node.return_value = None
     compiler.service(tree)
     line = tree.line()
     service = tree.child().child().value
     Objects.arguments.assert_called_with(tree.node())
     Compiler.output.assert_called_with(tree.node())
-    compiler.add_line.assert_called_with('execute', line, service=service,
-                                         command=tree.node(), parent=None,
-                                         args=Objects.arguments(),
-                                         output=Compiler.output())
+    lines.append.assert_called_with('execute', line, service=service,
+                                    command=tree.node(), parent=None,
+                                    args=Objects.arguments(),
+                                    output=Compiler.output())
 
 
-def test_compiler_service_command(patch, compiler, tree):
+def test_compiler_service_command(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
-    patch.many(Compiler, ['add_line', 'output'])
+    patch.object(Compiler, 'output')
     compiler.service(tree)
     line = tree.line()
     service = tree.child().child().value
-    assert compiler.outputs[tree.line()] == Compiler.output()
-    compiler.add_line.assert_called_with('execute', line, service=service,
-                                         command=tree.node().child(),
-                                         parent=None, output=Compiler.output(),
-                                         args=Objects.arguments())
+    lines.set_output.assert_called_with(line, Compiler.output())
+    lines.append.assert_called_with('execute', line, service=service,
+                                    command=tree.node().child(),
+                                    parent=None, output=Compiler.output(),
+                                    args=Objects.arguments())
 
 
-def test_compiler_service_output(patch, compiler, tree):
+def test_compiler_service_no_output(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
-    patch.many(Compiler, ['add_line', 'output'])
+    patch.object(Compiler, 'output')
     Compiler.output.return_value = None
     compiler.service(tree)
-    assert compiler.outputs == {}
+    assert lines.set_output.call_count == 0
 
 
-def test_compiler_service_parent(patch, compiler, tree):
+def test_compiler_service_parent(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
-    patch.many(Compiler, ['add_line', 'output'])
+    patch.object(Compiler, 'output')
     tree.node.return_value = None
     compiler.service(tree, parent='1')
     line = tree.line()
     service = tree.child().child().value
-    compiler.add_line.assert_called_with('execute', line, service=service,
-                                         command=tree.node(),
-                                         args=Objects.arguments(),
-                                         output=Compiler.output(), parent='1')
+    lines.append.assert_called_with('execute', line, service=service,
+                                    command=tree.node(),
+                                    args=Objects.arguments(),
+                                    output=Compiler.output(), parent='1')
 
 
 def test_compiler_return_statement(compiler, tree):
