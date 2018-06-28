@@ -113,8 +113,8 @@ class Compiler:
         args = [Objects.path(tree.node('foreach_statement'))]
         output = self.output(tree.node('foreach_statement.output'))
         nested_block = tree.node('nested_block')
-        self.add_line('for', line, args=args, enter=nested_block.line(),
-                      parent=parent, output=output)
+        self.lines.append('for', line, args=args, enter=nested_block.line(),
+                          parent=parent, output=output)
         self.subtree(nested_block, parent=line)
 
     def function_block(self, tree, parent=None):

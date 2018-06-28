@@ -228,27 +228,27 @@ def test_compiler_else_block_parent(patch, compiler, lines, tree):
                                     enter=tree.node().line(), parent='1')
 
 
-def test_compiler_foreach_block(patch, compiler, tree):
+def test_compiler_foreach_block(patch, compiler, lines, tree):
     patch.object(Objects, 'path')
-    patch.many(Compiler, ['add_line', 'subtree', 'output'])
+    patch.many(Compiler, ['subtree', 'output'])
     compiler.foreach_block(tree)
     Objects.path.assert_called_with(tree.node())
     compiler.output.assert_called_with(tree.node())
     args = [Objects.path()]
-    compiler.add_line.assert_called_with('for', tree.line(), args=args,
-                                         enter=tree.node().line(),
-                                         output=Compiler.output(), parent=None)
+    lines.append.assert_called_with('for', tree.line(), args=args,
+                                    enter=tree.node().line(),
+                                    output=Compiler.output(), parent=None)
     compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
 
 
-def test_compiler_foreach_block_parent(patch, compiler, tree):
+def test_compiler_foreach_block_parent(patch, compiler, lines, tree):
     patch.object(Objects, 'path')
-    patch.many(Compiler, ['add_line', 'subtree', 'output'])
+    patch.many(Compiler, ['subtree', 'output'])
     compiler.foreach_block(tree, parent='1')
     args = [Objects.path()]
-    compiler.add_line.assert_called_with('for', tree.line(), args=args,
-                                         enter=tree.node().line(),
-                                         output=Compiler.output(), parent='1')
+    lines.append.assert_called_with('for', tree.line(), args=args,
+                                    enter=tree.node().line(),
+                                    output=Compiler.output(), parent='1')
 
 
 def test_compiler_function_block(patch, compiler, tree):
