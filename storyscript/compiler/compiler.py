@@ -70,7 +70,7 @@ class Compiler:
             raise StoryscriptSyntaxError(4, tree)
         line = tree.line()
         args = [Objects.values(tree.child(0))]
-        self.add_line('return', line, args=args, parent=parent)
+        self.lines.append('return', line, args=args, parent=parent)
 
     def if_block(self, tree, parent=None):
         line = tree.line()

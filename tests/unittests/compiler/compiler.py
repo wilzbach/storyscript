@@ -138,14 +138,13 @@ def test_compiler_return_statement(compiler, tree):
         compiler.return_statement(tree)
 
 
-def test_compiler_return_statement_parent(patch, compiler, tree):
+def test_compiler_return_statement_parent(patch, compiler, lines, tree):
     patch.object(Objects, 'values')
-    patch.object(Compiler, 'add_line')
     compiler.return_statement(tree, parent='1')
     line = tree.line()
     Objects.values.assert_called_with(tree.child())
-    compiler.add_line.assert_called_with('return', line,
-                                         args=[Objects.values()], parent='1')
+    lines.append.assert_called_with('return', line, args=[Objects.values()],
+                                    parent='1')
 
 
 def test_compiler_if_block(patch, compiler):
