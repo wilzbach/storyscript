@@ -126,9 +126,9 @@ class Compiler:
         args = Objects.function_arguments(function)
         output = self.function_output(function)
         nested_block = tree.node('nested_block')
-        self.add_line('function', line, function=function.child(1).value,
-                      output=output, args=args, enter=nested_block.line(),
-                      parent=parent)
+        self.lines.append('function', line, function=function.child(1).value,
+                          output=output, args=args, enter=nested_block.line(),
+                          parent=parent)
         self.subtree(nested_block, parent=line)
 
     def service_block(self, tree, parent=None):
