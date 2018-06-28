@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from .lines import Lines
 from .objects import Objects
 from ..exceptions import StoryscriptSyntaxError
 from ..parser import Tree
@@ -11,10 +12,7 @@ class Compiler:
     Compiles Storyscript abstract syntax tree to JSON.
     """
     def __init__(self):
-        self.lines = {}
-        self.services = []
-        self.functions = {}
-        self.outputs = {}
+        self.lines = Lines()
 
     @staticmethod
     def output(tree):

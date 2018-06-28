@@ -3,22 +3,28 @@ from lark.lexer import Token
 
 from pytest import fixture, mark, raises
 
-from storyscript.compiler import Compiler, Objects
+from storyscript.compiler import Compiler, Lines, Objects
 from storyscript.exceptions import StoryscriptSyntaxError
 from storyscript.parser import Tree
 from storyscript.version import version
 
 
 @fixture
-def compiler():
-    return Compiler()
+def lines(magic):
+    return magic()
 
 
-def test_compiler_init(compiler):
-    assert compiler.lines == {}
-    assert compiler.services == []
-    assert compiler.functions == {}
-    assert compiler.outputs == {}
+@fixture
+def compiler(patch, lines):
+    patch.init(Lines)
+    compiler = Compiler()
+    compiler.lines = lines
+    return compiler
+
+
+def test_compiler_init():
+    compiler = Compiler()
+    assert isinstance(compiler.lines, Lines)
 
 
 def test_compiler_output(tree):
