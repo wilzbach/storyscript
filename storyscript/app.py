@@ -63,13 +63,12 @@ class App:
         return services
 
     @classmethod
-    def compile(cls, path, ebnf_file=None):
+    def compile(cls, path, ebnf_file=None, debug=False):
         """
         Parse and compile stories in path to JSON
         """
-        # I can have a debug argument and pass it like ebnf_file
         stories = cls.get_stories(path)
-        compiled_stories = cls.parse(stories, ebnf_file=ebnf_file)
+        compiled_stories = cls.parse(stories, ebnf_file=ebnf_file, debug=debug)
         services = cls.services(compiled_stories)
         dictionary = {'stories': compiled_stories, 'services': services}
         return json.dumps(dictionary, indent=2)

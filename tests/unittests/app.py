@@ -110,7 +110,8 @@ def test_app_compile(patch):
     patch.many(App, ['get_stories', 'parse', 'services'])
     result = App.compile('path')
     App.get_stories.assert_called_with('path')
-    App.parse.assert_called_with(App.get_stories(), ebnf_file=None)
+    kwargs = {'ebnf_file': None, 'debug': False}
+    App.parse.assert_called_with(App.get_stories(), **kwargs)
     App.services.assert_called_with(App.parse())
     dictionary = {'stories': App.parse(), 'services': App.services()}
     json.dumps.assert_called_with(dictionary, indent=2)
@@ -121,7 +122,16 @@ def test_app_compile_ebnf_file(patch):
     patch.object(json, 'dumps')
     patch.many(App, ['get_stories', 'parse', 'services'])
     App.compile('path', ebnf_file='test.ebnf')
-    App.parse.assert_called_with(App.get_stories(), ebnf_file='test.ebnf')
+    kwargs = {'ebnf_file': 'test.ebnf', 'debug': False}
+    App.parse.assert_called_with(App.get_stories(), **kwargs)
+
+
+def test_app_compile_debug(patch):
+    patch.object(json, 'dumps')
+    patch.many(App, ['get_stories', 'parse', 'services'])
+    App.compile('path', debug='debug')
+    kwargs = {'ebnf_file': None, 'debug': 'debug'}
+    App.parse.assert_called_with(App.get_stories(), **kwargs)
 
 
 def test_app_lexer(patch, read_story):
