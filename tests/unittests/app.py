@@ -2,7 +2,7 @@
 import json
 import os
 
-from pytest import fixture
+from pytest import fixture, raises
 
 from storyscript.app import App
 from storyscript.compiler import Compiler
@@ -46,6 +46,14 @@ def test_app_read_story(story, storypath):
     """
     result = App.read_story(storypath)
     assert result == story
+
+
+def test_app_read_story_not_found(patch, capsys):
+    patch.object(os, 'path')
+    with raises(SystemExit):
+        App.read_story('whatever')
+    out, err = capsys.readouterr()
+    assert out == 'File "whatever" not found at {}\n'.format(os.path.abspath())
 
 
 def test_app_get_stories(mocker):

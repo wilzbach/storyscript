@@ -13,8 +13,13 @@ class App:
         """
         Reads a story
         """
-        with open(storypath, 'r') as file:
-            return file.read()
+        try:
+            with open(storypath, 'r') as file:
+                return file.read()
+        except FileNotFoundError:
+            abspath = os.path.abspath(storypath)
+            print('File "{}" not found at {}'.format(storypath, abspath))
+            exit()
 
     @staticmethod
     def get_stories(storypath):
@@ -37,8 +42,12 @@ class App:
         """
         results = {}
         for story in stories:
+            # if debug raise the original error
+            # otherwise murder them
             tree = Parser(ebnf_file=ebnf_file).parse(cls.read_story(story))
+            # error wrap
             results[story] = Compiler.compile(tree)
+            # and compiler wrap too
         return results
 
     @staticmethod
@@ -58,6 +67,7 @@ class App:
         """
         Parse and compile stories in path to JSON
         """
+        # I can have a debug argument and pass it like ebnf_file
         stories = cls.get_stories(path)
         compiled_stories = cls.parse(stories, ebnf_file=ebnf_file)
         services = cls.services(compiled_stories)
