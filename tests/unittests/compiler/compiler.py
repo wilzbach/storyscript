@@ -212,20 +212,20 @@ def test_compiler_elseif_block_parent(patch, compiler, lines, tree):
                                     enter=tree.node().line(), parent='1')
 
 
-def test_compiler_else_block(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'subtree', 'set_exit_line'])
+def test_compiler_else_block(patch, compiler, lines, tree):
+    patch.object(Compiler, 'subtree')
     compiler.else_block(tree)
-    compiler.set_exit_line.assert_called_with(tree.line())
-    compiler.add_line.assert_called_with('else', tree.line(),
-                                         enter=tree.node().line(), parent=None)
+    lines.set_exit.assert_called_with(tree.line())
+    lines.append.assert_called_with('else', tree.line(),
+                                    enter=tree.node().line(), parent=None)
     compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
 
 
-def test_compiler_else_block_parent(patch, compiler, tree):
-    patch.many(Compiler, ['add_line', 'subtree'])
+def test_compiler_else_block_parent(patch, compiler, lines, tree):
+    patch.object(Compiler, 'subtree')
     compiler.else_block(tree, parent='1')
-    compiler.add_line.assert_called_with('else', tree.line(),
-                                         enter=tree.node().line(), parent='1')
+    lines.append.assert_called_with('else', tree.line(),
+                                    enter=tree.node().line(), parent='1')
 
 
 def test_compiler_foreach_block(patch, compiler, tree):

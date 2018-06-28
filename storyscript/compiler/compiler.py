@@ -98,10 +98,14 @@ class Compiler:
         self.subtree(nested_block, parent=line)
 
     def else_block(self, tree, parent=None):
+        """
+        Compiles else_block trees
+        """
         line = tree.line()
-        self.set_exit_line(line)
+        self.lines.set_exit(line)
         nested_block = tree.node('nested_block')
-        self.add_line('else', line, enter=nested_block.line(), parent=parent)
+        self.lines.append('else', line, enter=nested_block.line(),
+                          parent=parent)
         self.subtree(nested_block, parent=line)
 
     def foreach_block(self, tree, parent=None):
