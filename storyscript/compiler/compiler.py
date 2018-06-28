@@ -16,30 +16,6 @@ class Compiler:
         self.functions = {}
         self.outputs = {}
 
-    def sorted_lines(self):
-        return sorted(self.lines.keys(), key=lambda x: int(x))
-
-    def last_line(self):
-        """
-        Gets the last line
-        """
-        if self.lines:
-            return self.sorted_lines()[-1]
-
-    def set_next_line(self, line_number):
-        """
-        Finds the previous line, and set the current as its next line
-        """
-        previous_line = self.last_line()
-        if previous_line:
-            self.lines[previous_line]['next'] = line_number
-
-    def set_exit_line(self, line):
-        for line_number in self.sorted_lines()[::-1]:
-            if self.lines[line_number]['method'] in ['if', 'elif']:
-                self.lines[line_number]['exit'] = line
-                break
-
     @staticmethod
     def output(tree):
         output = []
@@ -51,50 +27,6 @@ class Compiler:
     @classmethod
     def function_output(cls, tree):
         return cls.output(tree.node('function_output.types'))
-
-    def is_output(self, parent_line, service):
-        """
-        Checks whether a service has been defined as output for this block
-        """
-        if parent_line in self.outputs:
-            if service in self.outputs[parent_line]:
-                return True
-        return False
-
-    def make_line(self, method, line, args=None, service=None, command=None,
-                  function=None, output=None, enter=None, exit=None,
-                  parent=None):
-        """
-        Creates the base dictionary for a given line.
-        """
-        dictionary = {
-            line: {
-                'method': method,
-                'ln': line,
-                'output': output,
-                'service': service,
-                'command': command,
-                'function': function,
-                'args': args,
-                'enter': enter,
-                'exit': exit,
-                'parent': parent
-            }
-        }
-        self.lines = {**self.lines, **dictionary}
-
-    def add_line(self, method, line, **kwargs):
-        if 'service' in kwargs:
-            if kwargs['service'] in self.functions:
-                method = 'call'
-
-        if method == 'function':
-            self.functions[kwargs['function']] = line
-        elif method == 'execute':
-            if self.is_output(kwargs['parent'], kwargs['service']) is False:
-                self.services.append(kwargs['service'])
-        self.set_next_line(line)
-        self.make_line(method, line, **kwargs)
 
     def assignment(self, tree, parent=None):
         """

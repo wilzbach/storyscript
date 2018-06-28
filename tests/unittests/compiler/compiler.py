@@ -21,36 +21,6 @@ def test_compiler_init(compiler):
     assert compiler.outputs == {}
 
 
-def test_compiler_sorted_lines(compiler):
-    compiler.lines = {'1': '1', '2': '2'}
-    assert compiler.sorted_lines() == ['1', '2']
-
-
-def test_compiler_last_line(patch, compiler):
-    patch.object(Compiler, 'sorted_lines')
-    compiler.lines = {'1': '1'}
-    assert compiler.last_line() == compiler.sorted_lines()[-1]
-
-
-def test_compiler_last_line_no_lines(compiler):
-    assert compiler.last_line() is None
-
-
-def test_compiler_set_next_line(patch, compiler):
-    patch.object(Compiler, 'last_line', return_value='1')
-    compiler.lines['1'] = {}
-    compiler.set_next_line('2')
-    assert compiler.lines['1']['next'] == '2'
-
-
-def test_compiler_set_exit_line(patch, compiler):
-    patch.object(Compiler, 'sorted_lines', return_value=['1', '2'])
-    compiler.lines = {'1': {}, '2': {'method': 'if'}}
-    compiler.set_exit_line('3')
-    assert compiler.sorted_lines.call_count == 1
-    assert compiler.lines['2']['exit'] == '3'
-
-
 def test_compiler_output(tree):
     tree.children = [Token('token', 'output')]
     result = Compiler.output(tree)
@@ -66,79 +36,6 @@ def test_compiler_function_output(patch, tree):
     result = Compiler.function_output(tree)
     tree.node.assert_called_with('function_output.types')
     assert result == Compiler.output()
-
-
-def test_compiler_is_output(patch, compiler):
-    compiler.outputs = {'parent_line': ['service']}
-    assert compiler.is_output('parent_line', 'service') is True
-
-
-def test_compiler_is_output_false(patch, compiler):
-    assert compiler.is_output('parent_line', 'service') is False
-
-
-def test_compiler_make_line(compiler):
-    expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
-                      'function': None, 'service': None, 'command': None,
-                      'enter': None, 'exit': None, 'args': None,
-                      'parent': None}}
-    compiler.make_line('method', '1')
-    assert compiler.lines == expected
-
-
-@mark.parametrize('keywords', ['service', 'command', 'function', 'output',
-                               'args', 'enter', 'exit', 'parent'])
-def test_compiler_make_line_keywords(compiler, keywords):
-    compiler.make_line('method', '1', **{keywords: keywords})
-    assert compiler.lines['1'][keywords] == keywords
-
-
-def test_compiler_add_line(patch, compiler):
-    patch.many(Compiler, ['make_line', 'set_next_line'])
-    compiler.add_line('method', 'line', extras='whatever')
-    compiler.set_next_line.assert_called_with('line')
-    compiler.make_line.assert_called_with('method', 'line', extras='whatever')
-
-
-def test_compiler_add_line_function(patch, compiler):
-    """
-    Ensures that a line is registered properly.
-    """
-    patch.many(Compiler, ['make_line', 'set_next_line'])
-    compiler.add_line('function', 'line', function='function')
-    assert compiler.functions['function'] == 'line'
-
-
-def test_compiler_add_line_service(patch, compiler):
-    """
-    Ensures that a service is registed in Compiler.services
-    """
-    patch.many(Compiler, ['make_line', 'set_next_line', 'is_output'])
-    Compiler.is_output.return_value = False
-    compiler.add_line('execute', 'line', service='service', parent='parent')
-    compiler.is_output.assert_called_with('parent', 'service')
-    assert compiler.services[0] == 'service'
-
-
-def test_compiler_add_line_service_block_output(patch, compiler):
-    """
-    Ensures that a service is not registered if the current service block
-    has defined it as output
-    """
-    patch.many(Compiler, ['make_line', 'set_next_line', 'is_output'])
-    compiler.outputs = {'line': ['service']}
-    compiler.add_line('execute', 'line', service='service', parent='parent')
-    assert compiler.services == []
-
-
-def test_compiler_add_line_function_call(patch, compiler):
-    """
-    Ensures that a function call is registered properly.
-    """
-    patch.many(Compiler, ['make_line', 'set_next_line'])
-    compiler.functions['function'] = 1
-    compiler.add_line('execute', 'line', service='function')
-    compiler.make_line.assert_called_with('call', 'line', service='function')
 
 
 def test_compiler_assignment(patch, compiler, tree):
