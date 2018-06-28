@@ -82,8 +82,8 @@ def test_app_parse(patch, parser, read_story):
     result = App.parse(['test.story'])
     App.read_story.assert_called_with('test.story')
     Parser.__init__.assert_called_with(ebnf_file=None)
-    Parser().parse.assert_called_with(App.read_story())
-    Compiler.compile.assert_called_with(Parser().parse())
+    Parser().parse.assert_called_with(App.read_story(), debug=False)
+    Compiler.compile.assert_called_with(Parser().parse(), debug=False)
     assert result == {'test.story': Compiler.compile()}
 
 
@@ -91,6 +91,13 @@ def test_app_parse_ebnf_file(patch, parser, read_story):
     patch.object(Compiler, 'compile')
     App.parse(['test.story'], ebnf_file='test.ebnf')
     Parser.__init__.assert_called_with(ebnf_file='test.ebnf')
+
+
+def test_app_parse_debug(patch, parser, read_story):
+    patch.object(Compiler, 'compile')
+    App.parse(['test.story'], debug=True)
+    Parser().parse.assert_called_with(App.read_story(), debug=True)
+    Compiler.compile.assert_called_with(Parser().parse(), debug=True)
 
 
 def test_app_services():
