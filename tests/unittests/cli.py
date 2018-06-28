@@ -46,7 +46,7 @@ def test_cli_parse(patch, runner, echo, app):
     """
     patch.object(click, 'style')
     runner.invoke(Cli.parse, ['/path'])
-    App.compile.assert_called_with('/path', ebnf_file=None)
+    App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
 
@@ -68,9 +68,14 @@ def test_cli_parse_silent(runner, echo, app, option):
     Ensures --silent makes everything quiet
     """
     result = runner.invoke(Cli.parse, ['/path', option])
-    App.compile.assert_called_with('/path', ebnf_file=None)
+    App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
     assert result.output == ''
     assert click.echo.call_count == 0
+
+
+def test_cli_parse_debug(runner, echo, app):
+    runner.invoke(Cli.parse, ['/path', '--debug'])
+    App.compile.assert_called_with('/path', ebnf_file=None, debug=True)
 
 
 @mark.parametrize('option', ['--json', '-j'])
@@ -79,13 +84,14 @@ def test_cli_parse_json(runner, echo, app, option):
     Ensures --json outputs json
     """
     runner.invoke(Cli.parse, ['/path', option])
-    App.compile.assert_called_with('/path', ebnf_file=None)
+    App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
     click.echo.assert_called_with(App.compile())
 
 
-def test_clis_parse_ebnf_file(runner, echo, app):
+def test_cli_parse_ebnf_file(runner, echo, app):
     runner.invoke(Cli.parse, ['/path', '--ebnf-file', 'test.grammar'])
-    App.compile.assert_called_with('/path', ebnf_file='test.grammar')
+    kwargs = {'ebnf_file': 'test.grammar', 'debug': False}
+    App.compile.assert_called_with('/path', **kwargs)
 
 
 def test_cli_lexer(patch, magic, runner, app, echo):

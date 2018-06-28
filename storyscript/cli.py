@@ -32,12 +32,13 @@ class Cli:
     @click.argument('output_file_path', required=False)
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
+    @click.option('--debug', is_flag=True)
     @click.option('--ebnf-file', help=ebnf_file_help)
-    def parse(storypath, output_file_path, json, silent, ebnf_file):
+    def parse(storypath, output_file_path, json, silent, debug, ebnf_file):
         """
         Parses stories and prints the resulting json
         """
-        results = App.compile(storypath, ebnf_file=ebnf_file)
+        results = App.compile(storypath, ebnf_file=ebnf_file, debug=debug)
         if not silent:
             if json:
                 click.echo(results)
