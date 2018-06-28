@@ -117,3 +117,8 @@ def test_lines_append_function_call(patch, lines):
     lines.functions['function'] = 1
     lines.append('execute', 'line', service='function')
     lines.make.assert_called_with('call', 'line', service='function')
+
+
+def test_compiler_get_services(lines):
+    lines.services = ['one', 'one']
+    assert lines.get_services() == ['one']

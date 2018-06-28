@@ -80,3 +80,9 @@ class Lines:
                 self.services.append(kwargs['service'])
         self.set_next(line)
         self.make(method, line, **kwargs)
+
+    def get_services(self):
+        """
+        Get the services and remove duplicates.
+        """
+        return list(set(self.services))

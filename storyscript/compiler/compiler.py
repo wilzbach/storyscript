@@ -168,12 +168,6 @@ class Compiler:
             if isinstance(item, Tree):
                 self.subtree(item, parent=parent)
 
-    def get_services(self):
-        """
-        Get the services and remove duplicates.
-        """
-        return list(set(self.services))
-
     @staticmethod
     def compiler():
         return Compiler()
