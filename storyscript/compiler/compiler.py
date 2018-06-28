@@ -35,7 +35,7 @@ class Compiler:
             Objects.path(tree.node('path')),
             Objects.values(tree.node('assignment_fragment').child(1))
         ]
-        self.add_line('set', line, args=args, parent=parent)
+        self.lines.append('set', line, args=args, parent=parent)
 
     def arguments(self, tree, parent=None):
         """
