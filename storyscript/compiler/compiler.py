@@ -90,11 +90,11 @@ class Compiler:
         Compiles elseif_block trees
         """
         line = tree.line()
-        self.set_exit_line(line)
+        self.lines.set_exit(line)
         args = Objects.expression(tree.node('elseif_statement'))
         nested_block = tree.node('nested_block')
-        self.add_line('elif', line, args=args, enter=nested_block.line(),
-                      parent=parent)
+        self.lines.append('elif', line, args=args, enter=nested_block.line(),
+                          parent=parent)
         self.subtree(nested_block, parent=line)
 
     def else_block(self, tree, parent=None):

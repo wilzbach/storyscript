@@ -190,26 +190,26 @@ def test_compiler_if_block_with_else(patch, compiler):
     compiler.subtrees.assert_called_with(tree.node('else_block'))
 
 
-def test_compiler_elseif_block(patch, compiler, tree):
+def test_compiler_elseif_block(patch, compiler, lines, tree):
     patch.object(Objects, 'expression')
-    patch.many(Compiler, ['add_line', 'subtree', 'set_exit_line'])
+    patch.object(Compiler, 'subtree')
     compiler.elseif_block(tree)
-    compiler.set_exit_line.assert_called_with(tree.line())
+    lines.set_exit.assert_called_with(tree.line())
     assert tree.node.call_count == 2
     Objects.expression.assert_called_with(tree.node())
     args = Objects.expression()
-    compiler.add_line.assert_called_with('elif', tree.line(), args=args,
-                                         enter=tree.node().line(), parent=None)
+    lines.append.assert_called_with('elif', tree.line(), args=args,
+                                    enter=tree.node().line(), parent=None)
     compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
 
 
-def test_compiler_elseif_block_parent(patch, compiler, tree):
+def test_compiler_elseif_block_parent(patch, compiler, lines, tree):
     patch.object(Objects, 'expression')
-    patch.many(Compiler, ['add_line', 'subtree'])
+    patch.object(Compiler, 'subtree')
     compiler.elseif_block(tree, parent='1')
     args = Objects.expression()
-    compiler.add_line.assert_called_with('elif', tree.line(), args=args,
-                                         enter=tree.node().line(), parent='1')
+    lines.append.assert_called_with('elif', tree.line(), args=args,
+                                    enter=tree.node().line(), parent='1')
 
 
 def test_compiler_else_block(patch, compiler, tree):
