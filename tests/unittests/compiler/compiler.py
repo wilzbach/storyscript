@@ -88,46 +88,34 @@ def test_compiler_service(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
     patch.object(Compiler, 'output')
     tree.node.return_value = None
-    compiler.service(tree)
+    compiler.service(tree, 'parent')
     line = tree.line()
     service = tree.child().child().value
     Objects.arguments.assert_called_with(tree.node())
     Compiler.output.assert_called_with(tree.node())
     lines.execute.assert_called_with(line, service, tree.node(),
                                      Objects.arguments(), Compiler.output(),
-                                     None)
+                                     'parent')
 
 
 def test_compiler_service_command(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
     patch.object(Compiler, 'output')
-    compiler.service(tree)
+    compiler.service(tree, 'parent')
     line = tree.line()
     service = tree.child().child().value
     lines.set_output.assert_called_with(line, Compiler.output())
     lines.execute.assert_called_with(line, service, tree.node().child(),
                                      Objects.arguments(), Compiler.output(),
-                                     None)
+                                     'parent')
 
 
 def test_compiler_service_no_output(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
     patch.object(Compiler, 'output')
     Compiler.output.return_value = None
-    compiler.service(tree)
+    compiler.service(tree, 'parent')
     assert lines.set_output.call_count == 0
-
-
-def test_compiler_service_parent(patch, compiler, lines, tree):
-    patch.object(Objects, 'arguments')
-    patch.object(Compiler, 'output')
-    tree.node.return_value = None
-    compiler.service(tree, parent='1')
-    line = tree.line()
-    service = tree.child().child().value
-    lines.execute.assert_called_with(line, service, tree.node(),
-                                     Objects.arguments(), Compiler.output(),
-                                     '1')
 
 
 def test_compiler_return_statement(compiler, tree):
@@ -277,10 +265,10 @@ def test_compiler_service_block(patch, compiler, tree):
     patch.object(Compiler, 'service')
     tree.node.return_value = None
     compiler.service_block(tree)
-    Compiler.service.assert_called_with(tree.node(), parent=None)
+    Compiler.service.assert_called_with(tree.node(), None)
 
 
-def test_compiler_service_block_parent(patch, compiler, tree):
+def test_compiler_service_block_nested_block(patch, compiler, tree):
     patch.many(Compiler, ['subtree', 'service'])
     compiler.service_block(tree)
     Compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
