@@ -41,7 +41,7 @@ class Compiler:
         """
         Compiles arguments. This is called only for nested arguments.
         """
-        line = self.lines[self.last_line()]
+        line = self.lines.lines[self.lines.last()]
         if line['method'] != 'execute':
             raise StoryscriptSyntaxError(5, tree)
         line['args'] = line['args'] + Objects.arguments(tree)
