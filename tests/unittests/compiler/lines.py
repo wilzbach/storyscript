@@ -46,6 +46,11 @@ def test_lines_set_exit(patch, lines):
     assert lines.lines['2']['exit'] == '3'
 
 
+def test_lines_set_output(lines):
+    lines.set_output('line', 'output')
+    assert lines.outputs['line'] == 'output'
+
+
 def test_lines_is_output(patch, lines):
     lines.outputs = {'parent_line': ['service']}
     assert lines.is_output('parent_line', 'service') is True

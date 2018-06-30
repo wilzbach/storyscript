@@ -38,6 +38,9 @@ class Lines:
                 self.lines[line_number]['exit'] = line
                 break
 
+    def set_output(self, line, output):
+        self.outputs[line] = output
+
     def is_output(self, parent_line, service):
         """
         Checks whether a service has been defined as output for this block
