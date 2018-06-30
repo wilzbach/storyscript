@@ -88,33 +88,46 @@ def test_compiler_service(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
     patch.object(Compiler, 'output')
     tree.node.return_value = None
-    compiler.service(tree, 'parent')
+    compiler.service(tree, None, 'parent')
     line = tree.line()
     service = tree.child().child().value
     Objects.arguments.assert_called_with(tree.node())
     Compiler.output.assert_called_with(tree.node())
     lines.execute.assert_called_with(line, service, tree.node(),
                                      Objects.arguments(), Compiler.output(),
-                                     'parent')
+                                     None, 'parent')
 
 
 def test_compiler_service_command(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
     patch.object(Compiler, 'output')
-    compiler.service(tree, 'parent')
+    compiler.service(tree, None, 'parent')
     line = tree.line()
     service = tree.child().child().value
     lines.set_output.assert_called_with(line, Compiler.output())
     lines.execute.assert_called_with(line, service, tree.node().child(),
                                      Objects.arguments(), Compiler.output(),
-                                     'parent')
+                                     None, 'parent')
+
+
+def test_compiler_service_nested_block(patch, magic, compiler, lines, tree):
+    patch.object(Objects, 'arguments')
+    patch.object(Compiler, 'output')
+    tree.node.return_value = None
+    nested_block = magic()
+    compiler.service(tree, nested_block, 'parent')
+    line = tree.line()
+    service = tree.child().child().value
+    lines.execute.assert_called_with(line, service, tree.node(),
+                                     Objects.arguments(), Compiler.output(),
+                                     nested_block.line(), 'parent')
 
 
 def test_compiler_service_no_output(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
     patch.object(Compiler, 'output')
     Compiler.output.return_value = None
-    compiler.service(tree, 'parent')
+    compiler.service(tree, None, 'parent')
     assert lines.set_output.call_count == 0
 
 
