@@ -84,6 +84,12 @@ class Lines:
         self.set_next(line)
         self.make(method, line, **kwargs)
 
+    def execute(self, line, service, command, arguments, output, enter,
+                parent):
+        kwargs = {'service': service, 'command': command, 'args': arguments,
+                  'output': output, 'enter': enter, 'parent': parent}
+        self.append('execute', line, **kwargs)
+
     def get_services(self):
         """
         Get the services and remove duplicates.

@@ -46,7 +46,7 @@ class Compiler:
             raise StoryscriptSyntaxError(5, tree)
         line['args'] = line['args'] + Objects.arguments(tree)
 
-    def service(self, tree, parent=None):
+    def service(self, tree, nested_block, parent):
         """
         Compiles a service tree.
         """
@@ -59,8 +59,11 @@ class Compiler:
         output = self.output(tree.node('service_fragment.output'))
         if output:
             self.lines.set_output(line, output)
-        self.lines.append('execute', line, service=service, command=command,
-                          args=arguments, parent=parent, output=output)
+        enter = None
+        if nested_block:
+            enter = nested_block.line()
+        self.lines.execute(line, service, command, arguments, output, enter,
+                           parent)
 
     def return_statement(self, tree, parent=None):
         """
@@ -135,8 +138,8 @@ class Compiler:
         """
         Compiles a service block and the eventual nested block.
         """
-        self.service(tree.node('service'), parent=parent)
         nested_block = tree.node('nested_block')
+        self.service(tree.node('service'), nested_block, parent)
         if nested_block:
             self.subtree(nested_block, parent=tree.line())
 

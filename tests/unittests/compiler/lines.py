@@ -124,6 +124,15 @@ def test_lines_append_function_call(patch, lines):
     lines.make.assert_called_with('call', 'line', service='function')
 
 
+def test_lines_execute(patch, lines):
+    patch.object(Lines, 'append')
+    lines.execute('line', 'service', 'command', 'args', 'output', 'enter',
+                  'parent')
+    kwargs = {'service': 'service', 'command': 'command', 'args': 'args',
+              'output': 'output', 'enter': 'enter', 'parent': 'parent'}
+    Lines.append.assert_called_with('execute', 'line', **kwargs)
+
+
 def test_compiler_get_services(lines):
     lines.services = ['one', 'one']
     assert lines.get_services() == ['one']
