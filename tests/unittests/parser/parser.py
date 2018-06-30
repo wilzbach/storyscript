@@ -39,6 +39,22 @@ def test_parser_init_ebnf_file():
     assert parser.ebnf_file == 'grammar.ebnf'
 
 
+def test_parser_make_message():
+    template = ('Failed reading story because of unexpected "{}" at'
+                'line {}, column {}')
+    result = Parser.make_message(1, 2, 3)
+    assert result == template.format(1, 2, 3)
+
+
+def test_parser_error_message(patch, magic):
+    patch.object(Parser, 'make_message')
+    error = magic()
+    result = Parser.error_message(error)
+    Parser.make_message.assert_called_with(error.token.value, error.line,
+                                           error.column)
+    assert result == Parser.make_message().encode().decode()
+
+
 def test_parser_indenter(patch, parser):
     patch.init(CustomIndenter)
     assert isinstance(parser.indenter(), CustomIndenter)
@@ -81,6 +97,22 @@ def test_parser_parse(patch, parser):
     Parser.lark().parse.assert_called_with('source\n')
     Parser.transformer().transform.assert_called_with(Parser.lark().parse())
     assert result == Parser.transformer().transform()
+
+
+def test_parser_parser_unexpected_token(capsys, patch, magic, parser):
+    patch.many(Parser, ['lark', 'transformer', 'error_message'])
+    Parser.lark().parse.side_effect = UnexpectedToken(magic(), 'exp', 0, 1)
+    with raises(SystemExit):
+        parser.parse('source', debug=False)
+    out, err = capsys.readouterr()
+    assert out == '{}\n'.format(Parser.error_message())
+
+
+def test_parser_parser_unexpected_token_debug(patch, magic, parser):
+    patch.many(Parser, ['lark', 'transformer', 'error_message'])
+    Parser.lark().parse.side_effect = UnexpectedToken(magic(), 'exp', 0, 1)
+    with raises(UnexpectedToken):
+        parser.parse('source', debug=True)
 
 
 def test_parser_lex(patch, parser):

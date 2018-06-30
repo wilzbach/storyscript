@@ -16,6 +16,17 @@ class Parser:
         self.algo = algo
         self.ebnf_file = ebnf_file
 
+    @staticmethod
+    def make_message(value, line, column):
+        template = ('Failed reading story because of unexpected "{}" at'
+                    'line {}, column {}')
+        return template.format(value, line, column)
+
+    @classmethod
+    def error_message(cls, e):
+        message = cls.make_message(e.token.value, e.line, e.column)
+        return message.encode('unicode_escape').decode('utf-8')
+
     def indenter(self):
         """
         Initialize the indenter
@@ -40,13 +51,19 @@ class Parser:
         """
         return Lark(self.grammar(), parser=self.algo, postlex=self.indenter())
 
-    def parse(self, source):
+    def parse(self, source, debug=False):
         """
         Parses the source string.
         """
         source = '{}\n'.format(source)
         lark = self.lark()
-        tree = lark.parse(source)
+        try:
+            tree = lark.parse(source)
+        except UnexpectedToken as e:
+            if debug:
+                raise e
+            print(self.error_message(e))
+            exit()
         return self.transformer().transform(tree)
 
     def lex(self, source):

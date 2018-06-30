@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from .lines import Lines
 from .objects import Objects
 from ..exceptions import StoryscriptSyntaxError
 from ..parser import Tree
@@ -11,34 +12,7 @@ class Compiler:
     Compiles Storyscript abstract syntax tree to JSON.
     """
     def __init__(self):
-        self.lines = {}
-        self.services = []
-        self.functions = {}
-        self.outputs = {}
-
-    def sorted_lines(self):
-        return sorted(self.lines.keys(), key=lambda x: int(x))
-
-    def last_line(self):
-        """
-        Gets the last line
-        """
-        if self.lines:
-            return self.sorted_lines()[-1]
-
-    def set_next_line(self, line_number):
-        """
-        Finds the previous line, and set the current as its next line
-        """
-        previous_line = self.last_line()
-        if previous_line:
-            self.lines[previous_line]['next'] = line_number
-
-    def set_exit_line(self, line):
-        for line_number in self.sorted_lines()[::-1]:
-            if self.lines[line_number]['method'] in ['if', 'elif']:
-                self.lines[line_number]['exit'] = line
-                break
+        self.lines = Lines()
 
     @staticmethod
     def output(tree):
@@ -52,50 +26,6 @@ class Compiler:
     def function_output(cls, tree):
         return cls.output(tree.node('function_output.types'))
 
-    def is_output(self, parent_line, service):
-        """
-        Checks whether a service has been defined as output for this block
-        """
-        if parent_line in self.outputs:
-            if service in self.outputs[parent_line]:
-                return True
-        return False
-
-    def make_line(self, method, line, args=None, service=None, command=None,
-                  function=None, output=None, enter=None, exit=None,
-                  parent=None):
-        """
-        Creates the base dictionary for a given line.
-        """
-        dictionary = {
-            line: {
-                'method': method,
-                'ln': line,
-                'output': output,
-                'service': service,
-                'command': command,
-                'function': function,
-                'args': args,
-                'enter': enter,
-                'exit': exit,
-                'parent': parent
-            }
-        }
-        self.lines = {**self.lines, **dictionary}
-
-    def add_line(self, method, line, **kwargs):
-        if 'service' in kwargs:
-            if kwargs['service'] in self.functions:
-                method = 'call'
-
-        if method == 'function':
-            self.functions[kwargs['function']] = line
-        elif method == 'execute':
-            if self.is_output(kwargs['parent'], kwargs['service']) is False:
-                self.services.append(kwargs['service'])
-        self.set_next_line(line)
-        self.make_line(method, line, **kwargs)
-
     def assignment(self, tree, parent=None):
         """
         Compiles an assignment tree
@@ -105,13 +35,13 @@ class Compiler:
             Objects.path(tree.node('path')),
             Objects.values(tree.node('assignment_fragment').child(1))
         ]
-        self.add_line('set', line, args=args, parent=parent)
+        self.lines.append('set', line, args=args, parent=parent)
 
     def arguments(self, tree, parent=None):
         """
         Compiles arguments. This is called only for nested arguments.
         """
-        line = self.lines[self.last_line()]
+        line = self.lines.lines[self.lines.last()]
         if line['method'] != 'execute':
             raise StoryscriptSyntaxError(5, tree)
         line['args'] = line['args'] + Objects.arguments(tree)
@@ -128,9 +58,9 @@ class Compiler:
         service = tree.child(0).child(0).value
         output = self.output(tree.node('service_fragment.output'))
         if output:
-            self.outputs[line] = output
-        self.add_line('execute', line, service=service, command=command,
-                      args=arguments, parent=parent, output=output)
+            self.lines.set_output(line, output)
+        self.lines.append('execute', line, service=service, command=command,
+                          args=arguments, parent=parent, output=output)
 
     def return_statement(self, tree, parent=None):
         """
@@ -140,14 +70,14 @@ class Compiler:
             raise StoryscriptSyntaxError(4, tree)
         line = tree.line()
         args = [Objects.values(tree.child(0))]
-        self.add_line('return', line, args=args, parent=parent)
+        self.lines.append('return', line, args=args, parent=parent)
 
     def if_block(self, tree, parent=None):
         line = tree.line()
         nested_block = tree.node('nested_block')
         args = Objects.expression(tree.node('if_statement'))
-        self.add_line('if', line, args=args, enter=nested_block.line(),
-                      parent=parent)
+        self.lines.append('if', line, args=args, enter=nested_block.line(),
+                          parent=parent)
         self.subtree(nested_block, parent=line)
         trees = []
         for block in [tree.node('elseif_block'), tree.node('else_block')]:
@@ -160,18 +90,22 @@ class Compiler:
         Compiles elseif_block trees
         """
         line = tree.line()
-        self.set_exit_line(line)
+        self.lines.set_exit(line)
         args = Objects.expression(tree.node('elseif_statement'))
         nested_block = tree.node('nested_block')
-        self.add_line('elif', line, args=args, enter=nested_block.line(),
-                      parent=parent)
+        self.lines.append('elif', line, args=args, enter=nested_block.line(),
+                          parent=parent)
         self.subtree(nested_block, parent=line)
 
     def else_block(self, tree, parent=None):
+        """
+        Compiles else_block trees
+        """
         line = tree.line()
-        self.set_exit_line(line)
+        self.lines.set_exit(line)
         nested_block = tree.node('nested_block')
-        self.add_line('else', line, enter=nested_block.line(), parent=parent)
+        self.lines.append('else', line, enter=nested_block.line(),
+                          parent=parent)
         self.subtree(nested_block, parent=line)
 
     def foreach_block(self, tree, parent=None):
@@ -179,8 +113,8 @@ class Compiler:
         args = [Objects.path(tree.node('foreach_statement'))]
         output = self.output(tree.node('foreach_statement.output'))
         nested_block = tree.node('nested_block')
-        self.add_line('for', line, args=args, enter=nested_block.line(),
-                      parent=parent, output=output)
+        self.lines.append('for', line, args=args, enter=nested_block.line(),
+                          parent=parent, output=output)
         self.subtree(nested_block, parent=line)
 
     def function_block(self, tree, parent=None):
@@ -192,9 +126,9 @@ class Compiler:
         args = Objects.function_arguments(function)
         output = self.function_output(function)
         nested_block = tree.node('nested_block')
-        self.add_line('function', line, function=function.child(1).value,
-                      output=output, args=args, enter=nested_block.line(),
-                      parent=parent)
+        self.lines.append('function', line, function=function.child(1).value,
+                          output=output, args=args, enter=nested_block.line(),
+                          parent=parent)
         self.subtree(nested_block, parent=line)
 
     def service_block(self, tree, parent=None):
@@ -234,19 +168,14 @@ class Compiler:
             if isinstance(item, Tree):
                 self.subtree(item, parent=parent)
 
-    def get_services(self):
-        """
-        Get the services and remove duplicates.
-        """
-        return list(set(self.services))
-
     @staticmethod
     def compiler():
         return Compiler()
 
     @classmethod
-    def compile(cls, tree):
+    def compile(cls, tree, debug=False):
         compiler = cls.compiler()
         compiler.parse_tree(tree)
-        return {'tree': compiler.lines, 'services': compiler.get_services(),
-                'functions': compiler.functions, 'version': version}
+        services = compiler.lines.get_services()
+        return {'tree': compiler.lines.lines, 'services': services,
+                'functions': compiler.lines.functions, 'version': version}

@@ -2,7 +2,7 @@
 import json
 import os
 
-from pytest import fixture
+from pytest import fixture, raises
 
 from storyscript.app import App
 from storyscript.compiler import Compiler
@@ -48,6 +48,14 @@ def test_app_read_story(story, storypath):
     assert result == story
 
 
+def test_app_read_story_not_found(patch, capsys):
+    patch.object(os, 'path')
+    with raises(SystemExit):
+        App.read_story('whatever')
+    out, err = capsys.readouterr()
+    assert out == 'File "whatever" not found at {}\n'.format(os.path.abspath())
+
+
 def test_app_get_stories(mocker):
     """
     Ensures App.get_stories returns the original path if it's not a directory
@@ -74,8 +82,8 @@ def test_app_parse(patch, parser, read_story):
     result = App.parse(['test.story'])
     App.read_story.assert_called_with('test.story')
     Parser.__init__.assert_called_with(ebnf_file=None)
-    Parser().parse.assert_called_with(App.read_story())
-    Compiler.compile.assert_called_with(Parser().parse())
+    Parser().parse.assert_called_with(App.read_story(), debug=False)
+    Compiler.compile.assert_called_with(Parser().parse(), debug=False)
     assert result == {'test.story': Compiler.compile()}
 
 
@@ -83,6 +91,13 @@ def test_app_parse_ebnf_file(patch, parser, read_story):
     patch.object(Compiler, 'compile')
     App.parse(['test.story'], ebnf_file='test.ebnf')
     Parser.__init__.assert_called_with(ebnf_file='test.ebnf')
+
+
+def test_app_parse_debug(patch, parser, read_story):
+    patch.object(Compiler, 'compile')
+    App.parse(['test.story'], debug=True)
+    Parser().parse.assert_called_with(App.read_story(), debug=True)
+    Compiler.compile.assert_called_with(Parser().parse(), debug=True)
 
 
 def test_app_services():
@@ -102,7 +117,8 @@ def test_app_compile(patch):
     patch.many(App, ['get_stories', 'parse', 'services'])
     result = App.compile('path')
     App.get_stories.assert_called_with('path')
-    App.parse.assert_called_with(App.get_stories(), ebnf_file=None)
+    kwargs = {'ebnf_file': None, 'debug': False}
+    App.parse.assert_called_with(App.get_stories(), **kwargs)
     App.services.assert_called_with(App.parse())
     dictionary = {'stories': App.parse(), 'services': App.services()}
     json.dumps.assert_called_with(dictionary, indent=2)
@@ -113,7 +129,16 @@ def test_app_compile_ebnf_file(patch):
     patch.object(json, 'dumps')
     patch.many(App, ['get_stories', 'parse', 'services'])
     App.compile('path', ebnf_file='test.ebnf')
-    App.parse.assert_called_with(App.get_stories(), ebnf_file='test.ebnf')
+    kwargs = {'ebnf_file': 'test.ebnf', 'debug': False}
+    App.parse.assert_called_with(App.get_stories(), **kwargs)
+
+
+def test_app_compile_debug(patch):
+    patch.object(json, 'dumps')
+    patch.many(App, ['get_stories', 'parse', 'services'])
+    App.compile('path', debug='debug')
+    kwargs = {'ebnf_file': None, 'debug': 'debug'}
+    App.parse.assert_called_with(App.get_stories(), **kwargs)
 
 
 def test_app_lexer(patch, read_story):

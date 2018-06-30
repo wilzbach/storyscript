@@ -13,8 +13,13 @@ class App:
         """
         Reads a story
         """
-        with open(storypath, 'r') as file:
-            return file.read()
+        try:
+            with open(storypath, 'r') as file:
+                return file.read()
+        except FileNotFoundError:
+            abspath = os.path.abspath(storypath)
+            print('File "{}" not found at {}'.format(storypath, abspath))
+            exit()
 
     @staticmethod
     def get_stories(storypath):
@@ -31,14 +36,15 @@ class App:
         return [storypath]
 
     @classmethod
-    def parse(cls, stories, ebnf_file=None):
+    def parse(cls, stories, ebnf_file=None, debug=False):
         """
         Parses a list of stories, returning their tree.
         """
         results = {}
         for story in stories:
-            tree = Parser(ebnf_file=ebnf_file).parse(cls.read_story(story))
-            results[story] = Compiler.compile(tree)
+            tale = cls.read_story(story)
+            tree = Parser(ebnf_file=ebnf_file).parse(tale, debug=debug)
+            results[story] = Compiler.compile(tree, debug=debug)
         return results
 
     @staticmethod
@@ -54,12 +60,12 @@ class App:
         return services
 
     @classmethod
-    def compile(cls, path, ebnf_file=None):
+    def compile(cls, path, ebnf_file=None, debug=False):
         """
         Parse and compile stories in path to JSON
         """
         stories = cls.get_stories(path)
-        compiled_stories = cls.parse(stories, ebnf_file=ebnf_file)
+        compiled_stories = cls.parse(stories, ebnf_file=ebnf_file, debug=debug)
         services = cls.services(compiled_stories)
         dictionary = {'stories': compiled_stories, 'services': services}
         return json.dumps(dictionary, indent=2)
