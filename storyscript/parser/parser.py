@@ -22,6 +22,11 @@ class Parser:
                     'line {}, column {}')
         return template.format(value, line, column)
 
+    @classmethod
+    def error_message(cls, e):
+        message = cls.make_message(e.token.value, e.line, e.column)
+        return message.encode('unicode_escape').decode('utf-8')
+
     def indenter(self):
         """
         Initialize the indenter

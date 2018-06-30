@@ -46,6 +46,15 @@ def test_parser_make_message():
     assert  result == template.format(1, 2, 3)
 
 
+def test_parser_error_message(patch, magic):
+    patch.object(Parser, 'make_message')
+    error = magic()
+    result = Parser.error_message(error)
+    Parser.make_message.assert_called_with(error.token.value, error.line,
+                                           error.column)
+    assert result == Parser.make_message().encode().decode()
+
+
 def test_parser_indenter(patch, parser):
     patch.init(CustomIndenter)
     assert isinstance(parser.indenter(), CustomIndenter)
