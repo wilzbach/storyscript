@@ -278,7 +278,7 @@ def test_compiler_service_block(patch, compiler, tree):
     patch.object(Compiler, 'service')
     tree.node.return_value = None
     compiler.service_block(tree)
-    Compiler.service.assert_called_with(tree.node(), None)
+    Compiler.service.assert_called_with(tree.node(), tree.node(), None)
 
 
 def test_compiler_service_block_nested_block(patch, compiler, tree):
