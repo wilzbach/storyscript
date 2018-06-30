@@ -17,9 +17,10 @@ class Parser:
         self.ebnf_file = ebnf_file
 
     @staticmethod
-    def message_template():
-        return ('Failed reading story because of unexpected "{}" at'
-                'line {}, column {}')
+    def make_message(value, line, column):
+        template = ('Failed reading story because of unexpected "{}" at'
+                    'line {}, column {}')
+        return template.format(value, line, column)
 
     def indenter(self):
         """

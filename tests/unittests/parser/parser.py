@@ -39,10 +39,11 @@ def test_parser_init_ebnf_file():
     assert parser.ebnf_file == 'grammar.ebnf'
 
 
-def test_parser_message_template():
+def test_parser_make_message():
     template = ('Failed reading story because of unexpected "{}" at'
                 'line {}, column {}')
-    assert Parser.message_template() == template
+    result = Parser.make_message(1, 2, 3)
+    assert  result == template.format(1, 2, 3)
 
 
 def test_parser_indenter(patch, parser):
