@@ -108,6 +108,13 @@ def test_parser_parser_unexpected_token(capsys, patch, magic, parser):
     assert out == '{}\n'.format(Parser.error_message())
 
 
+def test_parser_parser_unexpected_token_debug(patch, magic, parser):
+    patch.many(Parser, ['lark', 'transformer', 'error_message'])
+    Parser.lark().parse.side_effect = UnexpectedToken(magic(), 'exp', 0, 1)
+    with raises(UnexpectedToken):
+        parser.parse('source', debug=True)
+
+
 def test_parser_lex(patch, parser):
     patch.many(Parser, ['lark', 'indenter'])
     result = parser.lex('source')

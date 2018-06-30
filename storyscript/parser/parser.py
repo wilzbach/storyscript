@@ -60,6 +60,8 @@ class Parser:
         try:
             tree = lark.parse(source)
         except UnexpectedToken as e:
+            if debug:
+                raise e
             print(self.error_message(e))
             exit()
         return self.transformer().transform(tree)
