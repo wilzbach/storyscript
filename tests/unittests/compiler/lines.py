@@ -126,9 +126,10 @@ def test_lines_append_function_call(patch, lines):
 
 def test_lines_execute(patch, lines):
     patch.object(Lines, 'append')
-    lines.execute('line', 'service', 'command', 'args', 'output', 'parent')
+    lines.execute('line', 'service', 'command', 'args', 'output', 'enter',
+                  'parent')
     kwargs = {'service': 'service', 'command': 'command', 'args': 'args',
-              'output': 'output', 'parent': 'parent'}
+              'output': 'output', 'enter': 'enter', 'parent': 'parent'}
     Lines.append.assert_called_with('execute', 'line', **kwargs)
 
 
