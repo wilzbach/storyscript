@@ -173,7 +173,7 @@ class Compiler:
         return Compiler()
 
     @classmethod
-    def compile(cls, tree):
+    def compile(cls, tree, debug=False):
         compiler = cls.compiler()
         compiler.parse_tree(tree)
         services = compiler.lines.get_services()

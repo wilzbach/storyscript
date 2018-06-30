@@ -344,3 +344,8 @@ def test_compiler_compile(patch):
                 'services': Compiler.compiler().lines.get_services(),
                 'functions': Compiler.compiler().lines.functions}
     assert result == expected
+
+
+def test_compiler_compile_debug(patch):
+    patch.many(Compiler, ['parse_tree', 'compiler'])
+    Compiler.compile('tree', debug='debug')
