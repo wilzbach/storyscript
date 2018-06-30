@@ -177,5 +177,5 @@ class Compiler:
         compiler = cls.compiler()
         compiler.parse_tree(tree)
         services = compiler.lines.get_services()
-        return {'tree': compiler.lines, 'services': services,
-                'functions': compiler.functions, 'version': version}
+        return {'tree': compiler.lines.lines, 'services': services,
+                'functions': compiler.lines.functions, 'version': version}

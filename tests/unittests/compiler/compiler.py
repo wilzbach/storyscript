@@ -340,7 +340,7 @@ def test_compiler_compile(patch):
     patch.many(Compiler, ['parse_tree', 'compiler'])
     result = Compiler.compile('tree')
     Compiler.compiler().parse_tree.assert_called_with('tree')
-    expected = {'tree': Compiler.compiler().lines, 'version': version,
+    expected = {'tree': Compiler.compiler().lines.lines, 'version': version,
                 'services': Compiler.compiler().lines.get_services(),
-                'functions': Compiler.compiler().functions}
+                'functions': Compiler.compiler().lines.functions}
     assert result == expected
