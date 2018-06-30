@@ -59,8 +59,7 @@ class Compiler:
         output = self.output(tree.node('service_fragment.output'))
         if output:
             self.lines.set_output(line, output)
-        self.lines.append('execute', line, service=service, command=command,
-                          args=arguments, parent=parent, output=output)
+        self.lines.execute(line, service, command, arguments, output, parent)
 
     def return_statement(self, tree, parent=None):
         """

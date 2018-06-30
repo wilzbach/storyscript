@@ -93,10 +93,9 @@ def test_compiler_service(patch, compiler, lines, tree):
     service = tree.child().child().value
     Objects.arguments.assert_called_with(tree.node())
     Compiler.output.assert_called_with(tree.node())
-    lines.append.assert_called_with('execute', line, service=service,
-                                    command=tree.node(), parent=None,
-                                    args=Objects.arguments(),
-                                    output=Compiler.output())
+    lines.execute.assert_called_with(line, service, tree.node(),
+                                     Objects.arguments(), Compiler.output(),
+                                     None)
 
 
 def test_compiler_service_command(patch, compiler, lines, tree):
@@ -106,10 +105,9 @@ def test_compiler_service_command(patch, compiler, lines, tree):
     line = tree.line()
     service = tree.child().child().value
     lines.set_output.assert_called_with(line, Compiler.output())
-    lines.append.assert_called_with('execute', line, service=service,
-                                    command=tree.node().child(),
-                                    parent=None, output=Compiler.output(),
-                                    args=Objects.arguments())
+    lines.execute.assert_called_with(line, service, tree.node().child(),
+                                     Objects.arguments(), Compiler.output(),
+                                     None)
 
 
 def test_compiler_service_no_output(patch, compiler, lines, tree):
@@ -127,10 +125,9 @@ def test_compiler_service_parent(patch, compiler, lines, tree):
     compiler.service(tree, parent='1')
     line = tree.line()
     service = tree.child().child().value
-    lines.append.assert_called_with('execute', line, service=service,
-                                    command=tree.node(),
-                                    args=Objects.arguments(),
-                                    output=Compiler.output(), parent='1')
+    lines.execute.assert_called_with(line, service, tree.node(),
+                                     Objects.arguments(), Compiler.output(),
+                                     '1')
 
 
 def test_compiler_return_statement(compiler, tree):
