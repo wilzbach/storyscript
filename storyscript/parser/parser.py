@@ -51,13 +51,17 @@ class Parser:
         """
         return Lark(self.grammar(), parser=self.algo, postlex=self.indenter())
 
-    def parse(self, source):
+    def parse(self, source, debug=False):
         """
         Parses the source string.
         """
         source = '{}\n'.format(source)
         lark = self.lark()
-        tree = lark.parse(source)
+        try:
+            tree = lark.parse(source)
+        except UnexpectedToken as e:
+            print(self.error_message(e))
+            exit()
         return self.transformer().transform(tree)
 
     def lex(self, source):
