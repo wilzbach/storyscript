@@ -16,6 +16,11 @@ class Parser:
         self.algo = algo
         self.ebnf_file = ebnf_file
 
+    @staticmethod
+    def message_template():
+        return ('Failed reading story because of unexpected "{}" at'
+                'line {}, column {}')
+
     def indenter(self):
         """
         Initialize the indenter
