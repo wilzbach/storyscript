@@ -340,7 +340,8 @@ def test_compiler_compile(patch):
     Compiler.compiler().parse_tree.assert_called_with('tree')
     expected = {'tree': Compiler.compiler().lines.lines, 'version': version,
                 'services': Compiler.compiler().lines.get_services(),
-                'functions': Compiler.compiler().lines.functions}
+                'functions': Compiler.compiler().lines.functions,
+                'entrypoint': Compiler.compiler().lines.first()}
     assert result == expected
 
 
