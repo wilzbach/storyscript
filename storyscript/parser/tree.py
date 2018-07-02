@@ -40,3 +40,6 @@ class Tree(LarkTree):
             if isinstance(child, Token):
                 return str(child.line)
             return child.line()
+
+    def __getattr__(self, attribute):
+        return self.node(attribute)

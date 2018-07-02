@@ -60,3 +60,11 @@ def test_tree_child_overflow():
 def test_tree_line():
     tree = Tree('outer', [Tree('path', [Token('WORD', 'word', line=1)])])
     assert tree.line() == '1'
+
+
+def test_tree_attributes(patch):
+    patch.object(Tree, 'node')
+    tree = Tree('master', [])
+    result = tree.branch
+    Tree.node.assert_called_with('branch')
+    assert result == Tree.node()
