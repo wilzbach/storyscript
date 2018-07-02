@@ -1,6 +1,6 @@
 .. image:: https://s3.amazonaws.com/asnycy/storyscript.png
 
-|Travis| |Codecov| |Pypi| |Bettercode| |Docs| |Devdocs|
+|CircleCI| |Codecov| |Pypi| |Bettercode| |Docs| |Devdocs|
 
 StoryScript
 ###########
@@ -87,8 +87,8 @@ Issues
 For problems directly related to the CLI, `add an issue on GitHub <https://github.com/asyncy/storyscript/issues/new>`_.
 For other issues, `submit a support ticket <mailto:help@storyscripts.org>`_
 
-.. |Travis| image:: https://secure.travis-ci.org/asyncy/storyscript.svg?branch=master
-   :target: http://travis-ci.org/asyncy/storyscript
+.. |CircleCI| image:: https://circleci.com/gh/asyncy/storyscript.svg?style=svg
+   :target: https://circleci.com/gh/asyncy/storyscript
 
 .. |Codecov| image:: https://codecov.io/gh/asyncy/storyscript/branch/master/graphs/badge.svg
    :target: https://codecov.io/github/asyncy/storyscript
