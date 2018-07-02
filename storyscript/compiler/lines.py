@@ -17,6 +17,13 @@ class Lines:
         """
         return sorted(self.lines.keys(), key=lambda x: int(x))
 
+    def first(self):
+        """
+        Gets the first line.
+        """
+        if self.lines:
+            return self.sort()[0]
+
     def last(self):
         """
         Gets the last line
