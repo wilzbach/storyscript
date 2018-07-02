@@ -21,6 +21,16 @@ def test_lines_sort(lines):
     assert lines.sort() == ['1', '2']
 
 
+def test_lines_first(patch, lines):
+    patch.object(Lines, 'sort')
+    lines.lines = {'1': '1'}
+    assert lines.last() == lines.sort()[0]
+
+
+def test_lines_first_none(lines):
+    assert lines.last() is None
+
+
 def test_lines_last(patch, lines):
     patch.object(Lines, 'sort')
     lines.lines = {'1': '1'}
