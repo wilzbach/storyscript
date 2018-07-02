@@ -32,8 +32,8 @@ class Compiler:
         """
         line = tree.line()
         args = [
-            Objects.path(tree.node('path')),
-            Objects.values(tree.node('assignment_fragment').child(1))
+            Objects.path(tree.path),
+            Objects.values(tree.assignment_fragment.child(1))
         ]
         self.lines.append('set', line, args=args, parent=parent)
 

@@ -47,9 +47,9 @@ def test_compiler_function_output(patch, tree):
 def test_compiler_assignment(patch, compiler, lines, tree):
     patch.many(Objects, ['path', 'values'])
     compiler.assignment(tree)
-    assert tree.node.call_count == 2
-    Objects.path.assert_called_with(tree.node())
-    Objects.values.assert_called_with(tree.node().child())
+    Objects.path.assert_called_with(tree.path)
+    tree.assignment_fragment.child.assert_called_with(1)
+    Objects.values.assert_called_with(tree.assignment_fragment.child())
     args = [Objects.path(), Objects.values()]
     lines.append.assert_called_with('set', tree.line(), args=args, parent=None)
 
