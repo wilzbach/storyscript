@@ -1,8 +1,6 @@
 version: 2.0
-
-
 jobs:
-    test:
+    build:
         working_directory: ~/repo
         docker:
             - image: circleci/python:3.6.1
