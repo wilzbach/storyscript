@@ -88,3 +88,8 @@ class App:
         Returns the current grammar
         """
         return Grammar().build()
+
+    @staticmethod
+    def loads(string):
+        tree = Parser().parse(string)
+        return Compiler.compile(tree)
