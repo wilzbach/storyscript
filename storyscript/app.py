@@ -93,3 +93,10 @@ class App:
     def loads(string):
         tree = Parser().parse(string)
         return Compiler.compile(tree)
+
+    @classmethod
+    def load(cls, stream):
+        dictionary = {stream.name: cls.loads(stream.read())}
+        services = cls.services(dictionary)
+        dictionary['services'] = services
+        return dictionary
