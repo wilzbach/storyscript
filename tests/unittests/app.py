@@ -155,3 +155,22 @@ def test_app_grammar(patch):
     patch.init(Grammar)
     patch.object(Grammar, 'build')
     assert App.grammar() == Grammar().build()
+
+
+def test_app_loads(patch):
+    patch.init(Parser)
+    patch.object(Parser, 'parse')
+    patch.object(Compiler, 'compile')
+    result = App.loads('string')
+    Parser.__init__.assert_called_with()
+    Parser.parse.assert_called_with('string')
+    Compiler.compile.assert_called_with(Parser.parse())
+    assert result == Compiler.compile()
+
+
+def test_app_load(patch, magic):
+    patch.many(App, ['loads', 'services'])
+    stream = magic()
+    result = App.load(stream)
+    App.loads.assert_called_with(stream.read())
+    assert result == {stream.name: App.loads(), 'services': App.services()}
