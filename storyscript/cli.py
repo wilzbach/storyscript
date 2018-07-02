@@ -41,13 +41,13 @@ class Cli:
         results = App.compile(storypath, ebnf_file=ebnf_file, debug=debug)
         if not silent:
             if json:
+                if output_file_path:
+                    with open(output_file_path, 'w') as f:
+                        f.write(results)
+                    exit()
                 click.echo(results)
             else:
                 click.echo(click.style('Script syntax passed!', fg='green'))
-        if output_file_path:
-            output_file = open(output_file_path, 'w')
-            output_file.write(results)
-            output_file.close()
 
     @staticmethod
     @main.command()
