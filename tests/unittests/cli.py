@@ -58,8 +58,8 @@ def test_cli_parse_output_file(runner, app, tmpdir):
     written), this test would throw an error
     """
     tmp_file = tmpdir.join('output_file')
-    runner.invoke(Cli.parse, ['/path', str(tmp_file)])
-    tmp_file.read()  # would expect exception if no file written
+    runner.invoke(Cli.parse, ['-j', '/path', str(tmp_file)])
+    tmp_file.read()
 
 
 @mark.parametrize('option', ['--silent', '-s'])
