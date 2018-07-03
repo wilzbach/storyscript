@@ -138,10 +138,9 @@ class Compiler:
         """
         Compiles a service block and the eventual nested block.
         """
-        nested_block = tree.node('nested_block')
-        self.service(tree.node('service'), nested_block, parent)
-        if nested_block:
-            self.subtree(nested_block, parent=tree.line())
+        self.service(tree.service, tree.nested_block, parent)
+        if tree.nested_block:
+            self.subtree(tree.nested_block, parent=tree.line())
 
     def subtrees(self, *trees):
         """

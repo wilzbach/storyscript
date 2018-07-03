@@ -281,13 +281,13 @@ def test_compiler_service_block(patch, compiler, tree):
     patch.object(Compiler, 'service')
     tree.node.return_value = None
     compiler.service_block(tree)
-    Compiler.service.assert_called_with(tree.node(), tree.node(), None)
+    Compiler.service.assert_called_with(tree.service, tree.nested_block, None)
 
 
 def test_compiler_service_block_nested_block(patch, compiler, tree):
     patch.many(Compiler, ['subtree', 'service'])
     compiler.service_block(tree)
-    Compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
+    Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
 @mark.parametrize('method_name', [
