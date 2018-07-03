@@ -192,8 +192,7 @@ def test_parser_function_arguments(parser):
 
 
 def test_parser_function_output(parser):
-    result = parser.parse('function test n:string -> name:int\n\tvar = 1\n')
+    result = parser.parse('function test n:string -> int\n\tvar = 1\n')
     statement = result.node('block.function_block.function_statement')
-    node = statement.node('function_output.typed_argument')
-    assert node.child(0) == Token('NAME', 'name')
-    assert node.node('types').child(0) == Token('INT_TYPE', 'int')
+    node = statement.node('function_output.types')
+    assert node.child(0) == Token('INT_TYPE', 'int')

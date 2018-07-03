@@ -107,8 +107,8 @@ def test_grammar_function_output(grammar, ebnf):
     grammar.function_output()
     ebnf.token.assert_called_with('arrow', 'DASH GREATER', regexp=True,
                                   inline=True, priority=2)
-    rule = '_WS _ARROW _WS (types|typed_argument)'
-    ebnf.rule.assert_called_with('function_output', rule, raw=True)
+    rule = ('ws', 'arrow', 'ws', 'types')
+    ebnf.rule.assert_called_with('function_output', rule)
 
 
 def test_grammar_function_statement(patch, grammar, ebnf):
