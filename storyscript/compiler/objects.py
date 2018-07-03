@@ -43,12 +43,8 @@ class Objects:
         matches = re.findall(r'{{([^}]*)}}', item['string'])
         if matches == []:
             return item
-        values = []
-        for match in matches:
-            values.append(cls.path(Tree('path', [Token('WORD', match)])))
-            find = '{}{}{}'.format('{{', match, '}}')
-            item['string'] = item['string'].replace(find, '{}')
-        item['values'] = values
+        item['values'] = cls.placeholders_values(matches)
+        item['string'] = cls.replace_placeholders(item['string'], matches)
         return item
 
     @staticmethod

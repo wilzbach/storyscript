@@ -37,14 +37,15 @@ def test_objects_string():
 
 
 def test_objects_string_templating(patch):
-    patch.object(Objects, 'path')
+    patch.many(Objects, ['placeholders_values', 'replace_placeholders'])
     patch.object(re, 'findall', return_value=['color'])
     tree = Tree('string', [Token('DOUBLE_QUOTED', '"{{color}}"')])
     result = Objects.string(tree)
     re.findall.assert_called_with(r'{{([^}]*)}}', '{{color}}')
-    Objects.path.assert_called_with(Tree('path', [Token('WORD', 'color')]))
-    assert result['string'] == '{}'
-    assert result['values'] == [Objects.path()]
+    Objects.placeholders_values.assert_called_with(re.findall())
+    Objects.replace_placeholders.assert_called_with('{{color}}', re.findall())
+    assert result['string'] == Objects.replace_placeholders()
+    assert result['values'] == Objects.placeholders_values()
 
 
 def test_objects_boolean():
