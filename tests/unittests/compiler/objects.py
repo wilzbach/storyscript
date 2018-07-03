@@ -19,6 +19,11 @@ def test_objects_number():
     assert Objects.number(tree) == 1
 
 
+def test_objects_replace_placeholders():
+    result = Objects.replace_placeholders('hello, {{world}}', ['world'])
+    assert result == 'hello, {}'
+
+
 def test_objects_string():
     tree = Tree('string', [Token('DOUBLE_QUOTED', '"blue"')])
     assert Objects.string(tree) == {'$OBJECT': 'string', 'string': 'blue'}

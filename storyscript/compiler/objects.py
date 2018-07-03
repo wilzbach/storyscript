@@ -16,6 +16,16 @@ class Objects:
     def number(tree):
         return int(tree.child(0).value)
 
+    @staticmethod
+    def replace_placeholders(string, matches):
+        """
+        Replaces placeholder values with '{}'
+        """
+        for match in matches:
+            placeholder = '{}{}{}'.format('{{', match, '}}')
+            string = string.replace(placeholder, '{}')
+        return string
+
     @classmethod
     def string(cls, tree):
         """
