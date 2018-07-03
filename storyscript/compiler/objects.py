@@ -22,7 +22,7 @@ class Objects:
         Replaces placeholder values with '{}'
         """
         for match in matches:
-            placeholder = '{}{}{}'.format('{{', match, '}}')
+            placeholder = '{}{}{}'.format('{', match, '}')
             string = string.replace(placeholder, '{}')
         return string
 

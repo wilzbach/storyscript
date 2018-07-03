@@ -20,7 +20,7 @@ def test_objects_number():
 
 
 def test_objects_replace_placeholders():
-    result = Objects.replace_placeholders('hello, {{world}}', ['world'])
+    result = Objects.replace_placeholders('hello, {world}', ['world'])
     assert result == 'hello, {}'
 
 
