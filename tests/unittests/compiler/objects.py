@@ -39,11 +39,11 @@ def test_objects_string():
 def test_objects_string_templating(patch):
     patch.many(Objects, ['placeholders_values', 'replace_placeholders'])
     patch.object(re, 'findall', return_value=['color'])
-    tree = Tree('string', [Token('DOUBLE_QUOTED', '"{{color}}"')])
+    tree = Tree('string', [Token('DOUBLE_QUOTED', '"{color}"')])
     result = Objects.string(tree)
-    re.findall.assert_called_with(r'{{([^}]*)}}', '{{color}}')
+    re.findall.assert_called_with(r'{([^}]*)}', '{color}')
     Objects.placeholders_values.assert_called_with(re.findall())
-    Objects.replace_placeholders.assert_called_with('{{color}}', re.findall())
+    Objects.replace_placeholders.assert_called_with('{color}', re.findall())
     assert result['string'] == Objects.replace_placeholders()
     assert result['values'] == Objects.placeholders_values()
 
