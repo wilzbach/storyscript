@@ -253,25 +253,28 @@ def test_compiler_function_block(patch, compiler, lines, tree):
     patch.object(Objects, 'function_arguments')
     patch.many(Compiler, ['subtree', 'function_output'])
     compiler.function_block(tree)
-    Objects.function_arguments.assert_called_with(tree.node())
-    compiler.function_output.assert_called_with(tree.node())
+    statement = tree.function_statement
+    Objects.function_arguments.assert_called_with(statement)
+    compiler.function_output.assert_called_with(statement)
     lines.append.assert_called_with('function', tree.line(),
-                                    function=tree.node().child().value,
+                                    function=statement.child().value,
                                     args=Objects.function_arguments(),
                                     output=compiler.function_output(),
-                                    enter=tree.node().line(), parent=None)
-    compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
+                                    enter=tree.nested_block.line(),
+                                    parent=None)
+    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
 def test_compiler_function_block_parent(patch, compiler, lines, tree):
     patch.object(Objects, 'function_arguments')
     patch.many(Compiler, ['subtree', 'function_output'])
     compiler.function_block(tree, parent='1')
+    statement = tree.function_statement
     lines.append.assert_called_with('function', tree.line(),
-                                    function=tree.node().child().value,
+                                    function=statement.child().value,
                                     args=Objects.function_arguments(),
                                     output=compiler.function_output(),
-                                    enter=tree.node().line(), parent='1')
+                                    enter=tree.nested_block.line(), parent='1')
 
 
 def test_compiler_service_block(patch, compiler, tree):

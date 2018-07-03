@@ -125,10 +125,10 @@ class Compiler:
         Compiles a function and its nested block of code.
         """
         line = tree.line()
-        function = tree.node('function_statement')
+        function = tree.function_statement
         args = Objects.function_arguments(function)
         output = self.function_output(function)
-        nested_block = tree.node('nested_block')
+        nested_block = tree.nested_block
         self.lines.append('function', line, function=function.child(1).value,
                           output=output, args=args, enter=nested_block.line(),
                           parent=parent)
