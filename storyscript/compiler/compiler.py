@@ -94,8 +94,8 @@ class Compiler:
         """
         line = tree.line()
         self.lines.set_exit(line)
-        args = Objects.expression(tree.node('elseif_statement'))
-        nested_block = tree.node('nested_block')
+        args = Objects.expression(tree.elseif_statement)
+        nested_block = tree.nested_block
         self.lines.append('elif', line, args=args, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)

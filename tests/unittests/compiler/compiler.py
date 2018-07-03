@@ -193,12 +193,12 @@ def test_compiler_elseif_block(patch, compiler, lines, tree):
     patch.object(Compiler, 'subtree')
     compiler.elseif_block(tree)
     lines.set_exit.assert_called_with(tree.line())
-    assert tree.node.call_count == 2
-    Objects.expression.assert_called_with(tree.node())
+    Objects.expression.assert_called_with(tree.elseif_statement)
     args = Objects.expression()
     lines.append.assert_called_with('elif', tree.line(), args=args,
-                                    enter=tree.node().line(), parent=None)
-    compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
+                                    enter=tree.nested_block.line(),
+                                    parent=None)
+    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
 def test_compiler_elseif_block_parent(patch, compiler, lines, tree):
@@ -207,7 +207,7 @@ def test_compiler_elseif_block_parent(patch, compiler, lines, tree):
     compiler.elseif_block(tree, parent='1')
     args = Objects.expression()
     lines.append.assert_called_with('elif', tree.line(), args=args,
-                                    enter=tree.node().line(), parent='1')
+                                    enter=tree.nested_block.line(), parent='1')
 
 
 def test_compiler_else_block(patch, compiler, lines, tree):
