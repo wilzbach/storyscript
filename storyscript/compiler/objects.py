@@ -27,6 +27,13 @@ class Objects:
         return string
 
     @classmethod
+    def placeholders_values(cls, matches):
+        values = []
+        for match in matches:
+            values.append(cls.path(Tree('path', [Token('WORD', match)])))
+        return values
+
+    @classmethod
     def string(cls, tree):
         """
         Compiles a string tree. If the string has templated values, they
