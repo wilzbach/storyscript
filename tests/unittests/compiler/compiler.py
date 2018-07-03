@@ -230,13 +230,13 @@ def test_compiler_foreach_block(patch, compiler, lines, tree):
     patch.object(Objects, 'path')
     patch.many(Compiler, ['subtree', 'output'])
     compiler.foreach_block(tree)
-    Objects.path.assert_called_with(tree.node())
-    compiler.output.assert_called_with(tree.node())
+    Objects.path.assert_called_with(tree.foreach_statement)
+    compiler.output.assert_called_with(tree.foreach_statement.output)
     args = [Objects.path()]
     lines.append.assert_called_with('for', tree.line(), args=args,
-                                    enter=tree.node().line(),
+                                    enter=tree.nested_block.line(),
                                     output=Compiler.output(), parent=None)
-    compiler.subtree.assert_called_with(tree.node(), parent=tree.line())
+    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
 def test_compiler_foreach_block_parent(patch, compiler, lines, tree):
@@ -245,7 +245,7 @@ def test_compiler_foreach_block_parent(patch, compiler, lines, tree):
     compiler.foreach_block(tree, parent='1')
     args = [Objects.path()]
     lines.append.assert_called_with('for', tree.line(), args=args,
-                                    enter=tree.node().line(),
+                                    enter=tree.nested_block.line(),
                                     output=Compiler.output(), parent='1')
 
 
