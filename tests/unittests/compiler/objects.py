@@ -19,20 +19,33 @@ def test_objects_number():
     assert Objects.number(tree) == 1
 
 
+def test_objects_replace_placeholders():
+    result = Objects.replace_placeholders('hello, {world}', ['world'])
+    assert result == 'hello, {}'
+
+
+def test_objects_placeholders_values(patch):
+    patch.object(Objects, 'path')
+    result = Objects.placeholders_values(['one'])
+    Objects.path.assert_called_with(Tree('path', [Token('WORD', 'one')]))
+    assert result == [Objects.path()]
+
+
 def test_objects_string():
     tree = Tree('string', [Token('DOUBLE_QUOTED', '"blue"')])
     assert Objects.string(tree) == {'$OBJECT': 'string', 'string': 'blue'}
 
 
 def test_objects_string_templating(patch):
-    patch.object(Objects, 'path')
+    patch.many(Objects, ['placeholders_values', 'replace_placeholders'])
     patch.object(re, 'findall', return_value=['color'])
-    tree = Tree('string', [Token('DOUBLE_QUOTED', '"{{color}}"')])
+    tree = Tree('string', [Token('DOUBLE_QUOTED', '"{color}"')])
     result = Objects.string(tree)
-    re.findall.assert_called_with(r'{{([^}]*)}}', '{{color}}')
-    Objects.path.assert_called_with(Tree('path', [Token('WORD', 'color')]))
-    assert result['string'] == '{}'
-    assert result['values'] == [Objects.path()]
+    re.findall.assert_called_with(r'{([^}]*)}', '{color}')
+    Objects.placeholders_values.assert_called_with(re.findall())
+    Objects.replace_placeholders.assert_called_with('{color}', re.findall())
+    assert result['string'] == Objects.replace_placeholders()
+    assert result['values'] == Objects.placeholders_values()
 
 
 def test_objects_boolean():

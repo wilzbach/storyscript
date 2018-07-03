@@ -14,7 +14,7 @@ Templating
 ::
 
     where = "Amsterdam"
-    message = "Hello, {{where}}!"
+    message = "Hello, {where}!"
 
 Numbers
 -------

@@ -16,6 +16,23 @@ class Objects:
     def number(tree):
         return int(tree.child(0).value)
 
+    @staticmethod
+    def replace_placeholders(string, matches):
+        """
+        Replaces placeholder values with '{}'
+        """
+        for match in matches:
+            placeholder = '{}{}{}'.format('{', match, '}')
+            string = string.replace(placeholder, '{}')
+        return string
+
+    @classmethod
+    def placeholders_values(cls, matches):
+        values = []
+        for match in matches:
+            values.append(cls.path(Tree('path', [Token('WORD', match)])))
+        return values
+
     @classmethod
     def string(cls, tree):
         """
@@ -23,15 +40,11 @@ class Objects:
         are processed and compiled.
         """
         item = {'$OBJECT': 'string', 'string': tree.child(0).value[1:-1]}
-        matches = re.findall(r'{{([^}]*)}}', item['string'])
+        matches = re.findall(r'{([^}]*)}', item['string'])
         if matches == []:
             return item
-        values = []
-        for match in matches:
-            values.append(cls.path(Tree('path', [Token('WORD', match)])))
-            find = '{}{}{}'.format('{{', match, '}}')
-            item['string'] = item['string'].replace(find, '{}')
-        item['values'] = values
+        item['values'] = cls.placeholders_values(matches)
+        item['string'] = cls.replace_placeholders(item['string'], matches)
         return item
 
     @staticmethod
