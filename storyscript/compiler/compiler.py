@@ -106,7 +106,7 @@ class Compiler:
         """
         line = tree.line()
         self.lines.set_exit(line)
-        nested_block = tree.node('nested_block')
+        nested_block = tree.nested_block
         self.lines.append('else', line, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
