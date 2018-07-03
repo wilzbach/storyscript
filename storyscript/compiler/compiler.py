@@ -77,13 +77,13 @@ class Compiler:
 
     def if_block(self, tree, parent=None):
         line = tree.line()
-        nested_block = tree.node('nested_block')
-        args = Objects.expression(tree.node('if_statement'))
+        nested_block = tree.nested_block
+        args = Objects.expression(tree.if_statement)
         self.lines.append('if', line, args=args, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
         trees = []
-        for block in [tree.node('elseif_block'), tree.node('else_block')]:
+        for block in [tree.elseif_block, tree.else_block]:
             if block:
                 trees.append(block)
         self.subtrees(*trees)
