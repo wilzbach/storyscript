@@ -89,7 +89,7 @@ Functions
 ---------
 ::
 
-    function sum a:int b:int -> x:int
+    function sum a:int b:int -> int
         x = a + b
         return x
 
