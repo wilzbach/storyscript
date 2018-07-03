@@ -26,7 +26,7 @@ class Compiler:
     def function_output(cls, tree):
         return cls.output(tree.node('function_output.types'))
 
-    def assignment(self, tree, parent=None):
+    def assignment(self, tree, parent):
         """
         Compiles an assignment tree
         """
@@ -37,7 +37,7 @@ class Compiler:
         ]
         self.lines.append('set', line, args=args, parent=parent)
 
-    def arguments(self, tree, parent=None):
+    def arguments(self, tree, parent):
         """
         Compiles arguments. This is called only for nested arguments.
         """
@@ -65,7 +65,7 @@ class Compiler:
         self.lines.execute(line, service, command, arguments, output, enter,
                            parent)
 
-    def return_statement(self, tree, parent=None):
+    def return_statement(self, tree, parent):
         """
         Compiles a return_statement tree
         """
@@ -75,7 +75,7 @@ class Compiler:
         args = [Objects.values(tree.child(0))]
         self.lines.append('return', line, args=args, parent=parent)
 
-    def if_block(self, tree, parent=None):
+    def if_block(self, tree, parent):
         line = tree.line()
         nested_block = tree.nested_block
         args = Objects.expression(tree.if_statement)
@@ -88,7 +88,7 @@ class Compiler:
                 trees.append(block)
         self.subtrees(*trees)
 
-    def elseif_block(self, tree, parent=None):
+    def elseif_block(self, tree, parent):
         """
         Compiles elseif_block trees
         """
@@ -100,7 +100,7 @@ class Compiler:
                           parent=parent)
         self.subtree(nested_block, parent=line)
 
-    def else_block(self, tree, parent=None):
+    def else_block(self, tree, parent):
         """
         Compiles else_block trees
         """
@@ -111,7 +111,7 @@ class Compiler:
                           parent=parent)
         self.subtree(nested_block, parent=line)
 
-    def foreach_block(self, tree, parent=None):
+    def foreach_block(self, tree, parent):
         line = tree.line()
         args = [Objects.path(tree.foreach_statement)]
         output = self.output(tree.foreach_statement.output)
@@ -120,7 +120,7 @@ class Compiler:
                           parent=parent, output=output)
         self.subtree(nested_block, parent=line)
 
-    def function_block(self, tree, parent=None):
+    def function_block(self, tree, parent):
         """
         Compiles a function and its nested block of code.
         """
@@ -134,7 +134,7 @@ class Compiler:
                           parent=parent)
         self.subtree(nested_block, parent=line)
 
-    def service_block(self, tree, parent=None):
+    def service_block(self, tree, parent):
         """
         Compiles a service block and the eventual nested block.
         """
@@ -158,7 +158,7 @@ class Compiler:
                          'elseif_block', 'else_block', 'foreach_block',
                          'function_block', 'return_statement', 'arguments']
         if tree.data in allowed_nodes:
-            getattr(self, tree.data)(tree, parent=parent)
+            getattr(self, tree.data)(tree, parent)
             return
         self.parse_tree(tree, parent=parent)
 
