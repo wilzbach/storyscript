@@ -27,13 +27,16 @@ class StoryscriptSyntaxError(SyntaxError):
         ]
         return reasons[self.error_type]
 
-    def __str__(self):
+    def pretty(self):
         """
-        Print a message for the item, checking whether it's a tree or a token,
-        using the reason that matches the error type.
+        Returns a message for the item, using the reason that matches the
+        error type.
         """
         if hasattr(self.item, 'data'):
             return '{} at line {}'.format(self.reason(), self.item.line())
         message = '"{}" not allowed at line {}, column {}.\n\n> {}'
         return message.format(self.item, self.item.line, self.item.column,
                               self.reason())
+
+    def __str__(self):
+        return self.pretty()

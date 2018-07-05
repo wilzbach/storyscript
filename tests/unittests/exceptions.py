@@ -20,15 +20,20 @@ def test_storyscript_syntax_error_reason(error):
     assert error.reason() == 'unknown'
 
 
-def test_storyscript_syntax_error__str__token(patch, error):
+def test_storyscript_syntax_error_pretty_token(patch, error):
     patch.object(StoryscriptSyntaxError, 'reason')
     message = '"{}" not allowed at line {}, column {}.\n\n> {}'
     args = (error.item, error.item.line, error.item.column, error.reason())
-    assert str(error) == message.format(*args)
+    assert error.pretty() == message.format(*args)
 
 
-def test_storyscript_syntax_error__str__tree(patch, magic):
+def test_storyscript_syntax_error_pretty_tree(patch, magic):
     patch.object(StoryscriptSyntaxError, 'reason')
     error = StoryscriptSyntaxError(0, magic(data='data'))
     args = (error.reason(), error.item.line())
-    assert str(error) == '{} at line {}'.format(*args)
+    assert error.pretty() == '{} at line {}'.format(*args)
+
+
+def test_storyscript_syntax_error_str_(patch, error):
+    patch.object(StoryscriptSyntaxError, 'pretty', return_value='pretty')
+    assert str(error) == StoryscriptSyntaxError.pretty()
