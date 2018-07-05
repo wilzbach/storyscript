@@ -28,12 +28,12 @@ class StoryscriptSyntaxError(SyntaxError):
         return reasons[self.error_type]
 
     def token_message(self, value, line, column):
-        template = ('Failed reading story because of unexpected "{}" at'
+        template = ('Failed reading story because of unexpected "{}" at '
                     'line {}, column {}')
         return template.format(value, line, column)
 
     def tree_message(self, value, line):
-        template = ('Failed reading story because of unexpected "{}" at'
+        template = ('Failed reading story because of unexpected "{}" at '
                     'line {}')
         return template.format(value, line)
 
@@ -43,10 +43,11 @@ class StoryscriptSyntaxError(SyntaxError):
         error type.
         """
         if hasattr(self.item, 'data'):
-            return '{} at line {}'.format(self.reason(), self.item.line())
-        message = '"{}" not allowed at line {}, column {}.\n\n> {}'
-        return message.format(self.item, self.item.line, self.item.column,
-                              self.reason())
+            message = self.tree_message(self.item, self.item.line())
+        else:
+            message = self.token_message(self.item, self.item.line,
+                                         self.item.column)
+        return message
 
     def __str__(self):
         return self.pretty()
