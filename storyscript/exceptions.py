@@ -32,6 +32,11 @@ class StoryscriptSyntaxError(SyntaxError):
                     'line {}, column {}')
         return template.format(value, line, column)
 
+    def tree_message(self, value, line):
+        template = ('Failed reading story because of unexpected "{}" at'
+                    'line {}')
+        return template.format(value, line)
+
     def pretty(self):
         """
         Returns a message for the item, using the reason that matches the
