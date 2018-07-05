@@ -27,6 +27,11 @@ class StoryscriptSyntaxError(SyntaxError):
         ]
         return reasons[self.error_type]
 
+    def token_message(self, value, line, column):
+        template = ('Failed reading story because of unexpected "{}" at'
+                    'line {}, column {}')
+        return template.format(value, line, column)
+
     def pretty(self):
         """
         Returns a message for the item, using the reason that matches the

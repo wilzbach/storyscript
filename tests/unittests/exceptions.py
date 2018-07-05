@@ -20,6 +20,12 @@ def test_storyscript_syntax_error_reason(error):
     assert error.reason() == 'unknown'
 
 
+def test_storyscript_syntax_error_token_message(error):
+    expected = ('Failed reading story because of unexpected "value" at'
+                'line 1, column 2')
+    assert error.token_message('value', 1, 2) == expected
+
+
 def test_storyscript_syntax_error_pretty_token(patch, error):
     patch.object(StoryscriptSyntaxError, 'reason')
     message = '"{}" not allowed at line {}, column {}.\n\n> {}'
