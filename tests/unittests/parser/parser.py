@@ -3,6 +3,7 @@ import os
 
 from lark import Lark
 from lark.common import UnexpectedToken
+from lark.lexer import UnexpectedInput
 
 from pytest import fixture, raises
 
@@ -99,6 +100,24 @@ def test_parser_parser_unexpected_token_debug(patch, magic, parser):
     patch.many(Parser, ['lark', 'transformer'])
     Parser.lark().parse.side_effect = UnexpectedToken(magic(), 'exp', 0, 1)
     with raises(UnexpectedToken):
+        parser.parse('source', debug=True)
+
+
+def test_parser_parser_unexpected_input(capsys, patch, magic, parser):
+    patch.init(StoryError)
+    patch.object(StoryError, 'message')
+    patch.many(Parser, ['lark', 'transformer'])
+    Parser.lark().parse.side_effect = UnexpectedInput(magic(), 0, 0, 0)
+    with raises(SystemExit):
+        parser.parse('source', debug=False)
+    out, err = capsys.readouterr()
+    assert out == '{}\n'.format(StoryError.message())
+
+
+def test_parser_parser_unexpected_input_debug(patch, magic, parser):
+    patch.many(Parser, ['lark', 'transformer'])
+    Parser.lark().parse.side_effect = UnexpectedInput(magic(), 0, 0, 0)
+    with raises(UnexpectedInput):
         parser.parse('source', debug=True)
 
 

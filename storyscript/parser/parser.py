@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from lark import Lark
 from lark.common import UnexpectedToken
+from lark.lexer import UnexpectedInput
 
 from .grammar import Grammar
 from .indenter import CustomIndenter
@@ -53,6 +54,11 @@ class Parser:
             if debug:
                 raise e
             print(StoryError('token-unexpected', e).message())
+            exit()
+        except UnexpectedInput as e:
+            if debug:
+                raise e
+            print(StoryError('input-unexpected', e).message())
             exit()
         return self.transformer().transform(tree)
 
