@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
-class StoryscriptSyntaxError(SyntaxError):
+class StoryError(SyntaxError):
 
     """
-    Handles syntax errors and provides useful output about them. It supports
-    both trees and tokens as error items.
+    Handles errors related to the story, such as unrecognized tokens, syntax
+    errors and so on.  Supports both trees and tokens as error items.
     """
 
     def __init__(self, error_type, item):
