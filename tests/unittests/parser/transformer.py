@@ -3,7 +3,7 @@ from lark import Transformer as LarkTransformer
 
 from pytest import mark, raises
 
-from storyscript.exceptions import StoryscriptSyntaxError
+from storyscript.exceptions import StoryError
 from storyscript.parser import Transformer, Tree
 
 
@@ -28,7 +28,7 @@ def test_transformer_service(magic):
 
 def test_transformer_service_error(magic):
     matches = [magic(children=[magic(), magic()])]
-    with raises(StoryscriptSyntaxError):
+    with raises(StoryError):
         Transformer().service(matches)
 
 
@@ -39,13 +39,13 @@ def test_transformer_assignment(magic):
 
 def test_transformer_assignment_error_backslash(magic):
     matches = [magic(children=[magic(value='/')])]
-    with raises(StoryscriptSyntaxError):
+    with raises(StoryError):
         Transformer().assignment(matches)
 
 
 def test_transformer_assignment_error_dash(magic):
     matches = [magic(children=[magic(value='-')])]
-    with raises(StoryscriptSyntaxError):
+    with raises(StoryError):
         Transformer().assignment(matches)
 
 
