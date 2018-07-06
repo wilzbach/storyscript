@@ -4,7 +4,7 @@ from lark.lexer import Token
 from pytest import fixture, mark, raises
 
 from storyscript.compiler import Compiler, Lines, Objects
-from storyscript.exceptions import StoryscriptSyntaxError
+from storyscript.exceptions import StoryError
 from storyscript.parser import Tree
 from storyscript.version import version
 
@@ -70,7 +70,7 @@ def test_compiler_arguments_not_execute(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
     lines.last.return_value = '1'
     lines.lines = {'1': {'method': 'whatever'}}
-    with raises(StoryscriptSyntaxError):
+    with raises(StoryError):
         compiler.arguments(tree, '0')
 
 
@@ -128,7 +128,7 @@ def test_compiler_service_no_output(patch, compiler, lines, tree):
 
 
 def test_compiler_return_statement(compiler, tree):
-    with raises(StoryscriptSyntaxError):
+    with raises(StoryError):
         compiler.return_statement(tree, None)
 
 
