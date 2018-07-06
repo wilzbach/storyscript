@@ -28,7 +28,7 @@ class StoryError(SyntaxError):
         """
         return self.reasons[self.error_type]
 
-    def token_message(self, value, line, column):
+    def token_template(self, value, line, column):
         template = ('Failed reading story because of unexpected "{}" at '
                     'line {}, column {}')
         return template.format(value, line, column)
@@ -45,8 +45,8 @@ class StoryError(SyntaxError):
         if hasattr(self.item, 'data'):
             message = self.tree_message(self.item, self.item.line())
         else:
-            message = self.token_message(self.item, self.item.line,
-                                         self.item.column)
+            message = self.token_template(self.item, self.item.line,
+                                          self.item.column)
         if self.error_type != 'unknown':
             return '{}. Reason: {}'.format(message, self.reason())
         return message

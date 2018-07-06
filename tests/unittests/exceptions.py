@@ -20,10 +20,10 @@ def test_exceptions_storyerror_reason(error):
     assert error.reason() == 'unknown'
 
 
-def test_exceptions_storyerror_token_message(error):
+def test_exceptions_storyerror_token_template(error):
     expected = ('Failed reading story because of unexpected "value" at '
                 'line 1, column 2')
-    assert error.token_message('value', 1, 2) == expected
+    assert error.token_template('value', 1, 2) == expected
 
 
 def test_exceptions_storyerror_tree_message(error):
@@ -33,11 +33,11 @@ def test_exceptions_storyerror_tree_message(error):
 
 
 def test_exceptions_storyerror_message_token(patch, error):
-    patch.object(StoryError, 'token_message')
+    patch.object(StoryError, 'token_template')
     result = error.message()
     args = (error.item, error.item.line, error.item.column)
-    StoryError.token_message.assert_called_with(*args)
-    assert result == StoryError.token_message()
+    StoryError.token_template.assert_called_with(*args)
+    assert result == StoryError.token_template()
 
 
 def test_exceptions_storyerror_message_tree(patch, error):
@@ -50,12 +50,10 @@ def test_exceptions_storyerror_message_tree(patch, error):
 
 
 def test_exceptions_storyerror_message_reason(patch, error):
-    patch.many(StoryError, ['token_message', 'reason'])
+    patch.many(StoryError, ['token_template', 'reason'])
     error.error_type = 'else'
     result = error.message()
-    args = (error.item, error.item.line, error.item.column)
-    StoryError.token_message.assert_called_with(*args)
-    assert result == '{}. Reason: {}'.format(StoryError.token_message(),
+    assert result == '{}. Reason: {}'.format(StoryError.token_template(),
                                              StoryError.reason())
 
 
