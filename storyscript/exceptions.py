@@ -54,7 +54,7 @@ class StoryError(SyntaxError):
         """
         Produces a message for the error, including a reason when provided
         """
-        message = self.compile_template()
+        message = self.escape_string(self.compile_template())
         if self.error_type != 'unknown':
             return '{}. Reason: {}'.format(message, self.reason())
         return message

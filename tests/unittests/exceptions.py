@@ -64,16 +64,17 @@ def test_exceptions_storyerror_compile_template_tree(patch, error):
 
 
 def test_exceptions_storyerror_message(patch, error):
-    patch.object(StoryError, 'compile_template')
+    patch.many(StoryError, ['compile_template', 'escape_string'])
     result = error.message()
-    assert result == StoryError.compile_template()
+    StoryError.escape_string.assert_called_with(StoryError.compile_template())
+    assert result == StoryError.escape_string()
 
 
 def test_exceptions_storyerror_message_reason(patch, error):
-    patch.many(StoryError, ['compile_template', 'reason'])
+    patch.many(StoryError, ['compile_template', 'escape_string', 'reason'])
     error.error_type = 'else'
     result = error.message()
-    assert result == '{}. Reason: {}'.format(StoryError.compile_template(),
+    assert result == '{}. Reason: {}'.format(StoryError.escape_string(),
                                              StoryError.reason())
 
 
