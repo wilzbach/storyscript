@@ -22,6 +22,10 @@ class StoryError(SyntaxError):
         self.error_type = error_type
         self.item = item
 
+    @staticmethod
+    def escape_string(string):
+        return string.encode('unicode_escape').decode('utf-8')
+
     def reason(self):
         """
         Provides a reason for error.

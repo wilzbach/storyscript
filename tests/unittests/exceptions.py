@@ -16,6 +16,11 @@ def test_exceptions_storyerror_init():
     assert issubclass(StoryError, SyntaxError)
 
 
+def test_exceptions_storyerror_escape_string(magic):
+    string = magic()
+    assert StoryError.escape_string(string) == string.encode().decode()
+
+
 def test_exceptions_storyerror_reason(error):
     assert error.reason() == 'unknown'
 
