@@ -51,10 +51,25 @@ def test_exceptions_storyerror_compile_template(patch, error):
 
 
 def test_exceptions_storyerror_compile_template_error(patch, magic, error):
+    """
+    Ensures compile_template can handle UnexpectedToken items.
+    """
     patch.object(StoryError, 'token_template')
     error.item.token = magic()
     result = error.compile_template()
     args = (error.item.token.value, error.item.line, error.item.column)
+    StoryError.token_template.assert_called_with(*args)
+    assert result == StoryError.token_template()
+
+
+def test_exceptions_storyerror_compile_template_input(patch, magic, error):
+    """
+    Ensures compile_template can handle UnexpectedInput items.
+    """
+    patch.object(StoryError, 'token_template')
+    error.item.context = 'context'
+    result = error.compile_template()
+    args = (error.item.context, error.item.line, error.item.column)
     StoryError.token_template.assert_called_with(*args)
     assert result == StoryError.token_template()
 

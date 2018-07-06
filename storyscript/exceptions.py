@@ -49,6 +49,9 @@ class StoryError(SyntaxError):
         elif hasattr(self.item, 'token'):
             return self.token_template(self.item.token.value, self.item.line,
                                        self.item.column)
+        elif hasattr(self.item, 'context'):
+            return self.token_template(self.item.context, self.item.line,
+                                       self.item.column)
         return self.token_template(self.item, self.item.line, self.item.column)
 
     def message(self):
