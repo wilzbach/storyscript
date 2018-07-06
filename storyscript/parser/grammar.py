@@ -95,8 +95,13 @@ class Grammar:
         rule = ('function_statement', 'nl', 'nested_block')
         self.ebnf.rule('function_block', rule)
 
+    def inline_expression(self):
+        self.ebnf.tokens(('op', '('), ('cp', ')'), inline=True)
+        self.ebnf.rule('inline_expression', ('op', 'service', 'cp'))
+
     def arguments(self):
-        rule = '_WS? NAME? _COLON (values|path)'
+        self.inline_expression()
+        rule = '_WS? NAME? _COLON (values|path|inline_expression)'
         self.ebnf.rule('arguments', rule, raw=True)
 
     def command(self):
