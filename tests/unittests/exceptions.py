@@ -32,27 +32,27 @@ def test_exceptions_storyerror_tree_message(error):
     assert error.tree_message('value', 1) == expected
 
 
-def test_exceptions_storyerror_pretty_token(patch, error):
+def test_exceptions_storyerror_message_token(patch, error):
     patch.object(StoryError, 'token_message')
-    result = error.pretty()
+    result = error.message()
     args = (error.item, error.item.line, error.item.column)
     StoryError.token_message.assert_called_with(*args)
     assert result == StoryError.token_message()
 
 
-def test_exceptions_storyerror_pretty_tree(patch, error):
+def test_exceptions_storyerror_message_tree(patch, error):
     patch.object(StoryError, 'tree_message')
     error.item.data = 'data'
-    result = error.pretty()
+    result = error.message()
     args = (error.item, error.item.line())
     StoryError.tree_message.assert_called_with(*args)
     assert result == StoryError.tree_message()
 
 
-def test_exceptions_storyerror_pretty_reason(patch, error):
+def test_exceptions_storyerror_message_reason(patch, error):
     patch.many(StoryError, ['token_message', 'reason'])
     error.error_type = 'else'
-    result = error.pretty()
+    result = error.message()
     args = (error.item, error.item.line, error.item.column)
     StoryError.token_message.assert_called_with(*args)
     assert result == '{}. Reason: {}'.format(StoryError.token_message(),
@@ -60,5 +60,5 @@ def test_exceptions_storyerror_pretty_reason(patch, error):
 
 
 def test_exceptions_storyerror_str_(patch, error):
-    patch.object(StoryError, 'pretty', return_value='pretty')
-    assert str(error) == StoryError.pretty()
+    patch.object(StoryError, 'message', return_value='pretty')
+    assert str(error) == StoryError.message()

@@ -38,10 +38,9 @@ class StoryError(SyntaxError):
                     'line {}')
         return template.format(value, line)
 
-    def pretty(self):
+    def message(self):
         """
-        Returns a message for the item, using the reason that matches the
-        error type.
+        Produces a message for the error, including a reason when provided
         """
         if hasattr(self.item, 'data'):
             message = self.tree_message(self.item, self.item.line())
@@ -53,4 +52,4 @@ class StoryError(SyntaxError):
         return message
 
     def __str__(self):
-        return self.pretty()
+        return self.message()
