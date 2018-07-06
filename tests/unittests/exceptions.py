@@ -6,12 +6,12 @@ from storyscript.exceptions import StoryError
 
 @fixture
 def error(magic):
-    return StoryError(0, magic(spec=['line', 'column']))
+    return StoryError('unknown', magic(spec=['line', 'column']))
 
 
 def test_exceptions_storyerror_init():
-    error = StoryError(0, 'item')
-    assert error.error_type == 0
+    error = StoryError('unknown', 'item')
+    assert error.error_type == 'unknown'
     assert error.item == 'item'
     assert issubclass(StoryError, SyntaxError)
 
@@ -34,7 +34,6 @@ def test_exceptions_storyerror_tree_message(error):
 
 def test_exceptions_storyerror_pretty_token(patch, error):
     patch.object(StoryError, 'token_message')
-    error.error_type = 'unknown'
     result = error.pretty()
     args = (error.item, error.item.line, error.item.column)
     StoryError.token_message.assert_called_with(*args)
@@ -44,7 +43,6 @@ def test_exceptions_storyerror_pretty_token(patch, error):
 def test_exceptions_storyerror_pretty_tree(patch, error):
     patch.object(StoryError, 'tree_message')
     error.item.data = 'data'
-    error.error_type = 'unknown'
     result = error.pretty()
     args = (error.item, error.item.line())
     StoryError.tree_message.assert_called_with(*args)
@@ -53,6 +51,7 @@ def test_exceptions_storyerror_pretty_tree(patch, error):
 
 def test_exceptions_storyerror_pretty_reason(patch, error):
     patch.many(StoryError, ['token_message', 'reason'])
+    error.error_type = 'else'
     result = error.pretty()
     args = (error.item, error.item.line, error.item.column)
     StoryError.token_message.assert_called_with(*args)

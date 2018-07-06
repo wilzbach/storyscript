@@ -8,6 +8,16 @@ class StoryError(SyntaxError):
     errors and so on.  Supports both trees and tokens as error items.
     """
 
+    reasons = {
+        'unknown': 'unknown',
+        'service-path': ('Service names can only contain alphanumeric ,'
+                         'characters dashes and backslashes.'),
+        'variables-backslash': "Variable names can't contain backslashes",
+        'variables-dash': "Variable names can't contain dashes",
+        'return-outside': "Return can't be used outside functions",
+        'arguments-noservice': 'Missing service before service arguments'
+    }
+
     def __init__(self, error_type, item):
         self.error_type = error_type
         self.item = item
@@ -16,16 +26,7 @@ class StoryError(SyntaxError):
         """
         Provides a reason for error.
         """
-        reasons = [
-            'unknown',
-            ('Service names can only contain alphanumeric characters, '
-             'dashes and backslashes.'),
-            "Variable names can't contain backslashes",
-            "Variable names can't contain dashes",
-            "Return can't be used outside functions",
-            'Missing service before service arguments'
-        ]
-        return reasons[self.error_type]
+        return self.reasons[self.error_type]
 
     def token_message(self, value, line, column):
         template = ('Failed reading story because of unexpected "{}" at '
