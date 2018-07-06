@@ -51,6 +51,14 @@ def test_storyscript_syntax_error_pretty_tree(patch, error):
     assert result == StoryscriptSyntaxError.tree_message()
 
 
+def test_storyscript_syntax_error_pretty_reason(patch, error):
+    patch.many(StoryscriptSyntaxError, ['token_message', 'reason'])
+    result = error.pretty()
+    args = (error.item, error.item.line, error.item.column)
+    StoryscriptSyntaxError.token_message.assert_called_with(*args)
+    assert result == '{}. Reason: {}'.format(StoryscriptSyntaxError.token_message(), StoryscriptSyntaxError.reason())
+
+
 def test_storyscript_syntax_error_str_(patch, error):
     patch.object(StoryscriptSyntaxError, 'pretty', return_value='pretty')
     assert str(error) == StoryscriptSyntaxError.pretty()

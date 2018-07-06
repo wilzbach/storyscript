@@ -47,6 +47,8 @@ class StoryscriptSyntaxError(SyntaxError):
         else:
             message = self.token_message(self.item, self.item.line,
                                          self.item.column)
+        if self.error_type != 'unknown':
+            return '{}. Reason: {}'.format(message, self.reason())
         return message
 
     def __str__(self):
