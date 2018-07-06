@@ -9,7 +9,6 @@ class StoryError(SyntaxError):
     """
 
     reasons = {
-        'unknown': 'unknown',
         'service-path': ('Service names can only contain alphanumeric ,'
                          'characters dashes and backslashes.'),
         'variables-backslash': "Variable names can't contain backslashes",
@@ -30,7 +29,9 @@ class StoryError(SyntaxError):
         """
         Provides a reason for error.
         """
-        return self.reasons[self.error_type]
+        if self.error_type in self.reasons:
+            return self.reasons[self.error_type]
+        return 'unknown'
 
     def token_template(self, value, line, column):
         template = ('Failed reading story because of unexpected "{}" at '

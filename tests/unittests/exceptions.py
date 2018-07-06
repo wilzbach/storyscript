@@ -22,6 +22,11 @@ def test_exceptions_storyerror_escape_string(magic):
 
 
 def test_exceptions_storyerror_reason(error):
+    error.error_type = 'service-path'
+    assert error.reason() == StoryError.reasons['service-path']
+
+
+def test_exceptions_storyerror_noreason(error):
     assert error.reason() == 'unknown'
 
 
