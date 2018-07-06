@@ -33,7 +33,7 @@ class StoryError(SyntaxError):
                     'line {}, column {}')
         return template.format(value, line, column)
 
-    def tree_message(self, value, line):
+    def tree_template(self, value, line):
         template = ('Failed reading story because of unexpected "{}" at '
                     'line {}')
         return template.format(value, line)
@@ -43,7 +43,7 @@ class StoryError(SyntaxError):
         Produces a message for the error, including a reason when provided
         """
         if hasattr(self.item, 'data'):
-            message = self.tree_message(self.item, self.item.line())
+            message = self.tree_template(self.item, self.item.line())
         else:
             message = self.token_template(self.item, self.item.line,
                                           self.item.column)

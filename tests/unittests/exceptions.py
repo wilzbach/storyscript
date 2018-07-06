@@ -26,10 +26,10 @@ def test_exceptions_storyerror_token_template(error):
     assert error.token_template('value', 1, 2) == expected
 
 
-def test_exceptions_storyerror_tree_message(error):
+def test_exceptions_storyerror_tree_template(error):
     expected = ('Failed reading story because of unexpected "value" at '
                 'line 1')
-    assert error.tree_message('value', 1) == expected
+    assert error.tree_template('value', 1) == expected
 
 
 def test_exceptions_storyerror_message_token(patch, error):
@@ -41,12 +41,12 @@ def test_exceptions_storyerror_message_token(patch, error):
 
 
 def test_exceptions_storyerror_message_tree(patch, error):
-    patch.object(StoryError, 'tree_message')
+    patch.object(StoryError, 'tree_template')
     error.item.data = 'data'
     result = error.message()
     args = (error.item, error.item.line())
-    StoryError.tree_message.assert_called_with(*args)
-    assert result == StoryError.tree_message()
+    StoryError.tree_template.assert_called_with(*args)
+    assert result == StoryError.tree_template()
 
 
 def test_exceptions_storyerror_message_reason(patch, error):
