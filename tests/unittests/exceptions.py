@@ -32,6 +32,32 @@ def test_exceptions_storyerror_tree_template(error):
     assert error.tree_template('value', 1) == expected
 
 
+def test_exceptions_storyerror_compile_template(patch, error):
+    patch.object(StoryError, 'token_template')
+    result = error.compile_template()
+    args = (error.item, error.item.line, error.item.column)
+    StoryError.token_template.assert_called_with(*args)
+    assert result == StoryError.token_template()
+
+
+def test_exceptions_storyerror_compile_template_error(patch, magic, error):
+    patch.object(StoryError, 'token_template')
+    error.item.token = magic()
+    result = error.compile_template()
+    args = (error.item.token.value, error.item.line, error.item.column)
+    StoryError.token_template.assert_called_with(*args)
+    assert result == StoryError.token_template()
+
+
+def test_exceptions_storyerror_compile_template_tree(patch, error):
+    patch.object(StoryError, 'tree_template')
+    error.item.data = 'data'
+    result = error.compile_template()
+    args = (error.item, error.item.line())
+    StoryError.tree_template.assert_called_with(*args)
+    assert result == StoryError.tree_template()
+
+
 def test_exceptions_storyerror_message_token(patch, error):
     patch.object(StoryError, 'token_template')
     result = error.message()

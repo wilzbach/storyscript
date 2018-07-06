@@ -38,6 +38,14 @@ class StoryError(SyntaxError):
                     'line {}')
         return template.format(value, line)
 
+    def compile_template(self):
+        if hasattr(self.item, 'data'):
+            return self.tree_template(self.item, self.item.line())
+        elif hasattr(self.item, 'token'):
+            return self.token_template(self.item.token.value, self.item.line,
+                                       self.item.column)
+        return self.token_template(self.item, self.item.line, self.item.column)
+
     def message(self):
         """
         Produces a message for the error, including a reason when provided
