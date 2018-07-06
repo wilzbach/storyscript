@@ -5,7 +5,7 @@ class StoryError(SyntaxError):
 
     """
     Handles errors related to the story, such as unrecognized tokens, syntax
-    errors and so on.  Supports both trees and tokens as error items.
+    errors and so on.  Supports trees, tokens and lark errors as items.
     """
 
     reasons = {
@@ -50,11 +50,7 @@ class StoryError(SyntaxError):
         """
         Produces a message for the error, including a reason when provided
         """
-        if hasattr(self.item, 'data'):
-            message = self.tree_template(self.item, self.item.line())
-        else:
-            message = self.token_template(self.item, self.item.line,
-                                          self.item.column)
+        message = self.compile_template()
         if self.error_type != 'unknown':
             return '{}. Reason: {}'.format(message, self.reason())
         return message

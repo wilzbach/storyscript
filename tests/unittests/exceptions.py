@@ -58,28 +58,17 @@ def test_exceptions_storyerror_compile_template_tree(patch, error):
     assert result == StoryError.tree_template()
 
 
-def test_exceptions_storyerror_message_token(patch, error):
-    patch.object(StoryError, 'token_template')
+def test_exceptions_storyerror_message(patch, error):
+    patch.object(StoryError, 'compile_template')
     result = error.message()
-    args = (error.item, error.item.line, error.item.column)
-    StoryError.token_template.assert_called_with(*args)
-    assert result == StoryError.token_template()
-
-
-def test_exceptions_storyerror_message_tree(patch, error):
-    patch.object(StoryError, 'tree_template')
-    error.item.data = 'data'
-    result = error.message()
-    args = (error.item, error.item.line())
-    StoryError.tree_template.assert_called_with(*args)
-    assert result == StoryError.tree_template()
+    assert result == StoryError.compile_template()
 
 
 def test_exceptions_storyerror_message_reason(patch, error):
-    patch.many(StoryError, ['token_template', 'reason'])
+    patch.many(StoryError, ['compile_template', 'reason'])
     error.error_type = 'else'
     result = error.message()
-    assert result == '{}. Reason: {}'.format(StoryError.token_template(),
+    assert result == '{}. Reason: {}'.format(StoryError.compile_template(),
                                              StoryError.reason())
 
 
