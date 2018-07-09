@@ -20,6 +20,9 @@ class Preprocessor:
 
     @staticmethod
     def magic_path(line):
+        """
+        Creates a virtual path tree.
+        """
         path = '${}'.format(uuid.uuid4().hex[:8])
         return Tree('path', [Token('NAME', path, line=line)])
 
