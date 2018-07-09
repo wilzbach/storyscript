@@ -7,6 +7,9 @@ from ..parser import Tree
 
 
 class Preprocessor:
+    """
+    Performs additional transformations before the tree is compiled.
+    """
 
     @staticmethod
     def magic_line(block):
@@ -36,6 +39,10 @@ class Preprocessor:
 
     @classmethod
     def inline_expression(cls, tree):
+        """
+        Processes an inline expression, removing it from the tree and replacing
+        it with an equivalent virtual assignment.
+        """
         for block in tree.find_data('block'):
             target_path = 'service_block.service.service_fragment.arguments'
             target = block.node(target_path)
