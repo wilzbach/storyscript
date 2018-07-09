@@ -20,8 +20,6 @@ def test_preprocessor_magic_path(patch):
     assert result == Tree('path', [Token('NAME', name, line=1)])
 
 
-def test_preprocessor_inline_expressions(tree):
-    assert Preprocessor.inline_expression(tree) == tree
 def test_preprocessor_magic_assignment(patch):
     patch.object(Preprocessor, 'magic_path')
     result = Preprocessor.magic_assignment('1', 'value')
@@ -31,6 +29,19 @@ def test_preprocessor_magic_assignment(patch):
                                       [Token('EQUALS', '='), 'value'])
 
 
+def test_preprocessor_inline_expressions(patch, magic, tree):
+    patch.many(Preprocessor, ['magic_line', 'magic_assignment'])
+    block = magic()
+    tree.find_data.return_value = [block]
+    result = Preprocessor.inline_expression(tree)
+    Preprocessor.magic_line.assert_called_with(block)
+    value = block.node().inline_expression.service
+    Preprocessor.magic_assignment.assert_called_with(Preprocessor.magic_line(),
+                                                     value)
+    block.insert.assert_called_with(Preprocessor.magic_assignment())
+    path = Preprocessor.magic_assignment().path
+    block.node().replace.assert_called_with(1, path)
+    assert result == tree
 
 
 def test_preprocessor_process(patch):

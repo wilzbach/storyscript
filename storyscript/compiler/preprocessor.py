@@ -9,7 +9,6 @@ from ..parser import Tree
 class Preprocessor:
 
     @staticmethod
-    def inline_expression(tree):
     def magic_line(block):
         """
         Creates a virtual line number.
@@ -35,6 +34,17 @@ class Preprocessor:
         fragment = Tree('assignment_fragment', [Token('EQUALS', '='), value])
         return Tree('assignment', [path, fragment])
 
+    @classmethod
+    def inline_expression(cls, tree):
+        for block in tree.find_data('block'):
+            target_path = 'service_block.service.service_fragment.arguments'
+            target = block.node(target_path)
+            if target.inline_expression:
+                line = cls.magic_line(block)
+                value = target.inline_expression.service
+                assignment = cls.magic_assignment(line, value)
+                block.insert(assignment)
+                target.replace(1, assignment.path)
         return tree
 
     @classmethod
