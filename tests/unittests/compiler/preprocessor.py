@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-
+import uuid
+
+from lark.lexer import Token
+
 from storyscript.compiler import Preprocessor
+from storyscript.parser import Tree
+
+
+def test_preprocessor_magic_path(patch):
+    patch.object(uuid, 'uuid4')
+    result = Preprocessor.magic_path(1)
+    name = '${}'.format(uuid.uuid4().hex[:8])
+    assert result == Tree('path', [Token('NAME', name, line=1)])
 
 
 def test_preprocessor_inline_expressions(tree):
