@@ -47,5 +47,11 @@ class Tree(LarkTree):
         """
         self.children.insert(0, item)
 
+    def replace(self, index, item):
+        """
+        Replaces a child at the given index
+        """
+        self.children[index] = item
+
     def __getattr__(self, attribute):
         return self.node(attribute)
