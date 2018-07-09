@@ -11,6 +11,9 @@ class Preprocessor:
     @staticmethod
     def inline_expression(tree):
     def magic_line(block):
+        """
+        Creates a virtual line number.
+        """
         base = int(block.line()) - 1
         extension = str(uuid.uuid4().int)[:8]
         return '{}.{}'.format(base, extension)
