@@ -7,6 +7,12 @@ from storyscript.compiler import Preprocessor
 from storyscript.parser import Tree
 
 
+def test_preprocessor_magic_line(patch, magic, tree):
+    patch.object(uuid, 'uuid4', return_value=magic(int=123456789))
+    result = Preprocessor.magic_line(tree)
+    assert result == '0.12345678'
+
+
 def test_preprocessor_magic_path(patch):
     patch.object(uuid, 'uuid4')
     result = Preprocessor.magic_path(1)
