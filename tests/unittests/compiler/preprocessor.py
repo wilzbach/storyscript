@@ -44,6 +44,14 @@ def test_preprocessor_inline_expressions(patch, magic, tree):
     assert result == tree
 
 
+def test_preprocessor_inline_expressions_no_target(patch, magic, tree):
+    patch.many(Preprocessor, ['magic_line', 'magic_assignment'])
+    block = magic()
+    block.node.return_value = None
+    tree.find_data.return_value = [block]
+    assert Preprocessor.inline_expression(tree) == tree
+
+
 def test_preprocessor_process(patch):
     patch.object(Preprocessor, 'inline_expression')
     result = Preprocessor.process('tree')

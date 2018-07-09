@@ -46,12 +46,13 @@ class Preprocessor:
         for block in tree.find_data('block'):
             target_path = 'service_block.service.service_fragment.arguments'
             target = block.node(target_path)
-            if target.inline_expression:
-                line = cls.magic_line(block)
-                value = target.inline_expression.service
-                assignment = cls.magic_assignment(line, value)
-                block.insert(assignment)
-                target.replace(1, assignment.path)
+            if target:
+                if target.inline_expression:
+                    line = cls.magic_line(block)
+                    value = target.inline_expression.service
+                    assignment = cls.magic_assignment(line, value)
+                    block.insert(assignment)
+                    target.replace(1, assignment.path)
         return tree
 
     @classmethod
