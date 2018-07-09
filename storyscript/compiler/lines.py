@@ -15,7 +15,7 @@ class Lines:
         """
         Returns ordered line numbers
         """
-        return sorted(self.lines.keys(), key=lambda x: int(x))
+        return sorted(self.lines.keys(), key=lambda x: float(x))
 
     def first(self):
         """
