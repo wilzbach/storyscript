@@ -3,9 +3,11 @@ import os
 
 from lark import Lark
 from lark.common import UnexpectedToken
+from lark.lexer import UnexpectedInput
 
 from pytest import fixture, raises
 
+from storyscript.exceptions import StoryError
 from storyscript.parser import CustomIndenter, Grammar, Parser, Transformer
 
 
@@ -37,22 +39,6 @@ def test_parser_init_algo():
 def test_parser_init_ebnf_file():
     parser = Parser(ebnf_file='grammar.ebnf')
     assert parser.ebnf_file == 'grammar.ebnf'
-
-
-def test_parser_make_message():
-    template = ('Failed reading story because of unexpected "{}" at'
-                'line {}, column {}')
-    result = Parser.make_message(1, 2, 3)
-    assert result == template.format(1, 2, 3)
-
-
-def test_parser_error_message(patch, magic):
-    patch.object(Parser, 'make_message')
-    error = magic()
-    result = Parser.error_message(error)
-    Parser.make_message.assert_called_with(error.token.value, error.line,
-                                           error.column)
-    assert result == Parser.make_message().encode().decode()
 
 
 def test_parser_indenter(patch, parser):
@@ -100,18 +86,38 @@ def test_parser_parse(patch, parser):
 
 
 def test_parser_parser_unexpected_token(capsys, patch, magic, parser):
-    patch.many(Parser, ['lark', 'transformer', 'error_message'])
+    patch.init(StoryError)
+    patch.object(StoryError, 'message')
+    patch.many(Parser, ['lark', 'transformer'])
     Parser.lark().parse.side_effect = UnexpectedToken(magic(), 'exp', 0, 1)
     with raises(SystemExit):
         parser.parse('source', debug=False)
     out, err = capsys.readouterr()
-    assert out == '{}\n'.format(Parser.error_message())
+    assert out == '{}\n'.format(StoryError.message())
 
 
 def test_parser_parser_unexpected_token_debug(patch, magic, parser):
-    patch.many(Parser, ['lark', 'transformer', 'error_message'])
+    patch.many(Parser, ['lark', 'transformer'])
     Parser.lark().parse.side_effect = UnexpectedToken(magic(), 'exp', 0, 1)
     with raises(UnexpectedToken):
+        parser.parse('source', debug=True)
+
+
+def test_parser_parser_unexpected_input(capsys, patch, magic, parser):
+    patch.init(StoryError)
+    patch.object(StoryError, 'message')
+    patch.many(Parser, ['lark', 'transformer'])
+    Parser.lark().parse.side_effect = UnexpectedInput(magic(), 0, 0, 0)
+    with raises(SystemExit):
+        parser.parse('source', debug=False)
+    out, err = capsys.readouterr()
+    assert out == '{}\n'.format(StoryError.message())
+
+
+def test_parser_parser_unexpected_input_debug(patch, magic, parser):
+    patch.many(Parser, ['lark', 'transformer'])
+    Parser.lark().parse.side_effect = UnexpectedInput(magic(), 0, 0, 0)
+    with raises(UnexpectedInput):
         parser.parse('source', debug=True)
 
 

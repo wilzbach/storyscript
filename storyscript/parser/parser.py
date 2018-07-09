@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from lark import Lark
 from lark.common import UnexpectedToken
+from lark.lexer import UnexpectedInput
 
 from .grammar import Grammar
 from .indenter import CustomIndenter
 from .transformer import Transformer
+from ..exceptions import StoryError
 
 
 class Parser:
@@ -15,17 +17,6 @@ class Parser:
     def __init__(self, algo='lalr', ebnf_file=None):
         self.algo = algo
         self.ebnf_file = ebnf_file
-
-    @staticmethod
-    def make_message(value, line, column):
-        template = ('Failed reading story because of unexpected "{}" at'
-                    'line {}, column {}')
-        return template.format(value, line, column)
-
-    @classmethod
-    def error_message(cls, e):
-        message = cls.make_message(e.token.value, e.line, e.column)
-        return message.encode('unicode_escape').decode('utf-8')
 
     def indenter(self):
         """
@@ -62,7 +53,12 @@ class Parser:
         except UnexpectedToken as e:
             if debug:
                 raise e
-            print(self.error_message(e))
+            print(StoryError('token-unexpected', e).message())
+            exit()
+        except UnexpectedInput as e:
+            if debug:
+                raise e
+            print(StoryError('input-unexpected', e).message())
             exit()
         return self.transformer().transform(tree)
 

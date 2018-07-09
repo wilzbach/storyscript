@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from .lines import Lines
 from .objects import Objects
-from ..exceptions import StoryscriptSyntaxError
+from ..exceptions import StoryError
 from ..parser import Tree
 from ..version import version
 
@@ -43,7 +43,7 @@ class Compiler:
         """
         line = self.lines.lines[self.lines.last()]
         if line['method'] != 'execute':
-            raise StoryscriptSyntaxError(5, tree)
+            raise StoryError('arguments-noservice', tree)
         line['args'] = line['args'] + Objects.arguments(tree)
 
     def service(self, tree, nested_block, parent):
@@ -70,7 +70,7 @@ class Compiler:
         Compiles a return_statement tree
         """
         if parent is None:
-            raise StoryscriptSyntaxError(4, tree)
+            raise StoryError('return-outside', tree)
         line = tree.line()
         args = [Objects.values(tree.child(0))]
         self.lines.append('return', line, args=args, parent=parent)
