@@ -4,5 +4,10 @@
 class Preprocessor:
 
     @staticmethod
-    def process(tree):
+    def inline_expression(tree):
+        return tree
+
+    @classmethod
+    def process(cls, tree):
+        tree = cls.inline_expression(tree)
         return tree
