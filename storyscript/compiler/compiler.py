@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 from .lines import Lines
 from .objects import Objects
-
 from .preprocessor import Preprocessor
-from ..exceptions import StoryscriptSyntaxError
-
+from ..exceptions import StoryError
 from ..parser import Tree
 from ..version import version
 

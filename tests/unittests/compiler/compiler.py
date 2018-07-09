@@ -5,7 +5,6 @@ from pytest import fixture, mark, raises
 
 from storyscript.compiler import Compiler, Lines, Objects, Preprocessor
 from storyscript.exceptions import StoryError
-
 from storyscript.parser import Tree
 from storyscript.version import version
 
@@ -297,5 +296,6 @@ def test_compiler_compile(patch):
 
 
 def test_compiler_compile_debug(patch):
+    patch.object(Preprocessor, 'process')
     patch.many(Compiler, ['parse_tree', 'compiler'])
     Compiler.compile('tree', debug='debug')

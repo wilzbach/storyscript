@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from lark import Lark
-from lark.common import UnexpectedToken
-from lark.lexer import UnexpectedInput
+from lark.exceptions import UnexpectedInput, UnexpectedToken
 
 from .grammar import Grammar
 from .indenter import CustomIndenter

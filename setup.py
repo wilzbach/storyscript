@@ -20,7 +20,7 @@ classifiers = [
 
 requirements = [
     'click==6.7',
-    'lark-parser>=0.5.4'
+    'lark-parser>=0.6.0'
 ]
 
 extras = [
