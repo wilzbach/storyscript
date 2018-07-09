@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from .lines import Lines
 from .objects import Objects
-from ..exceptions import StoryError
+
+from .preprocessor import Preprocessor
+from ..exceptions import StoryscriptSyntaxError
+
 from ..parser import Tree
 from ..version import version
 
@@ -176,6 +179,7 @@ class Compiler:
 
     @classmethod
     def compile(cls, tree, debug=False):
+        tree = Preprocessor.process(tree)
         compiler = cls.compiler()
         compiler.parse_tree(tree)
         services = compiler.lines.get_services()

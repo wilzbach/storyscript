@@ -17,8 +17,8 @@ def test_lines_init(lines):
 
 
 def test_lines_sort(lines):
-    lines.lines = {'1': '1', '2': '2'}
-    assert lines.sort() == ['1', '2']
+    lines.lines = {'1': '1', '2': '2', '2.1': '2'}
+    assert lines.sort() == ['1', '2', '2.1']
 
 
 def test_lines_first(patch, lines):

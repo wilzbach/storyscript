@@ -3,8 +3,9 @@ from lark.lexer import Token
 
 from pytest import fixture, mark, raises
 
-from storyscript.compiler import Compiler, Lines, Objects
+from storyscript.compiler import Compiler, Lines, Objects, Preprocessor
 from storyscript.exceptions import StoryError
+
 from storyscript.parser import Tree
 from storyscript.version import version
 
@@ -283,9 +284,11 @@ def test_compiler_compiler():
 
 
 def test_compiler_compile(patch):
+    patch.object(Preprocessor, 'process')
     patch.many(Compiler, ['parse_tree', 'compiler'])
     result = Compiler.compile('tree')
-    Compiler.compiler().parse_tree.assert_called_with('tree')
+    Preprocessor.process.assert_called_with('tree')
+    Compiler.compiler().parse_tree.assert_called_with(Preprocessor.process())
     expected = {'tree': Compiler.compiler().lines.lines, 'version': version,
                 'services': Compiler.compiler().lines.get_services(),
                 'functions': Compiler.compiler().lines.functions,

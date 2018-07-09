@@ -125,6 +125,9 @@ class Objects:
 
     @classmethod
     def argument(cls, tree):
+        """
+        Compiles an argument tree to the corresponding object.
+        """
         name = tree.child(0).value
         value = cls.values(tree.child(1))
         return {'$OBJECT': 'argument', 'name': name, 'argument': value}

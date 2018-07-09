@@ -127,9 +127,17 @@ def test_grammar_function_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('function_block', definition)
 
 
-def test_grammar_arguments(grammar, ebnf):
+def test_grammar_inline_expression(patch, grammar, ebnf):
+    grammar.inline_expression()
+    ebnf.tokens.assert_called_with(('op', '('), ('cp', ')'), inline=True)
+    ebnf.rule.assert_called_with('inline_expression', ('op', 'service', 'cp'))
+
+
+def test_grammar_arguments(patch, grammar, ebnf):
+    patch.object(Grammar, 'inline_expression')
     grammar.arguments()
-    rule = '_WS? NAME? _COLON (values|path)'
+    assert Grammar.inline_expression.call_count == 1
+    rule = '_WS? NAME? _COLON (values|path|inline_expression)'
     ebnf.rule.assert_called_with('arguments', rule, raw=True)
 
 
