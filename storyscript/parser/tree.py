@@ -41,5 +41,11 @@ class Tree(LarkTree):
                 return str(child.line)
             return child.line()
 
+    def insert(self, item):
+        """
+        Inserts an item into the current tree.
+        """
+        self.children.insert(0, item)
+
     def __getattr__(self, attribute):
         return self.node(attribute)

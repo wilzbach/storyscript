@@ -62,6 +62,12 @@ def test_tree_line():
     assert tree.line() == '1'
 
 
+def test_tree_insert():
+    tree = Tree('tree', [])
+    tree.insert('child')
+    assert tree.children == ['child']
+
+
 def test_tree_attributes(patch):
     patch.object(Tree, 'node')
     tree = Tree('master', [])
