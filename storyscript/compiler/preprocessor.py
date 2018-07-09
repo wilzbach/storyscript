@@ -26,6 +26,15 @@ class Preprocessor:
         path = '${}'.format(uuid.uuid4().hex[:8])
         return Tree('path', [Token('NAME', path, line=line)])
 
+    @classmethod
+    def magic_assignment(cls, line, value):
+        """
+        Creates a magic assignment tree, equivalent to: "$magic = value"
+        """
+        path = cls.magic_path(line)
+        fragment = Tree('assignment_fragment', [Token('EQUALS', '='), value])
+        return Tree('assignment', [path, fragment])
+
         return tree
 
     @classmethod
