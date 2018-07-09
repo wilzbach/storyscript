@@ -308,7 +308,7 @@ def test_grammar_assignment(patch, grammar, ebnf):
 
 def test_grammar_imports(patch, grammar, ebnf):
     grammar.imports()
-    ebnf.token.assert_called_with('import', 'import')
+    ebnf.token.assert_called_with('import', 'import', inline=True)
     rule = ('import', 'ws', 'string', 'ws', 'as', 'ws', 'name')
     ebnf.rule.assert_called_with('imports', rule)
 

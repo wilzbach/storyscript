@@ -217,7 +217,7 @@ class Grammar:
         self.ebnf.rule('assignment', ('path', 'ws?', 'assignment_fragment'))
 
     def imports(self):
-        self.ebnf.token('import', 'import')
+        self.ebnf.token('import', 'import', inline=True)
         rule = ('import', 'ws', 'string', 'ws', 'as', 'ws', 'name')
         self.ebnf.rule('imports', rule)
 
