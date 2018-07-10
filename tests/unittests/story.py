@@ -15,8 +15,10 @@ def test_story_init(story):
 
 def test_story_from_file(patch):
     patch.init(Story)
+    patch.object(Story, 'read')
     result = Story.from_file('hello.story')
-    Story.__init__.assert_called_with('hello.story', 'file')
+    Story.read.assert_called_with('hello.story')
+    Story.__init__.assert_called_with(Story.read())
     assert isinstance(result, Story)
 
 

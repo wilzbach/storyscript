@@ -7,11 +7,12 @@ class Story:
         self.story = story
 
     @staticmethod
-    def from_file(path):
+    @classmethod
+    def from_file(cls, path):
         """
         Creates a story from a file source
         """
-        return Story(path, 'file')
+        return Story(cls.read(path))
 
     @staticmethod
     def from_stream(stream):
