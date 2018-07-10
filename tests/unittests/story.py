@@ -26,3 +26,10 @@ def test_story_from_stream(patch):
     result = Story.from_stream('stream')
     Story.__init__.assert_called_with('stream', 'stream')
     assert isinstance(result, Story)
+
+
+def test_story_from_string(patch):
+    patch.init(Story)
+    result = Story.from_string('string')
+    Story.__init__.assert_called_with('string', 'string')
+    assert isinstance(result, Story)
