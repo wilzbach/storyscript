@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
+from .compiler import Compiler
 from .parser import Parser
 
 
@@ -39,3 +40,5 @@ class Story:
     def parse(self):
         self.tree = Parser().parse(self.story)
 
+    def compile(self):
+        self.compiled = Compiler.compile(self.tree)

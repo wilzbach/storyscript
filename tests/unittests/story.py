@@ -3,6 +3,7 @@ import os
 
 from pytest import fixture, raises
 
+from storyscript.compiler import Compiler
 from storyscript.parser import Parser
 from storyscript.story import Story
 
@@ -78,3 +79,9 @@ def test_story_parse(patch, story):
     assert story.tree == Parser.parse()
 
 
+def test_story_compile(patch, story):
+    patch.object(Compiler, 'compile')
+    story.tree = 'tree'
+    story.compile()
+    Compiler.compile.assert_called_with(story.tree)
+    assert story.compiled == Compiler.compile()
