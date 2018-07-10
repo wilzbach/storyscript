@@ -136,14 +136,11 @@ def test_app_grammar(patch):
 
 
 def test_app_loads(patch):
-    patch.init(Parser)
-    patch.object(Parser, 'parse')
-    patch.object(Compiler, 'compile')
+    patch.init(Story)
+    patch.object(Story, 'process')
     result = App.loads('string')
-    Parser.__init__.assert_called_with()
-    Parser.parse.assert_called_with('string')
-    Compiler.compile.assert_called_with(Parser.parse())
-    assert result == Compiler.compile()
+    Story.__init__.assert_called_with('string')
+    assert result == Story.process()
 
 
 def test_app_load(patch, magic):

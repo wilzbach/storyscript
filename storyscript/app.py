@@ -82,8 +82,7 @@ class App:
 
     @staticmethod
     def loads(string):
-        tree = Parser().parse(string)
-        return Compiler.compile(tree)
+        return Story(string).process()
 
     @classmethod
     def load(cls, stream):
