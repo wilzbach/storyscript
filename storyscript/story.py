@@ -37,8 +37,8 @@ class Story:
         """
         return Story(stream.read())
 
-    def parse(self):
-        self.tree = Parser().parse(self.story)
+    def parse(self, ebnf_file=None, debug=False):
+        self.tree = Parser(ebnf_file=ebnf_file).parse(self.story, debug=debug)
 
     def compile(self):
         self.compiled = Compiler.compile(self.tree)

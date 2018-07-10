@@ -74,9 +74,23 @@ def test_story_parse(patch, story):
     patch.init(Parser)
     patch.object(Parser, 'parse')
     story.parse()
-    Parser.__init__.assert_called_with()
-    Parser.parse.assert_called_with(story.story)
+    Parser.__init__.assert_called_with(ebnf_file=None)
+    Parser.parse.assert_called_with(story.story, debug=False)
     assert story.tree == Parser.parse()
+
+
+def test_story_parse_ebnf_file(patch, story):
+    patch.init(Parser)
+    patch.object(Parser, 'parse')
+    story.parse(ebnf_file='ebnf')
+    Parser.__init__.assert_called_with(ebnf_file='ebnf')
+
+
+def test_story_debug(patch, story):
+    patch.init(Parser)
+    patch.object(Parser, 'parse')
+    story.parse(debug='debug')
+    Parser.parse.assert_called_with(story.story, debug='debug')
 
 
 def test_story_compile(patch, story):
