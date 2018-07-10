@@ -3,6 +3,7 @@ import os
 
 from pytest import fixture, raises
 
+from storyscript.parser import Parser
 from storyscript.story import Story
 
 
@@ -66,5 +67,14 @@ def test_story_from_stream(patch, magic):
     result = Story.from_stream(stream)
     Story.__init__.assert_called_with(stream.read())
     assert isinstance(result, Story)
+
+
+def test_story_parse(patch, story):
+    patch.init(Parser)
+    patch.object(Parser, 'parse')
+    story.parse()
+    Parser.__init__.assert_called_with()
+    Parser.parse.assert_called_with(story.story)
+    assert story.tree == Parser.parse()
 
 

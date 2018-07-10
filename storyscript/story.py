@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+from .parser import Parser
+
 
 class Story:
 
@@ -33,4 +35,7 @@ class Story:
         Creates a story from a stream source
         """
         return Story(stream.read())
+
+    def parse(self):
+        self.tree = Parser().parse(self.story)
 
