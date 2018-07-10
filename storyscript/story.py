@@ -19,5 +19,5 @@ class Story:
         """
         Creates a story from a stream source
         """
-        return Story(stream, 'stream')
+        return Story(stream.read())
 

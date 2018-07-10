@@ -22,10 +22,11 @@ def test_story_from_file(patch):
     assert isinstance(result, Story)
 
 
-def test_story_from_stream(patch):
+def test_story_from_stream(patch, magic):
     patch.init(Story)
-    result = Story.from_stream('stream')
-    Story.__init__.assert_called_with('stream', 'stream')
+    stream = magic()
+    result = Story.from_stream(stream)
+    Story.__init__.assert_called_with(stream.read())
     assert isinstance(result, Story)
 
 
