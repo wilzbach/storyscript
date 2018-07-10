@@ -144,8 +144,9 @@ def test_app_loads(patch):
 
 
 def test_app_load(patch, magic):
-    patch.many(App, ['loads', 'services'])
+    patch.object(Story, 'from_stream')
     stream = magic()
     result = App.load(stream)
-    App.loads.assert_called_with(stream.read())
-    assert result == {stream.name: App.loads(), 'services': App.services()}
+    Story.from_stream.assert_called_with(stream)
+    story = Story.from_stream().process()
+    assert result == {stream.name: story, 'services': story['services']}

@@ -84,9 +84,7 @@ class App:
     def loads(string):
         return Story(string).process()
 
-    @classmethod
-    def load(cls, stream):
-        dictionary = {stream.name: cls.loads(stream.read())}
-        services = cls.services(dictionary)
-        dictionary['services'] = services
-        return dictionary
+    @staticmethod
+    def load(stream):
+        story = Story.from_stream(stream).process()
+        return {stream.name: story, 'services': story['services']}
