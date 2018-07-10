@@ -36,17 +36,6 @@ class App:
             return stories
         return [storypath]
 
-    @classmethod
-    def parse(cls, stories, ebnf_file=None, debug=False):
-        """
-        Parses a list of stories, returning their tree.
-        """
-        results = {}
-        for path in stories:
-            story = Story.from_file(path)
-            results[path] = story.process(ebnf_file=ebnf_file, debug=debug)
-        return results
-
     @staticmethod
     def services(stories):
         """
@@ -64,8 +53,11 @@ class App:
         """
         Parse and compile stories in path to JSON
         """
-        stories = cls.get_stories(path)
-        compiled_stories = cls.parse(stories, ebnf_file=ebnf_file, debug=debug)
+        compiled_stories = {}
+        kwargs = {'ebnf_file': ebnf_file, 'debug': debug}
+        for file in cls.get_stories(path):
+            story = Story.from_file(file)
+            compiled_stories[file] = story.process(**kwargs)
         services = cls.services(compiled_stories)
         dictionary = {'stories': compiled_stories, 'services': services}
         return json.dumps(dictionary, indent=2)

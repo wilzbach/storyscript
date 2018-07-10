@@ -75,29 +75,6 @@ def test_app_get_stories_directory(mocker):
     assert App.get_stories('stories') == ['root/one.story']
 
 
-def test_app_parse(patch, parser, read_story):
-    """
-    Ensures App.parse processes stories
-    """
-    patch.object(Story, 'from_file')
-    result = App.parse(['test.story'])
-    Story.from_file.assert_called_with('test.story')
-    Story.from_file().process.assert_called_with(ebnf_file=None, debug=False)
-    assert result == {'test.story': Story.from_file().process()}
-
-
-def test_app_parse_ebnf_file(patch, parser, read_story):
-    patch.object(Story, 'from_file')
-    App.parse(['test.story'], ebnf_file='ebnf')
-    Story.from_file().process.assert_called_with(ebnf_file='ebnf', debug=False)
-
-
-def test_app_parse_debug(patch, parser, read_story):
-    patch.object(Story, 'from_file')
-    App.parse(['test.story'], debug='debug')
-    Story.from_file().process.assert_called_with(ebnf_file=None, debug='debug')
-
-
 def test_app_services():
     compiled_stories = {'a': {'services': ['one']}, 'b': {'services': ['two']}}
     result = App.services(compiled_stories)
@@ -112,31 +89,36 @@ def test_app_services_no_duplicates():
 
 def test_app_compile(patch):
     patch.object(json, 'dumps')
-    patch.many(App, ['get_stories', 'parse', 'services'])
+    patch.object(Story, 'from_file')
+    patch.many(App, ['get_stories', 'services'])
+    App.get_stories.return_value = ['one.story']
     result = App.compile('path')
     App.get_stories.assert_called_with('path')
-    kwargs = {'ebnf_file': None, 'debug': False}
-    App.parse.assert_called_with(App.get_stories(), **kwargs)
-    App.services.assert_called_with(App.parse())
-    dictionary = {'stories': App.parse(), 'services': App.services()}
+    Story.from_file.assert_called_with('one.story')
+    Story.from_file().process.assert_called_with(ebnf_file=None, debug=False)
+    App.services.assert_called_with({'one.story': Story.from_file().process()})
+    dictionary = {'stories': {'one.story': Story.from_file().process()},
+                  'services': App.services()}
     json.dumps.assert_called_with(dictionary, indent=2)
     assert result == json.dumps()
 
 
 def test_app_compile_ebnf_file(patch):
     patch.object(json, 'dumps')
-    patch.many(App, ['get_stories', 'parse', 'services'])
-    App.compile('path', ebnf_file='test.ebnf')
-    kwargs = {'ebnf_file': 'test.ebnf', 'debug': False}
-    App.parse.assert_called_with(App.get_stories(), **kwargs)
+    patch.object(Story, 'from_file')
+    patch.many(App, ['get_stories', 'services'])
+    App.get_stories.return_value = ['one.story']
+    App.compile('path', ebnf_file='ebnf')
+    Story.from_file().process.assert_called_with(ebnf_file='ebnf', debug=False)
 
 
 def test_app_compile_debug(patch):
     patch.object(json, 'dumps')
-    patch.many(App, ['get_stories', 'parse', 'services'])
+    patch.object(Story, 'from_file')
+    patch.many(App, ['get_stories', 'services'])
+    App.get_stories.return_value = ['one.story']
     App.compile('path', debug='debug')
-    kwargs = {'ebnf_file': None, 'debug': 'debug'}
-    App.parse.assert_called_with(App.get_stories(), **kwargs)
+    Story.from_file().process.assert_called_with(ebnf_file=None, debug='debug')
 
 
 def test_app_lexer(patch):
