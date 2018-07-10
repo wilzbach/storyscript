@@ -106,3 +106,27 @@ def test_story_compile_debug(patch, story):
     story.tree = 'tree'
     story.compile(debug='debug')
     Compiler.compile.assert_called_with(story.tree, debug='debug')
+
+
+def test_story_process(patch, story):
+    patch.many(Story, ['parse', 'compile'])
+    story.compiled = 'compiled'
+    result = story.process()
+    Story.parse.assert_called_with(ebnf_file=None, debug=False)
+    Story.compile.assert_called_with(debug=False)
+    assert result == story.compiled
+
+
+def test_story_process_debug(patch, story):
+    patch.many(Story, ['parse', 'compile'])
+    story.compiled = 'compiled'
+    story.process(debug='debug')
+    Story.parse.assert_called_with(ebnf_file=None, debug='debug')
+    Story.compile.assert_called_with(debug='debug')
+
+
+def test_story_process_ebnf_file(patch, story):
+    patch.many(Story, ['parse', 'compile'])
+    story.compiled = 'compiled'
+    story.process(ebnf_file='ebnf')
+    Story.parse.assert_called_with(ebnf_file='ebnf', debug=False)
