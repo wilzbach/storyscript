@@ -3,9 +3,8 @@
 
 class Story:
 
-    def __init__(self, source, source_type):
-        self.source = source
-        self.source_type = source_type
+    def __init__(self, story):
+        self.story = story
 
     @staticmethod
     def from_file(path):

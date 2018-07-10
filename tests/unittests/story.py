@@ -6,12 +6,11 @@ from storyscript.story import Story
 
 @fixture
 def story():
-    return Story('source', 'type')
+    return Story('story')
 
 
 def test_story_init(story):
-    assert story.source == 'source'
-    assert story.source_type == 'type'
+    assert story.story == 'story'
 
 
 def test_story_from_file(patch):
