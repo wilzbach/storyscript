@@ -77,28 +77,25 @@ def test_app_get_stories_directory(mocker):
 
 def test_app_parse(patch, parser, read_story):
     """
-    Ensures App.parse runs Parser.parse
+    Ensures App.parse processes stories
     """
-    patch.object(Compiler, 'compile')
+    patch.object(Story, 'from_file')
     result = App.parse(['test.story'])
-    App.read_story.assert_called_with('test.story')
-    Parser.__init__.assert_called_with(ebnf_file=None)
-    Parser().parse.assert_called_with(App.read_story(), debug=False)
-    Compiler.compile.assert_called_with(Parser().parse(), debug=False)
-    assert result == {'test.story': Compiler.compile()}
+    Story.from_file.assert_called_with('test.story')
+    Story.from_file().process.assert_called_with(ebnf_file=None, debug=False)
+    assert result == {'test.story': Story.from_file().process()}
 
 
 def test_app_parse_ebnf_file(patch, parser, read_story):
-    patch.object(Compiler, 'compile')
-    App.parse(['test.story'], ebnf_file='test.ebnf')
-    Parser.__init__.assert_called_with(ebnf_file='test.ebnf')
+    patch.object(Story, 'from_file')
+    App.parse(['test.story'], ebnf_file='ebnf')
+    Story.from_file().process.assert_called_with(ebnf_file='ebnf', debug=False)
 
 
 def test_app_parse_debug(patch, parser, read_story):
-    patch.object(Compiler, 'compile')
-    App.parse(['test.story'], debug=True)
-    Parser().parse.assert_called_with(App.read_story(), debug=True)
-    Compiler.compile.assert_called_with(Parser().parse(), debug=True)
+    patch.object(Story, 'from_file')
+    App.parse(['test.story'], debug='debug')
+    Story.from_file().process.assert_called_with(ebnf_file=None, debug='debug')
 
 
 def test_app_services():

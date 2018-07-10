@@ -42,10 +42,9 @@ class App:
         Parses a list of stories, returning their tree.
         """
         results = {}
-        for story in stories:
-            tale = cls.read_story(story)
-            tree = Parser(ebnf_file=ebnf_file).parse(tale, debug=debug)
-            results[story] = Compiler.compile(tree, debug=debug)
+        for path in stories:
+            story = Story.from_file(path)
+            results[path] = story.process(ebnf_file=ebnf_file, debug=debug)
         return results
 
     @staticmethod
