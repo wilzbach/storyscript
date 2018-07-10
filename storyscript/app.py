@@ -2,25 +2,11 @@
 import json
 import os
 
-from .compiler import Compiler
-from .parser import Grammar, Parser
+from .parser import Grammar
 from .story import Story
 
 
 class App:
-
-    @staticmethod
-    def read_story(storypath):
-        """
-        Reads a story
-        """
-        try:
-            with open(storypath, 'r') as file:
-                return file.read()
-        except FileNotFoundError:
-            abspath = os.path.abspath(storypath)
-            print('File "{}" not found at {}'.format(storypath, abspath))
-            exit()
 
     @staticmethod
     def get_stories(storypath):

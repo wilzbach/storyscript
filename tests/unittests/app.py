@@ -5,73 +5,24 @@ import os
 from pytest import fixture, raises
 
 from storyscript.app import App
-from storyscript.compiler import Compiler
-from storyscript.parser import Grammar, Parser
+from storyscript.parser import Grammar
 from storyscript.story import Story
 
 
-@fixture
-def storypath():
-    return 'test.story'
-
-
-@fixture
-def story_teardown(request, storypath):
-    def teardown():
-        os.remove(storypath)
-    request.addfinalizer(teardown)
-
-
-@fixture
-def story(story_teardown, storypath):
-    story = 'run\n\tpass'
-    with open(storypath, 'w') as file:
-        file.write(story)
-    return story
-
-
-@fixture
-def read_story(patch):
-    patch.object(App, 'read_story')
-
-
-@fixture
-def parser(patch):
-    patch.init(Parser)
-    patch.object(Parser, 'parse')
-
-
-def test_app_read_story(story, storypath):
-    """
-    Ensures App.read_story reads a story
-    """
-    result = App.read_story(storypath)
-    assert result == story
-
-
-def test_app_read_story_not_found(patch, capsys):
-    patch.object(os, 'path')
-    with raises(SystemExit):
-        App.read_story('whatever')
-    out, err = capsys.readouterr()
-    assert out == 'File "whatever" not found at {}\n'.format(os.path.abspath())
-
-
-def test_app_get_stories(mocker):
+def test_app_get_stories(patch):
     """
     Ensures App.get_stories returns the original path if it's not a directory
     """
-    mocker.patch.object(os.path, 'isdir', return_value=False)
+    patch.object(os.path, 'isdir', return_value=False)
     assert App.get_stories('stories') == ['stories']
 
 
-def test_app_get_stories_directory(mocker):
+def test_app_get_stories_directory(patch):
     """
     Ensures App.get_stories returns stories in a directory
     """
-    mocker.patch.object(os.path, 'isdir')
-    mocker.patch.object(os, 'walk',
-                        return_value=[('root', [], ['one.story', 'two'])])
+    patch.object(os.path, 'isdir')
+    patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
     assert App.get_stories('stories') == ['root/one.story']
 
 
