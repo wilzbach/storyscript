@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 
 
 class Story:
@@ -7,6 +8,18 @@ class Story:
         self.story = story
 
     @staticmethod
+    def read(path):
+        """
+        Reads a story
+        """
+        try:
+            with open(path, 'r') as file:
+                return file.read()
+        except FileNotFoundError:
+            abspath = os.path.abspath(path)
+            print('File "{}" not found at {}'.format(path, abspath))
+            exit()
+
     @classmethod
     def from_file(cls, path):
         """
