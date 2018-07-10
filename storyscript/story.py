@@ -43,6 +43,9 @@ class Story:
     def compile(self, debug=False):
         self.compiled = Compiler.compile(self.tree, debug=debug)
 
+    def lex(self):
+        return Parser().lex(self.story)
+
     def process(self, ebnf_file=None, debug=False):
         self.parse(ebnf_file=ebnf_file, debug=debug)
         self.compile(debug=debug)

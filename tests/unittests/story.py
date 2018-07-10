@@ -108,6 +108,12 @@ def test_story_compile_debug(patch, story):
     Compiler.compile.assert_called_with(story.tree, debug='debug')
 
 
+def test_story_lex(patch, story):
+    patch.init(Parser)
+    patch.object(Parser, 'lex')
+    assert story.lex() == Parser.lex()
+
+
 def test_story_process(patch, story):
     patch.many(Story, ['parse', 'compile'])
     story.compiled = 'compiled'
