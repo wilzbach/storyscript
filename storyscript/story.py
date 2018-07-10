@@ -40,5 +40,5 @@ class Story:
     def parse(self, ebnf_file=None, debug=False):
         self.tree = Parser(ebnf_file=ebnf_file).parse(self.story, debug=debug)
 
-    def compile(self):
-        self.compiled = Compiler.compile(self.tree)
+    def compile(self, debug=False):
+        self.compiled = Compiler.compile(self.tree, debug=debug)

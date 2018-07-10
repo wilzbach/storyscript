@@ -97,5 +97,12 @@ def test_story_compile(patch, story):
     patch.object(Compiler, 'compile')
     story.tree = 'tree'
     story.compile()
-    Compiler.compile.assert_called_with(story.tree)
+    Compiler.compile.assert_called_with(story.tree, debug=False)
     assert story.compiled == Compiler.compile()
+
+
+def test_story_compile_debug(patch, story):
+    patch.object(Compiler, 'compile')
+    story.tree = 'tree'
+    story.compile(debug='debug')
+    Compiler.compile.assert_called_with(story.tree, debug='debug')
