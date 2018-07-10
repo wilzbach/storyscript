@@ -13,3 +13,10 @@ class Story:
         Creates a story from a file source
         """
         return Story(path, 'file')
+
+    @staticmethod
+    def from_stream(stream):
+        """
+        Creates a story from a stream source
+        """
+        return Story(stream, 'stream')
