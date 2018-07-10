@@ -7,6 +7,7 @@ from pytest import fixture, raises
 from storyscript.app import App
 from storyscript.compiler import Compiler
 from storyscript.parser import Grammar, Parser
+from storyscript.story import Story
 
 
 @fixture
@@ -141,14 +142,12 @@ def test_app_compile_debug(patch):
     App.parse.assert_called_with(App.get_stories(), **kwargs)
 
 
-def test_app_lexer(patch, read_story):
-    patch.init(Parser)
-    patch.object(Parser, 'lex')
+def test_app_lexer(patch):
+    patch.object(Story, 'from_file')
     patch.object(App, 'get_stories', return_value=['one.story'])
     result = App.lex('/path')
-    App.read_story.assert_called_with('one.story')
-    Parser.lex.assert_called_with(App.read_story())
-    assert result == {'one.story': Parser.lex()}
+    Story.from_file.assert_called_with('one.story')
+    assert result == {'one.story': Story.from_file().lex()}
 
 
 def test_app_grammar(patch):

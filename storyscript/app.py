@@ -4,6 +4,7 @@ import os
 
 from .compiler import Compiler
 from .parser import Grammar, Parser
+from .story import Story
 
 
 class App:
@@ -73,13 +74,12 @@ class App:
     @classmethod
     def lex(cls, path):
         """
-        Parse and lex stories, producing the list of used tokens
+        Lex stories, producing the list of used tokens
         """
-        parser = Parser()
         stories = cls.get_stories(path)
         results = {}
         for story in stories:
-            results[story] = parser.lex(cls.read_story(story))
+            results[story] = Story.from_file(story).lex()
         return results
 
     @staticmethod
