@@ -21,9 +21,3 @@ class Story:
         """
         return Story(stream, 'stream')
 
-    @staticmethod
-    def from_string(string):
-        """
-        Creates a story from a string source
-        """
-        return Story(string, 'string')
