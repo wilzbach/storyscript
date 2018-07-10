@@ -2,8 +2,6 @@
 import json
 import os
 
-from pytest import fixture, raises
-
 from storyscript.app import App
 from storyscript.parser import Grammar
 from storyscript.story import Story
