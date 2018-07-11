@@ -7,6 +7,9 @@ from .story import Story
 
 
 class App:
+    """
+    Exposes functionalities for internal use e.g the command line
+    """
 
     @staticmethod
     def get_stories(storypath):
@@ -65,12 +68,3 @@ class App:
         Returns the current grammar
         """
         return Grammar().build()
-
-    @staticmethod
-    def loads(string):
-        return Story(string).process()
-
-    @staticmethod
-    def load(stream):
-        story = Story.from_stream(stream).process()
-        return {stream.name: story, 'services': story['services']}
