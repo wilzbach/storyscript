@@ -54,5 +54,6 @@ class Story:
 
     def process(self, ebnf_file=None, debug=False):
         self.parse(ebnf_file=ebnf_file, debug=debug)
+        self.load_modules()
         self.compile(debug=debug)
         return self.compiled
