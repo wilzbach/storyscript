@@ -40,6 +40,12 @@ class Story:
     def parse(self, ebnf_file=None, debug=False):
         self.tree = Parser(ebnf_file=ebnf_file).parse(self.story, debug=debug)
 
+    def load_modules(self):
+        """
+        Loads imported modules.
+        """
+        self.modules = None
+
     def compile(self, debug=False):
         self.compiled = Compiler.compile(self.tree, debug=debug)
 

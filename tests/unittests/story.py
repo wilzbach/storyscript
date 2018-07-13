@@ -86,6 +86,11 @@ def test_story_parse_ebnf_file(patch, story):
     Parser.__init__.assert_called_with(ebnf_file='ebnf')
 
 
+def test_story_load_modules(story):
+    story.load_modules()
+    assert story.modules is None
+
+
 def test_story_debug(patch, story):
     patch.init(Parser)
     patch.object(Parser, 'parse')
