@@ -14,6 +14,7 @@ def test_lines_init(lines):
     assert lines.services == []
     assert lines.functions == {}
     assert lines.outputs == {}
+    assert lines.modules == {}
 
 
 def test_lines_sort(lines):

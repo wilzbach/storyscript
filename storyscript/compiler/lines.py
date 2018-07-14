@@ -10,6 +10,7 @@ class Lines:
         self.services = []
         self.functions = {}
         self.outputs = {}
+        self.modules = {}
 
     def sort(self):
         """
