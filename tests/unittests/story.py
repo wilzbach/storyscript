@@ -86,9 +86,12 @@ def test_story_parse_ebnf_file(patch, story):
     Parser.__init__.assert_called_with(ebnf_file='ebnf')
 
 
-def test_story_load_modules(story):
-    story.load_modules()
-    assert story.modules is None
+def test_story_modules(magic, story):
+    import_tree = magic()
+    story.tree = magic()
+    story.tree.find_data.return_value = [import_tree]
+    result = story.modules()
+    assert result == [import_tree.string.child().value[1:-1]]
 
 
 def test_story_debug(patch, story):
@@ -120,17 +123,16 @@ def test_story_lex(patch, story):
 
 
 def test_story_process(patch, story):
-    patch.many(Story, ['parse', 'load_modules', 'compile'])
+    patch.many(Story, ['parse', 'compile'])
     story.compiled = 'compiled'
     result = story.process()
     Story.parse.assert_called_with(ebnf_file=None, debug=False)
-    assert Story.load_modules.call_count == 1
     Story.compile.assert_called_with(debug=False)
     assert result == story.compiled
 
 
 def test_story_process_debug(patch, story):
-    patch.many(Story, ['parse', 'load_modules', 'compile'])
+    patch.many(Story, ['parse', 'compile'])
     story.compiled = 'compiled'
     story.process(debug='debug')
     Story.parse.assert_called_with(ebnf_file=None, debug='debug')
@@ -138,7 +140,7 @@ def test_story_process_debug(patch, story):
 
 
 def test_story_process_ebnf_file(patch, story):
-    patch.many(Story, ['parse', 'load_modules', 'compile'])
+    patch.many(Story, ['parse', 'compile'])
     story.compiled = 'compiled'
     story.process(ebnf_file='ebnf')
     Story.parse.assert_called_with(ebnf_file='ebnf', debug=False)

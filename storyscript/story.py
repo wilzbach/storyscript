@@ -40,11 +40,14 @@ class Story:
     def parse(self, ebnf_file=None, debug=False):
         self.tree = Parser(ebnf_file=ebnf_file).parse(self.story, debug=debug)
 
-    def load_modules(self):
+    def modules(self):
         """
-        Loads imported modules.
+        Gets the modules of a story from its tree.
         """
-        self.modules = None
+        modules = []
+        for module in self.tree.find_data('imports'):
+            modules.append(module.string.child(0).value[1:-1])
+        return modules
 
     def compile(self, debug=False):
         self.compiled = Compiler.compile(self.tree, debug=debug)
@@ -54,6 +57,5 @@ class Story:
 
     def process(self, ebnf_file=None, debug=False):
         self.parse(ebnf_file=ebnf_file, debug=debug)
-        self.load_modules()
         self.compile(debug=debug)
         return self.compiled
