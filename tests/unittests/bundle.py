@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+
 from pytest import fixture
 
 from storyscript.bundle import Bundle
@@ -11,3 +13,25 @@ def bundle():
 
 def test_bundle_init(bundle):
     assert bundle.path == 'path'
+
+
+def test_bundle_find_stories(patch, bundle):
+    """
+    Ensures Bundle.find_stories returns the original path if it's not a
+    directory
+    """
+    patch.object(os.path, 'isdir', return_value=False)
+    bundle.find_stories()
+    assert bundle.stories == ['path']
+
+
+def test_bundle_find_stories_directory(patch, bundle):
+    """
+    Ensures Bundle.find_stories returns stories in a directory
+    """
+    patch.object(os.path, 'isdir')
+    patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
+    bundle.find_stories()
+    assert bundle.stories == ['root/one.story']
+
+
