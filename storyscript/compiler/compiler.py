@@ -184,8 +184,7 @@ class Compiler:
         tree = Preprocessor.process(tree)
         compiler = cls.compiler()
         compiler.parse_tree(tree)
-        services = compiler.lines.get_services()
-        entrypoint = compiler.lines.first()
-        return {'tree': compiler.lines.lines, 'services': services,
-                'entrypoint': entrypoint,
-                'functions': compiler.lines.functions, 'version': version}
+        lines = compiler.lines
+        return {'tree': lines.lines, 'services': lines.get_services(),
+                'entrypoint': lines.first(), 'modules': lines.modules,
+                'functions': lines.functions, 'version': version}

@@ -295,10 +295,10 @@ def test_compiler_compile(patch):
     result = Compiler.compile('tree')
     Preprocessor.process.assert_called_with('tree')
     Compiler.compiler().parse_tree.assert_called_with(Preprocessor.process())
-    expected = {'tree': Compiler.compiler().lines.lines, 'version': version,
-                'services': Compiler.compiler().lines.get_services(),
-                'functions': Compiler.compiler().lines.functions,
-                'entrypoint': Compiler.compiler().lines.first()}
+    lines = Compiler.compiler().lines
+    expected = {'tree': lines.lines, 'version': version,
+                'services': lines.get_services(), 'functions': lines.functions,
+                'entrypoint': lines.first(), 'modules': lines.modules}
     assert result == expected
 
 
