@@ -27,6 +27,9 @@ class Compiler:
     def function_output(cls, tree):
         return cls.output(tree.node('function_output.types'))
 
+    def imports(self, tree, parent):
+        self.lines.modules[tree.child(1)] = tree.string.child(0).value[1:-1]
+
     def assignment(self, tree, parent):
         """
         Compiles an assignment tree
@@ -157,7 +160,8 @@ class Compiler:
         """
         allowed_nodes = ['service_block', 'assignment', 'if_block',
                          'elseif_block', 'else_block', 'foreach_block',
-                         'function_block', 'return_statement', 'arguments']
+                         'function_block', 'return_statement', 'arguments',
+                         'imports']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return

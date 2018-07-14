@@ -44,6 +44,12 @@ def test_compiler_function_output(patch, tree):
     assert result == Compiler.output()
 
 
+def test_compiler_imports(patch, compiler, lines, tree):
+    compiler.lines.modules = {}
+    compiler.imports(tree, '1')
+    assert lines.modules[tree.child(1)] == tree.string.child(0).value[1:-1]
+
+
 def test_compiler_assignment(patch, compiler, lines, tree):
     patch.many(Objects, ['path', 'values'])
     compiler.assignment(tree, '1')
@@ -237,7 +243,8 @@ def test_compiler_service_block_nested_block(patch, compiler, tree):
 
 @mark.parametrize('method_name', [
     'service_block', 'assignment', 'if_block', 'elseif_block', 'else_block',
-    'foreach_block', 'function_block', 'return_statement', 'arguments'
+    'foreach_block', 'function_block', 'return_statement', 'arguments',
+    'imports'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)
