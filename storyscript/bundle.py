@@ -16,14 +16,14 @@ class Bundle:
         """
         Finds bundle stories.
         """
-        self.files = []
+        stories = []
         if os.path.isdir(self.path):
             for root, subdirs, files in os.walk(self.path):
                 for file in files:
                     if file.endswith('.story'):
-                        self.files.append(os.path.join(root, file))
-        else:
-            self.files.append(self.path)
+                        stories.append(os.path.join(root, file))
+            return stories
+        return [self.path]
 
     def services(self):
         services = []
@@ -37,9 +37,8 @@ class Bundle:
         """
         Makes the bundle
         """
-        self.find_stories()
         self.stories = {}
-        for storypath in self.files:
+        for storypath in self.find_stories():
             story = Story.from_file(storypath)
             self.stories[storypath] = story.process()
         return {'stories': self.stories, 'services': self.services()}

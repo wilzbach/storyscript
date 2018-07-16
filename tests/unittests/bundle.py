@@ -22,8 +22,7 @@ def test_bundle_find_stories(patch, bundle):
     directory
     """
     patch.object(os.path, 'isdir', return_value=False)
-    bundle.find_stories()
-    assert bundle.files == ['path']
+    assert bundle.find_stories() == ['path']
 
 
 def test_bundle_find_stories_directory(patch, bundle):
@@ -32,8 +31,7 @@ def test_bundle_find_stories_directory(patch, bundle):
     """
     patch.object(os.path, 'isdir')
     patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
-    bundle.find_stories()
-    assert bundle.files == ['root/one.story']
+    assert bundle.find_stories() == ['root/one.story']
 
 
 def test_bundle_services(bundle):
@@ -51,7 +49,7 @@ def test_bundle_services_no_duplicates(bundle):
 def test_bundle_bundle(patch, bundle):
     patch.object(Story, 'from_file')
     patch.many(Bundle, ['find_stories', 'services'])
-    bundle.files = ['one.story']
+    Bundle.find_stories.return_value = ['one.story']
     result = bundle.bundle()
     Bundle.find_stories.call_count = 1
     Story.from_file.assert_called_with('one.story')
