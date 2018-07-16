@@ -14,12 +14,12 @@ class Bundle:
         """
         Finds bundle stories.
         """
-        self.stories = []
+        self.files = []
         if os.path.isdir(self.path):
             for root, subdirs, files in os.walk(self.path):
                 for file in files:
                     if file.endswith('.story'):
-                        self.stories.append(os.path.join(root, file))
+                        self.files.append(os.path.join(root, file))
         else:
-            self.stories.append(self.path)
+            self.files.append(self.path)
 

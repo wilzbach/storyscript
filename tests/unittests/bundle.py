@@ -22,7 +22,7 @@ def test_bundle_find_stories(patch, bundle):
     """
     patch.object(os.path, 'isdir', return_value=False)
     bundle.find_stories()
-    assert bundle.stories == ['path']
+    assert bundle.files == ['path']
 
 
 def test_bundle_find_stories_directory(patch, bundle):
@@ -32,6 +32,6 @@ def test_bundle_find_stories_directory(patch, bundle):
     patch.object(os.path, 'isdir')
     patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
     bundle.find_stories()
-    assert bundle.stories == ['root/one.story']
+    assert bundle.files == ['root/one.story']
 
 
