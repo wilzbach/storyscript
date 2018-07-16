@@ -33,12 +33,13 @@ class Bundle:
         services.sort()
         return services
 
-    def bundle(self):
+    def bundle(self, ebnf_file=None, debug=False):
         """
         Makes the bundle
         """
         self.stories = {}
         for storypath in self.find_stories():
             story = Story.from_file(storypath)
-            self.stories[storypath] = story.process()
+            self.stories[storypath] = story.process(ebnf_file=ebnf_file,
+                                                    debug=debug)
         return {'stories': self.stories, 'services': self.services()}
