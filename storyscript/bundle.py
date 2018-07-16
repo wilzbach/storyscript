@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+from .story import Story
+
 
 class Bundle:
     """
@@ -31,3 +33,13 @@ class Bundle:
         services.sort()
         return services
 
+    def bundle(self):
+        """
+        Makes the bundle
+        """
+        self.find_stories()
+        self.stories = {}
+        for storypath in self.files:
+            story = Story.from_file(storypath)
+            self.stories[storypath] = story.process()
+        return {'stories': self.stories, 'services': self.services()}

@@ -4,6 +4,7 @@ import os
 from pytest import fixture
 
 from storyscript.bundle import Bundle
+from storyscript.story import Story
 
 
 @fixture
@@ -47,3 +48,12 @@ def test_bundle_services_no_duplicates(bundle):
     assert result == ['one']
 
 
+def test_bundle_bundle(patch, bundle):
+    patch.object(Story, 'from_file')
+    patch.many(Bundle, ['find_stories', 'services'])
+    bundle.files = ['one.story']
+    result = bundle.bundle()
+    Bundle.find_stories.call_count = 1
+    Story.from_file.assert_called_with('one.story')
+    assert result == {'stories': {'one.story': Story.from_file().process()},
+                      'services': Bundle.services()}
