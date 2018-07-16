@@ -35,3 +35,15 @@ def test_bundle_find_stories_directory(patch, bundle):
     assert bundle.files == ['root/one.story']
 
 
+def test_bundle_services(bundle):
+    bundle.stories = {'a': {'services': ['one']}, 'b': {'services': ['two']}}
+    result = bundle.services()
+    assert result == ['one', 'two']
+
+
+def test_bundle_services_no_duplicates(bundle):
+    bundle.stories = {'a': {'services': ['one']}, 'b': {'services': ['one']}}
+    result = bundle.services()
+    assert result == ['one']
+
+

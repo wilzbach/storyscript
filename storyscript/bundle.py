@@ -23,3 +23,11 @@ class Bundle:
         else:
             self.files.append(self.path)
 
+    def services(self):
+        services = []
+        for storypath, story in self.stories.items():
+            services += story['services']
+        services = list(set(services))
+        services.sort()
+        return services
+
