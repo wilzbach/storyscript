@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from pytest import fixture, mark
+from pytest import fixture, mark, raises
 
 from storyscript.compiler import Lines
+from storyscript.exceptions import StoryError
 
 
 @fixture
@@ -88,17 +89,27 @@ def test_lines_make_keywords(lines, keywords):
 
 
 def test_lines_service_method(lines):
-    assert lines.service_method('alpine') == 'execute'
+    assert lines.service_method('alpine', '1') == 'execute'
 
 
 def test_lines_service_method_call(lines):
     lines.functions['makeTea'] = '1'
-    assert lines.service_method('makeTea') == 'call'
+    assert lines.service_method('makeTea', '1') == 'call'
 
 
 def test_lines_service_method_call_from_module(lines):
     lines.modules['afternoon'] = 'afternoon.story'
-    assert lines.service_method('afternoon.makeTea') == 'call'
+    assert lines.service_method('afternoon.makeTea', '1') == 'call'
+
+
+def test_lines_service_method_story_error(patch, lines):
+    patch.init(StoryError)
+    patch.object(StoryError, 'message')
+    with raises(SystemExit):
+        lines.service_method('wrong.name', '1')
+    item = {'value': 'wrong.name', 'line': '1'}
+    StoryError.__init__.assert_called_with('service-path', item)
+    assert StoryError.message.call_count == 1
 
 
 def test_lines_append(patch, lines):
@@ -125,6 +136,7 @@ def test_compiler_append_service(patch, lines):
     Lines.service_method.return_value = 'execute'
     Lines.is_output.return_value = False
     lines.append('execute', 'line', service='service', parent='parent')
+    Lines.service_method.assert_called_with('service', 'line')
     lines.is_output.assert_called_with('parent', 'service')
     assert lines.services[0] == 'service'
 
