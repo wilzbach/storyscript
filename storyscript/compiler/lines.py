@@ -89,8 +89,7 @@ class Lines:
 
     def append(self, method, line, **kwargs):
         if 'service' in kwargs:
-            if kwargs['service'] in self.functions:
-                method = 'call'
+            method = self.service_method(kwargs['service'])
 
         if method == 'function':
             self.functions[kwargs['function']] = line

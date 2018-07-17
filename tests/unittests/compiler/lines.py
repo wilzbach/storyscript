@@ -116,7 +116,8 @@ def test_compiler_append_service(patch, lines):
     """
     Ensures that a service is registed in Compiler.services
     """
-    patch.many(Lines, ['make', 'set_next', 'is_output'])
+    patch.many(Lines, ['make', 'set_next', 'is_output', 'service_method'])
+    Lines.service_method.return_value = 'execute'
     Lines.is_output.return_value = False
     lines.append('execute', 'line', service='service', parent='parent')
     lines.is_output.assert_called_with('parent', 'service')
@@ -128,7 +129,8 @@ def test_lines_append_service_block_output(patch, lines):
     Ensures that a service is not registered if the current service block
     has defined it as output
     """
-    patch.many(Lines, ['make', 'set_next', 'is_output'])
+    patch.many(Lines, ['make', 'set_next', 'is_output', 'service_method'])
+    Lines.service_method.return_value = 'execute'
     lines.outputs = {'line': ['service']}
     lines.append('execute', 'line', service='service', parent='parent')
     assert lines.services == []
@@ -138,7 +140,8 @@ def test_lines_append_function_call(patch, lines):
     """
     Ensures that a function call is registered properly.
     """
-    patch.many(Lines, ['make', 'set_next'])
+    patch.many(Lines, ['make', 'set_next', 'service_method'])
+    Lines.service_method.return_value = 'call'
     lines.functions['function'] = 1
     lines.append('execute', 'line', service='function')
     lines.make.assert_called_with('call', 'line', service='function')
