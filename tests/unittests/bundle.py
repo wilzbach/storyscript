@@ -14,6 +14,7 @@ def bundle():
 
 def test_bundle_init(bundle):
     assert bundle.path == 'path'
+    assert bundle.stories == {}
 
 
 def test_bundle_find_stories(patch, bundle):

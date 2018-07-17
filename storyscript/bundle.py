@@ -11,6 +11,7 @@ class Bundle:
 
     def __init__(self, path):
         self.path = path
+        self.stories = {}
 
     def find_stories(self):
         """
@@ -37,7 +38,6 @@ class Bundle:
         """
         Makes the bundle
         """
-        self.stories = {}
         for storypath in self.find_stories():
             story = Story.from_file(storypath)
             self.stories[storypath] = story.process(ebnf_file=ebnf_file,
