@@ -87,6 +87,15 @@ def test_lines_make_keywords(lines, keywords):
     assert lines.lines['1'][keywords] == keywords
 
 
+def test_lines_service_method(lines):
+    assert lines.service_method('alpine') == 'execute'
+
+
+def test_lines_service_method_call(lines):
+    lines.functions['makeTea'] = '1'
+    assert lines.service_method('makeTea') == 'call'
+
+
 def test_lines_append(patch, lines):
     patch.many(Lines, ['make', 'set_next'])
     lines.append('method', 'line', extras='whatever')

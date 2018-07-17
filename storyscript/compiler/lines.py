@@ -79,6 +79,14 @@ class Lines:
         }
         self.lines = {**self.lines, **dictionary}
 
+    def service_method(self, service):
+        """
+        Finds whether a service is a function call or a service.
+        """
+        if service in self.functions:
+            return 'call'
+        return 'execute'
+
     def append(self, method, line, **kwargs):
         if 'service' in kwargs:
             if kwargs['service'] in self.functions:
