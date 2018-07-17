@@ -28,7 +28,11 @@ class Compiler:
         return cls.output(tree.node('function_output.types'))
 
     def imports(self, tree, parent):
-        self.lines.modules[tree.child(1)] = tree.string.child(0).value[1:-1]
+        """
+        Compiles an import rule
+        """
+        module = tree.child(1).value
+        self.lines.modules[module] = tree.string.child(0).value[1:-1]
 
     def assignment(self, tree, parent):
         """

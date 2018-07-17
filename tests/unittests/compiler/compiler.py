@@ -47,7 +47,8 @@ def test_compiler_function_output(patch, tree):
 def test_compiler_imports(patch, compiler, lines, tree):
     compiler.lines.modules = {}
     compiler.imports(tree, '1')
-    assert lines.modules[tree.child(1)] == tree.string.child(0).value[1:-1]
+    module = tree.child(1).value
+    assert lines.modules[module] == tree.string.child(0).value[1:-1]
 
 
 def test_compiler_assignment(patch, compiler, lines, tree):
