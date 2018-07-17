@@ -74,6 +74,17 @@ def test_tree_replace():
     assert tree.children == ['new']
 
 
+def test_tree_extract_path():
+    tree = Tree('path', [Token('NAME', 'one')])
+    assert tree.extract_path() == 'one'
+
+
+def test_tree_extract_path_fragments():
+    subtree = Tree('fragment', [Token('NAME', 'two')])
+    tree = Tree('path', [Token('NAME', 'one'), subtree, subtree])
+    assert tree.extract_path() == 'one.two.two'
+
+
 def test_tree_attributes(patch):
     patch.object(Tree, 'node')
     tree = Tree('master', [])

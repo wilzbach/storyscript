@@ -53,5 +53,17 @@ class Tree(LarkTree):
         """
         self.children[index] = item
 
+    def extract_path(self):
+        """
+        Extracts the path name from a path tree
+        """
+        string = ''
+        for child in self.children:
+            if isinstance(child, Tree):
+                string = '{}.{}'.format(string, child.child(0).value)
+            else:
+                string += child.value
+        return string
+
     def __getattr__(self, attribute):
         return self.node(attribute)
