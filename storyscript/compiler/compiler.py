@@ -63,7 +63,7 @@ class Compiler:
         if command:
             command = command.child(0)
         arguments = Objects.arguments(tree.service_fragment)
-        service = tree.child(0).child(0).value
+        service = tree.path.extract_path()
         output = self.output(tree.service_fragment.output)
         if output:
             self.lines.set_output(line, output)

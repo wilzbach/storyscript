@@ -90,7 +90,7 @@ def test_compiler_service(patch, compiler, lines, tree):
     tree.node.return_value = None
     compiler.service(tree, None, 'parent')
     line = tree.line()
-    service = tree.child().child().value
+    service = tree.path.extract_path()
     command = tree.service_fragment.command.child()
     Objects.arguments.assert_called_with(tree.service_fragment)
     Compiler.output.assert_called_with(tree.service_fragment.output)
@@ -104,7 +104,7 @@ def test_compiler_service_command(patch, compiler, lines, tree):
     patch.object(Compiler, 'output')
     compiler.service(tree, None, 'parent')
     line = tree.line()
-    service = tree.child().child().value
+    service = tree.path.extract_path()
     command = tree.service_fragment.command.child()
     lines.set_output.assert_called_with(line, Compiler.output())
     lines.execute.assert_called_with(line, service, command,
@@ -119,7 +119,7 @@ def test_compiler_service_nested_block(patch, magic, compiler, lines, tree):
     nested_block = magic()
     compiler.service(tree, nested_block, 'parent')
     line = tree.line()
-    service = tree.child().child().value
+    service = tree.path.extract_path()
     command = tree.service_fragment.command.child()
     lines.execute.assert_called_with(line, service, command,
                                      Objects.arguments(), Compiler.output(),
