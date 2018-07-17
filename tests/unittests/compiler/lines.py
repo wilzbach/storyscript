@@ -96,6 +96,11 @@ def test_lines_service_method_call(lines):
     assert lines.service_method('makeTea') == 'call'
 
 
+def test_lines_service_method_call_from_module(lines):
+    lines.modules['afternoon'] = 'afternoon.story'
+    assert lines.service_method('afternoon.makeTea') == 'call'
+
+
 def test_lines_append(patch, lines):
     patch.many(Lines, ['make', 'set_next'])
     lines.append('method', 'line', extras='whatever')

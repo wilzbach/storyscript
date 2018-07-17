@@ -85,6 +85,8 @@ class Lines:
         """
         if service in self.functions:
             return 'call'
+        if service.split('.')[0] in self.modules:
+            return 'call'
         return 'execute'
 
     def append(self, method, line, **kwargs):
