@@ -48,28 +48,19 @@ def test_bundle_services_no_duplicates(bundle):
 
 
 def test_bundle_bundle(patch, bundle):
-    patch.object(Story, 'from_file')
-    patch.many(Bundle, ['find_stories', 'services'])
-    Bundle.find_stories.return_value = ['one.story']
+    patch.many(Bundle, ['find_stories', 'services', 'compile'])
     result = bundle.bundle()
-    Bundle.find_stories.call_count = 1
-    Story.from_file.assert_called_with('one.story')
-    Story.from_file().process.assert_called_with(ebnf_file=None, debug=False)
-    assert result == {'stories': {'one.story': Story.from_file().process()},
-                      'services': Bundle.services()}
+    Bundle.compile.assert_called_with(Bundle.find_stories(), None, False)
+    assert result == {'stories': bundle.stories, 'services': Bundle.services()}
 
 
 def test_bundle_bundle_ebnf_file(patch, bundle):
-    patch.object(Story, 'from_file')
-    patch.many(Bundle, ['find_stories', 'services'])
-    Bundle.find_stories.return_value = ['one.story']
+    patch.many(Bundle, ['find_stories', 'services', 'compile'])
     bundle.bundle(ebnf_file='ebnf')
-    Story.from_file().process.assert_called_with(ebnf_file='ebnf', debug=False)
+    Bundle.compile.assert_called_with(Bundle.find_stories(), 'ebnf', False)
 
 
 def test_bundle_bundle_debug(patch, bundle):
-    patch.object(Story, 'from_file')
-    patch.many(Bundle, ['find_stories', 'services'])
-    Bundle.find_stories.return_value = ['one.story']
+    patch.many(Bundle, ['find_stories', 'services', 'compile'])
     bundle.bundle(debug=True)
-    Story.from_file().process.assert_called_with(ebnf_file=None, debug=True)
+    Bundle.compile.assert_called_with(Bundle.find_stories(), None, True)

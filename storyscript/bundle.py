@@ -38,8 +38,5 @@ class Bundle:
         """
         Makes the bundle
         """
-        for storypath in self.find_stories():
-            story = Story.from_file(storypath)
-            self.stories[storypath] = story.process(ebnf_file=ebnf_file,
-                                                    debug=debug)
+        self.compile(self.find_stories(), ebnf_file, debug)
         return {'stories': self.stories, 'services': self.services()}
