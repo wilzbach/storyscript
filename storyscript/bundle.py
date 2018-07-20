@@ -38,10 +38,16 @@ class Bundle:
         self.compile(stories, ebnf_file, debug)
 
     def compile(self, stories, ebnf_file, debug):
+        """
+        Reads and parses a story, then compiles its modules and finally
+        compiles the story itself.
+        """
         for storypath in stories:
             story = Story.from_file(storypath)
-            self.stories[storypath] = story.process(ebnf_file=ebnf_file,
-                                                    debug=debug)
+            story.parse(ebnf_file=ebnf_file, debug=debug)
+            self.compile_modules(story.modules(), ebnf_file, debug)
+            story.compile(debug=debug)
+            self.stories[storypath] = story.compiled
 
     def bundle(self, ebnf_file=None, debug=False):
         """

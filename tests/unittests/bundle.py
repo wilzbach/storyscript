@@ -55,10 +55,14 @@ def test_bundle_compile_modules(patch, bundle):
 
 def test_bundle_compile(patch, bundle):
     patch.object(Story, 'from_file')
+    patch.object(Bundle, 'compile_modules')
     bundle.compile(['one.story'], None, False)
     Story.from_file.assert_called_with('one.story')
-    Story.from_file().process.assert_called_with(ebnf_file=None, debug=False)
-    assert bundle.stories['one.story'] == Story.from_file().process()
+    story = Story.from_file()
+    story.parse.assert_called_with(ebnf_file=None, debug=False)
+    Bundle.compile_modules.assert_called_with(story.modules(), None, False)
+    story.compile.assert_called_with(debug=False)
+    assert bundle.stories['one.story'] == story.compiled
 
 
 def test_bundle_bundle(patch, bundle):
