@@ -47,6 +47,12 @@ def test_bundle_services_no_duplicates(bundle):
     assert result == ['one']
 
 
+def test_bundle_compile_modules(patch, bundle):
+    patch.object(Bundle, 'compile')
+    bundle.compile_modules(['stories'], 'ebnf', 'debug')
+    Bundle.compile.assert_called_with(['stories'], 'ebnf', 'debug')
+
+
 def test_bundle_compile(patch, bundle):
     patch.object(Story, 'from_file')
     bundle.compile(['one.story'], None, False)

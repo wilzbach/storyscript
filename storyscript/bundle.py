@@ -34,6 +34,9 @@ class Bundle:
         services.sort()
         return services
 
+    def compile_modules(self, stories, ebnf_file, debug):
+        self.compile(stories, ebnf_file, debug)
+
     def compile(self, stories, ebnf_file, debug):
         for storypath in stories:
             story = Story.from_file(storypath)
