@@ -34,6 +34,12 @@ class Bundle:
         services.sort()
         return services
 
+    def compile(self, stories, ebnf_file, debug):
+        for storypath in stories:
+            story = Story.from_file(storypath)
+            self.stories[storypath] = story.process(ebnf_file=ebnf_file,
+                                                    debug=debug)
+
     def bundle(self, ebnf_file=None, debug=False):
         """
         Makes the bundle
