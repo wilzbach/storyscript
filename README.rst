@@ -87,8 +87,8 @@ Issues
 For problems directly related to the CLI, `add an issue on GitHub <https://github.com/asyncy/storyscript/issues/new>`_.
 For other issues, `submit a support ticket <mailto:help@storyscripts.org>`_
 
-.. |CircleCI| image:: https://circleci.com/gh/asyncy/storyscript.svg?style=svg
-   :target: https://circleci.com/gh/asyncy/storyscript
+.. |CircleCI| image:: https://circleci.com/gh/storyscript/storyscript.svg?style=svg
+   :target: https://circleci.com/gh/storyscript/storyscript
 
 .. |Codecov| image:: https://codecov.io/gh/asyncy/storyscript/branch/master/graphs/badge.svg
    :target: https://codecov.io/github/asyncy/storyscript
