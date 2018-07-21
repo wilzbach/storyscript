@@ -134,6 +134,15 @@ def test_compiler_service_no_output(patch, compiler, lines, tree):
     assert lines.set_output.call_count == 0
 
 
+def test_compiler_when(patch, compiler, lines, tree):
+    patch.object(Compiler, 'service')
+    lines.lines = {'1': {}}
+    lines.last.return_value = '1'
+    compiler.when(tree, 'nested_block', '1')
+    Compiler.service.assert_called_with(tree.service, 'nested_block', '1')
+    assert lines.lines['1']['method'] == 'when'
+
+
 def test_compiler_return_statement(compiler, tree):
     with raises(StoryError):
         compiler.return_statement(tree, None)

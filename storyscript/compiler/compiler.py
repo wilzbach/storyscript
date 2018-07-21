@@ -73,6 +73,13 @@ class Compiler:
         self.lines.execute(line, service, command, arguments, output, enter,
                            parent)
 
+    def when(self, tree, nested_block, parent):
+        """
+        Compiles a when tree
+        """
+        self.service(tree.service, nested_block, parent)
+        self.lines.lines[self.lines.last()]['method'] = 'when'
+
     def return_statement(self, tree, parent):
         """
         Compiles a return_statement tree
