@@ -9,21 +9,25 @@ the list of services used by each story::
             "hello.story": {
                 "tree": {...}
                 "services": ["alpine"],
-                "version": "0.0.15"
+                "functions": {
+                    "name": "1"
+                },
+                "modules": {
+                    "Foo": "foo.story"
+                },
+                "version": "0.3.0"
             },
             "foo.story": {
                 "tree": {...},
-                "services": ["twtter"],
-                "version": "0.0.15"
+                "services": ["twitter"],
+                "version": "0.3.0"
             }
         },
         "services": [
             "alpine",
             "twitter"
         ],
-        "functions": {
-            "name": "line"
-        }
+        "entrypoint": "hello.story"
     }
 
 The compiled tree
