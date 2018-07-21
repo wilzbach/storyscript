@@ -21,17 +21,6 @@ def test_transformer_arguments_short():
     assert Transformer().arguments(matches) == Tree('arguments', expected)
 
 
-def test_transformer_service(magic):
-    matches = [magic()]
-    assert Transformer().service(matches) == Tree('service', matches)
-
-
-def test_transformer_service_error(magic):
-    matches = [magic(children=[magic(), magic()])]
-    with raises(StoryError):
-        Transformer().service(matches)
-
-
 def test_transformer_assignment(magic):
     matches = [magic()]
     assert Transformer().assignment(matches) == Tree('assignment', matches)

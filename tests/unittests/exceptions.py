@@ -83,6 +83,17 @@ def test_exceptions_storyerror_compile_template_tree(patch, error):
     assert result == StoryError.tree_template()
 
 
+def test_exceptions_storyerror_compile_template_dict(patch, error):
+    """
+    Ensures compile_template can handle dictionary items.
+    """
+    patch.object(StoryError, 'tree_template')
+    error.item = {'value': 'value', 'line': '1'}
+    result = error.compile_template()
+    StoryError.tree_template.assert_called_with('value', '1')
+    assert result == StoryError.tree_template()
+
+
 def test_exceptions_storyerror_message(patch, error):
     patch.many(StoryError, ['compile_template', 'escape_string'])
     result = error.message()

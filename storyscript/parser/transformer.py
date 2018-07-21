@@ -24,12 +24,6 @@ class Transformer(LarkTransformer):
             matches = [matches[0].child(0), matches[0]]
         return Tree('arguments', matches)
 
-    def service(self, matches):
-        if len(matches[0].children) > 1:
-            token = matches[0].children[1].children[0]
-            raise StoryError('service-path', token)
-        return Tree('service', matches)
-
     def assignment(self, matches):
         token = matches[0].children[0]
         if '/' in token.value:

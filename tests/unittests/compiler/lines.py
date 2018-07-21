@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from pytest import fixture, mark
+from pytest import fixture, mark, raises
 
 from storyscript.compiler import Lines
+from storyscript.exceptions import StoryError
 
 
 @fixture
@@ -14,6 +15,7 @@ def test_lines_init(lines):
     assert lines.services == []
     assert lines.functions == {}
     assert lines.outputs == {}
+    assert lines.modules == {}
 
 
 def test_lines_sort(lines):
@@ -86,6 +88,30 @@ def test_lines_make_keywords(lines, keywords):
     assert lines.lines['1'][keywords] == keywords
 
 
+def test_lines_service_method(lines):
+    assert lines.service_method('alpine', '1') == 'execute'
+
+
+def test_lines_service_method_call(lines):
+    lines.functions['makeTea'] = '1'
+    assert lines.service_method('makeTea', '1') == 'call'
+
+
+def test_lines_service_method_call_from_module(lines):
+    lines.modules['afternoon'] = 'afternoon.story'
+    assert lines.service_method('afternoon.makeTea', '1') == 'call'
+
+
+def test_lines_service_method_story_error(patch, lines):
+    patch.init(StoryError)
+    patch.object(StoryError, 'message')
+    with raises(SystemExit):
+        lines.service_method('wrong.name', '1')
+    item = {'value': 'wrong.name', 'line': '1'}
+    StoryError.__init__.assert_called_with('service-path', item)
+    assert StoryError.message.call_count == 1
+
+
 def test_lines_append(patch, lines):
     patch.many(Lines, ['make', 'set_next'])
     lines.append('method', 'line', extras='whatever')
@@ -106,9 +132,11 @@ def test_compiler_append_service(patch, lines):
     """
     Ensures that a service is registed in Compiler.services
     """
-    patch.many(Lines, ['make', 'set_next', 'is_output'])
+    patch.many(Lines, ['make', 'set_next', 'is_output', 'service_method'])
+    Lines.service_method.return_value = 'execute'
     Lines.is_output.return_value = False
     lines.append('execute', 'line', service='service', parent='parent')
+    Lines.service_method.assert_called_with('service', 'line')
     lines.is_output.assert_called_with('parent', 'service')
     assert lines.services[0] == 'service'
 
@@ -118,7 +146,8 @@ def test_lines_append_service_block_output(patch, lines):
     Ensures that a service is not registered if the current service block
     has defined it as output
     """
-    patch.many(Lines, ['make', 'set_next', 'is_output'])
+    patch.many(Lines, ['make', 'set_next', 'is_output', 'service_method'])
+    Lines.service_method.return_value = 'execute'
     lines.outputs = {'line': ['service']}
     lines.append('execute', 'line', service='service', parent='parent')
     assert lines.services == []
@@ -128,7 +157,8 @@ def test_lines_append_function_call(patch, lines):
     """
     Ensures that a function call is registered properly.
     """
-    patch.many(Lines, ['make', 'set_next'])
+    patch.many(Lines, ['make', 'set_next', 'service_method'])
+    Lines.service_method.return_value = 'call'
     lines.functions['function'] = 1
     lines.append('execute', 'line', service='function')
     lines.make.assert_called_with('call', 'line', service='function')

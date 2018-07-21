@@ -25,8 +25,8 @@ def test_grammar_init():
 
 def test_grammar_line(grammar, ebnf):
     grammar.line()
-    defintions = (['values'], ['operation'], ['comment'],
-                  ['assignment'], ['return_statement'], ['block'])
+    defintions = (['values'], ['operation'], ['comment'], ['assignment'],
+                  ['imports'], ['return_statement'], ['block'])
     ebnf.rules.assert_called_with('line', *defintions)
 
 
@@ -306,6 +306,13 @@ def test_grammar_assignment(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('assignment', definition)
 
 
+def test_grammar_imports(patch, grammar, ebnf):
+    grammar.imports()
+    ebnf.token.assert_called_with('import', 'import', inline=True)
+    rule = ('import', 'ws', 'string', 'ws', 'as', 'ws', 'name')
+    ebnf.rule.assert_called_with('imports', rule)
+
+
 def test_grammar_comparisons(grammar, ebnf):
     grammar.comparisons()
     tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
@@ -420,7 +427,7 @@ def test_grammar_comment(grammar, ebnf):
 
 def test_grammar_build(patch, grammar):
     patch.many(Grammar, ['line', 'spaces', 'values', 'operation', 'comment',
-                         'block', 'comparisons', 'assignment',
+                         'block', 'comparisons', 'assignment', 'imports',
                          'types', 'return_statement'])
     result = grammar.build()
     grammar.ebnf.start.assert_called_with('_NL? block')
@@ -431,6 +438,7 @@ def test_grammar_build(patch, grammar):
     assert Grammar.assignment.call_count == 1
     assert Grammar.return_statement.call_count == 1
     assert Grammar.block.call_count == 1
+    assert Grammar.imports.call_count == 1
     assert Grammar.comparisons.call_count == 1
     assert Grammar.types.call_count == 1
     assert Grammar.comment.call_count == 1

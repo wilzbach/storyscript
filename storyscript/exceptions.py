@@ -44,6 +44,10 @@ class StoryError(SyntaxError):
         return template.format(value, line)
 
     def compile_template(self):
+        """
+        Compiles the correct template for the item, depending on whether it's
+        UnexpectedToken, UnexpectedInput, a tree, a dict or a token.
+        """
         if hasattr(self.item, 'data'):
             return self.tree_template(self.item, self.item.line())
         elif hasattr(self.item, 'token'):
@@ -52,6 +56,8 @@ class StoryError(SyntaxError):
         elif hasattr(self.item, 'context'):
             return self.token_template(self.item.context, self.item.line,
                                        self.item.column)
+        elif isinstance(self.item, dict):
+            return self.tree_template(self.item['value'], self.item['line'])
         return self.token_template(self.item, self.item.line, self.item.column)
 
     def message(self):

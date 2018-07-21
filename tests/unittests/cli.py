@@ -40,56 +40,56 @@ def test_cli_version(mocker, runner, echo):
     click.echo.assert_called_with(message)
 
 
-def test_cli_parse(patch, runner, echo, app):
+def test_cli_compile(patch, runner, echo, app):
     """
-    Ensures the parse command parses a story
+    Ensures the compile command compiles a story
     """
     patch.object(click, 'style')
-    runner.invoke(Cli.parse, ['/path'])
+    runner.invoke(Cli.compile, ['/path'])
     App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
 
 
-def test_cli_parse_output_file(runner, app, tmpdir):
+def test_cli_compile_output_file(runner, app, tmpdir):
     """
-    Ensures the parse command outputs to an output file when
+    Ensures the compile command outputs to an output file when
     available. If no file were to be available (e.g. no file was
     written), this test would throw an error
     """
     tmp_file = tmpdir.join('output_file')
-    runner.invoke(Cli.parse, ['-j', '/path', str(tmp_file)])
+    runner.invoke(Cli.compile, ['-j', '/path', str(tmp_file)])
     tmp_file.read()
 
 
 @mark.parametrize('option', ['--silent', '-s'])
-def test_cli_parse_silent(runner, echo, app, option):
+def test_cli_compile_silent(runner, echo, app, option):
     """
     Ensures --silent makes everything quiet
     """
-    result = runner.invoke(Cli.parse, ['/path', option])
+    result = runner.invoke(Cli.compile, ['/path', option])
     App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
     assert result.output == ''
     assert click.echo.call_count == 0
 
 
-def test_cli_parse_debug(runner, echo, app):
-    runner.invoke(Cli.parse, ['/path', '--debug'])
+def test_cli_compile_debug(runner, echo, app):
+    runner.invoke(Cli.compile, ['/path', '--debug'])
     App.compile.assert_called_with('/path', ebnf_file=None, debug=True)
 
 
 @mark.parametrize('option', ['--json', '-j'])
-def test_cli_parse_json(runner, echo, app, option):
+def test_cli_compile_json(runner, echo, app, option):
     """
     Ensures --json outputs json
     """
-    runner.invoke(Cli.parse, ['/path', option])
+    runner.invoke(Cli.compile, ['/path', option])
     App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
     click.echo.assert_called_with(App.compile())
 
 
-def test_cli_parse_ebnf_file(runner, echo, app):
-    runner.invoke(Cli.parse, ['/path', '--ebnf-file', 'test.grammar'])
+def test_cli_compile_ebnf_file(runner, echo, app):
+    runner.invoke(Cli.compile, ['/path', '--ebnf-file', 'test.grammar'])
     kwargs = {'ebnf_file': 'test.grammar', 'debug': False}
     App.compile.assert_called_with('/path', **kwargs)
 

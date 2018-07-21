@@ -44,6 +44,13 @@ def test_compiler_function_output(patch, tree):
     assert result == Compiler.output()
 
 
+def test_compiler_imports(patch, compiler, lines, tree):
+    compiler.lines.modules = {}
+    compiler.imports(tree, '1')
+    module = tree.child(1).value
+    assert lines.modules[module] == tree.string.child(0).value[1:-1]
+
+
 def test_compiler_assignment(patch, compiler, lines, tree):
     patch.many(Objects, ['path', 'values'])
     compiler.assignment(tree, '1')
@@ -83,7 +90,7 @@ def test_compiler_service(patch, compiler, lines, tree):
     tree.node.return_value = None
     compiler.service(tree, None, 'parent')
     line = tree.line()
-    service = tree.child().child().value
+    service = tree.path.extract_path()
     command = tree.service_fragment.command.child()
     Objects.arguments.assert_called_with(tree.service_fragment)
     Compiler.output.assert_called_with(tree.service_fragment.output)
@@ -97,7 +104,7 @@ def test_compiler_service_command(patch, compiler, lines, tree):
     patch.object(Compiler, 'output')
     compiler.service(tree, None, 'parent')
     line = tree.line()
-    service = tree.child().child().value
+    service = tree.path.extract_path()
     command = tree.service_fragment.command.child()
     lines.set_output.assert_called_with(line, Compiler.output())
     lines.execute.assert_called_with(line, service, command,
@@ -112,7 +119,7 @@ def test_compiler_service_nested_block(patch, magic, compiler, lines, tree):
     nested_block = magic()
     compiler.service(tree, nested_block, 'parent')
     line = tree.line()
-    service = tree.child().child().value
+    service = tree.path.extract_path()
     command = tree.service_fragment.command.child()
     lines.execute.assert_called_with(line, service, command,
                                      Objects.arguments(), Compiler.output(),
@@ -237,7 +244,8 @@ def test_compiler_service_block_nested_block(patch, compiler, tree):
 
 @mark.parametrize('method_name', [
     'service_block', 'assignment', 'if_block', 'elseif_block', 'else_block',
-    'foreach_block', 'function_block', 'return_statement', 'arguments'
+    'foreach_block', 'function_block', 'return_statement', 'arguments',
+    'imports'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)
@@ -288,10 +296,10 @@ def test_compiler_compile(patch):
     result = Compiler.compile('tree')
     Preprocessor.process.assert_called_with('tree')
     Compiler.compiler().parse_tree.assert_called_with(Preprocessor.process())
-    expected = {'tree': Compiler.compiler().lines.lines, 'version': version,
-                'services': Compiler.compiler().lines.get_services(),
-                'functions': Compiler.compiler().lines.functions,
-                'entrypoint': Compiler.compiler().lines.first()}
+    lines = Compiler.compiler().lines
+    expected = {'tree': lines.lines, 'version': version,
+                'services': lines.get_services(), 'functions': lines.functions,
+                'entrypoint': lines.first(), 'modules': lines.modules}
     assert result == expected
 
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ..exceptions import StoryError
 
 
 class Lines:
@@ -10,6 +11,7 @@ class Lines:
         self.services = []
         self.functions = {}
         self.outputs = {}
+        self.modules = {}
 
     def sort(self):
         """
@@ -78,10 +80,24 @@ class Lines:
         }
         self.lines = {**self.lines, **dictionary}
 
+    def service_method(self, service, line):
+        """
+        Finds whether a service is a function call or a service.
+        """
+        if service in self.functions:
+            return 'call'
+        if service.split('.')[0] in self.modules:
+            return 'call'
+        if '.' in service:
+            item = {'value': service, 'line': line}
+            error = StoryError('service-path', item)
+            print(error.message())
+            exit()
+        return 'execute'
+
     def append(self, method, line, **kwargs):
         if 'service' in kwargs:
-            if kwargs['service'] in self.functions:
-                method = 'call'
+            method = self.service_method(kwargs['service'], line)
 
         if method == 'function':
             self.functions[kwargs['function']] = line

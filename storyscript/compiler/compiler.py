@@ -27,6 +27,13 @@ class Compiler:
     def function_output(cls, tree):
         return cls.output(tree.node('function_output.types'))
 
+    def imports(self, tree, parent):
+        """
+        Compiles an import rule
+        """
+        module = tree.child(1).value
+        self.lines.modules[module] = tree.string.child(0).value[1:-1]
+
     def assignment(self, tree, parent):
         """
         Compiles an assignment tree
@@ -56,7 +63,7 @@ class Compiler:
         if command:
             command = command.child(0)
         arguments = Objects.arguments(tree.service_fragment)
-        service = tree.child(0).child(0).value
+        service = tree.path.extract_path()
         output = self.output(tree.service_fragment.output)
         if output:
             self.lines.set_output(line, output)
@@ -157,7 +164,8 @@ class Compiler:
         """
         allowed_nodes = ['service_block', 'assignment', 'if_block',
                          'elseif_block', 'else_block', 'foreach_block',
-                         'function_block', 'return_statement', 'arguments']
+                         'function_block', 'return_statement', 'arguments',
+                         'imports']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return
@@ -180,8 +188,7 @@ class Compiler:
         tree = Preprocessor.process(tree)
         compiler = cls.compiler()
         compiler.parse_tree(tree)
-        services = compiler.lines.get_services()
-        entrypoint = compiler.lines.first()
-        return {'tree': compiler.lines.lines, 'services': services,
-                'entrypoint': entrypoint,
-                'functions': compiler.lines.functions, 'version': version}
+        lines = compiler.lines
+        return {'tree': lines.lines, 'services': lines.get_services(),
+                'entrypoint': lines.first(), 'modules': lines.modules,
+                'functions': lines.functions, 'version': version}

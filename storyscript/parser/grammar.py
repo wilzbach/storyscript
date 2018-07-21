@@ -13,8 +13,8 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['operation'], ['comment'],
-                       ['assignment'], ['return_statement'], ['block'])
+        definitions = (['values'], ['operation'], ['comment'], ['assignment'],
+                       ['imports'], ['return_statement'], ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
@@ -216,6 +216,11 @@ class Grammar:
         self.assignment_fragment()
         self.ebnf.rule('assignment', ('path', 'ws?', 'assignment_fragment'))
 
+    def imports(self):
+        self.ebnf.token('import', 'import', inline=True)
+        rule = ('import', 'ws', 'string', 'ws', 'as', 'ws', 'name')
+        self.ebnf.rule('imports', rule)
+
     def comparisons(self):
         tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
                   ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
@@ -287,6 +292,7 @@ class Grammar:
         self.return_statement()
         self.operation()
         self.block()
+        self.imports()
         self.types()
         self.comment()
         return self.ebnf.build()
