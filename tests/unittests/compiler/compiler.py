@@ -243,13 +243,13 @@ def test_compiler_service_block_nested_block(patch, compiler, tree):
 
 
 def test_compiler_when_block(patch, compiler, tree):
-    patch.many(Compiler, ['subtree', 'service'])
+    patch.many(Compiler, ['subtree', 'when'])
     compiler.when_block(tree, '1')
-    Compiler.service.assert_called_with(tree.service, tree.nested_block, '1')
+    Compiler.when.assert_called_with(tree, tree.nested_block, '1')
 
 
 def test_compiler_when_block_nested_block(patch, compiler, tree):
-    patch.many(Compiler, ['subtree', 'service'])
+    patch.many(Compiler, ['subtree', 'when'])
     compiler.when_block(tree, '1')
     Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 

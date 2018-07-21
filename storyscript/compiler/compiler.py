@@ -151,8 +151,7 @@ class Compiler:
             self.subtree(tree.nested_block, parent=tree.line())
 
     def when_block(self, tree, parent):
-        print(tree.pretty())
-        self.service(tree.service, tree.nested_block, parent)
+        self.when(tree, tree.nested_block, parent)
         if tree.nested_block:
             self.subtree(tree.nested_block, parent=tree.line())
 
