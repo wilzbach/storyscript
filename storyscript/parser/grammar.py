@@ -127,13 +127,19 @@ class Grammar:
         rule = 'service _NL (nested_block)?'
         self.ebnf.rule('service_block', rule, raw=True)
 
+    def when_block(self):
+        self.ebnf.token('when', 'when', inline=True)
+        rule = '_WHEN _WS (path output|service) _NL nested_block'
+        self.ebnf.rule('when_block', rule, raw=True)
+
     def block(self):
         self.if_block()
         self.foreach_block()
         self.function_block()
         self.service_block()
+        self.when_block()
         definition = ('line _NL|if_block|foreach_block|function_block'
-                      '|arguments|service_block')
+                      '|arguments|service_block|when_block')
         self.ebnf.rule('block', definition, raw=True)
 
     def number(self):
