@@ -69,3 +69,8 @@ class Cli:
         Prints the grammar specification
         """
         click.echo(App.grammar())
+
+    @staticmethod
+    @main.command()
+    def version():
+        click.echo(app_version)

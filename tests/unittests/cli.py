@@ -25,13 +25,13 @@ def app(patch):
     return App
 
 
-def test_cli(mocker, runner, echo):
+def test_cli(runner, echo):
     runner.invoke(Cli.main, [])
     # NOTE(vesuvium): I didn't find how to get the context in testing
     click.echo.call_count == 1
 
 
-def test_cli_version(mocker, runner, echo):
+def test_cli_version_flag(runner, echo):
     """
     Ensures --version outputs the version
     """
@@ -111,3 +111,8 @@ def test_cli_grammar(patch, runner, app, echo):
     runner.invoke(Cli.grammar, [])
     assert app.grammar.call_count == 1
     click.echo.assert_called_with(app.grammar())
+
+
+def test_cli_version(patch, runner, echo):
+    runner.invoke(Cli.version, [])
+    click.echo.assert_called_with(version)
