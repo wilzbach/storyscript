@@ -242,10 +242,22 @@ def test_compiler_service_block_nested_block(patch, compiler, tree):
     Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
+def test_compiler_when_block(patch, compiler, tree):
+    patch.many(Compiler, ['subtree', 'service'])
+    compiler.when_block(tree, '1')
+    Compiler.service.assert_called_with(tree.service, tree.nested_block, '1')
+
+
+def test_compiler_when_block_nested_block(patch, compiler, tree):
+    patch.many(Compiler, ['subtree', 'service'])
+    compiler.when_block(tree, '1')
+    Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+
+
 @mark.parametrize('method_name', [
     'service_block', 'assignment', 'if_block', 'elseif_block', 'else_block',
-    'foreach_block', 'function_block', 'return_statement', 'arguments',
-    'imports'
+    'foreach_block', 'function_block', 'when_block', 'return_statement',
+    'arguments', 'imports'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)

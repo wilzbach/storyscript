@@ -150,6 +150,12 @@ class Compiler:
         if tree.nested_block:
             self.subtree(tree.nested_block, parent=tree.line())
 
+    def when_block(self, tree, parent):
+        print(tree.pretty())
+        self.service(tree.service, tree.nested_block, parent)
+        if tree.nested_block:
+            self.subtree(tree.nested_block, parent=tree.line())
+
     def subtrees(self, *trees):
         """
         Parses many subtrees
@@ -164,8 +170,8 @@ class Compiler:
         """
         allowed_nodes = ['service_block', 'assignment', 'if_block',
                          'elseif_block', 'else_block', 'foreach_block',
-                         'function_block', 'return_statement', 'arguments',
-                         'imports']
+                         'function_block', 'when_block', 'return_statement',
+                         'arguments', 'imports']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return
