@@ -69,7 +69,9 @@ def test_bundle_bundle(patch, bundle):
     patch.many(Bundle, ['find_stories', 'services', 'compile'])
     result = bundle.bundle()
     Bundle.compile.assert_called_with(Bundle.find_stories(), None, False)
-    assert result == {'stories': bundle.stories, 'services': Bundle.services()}
+    expected = {'stories': bundle.stories, 'services': Bundle.services(),
+                'entrypoint': 'path'}
+    assert result == expected
 
 
 def test_bundle_bundle_ebnf_file(patch, bundle):
