@@ -70,7 +70,7 @@ def test_bundle_bundle(patch, bundle):
     result = bundle.bundle()
     Bundle.compile.assert_called_with(Bundle.find_stories(), None, False)
     expected = {'stories': bundle.stories, 'services': Bundle.services(),
-                'entrypoint': 'path'}
+                'entrypoint': Bundle.find_stories()}
     assert result == expected
 
 

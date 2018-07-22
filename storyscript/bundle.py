@@ -53,6 +53,7 @@ class Bundle:
         """
         Makes the bundle
         """
-        self.compile(self.find_stories(), ebnf_file, debug)
+        entrypoint = self.find_stories()
+        self.compile(entrypoint, ebnf_file, debug)
         return {'stories': self.stories, 'services': self.services(),
-                'entrypoint': self.path}
+                'entrypoint': entrypoint}
