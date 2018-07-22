@@ -176,16 +176,24 @@ def test_grammar_service_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('service_block', rule, raw=True)
 
 
+def test_grammar_when_block(patch, grammar, ebnf):
+    grammar.when_block()
+    ebnf.token.assert_called_with('when', 'when', inline=True)
+    rule = '_WHEN _WS (path output|service) _NL nested_block'
+    ebnf.rule.assert_called_with('when_block', rule, raw=True)
+
+
 def test_grammar_block(patch, grammar, ebnf):
     patch.many(Grammar, ['if_block', 'foreach_block', 'function_block',
-                         'service_block'])
+                         'service_block', 'when_block'])
     grammar.block()
     assert Grammar.if_block.call_count == 1
     assert Grammar.foreach_block.call_count == 1
     assert Grammar.function_block.call_count == 1
     assert Grammar.service_block.call_count == 1
+    assert Grammar.when_block.call_count == 1
     definition = ('line _NL|if_block|foreach_block|function_block'
-                  '|arguments|service_block')
+                  '|arguments|service_block|when_block')
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 

@@ -134,6 +134,26 @@ def test_compiler_service_no_output(patch, compiler, lines, tree):
     assert lines.set_output.call_count == 0
 
 
+def test_compiler_when(patch, compiler, lines, tree):
+    patch.object(Compiler, 'service')
+    lines.lines = {'1': {}}
+    lines.last.return_value = '1'
+    compiler.when(tree, 'nested_block', '1')
+    Compiler.service.assert_called_with(tree.service, 'nested_block', '1')
+    assert lines.lines['1']['method'] == 'when'
+
+
+def test_compiler_when_path(patch, compiler, lines, tree):
+    patch.object(Objects, 'path')
+    patch.object(Compiler, 'output')
+    tree.service = None
+    compiler.when(tree, 'nested_block', '1')
+    Objects.path.assert_called_with(tree.path)
+    Compiler.output.assert_called_with(tree.output)
+    lines.append.assert_called_with('when', tree.line(), args=[Objects.path()],
+                                    output=Compiler.output(), parent='1')
+
+
 def test_compiler_return_statement(compiler, tree):
     with raises(StoryError):
         compiler.return_statement(tree, None)
@@ -242,10 +262,22 @@ def test_compiler_service_block_nested_block(patch, compiler, tree):
     Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
+def test_compiler_when_block(patch, compiler, tree):
+    patch.many(Compiler, ['subtree', 'when'])
+    compiler.when_block(tree, '1')
+    Compiler.when.assert_called_with(tree, tree.nested_block, '1')
+
+
+def test_compiler_when_block_nested_block(patch, compiler, tree):
+    patch.many(Compiler, ['subtree', 'when'])
+    compiler.when_block(tree, '1')
+    Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+
+
 @mark.parametrize('method_name', [
     'service_block', 'assignment', 'if_block', 'elseif_block', 'else_block',
-    'foreach_block', 'function_block', 'return_statement', 'arguments',
-    'imports'
+    'foreach_block', 'function_block', 'when_block', 'return_statement',
+    'arguments', 'imports'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)
