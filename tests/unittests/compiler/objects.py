@@ -9,9 +9,17 @@ from storyscript.compiler import Objects
 from storyscript.parser import Tree
 
 
-def test_objects_path():
-    tree = Tree('path', [Token('WORD', 'var')])
-    assert Objects.path(tree) == {'$OBJECT': 'path', 'paths': ['var']}
+def test_objects_path(magic):
+    token = magic()
+    tree = Tree('path', [token])
+    result = Objects.path(tree)
+    assert result == {'$OBJECT': 'path', 'paths': [token.value]}
+
+
+def test_objects_path_fragments(magic):
+    fragment = magic()
+    tree = Tree('path', [magic(), fragment])
+    assert Objects.path(tree)['paths'][1] == fragment.child().value
 
 
 def test_objects_number():

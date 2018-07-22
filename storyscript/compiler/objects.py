@@ -10,7 +10,10 @@ class Objects:
 
     @staticmethod
     def path(tree):
-        return {'$OBJECT': 'path', 'paths': [tree.child(0).value]}
+        paths = [tree.child(0).value]
+        for fragment in tree.children[1:]:
+            paths.append(fragment.child(0).value)
+        return {'$OBJECT': 'path', 'paths': paths}
 
     @staticmethod
     def number(tree):
