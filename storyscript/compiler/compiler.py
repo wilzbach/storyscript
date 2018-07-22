@@ -77,8 +77,14 @@ class Compiler:
         """
         Compiles a when tree
         """
-        self.service(tree.service, nested_block, parent)
-        self.lines.lines[self.lines.last()]['method'] = 'when'
+        if tree.service:
+            self.service(tree.service, nested_block, parent)
+            self.lines.lines[self.lines.last()]['method'] = 'when'
+        elif tree.path:
+            args = [Objects.path(tree.path)]
+            output = self.output(tree.output)
+            self.lines.append('when', tree.line(), args=args,
+                              output=output, parent=parent)
 
     def return_statement(self, tree, parent):
         """

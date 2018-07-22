@@ -143,6 +143,17 @@ def test_compiler_when(patch, compiler, lines, tree):
     assert lines.lines['1']['method'] == 'when'
 
 
+def test_compiler_when_path(patch, compiler, lines, tree):
+    patch.object(Objects, 'path')
+    patch.object(Compiler, 'output')
+    tree.service = None
+    compiler.when(tree, 'nested_block', '1')
+    Objects.path.assert_called_with(tree.path)
+    Compiler.output.assert_called_with(tree.output)
+    lines.append.assert_called_with('when', tree.line(), args=[Objects.path()],
+                                    output=Compiler.output(), parent='1')
+
+
 def test_compiler_return_statement(compiler, tree):
     with raises(StoryError):
         compiler.return_statement(tree, None)
