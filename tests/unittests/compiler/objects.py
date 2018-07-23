@@ -22,8 +22,17 @@ def test_objects_path(token):
 
 def test_objects_mutation(token):
     tree = Tree('mutation', [token])
+    expected = {'$OBJECT': 'mutation', 'mutation': token.value,
+                'arguments': []}
+    assert Objects.mutation(tree) == expected
+
+
+def test_objects_mutation_argument(patch, magic):
+    patch.object(Objects, 'arguments')
+    tree = magic()
     result = Objects.mutation(tree)
-    assert result == {"$OBJECT": "mutation", "mutation": token.value}
+    Objects.arguments.assert_called_with(tree.arguments)
+    assert result['arguments'] == Objects.arguments()
 
 
 def test_objects_path_fragments(magic):
