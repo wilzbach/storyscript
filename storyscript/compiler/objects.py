@@ -16,6 +16,13 @@ class Objects:
         return {'$OBJECT': 'path', 'paths': paths}
 
     @staticmethod
+    def mutation(tree):
+        """
+        Compiles a mutation tree.
+        """
+        return {"$OBJECT": "mutation", "mutation": tree.child(0).value}
+
+    @staticmethod
     def number(tree):
         return int(tree.child(0).value)
 

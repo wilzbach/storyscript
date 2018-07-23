@@ -3,17 +3,27 @@ import re
 
 from lark.lexer import Token
 
-from pytest import mark
+from pytest import fixture, mark
 
 from storyscript.compiler import Objects
 from storyscript.parser import Tree
 
 
-def test_objects_path(magic):
-    token = magic()
+@fixture
+def token(magic):
+    return magic()
+
+
+def test_objects_path(token):
     tree = Tree('path', [token])
     result = Objects.path(tree)
     assert result == {'$OBJECT': 'path', 'paths': [token.value]}
+
+
+def test_objects_mutation(token):
+    tree = Tree('mutation', [token])
+    result = Objects.mutation(tree)
+    assert result == {"$OBJECT": "mutation", "mutation": token.value}
 
 
 def test_objects_path_fragments(magic):
