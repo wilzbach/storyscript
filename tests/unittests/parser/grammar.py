@@ -197,6 +197,12 @@ def test_grammar_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 
+def test_grammar_mutation(grammar, ebnf):
+    grammar.mutation()
+    rule = '_WS NAME (_WS NAME _COLON values)*'
+    ebnf.rule.assert_called_with('mutation', rule, raw=True)
+
+
 def test_grammar_number(grammar, ebnf):
     grammar.number()
     tokens = (('int', '"0".."9"+'), ('float', """INT "." INT? | "." INT"""))

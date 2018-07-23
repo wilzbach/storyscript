@@ -142,6 +142,10 @@ class Grammar:
                       '|arguments|service_block|when_block')
         self.ebnf.rule('block', definition, raw=True)
 
+    def mutation(self):
+        mutation = '_WS NAME (_WS NAME _COLON values)*'
+        self.ebnf.rule('mutation', mutation, raw=True)
+
     def number(self):
         tokens = (('int', '"0".."9"+'),
                   ('float', """INT "." INT? | "." INT"""))
