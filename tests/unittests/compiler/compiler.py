@@ -52,12 +52,22 @@ def test_compiler_imports(patch, compiler, lines, tree):
 
 
 def test_compiler_assignment(patch, compiler, lines, tree):
-    patch.many(Objects, ['path', 'values'])
+    patch.many(Objects, ['path', 'values', 'mutation'])
+    tree.assignment_fragment.values.mutation = None
     compiler.assignment(tree, '1')
     Objects.path.assert_called_with(tree.path)
     tree.assignment_fragment.child.assert_called_with(1)
     Objects.values.assert_called_with(tree.assignment_fragment.child())
     args = [Objects.path(), Objects.values()]
+    lines.append.assert_called_with('set', tree.line(), args=args, parent='1')
+
+
+def test_compiler_assignment_mutation(patch, compiler, lines, tree):
+    patch.many(Objects, ['path', 'values', 'mutation'])
+    compiler.assignment(tree, '1')
+    fragment = tree.assignment_fragment
+    Objects.mutation.assert_called_with(fragment.values.mutation)
+    args = [Objects.path(), Objects.values(), Objects.mutation()]
     lines.append.assert_called_with('set', tree.line(), args=args, parent='1')
 
 
