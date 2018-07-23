@@ -199,7 +199,7 @@ def test_grammar_block(patch, grammar, ebnf):
 
 def test_grammar_mutation(grammar, ebnf):
     grammar.mutation()
-    rule = '_WS NAME (_WS NAME _COLON values)*'
+    rule = '_WS NAME arguments*'
     ebnf.rule.assert_called_with('mutation', rule, raw=True)
 
 

@@ -143,7 +143,7 @@ class Grammar:
         self.ebnf.rule('block', definition, raw=True)
 
     def mutation(self):
-        mutation = '_WS NAME (_WS NAME _COLON values)*'
+        mutation = '_WS NAME arguments*'
         self.ebnf.rule('mutation', mutation, raw=True)
 
     def number(self):
