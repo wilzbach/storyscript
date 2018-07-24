@@ -142,6 +142,10 @@ class Grammar:
                       '|arguments|service_block|when_block')
         self.ebnf.rule('block', definition, raw=True)
 
+    def mutation(self):
+        mutation = '_WS NAME arguments*'
+        self.ebnf.rule('mutation', mutation, raw=True)
+
     def number(self):
         tokens = (('int', '"0".."9"+'),
                   ('float', """INT "." INT? | "." INT"""))
@@ -185,9 +189,10 @@ class Grammar:
         self.filepath()
         self.list()
         self.objects()
-        defintions = (['number'], ['string'], ['boolean'], ['filepath'],
-                      ['list'], ['objects'])
-        self.ebnf.rules('values', *defintions)
+        self.mutation()
+        rule = ('(number | string | boolean | FILEPATH | list | objects) '
+                'mutation?')
+        self.ebnf.rule('values', rule, raw=True)
 
     def operator(self):
         self.ebnf.tokens(('plus', '+'), ('dash', '-'), ('multiplier', '*'),

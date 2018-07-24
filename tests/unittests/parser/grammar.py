@@ -197,6 +197,12 @@ def test_grammar_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 
+def test_grammar_mutation(grammar, ebnf):
+    grammar.mutation()
+    rule = '_WS NAME arguments*'
+    ebnf.rule.assert_called_with('mutation', rule, raw=True)
+
+
 def test_grammar_number(grammar, ebnf):
     grammar.number()
     tokens = (('int', '"0".."9"+'), ('float', """INT "." INT? | "." INT"""))
@@ -226,7 +232,7 @@ def test_grammar_filepath(grammar, ebnf):
 
 def test_grammar_values(patch, grammar, ebnf):
     patch.many(Grammar, ['number', 'string', 'list', 'objects', 'filepath',
-                         'boolean'])
+                         'boolean', 'mutation'])
     grammar.values()
     assert Grammar.number.call_count == 1
     assert Grammar.string.call_count == 1
@@ -234,9 +240,9 @@ def test_grammar_values(patch, grammar, ebnf):
     assert Grammar.filepath.call_count == 1
     assert Grammar.list.call_count == 1
     assert Grammar.objects.call_count == 1
-    definitions = (['number'], ['string'], ['boolean'], ['filepath'], ['list'],
-                   ['objects'])
-    ebnf.rules.assert_called_with('values', *definitions)
+    assert Grammar.mutation.call_count == 1
+    rule = '(number | string | boolean | FILEPATH | list | objects) mutation?'
+    ebnf.rule.assert_called_with('values', rule, raw=True)
 
 
 def test_grammar_operator(grammar, ebnf):

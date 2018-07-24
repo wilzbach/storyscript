@@ -15,6 +15,17 @@ class Objects:
             paths.append(fragment.child(0).value)
         return {'$OBJECT': 'path', 'paths': paths}
 
+    @classmethod
+    def mutation(cls, tree):
+        """
+        Compiles a mutation tree.
+        """
+        arguments = []
+        if tree.arguments:
+            arguments = cls.arguments(tree.arguments)
+        return {'$OBJECT': 'mutation', 'mutation': tree.child(0).value,
+                'arguments': arguments}
+
     @staticmethod
     def number(tree):
         return int(tree.child(0).value)

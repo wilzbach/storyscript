@@ -39,10 +39,13 @@ class Compiler:
         Compiles an assignment tree
         """
         line = tree.line()
+        fragment = tree.assignment_fragment
         args = [
             Objects.path(tree.path),
-            Objects.values(tree.assignment_fragment.child(1))
+            Objects.values(fragment.child(1))
         ]
+        if fragment.values.mutation:
+            args.append(Objects.mutation(fragment.values.mutation))
         self.lines.append('set', line, args=args, parent=parent)
 
     def arguments(self, tree, parent):
