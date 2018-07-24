@@ -3,4 +3,4 @@ from storyscript.version import version
 
 
 def test_version():
-    assert version == '0.3.1'
+    assert version == '0.4.0'
