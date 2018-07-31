@@ -13,8 +13,9 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['expression'], ['comment'], ['assignment'],
-                       ['imports'], ['return_statement'], ['block'])
+        definitions = (['values'], ['absolute_expression'], ['comment'],
+                       ['assignment'], ['imports'], ['return_statement'],
+                       ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
@@ -201,6 +202,14 @@ class Grammar:
                        ('values', 'mutation'))
         self.ebnf.rules('expression', *definitions)
 
+    def absolute_expression(self):
+        """
+        An expression on its own line. This is necessary for the compiler to
+        understand how to compile an expression.
+        """
+        self.expression()
+        self.ebnf.rule('absolute_expression', ['expression'])
+
     def path_fragment(self):
         self.ebnf.token('dot', '.', inline=True)
         definitions = (('dot', 'name'), ('osb', 'int', 'csb'),
@@ -296,7 +305,7 @@ class Grammar:
         self.comparisons()
         self.assignment()
         self.return_statement()
-        self.expression()
+        self.absolute_expression()
         self.block()
         self.imports()
         self.types()

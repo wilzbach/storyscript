@@ -25,8 +25,8 @@ def test_grammar_init():
 
 def test_grammar_line(grammar, ebnf):
     grammar.line()
-    defintions = (['values'], ['expression'], ['comment'], ['assignment'],
-                  ['imports'], ['return_statement'], ['block'])
+    defintions = (['values'], ['absolute_expression'], ['comment'],
+                  ['assignment'], ['imports'], ['return_statement'], ['block'])
     ebnf.rules.assert_called_with('line', *defintions)
 
 
@@ -256,6 +256,13 @@ def test_grammar_expression(patch, grammar, ebnf):
     ebnf.rules.assert_called_with('expression', *definitions)
 
 
+def test_grammar_absolute_expression(patch, grammar, ebnf):
+    patch.object(Grammar, 'expression')
+    grammar.absolute_expression()
+    assert Grammar.expression.call_count == 1
+    ebnf.rule.assert_called_with('absolute_expression', ['expression'])
+
+
 def test_grammar_list(grammar, ebnf):
     grammar.list()
     tokens = (('comma', ','), ('osb', '['), ('csb', ']'))
@@ -433,15 +440,15 @@ def test_grammar_comment(grammar, ebnf):
 
 
 def test_grammar_build(patch, grammar):
-    patch.many(Grammar, ['line', 'spaces', 'values', 'expression', 'comment',
-                         'block', 'comparisons', 'assignment', 'imports',
-                         'types', 'return_statement'])
+    patch.many(Grammar, ['line', 'spaces', 'values', 'absolute_expression',
+                         'comment', 'block', 'comparisons', 'assignment',
+                         'imports', 'types', 'return_statement'])
     result = grammar.build()
     grammar.ebnf.start.assert_called_with('_NL? block')
     assert Grammar.line.call_count == 1
     assert Grammar.spaces.call_count == 1
     assert Grammar.values.call_count == 1
-    assert Grammar.expression.call_count == 1
+    assert Grammar.absolute_expression.call_count == 1
     assert Grammar.assignment.call_count == 1
     assert Grammar.return_statement.call_count == 1
     assert Grammar.block.call_count == 1
