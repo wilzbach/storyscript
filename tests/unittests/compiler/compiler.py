@@ -51,6 +51,14 @@ def test_compiler_imports(patch, compiler, lines, tree):
     assert lines.modules[module] == tree.string.child(0).value[1:-1]
 
 
+def test_compiler_absolute_expression(patch, compiler, lines, tree):
+    patch.object(Objects, 'expression')
+    compiler.absolute_expression(tree, '1')
+    Objects.expression.assert_called_with(tree.expression)
+    lines.append.assert_called_with('expression', tree.line(),
+                                    args=[Objects.expression()], parent='1')
+
+
 def test_compiler_assignment(patch, compiler, lines, tree):
     patch.many(Objects, ['path', 'values', 'mutation'])
     tree.assignment_fragment.values.mutation = None
@@ -285,9 +293,9 @@ def test_compiler_when_block_nested_block(patch, compiler, tree):
 
 
 @mark.parametrize('method_name', [
-    'service_block', 'assignment', 'if_block', 'elseif_block', 'else_block',
-    'foreach_block', 'function_block', 'when_block', 'return_statement',
-    'arguments', 'imports'
+    'service_block', 'absolute_expression', 'assignment', 'if_block',
+    'elseif_block', 'else_block', 'foreach_block', 'function_block',
+    'when_block', 'return_statement', 'arguments', 'imports'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)
