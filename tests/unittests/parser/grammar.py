@@ -25,7 +25,7 @@ def test_grammar_init():
 
 def test_grammar_line(grammar, ebnf):
     grammar.line()
-    defintions = (['values'], ['operation'], ['comment'], ['assignment'],
+    defintions = (['values'], ['expression'], ['comment'], ['assignment'],
                   ['imports'], ['return_statement'], ['block'])
     ebnf.rules.assert_called_with('line', *defintions)
 
@@ -196,12 +196,6 @@ def test_grammar_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 
-def test_grammar_mutation(grammar, ebnf):
-    grammar.mutation()
-    rule = '_WS NAME arguments*'
-    ebnf.rule.assert_called_with('mutation', rule, raw=True)
-
-
 def test_grammar_number(grammar, ebnf):
     grammar.number()
     tokens = (('int', '"0".."9"+'), ('float', """INT "." INT? | "." INT"""))
@@ -245,13 +239,21 @@ def test_grammar_operator(grammar, ebnf):
     ebnf.rules.assert_called_with('operator', *definitions)
 
 
-def test_grammar_operation(patch, grammar, ebnf):
-    patch.object(Grammar, 'operator')
-    grammar.operation()
+def test_grammar_mutation(grammar, ebnf):
+    grammar.mutation()
+    rule = '_WS NAME arguments*'
+    ebnf.rule.assert_called_with('mutation', rule, raw=True)
+
+
+def test_grammar_expression(patch, grammar, ebnf):
+    patch.many(Grammar, ['operator', 'mutation'])
+    grammar.expression()
     assert Grammar.operator.call_count == 1
+    assert Grammar.mutation.call_count == 1
     definitions = (('values', 'ws', 'operator', 'ws', 'values'),
-                   ('values', 'operator', 'values'))
-    ebnf.rules.assert_called_with('operation', *definitions)
+                   ('values', 'operator', 'values'),
+                   ('values', 'mutation'))
+    ebnf.rules.assert_called_with('expression', *definitions)
 
 
 def test_grammar_list(grammar, ebnf):
@@ -431,7 +433,7 @@ def test_grammar_comment(grammar, ebnf):
 
 
 def test_grammar_build(patch, grammar):
-    patch.many(Grammar, ['line', 'spaces', 'values', 'operation', 'comment',
+    patch.many(Grammar, ['line', 'spaces', 'values', 'expression', 'comment',
                          'block', 'comparisons', 'assignment', 'imports',
                          'types', 'return_statement'])
     result = grammar.build()
@@ -439,7 +441,7 @@ def test_grammar_build(patch, grammar):
     assert Grammar.line.call_count == 1
     assert Grammar.spaces.call_count == 1
     assert Grammar.values.call_count == 1
-    assert Grammar.operation.call_count == 1
+    assert Grammar.expression.call_count == 1
     assert Grammar.assignment.call_count == 1
     assert Grammar.return_statement.call_count == 1
     assert Grammar.block.call_count == 1

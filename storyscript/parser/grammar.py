@@ -13,7 +13,7 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['operation'], ['comment'], ['assignment'],
+        definitions = (['values'], ['expression'], ['comment'], ['assignment'],
                        ['imports'], ['return_statement'], ['block'])
         self.ebnf.rules('line', *definitions)
 
@@ -141,10 +141,6 @@ class Grammar:
                       '|arguments|service_block|when_block')
         self.ebnf.rule('block', definition, raw=True)
 
-    def mutation(self):
-        mutation = '_WS NAME arguments*'
-        self.ebnf.rule('mutation', mutation, raw=True)
-
     def number(self):
         tokens = (('int', '"0".."9"+'),
                   ('float', """INT "." INT? | "." INT"""))
@@ -193,11 +189,17 @@ class Grammar:
         definitions = (['plus'], ['dash'], ['multiplier'], ['bslash'])
         self.ebnf.rules('operator', *definitions)
 
-    def operation(self):
+    def mutation(self):
+        mutation = '_WS NAME arguments*'
+        self.ebnf.rule('mutation', mutation, raw=True)
+
+    def expression(self):
         self.operator()
+        self.mutation()
         definitions = (('values', 'ws', 'operator', 'ws', 'values'),
-                       ('values', 'operator', 'values'))
-        self.ebnf.rules('operation', *definitions)
+                       ('values', 'operator', 'values'),
+                       ('values', 'mutation'))
+        self.ebnf.rules('expression', *definitions)
 
     def path_fragment(self):
         self.ebnf.token('dot', '.', inline=True)
@@ -294,7 +296,7 @@ class Grammar:
         self.comparisons()
         self.assignment()
         self.return_statement()
-        self.operation()
+        self.expression()
         self.block()
         self.imports()
         self.types()
