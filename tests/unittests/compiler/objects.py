@@ -210,13 +210,26 @@ def test_fill_expression():
 def test_objects_expression(patch, tree):
     patch.object(Objects, 'values')
     tree.child.return_value = None
+    tree.values = None
     result = Objects.expression(tree)
     Objects.values.assert_called_with(tree.path_value.child())
     assert result == [Objects.values()]
 
 
+def test_objects_expression_absolute(patch, tree):
+    patch.many(Objects, ['values', 'fill_expression'])
+    result = Objects.expression(tree)
+    Objects.fill_expression.assert_called_with('{}',
+                                               tree.operator.child(0).value,
+                                               '{}')
+    assert result == [{'$OBJECT': 'expression',
+                       'expression': Objects.fill_expression(),
+                       'values': [Objects.values(), Objects.values()]}]
+
+
 def test_objects_expression_comparison(patch, tree):
     patch.many(Objects, ['values', 'fill_expression'])
+    tree.values = None
     result = Objects.expression(tree)
     Objects.values.assert_called_with(tree.child().child())
     Objects.fill_expression.assert_called_with('{}', tree.child().child(),
