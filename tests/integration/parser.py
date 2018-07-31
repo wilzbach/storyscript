@@ -53,12 +53,6 @@ def test_parser_sum(parser, int_token):
     assert node.child(2).node('number').child(0) == int_token
 
 
-def test_parser_filepath(parser):
-    result = parser.parse('`/path`\n')
-    node = result.node('start.block.line.values')
-    assert node.child(0) == Token('FILEPATH', '`/path`')
-
-
 def test_parser_list(parser, int_token):
     result = parser.parse('[3,4]\n')
     node = result.node('start.block.line.values.list')

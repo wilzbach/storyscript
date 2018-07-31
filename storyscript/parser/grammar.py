@@ -162,9 +162,6 @@ class Grammar:
         self.ebnf.tokens(('true', 'true'), ('false', 'false'))
         self.ebnf.rules('boolean', ['true'], ['false'])
 
-    def filepath(self):
-        self.ebnf.token('filepath', '/`([^"]*)`/', regexp=True)
-
     def list(self):
         self.ebnf.tokens(('comma', ','), ('osb', '['), ('csb', ']'),
                          inline=True)
@@ -186,12 +183,10 @@ class Grammar:
         self.number()
         self.string()
         self.boolean()
-        self.filepath()
         self.list()
         self.objects()
         self.mutation()
-        rule = ('(number | string | boolean | FILEPATH | list | objects) '
-                'mutation?')
+        rule = '(number | string | boolean | list | objects) mutation?'
         self.ebnf.rule('values', rule, raw=True)
 
     def operator(self):
