@@ -214,7 +214,7 @@ class Grammar:
 
     def assignment_fragment(self):
         self.ebnf.token('equals', '=')
-        rule = 'EQUALS _WS? (values|path|service)'
+        rule = 'EQUALS _WS? (values|expression|path|service)'
         self.ebnf.rule('assignment_fragment', rule, raw=True)
 
     def assignment(self):

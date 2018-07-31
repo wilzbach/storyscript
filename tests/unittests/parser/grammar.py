@@ -300,7 +300,7 @@ def test_grammar_path(patch, grammar, ebnf):
 def test_grammar_assignment_fragment(patch, grammar, ebnf):
     grammar.assignment_fragment()
     ebnf.token.assert_called_with('equals', '=')
-    rule = 'EQUALS _WS? (values|path|service)'
+    rule = 'EQUALS _WS? (values|expression|path|service)'
     ebnf.rule.assert_called_with('assignment_fragment', rule, raw=True)
 
 
