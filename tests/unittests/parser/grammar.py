@@ -42,11 +42,10 @@ def test_grammar_indentation(grammar, ebnf):
     ebnf.tokens.assert_called_with(*tokens, inline=True)
 
 
-def test_grammar_spaces(patch, grammar):
+def test_grammar_spaces(patch, call_count, grammar):
     patch.many(Grammar, ['whitespaces', 'indentation'])
     grammar.spaces()
-    assert Grammar.whitespaces.call_count == 1
-    assert Grammar.indentation.call_count == 1
+    call_count(Grammar, ['whitespaces', 'indentation'])
 
 
 def test_grammar_nested_block(grammar, ebnf):
@@ -55,11 +54,10 @@ def test_grammar_nested_block(grammar, ebnf):
     ebnf.rule.assert_called_with('nested_block', definition, raw=True)
 
 
-def test_grammar_elseif_block(patch, grammar, ebnf):
+def test_grammar_elseif_block(patch, call_count, grammar, ebnf):
     patch.many(Grammar, ['nested_block', 'elseif_statement'])
     grammar.elseif_block()
-    assert grammar.nested_block.call_count == 1
-    assert grammar.elseif_statement.call_count == 1
+    call_count(Grammar, ['nested_block', 'elseif_statement'])
     definition = ('elseif_statement', 'nl', 'nested_block')
     ebnf.rule.assert_called_with('elseif_block', definition)
 
@@ -72,12 +70,10 @@ def test_grammar_else_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('else_block', definition)
 
 
-def test_grammar_if_block(patch, grammar, ebnf):
+def test_grammar_if_block(patch, call_count, grammar, ebnf):
     patch.many(Grammar, ['if_statement', 'elseif_block', 'else_block'])
     grammar.if_block()
-    assert Grammar.if_statement.call_count == 1
-    assert Grammar.elseif_block.call_count == 1
-    assert Grammar.else_block.call_count == 1
+    call_count(Grammar, ['if_statement', 'elseif_block', 'else_block'])
     definition = 'if_statement _NL nested_block elseif_block* else_block?'
     ebnf.rule.assert_called_with('if_block', definition, raw=True)
 
@@ -110,11 +106,10 @@ def test_grammar_function_output(grammar, ebnf):
     ebnf.rule.assert_called_with('function_output', rule)
 
 
-def test_grammar_function_statement(patch, grammar, ebnf):
+def test_grammar_function_statement(patch, call_count, grammar, ebnf):
     patch.many(Grammar, ['function_argument', 'function_output'])
     grammar.function_statement()
-    assert Grammar.function_argument.call_count == 1
-    assert Grammar.function_output.call_count == 1
+    call_count(Grammar, ['function_argument', 'function_output'])
     rule = 'FUNCTION_TYPE _WS NAME function_argument* function_output?'
     ebnf.rule.assert_called_with('function_statement', rule, raw=True)
 
@@ -151,12 +146,10 @@ def test_grammar_output(grammar, ebnf):
     ebnf.rule.assert_called_with('output', rule, raw=True)
 
 
-def test_grammar_service_fragment(patch, grammar, ebnf):
+def test_grammar_service_fragment(patch, call_count, grammar, ebnf):
     patch.many(Grammar, ['arguments', 'command', 'output'])
     grammar.service_fragment()
-    assert Grammar.arguments.call_count == 1
-    assert Grammar.command.call_count == 1
-    assert Grammar.output.call_count == 1
+    call_count(Grammar, ['arguments', 'command', 'output'])
     rule = '(command arguments*|arguments+) output?'
     ebnf.rule.assert_called_with('service_fragment', rule, raw=True)
 
@@ -182,15 +175,12 @@ def test_grammar_when_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('when_block', rule, raw=True)
 
 
-def test_grammar_block(patch, grammar, ebnf):
-    patch.many(Grammar, ['if_block', 'foreach_block', 'function_block',
-                         'service_block', 'when_block'])
+def test_grammar_block(patch, call_count, grammar, ebnf):
+    methods = ['if_block', 'foreach_block', 'function_block', 'service_block',
+               'when_block']
+    patch.many(Grammar, methods)
     grammar.block()
-    assert Grammar.if_block.call_count == 1
-    assert Grammar.foreach_block.call_count == 1
-    assert Grammar.function_block.call_count == 1
-    assert Grammar.service_block.call_count == 1
-    assert Grammar.when_block.call_count == 1
+    call_count(Grammar, methods)
     definition = ('line _NL|if_block|foreach_block|function_block'
                   '|arguments|service_block|when_block')
     ebnf.rule.assert_called_with('block', definition, raw=True)
@@ -218,14 +208,11 @@ def test_grammar_boolean(grammar, ebnf):
     ebnf.rules.assert_called_with('boolean', ['true'], ['false'])
 
 
-def test_grammar_values(patch, grammar, ebnf):
-    patch.many(Grammar, ['number', 'string', 'list', 'objects', 'boolean'])
+def test_grammar_values(patch, call_count, grammar, ebnf):
+    methods = ['number', 'string', 'list', 'objects', 'boolean']
+    patch.many(Grammar, methods)
     grammar.values()
-    assert Grammar.number.call_count == 1
-    assert Grammar.string.call_count == 1
-    assert Grammar.boolean.call_count == 1
-    assert Grammar.list.call_count == 1
-    assert Grammar.objects.call_count == 1
+    call_count(Grammar, methods)
     rules = (['number'], ['string'], ['boolean'], ['list'], ['objects'])
     ebnf.rules.assert_called_with('values', *rules)
 
@@ -413,19 +400,12 @@ def test_grammar_regexp_type(grammar, ebnf):
     ebnf.token.assert_called_with('regexp_type', 'regexp')
 
 
-def test_grammar_types(patch, grammar, ebnf):
-    patch.many(Grammar, ['int_type', 'float_type', 'number_type',
-                         'string_type', 'list_type', 'object_type',
-                         'regexp_type', 'function_type'])
+def test_grammar_types(patch, call_count, grammar, ebnf):
+    methods = ['int_type', 'float_type', 'number_type', 'string_type',
+               'list_type', 'object_type', 'regexp_type', 'function_type']
+    patch.many(Grammar, methods)
     grammar.types()
-    assert grammar.int_type.call_count == 1
-    assert grammar.float_type.call_count == 1
-    assert grammar.number_type.call_count == 1
-    assert grammar.string_type.call_count == 1
-    assert grammar.list_type.call_count == 1
-    assert grammar.object_type.call_count == 1
-    assert grammar.regexp_type.call_count == 1
-    assert grammar.function_type.call_count == 1
+    call_count(Grammar, methods)
     definitions = (['int_type'], ['float_type'], ['string_type'],
                    ['list_type'], ['object_type'], ['regexp_type'],
                    ['function_type'])
@@ -439,21 +419,12 @@ def test_grammar_comment(grammar, ebnf):
     ebnf.rule.assert_called_with('comment', 'COMMENT+', raw=True)
 
 
-def test_grammar_build(patch, grammar):
-    patch.many(Grammar, ['line', 'spaces', 'values', 'absolute_expression',
-                         'comment', 'block', 'comparisons', 'assignment',
-                         'imports', 'types', 'return_statement'])
+def test_grammar_build(patch, call_count, grammar):
+    methods = ['line', 'spaces', 'values', 'absolute_expression', 'comment',
+               'block', 'comparisons', 'assignment', 'imports', 'types',
+               'return_statement']
+    patch.many(Grammar, methods)
     result = grammar.build()
     grammar.ebnf.start.assert_called_with('_NL? block')
-    assert Grammar.line.call_count == 1
-    assert Grammar.spaces.call_count == 1
-    assert Grammar.values.call_count == 1
-    assert Grammar.absolute_expression.call_count == 1
-    assert Grammar.assignment.call_count == 1
-    assert Grammar.return_statement.call_count == 1
-    assert Grammar.block.call_count == 1
-    assert Grammar.imports.call_count == 1
-    assert Grammar.comparisons.call_count == 1
-    assert Grammar.types.call_count == 1
-    assert Grammar.comment.call_count == 1
+    call_count(Grammar, methods)
     assert result == grammar.ebnf.build()
