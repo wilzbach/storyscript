@@ -80,9 +80,8 @@ class Grammar:
         self.ebnf.rule('function_argument', ('ws', 'typed_argument'))
 
     def function_output(self):
-        self.ebnf.token('arrow', 'DASH GREATER', regexp=True, inline=True,
-                        priority=2)
-        self.ebnf.rule('function_output', ('ws', 'arrow', 'ws', 'types'))
+        self.ebnf.token('returns', 'returns', inline=True)
+        self.ebnf.rule('function_output', ('ws', 'returns', 'ws', 'types'))
 
     def function_statement(self):
         self.function_argument()
