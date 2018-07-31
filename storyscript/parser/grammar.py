@@ -184,9 +184,8 @@ class Grammar:
         self.boolean()
         self.list()
         self.objects()
-        self.mutation()
-        rule = '(number | string | boolean | list | objects) mutation?'
-        self.ebnf.rule('values', rule, raw=True)
+        rules = (['number'], ['string'], ['boolean'], ['list'], ['objects'])
+        self.ebnf.rules('values', *rules)
 
     def operator(self):
         self.ebnf.tokens(('plus', '+'), ('dash', '-'), ('multiplier', '*'),

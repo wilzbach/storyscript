@@ -225,17 +225,15 @@ def test_grammar_boolean(grammar, ebnf):
 
 
 def test_grammar_values(patch, grammar, ebnf):
-    patch.many(Grammar, ['number', 'string', 'list', 'objects', 'boolean',
-                         'mutation'])
+    patch.many(Grammar, ['number', 'string', 'list', 'objects', 'boolean'])
     grammar.values()
     assert Grammar.number.call_count == 1
     assert Grammar.string.call_count == 1
     assert Grammar.boolean.call_count == 1
     assert Grammar.list.call_count == 1
     assert Grammar.objects.call_count == 1
-    assert Grammar.mutation.call_count == 1
-    rule = '(number | string | boolean | list | objects) mutation?'
-    ebnf.rule.assert_called_with('values', rule, raw=True)
+    rules = (['number'], ['string'], ['boolean'], ['list'], ['objects'])
+    ebnf.rules.assert_called_with('values', *rules)
 
 
 def test_grammar_operator(grammar, ebnf):
