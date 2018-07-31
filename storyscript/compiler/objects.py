@@ -182,11 +182,11 @@ class Objects:
         """
         Compiles an if_statement to the corresponding expression
         """
-        left_handside = cls.values(tree.node('path_value').child(0))
+        left_handside = cls.values(tree.path_value.child(0))
         comparison = tree.child(1)
         if comparison is None:
             return [left_handside]
         right_handside = cls.values(tree.child(2).child(0))
-        expression = '{} {} {}'.format('{}', comparison.child(0), '{}')
+        expression = Objects.fill_expression('{}', comparison.child(0), '{}')
         return [{'$OBJECT': 'expression', 'expression': expression,
                 'values': [left_handside, right_handside]}]

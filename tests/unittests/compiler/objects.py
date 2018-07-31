@@ -211,14 +211,17 @@ def test_objects_expression(patch, tree):
     patch.object(Objects, 'values')
     tree.child.return_value = None
     result = Objects.expression(tree)
-    Objects.values.assert_called_with(tree.node().child())
+    Objects.values.assert_called_with(tree.path_value.child())
     assert result == [Objects.values()]
 
 
 def test_objects_expression_comparison(patch, tree):
-    patch.object(Objects, 'values')
+    patch.many(Objects, ['values', 'fill_expression'])
     result = Objects.expression(tree)
     Objects.values.assert_called_with(tree.child().child())
-    expression = '{} {} {}'.format('{}', tree.child().child(), '{}')
-    assert result == [{'$OBJECT': 'expression', 'expression': expression,
-                      'values': [Objects.values(), Objects.values()]}]
+    Objects.fill_expression.assert_called_with('{}', tree.child().child(),
+                                               '{}')
+    expected = [{'$OBJECT': 'expression',
+                 'expression': Objects.fill_expression(),
+                 'values': [Objects.values(), Objects.values()]}]
+    assert result == expected
