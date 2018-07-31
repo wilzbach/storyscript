@@ -170,6 +170,13 @@ class Objects:
             arguments.append(cls.typed_argument(argument))
         return arguments
 
+    @staticmethod
+    def fill_expression(left_handside, operator, right_handside):
+        """
+        Compiles the expression template
+        """
+        return '{} {} {}'.format(left_handside, operator, right_handside)
+
     @classmethod
     def expression(cls, tree):
         """

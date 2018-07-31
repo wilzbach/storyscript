@@ -203,6 +203,10 @@ def test_objects_function_arguments(patch, tree):
     assert result == [Objects.typed_argument()]
 
 
+def test_fill_expression():
+    assert Objects.fill_expression('one', 'two', 'three') == 'one two three'
+
+
 def test_objects_expression(patch, tree):
     patch.object(Objects, 'values')
     tree.child.return_value = None
