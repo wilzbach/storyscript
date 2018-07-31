@@ -225,23 +225,17 @@ def test_grammar_boolean(grammar, ebnf):
     ebnf.rules.assert_called_with('boolean', ['true'], ['false'])
 
 
-def test_grammar_filepath(grammar, ebnf):
-    grammar.filepath()
-    ebnf.token.assert_called_with('filepath', '/`([^"]*)`/', regexp=True)
-
-
 def test_grammar_values(patch, grammar, ebnf):
-    patch.many(Grammar, ['number', 'string', 'list', 'objects', 'filepath',
-                         'boolean', 'mutation'])
+    patch.many(Grammar, ['number', 'string', 'list', 'objects', 'boolean',
+                         'mutation'])
     grammar.values()
     assert Grammar.number.call_count == 1
     assert Grammar.string.call_count == 1
     assert Grammar.boolean.call_count == 1
-    assert Grammar.filepath.call_count == 1
     assert Grammar.list.call_count == 1
     assert Grammar.objects.call_count == 1
     assert Grammar.mutation.call_count == 1
-    rule = '(number | string | boolean | FILEPATH | list | objects) mutation?'
+    rule = '(number | string | boolean | list | objects) mutation?'
     ebnf.rule.assert_called_with('values', rule, raw=True)
 
 
