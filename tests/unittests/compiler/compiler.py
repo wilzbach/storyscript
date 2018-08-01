@@ -53,10 +53,21 @@ def test_compiler_imports(patch, compiler, lines, tree):
 
 def test_compiler_absolute_expression(patch, compiler, lines, tree):
     patch.object(Objects, 'expression')
+    tree.expression.mutation = None
     compiler.absolute_expression(tree, '1')
     Objects.expression.assert_called_with(tree.expression)
     lines.append.assert_called_with('expression', tree.line(),
-                                    args=[Objects.expression()], parent='1')
+                                    args=Objects.expression(), parent='1')
+
+
+def test_compiler_absolute_expression_mutation(patch, compiler, lines, tree):
+    patch.many(Objects, ['mutation', 'values'])
+    compiler.absolute_expression(tree, '1')
+    Objects.mutation.assert_called_with(tree.expression.mutation)
+    Objects.values.assert_called_with(tree.expression.values)
+    args = [Objects.values(), Objects.mutation()]
+    lines.append.assert_called_with('expression', tree.line(), args=args,
+                                    parent='1')
 
 
 def test_compiler_assignment(patch, compiler, lines, tree):

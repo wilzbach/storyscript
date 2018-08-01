@@ -38,7 +38,12 @@ class Compiler:
         """
         Compiles an absolute expression
         """
-        args = [Objects.expression(tree.expression)]
+        mutation = tree.expression.mutation
+        if mutation:
+            args = [Objects.values(tree.expression.values),
+                    Objects.mutation(mutation)]
+        else:
+            args = Objects.expression(tree.expression)
         self.lines.append('expression', tree.line(), args=args, parent=parent)
 
     def assignment(self, tree, parent):
@@ -190,10 +195,10 @@ class Compiler:
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
         """
-        allowed_nodes = ['service_block', 'assignment', 'if_block',
-                         'elseif_block', 'else_block', 'foreach_block',
-                         'function_block', 'when_block', 'return_statement',
-                         'arguments', 'imports']
+        allowed_nodes = ['service_block', 'absolute_expression', 'assignment',
+                         'if_block', 'elseif_block', 'else_block',
+                         'foreach_block', 'function_block', 'when_block',
+                         'return_statement', 'arguments', 'imports']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return
