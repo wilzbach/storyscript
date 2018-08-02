@@ -42,6 +42,13 @@ Objects
 
     things = {'foo':'bar','apples':'oranges'}
 
+
+Expressions
+-----------
+::
+    
+    a = 1 + 2
+
 Conditions
 ----------
 ::
