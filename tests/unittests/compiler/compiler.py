@@ -57,7 +57,7 @@ def test_compiler_absolute_expression(patch, compiler, lines, tree):
     compiler.absolute_expression(tree, '1')
     Objects.expression.assert_called_with(tree.expression)
     lines.append.assert_called_with('expression', tree.line(),
-                                    args=Objects.expression(), parent='1')
+                                    args=[Objects.expression()], parent='1')
 
 
 def test_compiler_absolute_expression_mutation(patch, compiler, lines, tree):

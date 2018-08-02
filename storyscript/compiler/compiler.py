@@ -43,7 +43,7 @@ class Compiler:
             args = [Objects.values(tree.expression.values),
                     Objects.mutation(mutation)]
         else:
-            args = Objects.expression(tree.expression)
+            args = [Objects.expression(tree.expression)]
         self.lines.append('expression', tree.line(), args=args, parent=parent)
 
     def assignment(self, tree, parent):
