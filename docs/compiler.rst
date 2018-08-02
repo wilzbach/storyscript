@@ -228,6 +228,38 @@ the `alpine echo` bit would be compiled as method object::
 Methods
 -------
 
+Expression
+##########
+Used for expression lines, like sums, multiplications and so on. For example,
+the line::
+
+    1 + 1
+
+Should produce the following tree::
+
+    {
+        "method": "expression",
+        "ln": "1",
+        "output": null,
+        "service": null,
+        "command": null,
+        "function": null,
+        "args": [
+            {
+              "$OBJECT": "expression",
+              "expression": "{} + {}",
+              "values": [
+                1,
+                1
+              ]
+            }
+        ],
+        "enter": null,
+        "exit": null,
+        "parent": null
+    }
+
+
 Set
 ###
 Used when declaring a variable, or assigning a value to a property::
