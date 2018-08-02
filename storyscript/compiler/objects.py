@@ -186,8 +186,8 @@ class Objects:
             operator = tree.operator.child(0).value
             expression = Objects.fill_expression('{}', operator, '{}')
             values = [cls.values(tree.values), cls.values(tree.child(2))]
-            return [{'$OBJECT': 'expression', 'expression': expression,
-                     'values': values}]
+            return {'$OBJECT': 'expression', 'expression': expression,
+                    'values': values}
         left_handside = cls.values(tree.path_value.child(0))
         comparison = tree.child(1)
         if comparison is None:

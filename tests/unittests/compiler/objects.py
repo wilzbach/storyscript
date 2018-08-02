@@ -222,9 +222,9 @@ def test_objects_expression_absolute(patch, tree):
     Objects.fill_expression.assert_called_with('{}',
                                                tree.operator.child(0).value,
                                                '{}')
-    assert result == [{'$OBJECT': 'expression',
-                       'expression': Objects.fill_expression(),
-                       'values': [Objects.values(), Objects.values()]}]
+    assert result == {'$OBJECT': 'expression',
+                      'expression': Objects.fill_expression(),
+                      'values': [Objects.values(), Objects.values()]}
 
 
 def test_objects_expression_comparison(patch, tree):
