@@ -71,8 +71,11 @@ def test_compiler_absolute_expression_mutation(patch, compiler, lines, tree):
 
 
 def test_compiler_assignment(patch, compiler, lines, tree):
+    """
+    Ensures a line like "x = value" is compiled correctly
+    """
     patch.many(Objects, ['path', 'values', 'mutation'])
-    tree.assignment_fragment.values.mutation = None
+    tree.assignment_fragment.expression = None
     compiler.assignment(tree, '1')
     Objects.path.assert_called_with(tree.path)
     tree.assignment_fragment.child.assert_called_with(1)
@@ -82,10 +85,14 @@ def test_compiler_assignment(patch, compiler, lines, tree):
 
 
 def test_compiler_assignment_mutation(patch, compiler, lines, tree):
+    """
+    Ensures a line like "x = value mutation" is compiled correctly
+    """
     patch.many(Objects, ['path', 'values', 'mutation'])
     compiler.assignment(tree, '1')
     fragment = tree.assignment_fragment
-    Objects.mutation.assert_called_with(fragment.values.mutation)
+    Objects.mutation.assert_called_with(fragment.expression.mutation)
+    Objects.values.assert_called_with(fragment.expression.values)
     args = [Objects.path(), Objects.values(), Objects.mutation()]
     lines.append.assert_called_with('set', tree.line(), args=args, parent='1')
 
