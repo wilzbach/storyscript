@@ -23,12 +23,6 @@ Numbers
     n = 1
     pie = 3.14
 
-Comments
---------
-::
-
-    # inline
-
 Boolean
 -------
 ::
@@ -116,3 +110,18 @@ Arguments with the value equal to the argument name can be shortened::
 Output::
 
     service command key:value as result
+
+
+Comments
+--------
+::
+
+    # inline
+
+
+::
+    
+    ###
+    multi
+    line
+    ###
