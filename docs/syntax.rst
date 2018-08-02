@@ -112,6 +112,17 @@ Output::
     service command key:value as result
 
 
+Mutations
+---------
+::
+
+    1 is_odd
+
+Mutations can have arguments::
+
+    ['a', 'b', 'c'] join by:':'
+
+
 Comments
 --------
 ::
@@ -120,7 +131,7 @@ Comments
 
 
 ::
-    
+
     ###
     multi
     line
