@@ -23,12 +23,6 @@ Numbers
     n = 1
     pie = 3.14
 
-Comments
---------
-::
-
-    # inline
-
 Boolean
 -------
 ::
@@ -47,6 +41,13 @@ Objects
 ::
 
     things = {'foo':'bar','apples':'oranges'}
+
+
+Expressions
+-----------
+::
+    
+    a = 1 + 2
 
 Conditions
 ----------
@@ -116,3 +117,29 @@ Arguments with the value equal to the argument name can be shortened::
 Output::
 
     service command key:value as result
+
+
+Mutations
+---------
+::
+
+    1 is_odd
+
+Mutations can have arguments::
+
+    ['a', 'b', 'c'] join by:':'
+
+
+Comments
+--------
+::
+
+    # inline
+
+
+::
+
+    ###
+    multi
+    line
+    ###

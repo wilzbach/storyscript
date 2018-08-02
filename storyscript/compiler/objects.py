@@ -170,16 +170,29 @@ class Objects:
             arguments.append(cls.typed_argument(argument))
         return arguments
 
+    @staticmethod
+    def fill_expression(left_handside, operator, right_handside):
+        """
+        Compiles the expression template
+        """
+        return '{} {} {}'.format(left_handside, operator, right_handside)
+
     @classmethod
     def expression(cls, tree):
         """
-        Compiles an if_statement to the corresponding expression
+        Compiles an expression object with the given tree.
         """
-        left_handside = cls.values(tree.node('path_value').child(0))
+        if tree.values:
+            operator = tree.operator.child(0).value
+            expression = Objects.fill_expression('{}', operator, '{}')
+            values = [cls.values(tree.values), cls.values(tree.child(2))]
+            return {'$OBJECT': 'expression', 'expression': expression,
+                    'values': values}
+        left_handside = cls.values(tree.path_value.child(0))
         comparison = tree.child(1)
         if comparison is None:
             return [left_handside]
         right_handside = cls.values(tree.child(2).child(0))
-        expression = '{} {} {}'.format('{}', comparison.child(0), '{}')
+        expression = Objects.fill_expression('{}', comparison.child(0), '{}')
         return [{'$OBJECT': 'expression', 'expression': expression,
                 'values': [left_handside, right_handside]}]

@@ -47,7 +47,7 @@ def test_parser_boolean_true(parser):
 
 def test_parser_sum(parser, int_token):
     result = parser.parse('3 + 3\n')
-    node = result.node('start.block.line.operation')
+    node = result.node('start.block.line.absolute_expression.expression')
     assert node.node('values.number').child(0) == int_token
     assert node.node('operator').child(0) == Token('PLUS', '+')
     assert node.child(2).node('number').child(0) == int_token

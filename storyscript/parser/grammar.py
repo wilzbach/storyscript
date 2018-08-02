@@ -13,8 +13,9 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def line(self):
-        definitions = (['values'], ['operation'], ['comment'], ['assignment'],
-                       ['imports'], ['return_statement'], ['block'])
+        definitions = (['values'], ['absolute_expression'], ['comment'],
+                       ['assignment'], ['imports'], ['return_statement'],
+                       ['block'])
         self.ebnf.rules('line', *definitions)
 
     def whitespaces(self):
@@ -141,10 +142,6 @@ class Grammar:
                       '|arguments|service_block|when_block')
         self.ebnf.rule('block', definition, raw=True)
 
-    def mutation(self):
-        mutation = '_WS NAME arguments*'
-        self.ebnf.rule('mutation', mutation, raw=True)
-
     def number(self):
         tokens = (('int', '"0".."9"+'),
                   ('float', """INT "." INT? | "." INT"""))
@@ -184,9 +181,8 @@ class Grammar:
         self.boolean()
         self.list()
         self.objects()
-        self.mutation()
-        rule = '(number | string | boolean | list | objects) mutation?'
-        self.ebnf.rule('values', rule, raw=True)
+        rules = (['number'], ['string'], ['boolean'], ['list'], ['objects'])
+        self.ebnf.rules('values', *rules)
 
     def operator(self):
         self.ebnf.tokens(('plus', '+'), ('dash', '-'), ('multiplier', '*'),
@@ -194,11 +190,25 @@ class Grammar:
         definitions = (['plus'], ['dash'], ['multiplier'], ['bslash'])
         self.ebnf.rules('operator', *definitions)
 
-    def operation(self):
+    def mutation(self):
+        mutation = '_WS NAME arguments*'
+        self.ebnf.rule('mutation', mutation, raw=True)
+
+    def expression(self):
         self.operator()
+        self.mutation()
         definitions = (('values', 'ws', 'operator', 'ws', 'values'),
-                       ('values', 'operator', 'values'))
-        self.ebnf.rules('operation', *definitions)
+                       ('values', 'operator', 'values'),
+                       ('values', 'mutation'))
+        self.ebnf.rules('expression', *definitions)
+
+    def absolute_expression(self):
+        """
+        An expression on its own line. This is necessary for the compiler to
+        understand how to compile an expression.
+        """
+        self.expression()
+        self.ebnf.rule('absolute_expression', ['expression'])
 
     def path_fragment(self):
         self.ebnf.token('dot', '.', inline=True)
@@ -213,7 +223,7 @@ class Grammar:
 
     def assignment_fragment(self):
         self.ebnf.token('equals', '=')
-        rule = 'EQUALS _WS? (values|path|service)'
+        rule = 'EQUALS _WS? (values|expression|path|service)'
         self.ebnf.rule('assignment_fragment', rule, raw=True)
 
     def assignment(self):
@@ -295,7 +305,7 @@ class Grammar:
         self.comparisons()
         self.assignment()
         self.return_statement()
-        self.operation()
+        self.absolute_expression()
         self.block()
         self.imports()
         self.types()

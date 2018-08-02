@@ -36,3 +36,14 @@ def patch(mocker, patch_init, patch_many):
     mocker.patch.init = patch_init
     mocker.patch.many = patch_many
     return mocker.patch
+
+
+@fixture
+def call_count():
+    """
+    Makes asserting a call count on the same module less repetitive.
+    """
+    def call_count(module, methods, count=1):
+        for method in methods:
+            assert getattr(module, method).call_count == count
+    return call_count

@@ -34,6 +34,18 @@ class Compiler:
         module = tree.child(1).value
         self.lines.modules[module] = tree.string.child(0).value[1:-1]
 
+    def absolute_expression(self, tree, parent):
+        """
+        Compiles an absolute expression
+        """
+        mutation = tree.expression.mutation
+        if mutation:
+            args = [Objects.values(tree.expression.values),
+                    Objects.mutation(mutation)]
+        else:
+            args = [Objects.expression(tree.expression)]
+        self.lines.append('expression', tree.line(), args=args, parent=parent)
+
     def assignment(self, tree, parent):
         """
         Compiles an assignment tree
@@ -44,8 +56,12 @@ class Compiler:
             Objects.path(tree.path),
             Objects.values(fragment.child(1))
         ]
-        if fragment.values.mutation:
-            args.append(Objects.mutation(fragment.values.mutation))
+        if fragment.expression:
+            if fragment.expression.mutation:
+                args[1] = Objects.values(fragment.expression.values)
+                args.append(Objects.mutation(fragment.expression.mutation))
+            else:
+                args[1] = Objects.expression(fragment.expression)
         self.lines.append('set', line, args=args, parent=parent)
 
     def arguments(self, tree, parent):
@@ -183,10 +199,10 @@ class Compiler:
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
         """
-        allowed_nodes = ['service_block', 'assignment', 'if_block',
-                         'elseif_block', 'else_block', 'foreach_block',
-                         'function_block', 'when_block', 'return_statement',
-                         'arguments', 'imports']
+        allowed_nodes = ['service_block', 'absolute_expression', 'assignment',
+                         'if_block', 'elseif_block', 'else_block',
+                         'foreach_block', 'function_block', 'when_block',
+                         'return_statement', 'arguments', 'imports']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return
