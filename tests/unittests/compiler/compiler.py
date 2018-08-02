@@ -84,6 +84,19 @@ def test_compiler_assignment(patch, compiler, lines, tree):
     lines.append.assert_called_with('set', tree.line(), args=args, parent='1')
 
 
+def test_compiler_assignment_expression(patch, compiler, lines, tree):
+    """
+    Ensures a line like "x = 1 + 2" is compiled correctly
+    """
+    patch.many(Objects, ['path', 'values', 'expression'])
+    tree.assignment_fragment.expression.mutation = None
+    compiler.assignment(tree, '1')
+    fragment = tree.assignment_fragment
+    Objects.expression.assert_called_with(fragment.expression)
+    args = [Objects.path(), Objects.expression()]
+    lines.append.assert_called_with('set', tree.line(), args=args, parent='1')
+
+
 def test_compiler_assignment_mutation(patch, compiler, lines, tree):
     """
     Ensures a line like "x = value mutation" is compiled correctly

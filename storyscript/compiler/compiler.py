@@ -57,8 +57,11 @@ class Compiler:
             Objects.values(fragment.child(1))
         ]
         if fragment.expression:
-            args[1] = Objects.values(fragment.expression.values)
-            args.append(Objects.mutation(fragment.expression.mutation))
+            if fragment.expression.mutation:
+                args[1] = Objects.values(fragment.expression.values)
+                args.append(Objects.mutation(fragment.expression.mutation))
+            else:
+                args[1] = Objects.expression(fragment.expression)
         self.lines.append('set', line, args=args, parent=parent)
 
     def arguments(self, tree, parent):
