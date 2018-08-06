@@ -8,7 +8,8 @@ from ..parser import Tree
 
 class Preprocessor:
     """
-    Performs additional transformations before the tree is compiled.
+    Performs additional transformations that can't be performed, or would be
+    too complicated for the Transformer, before the tree is compiled.
     """
 
     @staticmethod
