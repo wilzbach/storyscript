@@ -68,5 +68,5 @@ class Preprocessor:
 
     @classmethod
     def process(cls, tree):
-        tree = cls.inline_expression(tree)
+        cls.process_blocks(tree)
         return tree

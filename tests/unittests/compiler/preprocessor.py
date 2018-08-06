@@ -71,7 +71,7 @@ def test_preprocessor_process_blocks_no_target(patch, magic, tree):
 
 
 def test_preprocessor_process(patch):
-    patch.object(Preprocessor, 'inline_expression')
+    patch.object(Preprocessor, 'process_blocks')
     result = Preprocessor.process('tree')
-    Preprocessor.inline_expression.assert_called_with('tree')
-    assert result == Preprocessor.inline_expression()
+    Preprocessor.process_blocks.assert_called_with('tree')
+    assert result == 'tree'
