@@ -50,6 +50,15 @@ def test_preprocessor_inline_arguments_no_arguments(patch, tree):
     assert Preprocessor.magic_line.call_count == 0
 
 
+def test_preprocessor_process_assignments(patch, magic, tree):
+    patch.object(Preprocessor, 'inline_arguments')
+    assignment = magic()
+    tree.find_data.return_value = [assignment]
+    Preprocessor.process_assignments(tree)
+    assignment.node.assert_called_with('assignment_fragment.service')
+    Preprocessor.inline_arguments.assert_called_with(tree, assignment.node())
+
+
 def test_preprocessor_process_blocks(patch, magic, tree):
     patch.object(Preprocessor, 'inline_arguments')
     block = magic()

@@ -53,6 +53,17 @@ class Preprocessor:
             arguments.replace(1, assignment.path)
 
     @classmethod
+    def process_assignments(cls, block):
+        """
+        Process assignments by finding service assignments, for example:
+        a = alpine echo text:(random value)
+        """
+        for assignment in block.find_data('assignment'):
+            service = assignment.node('assignment_fragment.service')
+            if service:
+                cls.inline_arguments(block, service)
+
+    @classmethod
     def process_blocks(cls, tree):
         """
         Processes blocks, looking for trees that must be preprocessed.
