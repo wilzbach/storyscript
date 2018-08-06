@@ -57,6 +57,16 @@ class Preprocessor:
         return tree
 
     @classmethod
+    def process_blocks(cls, tree):
+        """
+        Processes blocks, looking for trees that must be preprocessed.
+        """
+        for block in tree.find_data('block'):
+            service = block.node('service_block.service')
+            if service:
+                cls.inline_arguments(block, service)
+
+    @classmethod
     def process(cls, tree):
         tree = cls.inline_expression(tree)
         return tree

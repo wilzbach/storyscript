@@ -52,6 +52,24 @@ def test_preprocessor_inline_expressions_no_target(patch, magic, tree):
     assert Preprocessor.inline_expression(tree) == tree
 
 
+def test_preprocessor_process_blocks(patch, magic, tree):
+    patch.object(Preprocessor, 'inline_arguments')
+    block = magic()
+    tree.find_data.return_value = [block]
+    Preprocessor.process_blocks(tree)
+    block.node.assert_called_with('service_block.service')
+    Preprocessor.inline_arguments.assert_called_with(block, block.node())
+
+
+def test_preprocessor_process_blocks_no_target(patch, magic, tree):
+    patch.object(Preprocessor, 'inline_arguments')
+    block = magic()
+    block.node.return_value = None
+    tree.find_data.return_value = [block]
+    Preprocessor.process_blocks(tree)
+    assert Preprocessor.inline_arguments.call_count == 0
+
+
 def test_preprocessor_process(patch):
     patch.object(Preprocessor, 'inline_expression')
     result = Preprocessor.process('tree')
