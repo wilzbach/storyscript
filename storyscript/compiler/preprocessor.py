@@ -39,22 +39,18 @@ class Preprocessor:
         return Tree('assignment', [path, fragment])
 
     @classmethod
-    def inline_expression(cls, tree):
+    def inline_arguments(cls, block, service):
         """
-        Processes an inline expression, removing it from the tree and replacing
-        it with an equivalent virtual assignment.
+        Processes an inline expression in a service line, for example:
+        alpine echo text:(random value)
         """
-        for block in tree.find_data('block'):
-            target_path = 'service_block.service.service_fragment.arguments'
-            target = block.node(target_path)
-            if target:
-                if target.inline_expression:
-                    line = cls.magic_line(block)
-                    value = target.inline_expression.service
-                    assignment = cls.magic_assignment(line, value)
-                    block.insert(assignment)
-                    target.replace(1, assignment.path)
-        return tree
+        arguments = service.service_fragment.arguments
+        if arguments.inline_expression:
+            line = cls.magic_line(block)
+            value = arguments.inline_expression.service
+            assignment = cls.magic_assignment(line, value)
+            block.insert(assignment)
+            arguments.replace(1, assignment.path)
 
     @classmethod
     def process_blocks(cls, tree):
