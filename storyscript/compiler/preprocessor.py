@@ -45,12 +45,13 @@ class Preprocessor:
         alpine echo text:(random value)
         """
         arguments = service.service_fragment.arguments
-        if arguments.inline_expression:
-            line = cls.magic_line(block)
-            value = arguments.inline_expression.service
-            assignment = cls.magic_assignment(line, value)
-            block.insert(assignment)
-            arguments.replace(1, assignment.path)
+        if arguments:
+            if arguments.inline_expression:
+                line = cls.magic_line(block)
+                value = arguments.inline_expression.service
+                assignment = cls.magic_assignment(line, value)
+                block.insert(assignment)
+                arguments.replace(1, assignment.path)
 
     @classmethod
     def process_assignments(cls, block):

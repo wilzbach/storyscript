@@ -45,6 +45,13 @@ def test_preprocessor_inline_arguments(patch, magic, tree):
 
 def test_preprocessor_inline_arguments_no_arguments(patch, tree):
     patch.many(Preprocessor, ['magic_line', 'magic_assignment'])
+    tree.service_fragment.arguments = None
+    Preprocessor.inline_arguments('block', tree)
+    assert Preprocessor.magic_line.call_count == 0
+
+
+def test_preprocessor_inline_arguments_no_expression(patch, tree):
+    patch.many(Preprocessor, ['magic_line', 'magic_assignment'])
     tree.service_fragment.arguments.inline_expression = None
     Preprocessor.inline_arguments('block', tree)
     assert Preprocessor.magic_line.call_count == 0
