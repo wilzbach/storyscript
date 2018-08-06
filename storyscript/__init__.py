@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
-from .version import version
+from .api import Api
 
-__version__ = VERSION = version
+
+__version__ = version = '0.4.1'
+
+
+loads = Api.loads
+load = Api.load
