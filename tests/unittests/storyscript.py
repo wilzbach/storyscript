@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from storyscript import load, loads, version
 from storyscript.api import Api
+from storyscript.version import version as real_version
 
 
 def test_storyscript_load():
@@ -12,4 +13,4 @@ def test_storyscript_loads():
 
 
 def test_storyscript_version():
-    assert version == '0.4.1'
+    assert version == real_version
