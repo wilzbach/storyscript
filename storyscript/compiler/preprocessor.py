@@ -69,6 +69,7 @@ class Preprocessor:
         Processes blocks, looking for trees that must be preprocessed.
         """
         for block in tree.find_data('block'):
+            cls.process_assignments(block)
             service = block.node('service_block.service')
             if service:
                 cls.inline_arguments(block, service)

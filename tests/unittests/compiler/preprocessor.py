@@ -60,16 +60,17 @@ def test_preprocessor_process_assignments(patch, magic, tree):
 
 
 def test_preprocessor_process_blocks(patch, magic, tree):
-    patch.object(Preprocessor, 'inline_arguments')
+    patch.many(Preprocessor, ['inline_arguments', 'process_assignments'])
     block = magic()
     tree.find_data.return_value = [block]
     Preprocessor.process_blocks(tree)
+    Preprocessor.process_assignments.assert_called_with(block)
     block.node.assert_called_with('service_block.service')
     Preprocessor.inline_arguments.assert_called_with(block, block.node())
 
 
 def test_preprocessor_process_blocks_no_target(patch, magic, tree):
-    patch.object(Preprocessor, 'inline_arguments')
+    patch.many(Preprocessor, ['inline_arguments', 'process_assignments'])
     block = magic()
     block.node.return_value = None
     tree.find_data.return_value = [block]
