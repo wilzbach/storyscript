@@ -9,6 +9,16 @@ from ..parser import Tree
 class Objects:
 
     @staticmethod
+    def names(tree):
+        """
+        Extracts names from a path tree
+        """
+        names = [tree.child(0).value]
+        for fragment in tree.children[1:]:
+            names.append(fragment.child(0).value)
+        return names
+
+    @staticmethod
     def path(tree):
         paths = [tree.child(0).value]
         for fragment in tree.children[1:]:

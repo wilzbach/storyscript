@@ -14,6 +14,16 @@ def token(magic):
     return magic()
 
 
+def test_objects_names(tree):
+    assert Objects.names(tree) == [tree.child(0).value]
+
+
+def test_objects_names_many(magic, tree):
+    shard = magic()
+    tree.children = [magic(), shard]
+    assert Objects.names(tree) == [tree.child(0).value, shard.child().value]
+
+
 def test_objects_path(token):
     tree = Tree('path', [token])
     result = Objects.path(tree)
