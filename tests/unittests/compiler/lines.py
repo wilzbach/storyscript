@@ -74,6 +74,7 @@ def test_lines_is_output_false(patch, lines):
 
 def test_lines_make(lines):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
+                      'name': None,
                       'function': None, 'service': None, 'command': None,
                       'enter': None, 'exit': None, 'args': None,
                       'parent': None}}
@@ -82,7 +83,7 @@ def test_lines_make(lines):
 
 
 @mark.parametrize('keywords', ['service', 'command', 'function', 'output',
-                               'args', 'enter', 'exit', 'parent'])
+                               'args', 'enter', 'exit', 'parent', 'name'])
 def test_lines_make_keywords(lines, keywords):
     lines.make('method', '1', **{keywords: keywords})
     assert lines.lines['1'][keywords] == keywords

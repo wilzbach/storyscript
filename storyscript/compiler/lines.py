@@ -59,8 +59,9 @@ class Lines:
                 return True
         return False
 
-    def make(self, method, line, args=None, service=None, command=None,
-             function=None, output=None, enter=None, exit=None, parent=None):
+    def make(self, method, line, name=None, args=None, service=None,
+             command=None, function=None, output=None, enter=None, exit=None,
+             parent=None):
         """
         Creates the base dictionary for a given line.
         """
@@ -69,6 +70,7 @@ class Lines:
                 'method': method,
                 'ln': line,
                 'output': output,
+                'name': name,
                 'service': service,
                 'command': command,
                 'function': function,
