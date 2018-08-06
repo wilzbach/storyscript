@@ -1,8 +1,8 @@
 from setuptools import find_packages, setup
 from setuptools.command.install import install
 
-from storyscript.version import version
 
+version = '0.4.1'
 
 classifiers = [
     'Development Status :: 4 - Beta',
