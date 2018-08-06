@@ -46,6 +46,12 @@ class Compiler:
             args = [Objects.expression(tree.expression)]
         self.lines.append('expression', tree.line(), args=args, parent=parent)
 
+    def extract_values(self, fragment):
+        """
+        Extracts values from an assignment_fragment tree
+        """
+        return [Objects.values(fragment.child(1))]
+
     def assignment(self, tree, parent):
         """
         Compiles an assignment tree

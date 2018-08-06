@@ -70,6 +70,15 @@ def test_compiler_absolute_expression_mutation(patch, compiler, lines, tree):
                                     parent='1')
 
 
+def test_compiler_extract_values(patch, compiler, tree):
+    patch.object(Objects, 'values')
+    tree.expression = None
+    result = compiler.extract_values(tree)
+    tree.child.assert_called_with(1)
+    Objects.values.assert_called_with(tree.child())
+    assert result == [Objects.values()]
+
+
 def test_compiler_assignment(patch, compiler, lines, tree):
     """
     Ensures a line like "x = value" is compiled correctly
