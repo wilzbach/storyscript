@@ -24,10 +24,11 @@ def test_objects_names_many(magic, tree):
     assert Objects.names(tree) == [tree.child(0).value, shard.child().value]
 
 
-def test_objects_path(token):
-    tree = Tree('path', [token])
-    result = Objects.path(tree)
-    assert result == {'$OBJECT': 'path', 'paths': [token.value]}
+def test_objects_path(patch):
+    patch.object(Objects, 'names')
+    result = Objects.path('tree')
+    Objects.names.assert_called_with('tree')
+    assert result == {'$OBJECT': 'path', 'paths': Objects.names()}
 
 
 def test_objects_mutation(token):
