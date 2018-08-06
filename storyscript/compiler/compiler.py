@@ -52,17 +52,15 @@ class Compiler:
         """
         line = tree.line()
         fragment = tree.assignment_fragment
-        args = [
-            Objects.path(tree.path),
-            Objects.values(fragment.child(1))
-        ]
+        name = Objects.names(tree.path)
+        args = [Objects.values(fragment.child(1))]
         if fragment.expression:
             if fragment.expression.mutation:
-                args[1] = Objects.values(fragment.expression.values)
+                args[0] = Objects.values(fragment.expression.values)
                 args.append(Objects.mutation(fragment.expression.mutation))
             else:
-                args[1] = Objects.expression(fragment.expression)
-        self.lines.append('set', line, args=args, parent=parent)
+                args[0] = Objects.expression(fragment.expression)
+        self.lines.append('set', line, name=name, args=args, parent=parent)
 
     def arguments(self, tree, parent):
         """
