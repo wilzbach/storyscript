@@ -48,7 +48,8 @@ class Compiler:
 
     def extract_values(self, fragment):
         """
-        Extracts values from an assignment_fragment tree
+        Extracts values from an assignment_fragment tree, to be used as
+        arguments in a set method.
         """
         if fragment.expression:
             if fragment.expression.mutation:
@@ -61,8 +62,12 @@ class Compiler:
         """
         Compiles an assignment tree
         """
-        line = tree.line()
         name = Objects.names(tree.path)
+        if tree.assignment_fragment.service:
+            self.service(tree.assignment_fragment.service, None, parent)
+            self.lines.set_name(name)
+            return
+        line = tree.line()
         args = self.extract_values(tree.assignment_fragment)
         self.lines.append('set', line, name=name, args=args, parent=parent)
 
