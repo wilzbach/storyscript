@@ -70,44 +70,53 @@ def test_compiler_absolute_expression_mutation(patch, compiler, lines, tree):
                                     parent='1')
 
 
+def test_compiler_extract_values(patch, compiler, tree):
+    patch.object(Objects, 'values')
+    tree.expression = None
+    result = compiler.extract_values(tree)
+    tree.child.assert_called_with(1)
+    Objects.values.assert_called_with(tree.child())
+    assert result == [Objects.values()]
+
+
+def test_compiler_extract_values_expression(patch, compiler, tree):
+    patch.object(Objects, 'expression')
+    tree.expression.mutation = None
+    result = compiler.extract_values(tree)
+    Objects.expression.assert_called_with(tree.expression)
+    assert result == [Objects.expression()]
+
+
+def test_compiler_extract_values_mutation(patch, compiler, tree):
+    patch.many(Objects, ['values', 'mutation'])
+    result = compiler.extract_values(tree)
+    Objects.values.assert_called_with(tree.expression.values)
+    Objects.mutation.assert_called_with(tree.expression.mutation)
+    assert result == [Objects.values(), Objects.mutation()]
+
+
 def test_compiler_assignment(patch, compiler, lines, tree):
     """
     Ensures a line like "x = value" is compiled correctly
     """
-    patch.many(Objects, ['path', 'values', 'mutation'])
-    tree.assignment_fragment.expression = None
+    patch.object(Objects, 'names')
+    patch.object(Compiler, 'extract_values')
+    tree.assignment_fragment.service = None
     compiler.assignment(tree, '1')
-    Objects.path.assert_called_with(tree.path)
-    tree.assignment_fragment.child.assert_called_with(1)
-    Objects.values.assert_called_with(tree.assignment_fragment.child())
-    args = [Objects.path(), Objects.values()]
-    lines.append.assert_called_with('set', tree.line(), args=args, parent='1')
+    Objects.names.assert_called_with(tree.path)
+    Compiler.extract_values.assert_called_with(tree.assignment_fragment)
+    kwargs = {'name': Objects.names(), 'args': Compiler.extract_values(),
+              'parent': '1'}
+    lines.append.assert_called_with('set', tree.line(), **kwargs)
 
 
-def test_compiler_assignment_expression(patch, compiler, lines, tree):
-    """
-    Ensures a line like "x = 1 + 2" is compiled correctly
-    """
-    patch.many(Objects, ['path', 'values', 'expression'])
-    tree.assignment_fragment.expression.mutation = None
+def test_compiler_assignment_service(patch, compiler, lines, tree):
+    patch.object(Objects, 'names')
+    patch.object(Compiler, 'service')
     compiler.assignment(tree, '1')
-    fragment = tree.assignment_fragment
-    Objects.expression.assert_called_with(fragment.expression)
-    args = [Objects.path(), Objects.expression()]
-    lines.append.assert_called_with('set', tree.line(), args=args, parent='1')
-
-
-def test_compiler_assignment_mutation(patch, compiler, lines, tree):
-    """
-    Ensures a line like "x = value mutation" is compiled correctly
-    """
-    patch.many(Objects, ['path', 'values', 'mutation'])
-    compiler.assignment(tree, '1')
-    fragment = tree.assignment_fragment
-    Objects.mutation.assert_called_with(fragment.expression.mutation)
-    Objects.values.assert_called_with(fragment.expression.values)
-    args = [Objects.path(), Objects.values(), Objects.mutation()]
-    lines.append.assert_called_with('set', tree.line(), args=args, parent='1')
+    service = tree.assignment_fragment.service
+    Compiler.service.assert_called_with(service, None, '1')
+    lines.set_name.assert_called_with(Objects.names())
 
 
 def test_compiler_arguments(patch, compiler, lines, tree):

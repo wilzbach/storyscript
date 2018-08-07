@@ -32,22 +32,38 @@ Boolean
 
 Lists
 -----
+Lists are a set of elements with guaranteed order.
+
 ::
 
     colours = ["blue", 'red', 0]
+
+A list can be defined over more lines::
+
+    colours = [
+        "blue",
+        'red',
+        0
+    ]
+
+Elements are accessed by index::
+
+    blue = colours[0]
+
 
 Objects
 -------
 ::
 
-    things = {'foo':'bar','apples':'oranges'}
+    things = {'foo':'bar', 'apples':'oranges'}
 
 
 Expressions
 -----------
-::
-    
+An expression is an arithmetical operation between values::
+
     a = 1 + 2
+
 
 Conditions
 ----------
@@ -118,6 +134,13 @@ Output::
 
     service command key:value as result
 
+
+Inline expressions
+------------------
+Inline expressions are a shorthand to have on the same line something that
+would normally be on its own line::
+
+    service command argument:(service2 command)
 
 Mutations
 ---------

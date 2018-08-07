@@ -43,6 +43,13 @@ def test_lines_last_no_lines(lines):
     assert lines.last() is None
 
 
+def test_lines_set_name(patch, lines):
+    patch.object(Lines, 'last')
+    lines.lines[lines.last()] = {}
+    lines.set_name('name')
+    assert lines.lines[lines.last()]['name'] == 'name'
+
+
 def test_lines_set_next(patch, lines):
     patch.object(Lines, 'last', return_value='1')
     lines.lines['1'] = {}
@@ -74,6 +81,7 @@ def test_lines_is_output_false(patch, lines):
 
 def test_lines_make(lines):
     expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
+                      'name': None,
                       'function': None, 'service': None, 'command': None,
                       'enter': None, 'exit': None, 'args': None,
                       'parent': None}}
@@ -82,7 +90,7 @@ def test_lines_make(lines):
 
 
 @mark.parametrize('keywords', ['service', 'command', 'function', 'output',
-                               'args', 'enter', 'exit', 'parent'])
+                               'args', 'enter', 'exit', 'parent', 'name'])
 def test_lines_make_keywords(lines, keywords):
     lines.make('method', '1', **{keywords: keywords})
     assert lines.lines['1'][keywords] == keywords

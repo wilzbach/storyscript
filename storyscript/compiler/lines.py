@@ -33,6 +33,14 @@ class Lines:
         if self.lines:
             return self.sort()[-1]
 
+    def set_name(self, name):
+        """
+        Sets the name of the previous line
+        """
+        previous_line = self.last()
+        if previous_line:
+            self.lines[previous_line]['name'] = name
+
     def set_next(self, line_number):
         """
         Finds the previous line, and set the current as its next line
@@ -59,8 +67,9 @@ class Lines:
                 return True
         return False
 
-    def make(self, method, line, args=None, service=None, command=None,
-             function=None, output=None, enter=None, exit=None, parent=None):
+    def make(self, method, line, name=None, args=None, service=None,
+             command=None, function=None, output=None, enter=None, exit=None,
+             parent=None):
         """
         Creates the base dictionary for a given line.
         """
@@ -69,6 +78,7 @@ class Lines:
                 'method': method,
                 'ln': line,
                 'output': output,
+                'name': name,
                 'service': service,
                 'command': command,
                 'function': function,

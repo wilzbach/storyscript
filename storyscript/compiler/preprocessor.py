@@ -8,7 +8,8 @@ from ..parser import Tree
 
 class Preprocessor:
     """
-    Performs additional transformations before the tree is compiled.
+    Performs additional transformations that can't be performed, or would be
+    too complicated for the Transformer, before the tree is compiled.
     """
 
     @staticmethod
@@ -33,29 +34,49 @@ class Preprocessor:
         """
         Creates a magic assignment tree, equivalent to: "$magic = value"
         """
+        value.child(0).child(0).line = line
         path = cls.magic_path(line)
         fragment = Tree('assignment_fragment', [Token('EQUALS', '='), value])
         return Tree('assignment', [path, fragment])
 
     @classmethod
-    def inline_expression(cls, tree):
+    def inline_arguments(cls, block, service):
         """
-        Processes an inline expression, removing it from the tree and replacing
-        it with an equivalent virtual assignment.
+        Processes an inline expression in a service line, for example:
+        alpine echo text:(random value)
+        """
+        arguments = service.service_fragment.arguments
+        if arguments:
+            if arguments.inline_expression:
+                line = cls.magic_line(block)
+                value = arguments.inline_expression.service
+                assignment = cls.magic_assignment(line, value)
+                block.insert(assignment)
+                arguments.replace(1, assignment.path)
+
+    @classmethod
+    def process_assignments(cls, block):
+        """
+        Process assignments by finding service assignments, for example:
+        a = alpine echo text:(random value)
+        """
+        for assignment in block.find_data('assignment'):
+            service = assignment.node('assignment_fragment.service')
+            if service:
+                cls.inline_arguments(block, service)
+
+    @classmethod
+    def process_blocks(cls, tree):
+        """
+        Processes blocks, looking for trees that must be preprocessed.
         """
         for block in tree.find_data('block'):
-            target_path = 'service_block.service.service_fragment.arguments'
-            target = block.node(target_path)
-            if target:
-                if target.inline_expression:
-                    line = cls.magic_line(block)
-                    value = target.inline_expression.service
-                    assignment = cls.magic_assignment(line, value)
-                    block.insert(assignment)
-                    target.replace(1, assignment.path)
-        return tree
+            cls.process_assignments(block)
+            service = block.node('service_block.service')
+            if service:
+                cls.inline_arguments(block, service)
 
     @classmethod
     def process(cls, tree):
-        tree = cls.inline_expression(tree)
+        cls.process_blocks(tree)
         return tree

@@ -9,11 +9,18 @@ from ..parser import Tree
 class Objects:
 
     @staticmethod
-    def path(tree):
-        paths = [tree.child(0).value]
+    def names(tree):
+        """
+        Extracts names from a path tree
+        """
+        names = [tree.child(0).value]
         for fragment in tree.children[1:]:
-            paths.append(fragment.child(0).value)
-        return {'$OBJECT': 'path', 'paths': paths}
+            names.append(fragment.child(0).value)
+        return names
+
+    @classmethod
+    def path(cls, tree):
+        return {'$OBJECT': 'path', 'paths': cls.names(tree)}
 
     @classmethod
     def mutation(cls, tree):

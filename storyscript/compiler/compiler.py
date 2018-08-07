@@ -46,23 +46,30 @@ class Compiler:
             args = [Objects.expression(tree.expression)]
         self.lines.append('expression', tree.line(), args=args, parent=parent)
 
+    def extract_values(self, fragment):
+        """
+        Extracts values from an assignment_fragment tree, to be used as
+        arguments in a set method.
+        """
+        if fragment.expression:
+            if fragment.expression.mutation:
+                return [Objects.values(fragment.expression.values),
+                        Objects.mutation(fragment.expression.mutation)]
+            return [Objects.expression(fragment.expression)]
+        return [Objects.values(fragment.child(1))]
+
     def assignment(self, tree, parent):
         """
         Compiles an assignment tree
         """
+        name = Objects.names(tree.path)
+        if tree.assignment_fragment.service:
+            self.service(tree.assignment_fragment.service, None, parent)
+            self.lines.set_name(name)
+            return
         line = tree.line()
-        fragment = tree.assignment_fragment
-        args = [
-            Objects.path(tree.path),
-            Objects.values(fragment.child(1))
-        ]
-        if fragment.expression:
-            if fragment.expression.mutation:
-                args[1] = Objects.values(fragment.expression.values)
-                args.append(Objects.mutation(fragment.expression.mutation))
-            else:
-                args[1] = Objects.expression(fragment.expression)
-        self.lines.append('set', line, args=args, parent=parent)
+        args = self.extract_values(tree.assignment_fragment)
+        self.lines.append('set', line, name=name, args=args, parent=parent)
 
     def arguments(self, tree, parent):
         """

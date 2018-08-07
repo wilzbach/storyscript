@@ -15,12 +15,12 @@ the list of services used by each story::
                 "modules": {
                     "Foo": "foo.story"
                 },
-                "version": "0.3.0"
+                "version": "0.5.0"
             },
             "foo.story": {
                 "tree": {...},
                 "services": ["twitter"],
-                "version": "0.3.0"
+                "version": "0.5.0"
             }
         },
         "services": [
@@ -40,6 +40,7 @@ The compiled tree uses a similar structure for every line::
               "method": "operation type",
               "ln": "line number",
               "output": "if an output was defined (as in services or functions)",
+              "name": ["if assigning a variable, its name"],
               "service": "the name of the service or null",
               "command": "the command or null",
               "function": "the name of the function or null",
@@ -262,19 +263,19 @@ Should produce the following tree::
 
 Set
 ###
-Used when declaring a variable, or assigning a value to a property::
+Used when declaring a variable, or assigning a value to a property. For example
+a story like::
+
+    x = "hello"
+
+Will result in::
 
     {
         "1": {
           "method": "set",
           "ln": "1",
+          "name": ["a"],
           "args": [
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "n"
-              ]
-            },
             1
           ],
           "next": "next line"
@@ -385,6 +386,7 @@ Used for services. Service arguments will be in *args*::
       "method": "execute",
       "ln": "1",
       "output": [],
+      "name": [],
       "service": "alpine",
       "command": "echo",
       "function": null,
