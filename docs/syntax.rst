@@ -32,9 +32,24 @@ Boolean
 
 Lists
 -----
+Lists are a set of elements with guaranteed order.
+
 ::
 
     colours = ["blue", 'red', 0]
+
+A list can be defined over more lines::
+
+    colours = [
+        "blue",
+        'red',
+        0
+    ]
+
+Elements are accessed by index::
+
+    blue = colours[0]
+
 
 Objects
 -------
@@ -46,7 +61,7 @@ Objects
 Expressions
 -----------
 ::
-    
+
     a = 1 + 2
 
 Conditions
