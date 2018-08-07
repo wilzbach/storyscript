@@ -34,6 +34,7 @@ class Preprocessor:
         """
         Creates a magic assignment tree, equivalent to: "$magic = value"
         """
+        value.child(0).child(0).line = line
         path = cls.magic_path(line)
         fragment = Tree('assignment_fragment', [Token('EQUALS', '='), value])
         return Tree('assignment', [path, fragment])
