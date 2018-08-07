@@ -15,12 +15,12 @@ the list of services used by each story::
                 "modules": {
                     "Foo": "foo.story"
                 },
-                "version": "0.3.0"
+                "version": "0.5.0"
             },
             "foo.story": {
                 "tree": {...},
                 "services": ["twitter"],
-                "version": "0.4.2"
+                "version": "0.5.0"
             }
         },
         "services": [
