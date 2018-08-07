@@ -99,42 +99,13 @@ def test_compiler_assignment(patch, compiler, lines, tree):
     """
     Ensures a line like "x = value" is compiled correctly
     """
-    patch.many(Objects, ['names', 'values', 'mutation'])
-    tree.assignment_fragment.expression = None
+    patch.many(Objects, ['names'])
+    patch.object(Compiler, 'extract_values')
     compiler.assignment(tree, '1')
     Objects.names.assert_called_with(tree.path)
-    tree.assignment_fragment.child.assert_called_with(1)
-    Objects.values.assert_called_with(tree.assignment_fragment.child())
-    kwargs = {'name': Objects.names(), 'args': [Objects.values()],
+    Compiler.extract_values.assert_called_with(tree.assignment_fragment)
+    kwargs = {'name': Objects.names(), 'args': Compiler.extract_values(),
               'parent': '1'}
-    lines.append.assert_called_with('set', tree.line(), **kwargs)
-
-
-def test_compiler_assignment_expression(patch, compiler, lines, tree):
-    """
-    Ensures a line like "x = 1 + 2" is compiled correctly
-    """
-    patch.many(Objects, ['names', 'values', 'expression'])
-    tree.assignment_fragment.expression.mutation = None
-    compiler.assignment(tree, '1')
-    fragment = tree.assignment_fragment
-    Objects.expression.assert_called_with(fragment.expression)
-    kwargs = {'name': Objects.names(), 'args': [Objects.expression()],
-              'parent': '1'}
-    lines.append.assert_called_with('set', tree.line(), **kwargs)
-
-
-def test_compiler_assignment_mutation(patch, compiler, lines, tree):
-    """
-    Ensures a line like "x = value mutation" is compiled correctly
-    """
-    patch.many(Objects, ['names', 'values', 'mutation'])
-    compiler.assignment(tree, '1')
-    fragment = tree.assignment_fragment
-    Objects.mutation.assert_called_with(fragment.expression.mutation)
-    Objects.values.assert_called_with(fragment.expression.values)
-    kwargs = {'name': Objects.names(), 'parent': '1',
-              'args': [Objects.values(), Objects.mutation()]}
     lines.append.assert_called_with('set', tree.line(), **kwargs)
 
 

@@ -62,15 +62,8 @@ class Compiler:
         Compiles an assignment tree
         """
         line = tree.line()
-        fragment = tree.assignment_fragment
         name = Objects.names(tree.path)
-        args = [Objects.values(fragment.child(1))]
-        if fragment.expression:
-            if fragment.expression.mutation:
-                args[0] = Objects.values(fragment.expression.values)
-                args.append(Objects.mutation(fragment.expression.mutation))
-            else:
-                args[0] = Objects.expression(fragment.expression)
+        args = self.extract_values(tree.assignment_fragment)
         self.lines.append('set', line, name=name, args=args, parent=parent)
 
     def arguments(self, tree, parent):
