@@ -43,6 +43,13 @@ def test_lines_last_no_lines(lines):
     assert lines.last() is None
 
 
+def test_lines_set_name(patch, lines):
+    patch.object(Lines, 'last')
+    lines.lines[lines.last()] = {}
+    lines.set_name('name')
+    assert lines.lines[lines.last()]['name'] == 'name'
+
+
 def test_lines_set_next(patch, lines):
     patch.object(Lines, 'last', return_value='1')
     lines.lines['1'] = {}

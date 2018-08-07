@@ -33,6 +33,14 @@ class Lines:
         if self.lines:
             return self.sort()[-1]
 
+    def set_name(self, name):
+        """
+        Sets the name of the previous line
+        """
+        previous_line = self.last()
+        if previous_line:
+            self.lines[previous_line]['name'] = name
+
     def set_next(self, line_number):
         """
         Finds the previous line, and set the current as its next line
