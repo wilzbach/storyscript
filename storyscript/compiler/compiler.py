@@ -50,6 +50,11 @@ class Compiler:
         """
         Extracts values from an assignment_fragment tree
         """
+        if fragment.expression:
+            if fragment.expression.mutation:
+                return [Objects.values(fragment.expression.values),
+                        Objects.mutation(fragment.expression.mutation)]
+            return [Objects.expression(fragment.expression)]
         return [Objects.values(fragment.child(1))]
 
     def assignment(self, tree, parent):
