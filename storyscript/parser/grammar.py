@@ -167,7 +167,8 @@ class Grammar:
 
     def key_value(self):
         self.ebnf.token('colon', ':', inline=True)
-        self.ebnf.rule('key_value', 'string _COLON (values|path)', raw=True)
+        rule = 'string _COLON _WS? (values|path)'
+        self.ebnf.rule('key_value', rule, raw=True)
 
     def objects(self):
         self.key_value()
