@@ -262,7 +262,8 @@ def test_grammar_list(grammar, ebnf):
 def test_grammar_key_value(grammar, ebnf):
     grammar.key_value()
     ebnf.token.assert_called_with('colon', ':', inline=True)
-    ebnf.rule.assert_called_with('key_value', ('string', 'colon', 'values'))
+    rule = 'string _COLON _WS? (values|path)'
+    ebnf.rule.assert_called_with('key_value', rule, raw=True)
 
 
 def test_grammar_objects(patch, grammar, ebnf):
@@ -270,7 +271,7 @@ def test_grammar_objects(patch, grammar, ebnf):
     grammar.objects()
     assert Grammar.key_value.call_count == 1
     ebnf.tokens.assert_called_with(('ocb', '{'), ('ccb', '}'), inline=True)
-    rule = '_OCB (key_value (_COMMA key_value)*)? _CCB'
+    rule = '_OCB (key_value (_COMMA _WS? key_value)*)? _CCB'
     ebnf.rule.assert_called_with('objects', rule, raw=True)
 
 

@@ -167,12 +167,13 @@ class Grammar:
 
     def key_value(self):
         self.ebnf.token('colon', ':', inline=True)
-        self.ebnf.rule('key_value', ('string', 'colon', 'values'))
+        rule = 'string _COLON _WS? (values|path)'
+        self.ebnf.rule('key_value', rule, raw=True)
 
     def objects(self):
         self.key_value()
         self.ebnf.tokens(('ocb', '{'), ('ccb', '}'), inline=True)
-        rule = '_OCB (key_value (_COMMA key_value)*)? _CCB'
+        rule = '_OCB (key_value (_COMMA _WS? key_value)*)? _CCB'
         self.ebnf.rule('objects', rule, raw=True)
 
     def values(self):
