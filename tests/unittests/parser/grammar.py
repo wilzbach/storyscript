@@ -271,7 +271,7 @@ def test_grammar_objects(patch, grammar, ebnf):
     grammar.objects()
     assert Grammar.key_value.call_count == 1
     ebnf.tokens.assert_called_with(('ocb', '{'), ('ccb', '}'), inline=True)
-    rule = '_OCB (key_value (_COMMA key_value)*)? _CCB'
+    rule = '_OCB (key_value (_COMMA _WS? key_value)*)? _CCB'
     ebnf.rule.assert_called_with('objects', rule, raw=True)
 
 
