@@ -46,9 +46,10 @@ class Preprocessor:
         Processes an inline expression in a service call, for example:
         alpine echo text:(random value)
         """
+        block_line = block.line()
         for argument in service.service_fragment.find_data('arguments'):
             if argument.inline_expression:
-                line = cls.magic_line(block)
+                line = cls.magic_line(block_line)
                 value = argument.inline_expression.service
                 assignment = cls.magic_assignment(line, value)
                 block.insert(assignment)
