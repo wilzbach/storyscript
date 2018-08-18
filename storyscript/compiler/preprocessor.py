@@ -42,23 +42,22 @@ class Preprocessor:
     @classmethod
     def inline_arguments(cls, block, service):
         """
-        Processes an inline expression in a service line, for example:
+        Processes an inline expression in a service call, for example:
         alpine echo text:(random value)
         """
-        arguments = service.service_fragment.arguments
-        if arguments:
-            if arguments.inline_expression:
+        for argument in service.service_fragment.find_data('arguments'):
+            if argument.inline_expression:
                 line = cls.magic_line(block)
-                value = arguments.inline_expression.service
+                value = argument.inline_expression.service
                 assignment = cls.magic_assignment(line, value)
                 block.insert(assignment)
-                arguments.replace(1, assignment.path)
+                argument.replace(1, assignment.path)
 
     @classmethod
     def process_assignments(cls, block):
         """
-        Process assignments by finding service assignments, for example:
-        a = alpine echo text:(random value)
+        Process assignments, looking for inline expressions to replace,
+        for example: a = alpine echo text:(random value)
         """
         for assignment in block.find_data('assignment'):
             service = assignment.node('assignment_fragment.service')

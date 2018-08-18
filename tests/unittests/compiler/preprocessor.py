@@ -33,27 +33,23 @@ def test_preprocessor_magic_assignment(patch, tree):
 def test_preprocessor_inline_arguments(patch, magic, tree):
     patch.many(Preprocessor, ['magic_line', 'magic_assignment'])
     block = magic()
+    argument = magic()
+    tree.service_fragment.find_data.return_value = [argument]
     Preprocessor.inline_arguments(block, tree)
+    tree.service_fragment.find_data.assert_called_with('arguments')
     Preprocessor.magic_line.assert_called_with(block)
-    arguments = tree.service_fragment.arguments
-    value = arguments.inline_expression.service
+    value = argument.inline_expression.service
     Preprocessor.magic_assignment.assert_called_with(Preprocessor.magic_line(),
                                                      value)
     block.insert.assert_called_with(Preprocessor.magic_assignment())
     path = Preprocessor.magic_assignment().path
-    arguments.replace.assert_called_with(1, path)
+    argument.replace.assert_called_with(1, path)
 
 
-def test_preprocessor_inline_arguments_no_arguments(patch, tree):
+def test_preprocessor_inline_arguments_no_expression(patch, magic, tree):
     patch.many(Preprocessor, ['magic_line', 'magic_assignment'])
-    tree.service_fragment.arguments = None
-    Preprocessor.inline_arguments('block', tree)
-    assert Preprocessor.magic_line.call_count == 0
-
-
-def test_preprocessor_inline_arguments_no_expression(patch, tree):
-    patch.many(Preprocessor, ['magic_line', 'magic_assignment'])
-    tree.service_fragment.arguments.inline_expression = None
+    argument = magic(inline_expression=None)
+    tree.service_fragment.find_data.return_value = [argument]
     Preprocessor.inline_arguments('block', tree)
     assert Preprocessor.magic_line.call_count == 0
 
