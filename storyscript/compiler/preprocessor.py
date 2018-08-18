@@ -47,7 +47,7 @@ class Preprocessor:
         alpine echo text:(random value)
         """
         block_line = block.line()
-        for argument in service.service_fragment.find_data('arguments'):
+        for argument in service.find_data('arguments'):
             if argument.inline_expression:
                 line = cls.magic_line(block_line)
                 value = argument.inline_expression.service

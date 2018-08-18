@@ -37,9 +37,9 @@ def test_preprocessor_inline_arguments(patch, magic, tree):
     patch.many(Preprocessor, ['magic_line', 'magic_assignment'])
     block = magic()
     argument = magic()
-    tree.service_fragment.find_data.return_value = [argument]
+    tree.find_data.return_value = [argument]
     Preprocessor.inline_arguments(block, tree)
-    tree.service_fragment.find_data.assert_called_with('arguments')
+    tree.find_data.assert_called_with('arguments')
     Preprocessor.magic_line.assert_called_with(block.line())
     value = argument.inline_expression.service
     Preprocessor.magic_assignment.assert_called_with(Preprocessor.magic_line(),
