@@ -13,11 +13,12 @@ class Preprocessor:
     """
 
     @staticmethod
-    def magic_line(block):
+    def magic_line(line):
         """
-        Creates a virtual line number.
+        Creates a virtual line number, using a given line as base so that
+        line - 1 < magic line < line
         """
-        base = int(block.line()) - 1
+        base = int(line) - 1
         extension = str(uuid.uuid4().int)[:8]
         return '{}.{}'.format(base, extension)
 

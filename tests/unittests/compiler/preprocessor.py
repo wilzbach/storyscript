@@ -8,8 +8,11 @@ from storyscript.parser import Tree
 
 
 def test_preprocessor_magic_line(patch, magic, tree):
+    """
+    Ensures magic line can create a virtual line number
+    """
     patch.object(uuid, 'uuid4', return_value=magic(int=123456789))
-    result = Preprocessor.magic_line(tree)
+    result = Preprocessor.magic_line('1')
     assert result == '0.12345678'
 
 
