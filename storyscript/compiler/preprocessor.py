@@ -3,6 +3,7 @@ import uuid
 
 from lark.lexer import Token
 
+from .faketree import FakeTree
 from ..parser import Tree
 
 
@@ -13,35 +14,7 @@ class Preprocessor:
     """
 
     @staticmethod
-    def magic_line(line):
-        """
-        Creates a virtual line number, using a given line as base so that
-        line - 1 < magic line < line
-        """
-        base = int(line) - 1
-        extension = str(uuid.uuid4().int)[:8]
-        return '{}.{}'.format(base, extension)
-
-    @staticmethod
-    def magic_path(line):
-        """
-        Creates a virtual path tree.
-        """
-        path = '${}'.format(uuid.uuid4().hex[:8])
-        return Tree('path', [Token('NAME', path, line=line)])
-
-    @classmethod
-    def magic_assignment(cls, line, value):
-        """
-        Creates a magic assignment tree, equivalent to: "$magic = value"
-        """
-        value.child(0).child(0).line = line
-        path = cls.magic_path(line)
-        fragment = Tree('assignment_fragment', [Token('EQUALS', '='), value])
-        return Tree('assignment', [path, fragment])
-
-    @classmethod
-    def inline_arguments(cls, block, service):
+    def inline_arguments(block, service):
         """
         Processes an inline expression in a service call, for example:
         alpine echo text:(random value)
@@ -49,9 +22,9 @@ class Preprocessor:
         block_line = block.line()
         for argument in service.find_data('arguments'):
             if argument.inline_expression:
-                line = cls.magic_line(block_line)
+                line = FakeTree.line(block_line)
                 value = argument.inline_expression.service
-                assignment = cls.magic_assignment(line, value)
+                assignment = FakeTree.assignment(line, value)
                 block.insert(assignment)
                 argument.replace(1, assignment.path)
 
