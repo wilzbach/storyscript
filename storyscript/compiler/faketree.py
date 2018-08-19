@@ -24,7 +24,17 @@ class FakeTree:
     @staticmethod
     def path(line):
         """
-        Creates a virtual path tree.
+        Creates a fake tree path.
         """
         path = '${}'.format(uuid.uuid4().hex[:8])
         return Tree('path', [Token('NAME', path, line=line)])
+
+    @classmethod
+    def assignment(cls, line, value):
+        """
+        Creates a fake assignment tree, equivalent to "$fake = value"
+        """
+        value.child(0).child(0).line = line
+        path = cls.path(line)
+        fragment = Tree('assignment_fragment', [Token('EQUALS', '='), value])
+        return Tree('assignment', [path, fragment])

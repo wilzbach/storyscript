@@ -20,3 +20,13 @@ def test_faketree_path(patch):
     result = FakeTree.path(1)
     name = '${}'.format(uuid.uuid4().hex[:8])
     assert result == Tree('path', [Token('NAME', name, line=1)])
+
+
+def test_faketree_assignment(patch, tree):
+    patch.object(FakeTree, 'path')
+    result = FakeTree.assignment('1', tree)
+    FakeTree.path.assert_called_with('1')
+    assert tree.child().child().line == '1'
+    assert result.children[0] == FakeTree.path()
+    expected = Tree('assignment_fragment', [Token('EQUALS', '='), tree])
+    assert result.children[1] == expected
