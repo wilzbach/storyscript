@@ -22,9 +22,8 @@ class Preprocessor:
         block_line = block.line()
         for argument in service.find_data('arguments'):
             if argument.inline_expression:
-                line = FakeTree.line(block_line)
                 value = argument.inline_expression.service
-                assignment = FakeTree.assignment(line, value)
+                assignment = FakeTree.assignment(block_line, value)
                 block.insert(assignment)
                 argument.replace(1, assignment.path)
 
