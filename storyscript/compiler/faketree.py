@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import random
 import uuid
 
 from lark.lexer import Token
@@ -17,9 +18,9 @@ class FakeTree:
         Creates a fake line number, using a given line as base so that
         line - 1 < fake line < line
         """
-        base = int(line) - 1
-        extension = str(uuid.uuid4().int)[:8]
-        return '{}.{}'.format(base, extension)
+        upper_bound = int(line)
+        lower_bound = upper_bound - 1
+        return str(random.uniform(lower_bound, upper_bound))
 
     @staticmethod
     def path(line):

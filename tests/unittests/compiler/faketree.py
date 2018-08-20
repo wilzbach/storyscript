@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import random
 import uuid
 
 from lark.lexer import Token
@@ -11,8 +12,10 @@ def test_faketree_line(patch, magic, tree):
     """
     Ensures line can create a fake line number
     """
-    patch.object(uuid, 'uuid4', return_value=magic(int=123456789))
-    assert FakeTree.line('1') == '0.12345678'
+    patch.object(random, 'uniform')
+    result = FakeTree.line('1')
+    random.uniform.assert_called_with(0, 1)
+    assert result == str(random.uniform())
 
 
 def test_faketree_path(patch):
