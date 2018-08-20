@@ -49,10 +49,9 @@ def test_faketree_path(patch):
     assert result == Tree('path', [Token('NAME', name, line=1)])
 
 
-def test_faketree_assignment(patch, tree):
+def test_faketree_assignment(patch, tree, fake_tree):
     patch.many(FakeTree, ['path', 'line'])
-    result = FakeTree.assignment('1', tree)
-    FakeTree.line.assert_called_with('1')
+    result = fake_tree.assignment(tree)
     FakeTree.path.assert_called_with(FakeTree.line())
     assert tree.child().child().line == FakeTree.line()
     assert result.children[0] == FakeTree.path()
@@ -63,6 +62,6 @@ def test_faketree_assignment(patch, tree):
 def test_faketree_add_assignment(patch, fake_tree):
     patch.object(FakeTree, 'assignment')
     result = fake_tree.add_assignment('value')
-    FakeTree.assignment.assert_called_with(fake_tree.original_line, 'value')
+    FakeTree.assignment.assert_called_with('value')
     fake_tree.block.insert.assert_called_with(FakeTree.assignment())
     assert result == FakeTree.assignment()

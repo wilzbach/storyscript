@@ -36,14 +36,13 @@ class FakeTree:
         path = '${}'.format(uuid.uuid4().hex[:8])
         return Tree('path', [Token('NAME', path, line=line)])
 
-    @classmethod
-    def assignment(cls, line, value):
+    def assignment(self, value):
         """
         Creates a fake assignment tree, equivalent to "$fake = value"
         """
-        fake_line = cls.line(line)
+        fake_line = self.line()
         value.child(0).child(0).line = fake_line
-        path = cls.path(fake_line)
+        path = self.path(fake_line)
         fragment = Tree('assignment_fragment', [Token('EQUALS', '='), value])
         return Tree('assignment', [path, fragment])
 
@@ -51,6 +50,6 @@ class FakeTree:
         """
         Creates an assignments and adds it to the current block
         """
-        assignment = self.assignment(self.original_line, value)
+        assignment = self.assignment(value)
         self.block.insert(assignment)
         return assignment
