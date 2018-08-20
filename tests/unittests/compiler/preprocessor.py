@@ -8,24 +8,25 @@ from storyscript.parser import Tree
 
 
 def test_preprocessor_inline_arguments(patch, magic, tree):
-    patch.object(FakeTree, 'assignment')
-    block = magic()
+    patch.init(FakeTree)
+    patch.object(FakeTree, 'add_assignment')
     argument = magic()
     tree.find_data.return_value = [argument]
-    Preprocessor.inline_arguments(block, tree)
+    Preprocessor.inline_arguments('block', tree)
+    FakeTree.__init__.assert_called_with('block')
     tree.find_data.assert_called_with('arguments')
     value = argument.inline_expression.service
-    FakeTree.assignment.assert_called_with(block.line(), value)
-    block.insert.assert_called_with(FakeTree.assignment())
-    argument.replace.assert_called_with(1, FakeTree.assignment().path)
+    FakeTree.add_assignment.assert_called_with(value)
+    argument.replace.assert_called_with(1, FakeTree.add_assignment().path)
 
 
 def test_preprocessor_inline_arguments_no_expression(patch, magic, tree):
-    patch.object(FakeTree, 'assignment')
+    patch.init(FakeTree)
+    patch.object(FakeTree, 'add_assignment')
     argument = magic(inline_expression=None)
     tree.service_fragment.find_data.return_value = [argument]
     Preprocessor.inline_arguments(magic(), tree)
-    assert FakeTree.assignment.call_count == 0
+    assert FakeTree.add_assignment.call_count == 0
 
 
 def test_preprocessor_process_assignments(patch, magic, tree):

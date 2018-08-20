@@ -19,12 +19,11 @@ class Preprocessor:
         Processes an inline expression in a service call, for example:
         alpine echo text:(random value)
         """
-        block_line = block.line()
+        fake_tree = FakeTree(block)
         for argument in service.find_data('arguments'):
             if argument.inline_expression:
                 value = argument.inline_expression.service
-                assignment = FakeTree.assignment(block_line, value)
-                block.insert(assignment)
+                assignment = fake_tree.add_assignment(value)
                 argument.replace(1, assignment.path)
 
     @classmethod
