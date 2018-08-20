@@ -58,3 +58,11 @@ def test_faketree_assignment(patch, tree):
     assert result.children[0] == FakeTree.path()
     expected = Tree('assignment_fragment', [Token('EQUALS', '='), tree])
     assert result.children[1] == expected
+
+
+def test_faketree_add_assignment(patch, fake_tree):
+    patch.object(FakeTree, 'assignment')
+    result = fake_tree.add_assignment('value')
+    FakeTree.assignment.assert_called_with(fake_tree.original_line, 'value')
+    fake_tree.block.insert.assert_called_with(FakeTree.assignment())
+    assert result == FakeTree.assignment()
