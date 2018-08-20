@@ -4,8 +4,20 @@ import uuid
 
 from lark.lexer import Token
 
+from pytest import fixture
+
 from storyscript.compiler import FakeTree
 from storyscript.parser import Tree
+
+
+@fixture
+def fake_tree(block):
+    return FakeTree(block)
+
+
+def test_faketree_init(block, fake_tree):
+    assert fake_tree.block == block
+    assert fake_tree.original_line == block.line()
 
 
 def test_faketree_line(patch, magic, tree):

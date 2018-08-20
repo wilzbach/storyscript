@@ -11,6 +11,9 @@ class FakeTree:
     """
     Creates fake trees that are not in the original story source.
     """
+    def __init__(self, block):
+        self.block = block
+        self.original_line = block.line()
 
     @staticmethod
     def line(line):
