@@ -14,16 +14,19 @@ class FakeTree:
     def __init__(self, block):
         self.block = block
         self.original_line = block.line()
+        self.new_lines = []
 
-    @staticmethod
-    def line(line):
+    def line(self):
         """
-        Creates a fake line number, using a given line as base so that
-        line - 1 < fake line < line
+        Creates successive fake line numbers
         """
-        upper_bound = int(line)
+        upper_bound = int(self.original_line)
         lower_bound = upper_bound - 1
-        return str(random.uniform(lower_bound, upper_bound))
+        if len(self.new_lines) > 0:
+            lower_bound = self.new_lines[-1]
+        fake_line = random.uniform(lower_bound, upper_bound)
+        self.new_lines.append(fake_line)
+        return str(fake_line)
 
     @staticmethod
     def path(line):
@@ -43,3 +46,11 @@ class FakeTree:
         path = cls.path(fake_line)
         fragment = Tree('assignment_fragment', [Token('EQUALS', '='), value])
         return Tree('assignment', [path, fragment])
+
+    def add_assignment(self, value):
+        """
+        Creates an assignments and adds it to the current block
+        """
+        assignment = self.assignment(self.original_line, value)
+        self.block.insert(assignment)
+        return assignment

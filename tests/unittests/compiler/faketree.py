@@ -18,16 +18,28 @@ def fake_tree(block):
 def test_faketree_init(block, fake_tree):
     assert fake_tree.block == block
     assert fake_tree.original_line == block.line()
+    assert fake_tree.new_lines == []
 
 
-def test_faketree_line(patch, magic, tree):
+def test_faketree_line(patch, fake_tree):
     """
-    Ensures line can create a fake line number
+    Ensures FakeTree.line can create a fake line number
     """
     patch.object(random, 'uniform')
-    result = FakeTree.line('1')
+    result = fake_tree.line()
     random.uniform.assert_called_with(0, 1)
+    assert fake_tree.new_lines == [random.uniform()]
     assert result == str(random.uniform())
+
+
+def test_faketree_line_successive(patch, fake_tree):
+    """
+    Ensures FakeTree.line takes into account FakeTree.new_lines
+    """
+    patch.object(random, 'uniform')
+    fake_tree.new_lines = [0.2]
+    fake_tree.line()
+    random.uniform.assert_called_with(0.2, 1)
 
 
 def test_faketree_path(patch):
