@@ -47,3 +47,13 @@ def call_count():
         for method in methods:
             assert getattr(module, method).call_count == count
     return call_count
+
+
+@fixture
+def tree(magic):
+    return magic()
+
+
+@fixture
+def block(magic):
+    return magic()

@@ -3,6 +3,7 @@ import uuid
 
 from lark.lexer import Token
 
+from .faketree import FakeTree
 from ..parser import Tree
 
 
@@ -13,52 +14,23 @@ class Preprocessor:
     """
 
     @staticmethod
-    def magic_line(block):
+    def inline_arguments(block, service):
         """
-        Creates a virtual line number.
-        """
-        base = int(block.line()) - 1
-        extension = str(uuid.uuid4().int)[:8]
-        return '{}.{}'.format(base, extension)
-
-    @staticmethod
-    def magic_path(line):
-        """
-        Creates a virtual path tree.
-        """
-        path = '${}'.format(uuid.uuid4().hex[:8])
-        return Tree('path', [Token('NAME', path, line=line)])
-
-    @classmethod
-    def magic_assignment(cls, line, value):
-        """
-        Creates a magic assignment tree, equivalent to: "$magic = value"
-        """
-        value.child(0).child(0).line = line
-        path = cls.magic_path(line)
-        fragment = Tree('assignment_fragment', [Token('EQUALS', '='), value])
-        return Tree('assignment', [path, fragment])
-
-    @classmethod
-    def inline_arguments(cls, block, service):
-        """
-        Processes an inline expression in a service line, for example:
+        Processes an inline expression in a service call, for example:
         alpine echo text:(random value)
         """
-        arguments = service.service_fragment.arguments
-        if arguments:
-            if arguments.inline_expression:
-                line = cls.magic_line(block)
-                value = arguments.inline_expression.service
-                assignment = cls.magic_assignment(line, value)
-                block.insert(assignment)
-                arguments.replace(1, assignment.path)
+        fake_tree = FakeTree(block)
+        for argument in service.find_data('arguments'):
+            if argument.inline_expression:
+                value = argument.inline_expression.service
+                assignment = fake_tree.add_assignment(value)
+                argument.replace(1, assignment.path)
 
     @classmethod
     def process_assignments(cls, block):
         """
-        Process assignments by finding service assignments, for example:
-        a = alpine echo text:(random value)
+        Process assignments, looking for inline expressions to replace,
+        for example: a = alpine echo text:(random value)
         """
         for assignment in block.find_data('assignment'):
             service = assignment.node('assignment_fragment.service')
