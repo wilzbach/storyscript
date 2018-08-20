@@ -35,7 +35,8 @@ class FakeTree:
         """
         Creates a fake assignment tree, equivalent to "$fake = value"
         """
-        value.child(0).child(0).line = line
-        path = cls.path(line)
+        fake_line = cls.line(line)
+        value.child(0).child(0).line = fake_line
+        path = cls.path(fake_line)
         fragment = Tree('assignment_fragment', [Token('EQUALS', '='), value])
         return Tree('assignment', [path, fragment])

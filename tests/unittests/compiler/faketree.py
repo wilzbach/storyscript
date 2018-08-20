@@ -26,10 +26,11 @@ def test_faketree_path(patch):
 
 
 def test_faketree_assignment(patch, tree):
-    patch.object(FakeTree, 'path')
+    patch.many(FakeTree, ['path', 'line'])
     result = FakeTree.assignment('1', tree)
-    FakeTree.path.assert_called_with('1')
-    assert tree.child().child().line == '1'
+    FakeTree.line.assert_called_with('1')
+    FakeTree.path.assert_called_with(FakeTree.line())
+    assert tree.child().child().line == FakeTree.line()
     assert result.children[0] == FakeTree.path()
     expected = Tree('assignment_fragment', [Token('EQUALS', '='), tree])
     assert result.children[1] == expected
