@@ -166,3 +166,11 @@ Comments
     multi
     line
     ###
+
+Importing
+---------
+To import another story and have access to its functions:
+
+::
+    
+    import 'colours.story' as Colours
