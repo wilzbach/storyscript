@@ -130,9 +130,14 @@ Arguments with the value equal to the argument name can be shortened::
     # instead of: service command argument:argument
     service command :argument
 
-Output::
+Streams
+-------
+When a service provides a stream, the service+when syntax can be used. This
+could be an http stream, a stream of events or a generator-like result::
 
-    service command key:value as result
+    service command key:value as client
+        when client event name:'some_name' as data
+            # ...
 
 
 Inline expressions
@@ -166,3 +171,11 @@ Comments
     multi
     line
     ###
+
+Importing
+---------
+To import another story and have access to its functions:
+
+::
+
+    import 'colours.story' as Colours
