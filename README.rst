@@ -1,8 +1,8 @@
-.. image:: https://s3.amazonaws.com/asnycy/storyscript.png
+.. image:: https://user-images.githubusercontent.com/2041757/44708914-9c66a380-aaa8-11e8-8e53-502c17ab5be3.png
 
-|CircleCI| |Codecov| |Pypi| |Bettercode| |Docs| |Devdocs|
+|CircleCI| |Codecov| |Pypi| |Docs| |Devdocs|
 
-StoryScript
+Storyscript
 ###########
 StoryScript is an high-level language that can be used to orchestrate
 microservices in an algorithmic way. Unlike a traditional language, StoryScript
@@ -90,11 +90,8 @@ For other issues, `submit a support ticket <mailto:help@storyscripts.org>`_
 .. |CircleCI| image:: https://circleci.com/gh/storyscript/storyscript.svg?style=svg
    :target: https://circleci.com/gh/storyscript/storyscript
 
-.. |Codecov| image:: https://codecov.io/gh/asyncy/storyscript/branch/master/graphs/badge.svg
+.. |Codecov| image:: https://codecov.io/gh/storyscript/storyscript/graphs/badge.svg
    :target: https://codecov.io/github/asyncy/storyscript
-
-.. |Bettercode| image:: https://bettercodehub.com/edge/badge/asyncy/storyscript?branch=master
-   :target: https://bettercodehub.com/results/asyncy/storyscript
 
 .. |Pypi| image:: https://img.shields.io/pypi/v/storyscript.svg
    :target: https://pypi.python.org/pypi/storyscript
