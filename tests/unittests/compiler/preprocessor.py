@@ -52,27 +52,11 @@ def test_preprocessor_service_no_service(patch, magic, tree):
     assert Preprocessor.inline_expressions.call_count == 0
 
 
-def test_preprocessor_blocks(patch, magic, tree):
-    patch.many(Preprocessor, ['inline_expressions', 'assignments'])
+def test_preprocessor_process(patch, magic, tree):
+    patch.many(Preprocessor, ['assignments', 'service'])
     block = magic()
     tree.find_data.return_value = [block]
-    Preprocessor.blocks(tree)
+    result = Preprocessor.process(tree)
     Preprocessor.assignments.assert_called_with(block)
-    block.node.assert_called_with('service_block.service')
-    Preprocessor.inline_expressions.assert_called_with(block, block.node())
-
-
-def test_preprocessor_blocks_no_target(patch, magic, tree):
-    patch.many(Preprocessor, ['inline_expressions', 'assignments'])
-    block = magic()
-    block.node.return_value = None
-    tree.find_data.return_value = [block]
-    Preprocessor.blocks(tree)
-    assert Preprocessor.inline_expressions.call_count == 0
-
-
-def test_preprocessor_process(patch):
-    patch.object(Preprocessor, 'blocks')
-    result = Preprocessor.process('tree')
-    Preprocessor.blocks.assert_called_with('tree')
-    assert result == 'tree'
+    Preprocessor.service.assert_called_with(block)
+    assert result == tree

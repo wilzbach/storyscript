@@ -16,8 +16,7 @@ class Preprocessor:
     @staticmethod
     def inline_expressions(block, service):
         """
-        Processes an inline expression in a service call, for example:
-        alpine echo text:(random value)
+        Processes an inline expression, replacing it with a fake assignment
         """
         fake_tree = FakeTree(block)
         for argument in service.find_data('arguments'):
@@ -29,8 +28,8 @@ class Preprocessor:
     @classmethod
     def assignments(cls, block):
         """
-        Process assignments, looking for inline expressions to replace,
-        for example: a = alpine echo text:(random value)
+        Process assignments, looking for inline expressions, for example:
+        a = alpine echo text:(random value)
         """
         for assignment in block.find_data('assignment'):
             service = assignment.node('assignment_fragment.service')
@@ -39,22 +38,17 @@ class Preprocessor:
 
     @classmethod
     def service(cls, tree):
+        """
+        Processes services, looking for inline expressions, for example:
+        alpine echo text:(random value)
+        """
         service = tree.node('service_block.service')
         if service:
             cls.inline_expressions(tree, service)
 
     @classmethod
-    def blocks(cls, tree):
-        """
-        Processes blocks, looking for trees that must be preprocessed.
-        """
+    def process(cls, tree):
         for block in tree.find_data('block'):
             cls.assignments(block)
-            service = block.node('service_block.service')
-            if service:
-                cls.inline_expressions(block, service)
-
-    @classmethod
-    def process(cls, tree):
-        cls.blocks(tree)
+            cls.service(block)
         return tree
