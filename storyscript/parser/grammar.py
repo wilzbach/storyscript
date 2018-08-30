@@ -101,7 +101,7 @@ class Grammar:
 
     def arguments(self):
         self.inline_expression()
-        rule = '_WS? NAME? _COLON (values|path|inline_expression)'
+        rule = '_WS? NAME? _COLON _WS? (values|path|inline_expression)'
         self.ebnf.rule('arguments', rule, raw=True)
 
     def command(self):

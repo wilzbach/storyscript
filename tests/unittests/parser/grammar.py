@@ -131,7 +131,7 @@ def test_grammar_arguments(patch, grammar, ebnf):
     patch.object(Grammar, 'inline_expression')
     grammar.arguments()
     assert Grammar.inline_expression.call_count == 1
-    rule = '_WS? NAME? _COLON (values|path|inline_expression)'
+    rule = '_WS? NAME? _COLON _WS? (values|path|inline_expression)'
     ebnf.rule.assert_called_with('arguments', rule, raw=True)
 
 
