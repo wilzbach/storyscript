@@ -7,12 +7,12 @@ from storyscript.compiler import FakeTree, Preprocessor
 from storyscript.parser import Tree
 
 
-def test_preprocessor_inline_arguments(patch, magic, tree):
+def test_preprocessor_inline_expression(patch, magic, tree):
     patch.init(FakeTree)
     patch.object(FakeTree, 'add_assignment')
     argument = magic()
     tree.find_data.return_value = [argument]
-    Preprocessor.inline_arguments('block', tree)
+    Preprocessor.inline_expression('block', tree)
     FakeTree.__init__.assert_called_with('block')
     tree.find_data.assert_called_with('arguments')
     value = argument.values.inline_expression.service
@@ -20,12 +20,12 @@ def test_preprocessor_inline_arguments(patch, magic, tree):
     argument.replace.assert_called_with(1, FakeTree.add_assignment().path)
 
 
-def test_preprocessor_inline_arguments_no_expression(patch, magic, tree):
+def test_preprocessor_inline_expression_no_expression(patch, magic, tree):
     patch.init(FakeTree)
     patch.object(FakeTree, 'add_assignment')
     argument = magic(inline_expression=None)
     tree.service_fragment.find_data.return_value = [argument]
-    Preprocessor.inline_arguments(magic(), tree)
+    Preprocessor.inline_expression(magic(), tree)
     assert FakeTree.add_assignment.call_count == 0
 
 

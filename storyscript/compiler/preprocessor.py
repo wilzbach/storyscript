@@ -14,7 +14,7 @@ class Preprocessor:
     """
 
     @staticmethod
-    def inline_arguments(block, service):
+    def inline_expression(block, service):
         """
         Processes an inline expression in a service call, for example:
         alpine echo text:(random value)
