@@ -38,6 +38,12 @@ class Preprocessor:
                 cls.inline_expressions(block, service)
 
     @classmethod
+    def service(cls, tree):
+        service = tree.node('service_block.service')
+        if service:
+            cls.inline_expressions(tree, service)
+
+    @classmethod
     def blocks(cls, tree):
         """
         Processes blocks, looking for trees that must be preprocessed.
