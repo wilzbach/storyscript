@@ -46,7 +46,10 @@ class Story:
         """
         modules = []
         for module in self.tree.find_data('imports'):
-            modules.append(module.string.child(0).value[1:-1])
+            path = module.string.child(0).value[1:-1]
+            if path.endswith('.story') is False:
+                path = '{}.story'.format(path)
+            modules.append(path)
         return modules
 
     def compile(self, debug=False):
