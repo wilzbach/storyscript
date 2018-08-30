@@ -94,6 +94,15 @@ def test_story_modules(magic, story):
     assert result == [import_tree.string.child().value[1:-1]]
 
 
+def test_story_modules_no_extension(magic, story):
+    import_tree = magic()
+    import_tree.string.child.return_value = magic(value='"hello"')
+    story.tree = magic()
+    story.tree.find_data.return_value = [import_tree]
+    result = story.modules()
+    assert result == ['hello.story']
+
+
 def test_story_debug(patch, story):
     patch.init(Parser)
     patch.object(Parser, 'parse')
