@@ -14,7 +14,7 @@ class Preprocessor:
     """
 
     @staticmethod
-    def inline_expression(block, service):
+    def inline_expressions(block, service):
         """
         Processes an inline expression in a service call, for example:
         alpine echo text:(random value)
@@ -27,7 +27,7 @@ class Preprocessor:
                 argument.replace(1, assignment.path)
 
     @classmethod
-    def process_assignments(cls, block):
+    def assignments(cls, block):
         """
         Process assignments, looking for inline expressions to replace,
         for example: a = alpine echo text:(random value)

@@ -7,12 +7,12 @@ from storyscript.compiler import FakeTree, Preprocessor
 from storyscript.parser import Tree
 
 
-def test_preprocessor_inline_expression(patch, magic, tree):
+def test_preprocessor_inline_expressions(patch, magic, tree):
     patch.init(FakeTree)
     patch.object(FakeTree, 'add_assignment')
     argument = magic()
     tree.find_data.return_value = [argument]
-    Preprocessor.inline_expression('block', tree)
+    Preprocessor.inline_expressions('block', tree)
     FakeTree.__init__.assert_called_with('block')
     tree.find_data.assert_called_with('arguments')
     value = argument.values.inline_expression.service
@@ -20,22 +20,22 @@ def test_preprocessor_inline_expression(patch, magic, tree):
     argument.replace.assert_called_with(1, FakeTree.add_assignment().path)
 
 
-def test_preprocessor_inline_expression_no_expression(patch, magic, tree):
+def test_preprocessor_inline_expressions_no_expression(patch, magic, tree):
     patch.init(FakeTree)
     patch.object(FakeTree, 'add_assignment')
     argument = magic(inline_expression=None)
     tree.service_fragment.find_data.return_value = [argument]
-    Preprocessor.inline_expression(magic(), tree)
+    Preprocessor.inline_expressions(magic(), tree)
     assert FakeTree.add_assignment.call_count == 0
 
 
-def test_preprocessor_process_assignments(patch, magic, tree):
-    patch.object(Preprocessor, 'inline_arguments')
+def test_preprocessor_assignments(patch, magic, tree):
+    patch.object(Preprocessor, 'inline_expressions')
     assignment = magic()
     tree.find_data.return_value = [assignment]
-    Preprocessor.process_assignments(tree)
+    Preprocessor.assignments(tree)
     assignment.node.assert_called_with('assignment_fragment.service')
-    Preprocessor.inline_arguments.assert_called_with(tree, assignment.node())
+    Preprocessor.inline_expressions.assert_called_with(tree, assignment.node())
 
 
 def test_preprocessor_process_blocks(patch, magic, tree):
