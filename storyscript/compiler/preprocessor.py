@@ -21,8 +21,8 @@ class Preprocessor:
         """
         fake_tree = FakeTree(block)
         for argument in service.find_data('arguments'):
-            if argument.inline_expression:
-                value = argument.inline_expression.service
+            if argument.values.inline_expression:
+                value = argument.values.inline_expression.service
                 assignment = fake_tree.add_assignment(value)
                 argument.replace(1, assignment.path)
 

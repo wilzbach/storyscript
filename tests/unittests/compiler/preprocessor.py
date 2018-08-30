@@ -15,7 +15,7 @@ def test_preprocessor_inline_arguments(patch, magic, tree):
     Preprocessor.inline_arguments('block', tree)
     FakeTree.__init__.assert_called_with('block')
     tree.find_data.assert_called_with('arguments')
-    value = argument.inline_expression.service
+    value = argument.values.inline_expression.service
     FakeTree.add_assignment.assert_called_with(value)
     argument.replace.assert_called_with(1, FakeTree.add_assignment().path)
 
