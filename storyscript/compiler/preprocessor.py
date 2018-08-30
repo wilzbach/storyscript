@@ -35,20 +35,20 @@ class Preprocessor:
         for assignment in block.find_data('assignment'):
             service = assignment.node('assignment_fragment.service')
             if service:
-                cls.inline_arguments(block, service)
+                cls.inline_expressions(block, service)
 
     @classmethod
-    def process_blocks(cls, tree):
+    def blocks(cls, tree):
         """
         Processes blocks, looking for trees that must be preprocessed.
         """
         for block in tree.find_data('block'):
-            cls.process_assignments(block)
+            cls.assignments(block)
             service = block.node('service_block.service')
             if service:
-                cls.inline_arguments(block, service)
+                cls.inline_expressions(block, service)
 
     @classmethod
     def process(cls, tree):
-        cls.process_blocks(tree)
+        cls.blocks(tree)
         return tree

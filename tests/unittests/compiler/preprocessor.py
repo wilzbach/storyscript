@@ -38,27 +38,27 @@ def test_preprocessor_assignments(patch, magic, tree):
     Preprocessor.inline_expressions.assert_called_with(tree, assignment.node())
 
 
-def test_preprocessor_process_blocks(patch, magic, tree):
-    patch.many(Preprocessor, ['inline_arguments', 'process_assignments'])
+def test_preprocessor_blocks(patch, magic, tree):
+    patch.many(Preprocessor, ['inline_expressions', 'assignments'])
     block = magic()
     tree.find_data.return_value = [block]
-    Preprocessor.process_blocks(tree)
-    Preprocessor.process_assignments.assert_called_with(block)
+    Preprocessor.blocks(tree)
+    Preprocessor.assignments.assert_called_with(block)
     block.node.assert_called_with('service_block.service')
-    Preprocessor.inline_arguments.assert_called_with(block, block.node())
+    Preprocessor.inline_expressions.assert_called_with(block, block.node())
 
 
-def test_preprocessor_process_blocks_no_target(patch, magic, tree):
-    patch.many(Preprocessor, ['inline_arguments', 'process_assignments'])
+def test_preprocessor_blocks_no_target(patch, magic, tree):
+    patch.many(Preprocessor, ['inline_expressions', 'assignments'])
     block = magic()
     block.node.return_value = None
     tree.find_data.return_value = [block]
-    Preprocessor.process_blocks(tree)
-    assert Preprocessor.inline_arguments.call_count == 0
+    Preprocessor.blocks(tree)
+    assert Preprocessor.inline_expressions.call_count == 0
 
 
 def test_preprocessor_process(patch):
-    patch.object(Preprocessor, 'process_blocks')
+    patch.object(Preprocessor, 'blocks')
     result = Preprocessor.process('tree')
-    Preprocessor.process_blocks.assert_called_with('tree')
+    Preprocessor.blocks.assert_called_with('tree')
     assert result == 'tree'
