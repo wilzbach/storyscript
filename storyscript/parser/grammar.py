@@ -100,8 +100,7 @@ class Grammar:
         self.ebnf.rule('inline_expression', ('op', 'service', 'cp'))
 
     def arguments(self):
-        self.inline_expression()
-        rule = '_WS? NAME? _COLON _WS? (values|path|inline_expression)'
+        rule = '_WS? NAME? _COLON _WS? (values|path)'
         self.ebnf.rule('arguments', rule, raw=True)
 
     def command(self):
@@ -182,7 +181,9 @@ class Grammar:
         self.boolean()
         self.list()
         self.objects()
-        rules = (['number'], ['string'], ['boolean'], ['list'], ['objects'])
+        self.inline_expression()
+        rules = (['number'], ['string'], ['boolean'], ['list'], ['objects'],
+                 ['inline_expression'])
         self.ebnf.rules('values', *rules)
 
     def operator(self):

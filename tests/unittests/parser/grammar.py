@@ -128,10 +128,8 @@ def test_grammar_inline_expression(patch, grammar, ebnf):
 
 
 def test_grammar_arguments(patch, grammar, ebnf):
-    patch.object(Grammar, 'inline_expression')
     grammar.arguments()
-    assert Grammar.inline_expression.call_count == 1
-    rule = '_WS? NAME? _COLON _WS? (values|path|inline_expression)'
+    rule = '_WS? NAME? _COLON _WS? (values|path)'
     ebnf.rule.assert_called_with('arguments', rule, raw=True)
 
 
@@ -209,11 +207,13 @@ def test_grammar_boolean(grammar, ebnf):
 
 
 def test_grammar_values(patch, call_count, grammar, ebnf):
-    methods = ['number', 'string', 'list', 'objects', 'boolean']
+    methods = ['number', 'string', 'list', 'objects', 'boolean',
+               'inline_expression']
     patch.many(Grammar, methods)
     grammar.values()
     call_count(Grammar, methods)
-    rules = (['number'], ['string'], ['boolean'], ['list'], ['objects'])
+    rules = (['number'], ['string'], ['boolean'], ['list'], ['objects'],
+             ['inline_expression'])
     ebnf.rules.assert_called_with('values', *rules)
 
 
