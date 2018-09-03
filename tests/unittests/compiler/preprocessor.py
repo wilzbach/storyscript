@@ -7,6 +7,14 @@ from storyscript.compiler import FakeTree, Preprocessor
 from storyscript.parser import Tree
 
 
+def test_preprocessor_replace_expression(magic, tree):
+    argument = magic()
+    Preprocessor.replace_expression(tree, argument)
+    service = argument.values.inline_expression.service
+    tree.add_assignment.assert_called_with(service)
+    argument.replace.assert_called_with(1, tree.add_assignment().path)
+
+
 def test_preprocessor_inline_expressions(patch, magic, tree):
     patch.init(FakeTree)
     patch.object(FakeTree, 'add_assignment')
