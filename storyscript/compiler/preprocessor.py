@@ -14,7 +14,6 @@ class Preprocessor:
     """
 
     @staticmethod
-    def inline_expressions(block, service):
     def fake_tree(block):
         """
         Get a fake tree
@@ -24,20 +23,21 @@ class Preprocessor:
     @staticmethod
     def replace_expression(fake_tree, argument):
         """
-        Processes an inline expression, replacing it with a fake assignment
         Replaces an inline expression with a fake assignment
         """
         value = argument.values.inline_expression.service
         assignment = fake_tree.add_assignment(value)
         argument.replace(1, assignment.path)
 
+    @classmethod
+    def service_arguments(cls, block, service):
         """
-        fake_tree = FakeTree(block)
+        Processes the arguments of a service, replacing inline expressions
+        """
+        fake_tree = cls.fake_tree(block)
         for argument in service.find_data('arguments'):
             if argument.values.inline_expression:
-                value = argument.values.inline_expression.service
-                assignment = fake_tree.add_assignment(value)
-                argument.replace(1, assignment.path)
+                cls.replace_expression(fake_tree, argument)
 
     @classmethod
     def assignments(cls, block):

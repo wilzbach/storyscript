@@ -22,26 +22,23 @@ def test_preprocessor_replace_expression(magic, tree):
     argument.replace.assert_called_with(1, tree.add_assignment().path)
 
 
-def test_preprocessor_inline_expressions(patch, magic, tree):
-    patch.init(FakeTree)
-    patch.object(FakeTree, 'add_assignment')
+def test_preprocessor_service_arguments(patch, magic, tree):
+    patch.many(Preprocessor, ['replace_expression', 'fake_tree'])
     argument = magic()
     tree.find_data.return_value = [argument]
-    Preprocessor.inline_expressions('block', tree)
-    FakeTree.__init__.assert_called_with('block')
+    Preprocessor.service_arguments('block', tree)
+    Preprocessor.fake_tree.assert_called_with('block')
     tree.find_data.assert_called_with('arguments')
-    value = argument.values.inline_expression.service
-    FakeTree.add_assignment.assert_called_with(value)
-    argument.replace.assert_called_with(1, FakeTree.add_assignment().path)
+    args = (Preprocessor.fake_tree(), argument)
+    Preprocessor.replace_expression.assert_called_with(*args)
 
 
-def test_preprocessor_inline_expressions_no_expression(patch, magic, tree):
-    patch.init(FakeTree)
-    patch.object(FakeTree, 'add_assignment')
+def test_preprocessor_service_arguments_no_expression(patch, magic, tree):
+    patch.many(Preprocessor, ['replace_expression', 'fake_tree'])
     argument = magic(inline_expression=None)
     tree.service_fragment.find_data.return_value = [argument]
-    Preprocessor.inline_expressions(magic(), tree)
-    assert FakeTree.add_assignment.call_count == 0
+    Preprocessor.service_arguments(magic(), tree)
+    assert Preprocessor.replace_expression.call_count == 0
 
 
 def test_preprocessor_assignments(patch, magic, tree):
