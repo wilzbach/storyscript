@@ -61,8 +61,22 @@ def test_preprocessor_assignments(patch, magic, tree):
     assignment = magic()
     tree.find_data.return_value = [assignment]
     Preprocessor.assignments(tree)
-    assignment.node.assert_called_with('assignment_fragment.service')
-    Preprocessor.service_arguments.assert_called_with(tree, assignment.node())
+    args = (tree, assignment.assignment_fragment.service)
+    Preprocessor.service_arguments.assert_called_with(*args)
+
+
+def test_preprocessor_assignments_to_expression(patch, magic, tree):
+    """
+    Ensures Preprocessor.assignments can processs lines like
+    a = (alpine echo message:'text')
+    """
+    patch.object(Preprocessor, 'assignment_expression')
+    assignment = magic()
+    assignment.assignment_fragment.service = None
+    tree.find_data.return_value = [assignment]
+    Preprocessor.assignments(tree)
+    args = (tree, assignment.assignment_fragment.values)
+    Preprocessor.assignment_expression.assert_called_with(*args)
 
 
 def test_preprocessor_service(patch, magic, tree):

@@ -52,12 +52,14 @@ class Preprocessor:
     def assignments(cls, block):
         """
         Process assignments, looking for inline expressions, for example:
-        a = alpine echo text:(random value)
+        a = alpine echo text:(random value) or a = (alpine echo message:'text')
         """
         for assignment in block.find_data('assignment'):
-            service = assignment.node('assignment_fragment.service')
-            if service:
-                cls.service_arguments(block, service)
+            fragment = assignment.assignment_fragment
+            if fragment.service:
+                cls.service_arguments(block, fragment.service)
+            elif fragment.values:
+                cls.assignment_expression(block, fragment.values)
 
     @classmethod
     def service(cls, tree):
