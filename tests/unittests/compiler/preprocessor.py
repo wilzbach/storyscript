@@ -7,6 +7,13 @@ from storyscript.compiler import FakeTree, Preprocessor
 from storyscript.parser import Tree
 
 
+def test_preprocessor_fake_tree(patch):
+    patch.init(FakeTree)
+    result = Preprocessor.fake_tree('block')
+    FakeTree.__init__.assert_called_with('block')
+    assert isinstance(result, FakeTree)
+
+
 def test_preprocessor_replace_expression(magic, tree):
     argument = magic()
     Preprocessor.replace_expression(tree, argument)

@@ -15,6 +15,13 @@ class Preprocessor:
 
     @staticmethod
     def inline_expressions(block, service):
+    def fake_tree(block):
+        """
+        Get a fake tree
+        """
+        return FakeTree(block)
+
+    @staticmethod
     def replace_expression(fake_tree, argument):
         """
         Processes an inline expression, replacing it with a fake assignment
