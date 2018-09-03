@@ -23,7 +23,7 @@ def test_preprocessor_replace_expression(magic, tree):
 
 
 def test_preprocessor_service_arguments(patch, magic, tree):
-    patch.many(Preprocessor, ['replace_expression', 'fake_tree'])
+    patch.many(Preprocessor, ['fake_tree', 'replace_expression'])
     argument = magic()
     tree.find_data.return_value = [argument]
     Preprocessor.service_arguments('block', tree)
@@ -35,11 +35,21 @@ def test_preprocessor_service_arguments(patch, magic, tree):
 
 
 def test_preprocessor_service_arguments_no_expression(patch, magic, tree):
-    patch.many(Preprocessor, ['replace_expression', 'fake_tree'])
+    patch.many(Preprocessor, ['fake_tree', 'replace_expression'])
     argument = magic(inline_expression=None)
     tree.service_fragment.find_data.return_value = [argument]
     Preprocessor.service_arguments(magic(), tree)
     assert Preprocessor.replace_expression.call_count == 0
+
+
+def test_preprocessor_assignment_expression(patch, magic, tree):
+    patch.many(Preprocessor, ['fake_tree', 'replace_expression'])
+    block = magic()
+    Preprocessor.assignment_expression(block, tree)
+    Preprocessor.fake_tree.assert_called_with(block)
+    parent = block.node().assignment.assignment_fragment
+    args = (Preprocessor.fake_tree(), parent, tree.inline_expression)
+    Preprocessor.replace_expression.assert_called_with(*args)
 
 
 def test_preprocessor_assignments(patch, magic, tree):

@@ -40,6 +40,15 @@ class Preprocessor:
                 cls.replace_expression(fake_tree, argument, expression)
 
     @classmethod
+    def assignment_expression(cls, block, tree):
+        """
+        Processess an assignment to an expression, replacing it
+        """
+        fake_tree = cls.fake_tree(block)
+        parent = block.node('line').assignment.assignment_fragment
+        cls.replace_expression(fake_tree, parent, tree.inline_expression)
+
+    @classmethod
     def assignments(cls, block):
         """
         Process assignments, looking for inline expressions, for example:
