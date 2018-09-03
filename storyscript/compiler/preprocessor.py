@@ -58,7 +58,7 @@ class Preprocessor:
         """
         service = tree.node('service_block.service')
         if service:
-            cls.inline_expressions(tree, service)
+            cls.service_arguments(tree, service)
 
     @classmethod
     def process(cls, tree):

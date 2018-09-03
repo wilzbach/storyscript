@@ -55,17 +55,17 @@ def test_preprocessor_assignments(patch, magic, tree):
 
 
 def test_preprocessor_service(patch, magic, tree):
-    patch.object(Preprocessor, 'inline_expressions')
+    patch.object(Preprocessor, 'service_arguments')
     Preprocessor.service(tree)
     tree.node.assert_called_with('service_block.service')
-    Preprocessor.inline_expressions.assert_called_with(tree, tree.node())
+    Preprocessor.service_arguments.assert_called_with(tree, tree.node())
 
 
 def test_preprocessor_service_no_service(patch, magic, tree):
-    patch.object(Preprocessor, 'inline_expressions')
+    patch.object(Preprocessor, 'service_arguments')
     tree.node.return_value = None
     Preprocessor.service(tree)
-    assert Preprocessor.inline_expressions.call_count == 0
+    assert Preprocessor.service_arguments.call_count == 0
 
 
 def test_preprocessor_process(patch, magic, tree):
