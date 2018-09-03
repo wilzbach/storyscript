@@ -21,13 +21,12 @@ class Preprocessor:
         return FakeTree(block)
 
     @staticmethod
-    def replace_expression(fake_tree, argument):
+    def replace_expression(fake_tree, parent, inline_expression):
         """
         Replaces an inline expression with a fake assignment
         """
-        value = argument.values.inline_expression.service
-        assignment = fake_tree.add_assignment(value)
-        argument.replace(1, assignment.path)
+        assignment = fake_tree.add_assignment(inline_expression.service)
+        parent.replace(1, assignment.path)
 
     @classmethod
     def service_arguments(cls, block, service):
