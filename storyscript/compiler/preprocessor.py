@@ -35,8 +35,9 @@ class Preprocessor:
         """
         fake_tree = cls.fake_tree(block)
         for argument in service.find_data('arguments'):
-            if argument.values.inline_expression:
-                cls.replace_expression(fake_tree, argument)
+            expression = argument.values.inline_expression
+            if expression:
+                cls.replace_expression(fake_tree, argument, expression)
 
     @classmethod
     def assignments(cls, block):
