@@ -48,7 +48,7 @@ class Preprocessor:
         for assignment in block.find_data('assignment'):
             service = assignment.node('assignment_fragment.service')
             if service:
-                cls.inline_expressions(block, service)
+                cls.service_arguments(block, service)
 
     @classmethod
     def service(cls, tree):

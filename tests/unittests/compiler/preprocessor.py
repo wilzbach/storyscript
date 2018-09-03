@@ -42,12 +42,16 @@ def test_preprocessor_service_arguments_no_expression(patch, magic, tree):
 
 
 def test_preprocessor_assignments(patch, magic, tree):
-    patch.object(Preprocessor, 'inline_expressions')
+    """
+    Ensures Preprocessor.assignments can process lines like
+    a = alpine echo text:(random value)
+    """
+    patch.object(Preprocessor, 'service_arguments')
     assignment = magic()
     tree.find_data.return_value = [assignment]
     Preprocessor.assignments(tree)
     assignment.node.assert_called_with('assignment_fragment.service')
-    Preprocessor.inline_expressions.assert_called_with(tree, assignment.node())
+    Preprocessor.service_arguments.assert_called_with(tree, assignment.node())
 
 
 def test_preprocessor_service(patch, magic, tree):
