@@ -32,6 +32,18 @@ def test_objects_names_string(magic, tree, token):
     assert Objects.names(tree)[1] == token.value[1:-1]
 
 
+def test_objects_names_path(patch, magic, tree):
+    """
+    Ensures that paths like x[y] are compiled correctly
+    """
+    patch.object(Objects, 'path')
+    subtree = Tree('path', ['token'])
+    tree.children = [magic(), Tree('fragment', [subtree])]
+    result = Objects.names(tree)
+    Objects.path.assert_called_with(subtree)
+    assert result[1] == Objects.path()
+
+
 def test_objects_path(patch):
     patch.object(Objects, 'names')
     result = Objects.path('tree')

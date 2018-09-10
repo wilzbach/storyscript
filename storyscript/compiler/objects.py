@@ -8,8 +8,8 @@ from ..parser import Tree
 
 class Objects:
 
-    @staticmethod
-    def names(tree):
+    @classmethod
+    def names(cls, tree):
         """
         Extracts names from a path tree
         """
@@ -18,7 +18,10 @@ class Objects:
             child = fragment.child(0)
             value = child.value
             if isinstance(child, Tree):
-                value = child.child(0).value[1:-1]
+                if child.data == 'string':
+                    value = child.child(0).value[1:-1]
+                elif child.data == 'path':
+                    value = cls.path(child)
             names.append(value)
         return names
 
