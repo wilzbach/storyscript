@@ -15,7 +15,11 @@ class Objects:
         """
         names = [tree.child(0).value]
         for fragment in tree.children[1:]:
-            names.append(fragment.child(0).value)
+            child = fragment.child(0)
+            value = child.value
+            if isinstance(child, Tree):
+                value = child.child(0).value[1:-1]
+            names.append(value)
         return names
 
     @classmethod
