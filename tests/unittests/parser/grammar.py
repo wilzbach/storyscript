@@ -262,7 +262,7 @@ def test_grammar_list(grammar, ebnf):
 def test_grammar_key_value(grammar, ebnf):
     grammar.key_value()
     ebnf.token.assert_called_with('colon', ':', inline=True)
-    rule = 'string _COLON _WS? (values|path)'
+    rule = '(string|path) _COLON _WS? (values|path)'
     ebnf.rule.assert_called_with('key_value', rule, raw=True)
 
 
