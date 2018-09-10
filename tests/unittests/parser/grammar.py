@@ -279,7 +279,7 @@ def test_grammar_path_fragment(grammar, ebnf):
     grammar.path_fragment()
     ebnf.token.assert_called_with('dot', '.', inline=True)
     definitions = (('dot', 'name'), ('osb', 'int', 'csb'),
-                   ('osb', 'string', 'csb'))
+                   ('osb', 'string', 'csb'), ('osb', 'path', 'csb'))
     ebnf.rules.assert_called_with('path_fragment', *definitions)
 
 

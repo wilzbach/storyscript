@@ -215,7 +215,7 @@ class Grammar:
     def path_fragment(self):
         self.ebnf.token('dot', '.', inline=True)
         definitions = (('dot', 'name'), ('osb', 'int', 'csb'),
-                       ('osb', 'string', 'csb'))
+                       ('osb', 'string', 'csb'), ('osb', 'path', 'csb'))
         self.ebnf.rules('path_fragment', *definitions)
 
     def path(self):
