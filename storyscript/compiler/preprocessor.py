@@ -35,7 +35,7 @@ class Preprocessor:
         """
         fake_tree = cls.fake_tree(block)
         for argument in service.find_data('arguments'):
-            expression = argument.values.inline_expression
+            expression = argument.node('values.inline_expression')
             if expression:
                 cls.replace_expression(fake_tree, argument, expression)
 
