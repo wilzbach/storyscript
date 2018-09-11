@@ -8,14 +8,21 @@ from ..parser import Tree
 
 class Objects:
 
-    @staticmethod
-    def names(tree):
+    @classmethod
+    def names(cls, tree):
         """
         Extracts names from a path tree
         """
         names = [tree.child(0).value]
         for fragment in tree.children[1:]:
-            names.append(fragment.child(0).value)
+            child = fragment.child(0)
+            value = child.value
+            if isinstance(child, Tree):
+                if child.data == 'string':
+                    value = child.child(0).value[1:-1]
+                elif child.data == 'path':
+                    value = cls.path(child)
+            names.append(value)
         return names
 
     @classmethod
@@ -89,7 +96,11 @@ class Objects:
     def objects(cls, tree):
         items = []
         for item in tree.children:
-            key = cls.string(item.node('string'))
+            child = item.child(0)
+            if child.data == 'string':
+                key = cls.string(child)
+            elif child.data == 'path':
+                key = cls.path(child)
             value = cls.values(item.child(1))
             items.append([key, value])
         return {'$OBJECT': 'dict', 'items': items}

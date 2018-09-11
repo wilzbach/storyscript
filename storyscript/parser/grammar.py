@@ -166,7 +166,7 @@ class Grammar:
 
     def key_value(self):
         self.ebnf.token('colon', ':', inline=True)
-        rule = 'string _COLON _WS? (values|path)'
+        rule = '(string|path) _COLON _WS? (values|path)'
         self.ebnf.rule('key_value', rule, raw=True)
 
     def objects(self):
@@ -215,7 +215,7 @@ class Grammar:
     def path_fragment(self):
         self.ebnf.token('dot', '.', inline=True)
         definitions = (('dot', 'name'), ('osb', 'int', 'csb'),
-                       ('osb', 'string', 'csb'))
+                       ('osb', 'string', 'csb'), ('osb', 'path', 'csb'))
         self.ebnf.rules('path_fragment', *definitions)
 
     def path(self):

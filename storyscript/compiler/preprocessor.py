@@ -59,7 +59,8 @@ class Preprocessor:
             if fragment.service:
                 cls.service_arguments(block, fragment.service)
             elif fragment.values:
-                cls.assignment_expression(block, fragment.values)
+                if fragment.values.inline_expression:
+                    cls.assignment_expression(block, fragment.values)
 
     @classmethod
     def service(cls, tree):
