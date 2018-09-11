@@ -129,18 +129,27 @@ def test_objects_list(patch, tree):
     assert result == {'$OBJECT': 'list', 'items': [Objects.values()]}
 
 
-def test_objects_objects(patch, magic, tree):
+def test_objects_objects(patch, tree):
     patch.many(Objects, ['string', 'values'])
-    subtree = magic()
+    subtree = Tree('key_value', [Tree('string', ['key']), 'value'])
     tree.children = [subtree]
     result = Objects.objects(tree)
-    subtree.node.assert_called_with('string')
-    subtree.child.assert_called_with(1)
-    Objects.string.assert_called_with(subtree.node())
-    Objects.values.assert_called_with(subtree.child())
+    Objects.string.assert_called_with(subtree.string)
+    Objects.values.assert_called_with('value')
     expected = {'$OBJECT': 'dict', 'items': [[Objects.string(),
                                               Objects.values()]]}
     assert result == expected
+
+
+def test_objects_objects_key_path(patch, tree):
+    """
+    Ensures that objects like {x: 0} are compiled
+    """
+    patch.many(Objects, ['path', 'values'])
+    subtree = Tree('key_value', [Tree('path', ['path'])])
+    tree.children = [subtree]
+    result = Objects.objects(tree)
+    assert result['items'][0][0] == Objects.path()
 
 
 def test_objects_types(tree):

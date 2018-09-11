@@ -96,7 +96,11 @@ class Objects:
     def objects(cls, tree):
         items = []
         for item in tree.children:
-            key = cls.string(item.node('string'))
+            child = item.child(0)
+            if child.data == 'string':
+                key = cls.string(child)
+            elif child.data == 'path':
+                key = cls.path(child)
             value = cls.values(item.child(1))
             items.append([key, value])
         return {'$OBJECT': 'dict', 'items': items}
