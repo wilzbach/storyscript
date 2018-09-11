@@ -53,9 +53,22 @@ Elements are accessed by index::
 
 Objects
 -------
-::
+An unordered collection of elements, accessable by key::
 
-    things = {'foo':'bar', 'apples':'oranges'}
+    colours = {'red':'#f00', 'blue':'#00f'}
+
+
+Keys can be variables::
+
+    colour = 'red'
+    colours = {colour: '#f00'} # equal to {'red': '#f00'}
+
+
+Objects can be access with dot notation or by key index::
+
+    colours.red
+    colours['red']
+
 
 
 Expressions
