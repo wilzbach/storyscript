@@ -12,6 +12,7 @@ def lines():
 
 def test_lines_init(lines):
     assert lines.lines == {}
+    assert lines.variables == []
     assert lines.services == []
     assert lines.functions == {}
     assert lines.outputs == {}
@@ -134,6 +135,15 @@ def test_lines_append_function(patch, lines):
     patch.many(Lines, ['make', 'set_next'])
     lines.append('function', 'line', function='function')
     assert lines.functions['function'] == 'line'
+
+
+def test_lines_append_set(patch, lines):
+    """
+    Ensures that a variable is registered properly
+    """
+    patch.many(Lines, ['make', 'set_next'])
+    lines.append('set', 'line', name=['name'])
+    assert lines.variables[-1] == ['name']
 
 
 def test_compiler_append_service(patch, lines):
