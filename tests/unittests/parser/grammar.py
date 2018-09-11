@@ -407,9 +407,9 @@ def test_grammar_types(patch, call_count, grammar, ebnf):
     patch.many(Grammar, methods)
     grammar.types()
     call_count(Grammar, methods)
-    definitions = (['int_type'], ['float_type'], ['string_type'],
-                   ['list_type'], ['object_type'], ['regexp_type'],
-                   ['function_type'])
+    definitions = (['int_type'], ['float_type'], ['number_type'],
+                   ['string_type'], ['list_type'], ['object_type'],
+                   ['regexp_type'], ['function_type'])
     ebnf.rules.assert_called_with('types', *definitions)
 
 

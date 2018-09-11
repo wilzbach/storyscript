@@ -289,9 +289,9 @@ class Grammar:
         self.object_type()
         self.regexp_type()
         self.function_type()
-        definitions = (['int_type'], ['float_type'], ['string_type'],
-                       ['list_type'], ['object_type'], ['regexp_type'],
-                       ['function_type'])
+        definitions = (['int_type'], ['float_type'], ['number_type'],
+                       ['string_type'], ['list_type'], ['object_type'],
+                       ['regexp_type'], ['function_type'])
         self.ebnf.rules('types', *definitions)
 
     def comment(self):
