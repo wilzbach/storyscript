@@ -116,11 +116,6 @@ def test_objects_boolean_false():
     assert Objects.boolean(tree) is False
 
 
-def test_objects_file():
-    token = Token('FILEPATH', '`path`')
-    assert Objects.file(token) == {'$OBJECT': 'file', 'string': 'path'}
-
-
 def test_objects_list(patch, tree):
     patch.object(Objects, 'values')
     tree.children = ['value']
@@ -187,15 +182,6 @@ def test_objects_values_method(patch, magic):
     result = Objects.values(tree)
     Objects.method.assert_called_with(tree)
     assert result == Objects.method()
-
-
-def test_objects_values_filepath(patch, magic):
-    patch.object(Objects, 'file')
-    item = magic(type='FILEPATH')
-    tree = magic(child=lambda x: item)
-    result = Objects.values(tree)
-    Objects.file.assert_called_with(item)
-    assert result == Objects.file()
 
 
 def test_objects_values_path(patch, magic):

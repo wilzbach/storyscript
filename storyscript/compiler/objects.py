@@ -81,10 +81,6 @@ class Objects:
             return True
         return False
 
-    @staticmethod
-    def file(token):
-        return {'$OBJECT': 'file', 'string': token.value[1:-1]}
-
     @classmethod
     def list(cls, tree):
         items = []
@@ -150,9 +146,7 @@ class Objects:
                 # when they are in a service tree. Objects.method however takes
                 # the whole tree.
                 return cls.method(tree)
-        if subtree.type == 'FILEPATH':
-            return cls.file(subtree)
-        elif subtree.type == 'NAME':
+        if subtree.type == 'NAME':
             return cls.path(tree)
 
     @classmethod
