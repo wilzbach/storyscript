@@ -201,31 +201,6 @@ to declare arguments:
     }
 
 
-Method
-######
-Method objects is used when it's not possible to compile a tree that would
-normally be a line as a proper line. For example, in `x = alpine echo`
-the `alpine echo` bit would be compiled as method object::
-
-
-    {
-      "$OBJECT": "method",
-      "method": "execute",
-      "service": "alpine",
-      "output": null,
-      "args": [
-        {
-          "$OBJECT": "argument",
-          "name": "pizza",
-          "argument": {
-            "$OBJECT": "string",
-            "string": "please"
-          }
-        }
-      ],
-      "command": "echo"
-    }
-
 Methods
 -------
 
