@@ -106,23 +106,6 @@ class Objects:
         return {'$OBJECT': 'type', 'type': tree.child(0).value}
 
     @classmethod
-    def method(cls, tree):
-        """
-        Produces a method object. This is used when it's not possible to
-        compile something that would normally be a line as a line.
-        For example, in `x = alpine echo` the `alpine echo` bit would be
-        compiled as method object.
-        """
-        service = tree.child(0).child(0).value
-        args = cls.arguments(tree.node('service_fragment'))
-        object = {'$OBJECT': 'method', 'method': 'execute', 'service': service,
-                  'output': None, 'args': args}
-        command = tree.node('service_fragment.command')
-        if command:
-            object['command'] = command.child(0).value
-        return object
-
-    @classmethod
     def values(cls, tree):
         """
         Parses a values subtree
@@ -141,11 +124,6 @@ class Objects:
                 return cls.objects(subtree)
             elif subtree.data == 'types':
                 return cls.types(subtree)
-            elif subtree.data == 'path':
-                # NOTE(vesuvium): path trees are sent to Objects.values only
-                # when they are in a service tree. Objects.method however takes
-                # the whole tree.
-                return cls.method(tree)
         if subtree.type == 'NAME':
             return cls.path(tree)
 
