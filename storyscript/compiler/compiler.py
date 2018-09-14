@@ -34,6 +34,14 @@ class Compiler:
         module = tree.child(1).value
         self.lines.modules[module] = tree.string.child(0).value[1:-1]
 
+    def expression(self, tree, parent):
+        """
+        Compiles an expression
+        """
+        mutation = Objects.mutation(tree.service_fragment.command)
+        args = [Objects.path(tree.path), mutation]
+        self.lines.append('expression', tree.line(), args=args, parent=parent)
+
     def absolute_expression(self, tree, parent):
         """
         Compiles an absolute expression

@@ -51,6 +51,16 @@ def test_compiler_imports(patch, compiler, lines, tree):
     assert lines.modules[module] == tree.string.child(0).value[1:-1]
 
 
+def test_compiler_expression(patch, compiler, lines, tree):
+    patch.many(Objects, ['mutation', 'path'])
+    compiler.expression(tree, '1')
+    Objects.mutation.assert_called_with(tree.service_fragment.command)
+    Objects.path.assert_called_with(tree.path)
+    args = [Objects.path(), Objects.mutation()]
+    lines.append.assert_called_with('expression', tree.line(), args=args,
+                                    parent='1')
+
+
 def test_compiler_absolute_expression(patch, compiler, lines, tree):
     patch.object(Objects, 'expression')
     tree.expression.mutation = None
