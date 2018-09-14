@@ -32,12 +32,16 @@ class Objects:
     @classmethod
     def mutation(cls, tree):
         """
-        Compiles a mutation tree.
+        Compiles a mutation object, either from a mutation or a
+        service_fragment tree.
         """
+        mutation = tree.child(0).value
         arguments = []
         if tree.arguments:
             arguments = cls.arguments(tree.arguments)
-        return {'$OBJECT': 'mutation', 'mutation': tree.child(0).value,
+        if tree.command:
+            mutation = tree.command.child(0).value
+        return {'$OBJECT': 'mutation', 'mutation': mutation,
                 'arguments': arguments}
 
     @staticmethod

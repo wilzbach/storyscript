@@ -61,6 +61,16 @@ def test_objects_mutation(token):
     assert Objects.mutation(tree) == expected
 
 
+def test_objects_mutation_from_service(token):
+    """
+    Ensures that mutations objects from service trees are compiled correctly.
+    """
+    tree = Tree('service_fragment', [Tree('command', [token])])
+    expected = {'$OBJECT': 'mutation', 'mutation': token.value,
+                'arguments': []}
+    assert Objects.mutation(tree) == expected
+
+
 def test_objects_mutation_arguments(patch, magic):
     """
     Ensures that mutations objects with arguments are compiled correctly.
