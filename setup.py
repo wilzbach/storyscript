@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 from setuptools.command.install import install
 
 
-version = '0.5.2'
+version = '0.5.3'
 
 classifiers = [
     'Development Status :: 4 - Beta',
