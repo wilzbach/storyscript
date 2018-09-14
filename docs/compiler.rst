@@ -201,17 +201,48 @@ to declare arguments:
     }
 
 
+Mutation
+########
+Mutation objects are used for mutations on values, and are found only as
+arguments in expression methods. They are always preceded by another object,
+that can be any kind of value or a path::
+
+    {
+      "$OBJECT": "string",
+      "string": "hello"
+    },
+    {
+      "$OBJECT": "mutation",
+      "mutation": "uppercase",
+      "arguments": []
+    }
+
+
+Mutations arguments follow the same syntax for service arguments and can be
+found in the arguments list::
+
+    {
+      "$OBJECT": "mutation",
+      "mutation": "slice",
+      "arguments": [
+        {
+          "$OBJECT": "argument",
+          "name": "at",
+          "argument": 2
+        }
+      ]
+    }
+
 Methods
 -------
 
 Expression
 ##########
-Used for expression lines, like sums, multiplications and so on. For example,
-the line::
+Used for expression lines, like sums, multiplications and so on. For example::
 
     1 + 1
 
-Should produce the following tree::
+Compiles to::
 
     {
         "method": "expression",
