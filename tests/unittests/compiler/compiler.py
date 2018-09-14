@@ -52,7 +52,11 @@ def test_compiler_imports(patch, compiler, lines, tree):
 
 
 def test_compiler_expression(patch, compiler, lines, tree):
+    """
+    Ensures that expressions are compiled correctly
+    """
     patch.many(Objects, ['mutation', 'path'])
+    tree.expression = None
     compiler.expression(tree, '1')
     Objects.mutation.assert_called_with(tree.service_fragment)
     Objects.path.assert_called_with(tree.path)
@@ -61,23 +65,36 @@ def test_compiler_expression(patch, compiler, lines, tree):
                                     parent='1')
 
 
-def test_compiler_absolute_expression(patch, compiler, lines, tree):
+def test_compiler_expression_absolute(patch, compiler, lines, tree):
+    """
+    Ensures that absolute expressions are compiled correctly
+    """
     patch.object(Objects, 'expression')
     tree.expression.mutation = None
-    compiler.absolute_expression(tree, '1')
+    compiler.expression(tree, '1')
     Objects.expression.assert_called_with(tree.expression)
-    lines.append.assert_called_with('expression', tree.line(),
-                                    args=[Objects.expression()], parent='1')
+    args = [Objects.expression()]
+    lines.append.assert_called_with('expression', tree.line(), args=args,
+                                    parent='1')
 
 
-def test_compiler_absolute_expression_mutation(patch, compiler, lines, tree):
+def test_compiler_expression_absolute_mutation(patch, compiler, lines, tree):
+    """
+    Ensures that absolute expressions with mutations are compiled correctly
+    """
     patch.many(Objects, ['mutation', 'values'])
-    compiler.absolute_expression(tree, '1')
+    compiler.expression(tree, '1')
     Objects.mutation.assert_called_with(tree.expression.mutation)
     Objects.values.assert_called_with(tree.expression.values)
     args = [Objects.values(), Objects.mutation()]
     lines.append.assert_called_with('expression', tree.line(), args=args,
                                     parent='1')
+
+
+def test_compiler_absolute_expression(patch, compiler, lines, tree):
+    patch.object(Compiler, 'expression')
+    compiler.absolute_expression(tree, '1')
+    Compiler.expression.assert_called_with(tree, '1')
 
 
 def test_compiler_extract_values(patch, compiler, tree):

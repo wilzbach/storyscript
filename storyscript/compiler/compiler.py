@@ -38,21 +38,26 @@ class Compiler:
         """
         Compiles an expression
         """
-        mutation = Objects.mutation(tree.service_fragment)
-        args = [Objects.path(tree.path), mutation]
+        mutation = None
+        if tree.expression:
+            if tree.expression.mutation:
+                value = Objects.values(tree.expression.values)
+                mutation = Objects.mutation(tree.expression.mutation)
+            else:
+                value = Objects.expression(tree.expression)
+        elif tree.service_fragment:
+            value = Objects.path(tree.path)
+            mutation = Objects.mutation(tree.service_fragment)
+        args = [value]
+        if mutation:
+            args.append(mutation)
         self.lines.append('expression', tree.line(), args=args, parent=parent)
 
     def absolute_expression(self, tree, parent):
         """
-        Compiles an absolute expression
+        Compiles an absolute expression using Compiler.expression
         """
-        mutation = tree.expression.mutation
-        if mutation:
-            args = [Objects.values(tree.expression.values),
-                    Objects.mutation(mutation)]
-        else:
-            args = [Objects.expression(tree.expression)]
-        self.lines.append('expression', tree.line(), args=args, parent=parent)
+        self.expression(tree, parent)
 
     def extract_values(self, fragment):
         """
