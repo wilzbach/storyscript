@@ -89,8 +89,19 @@ def test_objects_path_fragments(magic):
 
 
 def test_objects_number():
+    """
+    Ensures that an int is compiled correctly.
+    """
     tree = Tree('number', [Token('INT', '1')])
     assert Objects.number(tree) == 1
+
+
+def test_objects_number_float():
+    """
+    Ensures that a float is compiled correctly.
+    """
+    tree = Tree('number', [Token('FLOAT', '1.2')])
+    assert Objects.number(tree) == 1.2
 
 
 def test_objects_replace_placeholders():

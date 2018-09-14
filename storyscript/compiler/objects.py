@@ -46,7 +46,13 @@ class Objects:
 
     @staticmethod
     def number(tree):
-        return int(tree.child(0).value)
+        """
+        Compiles a number tree
+        """
+        token = tree.child(0)
+        if token.type == 'FLOAT':
+            return float(token.value)
+        return int(token.value)
 
     @staticmethod
     def replace_placeholders(string, matches):
