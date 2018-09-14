@@ -129,6 +129,21 @@ def test_compiler_assignment_service(patch, compiler, lines, tree):
     lines.set_name.assert_called_with(Objects.names())
 
 
+def test_compiler_assignment_expression(patch, compiler, lines, tree):
+    """
+    Ensures that assignments like 'x = a mutation' are compiled correctly.
+    This works by checking that 'a' was infact previously assigned, thus
+    it's not a service but a variable.
+    """
+    patch.object(Objects, 'names', return_value='name')
+    patch.object(Compiler, 'expression')
+    lines.variables = ['name']
+    compiler.assignment(tree, '1')
+    service = tree.assignment_fragment.service
+    Compiler.expression.assert_called_with(service, '1')
+    lines.set_name.assert_called_with(Objects.names())
+
+
 def test_compiler_arguments(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
     lines.last.return_value = '1'

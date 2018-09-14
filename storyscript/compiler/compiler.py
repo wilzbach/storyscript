@@ -71,10 +71,17 @@ class Compiler:
         Compiles an assignment tree
         """
         name = Objects.names(tree.path)
-        if tree.assignment_fragment.service:
-            self.service(tree.assignment_fragment.service, None, parent)
-            self.lines.set_name(name)
-            return
+        service = tree.assignment_fragment.service
+        if service:
+            path = Objects.names(service.path)
+            if path not in self.lines.variables:
+                self.service(service, None, parent)
+                self.lines.set_name(name)
+                return
+            else:
+                self.expression(service, parent)
+                self.lines.set_name(name)
+                return
         line = tree.line()
         args = self.extract_values(tree.assignment_fragment)
         self.lines.append('set', line, name=name, args=args, parent=parent)
