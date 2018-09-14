@@ -52,13 +52,19 @@ def test_objects_path(patch):
 
 
 def test_objects_mutation(token):
+    """
+    Ensures that mutations objects are compiled correctly.
+    """
     tree = Tree('mutation', [token])
     expected = {'$OBJECT': 'mutation', 'mutation': token.value,
                 'arguments': []}
     assert Objects.mutation(tree) == expected
 
 
-def test_objects_mutation_argument(patch, magic):
+def test_objects_mutation_arguments(patch, magic):
+    """
+    Ensures that mutations objects with arguments are compiled correctly.
+    """
     patch.object(Objects, 'arguments')
     tree = magic()
     result = Objects.mutation(tree)
