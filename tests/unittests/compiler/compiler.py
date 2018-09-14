@@ -54,7 +54,7 @@ def test_compiler_imports(patch, compiler, lines, tree):
 def test_compiler_expression(patch, compiler, lines, tree):
     patch.many(Objects, ['mutation', 'path'])
     compiler.expression(tree, '1')
-    Objects.mutation.assert_called_with(tree.service_fragment.command)
+    Objects.mutation.assert_called_with(tree.service_fragment)
     Objects.path.assert_called_with(tree.path)
     args = [Objects.path(), Objects.mutation()]
     lines.append.assert_called_with('expression', tree.line(), args=args,

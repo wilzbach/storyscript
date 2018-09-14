@@ -38,7 +38,7 @@ class Compiler:
         """
         Compiles an expression
         """
-        mutation = Objects.mutation(tree.service_fragment.command)
+        mutation = Objects.mutation(tree.service_fragment)
         args = [Objects.path(tree.path), mutation]
         self.lines.append('expression', tree.line(), args=args, parent=parent)
 
