@@ -34,17 +34,30 @@ class Compiler:
         module = tree.child(1).value
         self.lines.modules[module] = tree.string.child(0).value[1:-1]
 
+    def expression(self, tree, parent):
+        """
+        Compiles an expression
+        """
+        mutation = None
+        if tree.expression:
+            if tree.expression.mutation:
+                value = Objects.values(tree.expression.values)
+                mutation = Objects.mutation(tree.expression.mutation)
+            else:
+                value = Objects.expression(tree.expression)
+        elif tree.service_fragment:
+            value = Objects.path(tree.path)
+            mutation = Objects.mutation(tree.service_fragment)
+        args = [value]
+        if mutation:
+            args.append(mutation)
+        self.lines.append('expression', tree.line(), args=args, parent=parent)
+
     def absolute_expression(self, tree, parent):
         """
-        Compiles an absolute expression
+        Compiles an absolute expression using Compiler.expression
         """
-        mutation = tree.expression.mutation
-        if mutation:
-            args = [Objects.values(tree.expression.values),
-                    Objects.mutation(mutation)]
-        else:
-            args = [Objects.expression(tree.expression)]
-        self.lines.append('expression', tree.line(), args=args, parent=parent)
+        self.expression(tree, parent)
 
     def extract_values(self, fragment):
         """
@@ -63,10 +76,17 @@ class Compiler:
         Compiles an assignment tree
         """
         name = Objects.names(tree.path)
-        if tree.assignment_fragment.service:
-            self.service(tree.assignment_fragment.service, None, parent)
-            self.lines.set_name(name)
-            return
+        service = tree.assignment_fragment.service
+        if service:
+            path = Objects.names(service.path)
+            if path not in self.lines.variables:
+                self.service(service, None, parent)
+                self.lines.set_name(name)
+                return
+            else:
+                self.expression(service, parent)
+                self.lines.set_name(name)
+                return
         line = tree.line()
         args = self.extract_values(tree.assignment_fragment)
         self.lines.append('set', line, name=name, args=args, parent=parent)

@@ -52,13 +52,29 @@ def test_objects_path(patch):
 
 
 def test_objects_mutation(token):
+    """
+    Ensures that mutations objects are compiled correctly.
+    """
     tree = Tree('mutation', [token])
     expected = {'$OBJECT': 'mutation', 'mutation': token.value,
                 'arguments': []}
     assert Objects.mutation(tree) == expected
 
 
-def test_objects_mutation_argument(patch, magic):
+def test_objects_mutation_from_service(token):
+    """
+    Ensures that mutations objects from service trees are compiled correctly.
+    """
+    tree = Tree('service_fragment', [Tree('command', [token])])
+    expected = {'$OBJECT': 'mutation', 'mutation': token.value,
+                'arguments': []}
+    assert Objects.mutation(tree) == expected
+
+
+def test_objects_mutation_arguments(patch, magic):
+    """
+    Ensures that mutations objects with arguments are compiled correctly.
+    """
     patch.object(Objects, 'arguments')
     tree = magic()
     result = Objects.mutation(tree)
@@ -116,11 +132,6 @@ def test_objects_boolean_false():
     assert Objects.boolean(tree) is False
 
 
-def test_objects_file():
-    token = Token('FILEPATH', '`path`')
-    assert Objects.file(token) == {'$OBJECT': 'file', 'string': 'path'}
-
-
 def test_objects_list(patch, tree):
     patch.object(Objects, 'values')
     tree.children = ['value']
@@ -157,17 +168,6 @@ def test_objects_types(tree):
     assert Objects.types(tree) == {'$OBJECT': 'type', 'type': token.value}
 
 
-def test_objects_method(patch, tree):
-    patch.object(Objects, 'arguments')
-    result = Objects.method(tree)
-    Objects.arguments.assert_called_with(tree.node())
-    expected = {'$OBJECT': 'method', 'method': 'execute',
-                'service': tree.child().child().value,
-                'command': tree.node().child().value,
-                'output': None, 'args': Objects.arguments()}
-    assert result == expected
-
-
 @mark.parametrize('value_type', [
     'string', 'boolean', 'list', 'number', 'objects', 'types'
 ])
@@ -178,24 +178,6 @@ def test_objects_values(patch, magic, value_type):
     result = Objects.values(tree)
     getattr(Objects, value_type).assert_called_with(item)
     assert result == getattr(Objects, value_type)()
-
-
-def test_objects_values_method(patch, magic):
-    patch.object(Objects, 'method')
-    item = magic(data='path')
-    tree = magic(child=lambda x: item)
-    result = Objects.values(tree)
-    Objects.method.assert_called_with(tree)
-    assert result == Objects.method()
-
-
-def test_objects_values_filepath(patch, magic):
-    patch.object(Objects, 'file')
-    item = magic(type='FILEPATH')
-    tree = magic(child=lambda x: item)
-    result = Objects.values(tree)
-    Objects.file.assert_called_with(item)
-    assert result == Objects.file()
 
 
 def test_objects_values_path(patch, magic):

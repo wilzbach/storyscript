@@ -201,29 +201,36 @@ to declare arguments:
     }
 
 
-Method
-######
-Method objects is used when it's not possible to compile a tree that would
-normally be a line as a proper line. For example, in `x = alpine echo`
-the `alpine echo` bit would be compiled as method object::
-
+Mutation
+########
+Mutation objects are used for mutations on values, and are found only as
+arguments in expression methods. They are always preceded by another object,
+that can be any kind of value or a path::
 
     {
-      "$OBJECT": "method",
-      "method": "execute",
-      "service": "alpine",
-      "output": null,
-      "args": [
+      "$OBJECT": "string",
+      "string": "hello"
+    },
+    {
+      "$OBJECT": "mutation",
+      "mutation": "uppercase",
+      "arguments": []
+    }
+
+
+Mutations arguments follow the same syntax for service arguments and can be
+found in the arguments list::
+
+    {
+      "$OBJECT": "mutation",
+      "mutation": "slice",
+      "arguments": [
         {
           "$OBJECT": "argument",
-          "name": "pizza",
-          "argument": {
-            "$OBJECT": "string",
-            "string": "please"
-          }
+          "name": "at",
+          "argument": 2
         }
-      ],
-      "command": "echo"
+      ]
     }
 
 Methods
@@ -231,12 +238,11 @@ Methods
 
 Expression
 ##########
-Used for expression lines, like sums, multiplications and so on. For example,
-the line::
+Used for expression lines, like sums, multiplications and so on. For example::
 
     1 + 1
 
-Should produce the following tree::
+Compiles to::
 
     {
         "method": "expression",

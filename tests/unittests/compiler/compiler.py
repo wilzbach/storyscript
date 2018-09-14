@@ -51,23 +51,50 @@ def test_compiler_imports(patch, compiler, lines, tree):
     assert lines.modules[module] == tree.string.child(0).value[1:-1]
 
 
-def test_compiler_absolute_expression(patch, compiler, lines, tree):
+def test_compiler_expression(patch, compiler, lines, tree):
+    """
+    Ensures that expressions are compiled correctly
+    """
+    patch.many(Objects, ['mutation', 'path'])
+    tree.expression = None
+    compiler.expression(tree, '1')
+    Objects.mutation.assert_called_with(tree.service_fragment)
+    Objects.path.assert_called_with(tree.path)
+    args = [Objects.path(), Objects.mutation()]
+    lines.append.assert_called_with('expression', tree.line(), args=args,
+                                    parent='1')
+
+
+def test_compiler_expression_absolute(patch, compiler, lines, tree):
+    """
+    Ensures that absolute expressions are compiled correctly
+    """
     patch.object(Objects, 'expression')
     tree.expression.mutation = None
-    compiler.absolute_expression(tree, '1')
+    compiler.expression(tree, '1')
     Objects.expression.assert_called_with(tree.expression)
-    lines.append.assert_called_with('expression', tree.line(),
-                                    args=[Objects.expression()], parent='1')
+    args = [Objects.expression()]
+    lines.append.assert_called_with('expression', tree.line(), args=args,
+                                    parent='1')
 
 
-def test_compiler_absolute_expression_mutation(patch, compiler, lines, tree):
+def test_compiler_expression_absolute_mutation(patch, compiler, lines, tree):
+    """
+    Ensures that absolute expressions with mutations are compiled correctly
+    """
     patch.many(Objects, ['mutation', 'values'])
-    compiler.absolute_expression(tree, '1')
+    compiler.expression(tree, '1')
     Objects.mutation.assert_called_with(tree.expression.mutation)
     Objects.values.assert_called_with(tree.expression.values)
     args = [Objects.values(), Objects.mutation()]
     lines.append.assert_called_with('expression', tree.line(), args=args,
                                     parent='1')
+
+
+def test_compiler_absolute_expression(patch, compiler, lines, tree):
+    patch.object(Compiler, 'expression')
+    compiler.absolute_expression(tree, '1')
+    Compiler.expression.assert_called_with(tree, '1')
 
 
 def test_compiler_extract_values(patch, compiler, tree):
@@ -116,6 +143,21 @@ def test_compiler_assignment_service(patch, compiler, lines, tree):
     compiler.assignment(tree, '1')
     service = tree.assignment_fragment.service
     Compiler.service.assert_called_with(service, None, '1')
+    lines.set_name.assert_called_with(Objects.names())
+
+
+def test_compiler_assignment_expression(patch, compiler, lines, tree):
+    """
+    Ensures that assignments like 'x = a mutation' are compiled correctly.
+    This works by checking that 'a' was infact previously assigned, thus
+    it's not a service but a variable.
+    """
+    patch.object(Objects, 'names', return_value='name')
+    patch.object(Compiler, 'expression')
+    lines.variables = ['name']
+    compiler.assignment(tree, '1')
+    service = tree.assignment_fragment.service
+    Compiler.expression.assert_called_with(service, '1')
     lines.set_name.assert_called_with(Objects.names())
 
 
