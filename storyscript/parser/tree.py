@@ -6,6 +6,10 @@ from ..version import version
 
 
 class Tree(LarkTree):
+    """
+    Wraps the original Tree class from lark, providing many useful
+    enhancements.
+    """
 
     @staticmethod
     def walk(tree, path):
