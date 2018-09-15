@@ -24,7 +24,7 @@ def name_token():
 
 def test_parser_values(parser, int_token):
     """
-    Ensures that parsing a number produces the exprected tree
+    Ensures that parsing a number produces the expected tree
     """
     result = parser.parse('3\n')
     assert result.node('start.block.line.values.number').child(0) == int_token
