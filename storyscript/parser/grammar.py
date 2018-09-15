@@ -12,11 +12,11 @@ class Grammar:
     def __init__(self):
         self.ebnf = Ebnf()
 
-    def line(self):
+    def rules(self):
         definitions = (['values'], ['absolute_expression'], ['comment'],
                        ['assignment'], ['imports'], ['return_statement'],
                        ['block'])
-        self.ebnf.rules('line', *definitions)
+        self.ebnf.rules('rules', *definitions)
 
     def whitespaces(self):
         tokens = (('ws', '(" ")+'), ('nl', r'/(\r?\n[\t ]*)+/'))
@@ -137,7 +137,7 @@ class Grammar:
         self.function_block()
         self.service_block()
         self.when_block()
-        definition = ('line _NL|if_block|foreach_block|function_block'
+        definition = ('rules _NL|if_block|foreach_block|function_block'
                       '|arguments|service_block|when_block')
         self.ebnf.rule('block', definition, raw=True)
 
@@ -301,7 +301,7 @@ class Grammar:
 
     def build(self):
         self.ebnf.start('_NL? block')
-        self.line()
+        self.rules()
         self.spaces()
         self.values()
         self.comparisons()

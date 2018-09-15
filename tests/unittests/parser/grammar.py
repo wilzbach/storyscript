@@ -23,11 +23,11 @@ def test_grammar_init():
     assert isinstance(grammar.ebnf, Ebnf)
 
 
-def test_grammar_line(grammar, ebnf):
-    grammar.line()
+def test_grammar_rules(grammar, ebnf):
+    grammar.rules()
     defintions = (['values'], ['absolute_expression'], ['comment'],
                   ['assignment'], ['imports'], ['return_statement'], ['block'])
-    ebnf.rules.assert_called_with('line', *defintions)
+    ebnf.rules.assert_called_with('rules', *defintions)
 
 
 def test_grammar_whitespaces(grammar, ebnf):
@@ -179,7 +179,7 @@ def test_grammar_block(patch, call_count, grammar, ebnf):
     patch.many(Grammar, methods)
     grammar.block()
     call_count(Grammar, methods)
-    definition = ('line _NL|if_block|foreach_block|function_block'
+    definition = ('rules _NL|if_block|foreach_block|function_block'
                   '|arguments|service_block|when_block')
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
@@ -421,7 +421,7 @@ def test_grammar_comment(grammar, ebnf):
 
 
 def test_grammar_build(patch, call_count, grammar):
-    methods = ['line', 'spaces', 'values', 'absolute_expression', 'comment',
+    methods = ['rules', 'spaces', 'values', 'absolute_expression', 'comment',
                'block', 'comparisons', 'assignment', 'imports', 'types',
                'return_statement']
     patch.many(Grammar, methods)
