@@ -91,3 +91,12 @@ def test_tree_attributes(patch):
     result = tree.branch
     Tree.node.assert_called_with('branch')
     assert result == Tree.node()
+
+
+def test_tree_find():
+    """
+    Ensures Tree.find can find the correct subtree.
+    """
+    expected = Tree('assignment', ['x'])
+    tree = Tree('start', [Tree('block', [Tree('line', [expected])])])
+    assert tree.find('assignment') == [expected]

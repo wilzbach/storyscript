@@ -35,6 +35,12 @@ class Tree(LarkTree):
         if len(self.children) > index:
             return self.children[index]
 
+    def find(self, path):
+        """
+        Wraps LarkTree.find_data, making it easier to use.
+        """
+        return list(self.find_data(path))
+
     def line(self):
         """
         Finds the line number of a tree, by finding the first token in the tree
