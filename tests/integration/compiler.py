@@ -72,3 +72,27 @@ def test_compiler_set_service():
     result = Compiler.compile(Tree.from_dict(dict))
     assert result['tree']['1']['method'] == 'execute'
     assert result['tree']['1']['name'] == ['a']
+
+
+def test_compiler_service():
+    """
+    Ensures that services are compiled correctly
+    """
+    service = [
+        {'path': Token('NAME', 'alpine', line=1)},
+        {'service_fragment': [
+            {'command': Token('NAME', 'echo')},
+            {'arguments': [Token('NAME', 'message'),
+             {'values.string': Token('SINGLE_QUOTED', "'hello'")}]}
+        ]}
+    ]
+    dict = {'start.block.service_block.service': service}
+    result = Compiler.compile(Tree.from_dict(dict))
+    args = [
+        {'$OBJECT': 'argument', 'name': 'message', 'argument':
+         {'$OBJECT': 'string', 'string': 'hello'}}
+    ]
+    assert result['tree']['1']['method'] == 'execute'
+    assert result['tree']['1']['service'] == 'alpine'
+    assert result['tree']['1']['command'] == 'echo'
+    assert result['tree']['1']['args'] == args
