@@ -39,6 +39,16 @@ def test_tree_walk_token():
     assert result == inner_tree
 
 
+def test_tree_from_dict():
+    result = Tree.from_dict({'start': {'inner': Token('value', 'value')}})
+    assert result == Tree('start', [Tree('inner', [Token('value', 'value')])])
+
+
+def test_tree_from_dict_simple():
+    result = Tree.from_dict({'start.inner': Token('value', 'value')})
+    assert result == Tree('start', [Tree('inner', [Token('value', 'value')])])
+
+
 def test_tree_node(patch):
     patch.object(Tree, 'walk')
     tree = Tree('rule', [])

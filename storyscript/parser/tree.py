@@ -18,6 +18,29 @@ class Tree(LarkTree):
                 if item.data == path:
                     return item
 
+    @classmethod
+    def from_dict(cls, dictionary):
+        """
+        Create a tree from a dictionary
+        """
+        for key, value in dictionary.items():
+            tree = None
+            subtree = None
+            if isinstance(value, dict):
+                subtree = cls.from_dict(value)
+            elif isinstance(value, Token):
+                subtree = value
+
+            shards = key.split('.')
+            for shard in shards[::-1]:
+                if tree:
+                    tree = Tree(shard, [tree])
+                else:
+                    tree = Tree(shard, [])
+                    inner_tree = tree
+            inner_tree.children = [subtree]
+        return tree
+
     def node(self, path):
         """
         Finds a subtree or a nested subtree, using path
