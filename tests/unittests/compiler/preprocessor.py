@@ -47,7 +47,7 @@ def test_preprocessor_assignment_expression(patch, magic, tree):
     block = magic()
     Preprocessor.assignment_expression(block, tree)
     Preprocessor.fake_tree.assert_called_with(block)
-    parent = block.node().assignment.assignment_fragment
+    parent = block.rules.assignment.assignment_fragment
     args = (Preprocessor.fake_tree(), parent, tree.inline_expression)
     Preprocessor.replace_expression.assert_called_with(*args)
 

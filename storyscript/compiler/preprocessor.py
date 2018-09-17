@@ -45,7 +45,7 @@ class Preprocessor:
         Processess an assignment to an expression, replacing it
         """
         fake_tree = cls.fake_tree(block)
-        parent = block.node('line').assignment.assignment_fragment
+        parent = block.rules.assignment.assignment_fragment
         cls.replace_expression(fake_tree, parent, tree.inline_expression)
 
     @classmethod
