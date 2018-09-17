@@ -39,3 +39,36 @@ def test_compiler_expression_mutation():
     ]
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == args
+
+
+def test_compiler_set():
+    """
+    Ensures that assignments are compiled correctly
+    """
+    assignment = [
+        {'path': Token('NAME', 'a', line=1)},
+        {'assignment_fragment': [Token('EQUALS', '='),
+         {'values.number': Token('INT', 0)}]}
+    ]
+    dict = {'start.block.rules.assignment': assignment}
+    result = Compiler.compile(Tree.from_dict(dict))
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == [0]
+
+
+def test_compiler_set_service():
+    """
+    Ensures that service assignments are compiled correctly
+    """
+    service = [
+        {'path': Token('NAME', 'alpine', line=1)},
+        {'service_fragment.command': Token('NAME', 'echo')}
+    ]
+    assignment = [
+        {'path': Token('NAME', 'a', line=1)},
+        {'assignment_fragment': [Token('EQUALS', '='), {'service': service}]}
+    ]
+    dict = {'start.block.rules.assignment': assignment}
+    result = Compiler.compile(Tree.from_dict(dict))
+    assert result['tree']['1']['method'] == 'execute'
+    assert result['tree']['1']['name'] == ['a']
