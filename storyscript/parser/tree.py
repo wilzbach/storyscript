@@ -31,17 +31,22 @@ class Tree(LarkTree):
             else:
                 tree = Tree(shard, [])
                 inner_tree = tree
-        inner_tree.children = [subtree]
+        inner_tree.children = subtree
         return tree
 
     @classmethod
     def from_value(cls, value):
         """
-        Creates a tree from value, or returns the value when not possible
+        Creates a subtree from value, or returns the value when not possible
         """
         if isinstance(value, dict):
-            return cls.from_dict(value)
-        return value
+            return [cls.from_dict(value)]
+        elif isinstance(value, list):
+            values = []
+            for item in value:
+                values.append(cls.from_dict(item))
+            return values
+        return [value]
 
     @classmethod
     def from_dict(cls, dictionary):
