@@ -57,6 +57,8 @@ class Tree(LarkTree):
             for key, value in dictionary.items():
                 subtree = cls.from_value(value)
                 return cls.from_name(key, subtree)
+        elif isinstance(dictionary, Token):
+            return dictionary
 
     def node(self, path):
         """

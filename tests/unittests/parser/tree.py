@@ -79,7 +79,7 @@ def test_tree_from_dict(patch):
 
 
 def test_tree_from_dict_token():
-    assert Tree.from_dict(Token('test', 'test')) is None
+    assert Tree.from_dict(Token('test', 'test')) == Token('test', 'test')
 
 
 def test_tree_node(patch):
