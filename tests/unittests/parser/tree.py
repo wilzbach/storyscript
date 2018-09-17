@@ -39,13 +39,13 @@ def test_tree_walk_token():
     assert result == inner_tree
 
 
+def test_tree_from_name():
+    result = Tree.from_name('tree.name', None)
+    assert result == Tree('tree', [Tree('name', [None])])
+
+
 def test_tree_from_dict():
     result = Tree.from_dict({'start': {'inner': Token('value', 'value')}})
-    assert result == Tree('start', [Tree('inner', [Token('value', 'value')])])
-
-
-def test_tree_from_dict_simple():
-    result = Tree.from_dict({'start.inner': Token('value', 'value')})
     assert result == Tree('start', [Tree('inner', [Token('value', 'value')])])
 
 
