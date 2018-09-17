@@ -39,6 +39,34 @@ def test_compiler_expression_mutation(parser):
     assert result['tree']['1']['args'] == args
 
 
+def test_compiler_if(parser):
+    tree = parser.parse('if colour == "red"\n\tx = 0')
+    result = Compiler.compile(tree)
+    args = [
+        {'$OBJECT': 'expression', 'expression': '{} == {}',
+         'values': [{'$OBJECT': 'path', 'paths': ['colour']},
+                    {'$OBJECT': 'string', 'string': 'red'}]}
+    ]
+    assert result['tree']['1']['method'] == 'if'
+    assert result['tree']['1']['args'] == args
+    assert result['tree']['1']['enter'] == '2'
+    assert result['tree']['2']['parent'] == '1'
+
+
+def test_compiler_if_elseif(parser):
+    source = 'if colour == "red"\n\tx = 0\nelse if colour == "blue"\n\tx = 1'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    args = [
+        {'$OBJECT': 'expression', 'expression': '{} == {}',
+         'values': [{'$OBJECT': 'path', 'paths': ['colour']},
+                    {'$OBJECT': 'string', 'string': 'blue'}]}]
+    assert result['tree']['1']['exit'] == '3'
+    assert result['tree']['3']['method'] == 'elif'
+    assert result['tree']['3']['args'] == args
+    assert result['tree']['4']['parent'] == '3'
+
+
 def test_compiler_set(parser):
     """
     Ensures that assignments are compiled correctly
