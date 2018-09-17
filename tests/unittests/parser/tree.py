@@ -44,9 +44,23 @@ def test_tree_from_name():
     assert result == Tree('tree', [Tree('name', [None])])
 
 
-def test_tree_from_dict():
+def test_tree_from_value(patch):
+    patch.object(Tree, 'from_dict')
+    result = Tree.from_value({'value': 'tree'})
+    Tree.from_dict.assert_called_with({'value': 'tree'})
+    assert result == Tree.from_dict()
+
+
+def test_tree_from_value_value(patch):
+    assert Tree.from_value('value') == 'value'
+
+
+def test_tree_from_dict(patch):
+    patch.many(Tree, ['from_value', 'from_name'])
     result = Tree.from_dict({'start': {'inner': Token('value', 'value')}})
-    assert result == Tree('start', [Tree('inner', [Token('value', 'value')])])
+    Tree.from_value.assert_called_with({'inner': Token('value', 'value')})
+    Tree.from_name.assert_called_with('start', Tree.from_value())
+    assert result == Tree.from_name()
 
 
 def test_tree_node(patch):

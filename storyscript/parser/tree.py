@@ -35,18 +35,22 @@ class Tree(LarkTree):
         return tree
 
     @classmethod
+    def from_value(cls, value):
+        """
+        Creates a tree from value, or returns the value when not possible
+        """
+        if isinstance(value, dict):
+            return cls.from_dict(value)
+        return value
+
+    @classmethod
     def from_dict(cls, dictionary):
         """
         Create a tree from a dictionary
         """
         for key, value in dictionary.items():
-            subtree = None
-            if isinstance(value, dict):
-                subtree = cls.from_dict(value)
-            elif isinstance(value, Token):
-                subtree = value
-            tree = cls.from_name(key, subtree)
-        return tree
+            subtree = cls.from_value(value)
+            return cls.from_name(key, subtree)
 
     def node(self, path):
         """
