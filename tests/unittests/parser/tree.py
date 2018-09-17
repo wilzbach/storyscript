@@ -78,6 +78,10 @@ def test_tree_from_dict(patch):
     assert result == Tree.from_name()
 
 
+def test_tree_from_dict_token():
+    assert Tree.from_dict(Token('test', 'test')) is None
+
+
 def test_tree_node(patch):
     patch.object(Tree, 'walk')
     tree = Tree('rule', [])

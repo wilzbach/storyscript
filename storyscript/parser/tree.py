@@ -53,9 +53,10 @@ class Tree(LarkTree):
         """
         Create a tree from a dictionary
         """
-        for key, value in dictionary.items():
-            subtree = cls.from_value(value)
-            return cls.from_name(key, subtree)
+        if isinstance(dictionary, dict):
+            for key, value in dictionary.items():
+                subtree = cls.from_value(value)
+                return cls.from_name(key, subtree)
 
     def node(self, path):
         """
