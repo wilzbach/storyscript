@@ -18,48 +18,6 @@ class Tree(LarkTree):
                 if item.data == path:
                     return item
 
-    @staticmethod
-    def from_name(tree_name, subtree):
-        """
-        Creates a tree from a name
-        """
-        tree = None
-        shards = tree_name.split('.')
-        for shard in shards[::-1]:
-            if tree:
-                tree = Tree(shard, [tree])
-            else:
-                tree = Tree(shard, [])
-                inner_tree = tree
-        inner_tree.children = subtree
-        return tree
-
-    @classmethod
-    def from_value(cls, value):
-        """
-        Creates a subtree from value, or returns the value when not possible
-        """
-        if isinstance(value, dict):
-            return [cls.from_dict(value)]
-        elif isinstance(value, list):
-            values = []
-            for item in value:
-                values.append(cls.from_dict(item))
-            return values
-        return [value]
-
-    @classmethod
-    def from_dict(cls, dictionary):
-        """
-        Create a tree from a dictionary
-        """
-        if isinstance(dictionary, dict):
-            for key, value in dictionary.items():
-                subtree = cls.from_value(value)
-                return cls.from_name(key, subtree)
-        elif isinstance(dictionary, Token):
-            return dictionary
-
     def node(self, path):
         """
         Finds a subtree or a nested subtree, using path

@@ -39,49 +39,6 @@ def test_tree_walk_token():
     assert result == inner_tree
 
 
-def test_tree_from_name():
-    result = Tree.from_name('tree.name', None)
-    assert result == Tree('tree', [Tree('name', None)])
-
-
-def test_tree_from_value(patch):
-    """
-    Ensures Tree.from_value can handle nested trees
-    """
-    patch.object(Tree, 'from_dict')
-    result = Tree.from_value({'value': 'tree'})
-    Tree.from_dict.assert_called_with({'value': 'tree'})
-    assert result == [Tree.from_dict()]
-
-
-def test_tree_from_value_list(patch):
-    """
-    Ensures Tree.from_value can handle lists
-    """
-    patch.object(Tree, 'from_dict')
-    result = Tree.from_value([{'values': 0}, {'values': 1}])
-    assert result == [Tree.from_dict(), Tree.from_dict()]
-
-
-def test_tree_from_value_value(patch):
-    """
-    Ensures Tree.from_value return any other value
-    """
-    assert Tree.from_value('value') == ['value']
-
-
-def test_tree_from_dict(patch):
-    patch.many(Tree, ['from_value', 'from_name'])
-    result = Tree.from_dict({'start': {'inner': Token('value', 'value')}})
-    Tree.from_value.assert_called_with({'inner': Token('value', 'value')})
-    Tree.from_name.assert_called_with('start', Tree.from_value())
-    assert result == Tree.from_name()
-
-
-def test_tree_from_dict_token():
-    assert Tree.from_dict(Token('test', 'test')) == Token('test', 'test')
-
-
 def test_tree_node(patch):
     patch.object(Tree, 'walk')
     tree = Tree('rule', [])
