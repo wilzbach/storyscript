@@ -148,9 +148,9 @@ def test_objects_boolean_false():
 
 def test_objects_list(patch, tree):
     patch.object(Objects, 'values')
-    tree.children = ['value']
+    tree.children = [Tree('value', 'value'), 'token']
     result = Objects.list(tree)
-    Objects.values.assert_called_with('value')
+    Objects.values.assert_called_with(Tree('value', 'value'))
     assert result == {'$OBJECT': 'list', 'items': [Objects.values()]}
 
 

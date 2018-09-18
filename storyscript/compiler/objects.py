@@ -95,7 +95,8 @@ class Objects:
     def list(cls, tree):
         items = []
         for value in tree.children:
-            items.append(cls.values(value))
+            if isinstance(value, Tree):
+                items.append(cls.values(value))
         return {'$OBJECT': 'list', 'items': items}
 
     @classmethod
