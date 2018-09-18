@@ -86,12 +86,33 @@ def test_compiler_foreach_key_value(parser):
 
 def test_compiler_set(parser):
     """
-    Ensures that assignments are compiled correctly
+    Ensures that assignments to integers are compiled correctly
     """
     tree = parser.parse('a = 0')
     result = Compiler.compile(tree)
     assert result['tree']['1']['method'] == 'set'
     assert result['tree']['1']['args'] == [0]
+
+
+def test_compiler_set_list(parser):
+    """
+    Ensures that assignments to lists are compiled correctly
+    """
+    tree = parser.parse('a = [1, 2]')
+    result = Compiler.compile(tree)
+    args = [{'$OBJECT': 'list', 'items': [1, 2]}]
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == args
+
+
+def test_compiler_set_empty(parser):
+    """
+    Ensures that assignments to empty lists are compiled correctly
+    """
+    tree = parser.parse('a = []')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == [{'$OBJECT': 'list', 'items': []}]
 
 
 def test_compiler_set_service(parser):
