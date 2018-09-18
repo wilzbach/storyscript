@@ -67,6 +67,23 @@ def test_compiler_if_elseif(parser):
     assert result['tree']['4']['parent'] == '3'
 
 
+def test_compiler_foreach(parser):
+    tree = parser.parse('foreach items as item\n\tx = 0')
+    result = Compiler.compile(tree)
+    args = [{'$OBJECT': 'path', 'paths': ['items']}]
+    assert result['tree']['1']['method'] == 'for'
+    assert result['tree']['1']['output'] == ['item']
+    assert result['tree']['1']['args'] == args
+    assert result['tree']['1']['enter'] == '2'
+    assert result['tree']['2']['parent'] == '1'
+
+
+def test_compiler_foreach_key_value(parser):
+    tree = parser.parse('foreach items as key, value\n\tx = 0')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['output'] == ['key', 'value']
+
+
 def test_compiler_set(parser):
     """
     Ensures that assignments are compiled correctly
