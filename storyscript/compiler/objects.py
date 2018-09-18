@@ -19,7 +19,7 @@ class Objects:
             value = child.value
             if isinstance(child, Tree):
                 if child.data == 'string':
-                    value = child.child(0).value[1:-1]
+                    value = cls.string(child)
                 elif child.data == 'path':
                     value = cls.path(child)
             names.append(value)

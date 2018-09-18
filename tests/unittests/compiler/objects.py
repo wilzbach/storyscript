@@ -24,12 +24,15 @@ def test_objects_names_many(magic, tree):
     assert Objects.names(tree) == [tree.child(0).value, shard.child().value]
 
 
-def test_objects_names_string(magic, tree, token):
+def test_objects_names_string(patch, magic, tree):
     """
     Ensures that paths like x['y'] are compiled correctly
     """
-    tree.children = [magic(), Tree('fragment', [Tree('string', [token])])]
-    assert Objects.names(tree)[1] == token.value[1:-1]
+    patch.object(Objects, 'string')
+    tree.children = [magic(), Tree('fragment', [Tree('string', 'token')])]
+    result = Objects.names(tree)
+    Objects.string.assert_called_with(Tree('string', 'token'))
+    assert result[1] == Objects.string()
 
 
 def test_objects_names_path(patch, magic, tree):
