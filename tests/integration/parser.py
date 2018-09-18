@@ -23,54 +23,55 @@ def name_token():
 
 
 def test_parser_values(parser, int_token):
+    """
+    Ensures that parsing a number produces the expected tree
+    """
     result = parser.parse('3\n')
-    assert result.node('start.block.line.values.number').child(0) == int_token
+    assert result.block.rules.values.number.child(0) == int_token
 
 
 def test_parser_values_single_quoted_string(parser):
     result = parser.parse("'red'\n")
-    node = result.node('start.block.line.values.string')
-    assert node.child(0) == Token('SINGLE_QUOTED', "'red'")
+    expected = result.block.rules.values.string.child(0)
+    assert expected == Token('SINGLE_QUOTED', "'red'")
 
 
 def test_parser_values_double_quoted_string(parser):
     result = parser.parse('"red"\n')
-    node = result.node('start.block.line.values.string')
-    assert node.child(0) == Token('DOUBLE_QUOTED', '"red"')
+    expected = result.block.rules.values.string.child(0)
+    assert expected == Token('DOUBLE_QUOTED', '"red"')
 
 
 def test_parser_boolean_true(parser):
     result = parser.parse('true\n')
-    node = result.node('start.block.line.values.boolean')
-    assert node.child(0) == Token('TRUE', 'true')
+    assert result.block.rules.values.boolean.child(0) == Token('TRUE', 'true')
 
 
 def test_parser_sum(parser, int_token):
     result = parser.parse('3 + 3\n')
-    node = result.node('start.block.line.absolute_expression.expression')
-    assert node.node('values.number').child(0) == int_token
-    assert node.node('operator').child(0) == Token('PLUS', '+')
-    assert node.child(2).node('number').child(0) == int_token
+    expression = result.block.rules.absolute_expression.expression
+    assert expression.values.number.child(0) == int_token
+    assert expression.operator.child(0) == Token('PLUS', '+')
+    assert expression.child(2).number.child(0) == int_token
 
 
 def test_parser_list(parser, int_token):
     result = parser.parse('[3,4]\n')
-    node = result.node('start.block.line.values.list')
-    assert node.node('values.number').child(0) == int_token
-    assert node.child(1).node('values.number').child(0) == Token('INT', 4)
+    list = result.block.rules.values.list
+    assert list.values.number.child(0) == int_token
+    assert list.child(1).number.child(0) == Token('INT', 4)
 
 
 def test_parser_list_empty(parser):
     result = parser.parse('[]\n')
-    assert result.node('start.block.line.values.list') == Tree('list', [])
+    assert result.block.rules.values.list == Tree('list', [])
 
 
 def test_parser_object(parser):
     result = parser.parse("{'color':'red','shape':1}\n")
-    node = result.node('start.block.line.values.objects.key_value')
-    assert node.node('string').child(0) == Token('SINGLE_QUOTED', "'color'")
-    value = node.node('values.string').child(0)
-    assert value == Token('SINGLE_QUOTED', "'red'")
+    key_value = result.block.rules.values.objects.key_value
+    assert key_value.string.child(0) == Token('SINGLE_QUOTED', "'color'")
+    assert key_value.values.string.child(0) == Token('SINGLE_QUOTED', "'red'")
 
 
 @mark.parametrize('code, token', [
@@ -81,50 +82,47 @@ def test_parser_object(parser):
 ])
 def test_parser_assignment(parser, name_token, code, token):
     result = parser.parse(code)
-    node = result.node('start.block.line.assignment')
-    assert node.node('path').child(0) == name_token
-    assert node.child(1).child(0) == Token('EQUALS', '=')
-    assert node.child(1).child(1).child(0).child(0) == token
+    assignment = result.block.rules.assignment
+    assert assignment.path.child(0) == name_token
+    assert assignment.assignment_fragment.child(0) == Token('EQUALS', '=')
+    assert assignment.assignment_fragment.values.child(0).child(0) == token
 
 
 def test_parser_assignment_path(parser):
     result = parser.parse('rainbow.colors[0]="blue"\n')
-    node = result.node('start.block.line.assignment.path')
-    assert node.child(0) == Token('NAME', 'rainbow')
-    assert node.child(1).child(0) == Token('NAME', 'colors')
-    assert node.child(2).child(0) == Token('INT', 0)
+    path = result.block.rules.assignment.path
+    assert path.child(0) == Token('NAME', 'rainbow')
+    assert path.path_fragment.child(0) == Token('NAME', 'colors')
+    assert path.child(2).child(0) == Token('INT', 0)
 
 
 def test_parser_foreach_block(parser):
     result = parser.parse('foreach items as one, two\n\tvar=3\n')
-    node = result.node('start.block.foreach_block')
-    foreach = node.node('foreach_statement')
+    block = result.block.foreach_block
+    foreach = block.foreach_statement
     assert foreach.child(0) == Token('NAME', 'items')
-    assert foreach.node('output').child(0) == Token('NAME', 'one')
-    assert foreach.node('output').child(1) == Token('NAME', 'two')
-    assert node.node('nested_block').data == 'nested_block'
+    assert foreach.output.child(0) == Token('NAME', 'one')
+    assert foreach.output.child(1) == Token('NAME', 'two')
+    assert block.nested_block.data == 'nested_block'
 
 
 def test_parser_service(parser):
     result = parser.parse('org/container-name command\n')
-    node = result.node('start.block.service_block.service')
-    assert node.node('path').child(0) == 'org/container-name'
-    assert node.node('service_fragment.command').child(0) == 'command'
+    service = result.block.service_block.service
+    assert service.path.child(0) == 'org/container-name'
+    assert service.service_fragment.command.child(0) == 'command'
 
 
 def test_parser_service_arguments(parser):
     result = parser.parse('container key:"value"\n')
-    tree = 'start.block.service_block.service.service_fragment.arguments'
-    node = result.node(tree)
-    assert node.child(0) == Token('NAME', 'key')
-    token = node.child(1).node('string').child(0)
-    assert token == Token('DOUBLE_QUOTED', '"value"')
+    args = result.block.service_block.service.service_fragment.arguments
+    assert args.child(0) == Token('NAME', 'key')
+    assert args.values.string.child(0) == Token('DOUBLE_QUOTED', '"value"')
 
 
 def test_parser_service_output(parser):
     result = parser.parse('container command as request, response\n')
-    tree = 'start.block.service_block.service.service_fragment.output'
-    node = result.node(tree)
+    node = result.block.service_block.service.service_fragment.output
     assert node.child(0) == Token('NAME', 'request')
     assert node.child(1) == Token('NAME', 'response')
 
@@ -132,61 +130,56 @@ def test_parser_service_output(parser):
 @mark.parametrize('comment', ['# one', '#one'])
 def test_parser_comment(parser, comment):
     result = parser.parse('{}\n'.format(comment))
-    node = result.node('start.block.line.comment')
-    assert node.child(0) == Token('COMMENT', comment)
+    assert result.block.rules.comment.child(0) == Token('COMMENT', comment)
 
 
 def test_parser_if_block(parser, name_token):
     result = parser.parse('if expr\n\tvar=3\n')
-    node = result.node('block.if_block')
-    path = node.node('if_statement.path_value.path')
+    if_block = result.block.if_block
+    path = if_block.if_statement.path_value.path
+    assignment = if_block.nested_block.block.rules.assignment
     assert path.child(0) == Token('NAME', 'expr')
-    path = node.node('nested_block.block.line.assignment.path')
-    assert path.child(0) == name_token
+    assert assignment.path.child(0) == name_token
 
 
 def test_parser_if_block_nested(parser, name_token):
     result = parser.parse('if expr\n\tif things\n\t\tvar=3\n')
-    node = result.node('block.if_block.nested_block.block.if_block')
-    path = node.node('if_statement.path_value.path')
+    if_block = result.block.if_block.nested_block.block.if_block
+    path = if_block.if_statement.path_value.path
+    assignment = if_block.nested_block.block.rules.assignment
     assert path.child(0) == Token('NAME', 'things')
-    path = node.node('nested_block.block.line.assignment.path')
-    assert path.child(0) == name_token
+    assert assignment.path.child(0) == name_token
 
 
 def test_parser_if_block_else(parser):
     result = parser.parse('if expr\n\tvar=3\nelse\n\tvar=4\n')
-    node = result.node('block.if_block')
-    path = node.child(2).child(1).node('block.line.assignment.path')
-    assert path.child(0) == Token('NAME', 'var')
+    node = result.block.if_block.else_block.nested_block.block.rules
+    assert node.assignment.path.child(0) == Token('NAME', 'var')
 
 
 def test_parser_if_block_elseif(parser):
     result = parser.parse('if expr\n\tvar=3\nelse if magic\n\tvar=4\n')
-    node = result.node('block.if_block')
-    path = node.child(2).child(1).node('block.line.assignment.path')
-    assert path.child(0) == Token('NAME', 'var')
+    node = result.block.if_block.elseif_block.nested_block.block.rules
+    assert node.assignment.path.child(0) == Token('NAME', 'var')
 
 
 def test_parser_function(parser):
     result = parser.parse('function test\n\tvar = 3\n')
-    node = result.node('block.function_block')
-    assert node.node('function_statement').child(1) == Token('NAME', 'test')
-    path = node.node('nested_block.block.line.assignment.path')
+    node = result.block.function_block
+    path = node.nested_block.block.rules.assignment.path
+    assert node.function_statement.child(1) == Token('NAME', 'test')
     assert path.child(0) == Token('NAME', 'var')
 
 
 def test_parser_function_arguments(parser):
-    result = parser.parse('function test n:int x:float\n\tvar = 3\n')
-    node = result.node('block.function_block')
-    arguments = list(node.find_data('function_argument'))
-    typed_argument = arguments[0].node('typed_argument')
+    result = parser.parse('function test n:int\n\tvar = 3\n')
+    node = result.block.function_block
+    typed_argument = node.find('function_argument')[0].typed_argument
     assert typed_argument.child(0) == Token('NAME', 'n')
-    assert typed_argument.node('types').child(0) == Token('INT_TYPE', 'int')
+    assert typed_argument.types.child(0) == Token('INT_TYPE', 'int')
 
 
 def test_parser_function_output(parser):
     result = parser.parse('function test n:string returns int\n\tvar = 1\n')
-    statement = result.node('block.function_block.function_statement')
-    node = statement.node('function_output.types')
-    assert node.child(0) == Token('INT_TYPE', 'int')
+    statement = result.block.function_block.function_statement
+    assert statement.function_output.types.child(0) == Token('INT_TYPE', 'int')

@@ -212,7 +212,7 @@ def test_objects_argument(patch, tree):
 
 def test_objects_arguments(patch, tree):
     patch.object(Objects, 'argument')
-    tree.find_data.return_value = filter(lambda x: x, ['argument'])
+    tree.find_data.return_value = ['argument']
     result = Objects.arguments(tree)
     tree.find_data.assert_called_with('arguments')
     Objects.argument.assert_called_with('argument')
@@ -229,7 +229,7 @@ def test_objects_typed_argument(patch, tree):
 
 def test_objects_function_arguments(patch, tree):
     patch.object(Objects, 'typed_argument')
-    tree.find_data.return_value = filter(lambda x: x, ['function_argument'])
+    tree.find_data.return_value = ['function_argument']
     result = Objects.function_arguments(tree)
     tree.find_data.assert_called_with('function_argument')
     Objects.typed_argument.assert_called_with('function_argument')

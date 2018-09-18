@@ -152,7 +152,7 @@ class Objects:
         Parses a group of arguments rules
         """
         arguments = []
-        for argument in list(tree.find_data('arguments')):
+        for argument in tree.find_data('arguments'):
             arguments.append(cls.argument(argument))
         return arguments
 
@@ -166,7 +166,7 @@ class Objects:
     @classmethod
     def function_arguments(cls, tree):
         arguments = []
-        for argument in list(tree.find_data('function_argument')):
+        for argument in tree.find_data('function_argument'):
             arguments.append(cls.typed_argument(argument))
         return arguments
 

@@ -6,6 +6,10 @@ from ..version import version
 
 
 class Tree(LarkTree):
+    """
+    Wraps the original Tree class from lark, providing many useful
+    enhancements.
+    """
 
     @staticmethod
     def walk(tree, path):
@@ -30,6 +34,12 @@ class Tree(LarkTree):
     def child(self, index):
         if len(self.children) > index:
             return self.children[index]
+
+    def find(self, path):
+        """
+        Wraps LarkTree.find_data, making it easier to use.
+        """
+        return list(self.find_data(path))
 
     def line(self):
         """
