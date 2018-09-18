@@ -67,6 +67,15 @@ def test_compiler_if_elseif(parser):
     assert result['tree']['4']['parent'] == '3'
 
 
+def test_compiler_if_else(parser):
+    source = 'if colour == "red"\n\tx = 0\nelse\n\tx = 1'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['exit'] == '3'
+    assert result['tree']['3']['method'] == 'else'
+    assert result['tree']['4']['parent'] == '3'
+
+
 def test_compiler_foreach(parser):
     tree = parser.parse('foreach items as item\n\tx = 0')
     result = Compiler.compile(tree)
