@@ -59,12 +59,13 @@ def test_parser_list(parser, int_token):
     result = parser.parse('[3,4]\n')
     list = result.block.rules.values.list
     assert list.values.number.child(0) == int_token
-    assert list.child(1).number.child(0) == Token('INT', 4)
+    assert list.child(3).number.child(0) == Token('INT', 4)
 
 
 def test_parser_list_empty(parser):
     result = parser.parse('[]\n')
-    assert result.block.rules.values.list == Tree('list', [])
+    expected = Tree('list', [Token('_OSB', '['), Token('_CSB', ']')])
+    assert result.block.rules.values.list == expected
 
 
 def test_parser_object(parser):

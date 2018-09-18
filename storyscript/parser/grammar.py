@@ -162,7 +162,7 @@ class Grammar:
                          inline=True)
         definition = ('_OSB (_NL _INDENT)? (values (_COMMA (_WS|_NL)? '
                       'values)*)? (_NL _DEDENT)? _CSB')
-        self.ebnf.rule('list', definition, raw=True)
+        self.ebnf.rule('!list', definition, raw=True)
 
     def key_value(self):
         self.ebnf.token('colon', ':', inline=True)
