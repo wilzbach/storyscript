@@ -46,7 +46,7 @@ class Grammar:
 
     def else_statement(self):
         self.ebnf.token('else', 'else', inline=True)
-        self.ebnf.rule('else_statement', ['else'])
+        self.ebnf.rule('!else_statement', ['else'])
 
     def else_block(self):
         self.else_statement()

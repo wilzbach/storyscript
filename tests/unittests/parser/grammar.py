@@ -342,7 +342,7 @@ def test_grammar_if_statement(patch, grammar, ebnf):
 def test_grammar_else_statement(grammar, ebnf):
     grammar.else_statement()
     ebnf.token.assert_called_with('else', 'else', inline=True)
-    ebnf.rule.assert_called_with('else_statement', ['else'])
+    ebnf.rule.assert_called_with('!else_statement', ['else'])
 
 
 def test_grammar_elseif_statement(grammar, ebnf):
