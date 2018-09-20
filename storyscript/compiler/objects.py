@@ -55,9 +55,9 @@ class Objects:
         return int(token.value)
 
     @staticmethod
-    def replace_placeholders(string, matches):
+    def replace_fillers(string, matches):
         """
-        Replaces placeholder values with '{}'
+        Replaces filler values with '{}'
         """
         for match in matches:
             placeholder = '{}{}{}'.format('{', match, '}')
@@ -65,11 +65,20 @@ class Objects:
         return string
 
     @classmethod
-    def placeholders_values(cls, matches):
+    def fillers_values(cls, matches):
         values = []
         for match in matches:
             values.append(cls.path(Tree('path', [Token('WORD', match)])))
         return values
+
+    @staticmethod
+    def unescape_string(tree):
+        """
+        Unescapes a string tree, returning the real string.
+        """
+        string = tree.child(0).value[1:-1]
+        unescaped = string.encode('utf-8').decode('unicode_escape')
+        return unescaped.encode('latin1').decode()
 
     @classmethod
     def string(cls, tree):
@@ -77,12 +86,12 @@ class Objects:
         Compiles a string tree. If the string has templated values, they
         are processed and compiled.
         """
-        item = {'$OBJECT': 'string', 'string': tree.child(0).value[1:-1]}
+        item = {'$OBJECT': 'string', 'string': cls.unescape_string(tree)}
         matches = re.findall(r'{([^}]*)}', item['string'])
         if matches == []:
             return item
-        item['values'] = cls.placeholders_values(matches)
-        item['string'] = cls.replace_placeholders(item['string'], matches)
+        item['values'] = cls.fillers_values(matches)
+        item['string'] = cls.replace_fillers(item['string'], matches)
         return item
 
     @staticmethod
