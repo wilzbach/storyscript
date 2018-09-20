@@ -112,9 +112,9 @@ def test_objects_replace_fillers():
     assert result == 'hello, {}'
 
 
-def test_objects_placeholders_values(patch):
+def test_objects_fillers_values(patch):
     patch.object(Objects, 'path')
-    result = Objects.placeholders_values(['one'])
+    result = Objects.fillers_values(['one'])
     Objects.path.assert_called_with(Tree('path', [Token('WORD', 'one')]))
     assert result == [Objects.path()]
 
