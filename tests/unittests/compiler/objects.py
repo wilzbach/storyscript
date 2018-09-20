@@ -119,21 +119,32 @@ def test_objects_fillers_values(patch):
     assert result == [Objects.path()]
 
 
-def test_objects_string():
-    tree = Tree('string', [Token('DOUBLE_QUOTED', '"blue"')])
-    assert Objects.string(tree) == {'$OBJECT': 'string', 'string': 'blue'}
+def test_objects_unescape_string(tree):
+    result = Objects.unescape_string(tree)
+    string = tree.child().value[1:-1]
+    assert result == string.encode().decode().encode().decode()
+
+
+def test_objects_string(patch, tree):
+    patch.object(Objects, 'unescape_string')
+    patch.object(re, 'findall', return_value=[])
+    result = Objects.string(tree)
+    Objects.unescape_string.assert_called_with(tree)
+    re.findall.assert_called_with(r'{([^}]*)}', Objects.unescape_string())
+    assert result == {'$OBJECT': 'string', 'string': Objects.unescape_string()}
 
 
 def test_objects_string_templating(patch):
-    patch.many(Objects, ['placeholders_values', 'replace_placeholders'])
+    patch.many(Objects, ['unescape_string', 'fillers_values',
+                         'replace_fillers'])
     patch.object(re, 'findall', return_value=['color'])
     tree = Tree('string', [Token('DOUBLE_QUOTED', '"{color}"')])
     result = Objects.string(tree)
-    re.findall.assert_called_with(r'{([^}]*)}', '{color}')
-    Objects.placeholders_values.assert_called_with(re.findall())
-    Objects.replace_placeholders.assert_called_with('{color}', re.findall())
-    assert result['string'] == Objects.replace_placeholders()
-    assert result['values'] == Objects.placeholders_values()
+    Objects.fillers_values.assert_called_with(re.findall())
+    Objects.replace_fillers.assert_called_with(Objects.unescape_string(),
+                                               re.findall())
+    assert result['string'] == Objects.replace_fillers()
+    assert result['values'] == Objects.fillers_values()
 
 
 def test_objects_boolean():
