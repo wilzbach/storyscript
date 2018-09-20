@@ -55,9 +55,9 @@ class Objects:
         return int(token.value)
 
     @staticmethod
-    def replace_placeholders(string, matches):
+    def replace_fillers(string, matches):
         """
-        Replaces placeholder values with '{}'
+        Replaces filler values with '{}'
         """
         for match in matches:
             placeholder = '{}{}{}'.format('{', match, '}')

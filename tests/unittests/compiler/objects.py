@@ -107,8 +107,8 @@ def test_objects_number_float():
     assert Objects.number(tree) == 1.2
 
 
-def test_objects_replace_placeholders():
-    result = Objects.replace_placeholders('hello, {world}', ['world'])
+def test_objects_replace_fillers():
+    result = Objects.replace_fillers('hello, {world}', ['world'])
     assert result == 'hello, {}'
 
 
