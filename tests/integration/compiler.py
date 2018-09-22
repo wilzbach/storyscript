@@ -100,6 +100,7 @@ def test_compiler_set(parser):
     tree = parser.parse('a = 0')
     result = Compiler.compile(tree)
     assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['name'] == ['a']
     assert result['tree']['1']['args'] == [0]
 
 
@@ -114,7 +115,7 @@ def test_compiler_set_list(parser):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_set_empty(parser):
+def test_compiler_set_list_empty(parser):
     """
     Ensures that assignments to empty lists are compiled correctly
     """
@@ -122,6 +123,43 @@ def test_compiler_set_empty(parser):
     result = Compiler.compile(tree)
     assert result['tree']['1']['method'] == 'set'
     assert result['tree']['1']['args'] == [{'$OBJECT': 'list', 'items': []}]
+
+
+def test_compiler_set_object(parser):
+    """
+    Ensures that assignments to objects are compiled correctly
+    """
+    tree = parser.parse("a = {'x': 1, 'y': 3}")
+    result = Compiler.compile(tree)
+    items = [[{'$OBJECT': 'string', 'string': 'x'}, 1],
+             [{'$OBJECT': 'string', 'string': 'y'}, 3]]
+    arg = {'$OBJECT': 'dict', 'items': items}
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['name'] == ['a']
+    assert result['tree']['1']['args'] == [arg]
+
+
+def test_compiler_set_object_empty(parser):
+    """
+    Ensures that assignments to empty objects are compiled correctly
+    """
+    tree = parser.parse('a = {}')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == [{'$OBJECT': 'dict', 'items': []}]
+
+
+def test_compiler_set_object_multiline(parser):
+    """
+    Ensures that assignments to multiline objects are compiled correctly
+    """
+    tree = parser.parse("a = {\n\t'x': 1,\n\t'y': 3\n}")
+    result = Compiler.compile(tree)
+    items = [[{'$OBJECT': 'string', 'string': 'x'}, 1],
+             [{'$OBJECT': 'string', 'string': 'y'}, 3]]
+    arg = {'$OBJECT': 'dict', 'items': items}
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == [arg]
 
 
 def test_compiler_set_service(parser):
