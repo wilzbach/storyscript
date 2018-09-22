@@ -172,7 +172,8 @@ class Grammar:
     def objects(self):
         self.key_value()
         self.ebnf.tokens(('ocb', '{'), ('ccb', '}'), inline=True)
-        rule = '_OCB (key_value (_COMMA _WS? key_value)*)? _CCB'
+        rule = ('_OCB (_NL _INDENT)? (key_value (_COMMA (_WS|_NL)?'
+                ' key_value)*)? (_NL _DEDENT)? _CCB')
         self.ebnf.rule('objects', rule, raw=True)
 
     def values(self):
