@@ -125,6 +125,17 @@ def test_compiler_set_list_empty(parser):
     assert result['tree']['1']['args'] == [{'$OBJECT': 'list', 'items': []}]
 
 
+def test_compiler_set_list_multiline(parser):
+    """
+    Ensures that assignments to multiline lists are compiled correctly
+    """
+    tree = parser.parse('a = [\n\t1,\n\t2\n]')
+    result = Compiler.compile(tree)
+    args = [{'$OBJECT': 'list', 'items': [1, 2]}]
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == args
+
+
 def test_compiler_set_object(parser):
     """
     Ensures that assignments to objects are compiled correctly
