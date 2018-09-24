@@ -77,18 +77,14 @@ class Grammar:
     def typed_argument(self):
         self.ebnf.rule('typed_argument', ('name', 'colon', 'types'))
 
-    def function_argument(self):
-        self.typed_argument()
-        self.ebnf.rule('function_argument', ['typed_argument'])
-
     def function_output(self):
         self.ebnf.token('returns', 'returns', inline=True)
         self.ebnf.rule('function_output', ('returns', 'types'))
 
     def function_statement(self):
-        self.function_argument()
+        self.typed_argument()
         self.function_output()
-        rule = 'FUNCTION_TYPE NAME function_argument* function_output?'
+        rule = 'FUNCTION_TYPE NAME typed_argument* function_output?'
         self.ebnf.rule('function_statement', rule, raw=True)
 
     def function_block(self):

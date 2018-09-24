@@ -174,8 +174,7 @@ def test_parser_function(parser):
 
 def test_parser_function_arguments(parser):
     result = parser.parse('function test n:int\n\tvar = 3\n')
-    node = result.block.function_block
-    typed_argument = node.find('function_argument')[0].typed_argument
+    typed_argument = result.block.function_block.find('typed_argument')[0]
     assert typed_argument.child(0) == Token('NAME', 'n')
     assert typed_argument.types.child(0) == Token('INT_TYPE', 'int')
 

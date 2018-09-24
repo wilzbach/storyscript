@@ -92,13 +92,6 @@ def test_grammar_typed_argument(grammar, ebnf):
     ebnf.rule.assert_called_with('typed_argument', definition)
 
 
-def test_grammar_function_argument(patch, grammar, ebnf):
-    patch.object(Grammar, 'typed_argument')
-    grammar.function_argument()
-    assert Grammar.typed_argument.call_count == 1
-    ebnf.rule.assert_called_with('function_argument', ['typed_argument'])
-
-
 def test_grammar_function_output(grammar, ebnf):
     grammar.function_output()
     ebnf.token.assert_called_with('returns', 'returns', inline=True)
@@ -106,10 +99,10 @@ def test_grammar_function_output(grammar, ebnf):
 
 
 def test_grammar_function_statement(patch, call_count, grammar, ebnf):
-    patch.many(Grammar, ['function_argument', 'function_output'])
+    patch.many(Grammar, ['typed_argument', 'function_output'])
     grammar.function_statement()
-    call_count(Grammar, ['function_argument', 'function_output'])
-    rule = 'FUNCTION_TYPE NAME function_argument* function_output?'
+    call_count(Grammar, ['typed_argument', 'function_output'])
+    rule = 'FUNCTION_TYPE NAME typed_argument* function_output?'
     ebnf.rule.assert_called_with('function_statement', rule, raw=True)
 
 
