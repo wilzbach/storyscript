@@ -92,25 +92,17 @@ def test_grammar_typed_argument(grammar, ebnf):
     ebnf.rule.assert_called_with('typed_argument', definition)
 
 
-def test_grammar_function_argument(patch, grammar, ebnf):
-    patch.object(Grammar, 'typed_argument')
-    grammar.function_argument()
-    assert Grammar.typed_argument.call_count == 1
-    ebnf.rule.assert_called_with('function_argument', ('ws', 'typed_argument'))
-
-
 def test_grammar_function_output(grammar, ebnf):
     grammar.function_output()
     ebnf.token.assert_called_with('returns', 'returns', inline=True)
-    rule = ('ws', 'returns', 'ws', 'types')
-    ebnf.rule.assert_called_with('function_output', rule)
+    ebnf.rule.assert_called_with('function_output', ('returns', 'types'))
 
 
 def test_grammar_function_statement(patch, call_count, grammar, ebnf):
-    patch.many(Grammar, ['function_argument', 'function_output'])
+    patch.many(Grammar, ['typed_argument', 'function_output'])
     grammar.function_statement()
-    call_count(Grammar, ['function_argument', 'function_output'])
-    rule = 'FUNCTION_TYPE _WS NAME function_argument* function_output?'
+    call_count(Grammar, ['typed_argument', 'function_output'])
+    rule = 'FUNCTION_TYPE NAME typed_argument* function_output?'
     ebnf.rule.assert_called_with('function_statement', rule, raw=True)
 
 
@@ -129,18 +121,18 @@ def test_grammar_inline_expression(patch, grammar, ebnf):
 
 def test_grammar_arguments(patch, grammar, ebnf):
     grammar.arguments()
-    rule = '_WS? NAME? _COLON _WS? (values|path)'
+    rule = 'NAME? _COLON (values|path)'
     ebnf.rule.assert_called_with('arguments', rule, raw=True)
 
 
 def test_grammar_command(grammar, ebnf):
     grammar.command()
-    ebnf.rule.assert_called_with('command', ('ws', 'name'))
+    ebnf.rule.assert_called_with('command', ['name'])
 
 
 def test_grammar_output(grammar, ebnf):
     grammar.output()
-    rule = '(_WS _AS _WS NAME (_COMMA _WS? NAME)*)'
+    rule = '(_AS NAME (_COMMA NAME)*)'
     ebnf.rule.assert_called_with('output', rule, raw=True)
 
 
@@ -169,7 +161,7 @@ def test_grammar_service_block(patch, grammar, ebnf):
 def test_grammar_when_block(patch, grammar, ebnf):
     grammar.when_block()
     ebnf.token.assert_called_with('when', 'when', inline=True)
-    rule = '_WHEN _WS (path output|service) _NL nested_block'
+    rule = '_WHEN (path output|service) _NL nested_block'
     ebnf.rule.assert_called_with('when_block', rule, raw=True)
 
 
@@ -228,7 +220,7 @@ def test_grammar_operator(grammar, ebnf):
 
 def test_grammar_mutation(grammar, ebnf):
     grammar.mutation()
-    rule = '_WS NAME arguments*'
+    rule = 'NAME arguments*'
     ebnf.rule.assert_called_with('mutation', rule, raw=True)
 
 
@@ -237,7 +229,7 @@ def test_grammar_expression(patch, grammar, ebnf):
     grammar.expression()
     assert Grammar.operator.call_count == 1
     assert Grammar.mutation.call_count == 1
-    definitions = (('values', 'ws', 'operator', 'ws', 'values'),
+    definitions = (('values', 'operator', 'values'),
                    ('values', 'operator', 'values'),
                    ('values', 'mutation'))
     ebnf.rules.assert_called_with('expression', *definitions)
@@ -254,15 +246,15 @@ def test_grammar_list(grammar, ebnf):
     grammar.list()
     tokens = (('comma', ','), ('osb', '['), ('csb', ']'))
     ebnf.tokens.assert_called_with(*tokens, inline=True)
-    definition = ('_OSB (_NL _INDENT)? (values (_COMMA (_WS|_NL)? '
-                  'values)*)? (_NL _DEDENT)? _CSB')
+    definition = ('_OSB (_NL _INDENT)? (values (_COMMA _NL? values)*)?'
+                  ' (_NL _DEDENT)? _CSB')
     ebnf.rule.assert_called_with('!list', definition, raw=True)
 
 
 def test_grammar_key_value(grammar, ebnf):
     grammar.key_value()
     ebnf.token.assert_called_with('colon', ':', inline=True)
-    rule = '(string|path) _COLON _WS? (values|path)'
+    rule = '(string|path) _COLON (values|path)'
     ebnf.rule.assert_called_with('key_value', rule, raw=True)
 
 
@@ -271,8 +263,8 @@ def test_grammar_objects(patch, grammar, ebnf):
     grammar.objects()
     assert Grammar.key_value.call_count == 1
     ebnf.tokens.assert_called_with(('ocb', '{'), ('ccb', '}'), inline=True)
-    rule = ('_OCB (_NL _INDENT)? (key_value (_COMMA (_WS|_NL)?'
-            ' key_value)*)? (_NL _DEDENT)? _CCB')
+    rule = ('_OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)?'
+            ' (_NL _DEDENT)? _CCB')
     ebnf.rule.assert_called_with('objects', rule, raw=True)
 
 
@@ -296,7 +288,7 @@ def test_grammar_path(patch, grammar, ebnf):
 def test_grammar_assignment_fragment(patch, grammar, ebnf):
     grammar.assignment_fragment()
     ebnf.token.assert_called_with('equals', '=')
-    rule = 'EQUALS _WS? (values|expression|path|service)'
+    rule = 'EQUALS (values|expression|path|service)'
     ebnf.rule.assert_called_with('assignment_fragment', rule, raw=True)
 
 
@@ -305,14 +297,14 @@ def test_grammar_assignment(patch, grammar, ebnf):
     grammar.assignment()
     assert Grammar.path.call_count == 1
     assert Grammar.assignment_fragment.call_count == 1
-    definition = ('path', 'ws?', 'assignment_fragment')
+    definition = ('path', 'assignment_fragment')
     ebnf.rule.assert_called_with('assignment', definition)
 
 
 def test_grammar_imports(patch, grammar, ebnf):
     grammar.imports()
     ebnf.token.assert_called_with('import', 'import', inline=True)
-    rule = ('import', 'ws', 'string', 'ws', 'as', 'ws', 'name')
+    rule = ('import', 'string', 'as', 'name')
     ebnf.rule.assert_called_with('imports', rule)
 
 
@@ -336,7 +328,7 @@ def test_grammar_if_statement(patch, grammar, ebnf):
     grammar.if_statement()
     assert Grammar.path_value.call_count == 1
     ebnf.token.assert_called_with('if', 'if', inline=True)
-    rule = '_IF _WS path_value (_WS comparisons _WS path_value)?'
+    rule = '_IF path_value (comparisons path_value)?'
     ebnf.rule.assert_called_with('if_statement', rule, raw=True)
 
 
@@ -348,13 +340,13 @@ def test_grammar_else_statement(grammar, ebnf):
 
 def test_grammar_elseif_statement(grammar, ebnf):
     grammar.elseif_statement()
-    rule = '_ELSE _WS? _IF _WS path_value (_WS comparisons _WS path_value)?'
+    rule = '_ELSE _IF path_value (comparisons path_value)?'
     ebnf.rule.assert_called_with('elseif_statement', rule, raw=True)
 
 
 def test_grammar_foreach_statement(grammar, ebnf):
     grammar.foreach_statement()
-    definition = ('foreach', 'ws', 'name', 'output')
+    definition = ('foreach', 'name', 'output')
     ebnf.rule.assert_called_with('foreach_statement', definition)
     tokens = (('foreach', 'foreach'), ('as', 'as'))
     ebnf.tokens.assert_called_with(*tokens, inline=True)
@@ -363,7 +355,7 @@ def test_grammar_foreach_statement(grammar, ebnf):
 def test_grammar_return_statement(patch, ebnf, grammar):
     grammar.return_statement()
     ebnf.token.assert_called_with('return', 'return', inline=True)
-    rule = '_RETURN _WS (path|values)'
+    rule = '_RETURN (path|values)'
     ebnf.rule.assert_called_with('return_statement', rule, raw=True)
 
 
