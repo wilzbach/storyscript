@@ -168,15 +168,14 @@ class Objects:
 
     @classmethod
     def typed_argument(cls, tree):
-        subtree = tree.node('typed_argument')
-        name = subtree.child(0).value
-        value = cls.values(Tree('anon', [subtree.child(1)]))
+        name = tree.child(0).value
+        value = cls.values(Tree('anon', [tree.child(1)]))
         return {'$OBJECT': 'argument', 'name': name, 'argument': value}
 
     @classmethod
     def function_arguments(cls, tree):
         arguments = []
-        for argument in tree.find_data('function_argument'):
+        for argument in tree.find_data('typed_argument'):
             arguments.append(cls.typed_argument(argument))
         return arguments
 

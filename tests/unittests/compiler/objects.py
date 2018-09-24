@@ -236,17 +236,18 @@ def test_objects_arguments(patch, tree):
 def test_objects_typed_argument(patch, tree):
     patch.object(Objects, 'values')
     result = Objects.typed_argument(tree)
-    expected = {'$OBJECT': 'argument', 'name': tree.node().child().value,
+    Objects.values.assert_called_with(Tree('anon', [tree.child(1)]))
+    expected = {'$OBJECT': 'argument', 'name': tree.child().value,
                 'argument': Objects.values()}
     assert result == expected
 
 
 def test_objects_function_arguments(patch, tree):
     patch.object(Objects, 'typed_argument')
-    tree.find_data.return_value = ['function_argument']
+    tree.find_data.return_value = ['typed_argument']
     result = Objects.function_arguments(tree)
-    tree.find_data.assert_called_with('function_argument')
-    Objects.typed_argument.assert_called_with('function_argument')
+    tree.find_data.assert_called_with('typed_argument')
+    Objects.typed_argument.assert_called_with('typed_argument')
     assert result == [Objects.typed_argument()]
 
 
