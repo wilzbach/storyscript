@@ -21,6 +21,7 @@ class Grammar:
     def whitespaces(self):
         tokens = (('ws', '(" ")+'), ('nl', r'/(\r?\n[\t ]*)+/'))
         self.ebnf.tokens(*tokens, inline=True, regexp=True)
+        self.ebnf.ignore('_WS')
 
     def indentation(self):
         tokens = (('indent', '<INDENT>'), ('dedent', '<DEDENT>'))
@@ -34,8 +35,8 @@ class Grammar:
         self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
 
     def elseif_statement(self):
-        rule = ('_ELSE _WS? _IF _WS path_value '
-                '(_WS comparisons _WS path_value)?')
+        rule = ('_ELSE _IF path_value '
+                '(comparisons path_value)?')
         self.ebnf.rule('elseif_statement', rule, raw=True)
 
     def elseif_block(self):
@@ -58,7 +59,7 @@ class Grammar:
     def if_statement(self):
         self.path_value()
         self.ebnf.token('if', 'if', inline=True)
-        rule = '_IF _WS path_value (_WS comparisons _WS path_value)?'
+        rule = '_IF path_value (comparisons path_value)?'
         self.ebnf.rule('if_statement', rule, raw=True)
 
     def if_block(self):
@@ -78,16 +79,16 @@ class Grammar:
 
     def function_argument(self):
         self.typed_argument()
-        self.ebnf.rule('function_argument', ('ws', 'typed_argument'))
+        self.ebnf.rule('function_argument', ['typed_argument'])
 
     def function_output(self):
         self.ebnf.token('returns', 'returns', inline=True)
-        self.ebnf.rule('function_output', ('ws', 'returns', 'ws', 'types'))
+        self.ebnf.rule('function_output', ('returns', 'types'))
 
     def function_statement(self):
         self.function_argument()
         self.function_output()
-        rule = 'FUNCTION_TYPE _WS NAME function_argument* function_output?'
+        rule = 'FUNCTION_TYPE NAME function_argument* function_output?'
         self.ebnf.rule('function_statement', rule, raw=True)
 
     def function_block(self):
@@ -100,14 +101,14 @@ class Grammar:
         self.ebnf.rule('inline_expression', ('op', 'service', 'cp'))
 
     def arguments(self):
-        rule = '_WS? NAME? _COLON _WS? (values|path)'
+        rule = 'NAME? _COLON (values|path)'
         self.ebnf.rule('arguments', rule, raw=True)
 
     def command(self):
-        self.ebnf.rule('command', ('ws', 'name'))
+        self.ebnf.rule('command', ['name'])
 
     def output(self):
-        rule = '(_WS _AS _WS NAME (_COMMA _WS? NAME)*)'
+        rule = '(_AS NAME (_COMMA NAME)*)'
         self.ebnf.rule('output', rule, raw=True)
 
     def service_fragment(self):
@@ -128,7 +129,7 @@ class Grammar:
 
     def when_block(self):
         self.ebnf.token('when', 'when', inline=True)
-        rule = '_WHEN _WS (path output|service) _NL nested_block'
+        rule = '_WHEN (path output|service) _NL nested_block'
         self.ebnf.rule('when_block', rule, raw=True)
 
     def block(self):
@@ -160,20 +161,20 @@ class Grammar:
     def list(self):
         self.ebnf.tokens(('comma', ','), ('osb', '['), ('csb', ']'),
                          inline=True)
-        definition = ('_OSB (_NL _INDENT)? (values (_COMMA (_WS|_NL)? '
-                      'values)*)? (_NL _DEDENT)? _CSB')
+        definition = ('_OSB (_NL _INDENT)? (values (_COMMA _NL? values)*)?'
+                      ' (_NL _DEDENT)? _CSB')
         self.ebnf.rule('!list', definition, raw=True)
 
     def key_value(self):
         self.ebnf.token('colon', ':', inline=True)
-        rule = '(string|path) _COLON _WS? (values|path)'
+        rule = '(string|path) _COLON (values|path)'
         self.ebnf.rule('key_value', rule, raw=True)
 
     def objects(self):
         self.key_value()
         self.ebnf.tokens(('ocb', '{'), ('ccb', '}'), inline=True)
-        rule = ('_OCB (_NL _INDENT)? (key_value (_COMMA (_WS|_NL)?'
-                ' key_value)*)? (_NL _DEDENT)? _CCB')
+        rule = ('_OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)?'
+                ' (_NL _DEDENT)? _CCB')
         self.ebnf.rule('objects', rule, raw=True)
 
     def values(self):
@@ -194,13 +195,13 @@ class Grammar:
         self.ebnf.rules('operator', *definitions)
 
     def mutation(self):
-        mutation = '_WS NAME arguments*'
+        mutation = 'NAME arguments*'
         self.ebnf.rule('mutation', mutation, raw=True)
 
     def expression(self):
         self.operator()
         self.mutation()
-        definitions = (('values', 'ws', 'operator', 'ws', 'values'),
+        definitions = (('values', 'operator', 'values'),
                        ('values', 'operator', 'values'),
                        ('values', 'mutation'))
         self.ebnf.rules('expression', *definitions)
@@ -226,17 +227,17 @@ class Grammar:
 
     def assignment_fragment(self):
         self.ebnf.token('equals', '=')
-        rule = 'EQUALS _WS? (values|expression|path|service)'
+        rule = 'EQUALS (values|expression|path|service)'
         self.ebnf.rule('assignment_fragment', rule, raw=True)
 
     def assignment(self):
         self.path()
         self.assignment_fragment()
-        self.ebnf.rule('assignment', ('path', 'ws?', 'assignment_fragment'))
+        self.ebnf.rule('assignment', ('path', 'assignment_fragment'))
 
     def imports(self):
         self.ebnf.token('import', 'import', inline=True)
-        rule = ('import', 'ws', 'string', 'ws', 'as', 'ws', 'name')
+        rule = ('import', 'string', 'as', 'name')
         self.ebnf.rule('imports', rule)
 
     def comparisons(self):
@@ -249,12 +250,12 @@ class Grammar:
 
     def foreach_statement(self):
         self.ebnf.tokens(('foreach', 'foreach'), ('as', 'as'), inline=True)
-        definition = ('foreach', 'ws', 'name', 'output')
+        definition = ('foreach', 'name', 'output')
         self.ebnf.rule('foreach_statement', definition)
 
     def return_statement(self):
         self.ebnf.token('return', 'return', inline=True)
-        rule = '_RETURN _WS (path|values)'
+        rule = '_RETURN (path|values)'
         self.ebnf.rule('return_statement', rule, raw=True)
 
     def int_type(self):
