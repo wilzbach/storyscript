@@ -33,7 +33,7 @@ jobs:
             - run:
                 name: collect unit coverage
                 command: |
-                    bash <(curl -s https://codecov.io/bash) -F unittests
+                    bash <(curl -s https://codecov.io/bash) -F unittests -f unittests.xml
 
             - run:
                 name: run integration tests
@@ -44,7 +44,7 @@ jobs:
             - run:
                 name: collect integration coverage
                 command: |
-                    bash <(curl -s https://codecov.io/bash) -F integration
+                    bash <(curl -s https://codecov.io/bash) -F integration -f integration.xml
 
             - store_artifacts:
                 path: test-reports
