@@ -1,17 +1,9 @@
 [run]
-source = storyscript
 branch = True
+source = storyscript
 
 [report]
-exclude_lines =
-    pragma: no cover
-    def __repr__
-    raise NotImplementedError
-    if __name__ == .__main__.:
-ignore_errors = True
 omit =
-    .tox/*
-    *tab.py
-    *reserved.py
-    setup.py
-    venv/*
+  setup.py
+  venv/*
+  .tox/*

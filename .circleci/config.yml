@@ -25,14 +25,26 @@ jobs:
                 key: v1-dependencies-{{ checksum "setup.py" }}
 
             - run:
+                name: run unit tests
                 command: |
                     . venv/bin/activate
-                    tox
+                    tox -e pep8,py36-unit
 
             - run:
-                name: collect coverage
+                name: collect unit coverage
                 command: |
-                    bash <(curl -s https://codecov.io/bash)
+                    bash <(curl -s https://codecov.io/bash) -F unittests -f unittests.xml
+
+            - run:
+                name: run integration tests
+                command: |
+                    . venv/bin/activate
+                    tox -e py36-integration
+
+            - run:
+                name: collect integration coverage
+                command: |
+                    bash <(curl -s https://codecov.io/bash) -F integration -f integration.xml
 
             - store_artifacts:
                 path: test-reports
