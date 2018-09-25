@@ -224,15 +224,3 @@ def test_compiler_function_call(parser):
     assert result['tree']['3']['method'] == 'call'
     assert result['tree']['3']['service'] == 'sum'
     assert result['tree']['3']['args'] == args
-
-
-def test_compiler_comment(parser):
-    source = '# hello world!'
-    tree = parser.parse(source)
-    assert Compiler.compile(tree)['tree'] == {}
-
-
-def test_compiler_comment_multiline(parser):
-    source = '###\nhello world!\n###'
-    tree = parser.parse(source)
-    assert Compiler.compile(tree)['tree'] == {}
