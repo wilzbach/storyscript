@@ -25,8 +25,8 @@ def test_grammar_init():
 
 def test_grammar_rules(grammar, ebnf):
     grammar.rules()
-    defintions = (['values'], ['absolute_expression'], ['comment'],
-                  ['assignment'], ['imports'], ['return_statement'], ['block'])
+    defintions = (['values'], ['absolute_expression'], ['assignment'],
+                  ['imports'], ['return_statement'], ['block'])
     ebnf.rules.assert_called_with('rules', *defintions)
 
 
@@ -406,16 +406,9 @@ def test_grammar_types(patch, call_count, grammar, ebnf):
     ebnf.rules.assert_called_with('types', *definitions)
 
 
-def test_grammar_comment(grammar, ebnf):
-    grammar.comment()
-    token = token = '/(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)/'
-    ebnf.token.assert_called_with('comment', token, regexp=True)
-    ebnf.rule.assert_called_with('comment', 'COMMENT+', raw=True)
-
-
 def test_grammar_build(patch, call_count, grammar):
-    methods = ['rules', 'spaces', 'values', 'absolute_expression', 'comment',
-               'block', 'comparisons', 'assignment', 'imports', 'types',
+    methods = ['rules', 'spaces', 'values', 'absolute_expression', 'block',
+               'comparisons', 'assignment', 'imports', 'types',
                'return_statement']
     patch.many(Grammar, methods)
     result = grammar.build()
