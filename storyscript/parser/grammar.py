@@ -13,9 +13,8 @@ class Grammar:
         self.ebnf = Ebnf()
 
     def rules(self):
-        definitions = (['values'], ['absolute_expression'], ['comment'],
-                       ['assignment'], ['imports'], ['return_statement'],
-                       ['block'])
+        definitions = (['values'], ['absolute_expression'], ['assignment'],
+                       ['imports'], ['return_statement'], ['block'])
         self.ebnf.rules('rules', *definitions)
 
     def whitespaces(self):
@@ -292,13 +291,6 @@ class Grammar:
                        ['regexp_type'], ['function_type'])
         self.ebnf.rules('types', *definitions)
 
-    def comment(self):
-        self.ebnf.token('comment', '#', inline=True, priority=2)
-        self.ebnf.token('hashes', '###', inline=True, priority=3)
-        self.ebnf.token('nws', '/[\S]+/', regexp=True)
-        rule = '_HASHES _NL (NWS* _NL)* _HASHES | _COMMENT (NWS*)?'
-        self.ebnf.rule('comment', rule, raw=True)
-
     def build(self):
         self.ebnf.start('_NL? block')
         self.rules()
@@ -311,5 +303,4 @@ class Grammar:
         self.block()
         self.imports()
         self.types()
-        self.comment()
         return self.ebnf.build()

@@ -128,11 +128,6 @@ def test_parser_service_output(parser):
     assert node.child(1) == Token('NAME', 'response')
 
 
-def test_parser_comment(parser):
-    result = parser.parse('# one')
-    assert result.block.rules.comment.child(0) == Token('NWS', 'one')
-
-
 def test_parser_if_block(parser, name_token):
     result = parser.parse('if expr\n\tvar=3\n')
     if_block = result.block.if_block
