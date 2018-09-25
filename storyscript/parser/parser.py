@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+
 from lark import Lark
 from lark.exceptions import UnexpectedInput, UnexpectedToken
 
@@ -16,6 +18,12 @@ class Parser:
     def __init__(self, algo='lalr', ebnf_file=None):
         self.algo = algo
         self.ebnf_file = ebnf_file
+
+    @staticmethod
+    def clean_source(source):
+        expression = '(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
+        source = re.sub(expression, '', source)
+        return '{}\n'.format(source)
 
     def indenter(self):
         """

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import re
 
 from lark import Lark
 from lark.exceptions import UnexpectedInput, UnexpectedToken
@@ -23,6 +24,14 @@ def ebnf_file(request):
     def teardown():
         os.remove('test.ebnf')
     request.addfinalizer(teardown)
+
+
+def test_parser_clean_source(patch):
+    patch.object(re, 'sub')
+    result = Parser.clean_source('source')
+    expression = '(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
+    re.sub.assert_called_with(expression, '', 'source')
+    assert result == '{}\n'.format(re.sub())
 
 
 def test_parser_init(parser):
