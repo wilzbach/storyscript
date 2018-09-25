@@ -86,9 +86,10 @@ def test_parser_parse(patch, parser):
     """
     Ensures the build method can build the grammar
     """
-    patch.many(Parser, ['lark', 'transformer'])
+    patch.many(Parser, ['clean_source', 'lark', 'transformer'])
     result = parser.parse('source')
-    Parser.lark().parse.assert_called_with('source\n')
+    Parser.clean_source.assert_called_with('source')
+    Parser.lark().parse.assert_called_with(Parser.clean_source())
     Parser.transformer().transform.assert_called_with(Parser.lark().parse())
     assert result == Parser.transformer().transform()
 
@@ -96,7 +97,7 @@ def test_parser_parse(patch, parser):
 def test_parser_parser_unexpected_token(capsys, patch, magic, parser):
     patch.init(StoryError)
     patch.object(StoryError, 'message')
-    patch.many(Parser, ['lark', 'transformer'])
+    patch.many(Parser, ['clean_source', 'lark', 'transformer'])
     Parser.lark().parse.side_effect = UnexpectedToken(magic(), 'exp', 0, 1)
     with raises(SystemExit):
         parser.parse('source', debug=False)
@@ -105,7 +106,7 @@ def test_parser_parser_unexpected_token(capsys, patch, magic, parser):
 
 
 def test_parser_parser_unexpected_token_debug(patch, magic, parser):
-    patch.many(Parser, ['lark', 'transformer'])
+    patch.many(Parser, ['clean_source', 'lark', 'transformer'])
     Parser.lark().parse.side_effect = UnexpectedToken(magic(), 'exp', 0, 1)
     with raises(UnexpectedToken):
         parser.parse('source', debug=True)
@@ -114,7 +115,7 @@ def test_parser_parser_unexpected_token_debug(patch, magic, parser):
 def test_parser_parser_unexpected_input(capsys, patch, magic, parser):
     patch.init(StoryError)
     patch.object(StoryError, 'message')
-    patch.many(Parser, ['lark', 'transformer'])
+    patch.many(Parser, ['clean_source', 'lark', 'transformer'])
     Parser.lark().parse.side_effect = UnexpectedInput(magic(), 0, 0, 0)
     with raises(SystemExit):
         parser.parse('source', debug=False)
@@ -123,7 +124,7 @@ def test_parser_parser_unexpected_input(capsys, patch, magic, parser):
 
 
 def test_parser_parser_unexpected_input_debug(patch, magic, parser):
-    patch.many(Parser, ['lark', 'transformer'])
+    patch.many(Parser, ['clean_source', 'lark', 'transformer'])
     Parser.lark().parse.side_effect = UnexpectedInput(magic(), 0, 0, 0)
     with raises(UnexpectedInput):
         parser.parse('source', debug=True)

@@ -53,7 +53,7 @@ class Parser:
         """
         Parses the source string.
         """
-        source = '{}\n'.format(source)
+        source = self.clean_source(source)
         lark = self.lark()
         try:
             tree = lark.parse(source)
