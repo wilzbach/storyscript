@@ -293,9 +293,11 @@ class Grammar:
         self.ebnf.rules('types', *definitions)
 
     def comment(self):
-        token = '/(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)/'
-        self.ebnf.token('comment', token, regexp=True)
-        self.ebnf.rule('comment', 'COMMENT+', raw=True)
+        self.ebnf.token('comment', '#', inline=True, priority=2)
+        self.ebnf.token('hashes', '###', inline=True, priority=3)
+        self.ebnf.token('nws', '/[\S]+/', regexp=True)
+        rule = '_HASHES _NL (NWS* _NL)* _HASHES | _COMMENT (NWS*)?'
+        self.ebnf.rule('comment', rule, raw=True)
 
     def build(self):
         self.ebnf.start('_NL? block')

@@ -408,9 +408,9 @@ def test_grammar_types(patch, call_count, grammar, ebnf):
 
 def test_grammar_comment(grammar, ebnf):
     grammar.comment()
-    token = token = '/(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)/'
-    ebnf.token.assert_called_with('comment', token, regexp=True)
-    ebnf.rule.assert_called_with('comment', 'COMMENT+', raw=True)
+    assert ebnf.token.call_count == 3
+    rule = '_HASHES _NL (NWS* _NL)* _HASHES | _COMMENT (NWS*)?'
+    ebnf.rule.assert_called_with('comment', rule, raw=True)
 
 
 def test_grammar_build(patch, call_count, grammar):
