@@ -129,7 +129,7 @@ def test_ebnf_build_tokens(patch, ebnf):
 
 def test_ebnf_build_rules(ebnf):
     ebnf._rules = {'rule': ['definition', 'more'], 'r2': ['definition']}
-    assert ebnf.build_rules() == 'rule: definition | more\nr2: definition\n'
+    assert ebnf.build_rules() == 'rule: definition\n\t| more\nr2: definition\n'
 
 
 def test_ebnf_build(patch, ebnf):

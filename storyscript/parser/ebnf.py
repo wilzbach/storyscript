@@ -102,7 +102,7 @@ class Ebnf:
     def build_rules(self):
         string = ''
         for name, definitions in self._rules.items():
-            string += '{}: {}\n'.format(name, ' | '.join(definitions))
+            string += '{}: {}\n'.format(name, '\n\t| '.join(definitions))
         return string
 
     def build(self):
