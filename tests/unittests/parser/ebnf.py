@@ -52,11 +52,6 @@ def test_ebnf_resolve_imports(ebnf):
     assert ebnf.resolve('token') == 'TOKEN'
 
 
-def test_ebnf_start(ebnf):
-    ebnf.start('rule')
-    assert ebnf.start_line == 'start: rule+'
-
-
 @mark.parametrize('token_name', ['NAME', 'name'])
 def test_ebnf_token(ebnf, token_name):
     """
@@ -86,12 +81,6 @@ def test_ebnf_token_regexp(ebnf):
     assert ebnf._tokens['NAME'] == ('NAME', 'regexp')
 
 
-def test_ebnf_tokens(patch, ebnf):
-    patch.object(Ebnf, 'token')
-    ebnf.tokens(('token', 'value'), kwargs='yes')
-    Ebnf.token.assert_called_with('token', 'value', kwargs='yes')
-
-
 def test_ebnf_rule(patch, ebnf):
     patch.object(Ebnf, 'resolve', return_value='resolved')
     ebnf.rule('name', ('literal', 'token'))
@@ -104,13 +93,6 @@ def test_ebnf_rule_raw(patch, ebnf):
     assert ebnf._rules['name'] == ['raw definition']
 
 
-def test_ebnf_rules(patch, ebnf):
-    patch.object(Ebnf, 'rule')
-    ebnf.rules('name', ('literal', ), ('literal2', ))
-    Ebnf.rule.assert_called_with('name', ('literal2', ))
-    assert Ebnf.rule.call_count == 2
-
-
 def test_ebnf_ignore(ebnf):
     ebnf.ignore('terminal')
     assert ebnf.ignores == ['%ignore terminal']
@@ -119,12 +101,6 @@ def test_ebnf_ignore(ebnf):
 def test_ebnf_load(ebnf):
     ebnf.load('token')
     assert ebnf.imports['token'] == '%import common.TOKEN'
-
-
-def test_ebnf_loads(patch, ebnf):
-    patch.object(Ebnf, 'load')
-    ebnf.loads(['one'])
-    Ebnf.load.assert_called_with('one')
 
 
 def test_ebnf_build_tokens(patch, ebnf):

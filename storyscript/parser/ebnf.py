@@ -46,12 +46,6 @@ class Ebnf:
             return item_name.upper()
         return item_name
 
-    def start(self, rule):
-        """
-        Produces the start rule
-        """
-        self.start_line = 'start: {}+'.format(rule)
-
     def token(self, name, value, priority=None, insensitive=False,
               inline=False, regexp=False):
         """
@@ -69,10 +63,6 @@ class Ebnf:
             value_string = '{}i'.format(value_string)
         self._tokens[name] = (name_string, value_string)
 
-    def tokens(self, *args, **kwargs):
-        for token_args in args:
-            self.token(*token_args, **kwargs)
-
     def rule(self, name, definition, raw=False):
         """
         Adds a rule with the given name and definition, which must be an
@@ -88,19 +78,11 @@ class Ebnf:
             string = '{}{} '.format(string, self.resolve(token))
         self._rules[name].append(string[:-1])
 
-    def rules(self, name, *definitions):
-        for definition in definitions:
-            self.rule(name, definition)
-
     def ignore(self, terminal):
         self.ignores.append('%ignore {}'.format(terminal))
 
     def load(self, token):
         self.imports[token] = '%import common.{}'.format(token.upper())
-
-    def loads(self, tokens):
-        for token in tokens:
-            self.load(token)
 
     def build_tokens(self):
         string = ''
