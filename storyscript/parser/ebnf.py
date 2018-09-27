@@ -31,6 +31,9 @@ class Ebnf:
     def set_token(self, name, value):
         self._tokens[name] = value
 
+    def set_rule(self, name, value):
+        self._rules[name] = value
+
     def resolve(self, item_name):
         """
         Resolves an item's reference to its real name.

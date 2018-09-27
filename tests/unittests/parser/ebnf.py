@@ -27,6 +27,11 @@ def test_ebnf_set_token(ebnf):
     assert ebnf._tokens['token'] == 'value'
 
 
+def test_ebnf_set_rule(ebnf):
+    ebnf.set_rule('rule', 'value')
+    assert ebnf._rules['rule'] == 'value'
+
+
 def test_ebnf_resolve(ebnf):
     assert ebnf.resolve('item') == 'item'
 
