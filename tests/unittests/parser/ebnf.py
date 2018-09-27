@@ -18,6 +18,11 @@ def test_ebnf_init():
     assert ebnf.ignores == []
 
 
+def test_ebnf_macro(ebnf):
+    ebnf.macro('name', 'hello {}')
+    assert ebnf.name('world') == 'hello world'
+
+
 def test_ebnf_resolve(ebnf):
     assert ebnf.resolve('item') == 'item'
 

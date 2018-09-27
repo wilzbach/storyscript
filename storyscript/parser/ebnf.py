@@ -20,6 +20,15 @@ class Ebnf:
         self.imports = {}
         self.ignores = []
 
+    def macro(self, name, template):
+        """
+        Creates a macro with the given name, by creating a method on the
+        instance
+        """
+        def compile_macro(rule):
+            return template.format(rule)
+        setattr(self, name, compile_macro)
+
     def resolve(self, item_name):
         """
         Resolves an item's reference to its real name.
