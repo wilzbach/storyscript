@@ -14,7 +14,6 @@ class Ebnf:
     """
 
     def __init__(self):
-        self.start_line = None
         self._tokens = {}
         self._rules = {}
         self.imports = {}

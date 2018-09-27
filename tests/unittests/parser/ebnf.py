@@ -11,7 +11,6 @@ def ebnf():
 
 def test_ebnf_init():
     ebnf = Ebnf()
-    assert ebnf.start_line is None
     assert ebnf._tokens == {}
     assert ebnf._rules == {}
     assert ebnf.imports == {}
