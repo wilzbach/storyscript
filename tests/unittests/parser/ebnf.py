@@ -22,6 +22,11 @@ def test_ebnf_macro(ebnf):
     assert ebnf.name('world') == 'hello world'
 
 
+def test_ebnf_set_token(ebnf):
+    ebnf.set_token('token', 'value')
+    assert ebnf._tokens['token'] == 'value'
+
+
 def test_ebnf_resolve(ebnf):
     assert ebnf.resolve('item') == 'item'
 

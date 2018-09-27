@@ -28,6 +28,9 @@ class Ebnf:
             return template.format(rule)
         setattr(self, name, compile_macro)
 
+    def set_token(self, name, value):
+        self._tokens[name] = value
+
     def resolve(self, item_name):
         """
         Resolves an item's reference to its real name.
