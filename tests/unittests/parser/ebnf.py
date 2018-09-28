@@ -132,3 +132,20 @@ def test_ebnf_build(patch, ebnf):
     assert Ebnf.build_tokens.call_count == 1
     assert Ebnf.build_rules.call_count == 1
     assert result == 'start\nrules\ntokens\nignores\n\nimports'
+
+
+def test_ebnf_setattr(ebnf):
+    ebnf.value = 1
+    assert ebnf.value == 1
+
+
+def test_ebnf_setattr_token(patch, ebnf):
+    patch.object(Ebnf, 'set_token')
+    ebnf.TOKEN = 'value'
+    Ebnf.set_token.assert_called_with('TOKEN', 'value')
+
+
+def test_ebnf_setattr_rule(patch, ebnf):
+    patch.object(Ebnf, 'set_rule')
+    ebnf.rule = 'value'
+    Ebnf.set_rule.assert_called_with('rule', 'value')

@@ -108,3 +108,10 @@ class Ebnf:
         imports = '\n'.join(self.imports.values())
         args = (self.start_line, rules, tokens, ignores, imports)
         return '{}\n{}\n{}\n{}\n\n{}'.format(*args)
+
+    def __setattr__(self, name, value):
+        if isinstance(value, str):
+            if name.isupper():
+                return self.set_token(name, value)
+            return self.set_rule(name, value)
+        object.__setattr__(self, name, value)
