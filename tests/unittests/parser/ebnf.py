@@ -23,8 +23,28 @@ def test_ebnf_macro(ebnf):
 
 
 def test_ebnf_set_token(ebnf):
-    ebnf.set_token('token', 'value')
-    assert ebnf._tokens['token'] == 'value'
+    ebnf.set_token('TOKEN', 'value')
+    assert ebnf._tokens['token'] == {'name': 'TOKEN', 'value': '"value"'}
+
+
+def test_ebnf_set_token_inline(ebnf):
+    ebnf.set_token('_TOKEN', 'value')
+    assert ebnf._tokens['token']['name'] == '_TOKEN'
+
+
+def test_ebnf_set_token_priority(ebnf):
+    ebnf.set_token('TOKEN.1', 'value')
+    assert ebnf._tokens['token']['name'] == 'TOKEN.1'
+
+
+def test_ebnf_set_token_expression(ebnf):
+    ebnf.set_token('TOKEN', '/regexp/')
+    assert ebnf._tokens['token']['value'] == '/regexp/'
+
+
+def test_ebnf_set_token_expression_false_positive(ebnf):
+    ebnf.set_token('TOKEN', '/')
+    assert ebnf._tokens['token']['value'] == '"/"'
 
 
 def test_ebnf_set_rule(ebnf):

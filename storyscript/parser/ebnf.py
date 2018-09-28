@@ -29,7 +29,16 @@ class Ebnf:
         setattr(self, name, compile_macro)
 
     def set_token(self, name, value):
-        self._tokens[name] = value
+        token = name.split('.')[0].lower()
+        if token.startswith('_'):
+            token = token[1:]
+
+        token_value = '"{}"'.format(value)
+        if len(value) > 2:
+            if value.startswith('/'):
+                if value.endswith('/'):
+                    token_value = value
+        self._tokens[token] = {'name': name, 'value': token_value}
 
     def set_rule(self, name, value):
         self._rules[name] = value
