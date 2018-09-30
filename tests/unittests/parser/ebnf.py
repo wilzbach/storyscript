@@ -24,7 +24,8 @@ def test_ebnf_macro(ebnf):
 
 def test_ebnf_set_token(ebnf):
     ebnf.set_token('TOKEN', 'value')
-    assert ebnf._tokens['token'] == {'name': 'TOKEN', 'value': '"value"'}
+    expected = {'name': 'TOKEN', 'value': '"value"', 'token': 'TOKEN'}
+    assert ebnf._tokens['token'] == expected
 
 
 def test_ebnf_set_token_inline(ebnf):
@@ -35,6 +36,7 @@ def test_ebnf_set_token_inline(ebnf):
 def test_ebnf_set_token_priority(ebnf):
     ebnf.set_token('TOKEN.1', 'value')
     assert ebnf._tokens['token']['name'] == 'TOKEN.1'
+    assert ebnf._tokens['token']['token'] == 'TOKEN'
 
 
 def test_ebnf_set_token_expression(ebnf):
