@@ -47,6 +47,8 @@ class Ebnf:
         self._tokens[token_name] = dictionary
 
     def set_rule(self, name, value):
+        if value in self._tokens:
+            value = self._tokens[value]['token']
         self._rules[name] = value
 
     def resolve(self, item_name):
