@@ -13,8 +13,8 @@ def test_ebnf_init():
     ebnf = Ebnf()
     assert ebnf._tokens == {}
     assert ebnf._rules == {}
-    assert ebnf.imports == {}
-    assert ebnf.ignores == []
+    assert ebnf._imports == {}
+    assert ebnf._ignores == []
 
 
 def test_ebnf_macro(ebnf):
@@ -72,12 +72,12 @@ def test_ebnf_set_rule(patch, ebnf):
 
 def test_ebnf_ignore(ebnf):
     ebnf.ignore('terminal')
-    assert ebnf.ignores == ['%ignore terminal']
+    assert ebnf._ignores == ['%ignore terminal']
 
 
 def test_ebnf_load(ebnf):
     ebnf.load('token')
-    assert ebnf.imports['token'] == '%import common.TOKEN'
+    assert ebnf._imports['token'] == '%import common.TOKEN'
 
 
 def test_ebnf_build_tokens(ebnf):
@@ -102,8 +102,8 @@ def test_ebnf_build(patch, ebnf):
     """
     patch.object(Ebnf, 'build_tokens', return_value='tokens')
     patch.object(Ebnf, 'build_rules', return_value='rules')
-    ebnf.ignores = ['ignores']
-    ebnf.imports = {'token': 'imports'}
+    ebnf._ignores = ['ignores']
+    ebnf._imports = {'token': 'imports'}
     result = ebnf.build()
     assert Ebnf.build_tokens.call_count == 1
     assert Ebnf.build_rules.call_count == 1

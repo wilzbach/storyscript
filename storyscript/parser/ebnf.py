@@ -16,8 +16,8 @@ class Ebnf:
     def __init__(self):
         self._tokens = {}
         self._rules = {}
-        self.imports = {}
-        self.ignores = []
+        self._imports = {}
+        self._ignores = []
 
     def macro(self, name, template):
         """
@@ -68,10 +68,10 @@ class Ebnf:
         self._rules[name] = rule.strip()
 
     def ignore(self, terminal):
-        self.ignores.append('%ignore {}'.format(terminal))
+        self._ignores.append('%ignore {}'.format(terminal))
 
     def load(self, token):
-        self.imports[token] = '%import common.{}'.format(token.upper())
+        self._imports[token] = '%import common.{}'.format(token.upper())
 
     def build_tokens(self):
         """
@@ -97,8 +97,8 @@ class Ebnf:
         """
         tokens = self.build_tokens()
         rules = self.build_rules()
-        ignores = '\n'.join(self.ignores)
-        imports = '\n'.join(self.imports.values())
+        ignores = '\n'.join(self._ignores)
+        imports = '\n'.join(self._imports.values())
         return '{}\n{}\n{}\n\n{}'.format(rules, tokens, ignores, imports)
 
     def __setattr__(self, name, value):
