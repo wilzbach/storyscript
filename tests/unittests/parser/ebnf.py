@@ -49,6 +49,11 @@ def test_ebnf_set_token_expression_false_positive(ebnf):
     assert ebnf._tokens['token']['value'] == '"/"'
 
 
+def test_ebnf_set_token_already_quoted(ebnf):
+    ebnf.set_token('TOKEN', '"quoted"')
+    assert ebnf._tokens['token']['value'] == '"quoted"'
+
+
 def test_ebnf_resolve(ebnf):
     result = ebnf.resolve('(something)*')
     assert result == '(something)*'

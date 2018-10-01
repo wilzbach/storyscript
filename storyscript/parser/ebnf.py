@@ -43,6 +43,8 @@ class Ebnf:
             if value.startswith('/'):
                 if value.endswith('/'):
                     token_value = value
+            elif '"' in value:
+                token_value = value
         dictionary = {'name': name, 'value': token_value, 'token': token}
         self._tokens[token_name] = dictionary
 
