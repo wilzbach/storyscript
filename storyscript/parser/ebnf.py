@@ -92,12 +92,14 @@ class Ebnf:
         return string
 
     def build(self):
+        """
+        Build the grammar
+        """
         tokens = self.build_tokens()
         rules = self.build_rules()
         ignores = '\n'.join(self.ignores)
         imports = '\n'.join(self.imports.values())
-        args = (self.start_line, rules, tokens, ignores, imports)
-        return '{}\n{}\n{}\n{}\n\n{}'.format(*args)
+        return '{}\n{}\n{}\n\n{}'.format(rules, tokens, ignores, imports)
 
     def __setattr__(self, name, value):
         if isinstance(value, str):

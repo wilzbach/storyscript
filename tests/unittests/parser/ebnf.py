@@ -97,15 +97,17 @@ def test_ebnf_build_rules(ebnf):
 
 
 def test_ebnf_build(patch, ebnf):
+    """
+    Ensures the grammar is built correctly.
+    """
     patch.object(Ebnf, 'build_tokens', return_value='tokens')
     patch.object(Ebnf, 'build_rules', return_value='rules')
-    ebnf.start_line = 'start'
     ebnf.ignores = ['ignores']
-    ebnf.imports = {'key': 'imports'}
+    ebnf.imports = {'token': 'imports'}
     result = ebnf.build()
     assert Ebnf.build_tokens.call_count == 1
     assert Ebnf.build_rules.call_count == 1
-    assert result == 'start\nrules\ntokens\nignores\n\nimports'
+    assert result == 'rules\ntokens\nignores\n\nimports'
 
 
 def test_ebnf_setattr(ebnf):
