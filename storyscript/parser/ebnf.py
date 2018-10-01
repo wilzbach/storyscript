@@ -83,9 +83,12 @@ class Ebnf:
         return string
 
     def build_rules(self):
+        """
+        Build the rules that have been defined into a string
+        """
         string = ''
-        for name, definitions in self._rules.items():
-            string += '{}: {}\n'.format(name, '\n\t| '.join(definitions))
+        for name, value in self._rules.items():
+            string = '{}{}: {}\n'.format(string, name, value)
         return string
 
     def build(self):
