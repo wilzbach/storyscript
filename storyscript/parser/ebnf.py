@@ -47,9 +47,15 @@ class Ebnf:
         self._tokens[token_name] = dictionary
 
     def set_rule(self, name, value):
-        if value in self._tokens:
-            value = self._tokens[value]['token']
-        self._rules[name] = value
+        """
+        Registers a rule, transforming tokens to their identifiers.
+        """
+        rule = ''
+        for shard in value.split():
+            if shard in self._tokens:
+                shard = self._tokens[shard]['token']
+            rule = '{} {}'.format(rule, shard)
+        self._rules[name] = rule.strip()
 
     def resolve(self, item_name):
         """

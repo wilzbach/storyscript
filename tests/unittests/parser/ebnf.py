@@ -50,14 +50,20 @@ def test_ebnf_set_token_expression_false_positive(ebnf):
 
 
 def test_ebnf_set_rule(ebnf):
+    """
+    Ensures that rules are registered correctly
+    """
     ebnf.set_rule('rule', 'value')
     assert ebnf._rules['rule'] == 'value'
 
 
 def test_ebnf_set_rule_tokens(ebnf):
+    """
+    Ensures that tokens are converted correctly.
+    """
     ebnf._tokens['token'] = {'token': 'TOKEN'}
-    ebnf.set_rule('rule', 'token')
-    assert ebnf._rules['rule'] == 'TOKEN'
+    ebnf.set_rule('rule', 'value token')
+    assert ebnf._rules['rule'] == 'value TOKEN'
 
 
 def test_ebnf_resolve(ebnf):
