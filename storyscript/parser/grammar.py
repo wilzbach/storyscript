@@ -292,15 +292,7 @@ class Grammar:
         self.ebnf.rules('types', *definitions)
 
     def build(self):
-        self.ebnf.start('_NL? block')
         self.rules()
-        self.spaces()
-        self.values()
-        self.comparisons()
-        self.assignment()
-        self.return_statement()
-        self.absolute_expression()
-        self.block()
-        self.imports()
-        self.types()
+        self.ebnf.start = 'nl? block'
+        self.ebnf.ignore('_WS')
         return self.ebnf.build()

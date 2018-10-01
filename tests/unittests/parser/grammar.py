@@ -406,12 +406,10 @@ def test_grammar_types(patch, call_count, grammar, ebnf):
     ebnf.rules.assert_called_with('types', *definitions)
 
 
-def test_grammar_build(patch, call_count, grammar):
-    methods = ['rules', 'spaces', 'values', 'absolute_expression', 'block',
-               'comparisons', 'assignment', 'imports', 'types',
-               'return_statement']
-    patch.many(Grammar, methods)
+def test_grammar_build(patch, grammar, ebnf):
+    patch.object(Grammar, 'rules')
     result = grammar.build()
-    grammar.ebnf.start.assert_called_with('_NL? block')
-    call_count(Grammar, methods)
-    assert result == grammar.ebnf.build()
+    assert Grammar.rules.call_count == 1
+    assert ebnf.start == 'nl? block'
+    ebnf.ignore.assert_called_with('_WS')
+    assert result == ebnf.build()
