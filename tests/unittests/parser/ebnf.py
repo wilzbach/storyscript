@@ -49,43 +49,25 @@ def test_ebnf_set_token_expression_false_positive(ebnf):
     assert ebnf._tokens['token']['value'] == '"/"'
 
 
+def test_ebnf_resolve(ebnf):
+    result = ebnf.resolve('(something)*')
+    assert result == '(something)*'
+
+
+def test_ebnf_resolve_token(ebnf):
+    ebnf._tokens['token'] = {'token': '_TOKEN'}
+    result = ebnf.resolve('(token)?')
+    assert result == '(_TOKEN)?'
+
+
 def test_ebnf_set_rule(patch, ebnf):
     """
     Ensures that rules are registered correctly
     """
-    patch.object(Ebnf, 'resolve_name', return_value='name')
+    patch.object(Ebnf, 'resolve', return_value='name')
     ebnf.set_rule('rule', 'value')
-    Ebnf.resolve_name.assert_called_with('value')
+    Ebnf.resolve.assert_called_with('value')
     assert ebnf._rules['rule'] == 'name'
-
-
-def test_ebnf_resolve(ebnf):
-    assert ebnf.resolve('item') == 'item'
-
-
-def test_ebnf_resolve_token(ebnf):
-    ebnf._tokens = {'token': ('TOKEN', 'value')}
-    assert ebnf.resolve('token') == 'TOKEN'
-
-
-def test_ebnf_resolve_token_inline(ebnf):
-    ebnf._tokens = {'token': ('_TOKEN', 'value')}
-    assert ebnf.resolve('token') == '_TOKEN'
-
-
-def test_ebnf_resolve_token_priority(ebnf):
-    ebnf._tokens = {'token': ('TOKEN.1', 'value')}
-    assert ebnf.resolve('token') == 'TOKEN'
-
-
-def test_ebnf_resolve_token_maybe(ebnf):
-    ebnf._tokens = {'token': ('TOKEN', 'value')}
-    assert ebnf.resolve('token?') == 'TOKEN?'
-
-
-def test_ebnf_resolve_imports(ebnf):
-    ebnf.imports = {'token': '%import common.TOKEN'}
-    assert ebnf.resolve('token') == 'TOKEN'
 
 
 @mark.parametrize('token_name', ['NAME', 'name'])

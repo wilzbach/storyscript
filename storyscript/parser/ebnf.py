@@ -46,31 +46,26 @@ class Ebnf:
         dictionary = {'name': name, 'value': token_value, 'token': token}
         self._tokens[token_name] = dictionary
 
+    def resolve(self, name):
+        """
+        Resolves a name to its real value if it's a token, or leave it as it
+        is.
+        """
+        clean_name = name.strip('*[]()?')
+        if clean_name in self._tokens:
+            real_name = self._tokens[clean_name]['token']
+        else:
+            real_name = clean_name
+        return name.replace(clean_name, real_name)
+
     def set_rule(self, name, value):
         """
         Registers a rule, transforming tokens to their identifiers.
         """
         rule = ''
         for shard in value.split():
-            rule = '{} {}'.format(rule, self.resolve_name(shard))
+            rule = '{} {}'.format(rule, self.resolve(shard))
         self._rules[name] = rule.strip()
-
-    def resolve(self, item_name):
-        """
-        Resolves an item's reference to its real name.
-        """
-        suffix = None
-        if item_name.endswith('?'):
-            item_name = item_name[:-1]
-            suffix = '?'
-        if item_name in self._tokens:
-            token = self._tokens[item_name][0].split('.')[0]
-            if suffix:
-                return '{}{}'.format(token, suffix)
-            return token
-        if item_name in self.imports:
-            return item_name.upper()
-        return item_name
 
     def token(self, name, value, priority=None, insensitive=False,
               inline=False, regexp=False):
