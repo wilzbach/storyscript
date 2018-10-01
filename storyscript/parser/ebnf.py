@@ -74,9 +74,12 @@ class Ebnf:
         self.imports[token] = '%import common.{}'.format(token.upper())
 
     def build_tokens(self):
+        """
+        Build the tokens that have been defined into a string
+        """
         string = ''
-        for name, token in self._tokens.items():
-            string += '{}: {}\n'.format(token[0], token[1])
+        for name, value in self._tokens.items():
+            string = '{}{}: {}\n'.format(string, value['name'], value['value'])
         return string
 
     def build_rules(self):

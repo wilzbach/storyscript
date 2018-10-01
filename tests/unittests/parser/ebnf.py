@@ -80,9 +80,12 @@ def test_ebnf_load(ebnf):
     assert ebnf.imports['token'] == '%import common.TOKEN'
 
 
-def test_ebnf_build_tokens(patch, ebnf):
-    ebnf._tokens = {'token': ('TOKEN', 'value'), 't2': ('T2', 'value')}
-    assert ebnf.build_tokens() == 'TOKEN: value\nT2: value\n'
+def test_ebnf_build_tokens(ebnf):
+    """
+    Ensures tokens are built correctly.
+    """
+    ebnf._tokens['token'] = {'name': 'TOKEN', 'value': '"hello"'}
+    assert ebnf.build_tokens() == 'TOKEN: "hello"\n'
 
 
 def test_ebnf_build_rules(ebnf):
