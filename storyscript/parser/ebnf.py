@@ -24,8 +24,8 @@ class Ebnf:
         Creates a macro with the given name, by creating a method on the
         instance
         """
-        def compile_macro(rule):
-            return template.format(rule)
+        def compile_macro(*args):
+            return template.format(*args)
         setattr(self, name, compile_macro)
 
     def set_token(self, name, value):

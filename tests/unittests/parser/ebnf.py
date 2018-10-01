@@ -18,8 +18,8 @@ def test_ebnf_init():
 
 
 def test_ebnf_macro(ebnf):
-    ebnf.macro('name', 'hello {}')
-    assert ebnf.name('world') == 'hello world'
+    ebnf.macro('name', '{} {}!')
+    assert ebnf.name('hello', 'world') == 'hello world!'
 
 
 def test_ebnf_set_token(ebnf):
