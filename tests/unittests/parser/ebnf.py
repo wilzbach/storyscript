@@ -49,21 +49,14 @@ def test_ebnf_set_token_expression_false_positive(ebnf):
     assert ebnf._tokens['token']['value'] == '"/"'
 
 
-def test_ebnf_set_rule(ebnf):
+def test_ebnf_set_rule(patch, ebnf):
     """
     Ensures that rules are registered correctly
     """
+    patch.object(Ebnf, 'resolve_name', return_value='name')
     ebnf.set_rule('rule', 'value')
-    assert ebnf._rules['rule'] == 'value'
-
-
-def test_ebnf_set_rule_tokens(ebnf):
-    """
-    Ensures that tokens are converted correctly.
-    """
-    ebnf._tokens['token'] = {'token': 'TOKEN'}
-    ebnf.set_rule('rule', 'value token')
-    assert ebnf._rules['rule'] == 'value TOKEN'
+    Ebnf.resolve_name.assert_called_with('value')
+    assert ebnf._rules['rule'] == 'name'
 
 
 def test_ebnf_resolve(ebnf):

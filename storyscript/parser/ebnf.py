@@ -52,9 +52,7 @@ class Ebnf:
         """
         rule = ''
         for shard in value.split():
-            if shard in self._tokens:
-                shard = self._tokens[shard]['token']
-            rule = '{} {}'.format(rule, shard)
+            rule = '{} {}'.format(rule, self.resolve_name(shard))
         self._rules[name] = rule.strip()
 
     def resolve(self, item_name):
