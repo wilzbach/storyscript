@@ -60,6 +60,11 @@ def test_ebnf_resolve_token(ebnf):
     assert result == '(_TOKEN)?'
 
 
+def test_ebnf_resolve_comma(patch, ebnf):
+    ebnf._tokens['token'] = {'token': 'TOKEN'}
+    assert ebnf.resolve('token,') == 'TOKEN|'
+
+
 def test_ebnf_set_rule(patch, ebnf):
     """
     Ensures that rules are registered correctly

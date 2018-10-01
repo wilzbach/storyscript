@@ -51,7 +51,8 @@ class Ebnf:
         Resolves a name to its real value if it's a token, or leave it as it
         is.
         """
-        clean_name = name.strip('*[]()?')
+        name = name.replace(',', '|')
+        clean_name = name.strip('*[]()?|')
         if clean_name in self._tokens:
             real_name = self._tokens[clean_name]['token']
         else:
