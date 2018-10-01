@@ -70,47 +70,6 @@ def test_ebnf_set_rule(patch, ebnf):
     assert ebnf._rules['rule'] == 'name'
 
 
-@mark.parametrize('token_name', ['NAME', 'name'])
-def test_ebnf_token(ebnf, token_name):
-    """
-    Ensures the token method can create a token
-    """
-    ebnf.token(token_name, 'value')
-    assert ebnf._tokens[token_name] == ('NAME', '"value"')
-
-
-def test_ebnf_token_priority(ebnf):
-    ebnf.token('NAME', 'value', priority=1)
-    assert ebnf._tokens['NAME'] == ('NAME.1', '"value"')
-
-
-def test_ebnf_token_insensitive(ebnf):
-    ebnf.token('NAME', 'value', insensitive=True)
-    assert ebnf._tokens['NAME'] == ('NAME', '"value"i')
-
-
-def test_ebnf_token_inline(ebnf):
-    ebnf.token('NAME', 'value', inline=True)
-    assert ebnf._tokens['NAME'] == ('_NAME', '"value"')
-
-
-def test_ebnf_token_regexp(ebnf):
-    ebnf.token('NAME', 'regexp', regexp=True)
-    assert ebnf._tokens['NAME'] == ('NAME', 'regexp')
-
-
-def test_ebnf_rule(patch, ebnf):
-    patch.object(Ebnf, 'resolve', return_value='resolved')
-    ebnf.rule('name', ('literal', 'token'))
-    ebnf.rule('name', ('literal2', ))
-    assert ebnf._rules['name'] == ['resolved resolved', 'resolved']
-
-
-def test_ebnf_rule_raw(patch, ebnf):
-    ebnf.rule('name', 'raw definition', raw=True)
-    assert ebnf._rules['name'] == ['raw definition']
-
-
 def test_ebnf_ignore(ebnf):
     ebnf.ignore('terminal')
     assert ebnf.ignores == ['%ignore terminal']
