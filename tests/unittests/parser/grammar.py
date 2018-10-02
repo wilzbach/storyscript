@@ -298,6 +298,7 @@ def test_grammar_values(grammar, ebnf):
     assert ebnf._OCB == '{'
     assert ebnf._CCB == '}'
     assert ebnf._COLON == ':'
+    assert ebnf._COMMA == ','
     assert ebnf._OP == '('
     assert ebnf._CP == ')'
     assert ebnf.boolean == 'true, false'

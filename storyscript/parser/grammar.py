@@ -219,6 +219,7 @@ class Grammar:
         self.ebnf._OCB = '{'
         self.ebnf._CCB = '}'
         self.ebnf._COLON = ':'
+        self.ebnf._COMMA = ','
         self.ebnf._OP = '('
         self.ebnf._CP = ')'
         self.ebnf.boolean = 'true, false'
