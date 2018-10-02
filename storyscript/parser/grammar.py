@@ -95,28 +95,6 @@ class Grammar:
         self.ebnf.tokens(('op', '('), ('cp', ')'), inline=True)
         self.ebnf.rule('inline_expression', ('op', 'service', 'cp'))
 
-    def arguments(self):
-        rule = 'NAME? _COLON (values|path)'
-        self.ebnf.rule('arguments', rule, raw=True)
-
-    def command(self):
-        self.ebnf.rule('command', ['name'])
-
-    def output(self):
-        rule = '(_AS NAME (_COMMA NAME)*)'
-        self.ebnf.rule('output', rule, raw=True)
-
-    def service_fragment(self):
-        self.arguments()
-        self.command()
-        self.output()
-        rule = '(command arguments*|arguments+) output?'
-        self.ebnf.rule('service_fragment', rule, raw=True)
-
-    def service(self):
-        self.service_fragment()
-        self.ebnf.rule('service', ('path', 'service_fragment'))
-
     def service_block(self):
         self.service()
         rule = 'service _NL (nested_block)?'
@@ -171,12 +149,6 @@ class Grammar:
         """
         self.expression()
         self.ebnf.rule('absolute_expression', ['expression'])
-
-    def imports(self):
-        self.ebnf.token('import', 'import', inline=True)
-        rule = ('import', 'string', 'as', 'name')
-        self.ebnf.rule('imports', rule)
-
     def comparisons(self):
         tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
                   ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
@@ -249,12 +221,20 @@ class Grammar:
         self.ebnf._IMPORT = 'import'
         self.ebnf.imports = 'import string as name'
 
+    def service(self):
+        self.ebnf.command = 'name'
+        self.ebnf.arguments = 'name? colon (values, path)'
+        self.ebnf.output = '(as name (comma name)*)'
+        self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
+        self.ebnf.service = 'path service_fragment'
+
     def build(self):
         self.macros()
         self.types()
         self.values()
         self.assignments()
         self.imports()
+        self.service()
         self.rules()
         self.ebnf.start = 'nl? block'
         self.ebnf.ignore('_WS')

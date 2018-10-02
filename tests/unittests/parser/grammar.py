@@ -119,38 +119,6 @@ def test_grammar_inline_expression(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('inline_expression', ('op', 'service', 'cp'))
 
 
-def test_grammar_arguments(patch, grammar, ebnf):
-    grammar.arguments()
-    rule = 'NAME? _COLON (values|path)'
-    ebnf.rule.assert_called_with('arguments', rule, raw=True)
-
-
-def test_grammar_command(grammar, ebnf):
-    grammar.command()
-    ebnf.rule.assert_called_with('command', ['name'])
-
-
-def test_grammar_output(grammar, ebnf):
-    grammar.output()
-    rule = '(_AS NAME (_COMMA NAME)*)'
-    ebnf.rule.assert_called_with('output', rule, raw=True)
-
-
-def test_grammar_service_fragment(patch, call_count, grammar, ebnf):
-    patch.many(Grammar, ['arguments', 'command', 'output'])
-    grammar.service_fragment()
-    call_count(Grammar, ['arguments', 'command', 'output'])
-    rule = '(command arguments*|arguments+) output?'
-    ebnf.rule.assert_called_with('service_fragment', rule, raw=True)
-
-
-def test_grammar_service(patch, grammar, ebnf):
-    patch.object(Grammar, 'service_fragment')
-    grammar.service()
-    assert Grammar.service_fragment.call_count == 1
-    ebnf.rule.assert_called_with('service', ('path', 'service_fragment'))
-
-
 def test_grammar_service_block(patch, grammar, ebnf):
     patch.object(Grammar, 'service')
     grammar.service_block()
@@ -323,8 +291,18 @@ def test_grammar_imports(grammar, ebnf):
     assert ebnf.imports == 'import string as name'
 
 
+def test_grammar_service(grammar, ebnf):
+    grammar.service()
+    assert ebnf.command == 'name'
+    assert ebnf.arguments == 'name? colon (values, path)'
+    assert ebnf.output == '(as name (comma name)*)'
+    assert ebnf.service_fragment == '(command arguments*|arguments+) output?'
+    assert ebnf.service == 'path service_fragment'
+
+
 def test_grammar_build(patch, call_count, grammar, ebnf):
-    methods = ['macros', 'types', 'values', 'assignments', 'imports', 'rules']
+    methods = ['macros', 'types', 'values', 'assignments', 'imports',
+               'service', 'rules']
     patch.many(Grammar, methods)
     result = grammar.build()
     call_count(Grammar, methods)
