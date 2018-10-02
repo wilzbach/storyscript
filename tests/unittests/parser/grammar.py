@@ -182,6 +182,6 @@ def test_grammar_build(patch, call_count, grammar, ebnf):
     result = grammar.build()
     assert ebnf._WS == '(" ")+'
     call_count(Grammar, methods)
-    assert ebnf.start == 'nl? block'
+    assert ebnf.start == 'nl? block+'
     ebnf.ignore.assert_called_with('_WS')
     assert result == ebnf.build()

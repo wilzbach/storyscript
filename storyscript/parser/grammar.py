@@ -166,6 +166,6 @@ class Grammar:
         self.foreach_block()
         self.function_block()
         self.block()
-        self.ebnf.start = 'nl? block'
+        self.ebnf.start = 'nl? block+'
         self.ebnf.ignore('_WS')
         return self.ebnf.build()
