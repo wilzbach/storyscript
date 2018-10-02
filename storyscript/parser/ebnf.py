@@ -14,101 +14,99 @@ class Ebnf:
     """
 
     def __init__(self):
-        self.start_line = None
         self._tokens = {}
         self._rules = {}
-        self.imports = {}
-        self.ignores = []
+        self._imports = {}
+        self._ignores = []
 
-    def resolve(self, item_name):
+    def macro(self, name, template):
         """
-        Resolves an item's reference to its real name.
+        Creates a macro with the given name, by creating a method on the
+        instance
         """
-        suffix = None
-        if item_name.endswith('?'):
-            item_name = item_name[:-1]
-            suffix = '?'
-        if item_name in self._tokens:
-            token = self._tokens[item_name][0].split('.')[0]
-            if suffix:
-                return '{}{}'.format(token, suffix)
-            return token
-        if item_name in self.imports:
-            return item_name.upper()
-        return item_name
+        def compile_macro(*args):
+            return template.format(*args)
+        setattr(self, name, compile_macro)
 
-    def start(self, rule):
+    def set_token(self, name, value):
         """
-        Produces the start rule
+        Registers a token under a simplified name, and keep the original name,
+        the value and the real token
         """
-        self.start_line = 'start: {}+'.format(rule)
+        token = name.split('.')[0]
+        token_name = token.lower()
+        if token_name.startswith('_'):
+            token_name = token_name[1:]
 
-    def token(self, name, value, priority=None, insensitive=False,
-              inline=False, regexp=False):
-        """
-        Adds a terminal token to the terminals list
-        """
-        name_string = name.upper()
-        value_string = '"{}"'.format(value)
-        if priority:
-            name_string = '{}.{}'.format(name_string, priority)
-        if inline:
-            name_string = '_{}'.format(name_string)
-        if regexp:
-            value_string = '{}'.format(value)
-        if insensitive:
-            value_string = '{}i'.format(value_string)
-        self._tokens[name] = (name_string, value_string)
+        token_value = '"{}"'.format(value)
+        if len(value) > 2:
+            if value.startswith('/'):
+                if value.endswith('/'):
+                    token_value = value
+            elif '"' in value:
+                token_value = value
+        dictionary = {'name': name, 'value': token_value, 'token': token}
+        self._tokens[token_name] = dictionary
 
-    def tokens(self, *args, **kwargs):
-        for token_args in args:
-            self.token(*token_args, **kwargs)
-
-    def rule(self, name, definition, raw=False):
+    def resolve(self, name):
         """
-        Adds a rule with the given name and definition, which must be an
-        iterable of tokens or literals.
+        Resolves a name to its real value if it's a token, or leave it as it
+        is.
         """
-        if name not in self._rules:
-            self._rules[name] = []
-        if raw:
-            self._rules[name].append(definition)
-            return
-        string = ''
-        for token in definition:
-            string = '{}{} '.format(string, self.resolve(token))
-        self._rules[name].append(string[:-1])
+        name = name.replace(',', '|')
+        clean_name = name.strip('*[]()?|')
+        if clean_name in self._tokens:
+            real_name = self._tokens[clean_name]['token']
+        else:
+            real_name = clean_name
+        return name.replace(clean_name, real_name)
 
-    def rules(self, name, *definitions):
-        for definition in definitions:
-            self.rule(name, definition)
+    def set_rule(self, name, value):
+        """
+        Registers a rule, transforming tokens to their identifiers.
+        """
+        rule = ''
+        for shard in value.split():
+            rule = '{} {}'.format(rule, self.resolve(shard))
+        self._rules[name] = rule.strip()
 
     def ignore(self, terminal):
-        self.ignores.append('%ignore {}'.format(terminal))
+        self._ignores.append('%ignore {}'.format(terminal))
 
     def load(self, token):
-        self.imports[token] = '%import common.{}'.format(token.upper())
-
-    def loads(self, tokens):
-        for token in tokens:
-            self.load(token)
+        self._imports[token] = '%import common.{}'.format(token.upper())
 
     def build_tokens(self):
+        """
+        Build the tokens that have been defined into a string
+        """
         string = ''
-        for name, token in self._tokens.items():
-            string += '{}: {}\n'.format(token[0], token[1])
+        for name, value in self._tokens.items():
+            string = '{}{}: {}\n'.format(string, value['name'], value['value'])
         return string
 
     def build_rules(self):
+        """
+        Build the rules that have been defined into a string
+        """
         string = ''
-        for name, definitions in self._rules.items():
-            string += '{}: {}\n'.format(name, ' | '.join(definitions))
+        for name, value in self._rules.items():
+            string = '{}{}: {}\n'.format(string, name, value)
         return string
 
     def build(self):
+        """
+        Build the grammar
+        """
         tokens = self.build_tokens()
         rules = self.build_rules()
-        ignores = '\n'.join(self.ignores)
-        imports = '\n'.join(self.imports.values())
-        args = (self.start_line, rules, tokens, ignores, imports)
-        return '{}\n{}\n{}\n{}\n\n{}'.format(*args)
+        ignores = '\n'.join(self._ignores)
+        imports = '\n'.join(self._imports.values())
+        return '{}\n{}\n{}\n\n{}'.format(rules, tokens, ignores, imports)
+
+    def __setattr__(self, name, value):
+        if isinstance(value, str):
+            if name.isupper():
+                return self.set_token(name, value)
+            return self.set_rule(name, value)
+        object.__setattr__(self, name, value)
