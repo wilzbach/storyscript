@@ -164,10 +164,13 @@ def test_grammar_function_block(grammar, ebnf):
 
 def test_grammar_try_block(grammar, ebnf):
     grammar.try_block()
-    ebnf._TRY == 'try'
-    ebnf.try_statement == 'try'
-    ebnf.simple_block.assert_called_with('try_statement')
-    ebnf.try_block == ebnf.simple_block()
+    assert ebnf._TRY == 'try'
+    assert ebnf._CATCH == 'catch'
+    assert ebnf.catch_statement == 'catch as name'
+    ebnf.simple_block.assert_called_with('catch_statement')
+    assert ebnf.catch_block == ebnf.simple_block()
+    assert ebnf.try_statement == 'try'
+    assert ebnf.try_block == 'try_statement nl nested_block catch_block?'
 
 
 def test_grammar_block(grammar, ebnf):
