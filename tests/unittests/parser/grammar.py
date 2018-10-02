@@ -29,14 +29,6 @@ def test_grammar_nested_block(grammar, ebnf):
     ebnf.rule.assert_called_with('nested_block', definition, raw=True)
 
 
-def test_grammar_foreach_block(patch, grammar, ebnf):
-    patch.object(Grammar, 'foreach_statement')
-    grammar.foreach_block()
-    assert Grammar.foreach_statement.call_count == 1
-    definition = 'foreach_statement _NL nested_block'
-    ebnf.rule.assert_called_with('foreach_block', definition, raw=True)
-
-
 def test_grammar_typed_argument(grammar, ebnf):
     grammar.typed_argument()
     definition = ('name', 'colon', 'types')
@@ -64,12 +56,6 @@ def test_grammar_function_block(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('function_block', definition)
 
 
-def test_grammar_inline_expression(patch, grammar, ebnf):
-    grammar.inline_expression()
-    ebnf.tokens.assert_called_with(('op', '('), ('cp', ')'), inline=True)
-    ebnf.rule.assert_called_with('inline_expression', ('op', 'service', 'cp'))
-
-
 def test_grammar_service_block(patch, grammar, ebnf):
     patch.object(Grammar, 'service')
     grammar.service_block()
@@ -93,14 +79,6 @@ def test_grammar_block(patch, call_count, grammar, ebnf):
     definition = ('rules _NL|if_block|foreach_block|function_block'
                   '|arguments|service_block|when_block')
     ebnf.rule.assert_called_with('block', definition, raw=True)
-
-
-def test_grammar_foreach_statement(grammar, ebnf):
-    grammar.foreach_statement()
-    definition = ('foreach', 'name', 'output')
-    ebnf.rule.assert_called_with('foreach_statement', definition)
-    tokens = (('foreach', 'foreach'), ('as', 'as'))
-    ebnf.tokens.assert_called_with(*tokens, inline=True)
 
 
 def test_grammar_return_statement(patch, ebnf, grammar):
@@ -226,6 +204,14 @@ def test_grammar_if_block(grammar, ebnf):
     assert ebnf.else_block == ebnf.simple_block()
     if_block = 'if_statement nl nested_block elseif_block* else_block?'
     assert ebnf.if_block == if_block
+
+
+def test_grammar_foreach_block(grammar, ebnf):
+    grammar.foreach_block()
+    assert ebnf._FOREACH == 'foreach'
+    assert ebnf.foreach_statement == 'foreach name output'
+    ebnf.simple_block.assert_called_with('foreach_statement')
+    assert ebnf.foreach_block == ebnf.simple_block()
 
 
 def test_grammar_build(patch, call_count, grammar, ebnf):

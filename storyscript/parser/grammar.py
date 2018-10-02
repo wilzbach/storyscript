@@ -15,11 +15,6 @@ class Grammar:
     def nested_block(self):
         self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
 
-    def foreach_block(self):
-        self.foreach_statement()
-        definition = 'foreach_statement _NL nested_block'
-        self.ebnf.rule('foreach_block', definition, raw=True)
-
     def typed_argument(self):
         self.ebnf.rule('typed_argument', ('name', 'colon', 'types'))
 
@@ -71,11 +66,6 @@ class Grammar:
         """
         Defines available types
         """
-    def foreach_statement(self):
-        self.ebnf.tokens(('foreach', 'foreach'), ('as', 'as'), inline=True)
-        definition = ('foreach', 'name', 'output')
-        self.ebnf.rule('foreach_statement', definition)
-
     def return_statement(self):
         self.ebnf.token('return', 'return', inline=True)
         rule = '_RETURN (path|values)'
@@ -184,6 +174,11 @@ class Grammar:
         self.ebnf.else_block = self.ebnf.simple_block('else_statement')
         if_block = 'if_statement nl nested_block elseif_block* else_block?'
         self.ebnf.if_block = if_block
+
+    def foreach_block(self):
+        self.ebnf._FOREACH = 'foreach'
+        self.ebnf.foreach_statement = 'foreach name output'
+        self.ebnf.foreach_block = self.ebnf.simple_block('foreach_statement')
 
     def build(self):
         self.macros()
