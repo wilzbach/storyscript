@@ -17,19 +17,6 @@ class Grammar:
                        ['imports'], ['return_statement'], ['block'])
         self.ebnf.rules('rules', *definitions)
 
-    def whitespaces(self):
-        tokens = (('ws', '(" ")+'), ('nl', r'/(\r?\n[\t ]*)+/'))
-        self.ebnf.tokens(*tokens, inline=True, regexp=True)
-        self.ebnf.ignore('_WS')
-
-    def indentation(self):
-        tokens = (('indent', '<INDENT>'), ('dedent', '<DEDENT>'))
-        self.ebnf.tokens(*tokens, inline=True)
-
-    def spaces(self):
-        self.whitespaces()
-        self.indentation()
-
     def nested_block(self):
         self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
 
@@ -180,6 +167,9 @@ class Grammar:
         self.ebnf.types = rule
 
     def values(self):
+        self.ebnf._NL = r'/(\r?\n[\t ]*)+/'
+        self.ebnf._INDENT = '<INDENT>'
+        self.ebnf._DEDENT = '<DEDENT>'
         self.ebnf.TRUE = 'true'
         self.ebnf.FALSE = 'false'
         self.ebnf.set_token('INT.2', '"0".."9"+')

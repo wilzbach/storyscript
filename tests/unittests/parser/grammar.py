@@ -30,24 +30,6 @@ def test_grammar_rules(grammar, ebnf):
     ebnf.rules.assert_called_with('rules', *defintions)
 
 
-def test_grammar_whitespaces(grammar, ebnf):
-    grammar.whitespaces()
-    tokens = (('ws', '(" ")+'), ('nl', r'/(\r?\n[\t ]*)+/'))
-    ebnf.tokens.assert_called_with(*tokens, inline=True, regexp=True)
-
-
-def test_grammar_indentation(grammar, ebnf):
-    grammar.indentation()
-    tokens = (('indent', '<INDENT>'), ('dedent', '<DEDENT>'))
-    ebnf.tokens.assert_called_with(*tokens, inline=True)
-
-
-def test_grammar_spaces(patch, call_count, grammar):
-    patch.many(Grammar, ['whitespaces', 'indentation'])
-    grammar.spaces()
-    call_count(Grammar, ['whitespaces', 'indentation'])
-
-
 def test_grammar_nested_block(grammar, ebnf):
     grammar.nested_block()
     definition = '_INDENT block+ _DEDENT'
@@ -250,6 +232,9 @@ def test_grammar_types(grammar, ebnf):
 
 def test_grammar_values(grammar, ebnf):
     grammar.values()
+    assert ebnf._NL == r'/(\r?\n[\t ]*)+/'
+    assert ebnf._INDENT == '<INDENT>'
+    assert ebnf._DEDENT == '<DEDENT>'
     assert ebnf.TRUE == 'true'
     assert ebnf.FALSE == 'false'
     assert ebnf.SINGLE_QUOTED == "/'([^']*)'/"
