@@ -176,39 +176,6 @@ def test_grammar_block(patch, call_count, grammar, ebnf):
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 
-def test_grammar_number(grammar, ebnf):
-    grammar.number()
-    tokens = (('int', '"0".."9"+'), ('float', """INT "." INT? | "." INT"""))
-    ebnf.tokens.assert_called_with(*tokens, regexp=True, priority=2)
-    ebnf.rules.assert_called_with('number', ['int'], ['float'])
-
-
-def test_grammar_string(grammar, ebnf):
-    grammar.string()
-    tokens = (('single_quoted', "/'([^']*)'/"),
-              ('double_quoted', '/"([^"]*)"/'))
-    ebnf.tokens.assert_called_with(*tokens, regexp=True)
-    definitions = (['single_quoted'], ['double_quoted'])
-    ebnf.rules.assert_called_with('string', *definitions)
-
-
-def test_grammar_boolean(grammar, ebnf):
-    grammar.boolean()
-    ebnf.tokens.assert_called_with(('true', 'true'), ('false', 'false'))
-    ebnf.rules.assert_called_with('boolean', ['true'], ['false'])
-
-
-def test_grammar_values(patch, call_count, grammar, ebnf):
-    methods = ['number', 'string', 'list', 'objects', 'boolean',
-               'inline_expression']
-    patch.many(Grammar, methods)
-    grammar.values()
-    call_count(Grammar, methods)
-    rules = (['number'], ['string'], ['boolean'], ['list'], ['objects'],
-             ['inline_expression'])
-    ebnf.rules.assert_called_with('values', *rules)
-
-
 def test_grammar_operator(grammar, ebnf):
     grammar.operator()
     tokens = (('plus', '+'), ('dash', '-'), ('multiplier', '*'),
@@ -240,32 +207,6 @@ def test_grammar_absolute_expression(patch, grammar, ebnf):
     grammar.absolute_expression()
     assert Grammar.expression.call_count == 1
     ebnf.rule.assert_called_with('absolute_expression', ['expression'])
-
-
-def test_grammar_list(grammar, ebnf):
-    grammar.list()
-    tokens = (('comma', ','), ('osb', '['), ('csb', ']'))
-    ebnf.tokens.assert_called_with(*tokens, inline=True)
-    definition = ('_OSB (_NL _INDENT)? (values (_COMMA _NL? values)*)?'
-                  ' (_NL _DEDENT)? _CSB')
-    ebnf.rule.assert_called_with('!list', definition, raw=True)
-
-
-def test_grammar_key_value(grammar, ebnf):
-    grammar.key_value()
-    ebnf.token.assert_called_with('colon', ':', inline=True)
-    rule = '(string|path) _COLON (values|path)'
-    ebnf.rule.assert_called_with('key_value', rule, raw=True)
-
-
-def test_grammar_objects(patch, grammar, ebnf):
-    patch.object(Grammar, 'key_value')
-    grammar.objects()
-    assert Grammar.key_value.call_count == 1
-    ebnf.tokens.assert_called_with(('ocb', '{'), ('ccb', '}'), inline=True)
-    rule = ('_OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)?'
-            ' (_NL _DEDENT)? _CCB')
-    ebnf.rule.assert_called_with('objects', rule, raw=True)
 
 
 def test_grammar_path_fragment(grammar, ebnf):
@@ -379,8 +320,31 @@ def test_grammar_types(grammar, ebnf):
     assert ebnf.types == rule
 
 
+def test_grammar_values(grammar, ebnf):
+    grammar.values()
+    assert ebnf.TRUE == 'true'
+    assert ebnf.FALSE == 'false'
+    assert ebnf.SINGLE_QUOTED == "/'([^']*)'/"
+    assert ebnf.DOUBLE_QUOTED == '/"([^"]*)"/'
+    assert ebnf._OSB == '['
+    assert ebnf._CSB == ']'
+    assert ebnf._OCB == '{'
+    assert ebnf._CCB == '}'
+    assert ebnf._COLON == ':'
+    assert ebnf._OP == '('
+    assert ebnf._CP == ')'
+    assert ebnf.boolean == 'true, false'
+    assert ebnf.number == 'int, float'
+    assert ebnf.string == 'single_quoted, double_quoted'
+    assert ebnf.key_value == '(string, path) colon (values, path)'
+    assert ebnf.objects == ebnf.collection()
+    assert ebnf.inline_expression == 'op service cp'
+    values = 'number, string, boolean, list, objects, inline_expression'
+    assert ebnf.values == values
+
+
 def test_grammar_build(patch, call_count, grammar, ebnf):
-    methods = ['macros', 'types', 'rules']
+    methods = ['macros', 'types', 'values', 'rules']
     patch.many(Grammar, methods)
     result = grammar.build()
     call_count(Grammar, methods)

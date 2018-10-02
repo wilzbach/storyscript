@@ -137,52 +137,6 @@ class Grammar:
                       '|arguments|service_block|when_block')
         self.ebnf.rule('block', definition, raw=True)
 
-    def number(self):
-        tokens = (('int', '"0".."9"+'),
-                  ('float', """INT "." INT? | "." INT"""))
-        self.ebnf.tokens(*tokens, regexp=True, priority=2)
-        self.ebnf.rules('number', ['int'], ['float'])
-
-    def string(self):
-        tokens = (('single_quoted', "/'([^']*)'/"),
-                  ('double_quoted', '/"([^"]*)"/'))
-        self.ebnf.tokens(*tokens, regexp=True)
-        self.ebnf.rules('string', ['single_quoted'], ['double_quoted'])
-
-    def boolean(self):
-        self.ebnf.tokens(('true', 'true'), ('false', 'false'))
-        self.ebnf.rules('boolean', ['true'], ['false'])
-
-    def list(self):
-        self.ebnf.tokens(('comma', ','), ('osb', '['), ('csb', ']'),
-                         inline=True)
-        definition = ('_OSB (_NL _INDENT)? (values (_COMMA _NL? values)*)?'
-                      ' (_NL _DEDENT)? _CSB')
-        self.ebnf.rule('!list', definition, raw=True)
-
-    def key_value(self):
-        self.ebnf.token('colon', ':', inline=True)
-        rule = '(string|path) _COLON (values|path)'
-        self.ebnf.rule('key_value', rule, raw=True)
-
-    def objects(self):
-        self.key_value()
-        self.ebnf.tokens(('ocb', '{'), ('ccb', '}'), inline=True)
-        rule = ('_OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)?'
-                ' (_NL _DEDENT)? _CCB')
-        self.ebnf.rule('objects', rule, raw=True)
-
-    def values(self):
-        self.number()
-        self.string()
-        self.boolean()
-        self.list()
-        self.objects()
-        self.inline_expression()
-        rules = (['number'], ['string'], ['boolean'], ['list'], ['objects'],
-                 ['inline_expression'])
-        self.ebnf.rules('values', *rules)
-
     def operator(self):
         self.ebnf.tokens(('plus', '+'), ('dash', '-'), ('multiplier', '*'),
                          ('bslash', '/'))
@@ -274,9 +228,37 @@ class Grammar:
                 'object_type, regexp_type, function_type')
         self.ebnf.types = rule
 
+    def values(self):
+        self.ebnf.TRUE = 'true'
+        self.ebnf.FALSE = 'false'
+        self.ebnf.set_token('INT.2', '"0".."9"+')
+        self.ebnf.set_token('FLOAT.2', 'INT "." INT? | "." INT')
+        self.ebnf.SINGLE_QUOTED = "/'([^']*)'/"
+        self.ebnf.DOUBLE_QUOTED = '/"([^"]*)"/'
+        self.ebnf._OSB = '['
+        self.ebnf._CSB = ']'
+        self.ebnf._OCB = '{'
+        self.ebnf._CCB = '}'
+        self.ebnf._COLON = ':'
+        self.ebnf._OP = '('
+        self.ebnf._CP = ')'
+        self.ebnf.boolean = 'true, false'
+        self.ebnf.number = 'int, float'
+        self.ebnf.string = 'single_quoted, double_quoted'
+        list = self.ebnf.collection('osb', 'values', 'values', 'csb')
+        self.ebnf.set_rule('!list', list)
+        self.ebnf.key_value = '(string, path) colon (values, path)'
+        objects = 'ocb', 'key_value', 'key_value', 'ccb'
+        self.ebnf.objects = self.ebnf.collection(objects)
+        self.ebnf.inline_expression = 'op service cp'
+        values = 'number, string, boolean, list, objects, inline_expression'
+        self.ebnf.values = values
+
+
     def build(self):
         self.macros()
         self.types()
+        self.values()
         self.rules()
         self.ebnf.start = 'nl? block'
         self.ebnf.ignore('_WS')
