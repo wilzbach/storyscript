@@ -359,57 +359,27 @@ def test_grammar_return_statement(patch, ebnf, grammar):
     ebnf.rule.assert_called_with('return_statement', rule, raw=True)
 
 
-def test_grammar_int_type(grammar, ebnf):
-    grammar.int_type()
-    ebnf.token.assert_called_with('int_type', 'int')
 
 
-def test_grammar_float_type(grammar, ebnf):
-    grammar.float_type()
-    ebnf.token.assert_called_with('float_type', 'float')
-
-
-def test_grammar_number_type(grammar, ebnf):
-    grammar.number_type()
-    ebnf.token.assert_called_with('number_type', 'number')
-
-
-def test_grammar_string_type(grammar, ebnf):
-    grammar.string_type()
-    ebnf.token.assert_called_with('string_type', 'string')
-
-
-def test_grammar_list_type(grammar, ebnf):
-    grammar.list_type()
-    ebnf.token.assert_called_with('list_type', 'list')
-
-
-def test_grammar_object_type(grammar, ebnf):
-    grammar.object_type()
-    ebnf.token.assert_called_with('object_type', 'object')
-
-
-def test_grammar_regexp_type(grammar, ebnf):
-    grammar.regexp_type()
-    ebnf.token.assert_called_with('regexp_type', 'regexp')
-
-
-def test_grammar_types(patch, call_count, grammar, ebnf):
-    methods = ['int_type', 'float_type', 'number_type', 'string_type',
-               'list_type', 'object_type', 'regexp_type', 'function_type']
-    patch.many(Grammar, methods)
+def test_grammar_types(grammar, ebnf):
     grammar.types()
-    call_count(Grammar, methods)
-    definitions = (['int_type'], ['float_type'], ['number_type'],
-                   ['string_type'], ['list_type'], ['object_type'],
-                   ['regexp_type'], ['function_type'])
-    ebnf.rules.assert_called_with('types', *definitions)
+    assert ebnf.INT_TYPE == 'int'
+    assert ebnf.FLOAT_TYPE == 'float'
+    assert ebnf.NUMBER_TYPE == 'number'
+    assert ebnf.STRING_TYPE == 'string'
+    assert ebnf.LIST_TYPE == 'list'
+    assert ebnf.OBJECT_TYPE == 'object'
+    assert ebnf.REGEXP_TYPE == 'regex'
+    assert ebnf.FUNCTION_TYPE == 'function'
+    rule = ('int_type, float_type, number_type, string_type, list_type, '
+            'object_type, regexp_type, function_type')
+    assert ebnf.types == rule
 
 
-def test_grammar_build(patch, grammar, ebnf):
-    patch.object(Grammar, 'rules')
+def test_grammar_build(patch, call_count, grammar, ebnf):
+    patch.many(Grammar, ['types', 'rules'])
     result = grammar.build()
-    assert Grammar.rules.call_count == 1
+    call_count(Grammar, ['types', 'rules'])
     assert ebnf.start == 'nl? block'
     ebnf.ignore.assert_called_with('_WS')
     assert result == ebnf.build()

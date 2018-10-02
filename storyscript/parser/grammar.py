@@ -202,9 +202,11 @@ class Grammar:
         self.ebnf.rules('expression', *definitions)
 
     def absolute_expression(self):
+    def types(self):
         """
         An expression on its own line. This is necessary for the compiler to
         understand how to compile an expression.
+        Defines available types
         """
         self.expression()
         self.ebnf.rule('absolute_expression', ['expression'])
@@ -253,45 +255,20 @@ class Grammar:
         rule = '_RETURN (path|values)'
         self.ebnf.rule('return_statement', rule, raw=True)
 
-    def int_type(self):
-        self.ebnf.token('int_type', 'int')
-
-    def float_type(self):
-        self.ebnf.token('float_type', 'float')
-
-    def number_type(self):
-        self.ebnf.token('number_type', 'number')
-
-    def string_type(self):
-        self.ebnf.token('string_type', 'string')
-
-    def list_type(self):
-        self.ebnf.token('list_type', 'list')
-
-    def object_type(self):
-        self.ebnf.token('object_type', 'object')
-
-    def regexp_type(self):
-        self.ebnf.token('regexp_type', 'regexp')
-
-    def function_type(self):
-        self.ebnf.token('function_type', 'function')
-
-    def types(self):
-        self.int_type()
-        self.float_type()
-        self.number_type()
-        self.string_type()
-        self.list_type()
-        self.object_type()
-        self.regexp_type()
-        self.function_type()
-        definitions = (['int_type'], ['float_type'], ['number_type'],
-                       ['string_type'], ['list_type'], ['object_type'],
-                       ['regexp_type'], ['function_type'])
-        self.ebnf.rules('types', *definitions)
+        self.ebnf.INT_TYPE = 'int'
+        self.ebnf.FLOAT_TYPE = 'float'
+        self.ebnf.NUMBER_TYPE = 'number'
+        self.ebnf.STRING_TYPE = 'string'
+        self.ebnf.LIST_TYPE = 'list'
+        self.ebnf.OBJECT_TYPE = 'object'
+        self.ebnf.REGEXP_TYPE = 'regex'
+        self.ebnf.FUNCTION_TYPE = 'function'
+        rule = ('int_type, float_type, number_type, string_type, list_type, '
+                'object_type, regexp_type, function_type')
+        self.ebnf.types = rule
 
     def build(self):
+        self.types()
         self.rules()
         self.ebnf.start = 'nl? block'
         self.ebnf.ignore('_WS')
