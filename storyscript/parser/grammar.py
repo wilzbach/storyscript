@@ -244,11 +244,17 @@ class Grammar:
         self.ebnf.assignment_fragment = assignment_fragment
         self.ebnf.assignment = 'path assignment_fragment'
 
+    def imports(self):
+        self.ebnf._AS = 'as'
+        self.ebnf._IMPORT = 'import'
+        self.ebnf.imports = 'import string as name'
+
     def build(self):
         self.macros()
         self.types()
         self.values()
         self.assignments()
+        self.imports()
         self.rules()
         self.ebnf.start = 'nl? block'
         self.ebnf.ignore('_WS')

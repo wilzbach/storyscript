@@ -209,13 +209,6 @@ def test_grammar_absolute_expression(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('absolute_expression', ['expression'])
 
 
-def test_grammar_imports(patch, grammar, ebnf):
-    grammar.imports()
-    ebnf.token.assert_called_with('import', 'import', inline=True)
-    rule = ('import', 'string', 'as', 'name')
-    ebnf.rule.assert_called_with('imports', rule)
-
-
 def test_grammar_comparisons(grammar, ebnf):
     grammar.comparisons()
     tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
@@ -323,8 +316,15 @@ def test_grammar_assignments(grammar, ebnf):
     assert ebnf.assignment == 'path assignment_fragment'
 
 
+def test_grammar_imports(grammar, ebnf):
+    grammar.imports()
+    assert ebnf._AS == 'as'
+    assert ebnf._IMPORT == 'import'
+    assert ebnf.imports == 'import string as name'
+
+
 def test_grammar_build(patch, call_count, grammar, ebnf):
-    methods = ['macros', 'types', 'values', 'assignments', 'rules']
+    methods = ['macros', 'types', 'values', 'assignments', 'imports', 'rules']
     patch.many(Grammar, methods)
     result = grammar.build()
     call_count(Grammar, methods)
