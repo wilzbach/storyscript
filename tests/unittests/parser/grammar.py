@@ -29,33 +29,6 @@ def test_grammar_nested_block(grammar, ebnf):
     ebnf.rule.assert_called_with('nested_block', definition, raw=True)
 
 
-def test_grammar_typed_argument(grammar, ebnf):
-    grammar.typed_argument()
-    definition = ('name', 'colon', 'types')
-    ebnf.rule.assert_called_with('typed_argument', definition)
-
-
-def test_grammar_function_output(grammar, ebnf):
-    grammar.function_output()
-    ebnf.token.assert_called_with('returns', 'returns', inline=True)
-    ebnf.rule.assert_called_with('function_output', ('returns', 'types'))
-
-
-def test_grammar_function_statement(patch, call_count, grammar, ebnf):
-    patch.many(Grammar, ['typed_argument', 'function_output'])
-    grammar.function_statement()
-    call_count(Grammar, ['typed_argument', 'function_output'])
-    rule = 'FUNCTION_TYPE NAME typed_argument* function_output?'
-    ebnf.rule.assert_called_with('function_statement', rule, raw=True)
-
-
-def test_grammar_function_block(patch, grammar, ebnf):
-    patch.object(Grammar, 'function_statement')
-    grammar.function_block()
-    definition = ('function_statement', 'nl', 'nested_block')
-    ebnf.rule.assert_called_with('function_block', definition)
-
-
 def test_grammar_service_block(patch, grammar, ebnf):
     patch.object(Grammar, 'service')
     grammar.service_block()
@@ -212,6 +185,17 @@ def test_grammar_foreach_block(grammar, ebnf):
     assert ebnf.foreach_statement == 'foreach name output'
     ebnf.simple_block.assert_called_with('foreach_statement')
     assert ebnf.foreach_block == ebnf.simple_block()
+
+
+def test_grammar_function_block(grammar, ebnf):
+    grammar.function_block()
+    assert ebnf._RETURNS == 'returns'
+    assert ebnf.typed_argument == 'name colon types'
+    assert ebnf.function_output == 'returns types'
+    function_statement = 'function_type name typed_argument* function_output?'
+    assert ebnf.function_statement == function_statement
+    ebnf.simple_block.assert_called_with('function_statement')
+    assert ebnf.function_block == ebnf.simple_block()
 
 
 def test_grammar_build(patch, call_count, grammar, ebnf):

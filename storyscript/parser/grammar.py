@@ -15,24 +15,6 @@ class Grammar:
     def nested_block(self):
         self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
 
-    def typed_argument(self):
-        self.ebnf.rule('typed_argument', ('name', 'colon', 'types'))
-
-    def function_output(self):
-        self.ebnf.token('returns', 'returns', inline=True)
-        self.ebnf.rule('function_output', ('returns', 'types'))
-
-    def function_statement(self):
-        self.typed_argument()
-        self.function_output()
-        rule = 'FUNCTION_TYPE NAME typed_argument* function_output?'
-        self.ebnf.rule('function_statement', rule, raw=True)
-
-    def function_block(self):
-        self.function_statement()
-        rule = ('function_statement', 'nl', 'nested_block')
-        self.ebnf.rule('function_block', rule)
-
     def service_block(self):
         self.service()
         rule = 'service _NL (nested_block)?'
@@ -60,7 +42,6 @@ class Grammar:
         collection = '{} (nl indent)? ({} (comma nl? {})*)? (nl dedent)? {}'
         self.ebnf.macro('collection', collection)
         self.ebnf.macro('simple_block', '{} nl nested_block')
-
 
     def types(self):
         """
@@ -179,6 +160,15 @@ class Grammar:
         self.ebnf._FOREACH = 'foreach'
         self.ebnf.foreach_statement = 'foreach name output'
         self.ebnf.foreach_block = self.ebnf.simple_block('foreach_statement')
+
+    def function_block(self):
+        self.ebnf._RETURNS = 'returns'
+        self.ebnf.typed_argument = 'name colon types'
+        self.ebnf.function_output = 'returns types'
+        function_statement = ('function_type name typed_argument* '
+                              'function_output?')
+        self.ebnf.function_statement = function_statement
+        self.ebnf.function_block = self.ebnf.simple_block('function_statement')
 
     def build(self):
         self.macros()
