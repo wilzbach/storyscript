@@ -12,29 +12,6 @@ class Grammar:
     def __init__(self):
         self.ebnf = Ebnf()
 
-    def nested_block(self):
-        self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
-
-    def service_block(self):
-        self.service()
-        rule = 'service _NL (nested_block)?'
-        self.ebnf.rule('service_block', rule, raw=True)
-
-    def when_block(self):
-        self.ebnf.token('when', 'when', inline=True)
-        rule = '_WHEN (path output|service) _NL nested_block'
-        self.ebnf.rule('when_block', rule, raw=True)
-
-    def block(self):
-        self.if_block()
-        self.foreach_block()
-        self.function_block()
-        self.service_block()
-        self.when_block()
-        definition = ('rules _NL|if_block|foreach_block|function_block'
-                      '|arguments|service_block|when_block')
-        self.ebnf.rule('block', definition, raw=True)
-
     def macros(self):
         """
         Define the macros
@@ -47,11 +24,6 @@ class Grammar:
         """
         Defines available types
         """
-    def return_statement(self):
-        self.ebnf.token('return', 'return', inline=True)
-        rule = '_RETURN (path|values)'
-        self.ebnf.rule('return_statement', rule, raw=True)
-
         self.ebnf.INT_TYPE = 'int'
         self.ebnf.FLOAT_TYPE = 'float'
         self.ebnf.NUMBER_TYPE = 'number'
@@ -169,6 +141,16 @@ class Grammar:
                               'function_output?')
         self.ebnf.function_statement = function_statement
         self.ebnf.function_block = self.ebnf.simple_block('function_statement')
+
+    def block(self):
+        self.ebnf._WHEN = 'when'
+        self.ebnf.service_block = 'service nl (nested_block)?'
+        when = 'when (path output|service)'
+        self.ebnf.when_block = self.ebnf.simple_block(when)
+        block = ('rules nl, if_block, foreach_block, function_block, '
+                 'arguments, service_block, when_block')
+        self.ebnf.block = block
+        self.ebnf.nested_block = 'indent block+ dedent'
 
     def build(self):
         self.macros()

@@ -23,42 +23,6 @@ def test_grammar_init():
     assert isinstance(grammar.ebnf, Ebnf)
 
 
-def test_grammar_nested_block(grammar, ebnf):
-    grammar.nested_block()
-    definition = '_INDENT block+ _DEDENT'
-    ebnf.rule.assert_called_with('nested_block', definition, raw=True)
-
-
-def test_grammar_service_block(patch, grammar, ebnf):
-    patch.object(Grammar, 'service')
-    grammar.service_block()
-    rule = 'service _NL (nested_block)?'
-    ebnf.rule.assert_called_with('service_block', rule, raw=True)
-
-
-def test_grammar_when_block(patch, grammar, ebnf):
-    grammar.when_block()
-    ebnf.token.assert_called_with('when', 'when', inline=True)
-    rule = '_WHEN (path output|service) _NL nested_block'
-    ebnf.rule.assert_called_with('when_block', rule, raw=True)
-
-
-def test_grammar_block(patch, call_count, grammar, ebnf):
-    methods = ['if_block', 'foreach_block', 'function_block', 'service_block',
-               'when_block']
-    patch.many(Grammar, methods)
-    grammar.block()
-    call_count(Grammar, methods)
-    definition = ('rules _NL|if_block|foreach_block|function_block'
-                  '|arguments|service_block|when_block')
-    ebnf.rule.assert_called_with('block', definition, raw=True)
-
-
-def test_grammar_return_statement(patch, ebnf, grammar):
-    grammar.return_statement()
-    ebnf.token.assert_called_with('return', 'return', inline=True)
-    rule = '_RETURN (path|values)'
-    ebnf.rule.assert_called_with('return_statement', rule, raw=True)
 def test_grammar_macros(grammar, ebnf):
     grammar.macros()
     ebnf.macro.call_count == 2
@@ -196,6 +160,18 @@ def test_grammar_function_block(grammar, ebnf):
     assert ebnf.function_statement == function_statement
     ebnf.simple_block.assert_called_with('function_statement')
     assert ebnf.function_block == ebnf.simple_block()
+
+
+def test_grammar_block(grammar, ebnf):
+    grammar.block()
+    assert ebnf._WHEN == 'when'
+    assert ebnf.service_block == 'service nl (nested_block)?'
+    ebnf.simple_block.assert_called_with('when (path output|service)')
+    assert ebnf.when_block == ebnf.simple_block()
+    block = ('rules nl, if_block, foreach_block, function_block, '
+             'arguments, service_block, when_block')
+    assert ebnf.block == block
+    assert ebnf.nested_block == 'indent block+ dedent'
 
 
 def test_grammar_build(patch, call_count, grammar, ebnf):
