@@ -29,30 +29,6 @@ def test_grammar_nested_block(grammar, ebnf):
     ebnf.rule.assert_called_with('nested_block', definition, raw=True)
 
 
-def test_grammar_elseif_block(patch, call_count, grammar, ebnf):
-    patch.many(Grammar, ['nested_block', 'elseif_statement'])
-    grammar.elseif_block()
-    call_count(Grammar, ['nested_block', 'elseif_statement'])
-    definition = ('elseif_statement', 'nl', 'nested_block')
-    ebnf.rule.assert_called_with('elseif_block', definition)
-
-
-def test_grammar_else_block(patch, grammar, ebnf):
-    patch.object(Grammar, 'else_statement')
-    grammar.else_block()
-    assert Grammar.else_statement.call_count == 1
-    definition = ('else_statement', 'nl', 'nested_block')
-    ebnf.rule.assert_called_with('else_block', definition)
-
-
-def test_grammar_if_block(patch, call_count, grammar, ebnf):
-    patch.many(Grammar, ['if_statement', 'elseif_block', 'else_block'])
-    grammar.if_block()
-    call_count(Grammar, ['if_statement', 'elseif_block', 'else_block'])
-    definition = 'if_statement _NL nested_block elseif_block* else_block?'
-    ebnf.rule.assert_called_with('if_block', definition, raw=True)
-
-
 def test_grammar_foreach_block(patch, grammar, ebnf):
     patch.object(Grammar, 'foreach_statement')
     grammar.foreach_block()
@@ -117,42 +93,6 @@ def test_grammar_block(patch, call_count, grammar, ebnf):
     definition = ('rules _NL|if_block|foreach_block|function_block'
                   '|arguments|service_block|when_block')
     ebnf.rule.assert_called_with('block', definition, raw=True)
-
-
-def test_grammar_comparisons(grammar, ebnf):
-    grammar.comparisons()
-    tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
-              ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
-    ebnf.tokens.assert_called_with(*tokens)
-    definitions = (['greater'], ['greater_equal'], ['lesser'],
-                   ['lesser_equal'], ['not'], ['equal'])
-    ebnf.rules.assert_called_with('comparisons', *definitions)
-
-
-def test_grammar_path_value(grammar, ebnf):
-    grammar.path_value()
-    ebnf.rules.assert_called_with('path_value', *(['path'], ['values']))
-
-
-def test_grammar_if_statement(patch, grammar, ebnf):
-    patch.object(Grammar, 'path_value')
-    grammar.if_statement()
-    assert Grammar.path_value.call_count == 1
-    ebnf.token.assert_called_with('if', 'if', inline=True)
-    rule = '_IF path_value (comparisons path_value)?'
-    ebnf.rule.assert_called_with('if_statement', rule, raw=True)
-
-
-def test_grammar_else_statement(grammar, ebnf):
-    grammar.else_statement()
-    ebnf.token.assert_called_with('else', 'else', inline=True)
-    ebnf.rule.assert_called_with('!else_statement', ['else'])
-
-
-def test_grammar_elseif_statement(grammar, ebnf):
-    grammar.elseif_statement()
-    rule = '_ELSE _IF path_value (comparisons path_value)?'
-    ebnf.rule.assert_called_with('elseif_statement', rule, raw=True)
 
 
 def test_grammar_foreach_statement(grammar, ebnf):
@@ -263,6 +203,29 @@ def test_grammar_rules(grammar, ebnf):
     rules = ('values, absolute_expression, assignment, imports, '
              'return_statement, block')
     assert ebnf.rules == rules
+
+
+def test_grammar_if_block(grammar, ebnf):
+    grammar.if_block()
+    assert ebnf.GREATER == '>'
+    assert ebnf.GREATER_EQUAL == '>='
+    assert ebnf.LESSER == '<'
+    assert ebnf.LESSER_EQUAL == '<='
+    assert ebnf.NOT == '!='
+    assert ebnf.EQUAL == '=='
+    assert ebnf._IF == 'if'
+    assert ebnf._ELSE == 'else'
+    assert ebnf.path_value == 'path, values'
+    comparisons = 'greater, greater_equal, lesser, lesser_equal, not, equal'
+    assert ebnf.comparisons == comparisons
+    assert ebnf.if_statement == 'if path_value (comparisons path_value)?'
+    elseif_statement = 'else if path_value (comparisons path_value)?'
+    assert ebnf.elseif_statement == elseif_statement
+    assert ebnf.elseif_block == ebnf.simple_block()
+    ebnf.set_rule.assert_called_with('!else_statement', 'else')
+    assert ebnf.else_block == ebnf.simple_block()
+    if_block = 'if_statement nl nested_block elseif_block* else_block?'
+    assert ebnf.if_block == if_block
 
 
 def test_grammar_build(patch, call_count, grammar, ebnf):

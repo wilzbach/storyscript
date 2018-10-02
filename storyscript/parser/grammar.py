@@ -15,41 +15,6 @@ class Grammar:
     def nested_block(self):
         self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
 
-    def elseif_statement(self):
-        rule = ('_ELSE _IF path_value '
-                '(comparisons path_value)?')
-        self.ebnf.rule('elseif_statement', rule, raw=True)
-
-    def elseif_block(self):
-        self.nested_block()
-        self.elseif_statement()
-        definition = ('elseif_statement', 'nl', 'nested_block')
-        self.ebnf.rule('elseif_block', definition)
-
-    def else_statement(self):
-        self.ebnf.token('else', 'else', inline=True)
-        self.ebnf.rule('!else_statement', ['else'])
-
-    def else_block(self):
-        self.else_statement()
-        self.ebnf.rule('else_block', ('else_statement', 'nl', 'nested_block'))
-
-    def path_value(self):
-        self.ebnf.rules('path_value', *(['path'], ['values']))
-
-    def if_statement(self):
-        self.path_value()
-        self.ebnf.token('if', 'if', inline=True)
-        rule = '_IF path_value (comparisons path_value)?'
-        self.ebnf.rule('if_statement', rule, raw=True)
-
-    def if_block(self):
-        self.if_statement()
-        self.elseif_block()
-        self.else_block()
-        definition = 'if_statement _NL nested_block elseif_block* else_block?'
-        self.ebnf.rule('if_block', definition, raw=True)
-
     def foreach_block(self):
         self.foreach_statement()
         definition = 'foreach_statement _NL nested_block'
@@ -72,10 +37,6 @@ class Grammar:
         self.function_statement()
         rule = ('function_statement', 'nl', 'nested_block')
         self.ebnf.rule('function_block', rule)
-
-    def inline_expression(self):
-        self.ebnf.tokens(('op', '('), ('cp', ')'), inline=True)
-        self.ebnf.rule('inline_expression', ('op', 'service', 'cp'))
 
     def service_block(self):
         self.service()
@@ -201,6 +162,28 @@ class Grammar:
         rules = ('values, absolute_expression, assignment, imports, '
                  'return_statement, block')
         self.ebnf.rules = rules
+
+    def if_block(self):
+        self.ebnf.GREATER = '>'
+        self.ebnf.GREATER_EQUAL = '>='
+        self.ebnf.LESSER = '<'
+        self.ebnf.LESSER_EQUAL = '<='
+        self.ebnf.NOT = '!='
+        self.ebnf.EQUAL = '=='
+        self.ebnf._IF = 'if'
+        self.ebnf._ELSE = 'else'
+        self.ebnf.path_value = 'path, values'
+        comparisons = ('greater, greater_equal, lesser, lesser_equal, not, '
+                       'equal')
+        self.ebnf.comparisons = comparisons
+        self.ebnf.if_statement = 'if path_value (comparisons path_value)?'
+        elseif_statement = 'else if path_value (comparisons path_value)?'
+        self.ebnf.elseif_statement = elseif_statement
+        self.ebnf.elseif_block = self.ebnf.simple_block('elseif_statement')
+        self.ebnf.set_rule('!else_statement', 'else')
+        self.ebnf.else_block = self.ebnf.simple_block('else_statement')
+        if_block = 'if_statement nl nested_block elseif_block* else_block?'
+        self.ebnf.if_block = if_block
 
     def build(self):
         self.macros()
