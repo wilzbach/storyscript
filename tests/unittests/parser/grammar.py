@@ -209,39 +209,6 @@ def test_grammar_absolute_expression(patch, grammar, ebnf):
     ebnf.rule.assert_called_with('absolute_expression', ['expression'])
 
 
-def test_grammar_path_fragment(grammar, ebnf):
-    grammar.path_fragment()
-    ebnf.token.assert_called_with('dot', '.', inline=True)
-    definitions = (('dot', 'name'), ('osb', 'int', 'csb'),
-                   ('osb', 'string', 'csb'), ('osb', 'path', 'csb'))
-    ebnf.rules.assert_called_with('path_fragment', *definitions)
-
-
-def test_grammar_path(patch, grammar, ebnf):
-    patch.object(Grammar, 'path_fragment')
-    grammar.path()
-    token = '/[a-zA-Z-\/_0-9]+/'
-    ebnf.token.assert_called_with('name', token, regexp=True, priority=1)
-    Grammar.path_fragment.call_count == 1
-    ebnf.rule.assert_called_with('path', 'NAME (path_fragment)*', raw=True)
-
-
-def test_grammar_assignment_fragment(patch, grammar, ebnf):
-    grammar.assignment_fragment()
-    ebnf.token.assert_called_with('equals', '=')
-    rule = 'EQUALS (values|expression|path|service)'
-    ebnf.rule.assert_called_with('assignment_fragment', rule, raw=True)
-
-
-def test_grammar_assignment(patch, grammar, ebnf):
-    patch.many(Grammar, ['path', 'assignment_fragment'])
-    grammar.assignment()
-    assert Grammar.path.call_count == 1
-    assert Grammar.assignment_fragment.call_count == 1
-    definition = ('path', 'assignment_fragment')
-    ebnf.rule.assert_called_with('assignment', definition)
-
-
 def test_grammar_imports(patch, grammar, ebnf):
     grammar.imports()
     ebnf.token.assert_called_with('import', 'import', inline=True)
@@ -343,8 +310,20 @@ def test_grammar_values(grammar, ebnf):
     assert ebnf.values == values
 
 
+def test_grammar_assignments(grammar, ebnf):
+    grammar.assignments()
+    ebnf.set_token.assert_called_with('NAME.1', '/[a-zA-Z-\/_0-9]+/')
+    assert ebnf.EQUALS == '='
+    path_fragment = 'dot name, osb int csb, osb string csb, osb path csb'
+    assert ebnf.path_fragment == path_fragment
+    assert ebnf.path == 'name (path_fragment)*'
+    assignment_fragment = 'equals (values, expression, path, service)'
+    assert ebnf.assignment_fragment == assignment_fragment
+    assert ebnf.assignment == 'path assignment_fragment'
+
+
 def test_grammar_build(patch, call_count, grammar, ebnf):
-    methods = ['macros', 'types', 'values', 'rules']
+    methods = ['macros', 'types', 'values', 'assignments', 'rules']
     patch.many(Grammar, methods)
     result = grammar.build()
     call_count(Grammar, methods)

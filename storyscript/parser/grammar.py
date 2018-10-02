@@ -172,27 +172,6 @@ class Grammar:
         self.expression()
         self.ebnf.rule('absolute_expression', ['expression'])
 
-    def path_fragment(self):
-        self.ebnf.token('dot', '.', inline=True)
-        definitions = (('dot', 'name'), ('osb', 'int', 'csb'),
-                       ('osb', 'string', 'csb'), ('osb', 'path', 'csb'))
-        self.ebnf.rules('path_fragment', *definitions)
-
-    def path(self):
-        self.ebnf.token('name', '/[a-zA-Z-\/_0-9]+/', regexp=True, priority=1)
-        self.path_fragment()
-        self.ebnf.rule('path', 'NAME (path_fragment)*', raw=True)
-
-    def assignment_fragment(self):
-        self.ebnf.token('equals', '=')
-        rule = 'EQUALS (values|expression|path|service)'
-        self.ebnf.rule('assignment_fragment', rule, raw=True)
-
-    def assignment(self):
-        self.path()
-        self.assignment_fragment()
-        self.ebnf.rule('assignment', ('path', 'assignment_fragment'))
-
     def imports(self):
         self.ebnf.token('import', 'import', inline=True)
         rule = ('import', 'string', 'as', 'name')
@@ -254,11 +233,21 @@ class Grammar:
         values = 'number, string, boolean, list, objects, inline_expression'
         self.ebnf.values = values
 
+    def assignments(self):
+        self.ebnf.EQUALS = '='
+        self.ebnf.set_token('NAME.1', '/[a-zA-Z-\/_0-9]+/')
+        path_fragment = 'dot name, osb int csb, osb string csb, osb path csb'
+        self.ebnf.path_fragment = path_fragment
+        self.ebnf.path = 'name (path_fragment)*'
+        assignment_fragment = 'equals (values, expression, path, service)'
+        self.ebnf.assignment_fragment = assignment_fragment
+        self.ebnf.assignment = 'path assignment_fragment'
 
     def build(self):
         self.macros()
         self.types()
         self.values()
+        self.assignments()
         self.rules()
         self.ebnf.start = 'nl? block'
         self.ebnf.ignore('_WS')
