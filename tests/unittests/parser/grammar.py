@@ -126,39 +126,6 @@ def test_grammar_block(patch, call_count, grammar, ebnf):
     ebnf.rule.assert_called_with('block', definition, raw=True)
 
 
-def test_grammar_operator(grammar, ebnf):
-    grammar.operator()
-    tokens = (('plus', '+'), ('dash', '-'), ('multiplier', '*'),
-              ('bslash', '/'))
-    ebnf.tokens.assert_called_with(*tokens)
-    definitions = (['plus'], ['dash'], ['multiplier'], ['bslash'])
-    ebnf.rules.assert_called_with('operator', *definitions)
-
-
-def test_grammar_mutation(grammar, ebnf):
-    grammar.mutation()
-    rule = 'NAME arguments*'
-    ebnf.rule.assert_called_with('mutation', rule, raw=True)
-
-
-def test_grammar_expression(patch, grammar, ebnf):
-    patch.many(Grammar, ['operator', 'mutation'])
-    grammar.expression()
-    assert Grammar.operator.call_count == 1
-    assert Grammar.mutation.call_count == 1
-    definitions = (('values', 'operator', 'values'),
-                   ('values', 'operator', 'values'),
-                   ('values', 'mutation'))
-    ebnf.rules.assert_called_with('expression', *definitions)
-
-
-def test_grammar_absolute_expression(patch, grammar, ebnf):
-    patch.object(Grammar, 'expression')
-    grammar.absolute_expression()
-    assert Grammar.expression.call_count == 1
-    ebnf.rule.assert_called_with('absolute_expression', ['expression'])
-
-
 def test_grammar_comparisons(grammar, ebnf):
     grammar.comparisons()
     tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
@@ -285,9 +252,21 @@ def test_grammar_service(grammar, ebnf):
     assert ebnf.service == 'path service_fragment'
 
 
+def test_grammar_expressions(grammar, ebnf):
+    grammar.expressions()
+    assert ebnf.PLUS == '+'
+    assert ebnf.DASH == '-'
+    assert ebnf.MULTIPLIER == '*'
+    assert ebnf.BSLASH == '/'
+    assert ebnf.operator == 'plus, dash, multiplier, bslash'
+    assert ebnf.mutation == 'name arguments*'
+    assert ebnf.expression == 'values operator values, values mutation'
+    assert ebnf.absolute_expression == 'expression'
+
+
 def test_grammar_build(patch, call_count, grammar, ebnf):
     methods = ['macros', 'types', 'values', 'assignments', 'imports',
-               'service', 'rules']
+               'service', 'expressions', 'rules']
     patch.many(Grammar, methods)
     result = grammar.build()
     call_count(Grammar, methods)

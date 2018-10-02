@@ -102,15 +102,6 @@ class Grammar:
                       '|arguments|service_block|when_block')
         self.ebnf.rule('block', definition, raw=True)
 
-    def operator(self):
-        self.ebnf.tokens(('plus', '+'), ('dash', '-'), ('multiplier', '*'),
-                         ('bslash', '/'))
-        definitions = (['plus'], ['dash'], ['multiplier'], ['bslash'])
-        self.ebnf.rules('operator', *definitions)
-
-    def mutation(self):
-        mutation = 'NAME arguments*'
-        self.ebnf.rule('mutation', mutation, raw=True)
     def macros(self):
         """
         Define the macros
@@ -119,31 +110,11 @@ class Grammar:
         self.ebnf.macro('collection', collection)
         self.ebnf.macro('simple_block', '{} nl nested_block')
 
-    def expression(self):
-        self.operator()
-        self.mutation()
-        definitions = (('values', 'operator', 'values'),
-                       ('values', 'operator', 'values'),
-                       ('values', 'mutation'))
-        self.ebnf.rules('expression', *definitions)
 
-    def absolute_expression(self):
     def types(self):
         """
-        An expression on its own line. This is necessary for the compiler to
-        understand how to compile an expression.
         Defines available types
         """
-        self.expression()
-        self.ebnf.rule('absolute_expression', ['expression'])
-    def comparisons(self):
-        tokens = (('greater', '>'), ('greater_equal', '>='), ('lesser', '<'),
-                  ('lesser_equal', '<='), ('not', '!='), ('equal', '=='))
-        self.ebnf.tokens(*tokens)
-        definitions = (['greater'], ['greater_equal'], ['lesser'],
-                       ['lesser_equal'], ['not'], ['equal'])
-        self.ebnf.rules('comparisons', *definitions)
-
     def foreach_statement(self):
         self.ebnf.tokens(('foreach', 'foreach'), ('as', 'as'), inline=True)
         definition = ('foreach', 'name', 'output')
@@ -218,6 +189,16 @@ class Grammar:
         self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
         self.ebnf.service = 'path service_fragment'
 
+    def expressions(self):
+        self.ebnf.PLUS = '+'
+        self.ebnf.DASH = '-'
+        self.ebnf.MULTIPLIER = '*'
+        self.ebnf.BSLASH = '/'
+        self.ebnf.operator = 'plus, dash, multiplier, bslash'
+        self.ebnf.mutation = 'name arguments*'
+        self.ebnf.expression = 'values operator values, values mutation'
+        self.ebnf.absolute_expression = 'expression'
+
     def build(self):
         self.macros()
         self.types()
@@ -225,6 +206,7 @@ class Grammar:
         self.assignments()
         self.imports()
         self.service()
+        self.expressions()
         self.rules()
         self.ebnf.start = 'nl? block'
         self.ebnf.ignore('_WS')
