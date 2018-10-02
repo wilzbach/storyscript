@@ -153,6 +153,7 @@ class Grammar:
         self.ebnf.nested_block = 'indent block+ dedent'
 
     def build(self):
+        self.ebnf._WS = '(" ")+'
         self.macros()
         self.types()
         self.values()
@@ -161,6 +162,10 @@ class Grammar:
         self.service()
         self.expressions()
         self.rules()
+        self.if_block()
+        self.foreach_block()
+        self.function_block()
+        self.block()
         self.ebnf.start = 'nl? block'
         self.ebnf.ignore('_WS')
         return self.ebnf.build()

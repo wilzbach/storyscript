@@ -176,9 +176,11 @@ def test_grammar_block(grammar, ebnf):
 
 def test_grammar_build(patch, call_count, grammar, ebnf):
     methods = ['macros', 'types', 'values', 'assignments', 'imports',
-               'service', 'expressions', 'rules']
+               'service', 'expressions', 'rules', 'if_block', 'foreach_block',
+               'function_block', 'block']
     patch.many(Grammar, methods)
     result = grammar.build()
+    assert ebnf._WS == '(" ")+'
     call_count(Grammar, methods)
     assert ebnf.start == 'nl? block'
     ebnf.ignore.assert_called_with('_WS')
