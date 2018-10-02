@@ -12,11 +12,6 @@ class Grammar:
     def __init__(self):
         self.ebnf = Ebnf()
 
-    def rules(self):
-        definitions = (['values'], ['absolute_expression'], ['assignment'],
-                       ['imports'], ['return_statement'], ['block'])
-        self.ebnf.rules('rules', *definitions)
-
     def nested_block(self):
         self.ebnf.rule('nested_block', '_INDENT block+ _DEDENT', raw=True)
 
@@ -198,6 +193,13 @@ class Grammar:
         self.ebnf.mutation = 'name arguments*'
         self.ebnf.expression = 'values operator values, values mutation'
         self.ebnf.absolute_expression = 'expression'
+
+    def rules(self):
+        self.ebnf._RETURN = 'return'
+        self.ebnf.return_statement = 'return (path, values)'
+        rules = ('values, absolute_expression, assignment, imports, '
+                 'return_statement, block')
+        self.ebnf.rules = rules
 
     def build(self):
         self.macros()

@@ -23,13 +23,6 @@ def test_grammar_init():
     assert isinstance(grammar.ebnf, Ebnf)
 
 
-def test_grammar_rules(grammar, ebnf):
-    grammar.rules()
-    defintions = (['values'], ['absolute_expression'], ['assignment'],
-                  ['imports'], ['return_statement'], ['block'])
-    ebnf.rules.assert_called_with('rules', *defintions)
-
-
 def test_grammar_nested_block(grammar, ebnf):
     grammar.nested_block()
     definition = '_INDENT block+ _DEDENT'
@@ -180,8 +173,6 @@ def test_grammar_macros(grammar, ebnf):
     ebnf.macro.call_count == 2
 
 
-
-
 def test_grammar_types(grammar, ebnf):
     grammar.types()
     assert ebnf.INT_TYPE == 'int'
@@ -262,6 +253,15 @@ def test_grammar_expressions(grammar, ebnf):
     assert ebnf.mutation == 'name arguments*'
     assert ebnf.expression == 'values operator values, values mutation'
     assert ebnf.absolute_expression == 'expression'
+
+
+def test_grammar_rules(grammar, ebnf):
+    grammar.rules()
+    assert ebnf._RETURN == 'return'
+    assert ebnf.return_statement == 'return (path, values)'
+    rules = ('values, absolute_expression, assignment, imports, '
+             'return_statement, block')
+    assert ebnf.rules == rules
 
 
 def test_grammar_build(patch, call_count, grammar, ebnf):
