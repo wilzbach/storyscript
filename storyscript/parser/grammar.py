@@ -156,14 +156,15 @@ class Grammar:
         list = self.ebnf.collection('osb', 'values', 'values', 'csb')
         self.ebnf.set_rule('!list', list)
         self.ebnf.key_value = '(string, path) colon (values, path)'
-        objects = 'ocb', 'key_value', 'key_value', 'ccb'
-        self.ebnf.objects = self.ebnf.collection(objects)
+        objects = ('ocb', 'key_value', 'key_value', 'ccb')
+        self.ebnf.objects = self.ebnf.collection(*objects)
         self.ebnf.inline_expression = 'op service cp'
         values = 'number, string, boolean, list, objects, inline_expression'
         self.ebnf.values = values
 
     def assignments(self):
         self.ebnf.EQUALS = '='
+        self.ebnf._DOT = '.'
         self.ebnf.set_token('NAME.1', '/[a-zA-Z-\/_0-9]+/')
         path_fragment = 'dot name, osb int csb, osb string csb, osb path csb'
         self.ebnf.path_fragment = path_fragment

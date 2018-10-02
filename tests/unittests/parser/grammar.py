@@ -219,6 +219,7 @@ def test_grammar_assignments(grammar, ebnf):
     grammar.assignments()
     ebnf.set_token.assert_called_with('NAME.1', '/[a-zA-Z-\/_0-9]+/')
     assert ebnf.EQUALS == '='
+    assert ebnf._DOT == '.'
     path_fragment = 'dot name, osb int csb, osb string csb, osb path csb'
     assert ebnf.path_fragment == path_fragment
     assert ebnf.path == 'name (path_fragment)*'
