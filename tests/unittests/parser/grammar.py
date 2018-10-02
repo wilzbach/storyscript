@@ -357,6 +357,9 @@ def test_grammar_return_statement(patch, ebnf, grammar):
     ebnf.token.assert_called_with('return', 'return', inline=True)
     rule = '_RETURN (path|values)'
     ebnf.rule.assert_called_with('return_statement', rule, raw=True)
+def test_grammar_macros(grammar, ebnf):
+    grammar.macros()
+    ebnf.macro.call_count == 2
 
 
 
@@ -377,9 +380,10 @@ def test_grammar_types(grammar, ebnf):
 
 
 def test_grammar_build(patch, call_count, grammar, ebnf):
-    patch.many(Grammar, ['types', 'rules'])
+    methods = ['macros', 'types', 'rules']
+    patch.many(Grammar, methods)
     result = grammar.build()
-    call_count(Grammar, ['types', 'rules'])
+    call_count(Grammar, methods)
     assert ebnf.start == 'nl? block'
     ebnf.ignore.assert_called_with('_WS')
     assert result == ebnf.build()

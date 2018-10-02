@@ -192,6 +192,13 @@ class Grammar:
     def mutation(self):
         mutation = 'NAME arguments*'
         self.ebnf.rule('mutation', mutation, raw=True)
+    def macros(self):
+        """
+        Define the macros
+        """
+        collection = '{} (nl indent)? ({} (comma nl? {})*)? (nl dedent)? {}'
+        self.ebnf.macro('collection', collection)
+        self.ebnf.macro('simple_block', '{} nl nested_block')
 
     def expression(self):
         self.operator()
@@ -268,6 +275,7 @@ class Grammar:
         self.ebnf.types = rule
 
     def build(self):
+        self.macros()
         self.types()
         self.rules()
         self.ebnf.start = 'nl? block'
