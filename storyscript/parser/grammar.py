@@ -142,13 +142,18 @@ class Grammar:
         self.ebnf.function_statement = function_statement
         self.ebnf.function_block = self.ebnf.simple_block('function_statement')
 
+    def try_block(self):
+        self.ebnf._TRY = 'try'
+        self.ebnf.try_statement = 'try'
+        self.ebnf.try_block = self.ebnf.simple_block('try_statement')
+
     def block(self):
         self.ebnf._WHEN = 'when'
         self.ebnf.service_block = 'service nl (nested_block)?'
         when = 'when (path output|service)'
         self.ebnf.when_block = self.ebnf.simple_block(when)
         block = ('rules nl, if_block, foreach_block, function_block, '
-                 'arguments, service_block, when_block')
+                 'arguments, service_block, when_block, try_block')
         self.ebnf.block = block
         self.ebnf.nested_block = 'indent block+ dedent'
 
@@ -165,6 +170,7 @@ class Grammar:
         self.if_block()
         self.foreach_block()
         self.function_block()
+        self.try_block()
         self.block()
         self.ebnf.start = 'nl? block+'
         self.ebnf.ignore('_WS')
