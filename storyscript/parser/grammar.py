@@ -145,10 +145,15 @@ class Grammar:
     def try_block(self):
         self.ebnf._TRY = 'try'
         self.ebnf._CATCH = 'catch'
+        self.ebnf._FINALLY = 'finally'
         self.ebnf.catch_statement = 'catch as name'
         self.ebnf.catch_block = self.ebnf.simple_block('catch_statement')
+        self.ebnf.finally_statement = 'finally'
+        self.ebnf.finally_block = self.ebnf.simple_block('finally_statement')
         self.ebnf.try_statement = 'try'
-        self.ebnf.try_block = 'try_statement nl nested_block catch_block?'
+        try_block = ('try_statement nl nested_block catch_block? '
+                     'finally_block?')
+        self.ebnf.try_block = try_block
 
     def block(self):
         self.ebnf._WHEN = 'when'
