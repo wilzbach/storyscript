@@ -177,3 +177,27 @@ def test_parser_function_output(parser):
     result = parser.parse('function test n:string returns int\n\tvar = 1\n')
     statement = result.block.function_block.function_statement
     assert statement.function_output.types.child(0) == Token('INT_TYPE', 'int')
+
+
+def test_parser_try(parser):
+    result = parser.parse('try\n\tx=0')
+    try_block = result.block.try_block
+    assert try_block.try_statement == Tree('try_statement', [])
+    path = try_block.nested_block.block.rules.assignment.path
+    assert path.child(0) == Token('NAME', 'x')
+
+
+def test_parser_try_catch(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\tx=1')
+    catch_block = result.block.try_block.catch_block
+    assert catch_block.catch_statement.child(0) == Token('NAME', 'error')
+    path = catch_block.nested_block.block.rules.assignment.path
+    assert path.child(0) == Token('NAME', 'x')
+
+
+def test_parser_try_finally(parser):
+    result = parser.parse('try\n\tx=0\nfinally\n\tx=1')
+    finally_block = result.block.try_block.finally_block
+    assert finally_block.finally_statement == Tree('finally_statement', [])
+    path = finally_block.nested_block.block.rules.assignment.path
+    assert path.child(0) == Token('NAME', 'x')
