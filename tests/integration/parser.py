@@ -182,7 +182,7 @@ def test_parser_function_output(parser):
 def test_parser_try(parser):
     result = parser.parse('try\n\tx=0')
     try_block = result.block.try_block
-    assert try_block.try_statement == Tree('try_statement', [])
+    assert try_block.try_statement.child(0) == Token('TRY', 'try')
     path = try_block.nested_block.block.rules.assignment.path
     assert path.child(0) == Token('NAME', 'x')
 
@@ -198,6 +198,7 @@ def test_parser_try_catch(parser):
 def test_parser_try_finally(parser):
     result = parser.parse('try\n\tx=0\nfinally\n\tx=1')
     finally_block = result.block.try_block.finally_block
-    assert finally_block.finally_statement == Tree('finally_statement', [])
+    token = Token('FINALLY', 'finally')
+    assert finally_block.finally_statement.child(0) == token
     path = finally_block.nested_block.block.rules.assignment.path
     assert path.child(0) == Token('NAME', 'x')

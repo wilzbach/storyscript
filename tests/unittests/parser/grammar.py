@@ -164,9 +164,9 @@ def test_grammar_function_block(grammar, ebnf):
 
 def test_grammar_try_block(grammar, ebnf):
     grammar.try_block()
-    assert ebnf._TRY == 'try'
+    assert ebnf.TRY == 'try'
     assert ebnf._CATCH == 'catch'
-    assert ebnf._FINALLY == 'finally'
+    assert ebnf.FINALLY == 'finally'
     assert ebnf.catch_statement == 'catch as name'
     assert ebnf.catch_block == ebnf.simple_block()
     assert ebnf.finally_statement == 'finally'

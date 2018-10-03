@@ -143,9 +143,9 @@ class Grammar:
         self.ebnf.function_block = self.ebnf.simple_block('function_statement')
 
     def try_block(self):
-        self.ebnf._TRY = 'try'
+        self.ebnf.TRY = 'try'
         self.ebnf._CATCH = 'catch'
-        self.ebnf._FINALLY = 'finally'
+        self.ebnf.FINALLY = 'finally'
         self.ebnf.catch_statement = 'catch as name'
         self.ebnf.catch_block = self.ebnf.simple_block('catch_statement')
         self.ebnf.finally_statement = 'finally'
