@@ -224,3 +224,32 @@ def test_compiler_function_call(parser):
     assert result['tree']['3']['method'] == 'call'
     assert result['tree']['3']['service'] == 'sum'
     assert result['tree']['3']['args'] == args
+
+
+def test_compiler_try(parser):
+    source = 'try\n\tx=0'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['method'] == 'try'
+    assert result['tree']['1']['enter'] == '2'
+    assert result['tree']['2']['parent'] == '1'
+
+
+def test_compiler_try_catch(parser):
+    source = 'try\n\tx=0\ncatch as error\n\tx=1'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['exit'] == '3'
+    assert result['tree']['3']['method'] == 'catch'
+    assert result['tree']['3']['output'] == ['error']
+    assert result['tree']['3']['enter'] == '4'
+    assert result['tree']['4']['parent'] == '3'
+
+
+def test_compiler_try_finally(parser):
+    source = 'try\n\tx=0\nfinally\n\tx=1'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    assert result['tree']['3']['method'] == 'finally'
+    assert result['tree']['3']['enter'] == '4'
+    assert result['tree']['4']['parent'] == '3'
