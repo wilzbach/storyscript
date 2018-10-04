@@ -215,6 +215,43 @@ class Compiler:
         if tree.nested_block:
             self.subtree(tree.nested_block, parent=tree.line())
 
+    def try_block(self, tree, parent):
+        """
+        Compiles a try block
+        """
+        line = tree.line()
+        nested_block = tree.nested_block
+        self.lines.append('try', line, enter=nested_block.line(),
+                          parent=parent)
+        self.subtree(nested_block, parent=line)
+        if tree.catch_block:
+            self.catch_block(tree.catch_block, parent=parent)
+        if tree.finally_block:
+            self.finally_block(tree.finally_block, parent=parent)
+
+    def catch_block(self, tree, parent):
+        """
+        Compiles a catch block
+        """
+        line = tree.line()
+        self.lines.set_exit(line)
+        nested_block = tree.nested_block
+        output = Objects.names(tree.catch_statement)
+        self.lines.append('catch', line, enter=nested_block.line(),
+                          output=output, parent=parent)
+        self.subtree(nested_block, parent=line)
+
+    def finally_block(self, tree, parent):
+        """
+        Compiles a finally block
+        """
+        line = tree.line()
+        self.lines.set_exit(line)
+        nested_block = tree.nested_block
+        self.lines.append('finally', line, enter=nested_block.line(),
+                          parent=parent)
+        self.subtree(nested_block, parent=line)
+
     def subtrees(self, *trees):
         """
         Parses many subtrees
@@ -230,7 +267,8 @@ class Compiler:
         allowed_nodes = ['service_block', 'absolute_expression', 'assignment',
                          'if_block', 'elseif_block', 'else_block',
                          'foreach_block', 'function_block', 'when_block',
-                         'return_statement', 'arguments', 'imports']
+                         'try_block', 'return_statement', 'arguments',
+                         'imports']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return

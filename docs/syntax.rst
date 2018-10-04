@@ -153,6 +153,28 @@ could be an http stream, a stream of events or a generator-like result::
             # ...
 
 
+Exceptions
+-----------
+Exceptions can be handled with try::
+
+    try
+        x = 0 / 0
+
+Exceptions can be caught::
+
+    try
+        x = 0 / 0
+    catch as error
+        alpine echo message:"caught!"
+
+Finally can be used to specify instructions that are always executed,
+regardless of the try's outcomet::
+
+    try
+        x = 0 / 0
+    finally
+        a = 1
+
 Inline expressions
 ------------------
 Inline expressions are a shorthand to have on the same line something that

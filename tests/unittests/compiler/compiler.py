@@ -376,10 +376,64 @@ def test_compiler_when_block_nested_block(patch, compiler, tree):
     Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
+def test_compiler_try_block(patch, compiler, lines, tree):
+    """
+    Ensures that try blocks are compiled correctly.
+    """
+    patch.object(Compiler, 'subtree')
+    tree.catch_block = None
+    tree.finally_block = None
+    compiler.try_block(tree, '1')
+    kwargs = {'enter': tree.nested_block.line(), 'parent': '1'}
+    lines.append.assert_called_with('try', tree.line(), **kwargs)
+    Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+
+
+def test_compiler_try_block_catch(patch, compiler, lines, tree):
+    patch.many(Compiler, ['subtree', 'catch_block'])
+    tree.finally_block = None
+    compiler.try_block(tree, '1')
+    Compiler.catch_block.assert_called_with(tree.catch_block, parent='1')
+
+
+def test_compiler_try_block_finally(patch, compiler, lines, tree):
+    patch.many(Compiler, ['subtree', 'finally_block'])
+    tree.catch_block = None
+    compiler.try_block(tree, '1')
+    Compiler.finally_block.assert_called_with(tree.finally_block, parent='1')
+
+
+def test_compiler_catch_block(patch, compiler, lines, tree):
+    """
+    Ensures that catch blocks are compiled correctly.
+    """
+    patch.object(Objects, 'names')
+    patch.object(Compiler, 'subtree')
+    compiler.catch_block(tree, '1')
+    lines.set_exit.assert_called_with(tree.line())
+    Objects.names.assert_called_with(tree.catch_statement)
+    kwargs = {'enter': tree.nested_block.line(), 'output': Objects.names(),
+              'parent': '1'}
+    lines.append.assert_called_with('catch', tree.line(), **kwargs)
+    Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+
+
+def test_compiler_finally_block(patch, compiler, lines, tree):
+    """
+    Ensures that finally blocks are compiled correctly.
+    """
+    patch.object(Compiler, 'subtree')
+    compiler.finally_block(tree, '1')
+    lines.set_exit.assert_called_with(tree.line())
+    kwargs = {'enter': tree.nested_block.line(), 'parent': '1'}
+    lines.append.assert_called_with('finally', tree.line(), **kwargs)
+    Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+
+
 @mark.parametrize('method_name', [
     'service_block', 'absolute_expression', 'assignment', 'if_block',
     'elseif_block', 'else_block', 'foreach_block', 'function_block',
-    'when_block', 'return_statement', 'arguments', 'imports'
+    'when_block', 'try_block', 'return_statement', 'arguments', 'imports'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)
