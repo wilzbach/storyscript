@@ -382,6 +382,7 @@ def test_compiler_try_block(patch, compiler, lines, tree):
     """
     patch.object(Compiler, 'subtree')
     tree.catch_block = None
+    tree.finally_block = None
     compiler.try_block(tree, '1')
     kwargs = {'enter': tree.nested_block.line(), 'parent': '1'}
     lines.append.assert_called_with('try', tree.line(), **kwargs)
@@ -390,8 +391,16 @@ def test_compiler_try_block(patch, compiler, lines, tree):
 
 def test_compiler_try_block_catch(patch, compiler, lines, tree):
     patch.many(Compiler, ['subtree', 'catch_block'])
+    tree.finally_block = None
     compiler.try_block(tree, '1')
     Compiler.catch_block.assert_called_with(tree.catch_block, parent='1')
+
+
+def test_compiler_try_block_finally(patch, compiler, lines, tree):
+    patch.many(Compiler, ['subtree', 'finally_block'])
+    tree.catch_block = None
+    compiler.try_block(tree, '1')
+    Compiler.finally_block.assert_called_with(tree.finally_block, parent='1')
 
 
 def test_compiler_catch_block(patch, compiler, lines, tree):
@@ -406,6 +415,18 @@ def test_compiler_catch_block(patch, compiler, lines, tree):
     kwargs = {'enter': tree.nested_block.line(), 'output': Objects.names(),
               'parent': '1'}
     lines.append.assert_called_with('catch', tree.line(), **kwargs)
+    Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+
+
+def test_compiler_finally_block(patch, compiler, lines, tree):
+    """
+    Ensures that finally blocks are compiled correctly.
+    """
+    patch.object(Compiler, 'subtree')
+    compiler.finally_block(tree, '1')
+    lines.set_exit.assert_called_with(tree.line())
+    kwargs = {'enter': tree.nested_block.line(), 'parent': '1'}
+    lines.append.assert_called_with('finally', tree.line(), **kwargs)
     Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
