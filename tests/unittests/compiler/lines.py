@@ -58,9 +58,10 @@ def test_lines_set_next(patch, lines):
     assert lines.lines['1']['next'] == '2'
 
 
-def test_lines_set_exit(patch, lines):
+@mark.parametrize('method', ['if', 'elif', 'try', 'catch'])
+def test_lines_set_exit(patch, lines, method):
     patch.object(Lines, 'sort', return_value=['1', '2'])
-    lines.lines = {'1': {}, '2': {'method': 'if'}}
+    lines.lines = {'1': {}, '2': {'method': method}}
     lines.set_exit('3')
     assert lines.sort.call_count == 1
     assert lines.lines['2']['exit'] == '3'

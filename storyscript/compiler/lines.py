@@ -51,8 +51,13 @@ class Lines:
             self.lines[previous_line]['next'] = line_number
 
     def set_exit(self, line):
+        """
+        Sets the current line as the exit line for a previous one, as needed
+        in if/elif/else and try/catch/finally blocks.
+        """
+        methods = ['if', 'elif', 'try', 'catch']
         for line_number in self.sort()[::-1]:
-            if self.lines[line_number]['method'] in ['if', 'elif']:
+            if self.lines[line_number]['method'] in methods:
                 self.lines[line_number]['exit'] = line
                 break
 
