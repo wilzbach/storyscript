@@ -357,6 +357,69 @@ Similar to if and elif, but exit is always null and no args are available::
       "next": "6"
     }
 
+
+Try
+###
+Declares the following child block as a try block. Errors during runtime
+inside that block should not terminate the engine::
+
+    {
+      "method": "try",
+      "ln": "1",
+      "next": "2",
+      "name": null,
+      "function": null,
+      "output": null,
+      "args": null,
+      "command": null,
+      "service": null,
+      "parent": null,
+      "enter": "2",
+      "exit": null
+    }
+
+Catch
+#####
+Declares the following child block as a catch block that would be executed
+in case the previous try block failed::
+
+    {
+      "method": "catch",
+      "ln": "3",
+      "output": [
+        "error"
+      ],
+      "name": null,
+      "function": null,
+      "args": null,
+      "command": null,
+      "service": null,
+      "parent": null,
+      "enter": "4",
+      "next": "4",
+      "exit": "line"
+    }
+
+Finally
+#######
+Declares the following child block as finally block that is always executed
+regardless of the previous try outcome::
+
+    {
+      "method": "finally",
+      "ln": "5",
+      "name": null,
+      "function": null,
+      "output": null,
+      "args": null,
+      "command": null,
+      "service": null,
+      "parent": null,
+      "enter": "6",
+      "next": "6",
+      "exit": null
+    }
+
 For
 ###
 Declares a for iteration::
