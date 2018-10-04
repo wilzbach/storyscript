@@ -376,10 +376,21 @@ def test_compiler_when_block_nested_block(patch, compiler, tree):
     Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
+def test_compiler_try_block(patch, compiler, lines, tree):
+    """
+    Ensures that try blocks are compiled correctly.
+    """
+    patch.object(Compiler, 'subtree')
+    compiler.try_block(tree, '1')
+    kwargs = {'enter': tree.nested_block.line(), 'parent': '1'}
+    lines.append.assert_called_with('try', tree.line(), **kwargs)
+    Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+
+
 @mark.parametrize('method_name', [
     'service_block', 'absolute_expression', 'assignment', 'if_block',
     'elseif_block', 'else_block', 'foreach_block', 'function_block',
-    'when_block', 'return_statement', 'arguments', 'imports'
+    'when_block', 'try_block', 'return_statement', 'arguments', 'imports'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)
