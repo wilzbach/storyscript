@@ -173,6 +173,26 @@ def test_compiler_set_object_multiline(parser):
     assert result['tree']['1']['args'] == [arg]
 
 
+def test_compiler_set_regular_expression(parser):
+    """
+    Ensures regular expressions are compiled correctly
+    """
+    tree = parser.parse('a = /^foo/')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'][0]['$OBJECT'] == 'regexp'
+    assert result['tree']['1']['args'][0]['regexp'] == '/^foo/'
+
+
+def test_compiler_set_regular_expression_flags(parser):
+    """
+    Ensures regular expressions with flags are compiled correctly
+    """
+    tree = parser.parse('a = /^foo/g')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['args'][0]['flags'] == 'g'
+
+
 def test_compiler_set_service(parser):
     """
     Ensures that service assignments are compiled correctly
