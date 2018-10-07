@@ -77,6 +77,11 @@ Regular expressions are defined with slashes::
     pattern = /^foo/
 
 
+Flags are supported::
+
+    pattern = /^foo/i
+
+
 Arithmetical expressions
 -------------------------
 An arithmetical operation between values::
