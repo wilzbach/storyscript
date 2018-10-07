@@ -64,7 +64,7 @@ class Grammar:
         self.ebnf.key_value = '(string, path) colon (values, path)'
         objects = ('ocb', 'key_value', 'key_value', 'ccb')
         self.ebnf.objects = self.ebnf.collection(*objects)
-        self.ebnf.regular_expression = 'regexp name'
+        self.ebnf.regular_expression = 'regexp name?'
         self.ebnf.inline_expression = 'op service cp'
         values = ('number, string, boolean, list, objects, '
                   'regular_expression, inline_expression')
