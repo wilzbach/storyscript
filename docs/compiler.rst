@@ -146,6 +146,7 @@ Declares a regular expression::
     {
         "$OBJECT": "regexp"
         "regexp": "/^foo/",
+        "flags": "flags"
     }
 
 
