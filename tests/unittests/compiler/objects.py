@@ -188,12 +188,19 @@ def test_objects_objects_key_path(patch, tree):
     assert result['items'][0][0] == Objects.path()
 
 
-def test_objects_regular_expression(tree):
+def test_objects_regular_expression():
     """
     Ensures regular expressions are compiled correctly
     """
+    tree = Tree('regular_expression', ['regexp'])
     result = Objects.regular_expression(tree)
     assert result == {'$OBJECT': 'regexp', 'regexp': tree.child(0)}
+
+
+def test_objects_regular_expression_flags():
+    tree = Tree('regular_expression', ['regexp', 'flags'])
+    result = Objects.regular_expression(tree)
+    assert result['flags'] == 'flags'
 
 
 def test_objects_types(tree):

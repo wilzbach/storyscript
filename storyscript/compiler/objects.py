@@ -126,7 +126,11 @@ class Objects:
         """
         Compiles a regexp object from a regular_expression tree
         """
-        return {'$OBJECT': 'regexp', 'regexp': tree.child(0)}
+        dictionary = {'$OBJECT': 'regexp', 'regexp': tree.child(0)}
+        flags = tree.child(1)
+        if flags:
+            dictionary['flags'] = flags
+        return dictionary
 
     @staticmethod
     def types(tree):
