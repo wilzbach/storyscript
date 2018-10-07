@@ -75,6 +75,24 @@ def test_parser_object(parser):
     assert key_value.values.string.child(0) == Token('SINGLE_QUOTED', "'red'")
 
 
+def test_parser_regular_expression(parser):
+    """
+    Ensures regular expressions are parsed correctly
+    """
+    result = parser.parse('/^foo/')
+    token = Token('REGEXP', '/^foo/')
+    assert result.block.rules.values.regular_expression.child(0) == token
+
+
+def test_parser_regular_expression_flags(parser):
+    """
+    Ensures regular expressions with flags are parsed correctly
+    """
+    result = parser.parse('/^foo/i')
+    token = Token('NAME', 'i')
+    assert result.block.rules.values.regular_expression.child(1) == token
+
+
 @mark.parametrize('code, token', [
     ('var="hello"\n', Token('DOUBLE_QUOTED', '"hello"')),
     ('var = "hello"\n', Token('DOUBLE_QUOTED', '"hello"')),
