@@ -73,7 +73,7 @@ def test_parser_parse(patch, parser):
     """
     patch.many(Parser, ['lark', 'transformer'])
     result = parser.parse('source')
-    Parser.lark().parse.assert_called_with('source')
+    Parser.lark().parse.assert_called_with('source\n')
     Parser.transformer().transform.assert_called_with(Parser.lark().parse())
     assert result == Parser.transformer().transform()
 

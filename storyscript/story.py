@@ -18,8 +18,7 @@ class Story:
         Cleans a story by removing comments.
         """
         expression = '(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
-        source = re.sub(expression, '', source)
-        return '{}\n'.format(source)
+        return re.sub(expression, '', source)
 
     @classmethod
     def read(cls, path):
