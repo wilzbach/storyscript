@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import io
 import os
+import re
 
 from pytest import fixture, raises
 
@@ -18,14 +19,27 @@ def test_story_init(story):
     assert story.story == 'story'
 
 
+def test_story_clean_source(patch):
+    """
+    Ensures that a story is cleaned correctly
+    """
+    patch.object(re, 'sub')
+    result = Story.clean_source('source')
+    expression = '(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
+    re.sub.assert_called_with(expression, '', 'source')
+    assert result == '{}\n'.format(re.sub())
+
+
 def test_story_read(patch):
     """
     Ensures Story.read can read a story
     """
     patch.object(io, 'open')
+    patch.object(Story, 'clean_source')
     result = Story.read('hello.story')
     io.open.assert_called_with('hello.story', 'r')
-    assert result == io.open().__enter__().read()
+    Story.clean_source.assert_called_with(io.open().__enter__().read())
+    assert result == Story.clean_source()
 
 
 def test_story_read_not_found(patch, capsys):

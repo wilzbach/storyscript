@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import io
 import os
+import re
 
 from .compiler import Compiler
 from .parser import Parser
@@ -12,13 +13,22 @@ class Story:
         self.story = story
 
     @staticmethod
-    def read(path):
+    def clean_source(source):
+        """
+        Cleans a story by removing comments.
+        """
+        expression = '(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
+        source = re.sub(expression, '', source)
+        return '{}\n'.format(source)
+
+    @classmethod
+    def read(cls, path):
         """
         Reads a story
         """
         try:
             with io.open(path, 'r') as file:
-                return file.read()
+                return cls.clean_source(file.read())
         except FileNotFoundError:
             abspath = os.path.abspath(path)
             print('File "{}" not found at {}'.format(path, abspath))
