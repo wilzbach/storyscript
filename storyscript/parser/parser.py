@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import io
+
 from lark import Lark
 from lark.exceptions import UnexpectedInput, UnexpectedToken
 
@@ -31,7 +33,7 @@ class Parser:
 
     def grammar(self):
         if self.ebnf_file:
-            with open(self.ebnf_file, 'r') as f:
+            with io.open(self.ebnf_file, 'r') as f:
                 return f.read()
         return Grammar().build()
 

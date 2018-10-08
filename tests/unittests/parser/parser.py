@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import io
 import os
 
 from lark import Lark
@@ -13,16 +14,6 @@ from storyscript.parser import CustomIndenter, Grammar, Parser, Transformer
 @fixture
 def parser():
     return Parser()
-
-
-@fixture
-def ebnf_file(request):
-    with open('test.ebnf', 'w') as f:
-        f.write('grammar')
-
-    def teardown():
-        os.remove('test.ebnf')
-    request.addfinalizer(teardown)
 
 
 def test_parser_init(parser):
@@ -58,9 +49,12 @@ def test_parser_grammar(patch, parser):
     assert result == Grammar().build()
 
 
-def test_parser_grammar_ebnf_file(parser, ebnf_file):
+def test_parser_grammar_ebnf_file(patch, parser):
+    patch.object(io, 'open')
     parser.ebnf_file = 'test.ebnf'
-    assert parser.grammar() == 'grammar'
+    result = parser.grammar()
+    io.open.assert_called_with('test.ebnf', 'r')
+    assert result == io.open().__enter__().read()
 
 
 def test_parser_lark(patch, parser):
