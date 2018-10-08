@@ -74,5 +74,14 @@ class Cli:
 
     @staticmethod
     @main.command()
+    @click.pass_context
+    def help(context):
+        """
+        Prints this help text
+        """
+        click.echo(context.parent.get_help())
+
+    @staticmethod
+    @main.command()
     def version():
         click.echo(app_version)
