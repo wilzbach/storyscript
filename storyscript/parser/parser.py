@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import re
+import io
 
 from lark import Lark
 from lark.exceptions import UnexpectedInput, UnexpectedToken
@@ -19,12 +19,6 @@ class Parser:
         self.algo = algo
         self.ebnf_file = ebnf_file
 
-    @staticmethod
-    def clean_source(source):
-        expression = '(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
-        source = re.sub(expression, '', source)
-        return '{}\n'.format(source)
-
     def indenter(self):
         """
         Initialize the indenter
@@ -39,7 +33,7 @@ class Parser:
 
     def grammar(self):
         if self.ebnf_file:
-            with open(self.ebnf_file, 'r') as f:
+            with io.open(self.ebnf_file, 'r') as f:
                 return f.read()
         return Grammar().build()
 
@@ -53,7 +47,7 @@ class Parser:
         """
         Parses the source string.
         """
-        source = self.clean_source(source)
+        source = '{}\n'.format(source)
         lark = self.lark()
         try:
             tree = lark.parse(source)

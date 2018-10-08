@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+import io
 import os
-import re
 
 from lark import Lark
 from lark.exceptions import UnexpectedInput, UnexpectedToken
@@ -14,24 +14,6 @@ from storyscript.parser import CustomIndenter, Grammar, Parser, Transformer
 @fixture
 def parser():
     return Parser()
-
-
-@fixture
-def ebnf_file(request):
-    with open('test.ebnf', 'w') as f:
-        f.write('grammar')
-
-    def teardown():
-        os.remove('test.ebnf')
-    request.addfinalizer(teardown)
-
-
-def test_parser_clean_source(patch):
-    patch.object(re, 'sub')
-    result = Parser.clean_source('source')
-    expression = '(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
-    re.sub.assert_called_with(expression, '', 'source')
-    assert result == '{}\n'.format(re.sub())
 
 
 def test_parser_init(parser):
@@ -67,9 +49,12 @@ def test_parser_grammar(patch, parser):
     assert result == Grammar().build()
 
 
-def test_parser_grammar_ebnf_file(parser, ebnf_file):
+def test_parser_grammar_ebnf_file(patch, parser):
+    patch.object(io, 'open')
     parser.ebnf_file = 'test.ebnf'
-    assert parser.grammar() == 'grammar'
+    result = parser.grammar()
+    io.open.assert_called_with('test.ebnf', 'r')
+    assert result == io.open().__enter__().read()
 
 
 def test_parser_lark(patch, parser):
@@ -86,10 +71,9 @@ def test_parser_parse(patch, parser):
     """
     Ensures the build method can build the grammar
     """
-    patch.many(Parser, ['clean_source', 'lark', 'transformer'])
+    patch.many(Parser, ['lark', 'transformer'])
     result = parser.parse('source')
-    Parser.clean_source.assert_called_with('source')
-    Parser.lark().parse.assert_called_with(Parser.clean_source())
+    Parser.lark().parse.assert_called_with('source\n')
     Parser.transformer().transform.assert_called_with(Parser.lark().parse())
     assert result == Parser.transformer().transform()
 
@@ -97,7 +81,7 @@ def test_parser_parse(patch, parser):
 def test_parser_parser_unexpected_token(capsys, patch, magic, parser):
     patch.init(StoryError)
     patch.object(StoryError, 'message')
-    patch.many(Parser, ['clean_source', 'lark', 'transformer'])
+    patch.many(Parser, ['lark', 'transformer'])
     Parser.lark().parse.side_effect = UnexpectedToken(magic(), 'exp', 0, 1)
     with raises(SystemExit):
         parser.parse('source', debug=False)
@@ -106,7 +90,7 @@ def test_parser_parser_unexpected_token(capsys, patch, magic, parser):
 
 
 def test_parser_parser_unexpected_token_debug(patch, magic, parser):
-    patch.many(Parser, ['clean_source', 'lark', 'transformer'])
+    patch.many(Parser, ['lark', 'transformer'])
     Parser.lark().parse.side_effect = UnexpectedToken(magic(), 'exp', 0, 1)
     with raises(UnexpectedToken):
         parser.parse('source', debug=True)
@@ -115,7 +99,7 @@ def test_parser_parser_unexpected_token_debug(patch, magic, parser):
 def test_parser_parser_unexpected_input(capsys, patch, magic, parser):
     patch.init(StoryError)
     patch.object(StoryError, 'message')
-    patch.many(Parser, ['clean_source', 'lark', 'transformer'])
+    patch.many(Parser, ['lark', 'transformer'])
     Parser.lark().parse.side_effect = UnexpectedInput(magic(), 0, 0, 0)
     with raises(SystemExit):
         parser.parse('source', debug=False)
@@ -124,7 +108,7 @@ def test_parser_parser_unexpected_input(capsys, patch, magic, parser):
 
 
 def test_parser_parser_unexpected_input_debug(patch, magic, parser):
-    patch.many(Parser, ['clean_source', 'lark', 'transformer'])
+    patch.many(Parser, ['lark', 'transformer'])
     Parser.lark().parse.side_effect = UnexpectedInput(magic(), 0, 0, 0)
     with raises(UnexpectedInput):
         parser.parse('source', debug=True)

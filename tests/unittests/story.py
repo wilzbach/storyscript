@@ -1,31 +1,13 @@
 # -*- coding: utf-8 -*-
+import io
 import os
+import re
 
 from pytest import fixture, raises
 
 from storyscript.compiler import Compiler
 from storyscript.parser import Parser
 from storyscript.story import Story
-
-
-@fixture
-def storypath():
-    return 'source'
-
-
-@fixture
-def story_teardown(request, storypath):
-    def teardown():
-        os.remove(storypath)
-    request.addfinalizer(teardown)
-
-
-@fixture
-def story_file(story_teardown, storypath):
-    story = 'run\n\tpass'
-    with open(storypath, 'w') as file:
-        file.write(story)
-    return story
 
 
 @fixture
@@ -37,15 +19,31 @@ def test_story_init(story):
     assert story.story == 'story'
 
 
-def test_story_read(story_file, storypath):
+def test_story_clean_source(patch):
+    """
+    Ensures that a story is cleaned correctly
+    """
+    patch.object(re, 'sub')
+    result = Story.clean_source('source')
+    expression = '(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
+    re.sub.assert_called_with(expression, '', 'source')
+    assert result == re.sub()
+
+
+def test_story_read(patch):
     """
     Ensures Story.read can read a story
     """
-    result = Story.read(storypath)
-    assert result == story_file
+    patch.object(io, 'open')
+    patch.object(Story, 'clean_source')
+    result = Story.read('hello.story')
+    io.open.assert_called_with('hello.story', 'r')
+    Story.clean_source.assert_called_with(io.open().__enter__().read())
+    assert result == Story.clean_source()
 
 
 def test_story_read_not_found(patch, capsys):
+    patch.object(io, 'open', side_effect=FileNotFoundError)
     patch.object(os, 'path')
     with raises(SystemExit):
         Story.read('whatever')
