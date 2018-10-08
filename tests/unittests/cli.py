@@ -30,7 +30,7 @@ def app(patch):
 def test_cli(runner, echo):
     runner.invoke(Cli.main, [])
     # NOTE(vesuvium): I didn't find how to get the context in testing
-    click.echo.call_count == 1
+    assert click.echo.call_count == 1
 
 
 def test_cli_version_flag(runner, echo):
@@ -130,6 +130,13 @@ def test_cli_grammar(patch, runner, app, echo):
     runner.invoke(Cli.grammar, [])
     assert app.grammar.call_count == 1
     click.echo.assert_called_with(app.grammar())
+
+
+def test_cli_help(patch, runner, echo):
+    runner.invoke(Cli.help, [])
+    # NOTE(vesuvium): another weird click thing. The context.parent.get_help
+    # seems to mess up with mock, registering no call on click.echo
+    assert click.echo.call_count == 0
 
 
 def test_cli_version(patch, runner, echo):
