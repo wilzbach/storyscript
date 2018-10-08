@@ -116,6 +116,15 @@ def test_cli_lexer(patch, magic, runner, app, echo):
     assert click.echo.call_count == 2
 
 
+def test_cli_lexer_default(patch, magic, runner, app):
+    """
+    Ensures the lex command storypath defaults to cwd
+    """
+    patch.object(App, 'lex', return_value={'one.story': [magic()]})
+    runner.invoke(Cli.lex, [])
+    app.lex.assert_called_with(os.getcwd())
+
+
 def test_cli_grammar(patch, runner, app, echo):
     patch.object(App, 'grammar')
     runner.invoke(Cli.grammar, [])

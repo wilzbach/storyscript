@@ -53,7 +53,7 @@ class Cli:
 
     @staticmethod
     @main.command()
-    @click.argument('storypath')
+    @click.argument('storypath', default=os.getcwd())
     def lex(storypath):
         """
         Shows lexer tokens for given stories
