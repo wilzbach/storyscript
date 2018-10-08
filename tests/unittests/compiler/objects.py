@@ -188,13 +188,29 @@ def test_objects_objects_key_path(patch, tree):
     assert result['items'][0][0] == Objects.path()
 
 
+def test_objects_regular_expression():
+    """
+    Ensures regular expressions are compiled correctly
+    """
+    tree = Tree('regular_expression', ['regexp'])
+    result = Objects.regular_expression(tree)
+    assert result == {'$OBJECT': 'regexp', 'regexp': tree.child(0)}
+
+
+def test_objects_regular_expression_flags():
+    tree = Tree('regular_expression', ['regexp', 'flags'])
+    result = Objects.regular_expression(tree)
+    assert result['flags'] == 'flags'
+
+
 def test_objects_types(tree):
     token = tree.child(0)
     assert Objects.types(tree) == {'$OBJECT': 'type', 'type': token.value}
 
 
 @mark.parametrize('value_type', [
-    'string', 'boolean', 'list', 'number', 'objects', 'types'
+    'string', 'boolean', 'list', 'number', 'objects', 'regular_expression',
+    'types'
 ])
 def test_objects_values(patch, magic, value_type):
     patch.object(Objects, value_type)

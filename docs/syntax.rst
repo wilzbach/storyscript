@@ -70,10 +70,21 @@ Objects can be access with dot notation or by key index::
     colours['red']
 
 
+Regular expressions
+-------------------
+Regular expressions are defined with slashes::
 
-Expressions
------------
-An expression is an arithmetical operation between values::
+    pattern = /^foo/
+
+
+Flags are supported::
+
+    pattern = /^foo/i
+
+
+Arithmetical expressions
+-------------------------
+An arithmetical operation between values::
 
     a = 1 + 2
 

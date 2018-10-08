@@ -121,6 +121,17 @@ class Objects:
             items.append([key, value])
         return {'$OBJECT': 'dict', 'items': items}
 
+    @classmethod
+    def regular_expression(cls, tree):
+        """
+        Compiles a regexp object from a regular_expression tree
+        """
+        dictionary = {'$OBJECT': 'regexp', 'regexp': tree.child(0)}
+        flags = tree.child(1)
+        if flags:
+            dictionary['flags'] = flags
+        return dictionary
+
     @staticmethod
     def types(tree):
         return {'$OBJECT': 'type', 'type': tree.child(0).value}
@@ -142,6 +153,8 @@ class Objects:
                 return cls.number(subtree)
             elif subtree.data == 'objects':
                 return cls.objects(subtree)
+            elif subtree.data == 'regular_expression':
+                return cls.regular_expression(subtree)
             elif subtree.data == 'types':
                 return cls.types(subtree)
         if subtree.type == 'NAME':

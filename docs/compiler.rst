@@ -93,7 +93,7 @@ function arguments, string or numeric values::
 
 String
 ######
-String object have a string property. If they are string templates, they will
+String objects have a string property. If they are string templates, they will
 also have a values list, indicating the variables to use when compiling the string::
 
     {
@@ -137,6 +137,18 @@ Declares an object::
         ]
       ]
     }
+
+
+Regexp
+######
+Declares a regular expression::
+
+    {
+        "$OBJECT": "regexp"
+        "regexp": "/^foo/",
+        "flags": "flags"
+    }
+
 
 Type
 ####

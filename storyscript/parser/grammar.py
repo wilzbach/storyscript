@@ -46,6 +46,8 @@ class Grammar:
         self.ebnf.set_token('FLOAT.2', 'INT "." INT? | "." INT')
         self.ebnf.SINGLE_QUOTED = "/'([^']*)'/"
         self.ebnf.DOUBLE_QUOTED = '/"([^"]*)"/'
+        self.ebnf.set_token('REGEXP.2', '/\/([^\/]*)\//')
+        self.ebnf.set_token('NAME.1', '/[a-zA-Z-\/_0-9]+/')
         self.ebnf._OSB = '['
         self.ebnf._CSB = ']'
         self.ebnf._OCB = '{'
@@ -62,14 +64,15 @@ class Grammar:
         self.ebnf.key_value = '(string, path) colon (values, path)'
         objects = ('ocb', 'key_value', 'key_value', 'ccb')
         self.ebnf.objects = self.ebnf.collection(*objects)
+        self.ebnf.regular_expression = 'regexp name?'
         self.ebnf.inline_expression = 'op service cp'
-        values = 'number, string, boolean, list, objects, inline_expression'
+        values = ('number, string, boolean, list, objects, '
+                  'regular_expression, inline_expression')
         self.ebnf.values = values
 
     def assignments(self):
         self.ebnf.EQUALS = '='
         self.ebnf._DOT = '.'
-        self.ebnf.set_token('NAME.1', '/[a-zA-Z-\/_0-9]+/')
         path_fragment = 'dot name, osb int csb, osb string csb, osb path csb'
         self.ebnf.path_fragment = path_fragment
         self.ebnf.path = 'name (path_fragment)*'

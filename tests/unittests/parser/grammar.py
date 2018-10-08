@@ -65,14 +65,15 @@ def test_grammar_values(grammar, ebnf):
     assert ebnf.string == 'single_quoted, double_quoted'
     assert ebnf.key_value == '(string, path) colon (values, path)'
     assert ebnf.objects == ebnf.collection()
+    assert ebnf.regular_expression == 'regexp name?'
     assert ebnf.inline_expression == 'op service cp'
-    values = 'number, string, boolean, list, objects, inline_expression'
+    values = ('number, string, boolean, list, objects, regular_expression, '
+              'inline_expression')
     assert ebnf.values == values
 
 
 def test_grammar_assignments(grammar, ebnf):
     grammar.assignments()
-    ebnf.set_token.assert_called_with('NAME.1', '/[a-zA-Z-\/_0-9]+/')
     assert ebnf.EQUALS == '='
     assert ebnf._DOT == '.'
     path_fragment = 'dot name, osb int csb, osb string csb, osb path csb'
