@@ -234,6 +234,19 @@ def test_compiler_service_no_output(patch, compiler, lines, tree):
     assert lines.set_output.call_count == 0
 
 
+def test_compiler_service_expressions(patch, compiler, lines, tree):
+    """
+    Ensures service trees that are infact mutations on paths are compiled
+    correctly
+    """
+    patch.object(Objects, 'names', return_value='x')
+    patch.object(Compiler, 'expression')
+    lines.variables = ['x']
+    compiler.service(tree, None, 'parent')
+    Objects.names.assert_called_with(tree.path)
+    Compiler.expression.assert_called_with(tree, 'parent')
+
+
 def test_compiler_when(patch, compiler, lines, tree):
     patch.object(Compiler, 'service')
     lines.lines = {'1': {}}
