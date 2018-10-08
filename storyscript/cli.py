@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+
 import click
 
 from .app import App
@@ -28,7 +30,7 @@ class Cli:
 
     @staticmethod
     @main.command()
-    @click.argument('storypath')
+    @click.argument('storypath', default=os.getcwd())
     @click.argument('output_file_path', required=False)
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
@@ -51,7 +53,7 @@ class Cli:
 
     @staticmethod
     @main.command()
-    @click.argument('storypath')
+    @click.argument('storypath', default=os.getcwd())
     def lex(storypath):
         """
         Shows lexer tokens for given stories

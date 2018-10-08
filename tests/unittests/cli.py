@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+
 import click
 from click.testing import CliRunner
 
@@ -49,6 +51,14 @@ def test_cli_compile(patch, runner, echo, app):
     App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
+
+
+def test_cli_compile_default_path(patch, runner, app):
+    """
+    Ensures the compile command default path is the current working directory.
+    """
+    runner.invoke(Cli.compile, [])
+    App.compile.assert_called_with(os.getcwd(), ebnf_file=None, debug=False)
 
 
 def test_cli_compile_output_file(runner, app, tmpdir):
@@ -104,6 +114,15 @@ def test_cli_lexer(patch, magic, runner, app, echo):
     app.lex.assert_called_with('/path')
     click.echo.assert_called_with('0 token value')
     assert click.echo.call_count == 2
+
+
+def test_cli_lexer_default(patch, magic, runner, app):
+    """
+    Ensures the lex command storypath defaults to cwd
+    """
+    patch.object(App, 'lex', return_value={'one.story': [magic()]})
+    runner.invoke(Cli.lex, [])
+    app.lex.assert_called_with(os.getcwd())
 
 
 def test_cli_grammar(patch, runner, app, echo):
