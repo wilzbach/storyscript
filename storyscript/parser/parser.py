@@ -7,6 +7,7 @@ from lark.exceptions import UnexpectedInput, UnexpectedToken
 from .grammar import Grammar
 from .indenter import CustomIndenter
 from .transformer import Transformer
+from .tree import Tree
 from ..exceptions import StoryError
 
 
@@ -47,6 +48,8 @@ class Parser:
         """
         Parses the source string.
         """
+        if source == '':
+            return Tree('empty', [])
         source = '{}\n'.format(source)
         lark = self.lark()
         try:

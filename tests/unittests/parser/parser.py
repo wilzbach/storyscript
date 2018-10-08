@@ -8,7 +8,8 @@ from lark.exceptions import UnexpectedInput, UnexpectedToken
 from pytest import fixture, raises
 
 from storyscript.exceptions import StoryError
-from storyscript.parser import CustomIndenter, Grammar, Parser, Transformer
+from storyscript.parser import (CustomIndenter, Grammar, Parser, Transformer,
+                                Tree)
 
 
 @fixture
@@ -76,6 +77,13 @@ def test_parser_parse(patch, parser):
     Parser.lark().parse.assert_called_with('source\n')
     Parser.transformer().transform.assert_called_with(Parser.lark().parse())
     assert result == Parser.transformer().transform()
+
+
+def test_parser_parse_empty(patch, parser):
+    """
+    Ensures that empty stories are parsed correctly
+    """
+    assert parser.parse('') == Tree('empty', [])
 
 
 def test_parser_parser_unexpected_token(capsys, patch, magic, parser):
