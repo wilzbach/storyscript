@@ -203,6 +203,18 @@ def test_compiler_set_service(parser):
     assert result['tree']['1']['name'] == ['a']
 
 
+def test_compiler_set_mutation(parser):
+    """
+    Ensures that applying a mutation on a variable is not compiled as a
+    service
+    """
+    tree = parser.parse('a = 0\na increase by:1')
+    result = Compiler.compile(tree)
+    assert result['services'] == []
+    assert result['tree']['2']['method'] == 'expression'
+    assert result['tree']['2']['args'][1]['$OBJECT'] == 'mutation'
+
+
 def test_compiler_service(parser):
     """
     Ensures that services are compiled correctly
