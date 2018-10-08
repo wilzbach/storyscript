@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import io
 import os
 
 from pytest import fixture, raises
@@ -6,26 +7,6 @@ from pytest import fixture, raises
 from storyscript.compiler import Compiler
 from storyscript.parser import Parser
 from storyscript.story import Story
-
-
-@fixture
-def storypath():
-    return 'source'
-
-
-@fixture
-def story_teardown(request, storypath):
-    def teardown():
-        os.remove(storypath)
-    request.addfinalizer(teardown)
-
-
-@fixture
-def story_file(story_teardown, storypath):
-    story = 'run\n\tpass'
-    with open(storypath, 'w') as file:
-        file.write(story)
-    return story
 
 
 @fixture
@@ -37,15 +18,18 @@ def test_story_init(story):
     assert story.story == 'story'
 
 
-def test_story_read(story_file, storypath):
+def test_story_read(patch):
     """
     Ensures Story.read can read a story
     """
-    result = Story.read(storypath)
-    assert result == story_file
+    patch.object(io, 'open')
+    result = Story.read('hello.story')
+    io.open.assert_called_with('hello.story', 'r')
+    assert result == io.open().__enter__().read()
 
 
 def test_story_read_not_found(patch, capsys):
+    patch.object(io, 'open', side_effect=FileNotFoundError)
     patch.object(os, 'path')
     with raises(SystemExit):
         Story.read('whatever')

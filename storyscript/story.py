@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import io
 import os
 
 from .compiler import Compiler
@@ -16,7 +17,7 @@ class Story:
         Reads a story
         """
         try:
-            with open(path, 'r') as file:
+            with io.open(path, 'r') as file:
                 return file.read()
         except FileNotFoundError:
             abspath = os.path.abspath(path)
