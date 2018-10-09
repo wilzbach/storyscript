@@ -116,7 +116,7 @@ def test_grammar_expressions(grammar, ebnf):
     assert ebnf.complex_symbol == 'multiplier, bslash, modulus, power'
     assert ebnf.operator == 'simple_symbol, complex_symbol, logical_symbol'
     assert ebnf.mutation == 'name arguments*'
-    assert ebnf.expression == 'values operator values, values mutation'
+    assert ebnf.expression == 'values (operator values)+, values mutation'
     assert ebnf.absolute_expression == 'expression'
 
 

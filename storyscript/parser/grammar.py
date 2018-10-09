@@ -107,7 +107,7 @@ class Grammar:
         self.ebnf.complex_symbol = 'multiplier, bslash, modulus, power'
         self.ebnf.operator = 'simple_symbol, complex_symbol, logical_symbol'
         self.ebnf.mutation = 'name arguments*'
-        self.ebnf.expression = 'values operator values, values mutation'
+        self.ebnf.expression = 'values (operator values)+, values mutation'
         self.ebnf.absolute_expression = 'expression'
 
     def rules(self):
