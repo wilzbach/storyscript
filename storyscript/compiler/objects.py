@@ -205,7 +205,7 @@ class Objects:
         Compiles an expression object with the given tree.
         """
         if tree.values:
-            operator = tree.operator.child(0).value
+            operator = tree.operator.child(0).child(0).value
             expression = Objects.fill_expression('{}', operator, '{}')
             values = [cls.values(tree.values), cls.values(tree.child(2))]
             return {'$OBJECT': 'expression', 'expression': expression,

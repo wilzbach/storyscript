@@ -283,9 +283,8 @@ def test_objects_expression(patch, tree):
 def test_objects_expression_absolute(patch, tree):
     patch.many(Objects, ['values', 'fill_expression'])
     result = Objects.expression(tree)
-    Objects.fill_expression.assert_called_with('{}',
-                                               tree.operator.child(0).value,
-                                               '{}')
+    operator = tree.operator.child().child().value
+    Objects.fill_expression.assert_called_with('{}', operator, '{}')
     assert result == {'$OBJECT': 'expression',
                       'expression': Objects.fill_expression(),
                       'values': [Objects.values(), Objects.values()]}
