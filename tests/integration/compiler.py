@@ -205,6 +205,17 @@ def test_compiler_set_service(parser):
 
 def test_compiler_set_mutation(parser):
     """
+    Ensures that assigning a mutation on a value is compiled correctly
+    """
+    tree = parser.parse('0 increase by:1')
+    result = Compiler.compile(tree)
+    assert result['services'] == []
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'][1]['$OBJECT'] == 'mutation'
+
+
+def test_compiler_set_mutation_variable(parser):
+    """
     Ensures that applying a mutation on a variable is not compiled as a
     service
     """
