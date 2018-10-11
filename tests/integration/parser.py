@@ -115,6 +115,16 @@ def test_parser_assignment_path(parser):
     assert path.child(2).child(0) == Token('INT', 0)
 
 
+def test_parser_assignment_indented_arguments(parser):
+    """
+    Ensures that assignments to a service with indented arguments are parsed
+    correctly
+    """
+    result = parser.parse('x = alpine echo\n\tmessage:"hello"')
+    argument = result.child(1).indented_arguments.arguments.values.string
+    assert argument.child(0) == Token('DOUBLE_QUOTED', '"hello"')
+
+
 def test_parser_foreach_block(parser):
     result = parser.parse('foreach items as one, two\n\tvar=3\n')
     block = result.block.foreach_block
