@@ -65,12 +65,12 @@ class Cli:
 
     @staticmethod
     @main.command()
-    @click.argument('storypath', default=os.getcwd())
-    def lex(storypath):
+    @click.argument('path', default=os.getcwd())
+    def lex(path):
         """
         Shows lexer tokens for given stories
         """
-        results = App.lex(storypath)
+        results = App.lex(path)
         for file, tokens in results.items():
             click.echo('File: {}'.format(file))
             for n, token in enumerate(tokens):

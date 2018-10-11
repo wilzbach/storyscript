@@ -141,19 +141,19 @@ def test_cli_lexer(patch, magic, runner, app, echo):
     """
     token = magic(type='token', value='value')
     patch.object(App, 'lex', return_value={'one.story': [token]})
-    runner.invoke(Cli.lex, ['/path'])
-    app.lex.assert_called_with('/path')
+    runner.invoke(Cli.lex, [])
+    App.lex.assert_called_with(os.getcwd())
     click.echo.assert_called_with('0 token value')
     assert click.echo.call_count == 2
 
 
-def test_cli_lexer_default(patch, magic, runner, app):
+def test_cli_lexer_path(patch, magic, runner, app):
     """
     Ensures the lex command storypath defaults to cwd
     """
     patch.object(App, 'lex', return_value={'one.story': [magic()]})
-    runner.invoke(Cli.lex, [])
-    app.lex.assert_called_with(os.getcwd())
+    runner.invoke(Cli.lex, ['/path'])
+    App.lex.assert_called_with('/path')
 
 
 def test_cli_grammar(patch, runner, app, echo):
