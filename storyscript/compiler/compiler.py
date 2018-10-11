@@ -83,7 +83,8 @@ class Compiler:
         Compiles an assignment tree
         """
         name = Objects.names(tree.path)
-        service = tree.assignment_fragment.service
+        fragment = tree.assignment_fragment
+        service = fragment.service
         if service:
             path = Objects.names(service.path)
             if path not in self.lines.variables:
@@ -91,11 +92,11 @@ class Compiler:
                 self.lines.set_name(name)
                 return
             else:
-                self.expression(service, parent)
-                self.lines.set_name(name)
-                return
+                return self.expression_assignment(service, name, parent)
+        elif fragment.expression:
+            return self.expression_assignment(fragment, name, parent)
         line = tree.line()
-        args = self.extract_values(tree.assignment_fragment)
+        args = self.extract_values(fragment)
         self.lines.append('set', line, name=name, args=args, parent=parent)
 
     def arguments(self, tree, parent):
