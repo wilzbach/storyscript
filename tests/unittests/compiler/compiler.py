@@ -91,6 +91,13 @@ def test_compiler_expression_absolute_mutation(patch, compiler, lines, tree):
                                     parent='1')
 
 
+def test_compiler_expression_assignment(patch, compiler, lines, tree):
+    patch.object(Compiler, 'expression')
+    compiler.expression_assignment(tree, 'name', '1')
+    Compiler.expression.assert_called_with(tree, '1')
+    lines.set_name.assert_called_with('name')
+
+
 def test_compiler_absolute_expression(patch, compiler, lines, tree):
     patch.object(Compiler, 'expression')
     compiler.absolute_expression(tree, '1')

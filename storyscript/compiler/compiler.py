@@ -53,6 +53,13 @@ class Compiler:
             args.append(mutation)
         self.lines.append('expression', tree.line(), args=args, parent=parent)
 
+    def expression_assignment(self, tree, name, parent):
+        """
+        Compiles an assignment to an expression.
+        """
+        self.expression(tree, parent)
+        self.lines.set_name(name)
+
     def absolute_expression(self, tree, parent):
         """
         Compiles an absolute expression using Compiler.expression
