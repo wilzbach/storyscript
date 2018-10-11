@@ -23,7 +23,7 @@ def echo(patch):
 
 @fixture
 def app(patch):
-    patch.object(App, 'compile')
+    patch.many(App, ['compile', 'parse'])
     return App
 
 
@@ -40,6 +40,38 @@ def test_cli_version_flag(runner, echo):
     runner.invoke(Cli.main, ['--version'])
     message = 'StoryScript {} - http://storyscript.org'.format(version)
     click.echo.assert_called_with(message)
+
+
+def test_cli_parse(runner, echo, app):
+    """
+    Ensures the parse command parses a story to its tree.
+    """
+    runner.invoke(Cli.parse, [])
+    App.parse.assert_called_with(os.getcwd(), ebnf=None, debug=False)
+
+
+def test_cli_parse_path(runner, echo, app):
+    """
+    Ensures the parse command supports specifying a path.
+    """
+    runner.invoke(Cli.parse, ['/path'])
+    App.parse.assert_called_with('/path', ebnf=None, debug=False)
+
+
+def test_cli_parse_ebnf_file(runner, echo, app):
+    """
+    Ensures the parse command supports specifying an ebnf file.
+    """
+    runner.invoke(Cli.parse, ['--ebnf', 'test.ebnf'])
+    App.parse.assert_called_with(os.getcwd(), ebnf='test.ebnf', debug=False)
+
+
+def test_cli_parse_debug(runner, echo, app):
+    """
+    Ensures the parse command supports a debug flag.
+    """
+    runner.invoke(Cli.parse, ['--debug'])
+    App.parse.assert_called_with(os.getcwd(), ebnf=None, debug=True)
 
 
 def test_cli_compile(patch, runner, echo, app):

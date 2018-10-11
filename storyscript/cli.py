@@ -30,6 +30,17 @@ class Cli:
 
     @staticmethod
     @main.command()
+    @click.argument('path', default=os.getcwd())
+    @click.option('--debug', is_flag=True)
+    @click.option('--ebnf', help=ebnf_file_help)
+    def parse(path, debug, ebnf):
+        """
+        Parses stories, producing the abstract syntax tree.
+        """
+        App.parse(path, ebnf=ebnf, debug=debug)
+
+    @staticmethod
+    @main.command()
     @click.argument('storypath', default=os.getcwd())
     @click.argument('output_file_path', required=False)
     @click.option('--json', '-j', is_flag=True)
