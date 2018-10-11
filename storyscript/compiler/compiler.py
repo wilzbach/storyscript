@@ -53,6 +53,13 @@ class Compiler:
             args.append(mutation)
         self.lines.append('expression', tree.line(), args=args, parent=parent)
 
+    def expression_assignment(self, tree, name, parent):
+        """
+        Compiles an assignment to an expression.
+        """
+        self.expression(tree, parent)
+        self.lines.set_name(name)
+
     def absolute_expression(self, tree, parent):
         """
         Compiles an absolute expression using Compiler.expression
@@ -76,7 +83,8 @@ class Compiler:
         Compiles an assignment tree
         """
         name = Objects.names(tree.path)
-        service = tree.assignment_fragment.service
+        fragment = tree.assignment_fragment
+        service = fragment.service
         if service:
             path = Objects.names(service.path)
             if path not in self.lines.variables:
@@ -84,11 +92,11 @@ class Compiler:
                 self.lines.set_name(name)
                 return
             else:
-                self.expression(service, parent)
-                self.lines.set_name(name)
-                return
+                return self.expression_assignment(service, name, parent)
+        elif fragment.expression:
+            return self.expression_assignment(fragment, name, parent)
         line = tree.line()
-        args = self.extract_values(tree.assignment_fragment)
+        args = self.extract_values(fragment)
         self.lines.append('set', line, name=name, args=args, parent=parent)
 
     def arguments(self, tree, parent):

@@ -91,6 +91,13 @@ def test_compiler_expression_absolute_mutation(patch, compiler, lines, tree):
                                     parent='1')
 
 
+def test_compiler_expression_assignment(patch, compiler, lines, tree):
+    patch.object(Compiler, 'expression')
+    compiler.expression_assignment(tree, 'name', '1')
+    Compiler.expression.assert_called_with(tree, '1')
+    lines.set_name.assert_called_with('name')
+
+
 def test_compiler_absolute_expression(patch, compiler, lines, tree):
     patch.object(Compiler, 'expression')
     compiler.absolute_expression(tree, '1')
@@ -129,6 +136,7 @@ def test_compiler_assignment(patch, compiler, lines, tree):
     patch.object(Objects, 'names')
     patch.object(Compiler, 'extract_values')
     tree.assignment_fragment.service = None
+    tree.assignment_fragment.expression = None
     compiler.assignment(tree, '1')
     Objects.names.assert_called_with(tree.path)
     Compiler.extract_values.assert_called_with(tree.assignment_fragment)
@@ -146,19 +154,27 @@ def test_compiler_assignment_service(patch, compiler, lines, tree):
     lines.set_name.assert_called_with(Objects.names())
 
 
-def test_compiler_assignment_expression(patch, compiler, lines, tree):
+def test_compiler_assignment_expression_service(patch, compiler, lines, tree):
     """
     Ensures that assignments like 'x = a mutation' are compiled correctly.
     This works by checking that 'a' was infact previously assigned, thus
     it's not a service but a variable.
     """
     patch.object(Objects, 'names', return_value='name')
-    patch.object(Compiler, 'expression')
+    patch.object(Compiler, 'expression_assignment')
     lines.variables = ['name']
     compiler.assignment(tree, '1')
     service = tree.assignment_fragment.service
-    Compiler.expression.assert_called_with(service, '1')
-    lines.set_name.assert_called_with(Objects.names())
+    Compiler.expression_assignment.assert_called_with(service, 'name', '1')
+
+
+def test_compiler_assignment_expression(patch, compiler, lines, tree):
+    patch.object(Objects, 'names', return_value='name')
+    patch.object(Compiler, 'expression_assignment')
+    tree.assignment_fragment.service = None
+    compiler.assignment(tree, '1')
+    fragment = tree.assignment_fragment
+    Compiler.expression_assignment.assert_called_with(fragment, 'name', '1')
 
 
 def test_compiler_arguments(patch, compiler, lines, tree):
