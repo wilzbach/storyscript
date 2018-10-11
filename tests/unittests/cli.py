@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import io
 import os
 
 import click
@@ -93,15 +94,14 @@ def test_cli_compile_path(patch, runner, app):
     App.compile.assert_called_with('/path', ebnf=None, debug=False)
 
 
-def test_cli_compile_output_file(runner, app, tmpdir):
+def test_cli_compile_output_file(patch, runner, app):
     """
-    Ensures the compile command outputs to an output file when
-    available. If no file were to be available (e.g. no file was
-    written), this test would throw an error
+    Ensures the compile command supports specifying an output file.
     """
-    tmp_file = tmpdir.join('output_file')
-    runner.invoke(Cli.compile, ['-j', '/path', str(tmp_file)])
-    tmp_file.read()
+    patch.object(io, 'open')
+    runner.invoke(Cli.compile, ['/path', 'hello.story', '-j'])
+    io.open.assert_called_with('hello.story', 'w')
+    io.open().__enter__().write.assert_called_with(App.compile())
 
 
 @mark.parametrize('option', ['--silent', '-s'])

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import io
 import os
 
 import click
@@ -42,20 +43,20 @@ class Cli:
     @staticmethod
     @main.command()
     @click.argument('path', default=os.getcwd())
-    @click.argument('output_file_path', required=False)
+    @click.argument('output', required=False)
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
     @click.option('--debug', is_flag=True)
     @click.option('--ebnf', help=ebnf_file_help)
-    def compile(path, output_file_path, json, silent, debug, ebnf):
+    def compile(path, output, json, silent, debug, ebnf):
         """
         Compiles stories and prints the resulting json
         """
         results = App.compile(path, ebnf=ebnf, debug=debug)
         if not silent:
             if json:
-                if output_file_path:
-                    with open(output_file_path, 'w') as f:
+                if output:
+                    with io.open(output, 'w') as f:
                         f.write(results)
                     exit()
                 click.echo(results)
