@@ -41,17 +41,17 @@ class Cli:
 
     @staticmethod
     @main.command()
-    @click.argument('storypath', default=os.getcwd())
+    @click.argument('path', default=os.getcwd())
     @click.argument('output_file_path', required=False)
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
     @click.option('--debug', is_flag=True)
-    @click.option('--ebnf-file', help=ebnf_file_help)
-    def compile(storypath, output_file_path, json, silent, debug, ebnf_file):
+    @click.option('--ebnf', help=ebnf_file_help)
+    def compile(path, output_file_path, json, silent, debug, ebnf):
         """
         Compiles stories and prints the resulting json
         """
-        results = App.compile(storypath, ebnf_file=ebnf_file, debug=debug)
+        results = App.compile(path, ebnf=ebnf, debug=debug)
         if not silent:
             if json:
                 if output_file_path:

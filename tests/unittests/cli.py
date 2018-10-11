@@ -76,21 +76,21 @@ def test_cli_parse_debug(runner, echo, app):
 
 def test_cli_compile(patch, runner, echo, app):
     """
-    Ensures the compile command compiles a story
+    Ensures the compile command compiles a story.
     """
     patch.object(click, 'style')
-    runner.invoke(Cli.compile, ['/path'])
-    App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
+    runner.invoke(Cli.compile, [])
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False)
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
 
 
-def test_cli_compile_default_path(patch, runner, app):
+def test_cli_compile_path(patch, runner, app):
     """
-    Ensures the compile command default path is the current working directory.
+    Ensures the compile command supports specifying a path
     """
-    runner.invoke(Cli.compile, [])
-    App.compile.assert_called_with(os.getcwd(), ebnf_file=None, debug=False)
+    runner.invoke(Cli.compile, ['/path'])
+    App.compile.assert_called_with('/path', ebnf=None, debug=False)
 
 
 def test_cli_compile_output_file(runner, app, tmpdir):
@@ -109,15 +109,15 @@ def test_cli_compile_silent(runner, echo, app, option):
     """
     Ensures --silent makes everything quiet
     """
-    result = runner.invoke(Cli.compile, ['/path', option])
-    App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
+    result = runner.invoke(Cli.compile, [option])
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False)
     assert result.output == ''
     assert click.echo.call_count == 0
 
 
 def test_cli_compile_debug(runner, echo, app):
-    runner.invoke(Cli.compile, ['/path', '--debug'])
-    App.compile.assert_called_with('/path', ebnf_file=None, debug=True)
+    runner.invoke(Cli.compile, ['--debug'])
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=True)
 
 
 @mark.parametrize('option', ['--json', '-j'])
@@ -125,15 +125,14 @@ def test_cli_compile_json(runner, echo, app, option):
     """
     Ensures --json outputs json
     """
-    runner.invoke(Cli.compile, ['/path', option])
-    App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
+    runner.invoke(Cli.compile, [option])
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False)
     click.echo.assert_called_with(App.compile())
 
 
 def test_cli_compile_ebnf_file(runner, echo, app):
-    runner.invoke(Cli.compile, ['/path', '--ebnf-file', 'test.grammar'])
-    kwargs = {'ebnf_file': 'test.grammar', 'debug': False}
-    App.compile.assert_called_with('/path', **kwargs)
+    runner.invoke(Cli.compile, ['--ebnf', 'test.ebnf'])
+    App.compile.assert_called_with(os.getcwd(), ebnf='test.ebnf', debug=False)
 
 
 def test_cli_lexer(patch, magic, runner, app, echo):
