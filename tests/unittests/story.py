@@ -126,7 +126,17 @@ def test_story_compile_debug(patch, story):
 def test_story_lex(patch, story):
     patch.init(Parser)
     patch.object(Parser, 'lex')
-    assert story.lex() == Parser.lex()
+    result = story.lex()
+    Parser.__init__.assert_called_with(ebnf=None)
+    Parser.lex.assert_called_with(story.story)
+    assert result == Parser.lex()
+
+
+def test_story_lex_ebnf(patch, story):
+    patch.init(Parser)
+    patch.object(Parser, 'lex')
+    story.lex(ebnf='ebnf')
+    Parser.__init__.assert_called_with(ebnf='ebnf')
 
 
 def test_story_process(patch, story):

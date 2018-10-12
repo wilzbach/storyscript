@@ -65,8 +65,8 @@ class Story:
     def compile(self, debug=False):
         self.compiled = Compiler.compile(self.tree, debug=debug)
 
-    def lex(self):
-        return Parser().lex(self.story)
+    def lex(self, ebnf=None):
+        return Parser(ebnf=ebnf).lex(self.story)
 
     def process(self, ebnf=None, debug=False):
         self.parse(ebnf=ebnf, debug=debug)
