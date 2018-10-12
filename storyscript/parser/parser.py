@@ -16,9 +16,9 @@ class Parser:
     Wraps up the parser submodule and exposes parsing and lexing
     functionalities.
     """
-    def __init__(self, algo='lalr', ebnf_file=None):
+    def __init__(self, algo='lalr', ebnf=None):
         self.algo = algo
-        self.ebnf_file = ebnf_file
+        self.ebnf = ebnf
 
     def indenter(self):
         """
@@ -33,8 +33,8 @@ class Parser:
         return Transformer()
 
     def grammar(self):
-        if self.ebnf_file:
-            with io.open(self.ebnf_file, 'r') as f:
+        if self.ebnf:
+            with io.open(self.ebnf, 'r') as f:
                 return f.read()
         return Grammar().build()
 
