@@ -47,8 +47,8 @@ class Story:
         """
         return Story(stream.read())
 
-    def parse(self, ebnf_file=None, debug=False):
-        self.tree = Parser(ebnf_file=ebnf_file).parse(self.story, debug=debug)
+    def parse(self, ebnf=None, debug=False):
+        self.tree = Parser(ebnf=ebnf).parse(self.story, debug=debug)
 
     def modules(self):
         """
@@ -68,7 +68,7 @@ class Story:
     def lex(self):
         return Parser().lex(self.story)
 
-    def process(self, ebnf_file=None, debug=False):
-        self.parse(ebnf_file=ebnf_file, debug=debug)
+    def process(self, ebnf=None, debug=False):
+        self.parse(ebnf=ebnf, debug=debug)
         self.compile(debug=debug)
         return self.compiled

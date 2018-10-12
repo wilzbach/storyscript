@@ -72,16 +72,16 @@ def test_story_parse(patch, story):
     patch.init(Parser)
     patch.object(Parser, 'parse')
     story.parse()
-    Parser.__init__.assert_called_with(ebnf_file=None)
+    Parser.__init__.assert_called_with(ebnf=None)
     Parser.parse.assert_called_with(story.story, debug=False)
     assert story.tree == Parser.parse()
 
 
-def test_story_parse_ebnf_file(patch, story):
+def test_story_parse_ebnf(patch, story):
     patch.init(Parser)
     patch.object(Parser, 'parse')
-    story.parse(ebnf_file='ebnf')
-    Parser.__init__.assert_called_with(ebnf_file='ebnf')
+    story.parse(ebnf='ebnf')
+    Parser.__init__.assert_called_with(ebnf='ebnf')
 
 
 def test_story_modules(magic, story):
@@ -133,7 +133,7 @@ def test_story_process(patch, story):
     patch.many(Story, ['parse', 'compile'])
     story.compiled = 'compiled'
     result = story.process()
-    Story.parse.assert_called_with(ebnf_file=None, debug=False)
+    Story.parse.assert_called_with(ebnf=None, debug=False)
     Story.compile.assert_called_with(debug=False)
     assert result == story.compiled
 
@@ -142,12 +142,12 @@ def test_story_process_debug(patch, story):
     patch.many(Story, ['parse', 'compile'])
     story.compiled = 'compiled'
     story.process(debug='debug')
-    Story.parse.assert_called_with(ebnf_file=None, debug='debug')
+    Story.parse.assert_called_with(ebnf=None, debug='debug')
     Story.compile.assert_called_with(debug='debug')
 
 
-def test_story_process_ebnf_file(patch, story):
+def test_story_process_ebnf(patch, story):
     patch.many(Story, ['parse', 'compile'])
     story.compiled = 'compiled'
-    story.process(ebnf_file='ebnf')
-    Story.parse.assert_called_with(ebnf_file='ebnf', debug=False)
+    story.process(ebnf='ebnf')
+    Story.parse.assert_called_with(ebnf='ebnf', debug=False)
