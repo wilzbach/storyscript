@@ -135,25 +135,34 @@ def test_cli_compile_ebnf_file(runner, echo, app):
     App.compile.assert_called_with(os.getcwd(), ebnf='test.ebnf', debug=False)
 
 
-def test_cli_lexer(patch, magic, runner, app, echo):
+def test_cli_lex(patch, magic, runner, app, echo):
     """
     Ensures the lex command outputs lexer tokens
     """
     token = magic(type='token', value='value')
     patch.object(App, 'lex', return_value={'one.story': [token]})
     runner.invoke(Cli.lex, [])
-    App.lex.assert_called_with(os.getcwd())
+    App.lex.assert_called_with(os.getcwd(), ebnf=None)
     click.echo.assert_called_with('0 token value')
     assert click.echo.call_count == 2
 
 
-def test_cli_lexer_path(patch, magic, runner, app):
+def test_cli_lex_path(patch, magic, runner, app):
     """
-    Ensures the lex command storypath defaults to cwd
+    Ensures the lex command path defaults to cwd
     """
     patch.object(App, 'lex', return_value={'one.story': [magic()]})
     runner.invoke(Cli.lex, ['/path'])
-    App.lex.assert_called_with('/path')
+    App.lex.assert_called_with('/path', ebnf=None)
+
+
+def test_cli_lex_ebnf(patch, runner):
+    """
+    Ensures the lex command allows specifying an ebnf file.
+    """
+    patch.object(App, 'lex')
+    runner.invoke(Cli.lex, ['--ebnf', 'my.ebnf'])
+    App.lex.assert_called_with(os.getcwd(), ebnf='my.ebnf')
 
 
 def test_cli_grammar(patch, runner, app, echo):

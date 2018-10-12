@@ -66,11 +66,12 @@ class Cli:
     @staticmethod
     @main.command()
     @click.argument('path', default=os.getcwd())
-    def lex(path):
+    @click.option('--ebnf', help=ebnf_file_help)
+    def lex(path, ebnf):
         """
         Shows lexer tokens for given stories
         """
-        results = App.lex(path)
+        results = App.lex(path, ebnf=ebnf)
         for file, tokens in results.items():
             click.echo('File: {}'.format(file))
             for n, token in enumerate(tokens):
