@@ -59,7 +59,7 @@ def test_cli_parse_path(runner, echo, app):
     App.parse.assert_called_with('/path', ebnf=None, debug=False)
 
 
-def test_cli_parse_ebnf_file(runner, echo, app):
+def test_cli_parse_ebnf(runner, echo, app):
     """
     Ensures the parse command supports specifying an ebnf file.
     """
@@ -130,7 +130,7 @@ def test_cli_compile_json(runner, echo, app, option):
     click.echo.assert_called_with(App.compile())
 
 
-def test_cli_compile_ebnf_file(runner, echo, app):
+def test_cli_compile_ebnf(runner, echo, app):
     runner.invoke(Cli.compile, ['--ebnf', 'test.ebnf'])
     App.compile.assert_called_with(os.getcwd(), ebnf='test.ebnf', debug=False)
 

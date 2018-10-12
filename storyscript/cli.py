@@ -12,7 +12,7 @@ class Cli:
 
     version_help = 'Prints Storyscript version'
     silent_help = 'Silent mode. Return syntax errors only.'
-    ebnf_file_help = 'Load the grammar from a file. Useful for development'
+    ebnf_help = 'Load the grammar from a file. Useful for development'
 
     @click.group(invoke_without_command=True)
     @click.option('--version', is_flag=True, help=version_help)
@@ -33,7 +33,7 @@ class Cli:
     @main.command()
     @click.argument('path', default=os.getcwd())
     @click.option('--debug', is_flag=True)
-    @click.option('--ebnf', help=ebnf_file_help)
+    @click.option('--ebnf', help=ebnf_help)
     def parse(path, debug, ebnf):
         """
         Parses stories, producing the abstract syntax tree.
@@ -47,7 +47,7 @@ class Cli:
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
     @click.option('--debug', is_flag=True)
-    @click.option('--ebnf', help=ebnf_file_help)
+    @click.option('--ebnf', help=ebnf_help)
     def compile(path, output, json, silent, debug, ebnf):
         """
         Compiles stories and prints the resulting json
@@ -66,7 +66,7 @@ class Cli:
     @staticmethod
     @main.command()
     @click.argument('path', default=os.getcwd())
-    @click.option('--ebnf', help=ebnf_file_help)
+    @click.option('--ebnf', help=ebnf_help)
     def lex(path, ebnf):
         """
         Shows lexer tokens for given stories
