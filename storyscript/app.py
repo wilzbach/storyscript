@@ -13,11 +13,11 @@ class App:
     """
 
     @classmethod
-    def compile(cls, path, ebnf_file=None, debug=False):
+    def compile(cls, path, ebnf=None, debug=False):
         """
         Parse and compile stories in path to JSON
         """
-        bundle = Bundle(path).bundle(ebnf_file=ebnf_file, debug=debug)
+        bundle = Bundle(path).bundle(ebnf=ebnf, debug=debug)
         return json.dumps(bundle, indent=2)
 
     @classmethod

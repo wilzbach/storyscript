@@ -14,17 +14,20 @@ def test_app_compile(patch):
     patch.object(Bundle, 'bundle')
     result = App.compile('path')
     Bundle.__init__.assert_called_with('path')
-    Bundle.bundle.assert_called_with(ebnf_file=None, debug=False)
+    Bundle.bundle.assert_called_with(ebnf=None, debug=False)
     json.dumps.assert_called_with(Bundle.bundle(), indent=2)
     assert result == json.dumps()
 
 
-def test_app_compile_ebnf_file(patch):
+def test_app_compile_ebnf(patch):
+    """
+    Ensures App.compile supports specifying an ebnf file
+    """
     patch.object(json, 'dumps')
     patch.init(Bundle)
     patch.object(Bundle, 'bundle')
-    App.compile('path', ebnf_file='ebnf')
-    Bundle.bundle.assert_called_with(ebnf_file='ebnf', debug=False)
+    App.compile('path', ebnf='ebnf')
+    Bundle.bundle.assert_called_with(ebnf='ebnf', debug=False)
 
 
 def test_app_compile_debug(patch):
@@ -32,7 +35,7 @@ def test_app_compile_debug(patch):
     patch.init(Bundle)
     patch.object(Bundle, 'bundle')
     App.compile('path', debug='debug')
-    Bundle.bundle.assert_called_with(ebnf_file=None, debug='debug')
+    Bundle.bundle.assert_called_with(ebnf=None, debug='debug')
 
 
 def test_app_lexer(patch):
