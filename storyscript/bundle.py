@@ -57,3 +57,13 @@ class Bundle:
         self.compile(entrypoint, ebnf, debug)
         return {'stories': self.stories, 'services': self.services(),
                 'entrypoint': entrypoint}
+
+    def lex(self, ebnf=None):
+        """
+        Lexes the bundle
+        """
+        stories = self.find_stories()
+        results = {}
+        for story in stories:
+            results[story] = Story.from_file(story).lex(ebnf=ebnf)
+        return results

@@ -84,3 +84,25 @@ def test_bundle_bundle_debug(patch, bundle):
     patch.many(Bundle, ['find_stories', 'services', 'compile'])
     bundle.bundle(debug=True)
     Bundle.compile.assert_called_with(Bundle.find_stories(), None, True)
+
+
+def test_bundle_lex(patch, bundle):
+    """
+    Ensures Bundle.lex can lex a bundle
+    """
+    patch.object(Story, 'from_file')
+    patch.object(Bundle, 'find_stories', return_value=['story'])
+    result = bundle.lex()
+    Story.from_file.assert_called_with('story')
+    Story.from_file().lex.assert_called_with(ebnf=None)
+    assert result['story'] == Story.from_file().lex()
+
+
+def test_bundle_lex_ebnf(patch, bundle):
+    """
+    Ensures Bundle.lex supports specifying an ebnf file
+    """
+    patch.object(Story, 'from_file')
+    patch.object(Bundle, 'find_stories', return_value=['story'])
+    bundle.lex(ebnf='ebnf')
+    Story.from_file().lex.assert_called_with(ebnf='ebnf')
