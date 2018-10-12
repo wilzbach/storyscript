@@ -38,13 +38,20 @@ def test_app_compile_debug(patch):
     Bundle.bundle.assert_called_with(ebnf=None, debug='debug')
 
 
-def test_app_lexer(patch):
-    patch.object(Story, 'from_file')
+def test_app_lex(patch):
     patch.init(Bundle)
-    patch.object(Bundle, 'find_stories', return_value=['one.story'])
+    patch.object(Bundle, 'lex')
     result = App.lex('/path')
-    Story.from_file.assert_called_with('one.story')
-    assert result == {'one.story': Story.from_file().lex()}
+    Bundle.__init__.assert_called_with('/path')
+    Bundle.lex.assert_called_with(ebnf=None)
+    assert result == Bundle.lex()
+
+
+def test_app_lex_ebnf(patch):
+    patch.init(Bundle)
+    patch.object(Bundle, 'lex')
+    App.lex('/path', ebnf='my.ebnf')
+    Bundle.lex.assert_called_with(ebnf='my.ebnf')
 
 
 def test_app_grammar(patch):

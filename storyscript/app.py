@@ -21,15 +21,11 @@ class App:
         return json.dumps(bundle, indent=2)
 
     @classmethod
-    def lex(cls, path):
+    def lex(cls, path, ebnf=None):
         """
         Lex stories, producing the list of used tokens
         """
-        stories = Bundle(path).find_stories()
-        results = {}
-        for story in stories:
-            results[story] = Story.from_file(story).lex()
-        return results
+        return Bundle(path).lex(ebnf=ebnf)
 
     @staticmethod
     def grammar():
