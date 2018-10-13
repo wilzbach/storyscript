@@ -34,26 +34,56 @@ class Bundle:
         services.sort()
         return services
 
-    def compile_modules(self, stories, ebnf_file, debug):
-        self.compile(stories, ebnf_file, debug)
+    def compile_modules(self, stories, ebnf, debug):
+        self.compile(stories, ebnf, debug)
 
-    def compile(self, stories, ebnf_file, debug):
+    def parse_modules(self, stories, ebnf, debug):
+        self.parse(stories, ebnf, debug)
+
+    def parse(self, stories, ebnf, debug):
+        """
+        Parse stories.
+        """
+        for storypath in stories:
+            story = Story.from_file(storypath)
+            story.parse(ebnf=ebnf, debug=debug)
+            self.parse_modules(story.modules(), ebnf, debug)
+            self.stories[storypath] = story.tree
+
+    def compile(self, stories, ebnf, debug):
         """
         Reads and parses a story, then compiles its modules and finally
         compiles the story itself.
         """
         for storypath in stories:
             story = Story.from_file(storypath)
-            story.parse(ebnf_file=ebnf_file, debug=debug)
-            self.compile_modules(story.modules(), ebnf_file, debug)
+            story.parse(ebnf=ebnf, debug=debug)
+            self.compile_modules(story.modules(), ebnf, debug)
             story.compile(debug=debug)
             self.stories[storypath] = story.compiled
 
-    def bundle(self, ebnf_file=None, debug=False):
+    def bundle(self, ebnf=None, debug=False):
         """
         Makes the bundle
         """
         entrypoint = self.find_stories()
-        self.compile(entrypoint, ebnf_file, debug)
+        self.compile(entrypoint, ebnf, debug)
         return {'stories': self.stories, 'services': self.services(),
                 'entrypoint': entrypoint}
+
+    def bundle_trees(self, ebnf=None, debug=None):
+        """
+        Makes a bundle of syntax trees
+        """
+        self.parse(self.find_stories(), ebnf, debug)
+        return self.stories
+
+    def lex(self, ebnf=None):
+        """
+        Lexes the bundle
+        """
+        stories = self.find_stories()
+        results = {}
+        for story in stories:
+            results[story] = Story.from_file(story).lex(ebnf=ebnf)
+        return results

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import io
 import os
 
 import click
@@ -11,7 +12,7 @@ class Cli:
 
     version_help = 'Prints Storyscript version'
     silent_help = 'Silent mode. Return syntax errors only.'
-    ebnf_file_help = 'Load the grammar from a file. Useful for development'
+    ebnf_help = 'Load the grammar from a file. Useful for development'
 
     @click.group(invoke_without_command=True)
     @click.option('--version', is_flag=True, help=version_help)
@@ -30,21 +31,39 @@ class Cli:
 
     @staticmethod
     @main.command()
-    @click.argument('storypath', default=os.getcwd())
-    @click.argument('output_file_path', required=False)
+    @click.argument('path', default=os.getcwd())
+    @click.option('--debug', is_flag=True)
+    @click.option('--ebnf', help=ebnf_help)
+    @click.option('--raw', is_flag=True)
+    def parse(path, debug, ebnf, raw):
+        """
+        Parses stories, producing the abstract syntax tree.
+        """
+        trees = App.parse(path, ebnf=ebnf, debug=debug)
+        for story, tree in trees.items():
+            click.echo('File: {}'.format(story))
+            if raw:
+                click.echo(tree)
+            else:
+                click.echo(tree.pretty())
+
+    @staticmethod
+    @main.command()
+    @click.argument('path', default=os.getcwd())
+    @click.argument('output', required=False)
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
     @click.option('--debug', is_flag=True)
-    @click.option('--ebnf-file', help=ebnf_file_help)
-    def compile(storypath, output_file_path, json, silent, debug, ebnf_file):
+    @click.option('--ebnf', help=ebnf_help)
+    def compile(path, output, json, silent, debug, ebnf):
         """
         Compiles stories and prints the resulting json
         """
-        results = App.compile(storypath, ebnf_file=ebnf_file, debug=debug)
+        results = App.compile(path, ebnf=ebnf, debug=debug)
         if not silent:
             if json:
-                if output_file_path:
-                    with open(output_file_path, 'w') as f:
+                if output:
+                    with io.open(output, 'w') as f:
                         f.write(results)
                     exit()
                 click.echo(results)
@@ -53,12 +72,13 @@ class Cli:
 
     @staticmethod
     @main.command()
-    @click.argument('storypath', default=os.getcwd())
-    def lex(storypath):
+    @click.argument('path', default=os.getcwd())
+    @click.option('--ebnf', help=ebnf_help)
+    def lex(path, ebnf):
         """
         Shows lexer tokens for given stories
         """
-        results = App.lex(storypath)
+        results = App.lex(path, ebnf=ebnf)
         for file, tokens in results.items():
             click.echo('File: {}'.format(file))
             for n, token in enumerate(tokens):

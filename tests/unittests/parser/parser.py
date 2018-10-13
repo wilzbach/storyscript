@@ -19,7 +19,7 @@ def parser():
 
 def test_parser_init(parser):
     assert parser.algo == 'lalr'
-    assert parser.ebnf_file is None
+    assert parser.ebnf is None
 
 
 def test_parser_init_algo():
@@ -27,9 +27,9 @@ def test_parser_init_algo():
     assert parser.algo == 'algo'
 
 
-def test_parser_init_ebnf_file():
-    parser = Parser(ebnf_file='grammar.ebnf')
-    assert parser.ebnf_file == 'grammar.ebnf'
+def test_parser_init_ebnf():
+    parser = Parser(ebnf='grammar.ebnf')
+    assert parser.ebnf == 'grammar.ebnf'
 
 
 def test_parser_indenter(patch, parser):
@@ -50,9 +50,9 @@ def test_parser_grammar(patch, parser):
     assert result == Grammar().build()
 
 
-def test_parser_grammar_ebnf_file(patch, parser):
+def test_parser_grammar_ebnf(patch, parser):
     patch.object(io, 'open')
-    parser.ebnf_file = 'test.ebnf'
+    parser.ebnf = 'test.ebnf'
     result = parser.grammar()
     io.open.assert_called_with('test.ebnf', 'r')
     assert result == io.open().__enter__().read()

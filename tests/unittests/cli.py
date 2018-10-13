@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import io
 import os
 
 import click
@@ -23,7 +24,7 @@ def echo(patch):
 
 @fixture
 def app(patch):
-    patch.object(App, 'compile')
+    patch.many(App, ['compile', 'parse'])
     return App
 
 
@@ -42,34 +43,76 @@ def test_cli_version_flag(runner, echo):
     click.echo.assert_called_with(message)
 
 
+def test_cli_parse(runner, echo, app, tree):
+    """
+    Ensures the parse command produces the trees for given stories.
+    """
+    App.parse.return_value = {'path': tree}
+    runner.invoke(Cli.parse, [])
+    App.parse.assert_called_with(os.getcwd(), ebnf=None, debug=False)
+    click.echo.assert_called_with(tree.pretty())
+
+
+def test_cli_parse_raw(runner, echo, app, tree):
+    """
+    Ensures the parse command supports raw trees
+    """
+    App.parse.return_value = {'path': tree}
+    runner.invoke(Cli.parse, ['--raw'])
+    click.echo.assert_called_with(tree)
+
+
+def test_cli_parse_path(runner, echo, app):
+    """
+    Ensures the parse command supports specifying a path.
+    """
+    runner.invoke(Cli.parse, ['/path'])
+    App.parse.assert_called_with('/path', ebnf=None, debug=False)
+
+
+def test_cli_parse_ebnf(runner, echo, app):
+    """
+    Ensures the parse command supports specifying an ebnf file.
+    """
+    runner.invoke(Cli.parse, ['--ebnf', 'test.ebnf'])
+    App.parse.assert_called_with(os.getcwd(), ebnf='test.ebnf', debug=False)
+
+
+def test_cli_parse_debug(runner, echo, app):
+    """
+    Ensures the parse command supports a debug flag.
+    """
+    runner.invoke(Cli.parse, ['--debug'])
+    App.parse.assert_called_with(os.getcwd(), ebnf=None, debug=True)
+
+
 def test_cli_compile(patch, runner, echo, app):
     """
-    Ensures the compile command compiles a story
+    Ensures the compile command compiles a story.
     """
     patch.object(click, 'style')
-    runner.invoke(Cli.compile, ['/path'])
-    App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
+    runner.invoke(Cli.compile, [])
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False)
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
 
 
-def test_cli_compile_default_path(patch, runner, app):
+def test_cli_compile_path(patch, runner, app):
     """
-    Ensures the compile command default path is the current working directory.
+    Ensures the compile command supports specifying a path
     """
-    runner.invoke(Cli.compile, [])
-    App.compile.assert_called_with(os.getcwd(), ebnf_file=None, debug=False)
+    runner.invoke(Cli.compile, ['/path'])
+    App.compile.assert_called_with('/path', ebnf=None, debug=False)
 
 
-def test_cli_compile_output_file(runner, app, tmpdir):
+def test_cli_compile_output_file(patch, runner, app):
     """
-    Ensures the compile command outputs to an output file when
-    available. If no file were to be available (e.g. no file was
-    written), this test would throw an error
+    Ensures the compile command supports specifying an output file.
     """
-    tmp_file = tmpdir.join('output_file')
-    runner.invoke(Cli.compile, ['-j', '/path', str(tmp_file)])
-    tmp_file.read()
+    patch.object(io, 'open')
+    runner.invoke(Cli.compile, ['/path', 'hello.story', '-j'])
+    io.open.assert_called_with('hello.story', 'w')
+    io.open().__enter__().write.assert_called_with(App.compile())
 
 
 @mark.parametrize('option', ['--silent', '-s'])
@@ -77,15 +120,15 @@ def test_cli_compile_silent(runner, echo, app, option):
     """
     Ensures --silent makes everything quiet
     """
-    result = runner.invoke(Cli.compile, ['/path', option])
-    App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
+    result = runner.invoke(Cli.compile, [option])
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False)
     assert result.output == ''
     assert click.echo.call_count == 0
 
 
 def test_cli_compile_debug(runner, echo, app):
-    runner.invoke(Cli.compile, ['/path', '--debug'])
-    App.compile.assert_called_with('/path', ebnf_file=None, debug=True)
+    runner.invoke(Cli.compile, ['--debug'])
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=True)
 
 
 @mark.parametrize('option', ['--json', '-j'])
@@ -93,36 +136,44 @@ def test_cli_compile_json(runner, echo, app, option):
     """
     Ensures --json outputs json
     """
-    runner.invoke(Cli.compile, ['/path', option])
-    App.compile.assert_called_with('/path', ebnf_file=None, debug=False)
+    runner.invoke(Cli.compile, [option])
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False)
     click.echo.assert_called_with(App.compile())
 
 
-def test_cli_compile_ebnf_file(runner, echo, app):
-    runner.invoke(Cli.compile, ['/path', '--ebnf-file', 'test.grammar'])
-    kwargs = {'ebnf_file': 'test.grammar', 'debug': False}
-    App.compile.assert_called_with('/path', **kwargs)
+def test_cli_compile_ebnf(runner, echo, app):
+    runner.invoke(Cli.compile, ['--ebnf', 'test.ebnf'])
+    App.compile.assert_called_with(os.getcwd(), ebnf='test.ebnf', debug=False)
 
 
-def test_cli_lexer(patch, magic, runner, app, echo):
+def test_cli_lex(patch, magic, runner, app, echo):
     """
     Ensures the lex command outputs lexer tokens
     """
     token = magic(type='token', value='value')
     patch.object(App, 'lex', return_value={'one.story': [token]})
-    runner.invoke(Cli.lex, ['/path'])
-    app.lex.assert_called_with('/path')
+    runner.invoke(Cli.lex, [])
+    App.lex.assert_called_with(os.getcwd(), ebnf=None)
     click.echo.assert_called_with('0 token value')
     assert click.echo.call_count == 2
 
 
-def test_cli_lexer_default(patch, magic, runner, app):
+def test_cli_lex_path(patch, magic, runner, app):
     """
-    Ensures the lex command storypath defaults to cwd
+    Ensures the lex command path defaults to cwd
     """
     patch.object(App, 'lex', return_value={'one.story': [magic()]})
-    runner.invoke(Cli.lex, [])
-    app.lex.assert_called_with(os.getcwd())
+    runner.invoke(Cli.lex, ['/path'])
+    App.lex.assert_called_with('/path', ebnf=None)
+
+
+def test_cli_lex_ebnf(patch, runner):
+    """
+    Ensures the lex command allows specifying an ebnf file.
+    """
+    patch.object(App, 'lex')
+    runner.invoke(Cli.lex, ['--ebnf', 'my.ebnf'])
+    App.lex.assert_called_with(os.getcwd(), ebnf='my.ebnf')
 
 
 def test_cli_grammar(patch, runner, app, echo):
