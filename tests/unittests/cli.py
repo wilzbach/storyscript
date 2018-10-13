@@ -53,6 +53,15 @@ def test_cli_parse(runner, echo, app, tree):
     click.echo.assert_called_with(tree.pretty())
 
 
+def test_cli_parse_raw(runner, echo, app, tree):
+    """
+    Ensures the parse command supports raw trees
+    """
+    App.parse.return_value = {'path': tree}
+    runner.invoke(Cli.parse, ['--raw'])
+    click.echo.assert_called_with(tree)
+
+
 def test_cli_parse_path(runner, echo, app):
     """
     Ensures the parse command supports specifying a path.
