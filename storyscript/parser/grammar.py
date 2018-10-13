@@ -171,7 +171,7 @@ class Grammar:
         self.ebnf.service_block = 'service nl (nested_block)?'
         when = 'when (path output|service)'
         self.ebnf.when_block = self.ebnf.simple_block(when)
-        self.ebnf.indented_arguments = 'indent arguments nl dedent'
+        self.ebnf.indented_arguments = 'indent (arguments nl)+ dedent'
         block = ('rules nl, if_block, foreach_block, function_block, '
                  'arguments, service_block, when_block, try_block, '
                  'indented_arguments')
