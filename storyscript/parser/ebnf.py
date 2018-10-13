@@ -54,7 +54,7 @@ class Ebnf:
         is.
         """
         name = name.replace(',', '|')
-        clean_name = name.strip('*[]()?|')
+        clean_name = name.strip('*[]()?|+')
         if clean_name in self._tokens:
             real_name = self._tokens[clean_name]['token']
         else:

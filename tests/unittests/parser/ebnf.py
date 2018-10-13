@@ -59,10 +59,11 @@ def test_ebnf_resolve(ebnf):
     assert result == '(something)*'
 
 
-def test_ebnf_resolve_token(ebnf):
+@mark.parametrize('symbol', ['?', '+', '*'])
+def test_ebnf_resolve_token(ebnf, symbol):
     ebnf._tokens['token'] = {'token': '_TOKEN'}
-    result = ebnf.resolve('(token)?')
-    assert result == '(_TOKEN)?'
+    result = ebnf.resolve('(token){}'.format(symbol))
+    assert result == '(_TOKEN){}'.format(symbol)
 
 
 def test_ebnf_resolve_comma(patch, ebnf):

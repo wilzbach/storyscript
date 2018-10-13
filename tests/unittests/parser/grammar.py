@@ -191,7 +191,7 @@ def test_grammar_block(grammar, ebnf):
     assert ebnf.service_block == 'service nl (nested_block)?'
     ebnf.simple_block.assert_called_with('when (path output|service)')
     assert ebnf.when_block == ebnf.simple_block()
-    assert ebnf.indented_arguments == 'indent arguments nl dedent'
+    assert ebnf.indented_arguments == 'indent (arguments nl)+ dedent'
     block = ('rules nl, if_block, foreach_block, function_block, arguments, '
              'service_block, when_block, try_block, indented_arguments')
     assert ebnf.block == block
