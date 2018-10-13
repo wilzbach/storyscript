@@ -58,6 +58,13 @@ class Bundle:
         return {'stories': self.stories, 'services': self.services(),
                 'entrypoint': entrypoint}
 
+    def bundle_trees(self, ebnf=None, debug=None):
+        """
+        Makes a bundle of syntax trees
+        """
+        self.parse(self.find_stories(), ebnf, debug)
+        return self.stories
+
     def lex(self, ebnf=None):
         """
         Lexes the bundle

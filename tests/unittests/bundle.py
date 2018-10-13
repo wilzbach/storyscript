@@ -86,6 +86,25 @@ def test_bundle_bundle_debug(patch, bundle):
     Bundle.compile.assert_called_with(Bundle.find_stories(), None, True)
 
 
+def test_bundle_bundle_trees(patch, bundle):
+    patch.many(Bundle, ['find_stories', 'parse'])
+    result = bundle.bundle_trees()
+    Bundle.parse.assert_called_with(Bundle.find_stories(), None, None)
+    assert result == bundle.stories
+
+
+def test_bundle_bundle_trees_ebnf(patch, bundle):
+    patch.many(Bundle, ['find_stories', 'parse'])
+    bundle.bundle_trees(ebnf='ebnf')
+    Bundle.parse.assert_called_with(Bundle.find_stories(), 'ebnf', None)
+
+
+def test_bundle_bundle_trees_debug(patch, bundle):
+    patch.many(Bundle, ['find_stories', 'parse'])
+    bundle.bundle_trees(debug=True)
+    Bundle.parse.assert_called_with(Bundle.find_stories(), None, True)
+
+
 def test_bundle_lex(patch, bundle):
     """
     Ensures Bundle.lex can lex a bundle
