@@ -40,6 +40,16 @@ class Bundle:
     def parse_modules(self, stories, ebnf, debug):
         self.parse(stories, ebnf, debug)
 
+    def parse(self, stories, ebnf, debug):
+        """
+        Parse stories.
+        """
+        for storypath in stories:
+            story = Story.from_file(storypath)
+            story.parse(ebnf=ebnf, debug=debug)
+            self.parse_modules(story.modules(), ebnf, debug)
+            self.stories[storypath] = story.tree
+
     def compile(self, stories, ebnf, debug):
         """
         Reads and parses a story, then compiles its modules and finally

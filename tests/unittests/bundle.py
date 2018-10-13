@@ -59,6 +59,16 @@ def test_bundle_parse_modules(patch, bundle):
     Bundle.parse.assert_called_with(['stories'], 'ebnf', 'debug')
 
 
+def test_bundle_parse(patch, bundle):
+    patch.object(Story, 'from_file')
+    patch.object(Bundle, 'parse_modules')
+    bundle.parse(['one.story'], None, False)
+    Story.from_file.assert_called_with('one.story')
+    story = Story.from_file()
+    Bundle.parse_modules.assert_called_with(story.modules(), None, False)
+    assert bundle.stories['one.story'] == story.tree
+
+
 def test_bundle_compile(patch, bundle):
     patch.object(Story, 'from_file')
     patch.object(Bundle, 'compile_modules')
