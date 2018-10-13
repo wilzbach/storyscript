@@ -37,6 +37,9 @@ class Bundle:
     def compile_modules(self, stories, ebnf, debug):
         self.compile(stories, ebnf, debug)
 
+    def parse_modules(self, stories, ebnf, debug):
+        self.parse(stories, ebnf, debug)
+
     def compile(self, stories, ebnf, debug):
         """
         Reads and parses a story, then compiles its modules and finally

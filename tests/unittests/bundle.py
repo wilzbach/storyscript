@@ -53,6 +53,12 @@ def test_bundle_compile_modules(patch, bundle):
     Bundle.compile.assert_called_with(['stories'], 'ebnf', 'debug')
 
 
+def test_bundle_parse_modules(patch, bundle):
+    patch.object(Bundle, 'parse')
+    bundle.parse_modules(['stories'], 'ebnf', 'debug')
+    Bundle.parse.assert_called_with(['stories'], 'ebnf', 'debug')
+
+
 def test_bundle_compile(patch, bundle):
     patch.object(Story, 'from_file')
     patch.object(Bundle, 'compile_modules')
