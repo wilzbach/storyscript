@@ -12,16 +12,23 @@ class App:
     Exposes functionalities for internal use e.g the command line
     """
 
-    @classmethod
-    def compile(cls, path, ebnf=None, debug=False):
+    @staticmethod
+    def parse(path, ebnf=None, debug=None):
         """
-        Parse and compile stories in path to JSON
+        Parses stories found in path, returning their trees
+        """
+        return Bundle(path).parse(ebnf=ebnf, debug=debug)
+
+    @staticmethod
+    def compile(path, ebnf=None, debug=False):
+        """
+        Parses and compiles stories found in path, returning JSON
         """
         bundle = Bundle(path).bundle(ebnf=ebnf, debug=debug)
         return json.dumps(bundle, indent=2)
 
-    @classmethod
-    def lex(cls, path, ebnf=None):
+    @staticmethod
+    def lex(path, ebnf=None):
         """
         Lex stories, producing the list of used tokens
         """
