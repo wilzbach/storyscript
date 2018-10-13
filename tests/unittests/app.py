@@ -13,7 +13,7 @@ from storyscript.story import Story
 @fixture
 def bundle(patch):
     patch.init(Bundle)
-    patch.many(Bundle, ['parse', 'bundle', 'lex'])
+    patch.many(Bundle, ['bundle_trees', 'bundle', 'lex'])
 
 
 def test_app_parse(bundle):
@@ -22,8 +22,8 @@ def test_app_parse(bundle):
     """
     result = App.parse('path')
     Bundle.__init__.assert_called_with('path')
-    Bundle.parse.assert_called_with(ebnf=None, debug=None)
-    assert result == Bundle.parse()
+    Bundle.bundle_trees.assert_called_with(ebnf=None, debug=None)
+    assert result == Bundle.bundle_trees()
 
 
 def test_app_parse_ebnf(bundle):
@@ -31,7 +31,7 @@ def test_app_parse_ebnf(bundle):
     Ensures App.parse supports specifying an ebnf
     """
     App.parse('path', ebnf='ebnf')
-    Bundle.parse.assert_called_with(ebnf='ebnf', debug=None)
+    Bundle.bundle_trees.assert_called_with(ebnf='ebnf', debug=None)
 
 
 def test_app_parse_debug(bundle):
@@ -39,7 +39,7 @@ def test_app_parse_debug(bundle):
     Ensures App.parse can run in debug mode
     """
     App.parse('path', debug=True)
-    Bundle.parse.assert_called_with(ebnf=None, debug=True)
+    Bundle.bundle_trees.assert_called_with(ebnf=None, debug=True)
 
 
 def test_app_compile(patch, bundle):

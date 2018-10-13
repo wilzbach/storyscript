@@ -17,7 +17,7 @@ class App:
         """
         Parses stories found in path, returning their trees
         """
-        return Bundle(path).parse(ebnf=ebnf, debug=debug)
+        return Bundle(path).bundle_trees(ebnf=ebnf, debug=debug)
 
     @staticmethod
     def compile(path, ebnf=None, debug=False):
