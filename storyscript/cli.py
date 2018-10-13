@@ -38,7 +38,10 @@ class Cli:
         """
         Parses stories, producing the abstract syntax tree.
         """
-        App.parse(path, ebnf=ebnf, debug=debug)
+        trees = App.parse(path, ebnf=ebnf, debug=debug)
+        for story, tree in trees.items():
+            click.echo('File: {}'.format(story))
+            click.echo(tree.pretty())
 
     @staticmethod
     @main.command()

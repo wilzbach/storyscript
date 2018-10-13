@@ -43,12 +43,14 @@ def test_cli_version_flag(runner, echo):
     click.echo.assert_called_with(message)
 
 
-def test_cli_parse(runner, echo, app):
+def test_cli_parse(runner, echo, app, tree):
     """
-    Ensures the parse command parses a story to its tree.
+    Ensures the parse command produces the trees for given stories.
     """
+    App.parse.return_value = {'path': tree}
     runner.invoke(Cli.parse, [])
     App.parse.assert_called_with(os.getcwd(), ebnf=None, debug=False)
+    click.echo.assert_called_with(tree.pretty())
 
 
 def test_cli_parse_path(runner, echo, app):
