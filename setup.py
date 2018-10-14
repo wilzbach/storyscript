@@ -15,6 +15,8 @@ if sys.argv[-1] == 'publish':
 version = '0.6.1'
 
 description = io.open('README.rst', 'r', encoding='utf-8').read()
+short_description = ('StoryScript is an high-level language that can be used '
+                     'to orchestrate microservices in an algorithmic way.')
 
 classifiers = [
     'Development Status :: 4 - Beta',
@@ -43,8 +45,8 @@ extras = [
 
 setup(name='storyscript',
       version=version,
-      description=description,
-      long_description='',
+      description=short_description,
+      long_description=description,
       classifiers=classifiers,
       download_url='https://github.com/asyncy/storyscript/archive/master.zip',
       keywords='',
