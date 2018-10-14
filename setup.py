@@ -1,8 +1,22 @@
+# -*- coding: utf-8 -*-
+import io
+import os
+import sys
+
 from setuptools import find_packages, setup
-from setuptools.command.install import install
 
 
-version = '0.6.1'
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist upload')
+    os.system('python setup.py bdist_wheel upload')
+    sys.exit()
+
+
+version = '0.6.2'
+
+description = io.open('README.rst', 'r', encoding='utf-8').read()
+short_description = ('StoryScript is an high-level language that can be used '
+                     'to orchestrate microservices in an algorithmic way.')
 
 classifiers = [
     'Development Status :: 4 - Beta',
@@ -31,8 +45,8 @@ extras = [
 
 setup(name='storyscript',
       version=version,
-      description='',
-      long_description='',
+      description=short_description,
+      long_description=description,
       classifiers=classifiers,
       download_url='https://github.com/asyncy/storyscript/archive/master.zip',
       keywords='',
