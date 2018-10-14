@@ -32,5 +32,17 @@ class Transformer(LarkTransformer):
             raise StoryError('variables-dash', token)
         return Tree('assignment', matches)
 
+    def service_block(self, matches):
+        """
+        Transforms service blocks, moving indented arguments back to the first
+        node.
+        """
+        if len(matches) > 1:
+            if matches[1].block.rules:
+                for argument in matches[1].find_data('arguments'):
+                    matches[0].service_fragment.children.append(argument)
+                return Tree('service_block', [matches[0]])
+        return Tree('service_block', matches)
+
     def __getattr__(self, attribute, *args):
         return lambda matches: Tree(attribute, matches)
