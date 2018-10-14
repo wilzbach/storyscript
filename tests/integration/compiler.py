@@ -242,6 +242,36 @@ def test_compiler_service(parser):
     assert result['tree']['1']['args'] == args
 
 
+def test_compiler_service_indented_arguments(parser):
+    """
+    Ensures that services with indented arguments are compiled correctly
+    """
+    tree = parser.parse('alpine echo message:"hello"\n\tcolour:"red"')
+    result = Compiler.compile(tree)
+    args = [
+        {'$OBJECT': 'argument', 'name': 'message', 'argument':
+         {'$OBJECT': 'string', 'string': 'hello'}},
+        {'$OBJECT': 'argument', 'name': 'colour', 'argument':
+         {'string': 'red', '$OBJECT': 'string'}}
+    ]
+    assert result['tree']['1']['args'] == args
+
+
+def test_compiler_service_streaming(parser):
+    """
+    Ensures that streaming services are compiled correctly
+    """
+    source = 'api stream as client\n\twhen client event as e\n\t\tx=0'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['output'] == ['client']
+    assert result['tree']['1']['enter'] == '2'
+    assert result['tree']['2']['method'] == 'when'
+    assert result['tree']['2']['output'] == ['e']
+    assert result['tree']['2']['enter'] == '3'
+    assert result['tree']['3']['method'] == 'set'
+
+
 def test_compiler_function(parser):
     tree = parser.parse('function sum a:int returns int\n\treturn 0')
     result = Compiler.compile(tree)
