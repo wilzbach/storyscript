@@ -1,8 +1,20 @@
+# -*- coding: utf-8 -*-
+import io
+import os
+import sys
+
 from setuptools import find_packages, setup
-from setuptools.command.install import install
+
+
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist upload')
+    os.system('python setup.py bdist_wheel upload')
+    sys.exit()
 
 
 version = '0.6.1'
+
+description = io.open('README.rst', 'r', encoding='utf-8').read()
 
 classifiers = [
     'Development Status :: 4 - Beta',
@@ -31,7 +43,7 @@ extras = [
 
 setup(name='storyscript',
       version=version,
-      description='',
+      description=description,
       long_description='',
       classifiers=classifiers,
       download_url='https://github.com/asyncy/storyscript/archive/master.zip',
