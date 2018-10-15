@@ -196,7 +196,9 @@ class Objects:
     def expression_type(operator):
         types = {'+': 'sum', '-': 'subtraction', '^': 'exponential',
                  '*': 'multiplication', '/': 'division', '%': 'modulus',
-                 'and': 'and', 'or': 'or', 'not': 'not'}
+                 'and': 'and', 'or': 'or', 'not': 'not', '==': 'equals',
+                 '>': 'greater', '<': 'less', '!=': 'not_equal',
+                 '>=': 'greater_equal', '<=': 'less_equal'}
         return types[operator]
 
     @classmethod

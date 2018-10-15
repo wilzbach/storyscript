@@ -270,7 +270,9 @@ def test_objects_function_arguments(patch, tree):
 @mark.parametrize('operator, expression', [
     ('+', 'sum'), ('*', 'multiplication'), ('/', 'division'), ('%', 'modulus'),
     ('^', 'exponential'), ('-', 'subtraction'), ('and', 'and'),
-    ('or', 'or'), ('not', 'not')
+    ('or', 'or'), ('not', 'not'), ('==', 'equals'), ('>', 'greater'),
+    ('<', 'less'), ('!=', 'not_equal'), ('>=', 'greater_equal'),
+    ('<=', 'less_equal')
 ])
 def test_objects_expression_type(operator, expression):
     assert Objects.expression_type(operator) == expression
