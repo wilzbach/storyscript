@@ -199,6 +199,13 @@ class Objects:
         """
         return '{} {} {}'.format(left_handside, operator, right_handside)
 
+    @staticmethod
+    def expression_type(operator):
+        types = {'+': 'sum', '-': 'subtraction', '^': 'exponential',
+                 '*': 'multiplication', '/': 'division', '%': 'modulus',
+                 'and': 'and', 'or': 'or', 'not': 'not'}
+        return types[operator]
+
     @classmethod
     def expression(cls, tree):
         """

@@ -271,6 +271,15 @@ def test_fill_expression():
     assert Objects.fill_expression('one', 'two', 'three') == 'one two three'
 
 
+@mark.parametrize('operator, expression', [
+    ('+', 'sum'), ('*', 'multiplication'), ('/', 'division'), ('%', 'modulus'),
+    ('^', 'exponential'), ('-', 'subtraction'), ('and', 'and'),
+    ('or', 'or'), ('not', 'not')
+])
+def test_objects_expression_type(operator, expression):
+    assert Objects.expression_type(operator) == expression
+
+
 def test_objects_expression(patch, tree):
     patch.object(Objects, 'values')
     tree.child.return_value = None
