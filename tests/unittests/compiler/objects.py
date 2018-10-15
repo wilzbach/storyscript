@@ -267,10 +267,6 @@ def test_objects_function_arguments(patch, tree):
     assert result == [Objects.typed_argument()]
 
 
-def test_fill_expression():
-    assert Objects.fill_expression('one', 'two', 'three') == 'one two three'
-
-
 @mark.parametrize('operator, expression', [
     ('+', 'sum'), ('*', 'multiplication'), ('/', 'division'), ('%', 'modulus'),
     ('^', 'exponential'), ('-', 'subtraction'), ('and', 'and'),
@@ -290,23 +286,22 @@ def test_objects_expression(patch, tree):
 
 
 def test_objects_expression_absolute(patch, tree):
-    patch.many(Objects, ['values', 'fill_expression'])
+    patch.many(Objects, ['values', 'expression_type'])
     result = Objects.expression(tree)
     operator = tree.operator.child().child().value
-    Objects.fill_expression.assert_called_with('{}', operator, '{}')
+    Objects.expression_type.assert_called_with(operator)
     assert result == {'$OBJECT': 'expression',
-                      'expression': Objects.fill_expression(),
+                      'expression': Objects.expression_type(),
                       'values': [Objects.values(), Objects.values()]}
 
 
 def test_objects_expression_comparison(patch, tree):
-    patch.many(Objects, ['values', 'fill_expression'])
+    patch.many(Objects, ['values', 'expression_type'])
     tree.values = None
     result = Objects.expression(tree)
     Objects.values.assert_called_with(tree.child().child())
-    Objects.fill_expression.assert_called_with('{}', tree.child().child(),
-                                               '{}')
+    Objects.expression_type.assert_called_with(tree.child().child())
     expected = [{'$OBJECT': 'expression',
-                 'expression': Objects.fill_expression(),
+                 'expression': Objects.expression_type(),
                  'values': [Objects.values(), Objects.values()]}]
     assert result == expected

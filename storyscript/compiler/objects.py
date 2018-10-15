@@ -193,13 +193,6 @@ class Objects:
         return arguments
 
     @staticmethod
-    def fill_expression(left_handside, operator, right_handside):
-        """
-        Compiles the expression template
-        """
-        return '{} {} {}'.format(left_handside, operator, right_handside)
-
-    @staticmethod
     def expression_type(operator):
         types = {'+': 'sum', '-': 'subtraction', '^': 'exponential',
                  '*': 'multiplication', '/': 'division', '%': 'modulus',
@@ -213,15 +206,15 @@ class Objects:
         """
         if tree.values:
             operator = tree.operator.child(0).child(0).value
-            expression = Objects.fill_expression('{}', operator, '{}')
+            expression_type = Objects.expression_type(operator)
             values = [cls.values(tree.values), cls.values(tree.child(2))]
-            return {'$OBJECT': 'expression', 'expression': expression,
+            return {'$OBJECT': 'expression', 'expression': expression_type,
                     'values': values}
         left_handside = cls.values(tree.path_value.child(0))
         comparison = tree.child(1)
         if comparison is None:
             return [left_handside]
         right_handside = cls.values(tree.child(2).child(0))
-        expression = Objects.fill_expression('{}', comparison.child(0), '{}')
+        expression = Objects.expression_type(comparison.child(0))
         return [{'$OBJECT': 'expression', 'expression': expression,
                 'values': [left_handside, right_handside]}]
