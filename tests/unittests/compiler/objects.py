@@ -297,13 +297,13 @@ def test_objects_expression_absolute(patch, tree):
                       'values': [Objects.values(), Objects.values()]}
 
 
-def test_objects_expression_comparison(patch, tree):
+def test_objects_assertion(patch, tree):
     patch.many(Objects, ['values', 'expression_type'])
-    tree.values = None
-    result = Objects.expression(tree)
+    result = Objects.assertion(tree)
     Objects.values.assert_called_with(tree.child().child())
     Objects.expression_type.assert_called_with(tree.child().child())
-    expected = [{'$OBJECT': 'expression',
-                 'expression': Objects.expression_type(),
-                 'values': [Objects.values(), Objects.values()]}]
+    expected = [
+        {'$OBJECT': 'assertion', 'assertion': Objects.expression_type(),
+         'values': [Objects.values(), Objects.values()]}
+    ]
     assert result == expected
