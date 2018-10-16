@@ -43,7 +43,7 @@ def test_compiler_if(parser):
     tree = parser.parse('if colour == "red"\n\tx = 0')
     result = Compiler.compile(tree)
     args = [
-        {'$OBJECT': 'expression', 'expression': 'equals',
+        {'$OBJECT': 'assertion', 'assertion': 'equals',
          'values': [{'$OBJECT': 'path', 'paths': ['colour']},
                     {'$OBJECT': 'string', 'string': 'red'}]}
     ]
@@ -58,7 +58,7 @@ def test_compiler_if_elseif(parser):
     tree = parser.parse(source)
     result = Compiler.compile(tree)
     args = [
-        {'$OBJECT': 'expression', 'expression': 'equals',
+        {'$OBJECT': 'assertion', 'assertion': 'equals',
          'values': [{'$OBJECT': 'path', 'paths': ['colour']},
                     {'$OBJECT': 'string', 'string': 'blue'}]}]
     assert result['tree']['1']['exit'] == '3'
