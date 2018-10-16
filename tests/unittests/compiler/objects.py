@@ -279,15 +279,6 @@ def test_objects_expression_type(operator, expression):
 
 
 def test_objects_expression(patch, tree):
-    patch.object(Objects, 'values')
-    tree.child.return_value = None
-    tree.values = None
-    result = Objects.expression(tree)
-    Objects.values.assert_called_with(tree.path_value.child())
-    assert result == [Objects.values()]
-
-
-def test_objects_expression_absolute(patch, tree):
     patch.many(Objects, ['values', 'expression_type'])
     result = Objects.expression(tree)
     operator = tree.operator.child().child().value
