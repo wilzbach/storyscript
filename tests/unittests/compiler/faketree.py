@@ -49,6 +49,17 @@ def test_faketree_path(patch):
     assert result == Tree('path', [Token('NAME', name, line=1)])
 
 
+def test_faketree_expression(patch, tree, fake_tree):
+    """
+    Ensures FakeTree.expression can create an expression
+    """
+    patch.object(FakeTree, 'line')
+    result = fake_tree.expression(tree, '+', 'rhs')
+    assert tree.child(0).child(0).line == FakeTree.line()
+    assert result.data == 'expression'
+    assert result.children == [tree, Tree('expression_fragment', ['+', 'rhs'])]
+
+
 def test_faketree_assignment(patch, tree, fake_tree):
     patch.many(FakeTree, ['path', 'line'])
     result = fake_tree.assignment(tree)

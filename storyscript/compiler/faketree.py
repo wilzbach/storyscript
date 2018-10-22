@@ -37,6 +37,14 @@ class FakeTree:
         path = '${}'.format(uuid.uuid4().hex[:8])
         return Tree('path', [Token('NAME', path, line=line)])
 
+    def expression(self, lhs, operator, rhs):
+        """
+        Creates a fake expression, equivalent to "lhs + rhs"
+        """
+        lhs.child(0).child(0).line = self.line()
+        fragment = Tree('expression_fragment', [operator, rhs])
+        return Tree('expression', [lhs, fragment])
+
     def assignment(self, value):
         """
         Creates a fake assignment tree, equivalent to "$fake = value"
