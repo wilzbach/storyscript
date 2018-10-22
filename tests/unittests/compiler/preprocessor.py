@@ -103,6 +103,22 @@ def test_preprocessor_service_no_service(patch, magic, tree):
     assert Preprocessor.service_arguments.call_count == 0
 
 
+def test_preprocessor_merge_operands(patch, magic, tree):
+    """
+    Ensures that Preprocessor.merge_operands can merge operands
+    """
+    patch.object(Preprocessor, 'fake_tree')
+    rhs = magic()
+    tree.children = [0, 1]
+    Preprocessor.merge_operands('block', tree, rhs)
+    Preprocessor.fake_tree.assert_called_with('block')
+    args = (tree.child(), rhs.operator, rhs.child(1))
+    Preprocessor.fake_tree().expression.assert_called_with(*args)
+    expression = Preprocessor.fake_tree().expression()
+    Preprocessor.fake_tree().add_assignment.assert_called_with(expression)
+    assert tree.children[1] == Preprocessor.fake_tree().add_assignment().path
+
+
 def test_preprocessor_expression_stack(patch, magic, tree):
     """
     Ensures expression_stack can replace the expression tree
