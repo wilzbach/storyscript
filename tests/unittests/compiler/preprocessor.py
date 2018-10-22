@@ -112,7 +112,8 @@ def test_preprocessor_expression_stack(patch, magic, tree):
     child.operator.child.return_value = '*'
     tree.children = [magic(), child]
     Preprocessor.expression_stack('block', tree)
-    Preprocessor.merge_operands.assert_called_with(tree.children[0], child)
+    args = ('block', tree.children[0], child)
+    Preprocessor.merge_operands.assert_called_with(*args)
     assert tree.children == [tree.children[0]]
 
 

@@ -80,8 +80,11 @@ class Preprocessor:
         """
         stack = []
         for child in tree.children:
-            if child.operator.child(0) == '*':
-                cls.merge_operands(stack[-1], child)
+            if child.operator:
+                if child.operator.child(0) == '*':
+                    cls.merge_operands(block, stack[-1], child)
+                else:
+                    stack.append(child)
             else:
                 stack.append(child)
         tree.children = stack
