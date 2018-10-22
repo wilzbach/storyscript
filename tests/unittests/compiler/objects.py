@@ -281,7 +281,7 @@ def test_objects_expression_type(operator, expression):
 def test_objects_expression(patch, tree):
     patch.many(Objects, ['values', 'expression_type'])
     result = Objects.expression(tree)
-    operator = tree.operator.child().child().value
+    operator = tree.operator.child().value
     Objects.expression_type.assert_called_with(operator)
     assert result == {'$OBJECT': 'expression',
                       'expression': Objects.expression_type(),
