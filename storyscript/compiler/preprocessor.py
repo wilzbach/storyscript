@@ -73,8 +73,9 @@ class Preprocessor:
             cls.service_arguments(tree, service)
 
     @classmethod
-    def expression(cls, tree):
-        return None
+    def expression(cls, block):
+        for expression in block.find_data('expression'):
+            cls.expression_stack(block, expression)
 
     @classmethod
     def process(cls, tree):

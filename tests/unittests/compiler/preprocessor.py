@@ -103,8 +103,12 @@ def test_preprocessor_service_no_service(patch, magic, tree):
     assert Preprocessor.service_arguments.call_count == 0
 
 
-def test_preprocessor_expression(tree):
-    assert Preprocessor.expression(tree) is None
+def test_preprocessor_expression(patch, tree):
+    patch.object(Preprocessor, 'expression_stack')
+    tree.find_data.return_value = ['expression']
+    Preprocessor.expression(tree)
+    tree.find_data.assert_called_with('expression')
+    Preprocessor.expression_stack.assert_called_with(tree, 'expression')
 
 
 def test_preprocessor_process(patch, magic, tree):
