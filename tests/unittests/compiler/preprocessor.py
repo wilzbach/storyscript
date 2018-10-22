@@ -104,11 +104,13 @@ def test_preprocessor_service_no_service(patch, magic, tree):
 
 
 def test_preprocessor_expression(patch, tree):
+def test_preprocessor_expression(patch, magic, tree):
     patch.object(Preprocessor, 'expression_stack')
-    tree.find_data.return_value = ['expression']
+    expression = magic(children=[1, 2, 3])
+    tree.find_data.return_value = [expression]
     Preprocessor.expression(tree)
     tree.find_data.assert_called_with('expression')
-    Preprocessor.expression_stack.assert_called_with(tree, 'expression')
+    Preprocessor.expression_stack.assert_called_with(tree, expression)
 
 
 def test_preprocessor_process(patch, magic, tree):
