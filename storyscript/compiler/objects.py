@@ -206,9 +206,10 @@ class Objects:
         """
         Compiles an expression object with the given tree.
         """
-        operator = tree.operator.child(0).value
+        operator = tree.expression_fragment.operator.child(0).value
         expression_type = Objects.expression_type(operator)
-        values = [cls.values(tree.values), cls.values(tree.child(2))]
+        rhs = tree.expression_fragment.values
+        values = [cls.values(tree.values), cls.values(rhs)]
         return {'$OBJECT': 'expression', 'expression': expression_type,
                 'values': values}
 
