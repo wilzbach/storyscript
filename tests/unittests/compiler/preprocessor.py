@@ -103,11 +103,16 @@ def test_preprocessor_service_no_service(patch, magic, tree):
     assert Preprocessor.service_arguments.call_count == 0
 
 
+def test_preprocessor_expression(tree):
+    assert Preprocessor.expression(tree) is None
+
+
 def test_preprocessor_process(patch, magic, tree):
-    patch.many(Preprocessor, ['assignments', 'service'])
+    patch.many(Preprocessor, ['assignments', 'service', 'expression'])
     block = magic()
     tree.find_data.return_value = [block]
     result = Preprocessor.process(tree)
     Preprocessor.assignments.assert_called_with(block)
     Preprocessor.service.assert_called_with(block)
+    Preprocessor.expression.assert_called_with(block)
     assert result == tree

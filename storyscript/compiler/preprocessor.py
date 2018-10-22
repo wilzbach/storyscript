@@ -73,8 +73,13 @@ class Preprocessor:
             cls.service_arguments(tree, service)
 
     @classmethod
+    def expression(cls, tree):
+        return None
+
+    @classmethod
     def process(cls, tree):
         for block in tree.find_data('block'):
             cls.assignments(block)
             cls.service(block)
+            cls.expression(block)
         return tree
