@@ -73,6 +73,20 @@ class Preprocessor:
             cls.service_arguments(tree, service)
 
     @classmethod
+    def expression_stack(cls, block, tree):
+        """
+        Rebuilds the expression tree, replacing fragments according to the order
+        that needs to be followed.
+        """
+        stack = []
+        for child in tree.children:
+            if child.operator.child(0) == '*':
+                cls.merge_operands(stack[-1], child)
+            else:
+                stack.append(child)
+        tree.children = stack
+
+    @classmethod
     def expression(cls, block):
         for expression in block.find_data('expression'):
             if len(expression.children) > 2:
