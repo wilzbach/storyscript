@@ -114,7 +114,8 @@ def test_grammar_expressions(grammar, ebnf):
     assert ebnf.operator == ('plus, dash, multiplier, bslash, modulus, '
                              'power, not, and, or')
     assert ebnf.mutation == 'name arguments*'
-    assert ebnf.expression == 'values (operator values)+, values mutation'
+    assert ebnf.expression_fragment == 'operator values'
+    assert ebnf.expression == 'values (expression_fragment)+, values mutation'
     assert ebnf.absolute_expression == 'expression'
 
 

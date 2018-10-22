@@ -105,7 +105,8 @@ class Grammar:
         self.ebnf.operator = ('plus, dash, multiplier, bslash, modulus, '
                               'power, not, and, or')
         self.ebnf.mutation = 'name arguments*'
-        self.ebnf.expression = 'values (operator values)+, values mutation'
+        self.ebnf.expression_fragment = 'operator values'
+        self.ebnf.expression = 'values (expression_fragment)+, values mutation'
         self.ebnf.absolute_expression = 'expression'
 
     def rules(self):
