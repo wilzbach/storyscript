@@ -42,6 +42,24 @@ def test_faketree_line_successive(patch, fake_tree):
     random.uniform.assert_called_with(0, 0.2)
 
 
+def test_faketree_get_line(patch, tree, fake_tree):
+    """
+    Ensures FakeTree.get_line can get a new line
+    """
+    patch.object(FakeTree, 'line')
+    result = fake_tree.get_line(tree)
+    assert result == FakeTree.line()
+
+
+def test_faketree_get_line_existing(tree, fake_tree):
+    """
+    Ensures FakeTree.get_line gets the existing line when appropriate.
+    """
+    fake_tree.new_lines = [0.1]
+    tree.line.return_value = '0.1'
+    assert fake_tree.get_line(tree) == tree.line()
+
+
 def test_faketree_path(patch):
     patch.object(uuid, 'uuid4')
     result = FakeTree.path(1)

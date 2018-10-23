@@ -29,6 +29,14 @@ class FakeTree:
         self.new_lines.append(fake_line)
         return str(fake_line)
 
+    def get_line(self, tree):
+        """
+        Gets the tree line if it's a new one, otherwise creates it.
+        """
+        if float(tree.line()) in self.new_lines:
+            return tree.line()
+        return self.line()
+
     @staticmethod
     def path(line):
         """
