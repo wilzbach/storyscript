@@ -57,10 +57,11 @@ class FakeTree:
         """
         Creates a fake assignment tree, equivalent to "$fake = value"
         """
-        fake_line = self.line()
-        value.child(0).child(0).line = fake_line
-        path = self.path(fake_line)
-        fragment = Tree('assignment_fragment', [Token('EQUALS', '='), value])
+        line = self.get_line(value)
+        value.child(0).child(0).line = line
+        path = self.path(line)
+        equals = Token('EQUALS', '=', line=line)
+        fragment = Tree('assignment_fragment', [equals, value])
         return Tree('assignment', [path, fragment])
 
     def add_assignment(self, value):

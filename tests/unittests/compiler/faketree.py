@@ -79,12 +79,15 @@ def test_faketree_expression(patch, tree, fake_tree):
 
 
 def test_faketree_assignment(patch, tree, fake_tree):
-    patch.many(FakeTree, ['path', 'line'])
+    patch.many(FakeTree, ['path', 'get_line'])
     result = fake_tree.assignment(tree)
-    FakeTree.path.assert_called_with(FakeTree.line())
-    assert tree.child().child().line == FakeTree.line()
+    FakeTree.get_line.assert_called_with(tree)
+    line = FakeTree.get_line()
+    FakeTree.path.assert_called_with(line)
+    assert tree.child().child().line == line
     assert result.children[0] == FakeTree.path()
-    expected = Tree('assignment_fragment', [Token('EQUALS', '='), tree])
+    subtree = [Token('EQUALS', '=', line=line), tree]
+    expected = Tree('assignment_fragment', subtree)
     assert result.children[1] == expected
 
 
