@@ -59,9 +59,10 @@ class Grammar:
         self.ebnf.boolean = 'true, false'
         self.ebnf.number = 'int, float'
         self.ebnf.string = 'single_quoted, double_quoted'
-        list = self.ebnf.collection('osb', 'values', 'values', 'csb')
+        values_path = '(values, path)'
+        list = self.ebnf.collection('osb', values_path, values_path, 'csb')
         self.ebnf.set_rule('!list', list)
-        self.ebnf.key_value = '(string, path) colon (values, path)'
+        self.ebnf.key_value = '(string, path) colon {}'.format(values_path)
         objects = ('ocb', 'key_value', 'key_value', 'ccb')
         self.ebnf.objects = self.ebnf.collection(*objects)
         self.ebnf.regular_expression = 'regexp name?'
