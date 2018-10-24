@@ -78,6 +78,8 @@ class Preprocessor:
         """
         fake_tree = cls.fake_tree(block)
         left_value = lhs.values
+        if left_value is None:
+            left_value = lhs
         right_value = rhs.child(1)
         args = (left_value, rhs.operator, right_value)
         expression = fake_tree.expression(*args)
