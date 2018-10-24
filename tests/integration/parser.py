@@ -50,9 +50,10 @@ def test_parser_boolean_true(parser):
 def test_parser_sum(parser, int_token):
     result = parser.parse('3 + 3\n')
     expression = result.block.rules.absolute_expression.expression
+    fragment = expression.expression_fragment
     assert expression.values.number.child(0) == int_token
-    assert expression.operator.simple_symbol.child(0) == Token('PLUS', '+')
-    assert expression.child(2).number.child(0) == int_token
+    assert fragment.operator.child(0) == Token('PLUS', '+')
+    assert fragment.values.number.child(0) == int_token
 
 
 def test_parser_list(parser, int_token):

@@ -206,17 +206,23 @@ class Objects:
         """
         Compiles an expression object with the given tree.
         """
-        if tree.values:
-            operator = tree.operator.child(0).child(0).value
-            expression_type = Objects.expression_type(operator)
-            values = [cls.values(tree.values), cls.values(tree.child(2))]
-            return {'$OBJECT': 'expression', 'expression': expression_type,
-                    'values': values}
-        left_handside = cls.values(tree.path_value.child(0))
-        comparison = tree.child(1)
-        if comparison is None:
-            return [left_handside]
-        right_handside = cls.values(tree.child(2).child(0))
-        expression = Objects.expression_type(comparison.child(0))
-        return [{'$OBJECT': 'expression', 'expression': expression,
-                'values': [left_handside, right_handside]}]
+        operator = tree.expression_fragment.operator.child(0).value
+        expression_type = Objects.expression_type(operator)
+        rhs = tree.expression_fragment.values
+        values = [cls.values(tree.values), cls.values(rhs)]
+        return {'$OBJECT': 'expression', 'expression': expression_type,
+                'values': values}
+
+    @classmethod
+    def assertion(cls, tree):
+        """
+        Compiles an assertion object.
+        """
+        lhs = cls.values(tree.path_value.child(0))
+        operator = tree.child(1)
+        if operator is None:
+            return [lhs]
+        rhs = cls.values(tree.child(2).child(0))
+        assertion = Objects.expression_type(operator.child(0))
+        return [{'$OBJECT': 'assertion', 'assertion': assertion,
+                 'values': [lhs, rhs]}]

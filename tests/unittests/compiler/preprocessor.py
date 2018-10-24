@@ -103,11 +103,51 @@ def test_preprocessor_service_no_service(patch, magic, tree):
     assert Preprocessor.service_arguments.call_count == 0
 
 
+def test_preprocessor_merge_operands(patch, magic, tree):
+    """
+    Ensures that Preprocessor.merge_operands can merge operands
+    """
+    patch.object(Preprocessor, 'fake_tree')
+    rhs = magic()
+    tree.children = [0, 1]
+    Preprocessor.merge_operands('block', tree, rhs)
+    Preprocessor.fake_tree.assert_called_with('block')
+    args = (tree.child(), rhs.operator, rhs.child(1))
+    Preprocessor.fake_tree().expression.assert_called_with(*args)
+    expression = Preprocessor.fake_tree().expression()
+    Preprocessor.fake_tree().add_assignment.assert_called_with(expression)
+    assert tree.children[1] == Preprocessor.fake_tree().add_assignment().path
+
+
+def test_preprocessor_expression_stack(patch, magic, tree):
+    """
+    Ensures expression_stack can replace the expression tree
+    """
+    patch.object(Preprocessor, 'merge_operands')
+    child = magic()
+    child.operator.child.return_value = '*'
+    tree.children = [magic(), child]
+    Preprocessor.expression_stack('block', tree)
+    args = ('block', tree.children[0], child)
+    Preprocessor.merge_operands.assert_called_with(*args)
+    assert tree.children == [tree.children[0]]
+
+
+def test_preprocessor_expression(patch, magic, tree):
+    patch.object(Preprocessor, 'expression_stack')
+    expression = magic(children=[1, 2, 3])
+    tree.find_data.return_value = [expression]
+    Preprocessor.expression(tree)
+    tree.find_data.assert_called_with('expression')
+    Preprocessor.expression_stack.assert_called_with(tree, expression)
+
+
 def test_preprocessor_process(patch, magic, tree):
-    patch.many(Preprocessor, ['assignments', 'service'])
+    patch.many(Preprocessor, ['assignments', 'service', 'expression'])
     block = magic()
     tree.find_data.return_value = [block]
     result = Preprocessor.process(tree)
     Preprocessor.assignments.assert_called_with(block)
     Preprocessor.service.assert_called_with(block)
+    Preprocessor.expression.assert_called_with(block)
     assert result == tree

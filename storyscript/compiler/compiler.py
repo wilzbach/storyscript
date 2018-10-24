@@ -157,7 +157,7 @@ class Compiler:
     def if_block(self, tree, parent):
         line = tree.line()
         nested_block = tree.nested_block
-        args = Objects.expression(tree.if_statement)
+        args = Objects.assertion(tree.if_statement)
         self.lines.append('if', line, args=args, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
@@ -173,7 +173,7 @@ class Compiler:
         """
         line = tree.line()
         self.lines.set_exit(line)
-        args = Objects.expression(tree.elseif_statement)
+        args = Objects.assertion(tree.elseif_statement)
         nested_block = tree.nested_block
         self.lines.append('elif', line, args=args, enter=nested_block.line(),
                           parent=parent)

@@ -29,6 +29,14 @@ class FakeTree:
         self.new_lines.append(fake_line)
         return str(fake_line)
 
+    def get_line(self, tree):
+        """
+        Gets the tree line if it's a new one, otherwise creates it.
+        """
+        if float(tree.line()) in self.new_lines:
+            return tree.line()
+        return self.line()
+
     @staticmethod
     def path(line):
         """
@@ -37,14 +45,23 @@ class FakeTree:
         path = '${}'.format(uuid.uuid4().hex[:8])
         return Tree('path', [Token('NAME', path, line=line)])
 
+    def expression(self, lhs, operator, rhs):
+        """
+        Creates a fake expression, equivalent to "lhs + rhs"
+        """
+        lhs.child(0).child(0).line = self.line()
+        fragment = Tree('expression_fragment', [operator, rhs])
+        return Tree('expression', [lhs, fragment])
+
     def assignment(self, value):
         """
         Creates a fake assignment tree, equivalent to "$fake = value"
         """
-        fake_line = self.line()
-        value.child(0).child(0).line = fake_line
-        path = self.path(fake_line)
-        fragment = Tree('assignment_fragment', [Token('EQUALS', '='), value])
+        line = self.get_line(value)
+        value.child(0).child(0).line = line
+        path = self.path(line)
+        equals = Token('EQUALS', '=', line=line)
+        fragment = Tree('assignment_fragment', [equals, value])
         return Tree('assignment', [path, fragment])
 
     def add_assignment(self, value):

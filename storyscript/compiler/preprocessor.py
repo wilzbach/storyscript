@@ -73,8 +73,44 @@ class Preprocessor:
             cls.service_arguments(tree, service)
 
     @classmethod
+    def merge_operands(cls, block, lhs, rhs):
+        """
+        Replaces the right hand-side operand and the right part of the left
+        one with a fake assignment to a simpler expression.
+        """
+        fake_tree = cls.fake_tree(block)
+        expression = fake_tree.expression(lhs.child(1), rhs.operator,
+                                          rhs.child(1))
+        assignment = fake_tree.add_assignment(expression)
+        lhs.children[1] = assignment.path
+
+    @classmethod
+    def expression_stack(cls, block, tree):
+        """
+        Rebuilds the expression tree, replacing fragments according to the
+        order that needs to be followed.
+        """
+        stack = []
+        for child in tree.children:
+            if child.operator:
+                if child.operator.child(0) == '*':
+                    cls.merge_operands(block, stack[-1], child)
+                else:
+                    stack.append(child)
+            else:
+                stack.append(child)
+        tree.children = stack
+
+    @classmethod
+    def expression(cls, block):
+        for expression in block.find_data('expression'):
+            if len(expression.children) > 2:
+                cls.expression_stack(block, expression)
+
+    @classmethod
     def process(cls, tree):
         for block in tree.find_data('block'):
             cls.assignments(block)
             cls.service(block)
+            cls.expression(block)
         return tree

@@ -298,21 +298,21 @@ def test_compiler_return_statement_parent(patch, compiler, lines, tree):
 
 
 def test_compiler_if_block(patch, compiler, lines, tree):
-    patch.object(Objects, 'expression')
+    patch.object(Objects, 'assertion')
     patch.object(Compiler, 'subtree')
     tree.elseif_block = None
     tree.else_block = None
     compiler.if_block(tree, '1')
-    Objects.expression.assert_called_with(tree.if_statement)
+    Objects.assertion.assert_called_with(tree.if_statement)
     nested_block = tree.nested_block
-    args = Objects.expression()
+    args = Objects.assertion()
     lines.append.assert_called_with('if', tree.line(), args=args,
                                     enter=nested_block.line(), parent='1')
     compiler.subtree.assert_called_with(nested_block, parent=tree.line())
 
 
 def test_compiler_if_block_with_elseif(patch, compiler, tree):
-    patch.object(Objects, 'expression')
+    patch.object(Objects, 'assertion')
     patch.many(Compiler, ['subtree', 'subtrees'])
     tree.else_block = None
     compiler.if_block(tree, '1')
@@ -320,7 +320,7 @@ def test_compiler_if_block_with_elseif(patch, compiler, tree):
 
 
 def test_compiler_if_block_with_else(patch, compiler, tree):
-    patch.object(Objects, 'expression')
+    patch.object(Objects, 'assertion')
     patch.many(Compiler, ['subtree', 'subtrees'])
     tree.elseif_block = None
     compiler.if_block(tree, '1')
@@ -328,12 +328,12 @@ def test_compiler_if_block_with_else(patch, compiler, tree):
 
 
 def test_compiler_elseif_block(patch, compiler, lines, tree):
-    patch.object(Objects, 'expression')
+    patch.object(Objects, 'assertion')
     patch.object(Compiler, 'subtree')
     compiler.elseif_block(tree, '1')
     lines.set_exit.assert_called_with(tree.line())
-    Objects.expression.assert_called_with(tree.elseif_statement)
-    args = Objects.expression()
+    Objects.assertion.assert_called_with(tree.elseif_statement)
+    args = Objects.assertion()
     lines.append.assert_called_with('elif', tree.line(), args=args,
                                     enter=tree.nested_block.line(),
                                     parent='1')

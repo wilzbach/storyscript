@@ -279,31 +279,22 @@ def test_objects_expression_type(operator, expression):
 
 
 def test_objects_expression(patch, tree):
-    patch.object(Objects, 'values')
-    tree.child.return_value = None
-    tree.values = None
-    result = Objects.expression(tree)
-    Objects.values.assert_called_with(tree.path_value.child())
-    assert result == [Objects.values()]
-
-
-def test_objects_expression_absolute(patch, tree):
     patch.many(Objects, ['values', 'expression_type'])
     result = Objects.expression(tree)
-    operator = tree.operator.child().child().value
+    operator = tree.expression_fragment.operator.child().value
     Objects.expression_type.assert_called_with(operator)
     assert result == {'$OBJECT': 'expression',
                       'expression': Objects.expression_type(),
                       'values': [Objects.values(), Objects.values()]}
 
 
-def test_objects_expression_comparison(patch, tree):
+def test_objects_assertion(patch, tree):
     patch.many(Objects, ['values', 'expression_type'])
-    tree.values = None
-    result = Objects.expression(tree)
+    result = Objects.assertion(tree)
     Objects.values.assert_called_with(tree.child().child())
     Objects.expression_type.assert_called_with(tree.child().child())
-    expected = [{'$OBJECT': 'expression',
-                 'expression': Objects.expression_type(),
-                 'values': [Objects.values(), Objects.values()]}]
+    expected = [
+        {'$OBJECT': 'assertion', 'assertion': Objects.expression_type(),
+         'values': [Objects.values(), Objects.values()]}
+    ]
     assert result == expected

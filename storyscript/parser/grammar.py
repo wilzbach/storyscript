@@ -46,8 +46,8 @@ class Grammar:
         self.ebnf.set_token('FLOAT.2', 'INT "." INT? | "." INT')
         self.ebnf.SINGLE_QUOTED = "/'([^']*)'/"
         self.ebnf.DOUBLE_QUOTED = '/"([^"]*)"/'
-        self.ebnf.set_token('REGEXP.2', '/\/([^\/]*)\//')
-        self.ebnf.set_token('NAME.1', '/[a-zA-Z-\/_0-9]+/')
+        self.ebnf.set_token('REGEXP.2', r'/\/([^\/]*)\//')
+        self.ebnf.set_token('NAME.1', r'/[a-zA-Z-\/_0-9]+/')
         self.ebnf._OSB = '['
         self.ebnf._CSB = ']'
         self.ebnf._OCB = '{'
@@ -102,12 +102,11 @@ class Grammar:
         self.ebnf.NOT = 'not'
         self.ebnf.AND = 'and'
         self.ebnf.OR = 'or'
-        self.ebnf.logical_symbol = 'not, and, or'
-        self.ebnf.simple_symbol = 'plus, dash'
-        self.ebnf.complex_symbol = 'multiplier, bslash, modulus, power'
-        self.ebnf.operator = 'simple_symbol, complex_symbol, logical_symbol'
+        self.ebnf.operator = ('plus, dash, multiplier, bslash, modulus, '
+                              'power, not, and, or')
         self.ebnf.mutation = 'name arguments*'
-        self.ebnf.expression = 'values (operator values)+, values mutation'
+        self.ebnf.expression_fragment = 'operator values'
+        self.ebnf.expression = 'values (expression_fragment)+, values mutation'
         self.ebnf.absolute_expression = 'expression'
 
     def rules(self):

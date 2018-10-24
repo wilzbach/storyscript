@@ -43,7 +43,7 @@ def test_compiler_if(parser):
     tree = parser.parse('if colour == "red"\n\tx = 0')
     result = Compiler.compile(tree)
     args = [
-        {'$OBJECT': 'expression', 'expression': 'equals',
+        {'$OBJECT': 'assertion', 'assertion': 'equals',
          'values': [{'$OBJECT': 'path', 'paths': ['colour']},
                     {'$OBJECT': 'string', 'string': 'red'}]}
     ]
@@ -58,7 +58,7 @@ def test_compiler_if_elseif(parser):
     tree = parser.parse(source)
     result = Compiler.compile(tree)
     args = [
-        {'$OBJECT': 'expression', 'expression': 'equals',
+        {'$OBJECT': 'assertion', 'assertion': 'equals',
          'values': [{'$OBJECT': 'path', 'paths': ['colour']},
                     {'$OBJECT': 'string', 'string': 'blue'}]}]
     assert result['tree']['1']['exit'] == '3'
@@ -270,6 +270,24 @@ def test_compiler_service_streaming(parser):
     assert result['tree']['2']['output'] == ['e']
     assert result['tree']['2']['enter'] == '3'
     assert result['tree']['3']['method'] == 'set'
+
+
+def test_compiler_service_inline_expression(parser):
+    """
+    Ensures that inline expressions in services are compiled correctly
+    """
+    source = 'alpine echo text:(random strings)'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    entry = result['entrypoint']
+    name = result['tree'][entry]['name']
+    assert result['tree'][entry]['method'] == 'execute'
+    assert result['tree'][entry]['service'] == 'random'
+    assert result['tree'][entry]['command'] == 'strings'
+    assert result['tree'][entry]['next'] == '1'
+    path = {'$OBJECT': 'path', 'paths': name}
+    argument = {'$OBJECT': 'argument', 'name': 'text', 'argument': path}
+    assert result['tree']['1']['args'] == [argument]
 
 
 def test_compiler_function(parser):
