@@ -45,13 +45,13 @@ class FakeTree:
         path = '${}'.format(uuid.uuid4().hex[:8])
         return Tree('path', [Token('NAME', path, line=line)])
 
-    def expression(self, lhs, operator, rhs):
+    def expression(self, left_value, operator, right_value):
         """
-        Creates a fake expression, equivalent to "lhs + rhs"
+        Creates a fake expression, equivalent to "left_value + right_value"
         """
-        lhs.child(0).child(0).line = self.line()
-        fragment = Tree('expression_fragment', [operator, rhs])
-        return Tree('expression', [lhs, fragment])
+        left_value.child(0).child(0).line = self.line()
+        fragment = Tree('expression_fragment', [operator, right_value])
+        return Tree('expression', [left_value, fragment])
 
     def assignment(self, value):
         """
