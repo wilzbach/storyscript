@@ -39,6 +39,16 @@ def test_compiler_expression_mutation(parser):
     assert result['tree']['1']['args'] == args
 
 
+def test_compiler_expression_path(parser):
+    """
+    Ensures that expressions with paths are compiled correctly.
+    """
+    tree = parser.parse('x = 3\nx + 2')
+    result = Compiler.compile(tree)
+    path = {'$OBJECT': 'path', 'paths': ['x']}
+    assert result['tree']['2']['args'][0]['values'][0] == path
+
+
 def test_compiler_if(parser):
     tree = parser.parse('if colour == "red"\n\tx = 0')
     result = Compiler.compile(tree)
