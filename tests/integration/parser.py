@@ -63,6 +63,15 @@ def test_parser_list(parser, int_token):
     assert list.child(3).number.child(0) == Token('INT', 4)
 
 
+def test_parser_list_path(parser):
+    """
+    Ensures that paths in lists can be parsed.
+    """
+    result = parser.parse('x = 0\n[3, x]\n')
+    list = result.child(1).rules.values.list
+    assert list.child(3).child(0) == Token('NAME', 'x')
+
+
 def test_parser_list_empty(parser):
     result = parser.parse('[]\n')
     expected = Tree('list', [Token('_OSB', '['), Token('_CSB', ']')])

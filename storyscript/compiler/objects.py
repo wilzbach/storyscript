@@ -209,7 +209,10 @@ class Objects:
         operator = tree.expression_fragment.operator.child(0).value
         expression_type = Objects.expression_type(operator)
         rhs = tree.expression_fragment.values
-        values = [cls.values(tree.values), cls.values(rhs)]
+        lhs = tree.values
+        if lhs is None:
+            lhs = tree.path
+        values = [cls.values(lhs), cls.values(rhs)]
         return {'$OBJECT': 'expression', 'expression': expression_type,
                 'values': values}
 

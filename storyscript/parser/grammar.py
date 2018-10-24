@@ -59,9 +59,10 @@ class Grammar:
         self.ebnf.boolean = 'true, false'
         self.ebnf.number = 'int, float'
         self.ebnf.string = 'single_quoted, double_quoted'
-        list = self.ebnf.collection('osb', 'values', 'values', 'csb')
+        values_path = '(values, path)'
+        list = self.ebnf.collection('osb', values_path, values_path, 'csb')
         self.ebnf.set_rule('!list', list)
-        self.ebnf.key_value = '(string, path) colon (values, path)'
+        self.ebnf.key_value = '(string, path) colon {}'.format(values_path)
         objects = ('ocb', 'key_value', 'key_value', 'ccb')
         self.ebnf.objects = self.ebnf.collection(*objects)
         self.ebnf.regular_expression = 'regexp name?'
@@ -105,8 +106,9 @@ class Grammar:
         self.ebnf.operator = ('plus, dash, multiplier, bslash, modulus, '
                               'power, not, and, or')
         self.ebnf.mutation = 'name arguments*'
-        self.ebnf.expression_fragment = 'operator values'
-        self.ebnf.expression = 'values (expression_fragment)+, values mutation'
+        self.ebnf.expression_fragment = 'operator (values, path)'
+        self.ebnf.expression = ('(values, path) (expression_fragment)+, '
+                                'values mutation')
         self.ebnf.absolute_expression = 'expression'
 
     def rules(self):
