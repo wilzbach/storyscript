@@ -119,7 +119,8 @@ def test_preprocessor_merge_operands(magic, tree, fake_tree):
     args = (tree.values, rhs.operator, rhs.child(1))
     Preprocessor.fake_tree().expression.assert_called_with(*args)
     fake_tree().add_assignment.assert_called_with(fake_tree().expression())
-    tree.replace.assert_called_with(1, fake_tree().add_assignment().path)
+    tree.replace.assert_called_with(len(tree.children) - 1,
+                                    fake_tree().add_assignment().path)
 
 
 def test_preprocessor_expression_stack(patch, magic, tree):
