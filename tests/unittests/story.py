@@ -25,7 +25,7 @@ def test_story_clean_source(patch):
     """
     patch.object(re, 'sub')
     result = Story.clean_source('source')
-    expression = '(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
+    expression = r'(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
     re.sub.assert_called_with(expression, '', 'source')
     assert result == re.sub()
 

@@ -17,7 +17,7 @@ class Story:
         """
         Cleans a story by removing comments.
         """
-        expression = '(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
+        expression = r'(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
         return re.sub(expression, '', source)
 
     @classmethod
