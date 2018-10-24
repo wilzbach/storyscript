@@ -272,6 +272,24 @@ def test_compiler_service_streaming(parser):
     assert result['tree']['3']['method'] == 'set'
 
 
+def test_compiler_service_inline_expression(parser):
+    """
+    Ensures that inline expressions in services are compiled correctly
+    """
+    source = 'alpine echo text:(random strings)'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    entry = result['entrypoint']
+    name = result['tree'][entry]['name']
+    assert result['tree'][entry]['method'] == 'execute'
+    assert result['tree'][entry]['service'] == 'random'
+    assert result['tree'][entry]['command'] == 'strings'
+    assert result['tree'][entry]['next'] == '1'
+    path = {'$OBJECT': 'path', 'paths': name}
+    argument = {'$OBJECT': 'argument', 'name': 'text', 'argument': path}
+    assert result['tree']['1']['args'] == [argument]
+
+
 def test_compiler_function(parser):
     tree = parser.parse('function sum a:int returns int\n\treturn 0')
     result = Compiler.compile(tree)
