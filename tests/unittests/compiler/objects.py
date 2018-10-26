@@ -279,6 +279,9 @@ def test_objects_expression_type(operator, expression):
 
 
 def test_objects_expression(patch, tree):
+    """
+    Ensures Objects.expression can compile expressions
+    """
     patch.many(Objects, ['values', 'expression_type'])
     result = Objects.expression(tree)
     operator = tree.expression_fragment.operator.child().value
@@ -286,6 +289,17 @@ def test_objects_expression(patch, tree):
     assert result == {'$OBJECT': 'expression',
                       'expression': Objects.expression_type(),
                       'values': [Objects.values(), Objects.values()]}
+
+
+def test_objects_expression_rhs(patch, tree):
+    """
+    Ensures Objects.expression can deal with right hand-side operand being
+    a path.
+    """
+    patch.many(Objects, ['values', 'expression_type'])
+    tree.expression_fragment.values = None
+    Objects.expression(tree)
+    Objects.values.assert_called_with(tree.expression_fragment.path)
 
 
 def test_objects_assertion(patch, tree):
