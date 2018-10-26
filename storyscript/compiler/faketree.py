@@ -45,6 +45,13 @@ class FakeTree:
         path = '${}'.format(uuid.uuid4().hex[:8])
         return Tree('path', [Token('NAME', path, line=line)])
 
+    def number(self, number):
+        """
+        Creates a number tree
+        """
+        token = Token('INT', number, line=self.line())
+        return Tree('values', [Tree('number', [token])])
+
     def expression(self, left_value, operator, right_value):
         """
         Creates a fake expression, equivalent to "left_value + right_value"

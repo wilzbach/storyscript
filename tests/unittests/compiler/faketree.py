@@ -67,6 +67,16 @@ def test_faketree_path(patch):
     assert result == Tree('path', [Token('NAME', name, line=1)])
 
 
+def test_faketree_number(patch, fake_tree):
+    """
+    Ensures FakeTree.number can return a number
+    """
+    patch.object(FakeTree, 'line')
+    result = fake_tree.number(1)
+    assert result == Tree('values', [Tree('number', [Token('INT', 1)])])
+    assert result.number.child(0).line == FakeTree.line()
+
+
 def test_faketree_expression(patch, tree, fake_tree):
     """
     Ensures FakeTree.expression can create an expression
