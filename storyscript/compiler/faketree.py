@@ -56,9 +56,9 @@ class FakeTree:
         """
         Creates a fake expression, equivalent to "left_value + right_value"
         """
-        left_value.child(0).child(0).line = self.line()
+        number = self.number(left_value.number.child(0))
         fragment = Tree('expression_fragment', [operator, right_value])
-        return Tree('expression', [left_value, fragment])
+        return Tree('expression', [number, fragment])
 
     def assignment(self, value):
         """
