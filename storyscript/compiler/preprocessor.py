@@ -84,7 +84,12 @@ class Preprocessor:
         args = (left_value, rhs.operator, right_value)
         expression = fake_tree.expression(*args)
         assignment = fake_tree.add_assignment(expression)
-        lhs.replace(len(lhs.children) - 1, assignment.path)
+        children = len(lhs.children)
+        if children == 1:
+            lhs.replace(0, assignment.path.child(0))
+            lhs.rename('path')
+            return
+        lhs.replace(children - 1, assignment.path)
 
     @classmethod
     def expression_stack(cls, block, tree):

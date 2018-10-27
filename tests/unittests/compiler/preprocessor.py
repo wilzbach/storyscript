@@ -135,6 +135,22 @@ def test_preprocessor_merge_operands_lhs(magic, tree, fake_tree):
     Preprocessor.fake_tree().expression.assert_called_with(*args)
 
 
+def test_preprocessor_merge_operands_lhs_child(magic, tree, fake_tree):
+    """
+    Ensures Preprocessor.merge_operands can deal with lhs having one child
+    """
+    rhs = magic()
+    tree.children = ['one']
+    Preprocessor.merge_operands('block', tree, rhs)
+    fake_tree.assert_called_with('block')
+    args = (tree.values, rhs.operator, rhs.child(1))
+    Preprocessor.fake_tree().expression.assert_called_with(*args)
+    fake_tree().add_assignment.assert_called_with(fake_tree().expression())
+    tree.replace.assert_called_with(0,
+                                    fake_tree().add_assignment().path.child())
+    tree.rename.assert_called_with('path')
+
+
 def test_preprocessor_expression_stack(patch, magic, tree):
     """
     Ensures expression_stack can replace the expression tree
