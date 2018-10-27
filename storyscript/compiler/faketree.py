@@ -37,13 +37,15 @@ class FakeTree:
             return tree.line()
         return self.line()
 
-    @staticmethod
-    def path(line):
+    def path(self, name=None, line=None):
         """
         Creates a fake tree path.
         """
-        path = '${}'.format(uuid.uuid4().hex[:8])
-        return Tree('path', [Token('NAME', path, line=line)])
+        if name is None:
+            name = '${}'.format(uuid.uuid4().hex[:8])
+        if line is None:
+            line = self.line()
+        return Tree('path', [Token('NAME', name, line=line)])
 
     def number(self, number):
         """
@@ -66,7 +68,7 @@ class FakeTree:
         """
         line = self.get_line(value)
         value.child(0).child(0).line = line
-        path = self.path(line)
+        path = self.path(line=line)
         equals = Token('EQUALS', '=', line=line)
         fragment = Tree('assignment_fragment', [equals, value])
         return Tree('assignment', [path, fragment])

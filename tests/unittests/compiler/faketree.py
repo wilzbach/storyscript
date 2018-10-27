@@ -60,11 +60,22 @@ def test_faketree_get_line_existing(tree, fake_tree):
     assert fake_tree.get_line(tree) == tree.line()
 
 
-def test_faketree_path(patch):
+def test_faketree_path(patch, fake_tree):
     patch.object(uuid, 'uuid4')
-    result = FakeTree.path(1)
+    patch.object(FakeTree, 'line')
+    result = fake_tree.path()
     name = '${}'.format(uuid.uuid4().hex[:8])
-    assert result == Tree('path', [Token('NAME', name, line=1)])
+    assert result == Tree('path', [Token('NAME', name, line=FakeTree.line())])
+
+
+def test_faketree_path_name(patch, fake_tree):
+    patch.object(FakeTree, 'line')
+    result = fake_tree.path(name='x')
+    assert result.child(0).value == 'x'
+
+
+def test_faketree_path_line(fake_tree):
+    assert fake_tree.path(line=1).child(0).line == 1
 
 
 def test_faketree_number(patch, fake_tree):
@@ -94,7 +105,7 @@ def test_faketree_assignment(patch, tree, fake_tree):
     result = fake_tree.assignment(tree)
     FakeTree.get_line.assert_called_with(tree)
     line = FakeTree.get_line()
-    FakeTree.path.assert_called_with(line)
+    FakeTree.path.assert_called_with(line=line)
     assert tree.child().child().line == line
     assert result.children[0] == FakeTree.path()
     subtree = [Token('EQUALS', '=', line=line), tree]
