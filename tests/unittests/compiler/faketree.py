@@ -100,6 +100,18 @@ def test_faketree_expression(patch, tree, fake_tree):
     assert result.children == [FakeTree.number(), fragment]
 
 
+def test_faketree_expression_path(patch, tree, fake_tree):
+    """
+    Ensures FakeTree.expression can create an expression with a path as left
+    value
+    """
+    patch.object(FakeTree, 'path')
+    tree.number = None
+    result = fake_tree.expression(tree, '+', 'rhs')
+    FakeTree.path.assert_called_with(name=tree.child())
+    assert result.children[0] == FakeTree.path()
+
+
 def test_faketree_assignment(patch, tree, fake_tree):
     patch.many(FakeTree, ['path', 'get_line'])
     result = fake_tree.assignment(tree)
