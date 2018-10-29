@@ -50,6 +50,7 @@ def test_grammar_values(grammar, ebnf):
     assert ebnf._DEDENT == '<DEDENT>'
     assert ebnf.TRUE == 'true'
     assert ebnf.FALSE == 'false'
+    assert ebnf.NULL == 'null'
     assert ebnf.SINGLE_QUOTED == "/'([^']*)'/"
     assert ebnf.DOUBLE_QUOTED == '/"([^"]*)"/'
     assert ebnf._OSB == '['
@@ -61,14 +62,15 @@ def test_grammar_values(grammar, ebnf):
     assert ebnf._OP == '('
     assert ebnf._CP == ')'
     assert ebnf.boolean == 'true, false'
+    assert ebnf.void == 'null'
     assert ebnf.number == 'int, float'
     assert ebnf.string == 'single_quoted, double_quoted'
     assert ebnf.key_value == '(string, path) colon (values, path)'
     assert ebnf.objects == ebnf.collection()
     assert ebnf.regular_expression == 'regexp name?'
     assert ebnf.inline_expression == 'op service cp'
-    values = ('number, string, boolean, list, objects, regular_expression, '
-              'inline_expression')
+    values = ('number, string, boolean, void, list, objects, '
+              'regular_expression, inline_expression')
     assert ebnf.values == values
 
 
