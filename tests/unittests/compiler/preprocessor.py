@@ -176,10 +176,12 @@ def test_preprocessor_expression(patch, magic, tree):
 
 
 def test_preprocessor_process(patch, magic, tree, block):
-    patch.many(Preprocessor, ['assignments', 'service', 'expression'])
+    patch.many(Preprocessor, ['assignments', 'service', 'expression',
+                              'if_statement'])
     tree.find_data.return_value = [block]
     result = Preprocessor.process(tree)
     Preprocessor.assignments.assert_called_with(block)
     Preprocessor.service.assert_called_with(block)
     Preprocessor.expression.assert_called_with(block)
+    Preprocessor.if_statement.assert_called_with(block)
     assert result == tree

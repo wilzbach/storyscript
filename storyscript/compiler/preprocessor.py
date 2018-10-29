@@ -120,4 +120,5 @@ class Preprocessor:
             cls.assignments(block)
             cls.service(block)
             cls.expression(block)
+            cls.if_statement(block)
         return tree
