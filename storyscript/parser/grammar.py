@@ -42,6 +42,7 @@ class Grammar:
         self.ebnf._DEDENT = '<DEDENT>'
         self.ebnf.TRUE = 'true'
         self.ebnf.FALSE = 'false'
+        self.ebnf.NULL = 'null'
         self.ebnf.set_token('INT.2', '"0".."9"+')
         self.ebnf.set_token('FLOAT.2', 'INT "." INT? | "." INT')
         self.ebnf.SINGLE_QUOTED = "/'([^']*)'/"
@@ -57,6 +58,7 @@ class Grammar:
         self.ebnf._OP = '('
         self.ebnf._CP = ')'
         self.ebnf.boolean = 'true, false'
+        self.ebnf.void = 'null'
         self.ebnf.number = 'int, float'
         self.ebnf.string = 'single_quoted, double_quoted'
         values_path = '(values, path)'
@@ -67,7 +69,7 @@ class Grammar:
         self.ebnf.objects = self.ebnf.collection(*objects)
         self.ebnf.regular_expression = 'regexp name?'
         self.ebnf.inline_expression = 'op service cp'
-        values = ('number, string, boolean, list, objects, '
+        values = ('number, string, boolean, void, list, objects, '
                   'regular_expression, inline_expression')
         self.ebnf.values = values
 
