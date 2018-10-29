@@ -68,6 +68,15 @@ def test_tree_insert():
     assert tree.children == ['child']
 
 
+def test_tree_rename():
+    """
+    Ensures Tree.rename can rename the current tree
+    """
+    tree = Tree('tree', [])
+    tree.rename('new')
+    assert tree.data == 'new'
+
+
 def test_tree_replace():
     tree = Tree('tree', ['old'])
     tree.replace(0, 'new')

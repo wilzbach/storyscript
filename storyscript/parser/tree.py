@@ -57,6 +57,12 @@ class Tree(LarkTree):
         """
         self.children.insert(0, item)
 
+    def rename(self, new_name):
+        """
+        Renames the current tree
+        """
+        self.data = new_name
+
     def replace(self, index, item):
         """
         Replaces a child at the given index

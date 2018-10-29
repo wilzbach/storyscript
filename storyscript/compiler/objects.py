@@ -209,6 +209,8 @@ class Objects:
         operator = tree.expression_fragment.operator.child(0).value
         expression_type = Objects.expression_type(operator)
         rhs = tree.expression_fragment.values
+        if rhs is None:
+            rhs = tree.expression_fragment.path
         lhs = tree.values
         if lhs is None:
             lhs = tree.path

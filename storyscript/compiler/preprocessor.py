@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import uuid
-
 from lark.lexer import Token
 
 from .faketree import FakeTree
@@ -79,10 +77,19 @@ class Preprocessor:
         one with a fake assignment to a simpler expression.
         """
         fake_tree = cls.fake_tree(block)
-        expression = fake_tree.expression(lhs.child(1), rhs.operator,
-                                          rhs.child(1))
+        left_value = lhs.values
+        if left_value is None:
+            left_value = lhs
+        right_value = rhs.child(1)
+        args = (left_value, rhs.operator, right_value)
+        expression = fake_tree.expression(*args)
         assignment = fake_tree.add_assignment(expression)
-        lhs.children[1] = assignment.path
+        children = len(lhs.children)
+        if children == 1:
+            lhs.replace(0, assignment.path.child(0))
+            lhs.rename('path')
+            return
+        lhs.replace(children - 1, assignment.path)
 
     @classmethod
     def expression_stack(cls, block, tree):
@@ -93,7 +100,7 @@ class Preprocessor:
         stack = []
         for child in tree.children:
             if child.operator:
-                if child.operator.child(0) == '*':
+                if child.operator.child(0) in ['*', '/', '%', '^']:
                     cls.merge_operands(block, stack[-1], child)
                 else:
                     stack.append(child)

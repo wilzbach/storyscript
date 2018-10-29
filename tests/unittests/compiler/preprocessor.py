@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
-import uuid
-
 from lark.lexer import Token
+
+from pytest import fixture, mark
 
 from storyscript.compiler import FakeTree, Preprocessor
 from storyscript.parser import Tree
+
+
+@fixture
+def fake_tree(patch):
+    patch.object(Preprocessor, 'fake_tree')
+    return Preprocessor.fake_tree
 
 
 def test_preprocessor_fake_tree(patch):
@@ -22,15 +28,15 @@ def test_preprocessor_replace_expression(magic, tree):
     parent.replace.assert_called_with(1, tree.add_assignment().path)
 
 
-def test_preprocessor_service_arguments(patch, magic, tree):
-    patch.many(Preprocessor, ['fake_tree', 'replace_expression'])
+def test_preprocessor_service_arguments(patch, magic, tree, fake_tree):
+    patch.object(Preprocessor, 'replace_expression')
     argument = magic()
     tree.find_data.return_value = [argument]
     Preprocessor.service_arguments('block', tree)
-    Preprocessor.fake_tree.assert_called_with('block')
+    fake_tree.assert_called_with('block')
     tree.find_data.assert_called_with('arguments')
     argument.node.assert_called_with('values.inline_expression')
-    args = (Preprocessor.fake_tree(), argument, argument.node())
+    args = (fake_tree(), argument, argument.node())
     Preprocessor.replace_expression.assert_called_with(*args)
 
 
@@ -42,13 +48,13 @@ def test_preprocessor_service_arguments_no_expression(patch, magic, tree):
     assert Preprocessor.replace_expression.call_count == 0
 
 
-def test_preprocessor_assignment_expression(patch, magic, tree):
-    patch.many(Preprocessor, ['fake_tree', 'replace_expression'])
+def test_preprocessor_assignment_expression(patch, magic, tree, fake_tree):
+    patch.object(Preprocessor, 'replace_expression')
     block = magic()
     Preprocessor.assignment_expression(block, tree)
-    Preprocessor.fake_tree.assert_called_with(block)
+    fake_tree.assert_called_with(block)
     parent = block.rules.assignment.assignment_fragment
-    args = (Preprocessor.fake_tree(), parent, tree.inline_expression)
+    args = (fake_tree(), parent, tree.inline_expression)
     Preprocessor.replace_expression.assert_called_with(*args)
 
 
@@ -103,29 +109,56 @@ def test_preprocessor_service_no_service(patch, magic, tree):
     assert Preprocessor.service_arguments.call_count == 0
 
 
-def test_preprocessor_merge_operands(patch, magic, tree):
+def test_preprocessor_merge_operands(magic, tree, fake_tree):
     """
-    Ensures that Preprocessor.merge_operands can merge operands
+    Ensures Preprocessor.merge_operands can merge operands
     """
-    patch.object(Preprocessor, 'fake_tree')
     rhs = magic()
-    tree.children = [0, 1]
     Preprocessor.merge_operands('block', tree, rhs)
-    Preprocessor.fake_tree.assert_called_with('block')
-    args = (tree.child(), rhs.operator, rhs.child(1))
+    fake_tree.assert_called_with('block')
+    args = (tree.values, rhs.operator, rhs.child(1))
     Preprocessor.fake_tree().expression.assert_called_with(*args)
-    expression = Preprocessor.fake_tree().expression()
-    Preprocessor.fake_tree().add_assignment.assert_called_with(expression)
-    assert tree.children[1] == Preprocessor.fake_tree().add_assignment().path
+    fake_tree().add_assignment.assert_called_with(fake_tree().expression())
+    tree.replace.assert_called_with(len(tree.children) - 1,
+                                    fake_tree().add_assignment().path)
 
 
-def test_preprocessor_expression_stack(patch, magic, tree):
+def test_preprocessor_merge_operands_lhs(magic, tree, fake_tree):
+    """
+    Ensures Preprocessor.merge_operands can deal with lhs having no values
+    branch.
+    """
+    rhs = magic()
+    tree.values = None
+    Preprocessor.merge_operands('block', tree, rhs)
+    args = (tree, rhs.operator, rhs.child(1))
+    Preprocessor.fake_tree().expression.assert_called_with(*args)
+
+
+def test_preprocessor_merge_operands_lhs_child(magic, tree, fake_tree):
+    """
+    Ensures Preprocessor.merge_operands can deal with lhs having one child
+    """
+    rhs = magic()
+    tree.children = ['one']
+    Preprocessor.merge_operands('block', tree, rhs)
+    fake_tree.assert_called_with('block')
+    args = (tree.values, rhs.operator, rhs.child(1))
+    Preprocessor.fake_tree().expression.assert_called_with(*args)
+    fake_tree().add_assignment.assert_called_with(fake_tree().expression())
+    tree.replace.assert_called_with(0,
+                                    fake_tree().add_assignment().path.child())
+    tree.rename.assert_called_with('path')
+
+
+@mark.parametrize('operator', ['*', '/', '%', '^'])
+def test_preprocessor_expression_stack(patch, magic, tree, operator):
     """
     Ensures expression_stack can replace the expression tree
     """
     patch.object(Preprocessor, 'merge_operands')
     child = magic()
-    child.operator.child.return_value = '*'
+    child.operator.child.return_value = operator
     tree.children = [magic(), child]
     Preprocessor.expression_stack('block', tree)
     args = ('block', tree.children[0], child)
@@ -142,9 +175,8 @@ def test_preprocessor_expression(patch, magic, tree):
     Preprocessor.expression_stack.assert_called_with(tree, expression)
 
 
-def test_preprocessor_process(patch, magic, tree):
+def test_preprocessor_process(patch, magic, tree, block):
     patch.many(Preprocessor, ['assignments', 'service', 'expression'])
-    block = magic()
     tree.find_data.return_value = [block]
     result = Preprocessor.process(tree)
     Preprocessor.assignments.assert_called_with(block)

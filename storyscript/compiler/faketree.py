@@ -21,8 +21,8 @@ class FakeTree:
         Creates fake line numbers. The numbers are decreasing, so that the
         resulting tree is compiled correctly.
         """
-        lower_bound = int(self.original_line) - 1
-        upper_bound = int(self.original_line)
+        lower_bound = float(self.original_line) - 1.0
+        upper_bound = float(self.original_line)
         if len(self.new_lines) > 0:
             upper_bound = self.new_lines[-1]
         fake_line = random.uniform(lower_bound, upper_bound)
@@ -37,21 +37,33 @@ class FakeTree:
             return tree.line()
         return self.line()
 
-    @staticmethod
-    def path(line):
+    def path(self, name=None, line=None):
         """
         Creates a fake tree path.
         """
-        path = '${}'.format(uuid.uuid4().hex[:8])
-        return Tree('path', [Token('NAME', path, line=line)])
+        if name is None:
+            name = '${}'.format(uuid.uuid4().hex[:8])
+        if line is None:
+            line = self.line()
+        return Tree('path', [Token('NAME', name, line=line)])
 
-    def expression(self, lhs, operator, rhs):
+    def number(self, number):
         """
-        Creates a fake expression, equivalent to "lhs + rhs"
+        Creates a number tree
         """
-        lhs.child(0).child(0).line = self.line()
-        fragment = Tree('expression_fragment', [operator, rhs])
-        return Tree('expression', [lhs, fragment])
+        token = Token('INT', number, line=self.line())
+        return Tree('values', [Tree('number', [token])])
+
+    def expression(self, left_value, operator, right_value):
+        """
+        Creates a fake expression, equivalent to "left_value + right_value"
+        """
+        if left_value.number:
+            value = self.number(left_value.number.child(0))
+        else:
+            value = self.path(name=left_value.child(0))
+        fragment = Tree('expression_fragment', [operator, right_value])
+        return Tree('expression', [value, fragment])
 
     def assignment(self, value):
         """
@@ -59,7 +71,7 @@ class FakeTree:
         """
         line = self.get_line(value)
         value.child(0).child(0).line = line
-        path = self.path(line)
+        path = self.path(line=line)
         equals = Token('EQUALS', '=', line=line)
         fragment = Tree('assignment_fragment', [equals, value])
         return Tree('assignment', [path, fragment])

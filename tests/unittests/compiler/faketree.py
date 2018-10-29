@@ -26,8 +26,9 @@ def test_faketree_line(patch, fake_tree):
     Ensures FakeTree.line can create a fake line number
     """
     patch.object(random, 'uniform')
+    fake_tree.original_line = '1.2'
     result = fake_tree.line()
-    random.uniform.assert_called_with(0, 1)
+    random.uniform.assert_called_with(1.2 - 1, 1.2)
     assert fake_tree.new_lines == [random.uniform()]
     assert result == str(random.uniform())
 
@@ -60,22 +61,56 @@ def test_faketree_get_line_existing(tree, fake_tree):
     assert fake_tree.get_line(tree) == tree.line()
 
 
-def test_faketree_path(patch):
+def test_faketree_path(patch, fake_tree):
     patch.object(uuid, 'uuid4')
-    result = FakeTree.path(1)
+    patch.object(FakeTree, 'line')
+    result = fake_tree.path()
     name = '${}'.format(uuid.uuid4().hex[:8])
-    assert result == Tree('path', [Token('NAME', name, line=1)])
+    assert result == Tree('path', [Token('NAME', name, line=FakeTree.line())])
+
+
+def test_faketree_path_name(patch, fake_tree):
+    patch.object(FakeTree, 'line')
+    result = fake_tree.path(name='x')
+    assert result.child(0).value == 'x'
+
+
+def test_faketree_path_line(fake_tree):
+    assert fake_tree.path(line=1).child(0).line == 1
+
+
+def test_faketree_number(patch, fake_tree):
+    """
+    Ensures FakeTree.number can create a number
+    """
+    patch.object(FakeTree, 'line')
+    result = fake_tree.number(1)
+    assert result == Tree('values', [Tree('number', [Token('INT', 1)])])
+    assert result.number.child(0).line == FakeTree.line()
 
 
 def test_faketree_expression(patch, tree, fake_tree):
     """
     Ensures FakeTree.expression can create an expression
     """
-    patch.object(FakeTree, 'line')
+    patch.object(FakeTree, 'number')
     result = fake_tree.expression(tree, '+', 'rhs')
-    assert tree.child(0).child(0).line == FakeTree.line()
+    FakeTree.number.assert_called_with(tree.number.child())
     assert result.data == 'expression'
-    assert result.children == [tree, Tree('expression_fragment', ['+', 'rhs'])]
+    fragment = Tree('expression_fragment', ['+', 'rhs'])
+    assert result.children == [FakeTree.number(), fragment]
+
+
+def test_faketree_expression_path(patch, tree, fake_tree):
+    """
+    Ensures FakeTree.expression can create an expression with a path as left
+    value
+    """
+    patch.object(FakeTree, 'path')
+    tree.number = None
+    result = fake_tree.expression(tree, '+', 'rhs')
+    FakeTree.path.assert_called_with(name=tree.child())
+    assert result.children[0] == FakeTree.path()
 
 
 def test_faketree_assignment(patch, tree, fake_tree):
@@ -83,7 +118,7 @@ def test_faketree_assignment(patch, tree, fake_tree):
     result = fake_tree.assignment(tree)
     FakeTree.get_line.assert_called_with(tree)
     line = FakeTree.get_line()
-    FakeTree.path.assert_called_with(line)
+    FakeTree.path.assert_called_with(line=line)
     assert tree.child().child().line == line
     assert result.children[0] == FakeTree.path()
     subtree = [Token('EQUALS', '=', line=line), tree]
