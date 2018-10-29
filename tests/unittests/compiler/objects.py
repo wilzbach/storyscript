@@ -221,6 +221,15 @@ def test_objects_values(patch, magic, value_type):
     assert result == getattr(Objects, value_type)()
 
 
+def test_objects_values_void(patch, magic):
+    """
+    Ensures Objects.values returns None when given a void value.
+    """
+    item = magic(data='void')
+    tree = magic(child=lambda x: item)
+    assert Objects.values(tree) is None
+
+
 def test_objects_values_path(patch, magic):
     patch.object(Objects, 'path')
     item = magic(type='NAME')
