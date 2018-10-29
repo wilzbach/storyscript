@@ -21,8 +21,8 @@ class FakeTree:
         Creates fake line numbers. The numbers are decreasing, so that the
         resulting tree is compiled correctly.
         """
-        lower_bound = int(self.original_line) - 1
-        upper_bound = int(self.original_line)
+        lower_bound = float(self.original_line) - 1.0
+        upper_bound = float(self.original_line)
         if len(self.new_lines) > 0:
             upper_bound = self.new_lines[-1]
         fake_line = random.uniform(lower_bound, upper_bound)
