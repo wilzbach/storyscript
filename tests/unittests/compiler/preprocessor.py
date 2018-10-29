@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
 
-from pytest import fixture
+from pytest import fixture, mark
 
 from storyscript.compiler import FakeTree, Preprocessor
 from storyscript.parser import Tree
@@ -151,13 +151,14 @@ def test_preprocessor_merge_operands_lhs_child(magic, tree, fake_tree):
     tree.rename.assert_called_with('path')
 
 
-def test_preprocessor_expression_stack(patch, magic, tree):
+@mark.parametrize('operator', ['*', '/', '%', '^'])
+def test_preprocessor_expression_stack(patch, magic, tree, operator):
     """
     Ensures expression_stack can replace the expression tree
     """
     patch.object(Preprocessor, 'merge_operands')
     child = magic()
-    child.operator.child.return_value = '*'
+    child.operator.child.return_value = operator
     tree.children = [magic(), child]
     Preprocessor.expression_stack('block', tree)
     args = ('block', tree.children[0], child)

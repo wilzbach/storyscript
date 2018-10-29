@@ -28,7 +28,7 @@ def test_faketree_line(patch, fake_tree):
     patch.object(random, 'uniform')
     fake_tree.original_line = '1.2'
     result = fake_tree.line()
-    random.uniform.assert_called_with(1.2-1, 1.2)
+    random.uniform.assert_called_with(1.2 - 1, 1.2)
     assert fake_tree.new_lines == [random.uniform()]
     assert result == str(random.uniform())
 

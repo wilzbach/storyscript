@@ -100,7 +100,7 @@ class Preprocessor:
         stack = []
         for child in tree.children:
             if child.operator:
-                if child.operator.child(0) == '*':
+                if child.operator.child(0) in ['*', '/', '%', '^']:
                     cls.merge_operands(block, stack[-1], child)
                 else:
                     stack.append(child)
