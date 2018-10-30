@@ -125,8 +125,18 @@ def test_exceptions_storyerror_message_reason(patch, error):
     patch.many(StoryError, ['compile_template', 'escape_string', 'reason'])
     error.error_type = 'else'
     result = error.message()
-    assert result == '{}. Reason: {}'.format(StoryError.escape_string(),
-                                             StoryError.reason())
+    args = (StoryError.escape_string(), StoryError.reason())
+    assert result == '{}. Reason: {}'.format(*args)
+
+
+def test_exceptions_storyerror_echo(capsys, patch, error):
+    """
+    Ensures StoryError.echo print StoryError.message
+    """
+    patch.object(StoryError, 'message')
+    error.echo()
+    output, error = capsys.readouterr()
+    assert output == '{}\n'.format(StoryError.message())
 
 
 def test_exceptions_storyerror_str_(patch, error):

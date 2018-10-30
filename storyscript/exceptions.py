@@ -78,5 +78,11 @@ class StoryError(SyntaxError):
             return '{}. Reason: {}'.format(message, self.reason())
         return message
 
+    def echo(self):
+        """
+        Prints the message
+        """
+        print(self.message())
+
     def __str__(self):
         return self.message()
