@@ -27,6 +27,18 @@ class Preprocessor:
         parent.replace(1, assignment.path)
 
     @classmethod
+    def replace_pathvalue(cls, block, statement, path_value):
+        """
+        Replaces an inline expression inside a path_value branch.
+        """
+        fake_tree = cls.fake_tree(block)
+        line = statement.line()
+        service = path_value.values.inline_expression.service
+        assignment = fake_tree.add_assignment(service)
+        path_value.replace(0, assignment.path)
+        path_value.path.children[0].line = line
+
+    @classmethod
     def service_arguments(cls, block, service):
         """
         Processes the arguments of a service, replacing inline expressions
@@ -115,9 +127,24 @@ class Preprocessor:
                 cls.expression_stack(block, expression)
 
     @classmethod
+    def flow_statement(cls, name, block):
+        """
+        Processes if statements, looking inline expressions.
+        """
+        for statement in block.find_data(name):
+            if statement.node('path_value.values.inline_expression'):
+                cls.replace_pathvalue(block, statement, statement.path_value)
+
+            if statement.child(2):
+                if statement.child(2).node('values.inline_expression'):
+                    cls.replace_pathvalue(block, statement, statement.child(2))
+
+    @classmethod
     def process(cls, tree):
         for block in tree.find_data('block'):
             cls.assignments(block)
             cls.service(block)
             cls.expression(block)
+            cls.flow_statement('if_statement', block)
+            cls.flow_statement('elseif_statement', block)
         return tree
