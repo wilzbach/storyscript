@@ -28,15 +28,14 @@ def test_preprocessor_replace_expression(magic, tree):
     parent.replace.assert_called_with(1, tree.add_assignment().path)
 
 
-def test_preprocessor_replace_pathvalue(magic, tree, fake_tree):
-    statement = magic()
-    Preprocessor.replace_pathvalue(tree, statement)
-    fake_tree.assert_called_with(tree)
-    path_value = statement.path_value
+def test_preprocessor_replace_pathvalue(magic, tree, block, fake_tree):
+    path_value = magic()
+    Preprocessor.replace_pathvalue(block, tree, path_value)
+    fake_tree.assert_called_with(block)
     service = path_value.values.inline_expression.service
     fake_tree().add_assignment.assert_called_with(service)
     path_value.replace.assert_called_with(0, fake_tree().add_assignment().path)
-    assert path_value.path.children[0].line == statement.line()
+    assert path_value.path.children[0].line == tree.line()
 
 
 def test_preprocessor_service_arguments(patch, magic, tree, fake_tree):

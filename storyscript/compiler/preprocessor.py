@@ -27,17 +27,16 @@ class Preprocessor:
         parent.replace(1, assignment.path)
 
     @classmethod
-    def replace_pathvalue(cls, block, statement):
+    def replace_pathvalue(cls, block, statement, path_value):
         """
         Replaces an inline expression inside a path_value branch.
         """
         fake_tree = cls.fake_tree(block)
         line = statement.line()
-        parent = statement.path_value
-        service = parent.values.inline_expression.service
+        service = path_value.values.inline_expression.service
         assignment = fake_tree.add_assignment(service)
-        parent.replace(0, assignment.path)
-        statement.path_value.path.children[0].line = line
+        path_value.replace(0, assignment.path)
+        path_value.path.children[0].line = line
 
     @classmethod
     def service_arguments(cls, block, service):
