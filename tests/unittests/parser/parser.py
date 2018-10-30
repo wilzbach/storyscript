@@ -59,12 +59,14 @@ def test_parser_grammar_ebnf(patch, parser):
 
 
 def test_parser_lark(patch, parser):
+    """
+    Ensures Parser.lark can produce the correct Lark instance.
+    """
     patch.init(Lark)
     patch.many(Parser, ['indenter', 'grammar'])
     result = parser.lark()
-    Lark.__init__.assert_called_with(parser.grammar(),
-                                     parser=parser.algo,
-                                     postlex=Parser.indenter())
+    kwargs = {'parser': parser.algo, 'postlex': Parser.indenter()}
+    Lark.__init__.assert_called_with(parser.grammar(), **kwargs)
     assert isinstance(result, Lark)
 
 
