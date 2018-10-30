@@ -34,6 +34,14 @@ class StoryError(SyntaxError):
             return self.reasons[self.error_type]
         return 'unknown'
 
+    def name(self):
+        """
+        Formats the name of the story, or just 'story'
+        """
+        if self.path:
+            return 'story "{}"'.format(self.path)
+        return 'story'
+
     def token_template(self, value, line, column):
         template = ('Failed reading story because of unexpected "{}" at '
                     'line {}, column {}')

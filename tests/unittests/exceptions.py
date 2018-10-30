@@ -39,6 +39,15 @@ def test_exceptions_storyerror_noreason(error):
     assert error.reason() == 'unknown'
 
 
+def test_exceptions_storyerror_name(error):
+    assert error.name() == 'story'
+
+
+def test_exceptions_storyerror_name_path(error):
+    error.path = 'hello.story'
+    assert error.name() == 'story "hello.story"'
+
+
 def test_exceptions_storyerror_token_template(error):
     expected = ('Failed reading story because of unexpected "value" at '
                 'line 1, column 2')
