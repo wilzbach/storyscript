@@ -175,6 +175,30 @@ def test_preprocessor_expression(patch, magic, tree):
     Preprocessor.expression_stack.assert_called_with(tree, expression)
 
 
+def test_preprocessor_if_statement(patch, magic, tree):
+    """
+    Ensures if_statement replaces inline expressions inside if statements
+    """
+    patch.object(Preprocessor, 'replace_pathvalue')
+    statement = magic()
+    tree.find_data.return_value = [statement]
+    Preprocessor.if_statement(tree)
+    statement.node.assert_called_with('path_value.values.inline_expression')
+    Preprocessor.replace_pathvalue.assert_called_with(tree, statement)
+
+
+def test_preprocessor_if_statement_no_expression(patch, magic, tree):
+    """
+    Ensures if_statement ignores statements without inline expressions
+    """
+    patch.object(Preprocessor, 'replace_pathvalue')
+    statement = magic()
+    statement.node.return_value = None
+    tree.find_data.return_value = [statement]
+    Preprocessor.if_statement(tree)
+    assert Preprocessor.replace_pathvalue.call_count == 0
+
+
 def test_preprocessor_process(patch, magic, tree, block):
     patch.many(Preprocessor, ['assignments', 'service', 'expression',
                               'if_statement'])

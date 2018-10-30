@@ -115,6 +115,15 @@ class Preprocessor:
                 cls.expression_stack(block, expression)
 
     @classmethod
+    def if_statement(cls, block):
+        """
+        Processes if statements, looking inline expressions.
+        """
+        for statement in block.find_data('if_statement'):
+            if statement.node('path_value.values.inline_expression'):
+                cls.replace_pathvalue(block, statement)
+
+    @classmethod
     def process(cls, tree):
         for block in tree.find_data('block'):
             cls.assignments(block)
