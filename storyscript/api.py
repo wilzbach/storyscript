@@ -8,9 +8,9 @@ class Api:
     """
     @staticmethod
     def loads(string):
-        return Story(string).process()
+        return Story(string).process(debug=True)
 
     @staticmethod
     def load(stream):
-        story = Story.from_stream(stream).process()
+        story = Story.from_stream(stream).process(debug=True)
         return {stream.name: story, 'services': story['services']}

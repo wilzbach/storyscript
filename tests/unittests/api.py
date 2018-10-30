@@ -8,6 +8,7 @@ def test_api_loads(patch):
     patch.object(Story, 'process')
     result = Api.loads('string')
     Story.__init__.assert_called_with('string')
+    Story.process.assert_called_with(debug=True)
     assert result == Story.process()
 
 
@@ -16,5 +17,6 @@ def test_api_load(patch, magic):
     stream = magic()
     result = Api.load(stream)
     Story.from_stream.assert_called_with(stream)
+    Story.from_stream().process.assert_called_with(debug=True)
     story = Story.from_stream().process()
     assert result == {stream.name: story, 'services': story['services']}
