@@ -44,7 +44,7 @@ class Parser:
         """
         return Lark(self.grammar(), parser=self.algo, postlex=self.indenter())
 
-    def parse(self, source, debug=False):
+    def parse(self, source, debug=False, path=None):
         """
         Parses the source string.
         """
@@ -57,12 +57,12 @@ class Parser:
         except UnexpectedToken as e:
             if debug:
                 raise e
-            print(StoryError('token-unexpected', e).message())
+            print(StoryError('token-unexpected', e, path=path).message())
             exit()
         except UnexpectedInput as e:
             if debug:
                 raise e
-            print(StoryError('input-unexpected', e).message())
+            print(StoryError('input-unexpected', e, path=path).message())
             exit()
         return self.transformer().transform(tree)
 
