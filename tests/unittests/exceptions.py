@@ -48,9 +48,10 @@ def test_exceptions_storyerror_name_path(error):
     assert error.name() == 'story "hello.story"'
 
 
-def test_exceptions_storyerror_token_template(error):
-    expected = ('Failed reading story because of unexpected "value" at '
-                'line 1, column 2')
+def test_exceptions_storyerror_token_template(patch, error):
+    patch.object(StoryError, 'name')
+    expected = ('Failed reading {} because of unexpected "value" at '
+                'line 1, column 2').format(StoryError.name())
     assert error.token_template('value', 1, 2) == expected
 
 

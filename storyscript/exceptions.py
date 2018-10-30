@@ -43,9 +43,9 @@ class StoryError(SyntaxError):
         return 'story'
 
     def token_template(self, value, line, column):
-        template = ('Failed reading story because of unexpected "{}" at '
+        template = ('Failed reading {} because of unexpected "{}" at '
                     'line {}, column {}')
-        return template.format(value, line, column)
+        return template.format(self.name(), value, line, column)
 
     def tree_template(self, value, line):
         template = ('Failed reading story because of unexpected "{}" at '
