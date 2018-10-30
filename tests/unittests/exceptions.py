@@ -55,9 +55,10 @@ def test_exceptions_storyerror_token_template(patch, error):
     assert error.token_template('value', 1, 2) == expected
 
 
-def test_exceptions_storyerror_tree_template(error):
-    expected = ('Failed reading story because of unexpected "value" at '
-                'line 1')
+def test_exceptions_storyerror_tree_template(patch, error):
+    patch.object(StoryError, 'name')
+    expected = ('Failed reading {} because of unexpected "value" at '
+                'line 1').format(StoryError.name())
     assert error.tree_template('value', 1) == expected
 
 

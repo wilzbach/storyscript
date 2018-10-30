@@ -48,9 +48,9 @@ class StoryError(SyntaxError):
         return template.format(self.name(), value, line, column)
 
     def tree_template(self, value, line):
-        template = ('Failed reading story because of unexpected "{}" at '
+        template = ('Failed reading {} because of unexpected "{}" at '
                     'line {}')
-        return template.format(value, line)
+        return template.format(self.name(), value, line)
 
     def compile_template(self):
         """
