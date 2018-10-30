@@ -128,11 +128,11 @@ class Preprocessor:
                 cls.expression_stack(block, expression)
 
     @classmethod
-    def if_statement(cls, block):
+    def flow_statement(cls, name, block):
         """
         Processes if statements, looking inline expressions.
         """
-        for statement in block.find_data('if_statement'):
+        for statement in block.find_data(name):
             if statement.node('path_value.values.inline_expression'):
                 cls.replace_pathvalue(block, statement)
 
@@ -142,5 +142,6 @@ class Preprocessor:
             cls.assignments(block)
             cls.service(block)
             cls.expression(block)
-            cls.if_statement(block)
+            cls.flow_statement('if_statement', block)
+            cls.flow_statement('elseif_statement', block)
         return tree
