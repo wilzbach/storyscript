@@ -17,9 +17,10 @@ class StoryError(SyntaxError):
         'arguments-noservice': 'Missing service before service arguments'
     }
 
-    def __init__(self, error_type, item):
+    def __init__(self, error_type, item, path=None):
         self.error_type = error_type
         self.item = item
+        self.path = path
 
     @staticmethod
     def escape_string(string):

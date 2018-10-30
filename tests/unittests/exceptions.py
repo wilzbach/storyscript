@@ -13,6 +13,15 @@ def test_exceptions_storyerror_init():
     error = StoryError('unknown', 'item')
     assert error.error_type == 'unknown'
     assert error.item == 'item'
+    assert error.path is None
+    assert issubclass(StoryError, SyntaxError)
+
+
+def test_exceptions_storyerror_init_path():
+    error = StoryError('unknown', 'item', path='hello.story')
+    assert error.error_type == 'unknown'
+    assert error.item == 'item'
+    assert error.path == 'hello.story'
     assert issubclass(StoryError, SyntaxError)
 
 
