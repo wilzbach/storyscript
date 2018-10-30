@@ -191,11 +191,27 @@ def test_preprocessor_flow_statement(patch, magic, tree):
     """
     patch.object(Preprocessor, 'replace_pathvalue')
     statement = magic()
+    statement.child.return_value = None
     tree.find_data.return_value = [statement]
     Preprocessor.flow_statement('statement', tree)
     tree.find_data.assert_called_with('statement')
     statement.node.assert_called_with('path_value.values.inline_expression')
-    Preprocessor.replace_pathvalue.assert_called_with(tree, statement)
+    args = (tree, statement, statement.path_value)
+    Preprocessor.replace_pathvalue.assert_called_with(*args)
+
+
+def test_preprocessor_flow_statement_rhs(patch, magic, tree):
+    """
+    Ensures flow_statement replaces inline expressions on the right hand-side
+    of statements
+    """
+    patch.object(Preprocessor, 'replace_pathvalue')
+    statement = magic()
+    statement.node.return_value = None
+    tree.find_data.return_value = [statement]
+    Preprocessor.flow_statement('statement', tree)
+    args = (tree, statement, statement.child())
+    Preprocessor.replace_pathvalue.assert_called_with(*args)
 
 
 def test_preprocessor_flow_statement_no_expression(patch, magic, tree):
@@ -204,6 +220,7 @@ def test_preprocessor_flow_statement_no_expression(patch, magic, tree):
     """
     patch.object(Preprocessor, 'replace_pathvalue')
     statement = magic()
+    statement.child.return_value = None
     statement.node.return_value = None
     tree.find_data.return_value = [statement]
     Preprocessor.flow_statement('statement', tree)
