@@ -29,9 +29,9 @@ class Transformer(LarkTransformer):
     def assignment(self, matches):
         token = matches[0].children[0]
         if '/' in token.value:
-            raise StoryError('variables-backslash', token)
+            raise StoryError('variables-backslash', token, path=self.path)
         if '-' in token.value:
-            raise StoryError('variables-dash', token)
+            raise StoryError('variables-dash', token, path=self.path)
         return Tree('assignment', matches)
 
     def service_block(self, matches):

@@ -32,16 +32,24 @@ def test_transformer_assignment(magic, transformer):
     assert transformer.assignment(matches) == Tree('assignment', matches)
 
 
-def test_transformer_assignment_error_backslash(magic, transformer):
-    matches = [magic(children=[magic(value='/')])]
+def test_transformer_assignment_error_backslash(patch, magic, transformer):
+    patch.init(StoryError)
+    token = magic(value='/')
+    matches = [magic(children=[token])]
     with raises(StoryError):
         transformer.assignment(matches)
+    error_name = 'variables-backslash'
+    StoryError.__init__.assert_called_with(error_name, token, path='path')
 
 
-def test_transformer_assignment_error_dash(magic, transformer):
-    matches = [magic(children=[magic(value='-')])]
+def test_transformer_assignment_error_dash(patch, magic, transformer):
+    patch.init(StoryError)
+    token = magic(value='-')
+    matches = [magic(children=[token])]
     with raises(StoryError):
         transformer.assignment(matches)
+    error_name = 'variables-dash'
+    StoryError.__init__.assert_called_with(error_name, token, path='path')
 
 
 def test_transformer_service_block(transformer):
