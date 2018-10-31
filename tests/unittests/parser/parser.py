@@ -39,7 +39,9 @@ def test_parser_indenter(patch, parser):
 
 def test_parser_transfomer(patch, parser):
     patch.init(Transformer)
-    assert isinstance(parser.transformer(), Transformer)
+    result = parser.transformer('path')
+    Transformer.__init__.assert_called_with('path')
+    assert isinstance(result, Transformer)
 
 
 def test_parser_grammar(patch, parser):

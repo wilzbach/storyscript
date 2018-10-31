@@ -26,11 +26,11 @@ class Parser:
         """
         return CustomIndenter()
 
-    def transformer(self):
+    def transformer(self, path):
         """
         Initialize the transformer
         """
-        return Transformer()
+        return Transformer(path)
 
     def grammar(self):
         if self.ebnf:
