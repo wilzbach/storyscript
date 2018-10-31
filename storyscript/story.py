@@ -9,8 +9,9 @@ from .parser import Parser
 
 class Story:
 
-    def __init__(self, story):
+    def __init__(self, story, path=None):
         self.story = story
+        self.path = path
 
     @staticmethod
     def clean_source(source):

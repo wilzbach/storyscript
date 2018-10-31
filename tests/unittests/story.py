@@ -17,6 +17,12 @@ def story():
 
 def test_story_init(story):
     assert story.story == 'story'
+    assert story.path is None
+
+
+def test_story_init_path():
+    story = Story('story', path='path')
+    assert story.path == 'path'
 
 
 def test_story_clean_source(patch):
