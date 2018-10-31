@@ -70,6 +70,29 @@ def test_parser_lark(patch, parser):
     assert isinstance(result, Lark)
 
 
+def test_parser_unexpected_token(patch, magic, parser):
+    """
+    Ensures Parser.unexpected_token can handle unexpected tokens errors.
+    """
+    patch.init(StoryError)
+    patch.object(StoryError, 'echo')
+    error = UnexpectedToken('error', 'exp', 0, 1)
+    with raises(SystemExit):
+        parser.unexpected_token(error, False, 'path')
+    StoryError.__init__.assert_called_with('token-unexpected', error,
+                                           path='path')
+    assert StoryError.echo.call_count == 1
+
+
+def test_parser_unexpected_token_debug(patch, magic, parser):
+    """
+    Ensures Parser.unexpected_token raises the error in debug mode.
+    """
+    error = UnexpectedToken('error', 'exp', 0, 1)
+    with raises(UnexpectedToken):
+        parser.unexpected_token(error, True, 'path')
+
+
 def test_parser_parse(patch, parser):
     """
     Ensures the build method can build the grammar

@@ -44,6 +44,16 @@ class Parser:
         """
         return Lark(self.grammar(), parser=self.algo, postlex=self.indenter())
 
+    def unexpected_token(self, error, debug, path):
+        """
+        Handles unexpected token errors.
+        """
+        if debug:
+            raise error
+        story_error = StoryError('token-unexpected', error, path=path)
+        story_error.echo()
+        exit()
+
     def parse(self, source, debug=False, path=None):
         """
         Parses the source string.
