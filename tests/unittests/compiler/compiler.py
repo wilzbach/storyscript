@@ -289,9 +289,12 @@ def test_compiler_when_path(patch, compiler, lines, tree):
                                     output=Compiler.output(), parent='1')
 
 
-def test_compiler_return_statement(compiler, tree):
+def test_compiler_return_statement(patch, compiler, tree):
+    patch.init(StoryError)
     with raises(StoryError):
         compiler.return_statement(tree, None)
+    args = ('return-outside', tree)
+    StoryError.__init__.assert_called_with(*args, path=compiler.path)
 
 
 def test_compiler_return_statement_parent(patch, compiler, lines, tree):

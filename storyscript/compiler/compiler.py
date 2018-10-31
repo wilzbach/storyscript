@@ -150,7 +150,7 @@ class Compiler:
         Compiles a return_statement tree
         """
         if parent is None:
-            raise StoryError('return-outside', tree)
+            raise StoryError('return-outside', tree, path=self.path)
         line = tree.line()
         args = [Objects.values(tree.child(0))]
         self.lines.append('return', line, args=args, parent=parent)
