@@ -12,8 +12,9 @@ class Compiler:
     """
     Compiles Storyscript abstract syntax tree to JSON.
     """
-    def __init__(self):
+    def __init__(self, path=None):
         self.lines = Lines()
+        self.path = path
 
     @staticmethod
     def output(tree):

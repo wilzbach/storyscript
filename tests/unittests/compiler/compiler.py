@@ -25,6 +25,12 @@ def compiler(patch, lines):
 def test_compiler_init():
     compiler = Compiler()
     assert isinstance(compiler.lines, Lines)
+    assert compiler.path is None
+
+
+def test_compiler_init_path():
+    compiler = Compiler(path='path')
+    assert compiler.path == 'path'
 
 
 def test_compiler_output(tree):
