@@ -70,50 +70,40 @@ def test_parser_lark(patch, parser):
     assert isinstance(result, Lark)
 
 
-def test_parser_unexpected_token(patch, magic, parser):
+def test_parser_storyerror(patch, parser):
     """
-    Ensures Parser.unexpected_token can handle unexpected tokens errors.
+    Ensures Parser.story_error can handle unexpected tokens errors.
     """
     patch.init(StoryError)
     patch.object(StoryError, 'echo')
     error = UnexpectedToken('error', 'exp', 0, 1)
     with raises(SystemExit):
-        parser.unexpected_token(error, False, 'path')
-    StoryError.__init__.assert_called_with('token-unexpected', error,
-                                           path='path')
+        parser.story_error(error, False, 'path')
+    error_name = 'token-unexpected'
+    StoryError.__init__.assert_called_with(error_name, error, path='path')
     assert StoryError.echo.call_count == 1
 
 
-def test_parser_unexpected_token_debug(patch, magic, parser):
+def test_parser_storyerror_input(patch, parser):
     """
-    Ensures Parser.unexpected_token raises the error in debug mode.
+    Ensures Parser.story_error can handle unexpected input errors.
+    """
+    patch.init(StoryError)
+    patch.object(StoryError, 'echo')
+    error = UnexpectedInput('error', 'exp', 0, 1)
+    with raises(SystemExit):
+        parser.story_error(error, False, 'path')
+    error_name = 'input-unexpected'
+    StoryError.__init__.assert_called_with(error_name, error, path='path')
+
+
+def test_parser_storyerror_debug(patch, parser):
+    """
+    Ensures Parser.story_error raises the error in debug mode.
     """
     error = UnexpectedToken('error', 'exp', 0, 1)
     with raises(UnexpectedToken):
-        parser.unexpected_token(error, True, 'path')
-
-
-def test_parser_unexpected_input(patch, magic, parser):
-    """
-    Ensures Parser.unexpected_input can handle unexpected input errors.
-    """
-    patch.init(StoryError)
-    patch.object(StoryError, 'echo')
-    error = UnexpectedInput('error', 'exp', 0, 1)
-    with raises(SystemExit):
-        parser.unexpected_input(error, False, 'path')
-    StoryError.__init__.assert_called_with('input-unexpected', error,
-                                           path='path')
-    assert StoryError.echo.call_count == 1
-
-
-def test_parser_unexpected_input_debug(patch, magic, parser):
-    """
-    Ensures Parser.unexpected_input raises the error in debug mode.
-    """
-    error = UnexpectedInput('error', 'exp', 0, 1)
-    with raises(UnexpectedInput):
-        parser.unexpected_input(error, True, 'path')
+        parser.story_error(error, True, 'path')
 
 
 def test_parser_parse(patch, parser):
