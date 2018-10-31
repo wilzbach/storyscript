@@ -49,7 +49,8 @@ class Story:
         return Story(stream.read())
 
     def parse(self, ebnf=None, debug=False):
-        self.tree = Parser(ebnf=ebnf).parse(self.story, debug=debug)
+        kwargs = {'debug': debug, 'path': self.path}
+        self.tree = Parser(ebnf=ebnf).parse(self.story, **kwargs)
 
     def modules(self):
         """

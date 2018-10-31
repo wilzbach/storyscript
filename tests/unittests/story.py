@@ -79,7 +79,7 @@ def test_story_parse(patch, story):
     patch.object(Parser, 'parse')
     story.parse()
     Parser.__init__.assert_called_with(ebnf=None)
-    Parser.parse.assert_called_with(story.story, debug=False)
+    Parser.parse.assert_called_with(story.story, debug=False, path=story.path)
     assert story.tree == Parser.parse()
 
 
@@ -88,6 +88,13 @@ def test_story_parse_ebnf(patch, story):
     patch.object(Parser, 'parse')
     story.parse(ebnf='ebnf')
     Parser.__init__.assert_called_with(ebnf='ebnf')
+
+
+def test_story_parse_debug(patch, story):
+    patch.init(Parser)
+    patch.object(Parser, 'parse')
+    story.parse(debug='debug')
+    Parser.parse.assert_called_with(story.story, debug='debug', path=None)
 
 
 def test_story_modules(magic, story):
@@ -105,13 +112,6 @@ def test_story_modules_no_extension(magic, story):
     story.tree.find_data.return_value = [import_tree]
     result = story.modules()
     assert result == ['hello.story']
-
-
-def test_story_debug(patch, story):
-    patch.init(Parser)
-    patch.object(Parser, 'parse')
-    story.parse(debug='debug')
-    Parser.parse.assert_called_with(story.story, debug='debug')
 
 
 def test_story_compile(patch, story):
