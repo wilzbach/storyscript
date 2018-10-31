@@ -14,6 +14,8 @@ class Transformer(LarkTransformer):
     All trees are transformed to Storyscript's custom tree. In some cases,
     additional transformations or checks are performed.
     """
+    def __init__(self, path):
+        self.path = path
 
     def arguments(self, matches):
         """
