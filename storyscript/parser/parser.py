@@ -50,8 +50,16 @@ class Parser:
         """
         if debug:
             raise error
-        story_error = StoryError('token-unexpected', error, path=path)
-        story_error.echo()
+        StoryError('token-unexpected', error, path=path).echo()
+        exit()
+
+    def unexpected_input(self, error, debug, path):
+        """
+        Handles unexpected input errors.
+        """
+        if debug:
+            raise error
+        StoryError('input-unexpected', error, path=path).echo()
         exit()
 
     def parse(self, source, debug=False, path=None):

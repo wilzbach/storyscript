@@ -93,6 +93,29 @@ def test_parser_unexpected_token_debug(patch, magic, parser):
         parser.unexpected_token(error, True, 'path')
 
 
+def test_parser_unexpected_input(patch, magic, parser):
+    """
+    Ensures Parser.unexpected_input can handle unexpected input errors.
+    """
+    patch.init(StoryError)
+    patch.object(StoryError, 'echo')
+    error = UnexpectedInput('error', 'exp', 0, 1)
+    with raises(SystemExit):
+        parser.unexpected_input(error, False, 'path')
+    StoryError.__init__.assert_called_with('input-unexpected', error,
+                                           path='path')
+    assert StoryError.echo.call_count == 1
+
+
+def test_parser_unexpected_input_debug(patch, magic, parser):
+    """
+    Ensures Parser.unexpected_input raises the error in debug mode.
+    """
+    error = UnexpectedInput('error', 'exp', 0, 1)
+    with raises(UnexpectedInput):
+        parser.unexpected_input(error, True, 'path')
+
+
 def test_parser_parse(patch, parser):
     """
     Ensures the build method can build the grammar
