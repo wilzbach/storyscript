@@ -39,7 +39,7 @@ class Story:
         """
         Creates a story from a file source
         """
-        return Story(cls.read(path))
+        return Story(cls.read(path), path=path)
 
     @staticmethod
     def from_stream(stream):
