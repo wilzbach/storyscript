@@ -13,7 +13,7 @@ def transformer():
 
 
 def test_transformer(transformer):
-    assert transformer.path == 'path'
+    assert transformer._path == 'path'
     assert issubclass(Transformer, LarkTransformer)
 
 
