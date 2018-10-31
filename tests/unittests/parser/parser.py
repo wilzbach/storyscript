@@ -134,70 +134,20 @@ def test_parser_parse_empty(patch, parser):
     assert parser.parse('') == Tree('empty', [])
 
 
-def test_parser_parser_unexpected_token(capsys, patch, magic, parser):
-    patch.init(StoryError)
-    patch.object(StoryError, 'message')
-    patch.many(Parser, ['lark', 'transformer'])
+def test_parser_parser_unexpected_token(patch, magic, parser):
+    patch.many(Parser, ['lark', 'transformer', 'unexpected_token'])
     error = UnexpectedToken(magic(), 'exp', 0, 1)
     Parser.lark().parse.side_effect = error
-    with raises(SystemExit):
-        parser.parse('source')
-    out, err = capsys.readouterr()
-    assert out == '{}\n'.format(StoryError.message())
-    StoryError.__init__.assert_called_with('token-unexpected', error,
-                                           path=None)
-
-
-def test_parser_parser_unexpected_token_path(capsys, patch, magic, parser):
-    patch.init(StoryError)
-    patch.object(StoryError, 'message')
-    patch.many(Parser, ['lark', 'transformer'])
-    error = UnexpectedToken(magic(), 'exp', 0, 1)
-    Parser.lark().parse.side_effect = error
-    with raises(SystemExit):
-        parser.parse('source', path='path')
-    StoryError.__init__.assert_called_with('token-unexpected', error,
-                                           path='path')
-
-
-def test_parser_parser_unexpected_token_debug(patch, magic, parser):
-    patch.many(Parser, ['lark', 'transformer'])
-    Parser.lark().parse.side_effect = UnexpectedToken(magic(), 'exp', 0, 1)
-    with raises(UnexpectedToken):
-        parser.parse('source', debug=True)
+    parser.parse('source')
+    Parser.unexpected_token.assert_called_with(error, False, None)
 
 
 def test_parser_parser_unexpected_input(capsys, patch, magic, parser):
-    patch.init(StoryError)
-    patch.object(StoryError, 'message')
-    patch.many(Parser, ['lark', 'transformer'])
+    patch.many(Parser, ['lark', 'transformer', 'unexpected_input'])
     error = UnexpectedInput(magic(), 0, 0, 0)
     Parser.lark().parse.side_effect = error
-    with raises(SystemExit):
-        parser.parse('source')
-    out, err = capsys.readouterr()
-    assert out == '{}\n'.format(StoryError.message())
-    StoryError.__init__.assert_called_with('input-unexpected', error,
-                                           path=None)
-
-
-def test_parser_parser_unexpected_input_path(capsys, patch, magic, parser):
-    patch.init(StoryError)
-    patch.object(StoryError, 'message')
-    patch.many(Parser, ['lark', 'transformer'])
-    error = UnexpectedInput(magic(), 0, 0, 0)
-    Parser.lark().parse.side_effect = error
-    with raises(SystemExit):
-        parser.parse('source', path='path')
-    StoryError.__init__.assert_called_with('input-unexpected', error,
-                                           path='path')
-
-
-def test_parser_parser_unexpected_input_debug(patch, magic, parser):
-    patch.many(Parser, ['lark', 'transformer'])
-    Parser.lark().parse.side_effect = UnexpectedInput(magic(), 0, 0, 0)
-    with raises(UnexpectedInput):
-        parser.parse('source', debug=True)
+    parser.parse('source')
+    Parser.unexpected_input.assert_called_with(error, False, None)
 
 
 def test_parser_lex(patch, parser):
