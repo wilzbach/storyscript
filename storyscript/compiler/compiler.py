@@ -296,13 +296,13 @@ class Compiler:
                 self.subtree(item, parent=parent)
 
     @staticmethod
-    def compiler():
-        return Compiler()
+    def compiler(path):
+        return Compiler(path=path)
 
     @classmethod
-    def compile(cls, tree, debug=False):
+    def compile(cls, tree, debug=False, path=None):
         tree = Preprocessor.process(tree)
-        compiler = cls.compiler()
+        compiler = cls.compiler(path)
         compiler.parse_tree(tree)
         lines = compiler.lines
         return {'tree': lines.lines, 'services': lines.get_services(),
