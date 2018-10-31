@@ -65,7 +65,8 @@ class Story:
         return modules
 
     def compile(self, debug=False):
-        self.compiled = Compiler.compile(self.tree, debug=debug)
+        kwargs = {'debug': debug, 'path': self.path}
+        self.compiled = Compiler.compile(self.tree, **kwargs)
 
     def lex(self, ebnf=None):
         return Parser(ebnf=ebnf).lex(self.story)
