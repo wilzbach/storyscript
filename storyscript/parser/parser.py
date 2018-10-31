@@ -71,7 +71,7 @@ class Parser:
             return self.story_error(error, debug, path)
         except UnexpectedInput as error:
             return self.story_error(error, debug, path)
-        return self.transformer().transform(tree)
+        return self.transformer(path).transform(tree)
 
     def lex(self, source):
         """
