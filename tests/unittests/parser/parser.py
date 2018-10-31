@@ -5,7 +5,7 @@ import os
 from lark import Lark
 from lark.exceptions import UnexpectedInput, UnexpectedToken
 
-from pytest import fixture, raises
+from pytest import fixture, mark, raises
 
 from storyscript.exceptions import StoryError
 from storyscript.parser import (CustomIndenter, Grammar, Parser, Transformer,
@@ -134,20 +134,16 @@ def test_parser_parse_empty(patch, parser):
     assert parser.parse('') == Tree('empty', [])
 
 
-def test_parser_parser_unexpected_token(patch, magic, parser):
-    patch.many(Parser, ['lark', 'transformer', 'unexpected_token'])
-    error = UnexpectedToken(magic(), 'exp', 0, 1)
+@mark.parametrize('exception', [UnexpectedToken, UnexpectedInput])
+def test_parser_parser_exception(patch, exception, parser):
+    """
+    Ensures Parser.parse handles exceptions correctly.
+    """
+    patch.many(Parser, ['lark', 'transformer', 'story_error'])
+    error = exception('error', 'exp', 0, 1)
     Parser.lark().parse.side_effect = error
     parser.parse('source')
-    Parser.unexpected_token.assert_called_with(error, False, None)
-
-
-def test_parser_parser_unexpected_input(capsys, patch, magic, parser):
-    patch.many(Parser, ['lark', 'transformer', 'unexpected_input'])
-    error = UnexpectedInput(magic(), 0, 0, 0)
-    Parser.lark().parse.side_effect = error
-    parser.parse('source')
-    Parser.unexpected_input.assert_called_with(error, False, None)
+    Parser.story_error.assert_called_with(error, False, None)
 
 
 def test_parser_lex(patch, parser):

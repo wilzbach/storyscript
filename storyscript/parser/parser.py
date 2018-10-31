@@ -73,9 +73,9 @@ class Parser:
         try:
             tree = lark.parse(source)
         except UnexpectedToken as error:
-            return self.unexpected_token(error, debug, path)
+            return self.story_error(error, debug, path)
         except UnexpectedInput as error:
-            return self.unexpected_input(error, debug, path)
+            return self.story_error(error, debug, path)
         return self.transformer().transform(tree)
 
     def lex(self, source):
