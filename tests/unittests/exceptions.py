@@ -13,6 +13,15 @@ def test_exceptions_storyerror_init():
     error = StoryError('unknown', 'item')
     assert error.error_type == 'unknown'
     assert error.item == 'item'
+    assert error.path is None
+    assert issubclass(StoryError, SyntaxError)
+
+
+def test_exceptions_storyerror_init_path():
+    error = StoryError('unknown', 'item', path='hello.story')
+    assert error.error_type == 'unknown'
+    assert error.item == 'item'
+    assert error.path == 'hello.story'
     assert issubclass(StoryError, SyntaxError)
 
 
@@ -30,15 +39,26 @@ def test_exceptions_storyerror_noreason(error):
     assert error.reason() == 'unknown'
 
 
-def test_exceptions_storyerror_token_template(error):
-    expected = ('Failed reading story because of unexpected "value" at '
-                'line 1, column 2')
+def test_exceptions_storyerror_name(error):
+    assert error.name() == 'story'
+
+
+def test_exceptions_storyerror_name_path(error):
+    error.path = 'hello.story'
+    assert error.name() == 'story "hello.story"'
+
+
+def test_exceptions_storyerror_token_template(patch, error):
+    patch.object(StoryError, 'name')
+    expected = ('Failed reading {} because of unexpected "value" at '
+                'line 1, column 2').format(StoryError.name())
     assert error.token_template('value', 1, 2) == expected
 
 
-def test_exceptions_storyerror_tree_template(error):
-    expected = ('Failed reading story because of unexpected "value" at '
-                'line 1')
+def test_exceptions_storyerror_tree_template(patch, error):
+    patch.object(StoryError, 'name')
+    expected = ('Failed reading {} because of unexpected "value" at '
+                'line 1').format(StoryError.name())
     assert error.tree_template('value', 1) == expected
 
 
@@ -105,8 +125,18 @@ def test_exceptions_storyerror_message_reason(patch, error):
     patch.many(StoryError, ['compile_template', 'escape_string', 'reason'])
     error.error_type = 'else'
     result = error.message()
-    assert result == '{}. Reason: {}'.format(StoryError.escape_string(),
-                                             StoryError.reason())
+    args = (StoryError.escape_string(), StoryError.reason())
+    assert result == '{}. Reason: {}'.format(*args)
+
+
+def test_exceptions_storyerror_echo(capsys, patch, error):
+    """
+    Ensures StoryError.echo print StoryError.message
+    """
+    patch.object(StoryError, 'message')
+    error.echo()
+    output, error = capsys.readouterr()
+    assert output == '{}\n'.format(StoryError.message())
 
 
 def test_exceptions_storyerror_str_(patch, error):

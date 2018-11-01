@@ -26,11 +26,11 @@ class Parser:
         """
         return CustomIndenter()
 
-    def transformer(self):
+    def transformer(self, path):
         """
         Initialize the transformer
         """
-        return Transformer()
+        return Transformer(path)
 
     def grammar(self):
         if self.ebnf:
@@ -44,7 +44,20 @@ class Parser:
         """
         return Lark(self.grammar(), parser=self.algo, postlex=self.indenter())
 
-    def parse(self, source, debug=False):
+    def story_error(self, error, debug, path):
+        """
+        Handles unexpected token errors.
+        """
+        if debug:
+            raise error
+        if isinstance(error, UnexpectedToken):
+            error_name = 'token-unexpected'
+        elif isinstance(error, UnexpectedInput):
+            error_name = 'input-unexpected'
+        StoryError(error_name, error, path=path).echo()
+        exit()
+
+    def parse(self, source, debug=False, path=None):
         """
         Parses the source string.
         """
@@ -54,17 +67,11 @@ class Parser:
         lark = self.lark()
         try:
             tree = lark.parse(source)
-        except UnexpectedToken as e:
-            if debug:
-                raise e
-            print(StoryError('token-unexpected', e).message())
-            exit()
-        except UnexpectedInput as e:
-            if debug:
-                raise e
-            print(StoryError('input-unexpected', e).message())
-            exit()
-        return self.transformer().transform(tree)
+        except UnexpectedToken as error:
+            return self.story_error(error, debug, path)
+        except UnexpectedInput as error:
+            return self.story_error(error, debug, path)
+        return self.transformer(path).transform(tree)
 
     def lex(self, source):
         """

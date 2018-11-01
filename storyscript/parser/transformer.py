@@ -14,6 +14,8 @@ class Transformer(LarkTransformer):
     All trees are transformed to Storyscript's custom tree. In some cases,
     additional transformations or checks are performed.
     """
+    def __init__(self, path):
+        self._path = path
 
     def arguments(self, matches):
         """
@@ -27,9 +29,9 @@ class Transformer(LarkTransformer):
     def assignment(self, matches):
         token = matches[0].children[0]
         if '/' in token.value:
-            raise StoryError('variables-backslash', token)
+            raise StoryError('variables-backslash', token, path=self._path)
         if '-' in token.value:
-            raise StoryError('variables-dash', token)
+            raise StoryError('variables-dash', token, path=self._path)
         return Tree('assignment', matches)
 
     def service_block(self, matches):

@@ -17,6 +17,12 @@ def story():
 
 def test_story_init(story):
     assert story.story == 'story'
+    assert story.path is None
+
+
+def test_story_init_path():
+    story = Story('story', path='path')
+    assert story.path == 'path'
 
 
 def test_story_clean_source(patch):
@@ -56,7 +62,7 @@ def test_story_from_file(patch):
     patch.object(Story, 'read')
     result = Story.from_file('hello.story')
     Story.read.assert_called_with('hello.story')
-    Story.__init__.assert_called_with(Story.read())
+    Story.__init__.assert_called_with(Story.read(), path='hello.story')
     assert isinstance(result, Story)
 
 
@@ -73,7 +79,7 @@ def test_story_parse(patch, story):
     patch.object(Parser, 'parse')
     story.parse()
     Parser.__init__.assert_called_with(ebnf=None)
-    Parser.parse.assert_called_with(story.story, debug=False)
+    Parser.parse.assert_called_with(story.story, debug=False, path=story.path)
     assert story.tree == Parser.parse()
 
 
@@ -82,6 +88,13 @@ def test_story_parse_ebnf(patch, story):
     patch.object(Parser, 'parse')
     story.parse(ebnf='ebnf')
     Parser.__init__.assert_called_with(ebnf='ebnf')
+
+
+def test_story_parse_debug(patch, story):
+    patch.init(Parser)
+    patch.object(Parser, 'parse')
+    story.parse(debug='debug')
+    Parser.parse.assert_called_with(story.story, debug='debug', path=None)
 
 
 def test_story_modules(magic, story):
@@ -101,18 +114,12 @@ def test_story_modules_no_extension(magic, story):
     assert result == ['hello.story']
 
 
-def test_story_debug(patch, story):
-    patch.init(Parser)
-    patch.object(Parser, 'parse')
-    story.parse(debug='debug')
-    Parser.parse.assert_called_with(story.story, debug='debug')
-
-
 def test_story_compile(patch, story):
     patch.object(Compiler, 'compile')
     story.tree = 'tree'
     story.compile()
-    Compiler.compile.assert_called_with(story.tree, debug=False)
+    kwargs = {'debug': False, 'path': story.path}
+    Compiler.compile.assert_called_with(story.tree, **kwargs)
     assert story.compiled == Compiler.compile()
 
 
@@ -120,7 +127,8 @@ def test_story_compile_debug(patch, story):
     patch.object(Compiler, 'compile')
     story.tree = 'tree'
     story.compile(debug='debug')
-    Compiler.compile.assert_called_with(story.tree, debug='debug')
+    kwargs = {'debug': 'debug', 'path': story.path}
+    Compiler.compile.assert_called_with(story.tree, **kwargs)
 
 
 def test_story_lex(patch, story):

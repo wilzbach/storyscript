@@ -9,8 +9,9 @@ from .parser import Parser
 
 class Story:
 
-    def __init__(self, story):
+    def __init__(self, story, path=None):
         self.story = story
+        self.path = path
 
     @staticmethod
     def clean_source(source):
@@ -38,7 +39,7 @@ class Story:
         """
         Creates a story from a file source
         """
-        return Story(cls.read(path))
+        return Story(cls.read(path), path=path)
 
     @staticmethod
     def from_stream(stream):
@@ -48,7 +49,8 @@ class Story:
         return Story(stream.read())
 
     def parse(self, ebnf=None, debug=False):
-        self.tree = Parser(ebnf=ebnf).parse(self.story, debug=debug)
+        kwargs = {'debug': debug, 'path': self.path}
+        self.tree = Parser(ebnf=ebnf).parse(self.story, **kwargs)
 
     def modules(self):
         """
@@ -63,7 +65,8 @@ class Story:
         return modules
 
     def compile(self, debug=False):
-        self.compiled = Compiler.compile(self.tree, debug=debug)
+        kwargs = {'debug': debug, 'path': self.path}
+        self.compiled = Compiler.compile(self.tree, **kwargs)
 
     def lex(self, ebnf=None):
         return Parser(ebnf=ebnf).lex(self.story)

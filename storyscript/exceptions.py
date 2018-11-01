@@ -17,9 +17,10 @@ class StoryError(SyntaxError):
         'arguments-noservice': 'Missing service before service arguments'
     }
 
-    def __init__(self, error_type, item):
+    def __init__(self, error_type, item, path=None):
         self.error_type = error_type
         self.item = item
+        self.path = path
 
     @staticmethod
     def escape_string(string):
@@ -33,15 +34,23 @@ class StoryError(SyntaxError):
             return self.reasons[self.error_type]
         return 'unknown'
 
+    def name(self):
+        """
+        Formats the name of the story, or just 'story'
+        """
+        if self.path:
+            return 'story "{}"'.format(self.path)
+        return 'story'
+
     def token_template(self, value, line, column):
-        template = ('Failed reading story because of unexpected "{}" at '
+        template = ('Failed reading {} because of unexpected "{}" at '
                     'line {}, column {}')
-        return template.format(value, line, column)
+        return template.format(self.name(), value, line, column)
 
     def tree_template(self, value, line):
-        template = ('Failed reading story because of unexpected "{}" at '
+        template = ('Failed reading {} because of unexpected "{}" at '
                     'line {}')
-        return template.format(value, line)
+        return template.format(self.name(), value, line)
 
     def compile_template(self):
         """
@@ -68,6 +77,12 @@ class StoryError(SyntaxError):
         if self.error_type != 'unknown':
             return '{}. Reason: {}'.format(message, self.reason())
         return message
+
+    def echo(self):
+        """
+        Prints the message
+        """
+        print(self.message())
 
     def __str__(self):
         return self.message()
