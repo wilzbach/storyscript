@@ -120,12 +120,13 @@ def test_lines_service_method_call_from_module(lines):
 
 def test_lines_service_method_story_error(patch, lines):
     patch.init(StoryError)
-    patch.object(StoryError, 'message')
+    patch.object(StoryError, 'echo')
     with raises(SystemExit):
         lines.service_method('wrong.name', '1')
     item = {'value': 'wrong.name', 'line': '1'}
-    StoryError.__init__.assert_called_with('service-path', item)
-    assert StoryError.message.call_count == 1
+    args = ('service-path', item)
+    StoryError.__init__.assert_called_with(*args, path=lines.path)
+    assert StoryError.echo.call_count == 1
 
 
 def test_lines_append(patch, lines):

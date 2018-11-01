@@ -107,8 +107,7 @@ class Lines:
             return 'call'
         if '.' in service:
             item = {'value': service, 'line': line}
-            error = StoryError('service-path', item)
-            print(error.message())
+            StoryError('service-path', item, path=self.path).echo()
             exit()
         return 'execute'
 
