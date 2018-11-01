@@ -22,14 +22,18 @@ def compiler(patch, lines):
     return compiler
 
 
-def test_compiler_init():
+def test_compiler_init(patch):
+    patch.init(Lines)
     compiler = Compiler()
+    Lines.__init__.assert_called_with(path=None)
     assert isinstance(compiler.lines, Lines)
     assert compiler.path is None
 
 
-def test_compiler_init_path():
+def test_compiler_init_path(patch):
+    patch.init(Lines)
     compiler = Compiler(path='path')
+    Lines.__init__.assert_called_with(path='path')
     assert compiler.path == 'path'
 
 
