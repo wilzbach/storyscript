@@ -11,12 +11,18 @@ def lines():
 
 
 def test_lines_init(lines):
+    assert lines.path is None
     assert lines.lines == {}
     assert lines.variables == []
     assert lines.services == []
     assert lines.functions == {}
     assert lines.outputs == {}
     assert lines.modules == {}
+
+
+def test_lines_init_path():
+    lines = Lines(path='path')
+    assert lines.path == 'path'
 
 
 def test_lines_sort(lines):
