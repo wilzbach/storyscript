@@ -8,6 +8,10 @@ from .parser import Parser
 
 
 class Story:
+    """
+    Represents a single story and exposes methods for reading, parsing and
+    compiling it.
+    """
 
     def __init__(self, story, path=None):
         self.story = story
@@ -49,6 +53,9 @@ class Story:
         return Story(stream.read())
 
     def parse(self, ebnf=None, debug=False):
+        """
+        Parses the story, storing the tree
+        """
         kwargs = {'debug': debug, 'path': self.path}
         self.tree = Parser(ebnf=ebnf).parse(self.story, **kwargs)
 
@@ -65,13 +72,22 @@ class Story:
         return modules
 
     def compile(self, debug=False):
+        """
+        Compiles the story, storing the result
+        """
         kwargs = {'debug': debug, 'path': self.path}
         self.compiled = Compiler.compile(self.tree, **kwargs)
 
     def lex(self, ebnf=None):
+        """
+        Lexes a story
+        """
         return Parser(ebnf=ebnf).lex(self.story)
 
     def process(self, ebnf=None, debug=False):
+        """
+        Parse and compile a story, returning the compiled JSON
+        """
         self.parse(ebnf=ebnf, debug=debug)
         self.compile(debug=debug)
         return self.compiled
