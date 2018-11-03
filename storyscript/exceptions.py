@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 
 
 class StoryError(SyntaxError):
@@ -39,6 +40,9 @@ class StoryError(SyntaxError):
         Formats the name of the story, or just 'story'
         """
         if self.path:
+            working_directory = os.getcwd()
+            if self.path.startswith(working_directory):
+                self.path = self.path[len(working_directory) + 1:]
             return 'story "{}"'.format(self.path)
         return 'story'
 

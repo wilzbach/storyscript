@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+
 from pytest import fixture
 
 from storyscript.exceptions import StoryError
@@ -45,6 +47,16 @@ def test_exceptions_storyerror_name(error):
 
 def test_exceptions_storyerror_name_path(error):
     error.path = 'hello.story'
+    assert error.name() == 'story "hello.story"'
+
+
+def test_exceptions_storyerror_name_abspath(patch, error):
+    """
+    Ensures that paths are simplified for stories in the current working
+    directory.
+    """
+    patch.object(os, 'getcwd', return_value='/abspath')
+    error.path = '/abspath/hello.story'
     assert error.name() == 'story "hello.story"'
 
 
