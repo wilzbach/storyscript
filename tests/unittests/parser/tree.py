@@ -62,6 +62,14 @@ def test_tree_line():
     assert tree.line() == '1'
 
 
+def test_tree_column():
+    """
+    Ensures Tree.column can find the column of a tree
+    """
+    tree = Tree('outer', [Tree('path', [Token('WORD', 'word', column=1)])])
+    assert tree.column() == '1'
+
+
 def test_tree_insert():
     tree = Tree('tree', [])
     tree.insert('child')

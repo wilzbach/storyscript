@@ -41,15 +41,25 @@ class Tree(LarkTree):
         """
         return list(self.find_data(path))
 
+    def _find_position(self, position):
+        for child in self.children:
+            if isinstance(child, Token):
+                return str(getattr(child, position))
+            return child._find_position(position)
+
     def line(self):
         """
         Finds the line number of a tree, by finding the first token in the tree
         and returning its line
         """
-        for child in self.children:
-            if isinstance(child, Token):
-                return str(child.line)
-            return child.line()
+        return self._find_position('line')
+
+    def column(self):
+        """
+        Finds the column number of a tree, by finding the first token in the
+        tree and returning its column
+        """
+        return self._find_position('column')
 
     def insert(self, item):
         """
