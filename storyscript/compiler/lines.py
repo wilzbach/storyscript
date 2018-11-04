@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from ..exceptions import StoryError
+from ..exceptions import StorySyntaxError
 
 
 class Lines:
@@ -106,9 +106,7 @@ class Lines:
         if service.split('.')[0] in self.modules:
             return 'call'
         if '.' in service:
-            item = {'value': service, 'line': line}
-            StoryError('service-path', item, path=self.path).echo()
-            exit()
+            raise StorySyntaxError('service-name')
         return 'execute'
 
     def append(self, method, line, **kwargs):

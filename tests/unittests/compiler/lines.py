@@ -2,7 +2,7 @@
 from pytest import fixture, mark, raises
 
 from storyscript.compiler import Lines
-from storyscript.exceptions import StoryError
+from storyscript.exceptions import StorySyntaxError
 
 
 @fixture
@@ -118,15 +118,11 @@ def test_lines_service_method_call_from_module(lines):
     assert lines.service_method('afternoon.makeTea', '1') == 'call'
 
 
-def test_lines_service_method_story_error(patch, lines):
-    patch.init(StoryError)
-    patch.object(StoryError, 'echo')
-    with raises(SystemExit):
+def test_lines_service_method_error(patch, lines):
+    patch.init(StorySyntaxError)
+    with raises(StorySyntaxError):
         lines.service_method('wrong.name', '1')
-    item = {'value': 'wrong.name', 'line': '1'}
-    args = ('service-path', item)
-    StoryError.__init__.assert_called_with(*args, path=lines.path)
-    assert StoryError.echo.call_count == 1
+    StorySyntaxError.__init__.assert_called_with('service-name')
 
 
 def test_lines_append(patch, lines):
