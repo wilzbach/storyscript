@@ -2,7 +2,7 @@
 from .lines import Lines
 from .objects import Objects
 from .preprocessor import Preprocessor
-from ..exceptions import StoryError
+from ..exceptions import StoryError, StorySyntaxError
 from ..parser import Tree
 from ..version import version
 
@@ -129,8 +129,12 @@ class Compiler:
         enter = None
         if nested_block:
             enter = nested_block.line()
-        self.lines.execute(line, service, command, arguments, output, enter,
-                           parent)
+        try:
+            args = (line, service, command, arguments, output, enter, parent)
+            self.lines.execute(*args)
+        except StorySyntaxError as error:
+            error.set_position(line, tree.column())
+            raise error
 
     def when(self, tree, nested_block, parent):
         """

@@ -4,7 +4,7 @@ from lark.lexer import Token
 from pytest import fixture, mark, raises
 
 from storyscript.compiler import Compiler, Lines, Objects, Preprocessor
-from storyscript.exceptions import StoryError
+from storyscript.exceptions import StoryError, StorySyntaxError
 from storyscript.parser import Tree
 from storyscript.version import version
 
@@ -274,6 +274,17 @@ def test_compiler_service_expressions(patch, compiler, lines, tree):
     compiler.service(tree, None, 'parent')
     Objects.names.assert_called_with(tree.path)
     Compiler.expression.assert_called_with(tree, 'parent')
+
+
+def test_compiler_service_syntax_error(patch, compiler, lines, tree):
+    patch.object(Objects, 'arguments')
+    patch.object(Compiler, 'output')
+    patch.object(StorySyntaxError, 'set_position')
+    lines.execute.side_effect = StorySyntaxError('error')
+    with raises(StorySyntaxError):
+        compiler.service(tree, None, 'parent')
+    line = tree.line()
+    StorySyntaxError.set_position.assert_called_with(line, tree.column())
 
 
 def test_compiler_when(patch, compiler, lines, tree):
