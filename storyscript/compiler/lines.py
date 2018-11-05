@@ -6,8 +6,7 @@ class Lines:
     """
     Holds compiled lines and provides methods for operation on lines.
     """
-    def __init__(self, path=None):
-        self.path = path
+    def __init__(self):
         self.lines = {}
         self.variables = []
         self.services = []
