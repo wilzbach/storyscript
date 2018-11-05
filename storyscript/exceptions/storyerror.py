@@ -24,6 +24,12 @@ class StoryError(SyntaxError):
                 return self.path[len(working_directory) + 1:]
         return 'story'
 
+    def get_line(self):
+        """
+        Gets the error line
+        """
+        return self.story.splitlines(keepends=False)[int(self.error.line) - 1]
+
     def header(self):
         """
         Creates the header of the message

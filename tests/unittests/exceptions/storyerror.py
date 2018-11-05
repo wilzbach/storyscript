@@ -42,6 +42,15 @@ def test_storyerror_name_path(patch, storyerror):
     assert storyerror.name() == 'hello.story'
 
 
+def test_storyerror_get_line(patch, storyerror, error):
+    """
+    Ensures get_line returns the error line
+    """
+    error.line = '1'
+    storyerror.story = 'x = 0\ny = 1'
+    assert storyerror.get_line() == 'x = 0'
+
+
 def test_storyerror_header(patch, storyerror, error):
     """
     Ensures header returns the correct text.
