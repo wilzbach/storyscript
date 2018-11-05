@@ -198,16 +198,17 @@ def test_compiler_arguments(patch, compiler, lines, tree):
 
 def test_compiler_arguments_not_execute(patch, compiler, lines, tree):
     """
-    Ensures that if the previous line is an execute line, an error is raised.
+    Ensures that if the previous line is not an execute, an error is raised.
     """
-    patch.init(StoryError)
+    patch.init(StorySyntaxError)
     patch.object(Objects, 'arguments')
     lines.last.return_value = '1'
     lines.lines = {'1': {'method': 'whatever'}}
-    with raises(StoryError):
+    with raises(StorySyntaxError):
         compiler.arguments(tree, '0')
-    args = ('arguments-noservice', tree)
-    StoryError.__init__.assert_called_with(*args, path=compiler.path)
+    error = 'arguments-noservice'
+    kwargs = {'line': tree.line(), 'column': tree.column()}
+    StorySyntaxError.__init__.assert_called_with(error, **kwargs)
 
 
 def test_compiler_service(patch, compiler, lines, tree):
