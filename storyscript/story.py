@@ -6,7 +6,7 @@ import re
 from lark.exceptions import UnexpectedInput, UnexpectedToken
 
 from .compiler import Compiler
-from .exceptions import StoryError, StorySyntaxError
+from .exceptions import CompilerError, StoryError, StorySyntaxError
 from .parser import Parser
 
 
@@ -55,6 +55,14 @@ class Story:
         """
         return Story(stream.read())
 
+    def line(self, line):
+        """
+        Gets a single line from the source
+        """
+        return self.story.splitlines(keepends=False)[line]
+
+    def slice(self, start, end):
+        return self.story.splitlines(keepends=False)[start:end]
 
     def error(self, error, debug=False):
         """
@@ -62,8 +70,12 @@ class Story:
         """
         if debug:
             raise error
+        # I don't really need the tree and I can extract line and column from
+        # the error.
         StoryError(error, self.path, self.story).echo()
+        # most likely echo can exit
         exit()
+
     def parse(self, ebnf=None, debug=False):
         """
         Parses the story, storing the tree
@@ -94,7 +106,7 @@ class Story:
         """
         try:
             self.compiled = Compiler.compile(self.tree, debug=debug)
-        except StorySyntaxError as error:
+        except (CompilerError, StorySyntaxError) as error:
             self.error(error, debug=debug)
 
     def lex(self, ebnf=None):

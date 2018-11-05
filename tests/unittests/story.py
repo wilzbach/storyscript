@@ -5,10 +5,10 @@ import re
 
 from lark.exceptions import UnexpectedInput, UnexpectedToken
 
-from pytest import fixture, raises
+from pytest import fixture, mark, raises
 
 from storyscript.compiler import Compiler
-from storyscript.exceptions import StoryError, StorySyntaxError
+from storyscript.exceptions import CompilerError, StoryError, StorySyntaxError
 from storyscript.parser import Parser
 from storyscript.story import Story
 
@@ -126,22 +126,14 @@ def test_story_parse_debug(patch, story, parser):
     Parser.parse.assert_called_with(story.story, debug='debug')
 
 
-def test_story_parse_unexpected_token(patch, story, parser):
+@mark.parametrize('error', [
+    UnexpectedToken('token', 'expected'),
+    UnexpectedInput('token', 'expected')
+])
+def test_story_parse_error(patch, story, parser, error):
     """
     Ensures Story.parse uses Story.error for UnexpectedToken errors.
     """
-    error = UnexpectedToken('token', 'expected')
-    Parser.parse.side_effect = error
-    patch.object(Story, 'error')
-    story.parse()
-    Story.error.assert_called_with(error, debug=False)
-
-
-def test_story_parse_unexpected_input(patch, story, parser):
-    """
-    Ensures Story.parse uses Story.error for UnexpectedInput errors.
-    """
-    error = UnexpectedInput('token', 'expected')
     Parser.parse.side_effect = error
     patch.object(Story, 'error')
     story.parse()
@@ -176,11 +168,11 @@ def test_story_compile_debug(patch, story, compiler):
     Compiler.compile.assert_called_with(story.tree, debug=True)
 
 
-def test_story_compiler_syntax_error(patch, story, compiler):
+@mark.parametrize('error', [StorySyntaxError('error'), CompilerError('error')])
+def test_story_compiler_error(patch, story, compiler, error):
     """
     Ensures Story.compiler uses Story.error in case of StorySyntaxError.
     """
-    error = StorySyntaxError('error')
     Compiler.compile.side_effect = error
     patch.object(Story, 'error')
     story.compile()
