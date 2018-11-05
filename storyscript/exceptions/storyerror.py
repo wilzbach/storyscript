@@ -43,6 +43,15 @@ class StoryError(SyntaxError):
         """
         return '^' * (int(self.error.end_column) - int(self.error.column))
 
+    def highlight(self):
+        """
+        Creates the error highlight of the message
+        """
+        spaces = ' ' * (int(self.error.column) + 5)
+        highlight = '{}{}'.format(spaces, self.symbols())
+        line = self.error.line
+        return '{}|    {}\n{}'.format(line, self.get_line(), highlight)
+
     def message(self):
         pass
 

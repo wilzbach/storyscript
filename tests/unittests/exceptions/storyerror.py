@@ -67,6 +67,18 @@ def test_storyerror_symbols(patch, storyerror, error):
     assert storyerror.symbols() == '^^^'
 
 
+def test_storyerror_highlight(patch, storyerror, error):
+    """
+    Ensures StoryError.highlight produces the correct text.
+    """
+    patch.many(StoryError, ['get_line', 'symbols'])
+    error.column = '1'
+    result = storyerror.highlight()
+    highlight = '{}{}'.format(' ' * 6, StoryError.symbols())
+    args = (error.line, StoryError.get_line(), highlight)
+    assert result == '{}|    {}\n{}'.format(*args)
+
+
 def test_storyerror_echo(capsys, patch, storyerror):
     """
     Ensures StoryError.echo prints StoryError.message
