@@ -3,6 +3,8 @@ import io
 import os
 import re
 
+from lark.exceptions import UnexpectedInput, UnexpectedToken
+
 from pytest import fixture, raises
 
 from storyscript.compiler import Compiler
@@ -14,6 +16,12 @@ from storyscript.story import Story
 @fixture
 def story():
     return Story('story')
+
+
+@fixture
+def parser(patch):
+    patch.init(Parser)
+    patch.many(Parser, ['parse', 'lex'])
 
 
 def test_story_init(story):
@@ -95,27 +103,43 @@ def test_story_error_debug(patch, story):
         story.error(StorySyntaxError('error'), debug=True)
 
 
-def test_story_parse(patch, story):
-    patch.init(Parser)
-    patch.object(Parser, 'parse')
+def test_story_parse(patch, story, parser):
     story.parse()
     Parser.__init__.assert_called_with(ebnf=None)
     Parser.parse.assert_called_with(story.story, debug=False)
     assert story.tree == Parser.parse()
 
 
-def test_story_parse_ebnf(patch, story):
-    patch.init(Parser)
-    patch.object(Parser, 'parse')
+def test_story_parse_ebnf(patch, story, parser):
     story.parse(ebnf='ebnf')
     Parser.__init__.assert_called_with(ebnf='ebnf')
 
 
-def test_story_parse_debug(patch, story):
-    patch.init(Parser)
-    patch.object(Parser, 'parse')
+def test_story_parse_debug(patch, story, parser):
     story.parse(debug='debug')
     Parser.parse.assert_called_with(story.story, debug='debug')
+
+
+def test_story_parse_unexpected_token(patch, story, parser):
+    """
+    Ensures Story.parse uses Story.error for UnexpectedToken errors.
+    """
+    error = UnexpectedToken('token', 'expected')
+    Parser.parse.side_effect = error
+    patch.object(Story, 'error')
+    story.parse()
+    Story.error.assert_called_with(error, debug=False)
+
+
+def test_story_parse_unexpected_input(patch, story, parser):
+    """
+    Ensures Story.parse uses Story.error for UnexpectedInput errors.
+    """
+    error = UnexpectedInput('token', 'expected')
+    Parser.parse.side_effect = error
+    patch.object(Story, 'error')
+    story.parse()
+    Story.error.assert_called_with(error, debug=False)
 
 
 def test_story_modules(magic, story):
@@ -162,18 +186,14 @@ def test_story_compiler_syntax_error(patch, story):
     Story.error.assert_called_with(error, debug=False)
 
 
-def test_story_lex(patch, story):
-    patch.init(Parser)
-    patch.object(Parser, 'lex')
+def test_story_lex(patch, story, parser):
     result = story.lex()
     Parser.__init__.assert_called_with(ebnf=None)
     Parser.lex.assert_called_with(story.story)
     assert result == Parser.lex()
 
 
-def test_story_lex_ebnf(patch, story):
-    patch.init(Parser)
-    patch.object(Parser, 'lex')
+def test_story_lex_ebnf(patch, story, parser):
     story.lex(ebnf='ebnf')
     Parser.__init__.assert_called_with(ebnf='ebnf')
 

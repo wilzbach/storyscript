@@ -3,6 +3,8 @@ import io
 import os
 import re
 
+from lark.exceptions import UnexpectedInput, UnexpectedToken
+
 from .compiler import Compiler
 from .exceptions import StoryError, StorySyntaxError
 from .parser import Parser
@@ -66,7 +68,13 @@ class Story:
         """
         Parses the story, storing the tree
         """
-        self.tree = Parser(ebnf=ebnf).parse(self.story, debug=debug)
+        parser = Parser(ebnf=ebnf)
+        try:
+            self.tree = parser.parse(self.story, debug=debug)
+        except UnexpectedToken as error:
+            self.error(error, debug=debug)
+        except UnexpectedInput as error:
+            self.error(error, debug=debug)
 
     def modules(self):
         """
