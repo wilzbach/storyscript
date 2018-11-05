@@ -4,7 +4,7 @@ from lark.lexer import Token
 from pytest import fixture, mark, raises
 
 from storyscript.compiler import Compiler, Lines, Objects, Preprocessor
-from storyscript.exceptions import StoryError, StorySyntaxError
+from storyscript.exceptions import CompilerError, StorySyntaxError
 from storyscript.parser import Tree
 from storyscript.version import version
 
@@ -308,21 +308,28 @@ def test_compiler_when_path(patch, compiler, lines, tree):
                                     output=Compiler.output(), parent='1')
 
 
-def test_compiler_return_statement(patch, compiler, tree):
-    patch.init(StoryError)
-    with raises(StoryError):
-        compiler.return_statement(tree, None)
-    args = ('return-outside', tree)
-    StoryError.__init__.assert_called_with(*args, path=compiler.path)
-
-
-def test_compiler_return_statement_parent(patch, compiler, lines, tree):
+def test_compiler_return_statement(patch, compiler, lines, tree):
+    """
+    Ensures Compiler.return_statement can compile return statements.
+    """
     patch.object(Objects, 'values')
     compiler.return_statement(tree, '1')
     line = tree.line()
     Objects.values.assert_called_with(tree.child())
-    lines.append.assert_called_with('return', line, args=[Objects.values()],
-                                    parent='1')
+    kwargs = {'args': [Objects.values()], 'parent': '1'}
+    lines.append.assert_called_with('return', line, **kwargs)
+
+
+def test_compiler_return_statement_error(patch, compiler, tree):
+    """
+    Ensures Compiler.return_statement raises CompilerError when the return
+    is outside a function.
+    """
+    patch.init(CompilerError)
+    with raises(CompilerError):
+        compiler.return_statement(tree, None)
+    kwargs = {'line': tree.line(), 'column': tree.column()}
+    CompilerError.__init__.assert_called_with('return-outside', **kwargs)
 
 
 def test_compiler_if_block(patch, compiler, lines, tree):

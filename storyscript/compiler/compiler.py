@@ -2,7 +2,7 @@
 from .lines import Lines
 from .objects import Objects
 from .preprocessor import Preprocessor
-from ..exceptions import StoryError, StorySyntaxError
+from ..exceptions import CompilerError, StorySyntaxError
 from ..parser import Tree
 from ..version import version
 
@@ -154,9 +154,10 @@ class Compiler:
         """
         Compiles a return_statement tree
         """
-        if parent is None:
-            raise StoryError('return-outside', tree, path=self.path)
         line = tree.line()
+        if parent is None:
+            column = tree.column()
+            raise CompilerError('return-outside', line=line, column=column)
         args = [Objects.values(tree.child(0))]
         self.lines.append('return', line, args=args, parent=parent)
 
