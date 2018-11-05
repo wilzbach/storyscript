@@ -38,8 +38,7 @@ def test_transformer_assignment_error_backslash(patch, magic, transformer):
     with raises(StorySyntaxError):
         transformer.assignment(matches)
     error = 'variables-backslash'
-    kwargs = {'line': token.line, 'column': token.column}
-    StorySyntaxError.__init__.assert_called_with(error, **kwargs)
+    StorySyntaxError.__init__.assert_called_with(error, token=token)
 
 
 def test_transformer_assignment_error_dash(patch, magic, transformer):
@@ -48,8 +47,7 @@ def test_transformer_assignment_error_dash(patch, magic, transformer):
     matches = [magic(children=[token])]
     with raises(StorySyntaxError):
         transformer.assignment(matches)
-    kwargs = {'line': token.line, 'column': token.column}
-    StorySyntaxError.__init__.assert_called_with('variables-dash', **kwargs)
+    StorySyntaxError.__init__.assert_called_with('variables-dash', token=token)
 
 
 def test_transformer_service_block(transformer):

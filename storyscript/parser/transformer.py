@@ -29,11 +29,10 @@ class Transformer(LarkTransformer):
         variable name.
         """
         token = matches[0].children[0]
-        kwargs = {'line': token.line, 'column': token.column}
         if '/' in token.value:
-            raise StorySyntaxError('variables-backslash', **kwargs)
+            raise StorySyntaxError('variables-backslash', token=token)
         if '-' in token.value:
-            raise StorySyntaxError('variables-dash', **kwargs)
+            raise StorySyntaxError('variables-dash', token=token)
         return Tree('assignment', matches)
 
     def service_block(self, matches):
