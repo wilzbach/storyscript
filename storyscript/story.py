@@ -83,10 +83,13 @@ class Story:
 
     def compile(self, debug=False):
         """
-        Compiles the story, storing the result
+        Compiles the story and stores the result.
         """
         kwargs = {'debug': debug, 'path': self.path}
-        self.compiled = Compiler.compile(self.tree, **kwargs)
+        try:
+            self.compiled = Compiler.compile(self.tree, **kwargs)
+        except StorySyntaxError as error:
+            self.error(error, debug=debug)
 
     def lex(self, ebnf=None):
         """

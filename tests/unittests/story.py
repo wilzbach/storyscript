@@ -152,6 +152,18 @@ def test_story_compile_debug(patch, story):
     Compiler.compile.assert_called_with(story.tree, **kwargs)
 
 
+def test_story_compiler_syntax_error(patch, story):
+    """
+    Ensures Story.compiler uses Story.error in case of StorySyntaxError.
+    """
+    error = StorySyntaxError('error')
+    patch.object(Compiler, 'compile', side_effect=error)
+    patch.object(Story, 'error')
+    story.tree = 'tree'
+    story.compile()
+    Story.error.assert_called_with(error, debug=False)
+
+
 def test_story_lex(patch, story):
     patch.init(Parser)
     patch.object(Parser, 'lex')
