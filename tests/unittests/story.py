@@ -24,6 +24,12 @@ def parser(patch):
     patch.many(Parser, ['parse', 'lex'])
 
 
+@fixture
+def compiler(patch, story):
+    patch.object(Compiler, 'compile')
+    story.tree = 'tree'
+
+
 def test_story_init(story):
     assert story.story == 'story'
     assert story.path is None
@@ -159,29 +165,24 @@ def test_story_modules_no_extension(magic, story):
     assert result == ['hello.story']
 
 
-def test_story_compile(patch, story):
-    patch.object(Compiler, 'compile')
-    story.tree = 'tree'
+def test_story_compile(patch, story, compiler):
     story.compile()
     Compiler.compile.assert_called_with(story.tree, debug=False)
     assert story.compiled == Compiler.compile()
 
 
-def test_story_compile_debug(patch, story):
-    patch.object(Compiler, 'compile')
-    story.tree = 'tree'
+def test_story_compile_debug(patch, story, compiler):
     story.compile(debug=True)
     Compiler.compile.assert_called_with(story.tree, debug=True)
 
 
-def test_story_compiler_syntax_error(patch, story):
+def test_story_compiler_syntax_error(patch, story, compiler):
     """
     Ensures Story.compiler uses Story.error in case of StorySyntaxError.
     """
     error = StorySyntaxError('error')
-    patch.object(Compiler, 'compile', side_effect=error)
+    Compiler.compile.side_effect = error
     patch.object(Story, 'error')
-    story.tree = 'tree'
     story.compile()
     Story.error.assert_called_with(error, debug=False)
 
