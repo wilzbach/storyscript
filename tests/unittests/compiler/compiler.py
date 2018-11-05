@@ -198,8 +198,7 @@ def test_compiler_arguments_not_execute(patch, compiler, lines, tree):
     with raises(StorySyntaxError):
         compiler.arguments(tree, '0')
     error = 'arguments-noservice'
-    kwargs = {'line': tree.line(), 'column': tree.column()}
-    StorySyntaxError.__init__.assert_called_with(error, **kwargs)
+    StorySyntaxError.__init__.assert_called_with(error, tree=tree)
 
 
 def test_compiler_service(patch, compiler, lines, tree):

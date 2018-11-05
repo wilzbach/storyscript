@@ -105,8 +105,7 @@ class Compiler:
         """
         line = self.lines.lines[self.lines.last()]
         if line['method'] != 'execute':
-            kwargs = {'line': tree.line(), 'column': tree.column()}
-            raise StorySyntaxError('arguments-noservice', **kwargs)
+            raise StorySyntaxError('arguments-noservice', tree=tree)
         line['args'] = line['args'] + Objects.arguments(tree)
 
     def service(self, tree, nested_block, parent):
