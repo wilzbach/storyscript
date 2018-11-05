@@ -83,6 +83,12 @@ def test_storyerror_hint(patch, storyerror):
     storyerror.hint() == 'You need to assign a value to `x`'
 
 
+def test_storyerror_message(patch, storyerror):
+    patch.many(StoryError, ['header', 'highlight', 'hint'])
+    args = (storyerror.header(), storyerror.highlight(), storyerror.hint())
+    assert storyerror.message() == '{}\n\n{}\n\n{}'.format(*args)
+
+
 def test_storyerror_echo(capsys, patch, storyerror):
     """
     Ensures StoryError.echo prints StoryError.message

@@ -59,7 +59,11 @@ class StoryError(SyntaxError):
         return 'You need to assign a value to `x`'
 
     def message(self):
-        pass
+        """
+        Creates a friendly error message.
+        """
+        args = (self.header(), self.highlight(), self.hint())
+        return '{}\n\n{}\n\n{}'.format(*args)
 
     def echo(self):
         """
