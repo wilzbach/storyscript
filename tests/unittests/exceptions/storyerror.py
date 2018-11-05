@@ -79,6 +79,10 @@ def test_storyerror_highlight(patch, storyerror, error):
     assert result == '{}|    {}\n{}'.format(*args)
 
 
+def test_storyerror_hint(patch, storyerror):
+    storyerror.hint() == 'You need to assign a value to `x`'
+
+
 def test_storyerror_echo(capsys, patch, storyerror):
     """
     Ensures StoryError.echo prints StoryError.message

@@ -52,6 +52,12 @@ class StoryError(SyntaxError):
         line = self.error.line
         return '{}|    {}\n{}'.format(line, self.get_line(), highlight)
 
+    def hint(self):
+        """
+        Provides an hint for the current error.
+        """
+        return 'You need to assign a value to `x`'
+
     def message(self):
         pass
 
