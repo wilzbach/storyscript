@@ -133,7 +133,7 @@ class Compiler:
             args = (line, service, command, arguments, output, enter, parent)
             self.lines.execute(*args)
         except StorySyntaxError as error:
-            error.set_position(line, tree.column())
+            error.tree_position(tree)
             raise error
 
     def when(self, tree, nested_block, parent):
