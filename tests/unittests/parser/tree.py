@@ -70,6 +70,16 @@ def test_tree_column():
     assert tree.column() == '1'
 
 
+def test_tree_end_column():
+    """
+    Ensures Tree.end_column can find the end column of a tree.
+    """
+    token = Token('WORD', 'word')
+    token.end_column = 1
+    tree = Tree('outer', [Tree('path', [token])])
+    assert tree.end_column() == '1'
+
+
 def test_tree_insert():
     tree = Tree('tree', [])
     tree.insert('child')
