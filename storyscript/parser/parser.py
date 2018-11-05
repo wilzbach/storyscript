@@ -24,11 +24,11 @@ class Parser:
         """
         return CustomIndenter()
 
-    def transformer(self, path):
+    def transformer(self):
         """
         Initialize the transformer
         """
-        return Transformer(path)
+        return Transformer()
 
     def grammar(self):
         if self.ebnf:
@@ -42,7 +42,7 @@ class Parser:
         """
         return Lark(self.grammar(), parser=self.algo, postlex=self.indenter())
 
-    def parse(self, source, debug=False, path=None):
+    def parse(self, source, debug=False):
         """
         Parses the source string.
         """
@@ -51,7 +51,7 @@ class Parser:
         source = '{}\n'.format(source)
         lark = self.lark()
         tree = lark.parse(source)
-        return self.transformer(path).transform(tree)
+        return self.transformer().transform(tree)
 
     def lex(self, source):
         """

@@ -37,8 +37,7 @@ def test_parser_indenter(patch, parser):
 
 def test_parser_transfomer(patch, parser):
     patch.init(Transformer)
-    result = parser.transformer('path')
-    Transformer.__init__.assert_called_with('path')
+    result = parser.transformer()
     assert isinstance(result, Transformer)
 
 
@@ -77,15 +76,8 @@ def test_parser_parse(patch, parser):
     patch.many(Parser, ['lark', 'transformer'])
     result = parser.parse('source')
     Parser.lark().parse.assert_called_with('source\n')
-    Parser.transformer.assert_called_with(None)
     Parser.transformer().transform.assert_called_with(Parser.lark().parse())
     assert result == Parser.transformer().transform()
-
-
-def test_parser_parse_path(patch, parser):
-    patch.many(Parser, ['lark', 'transformer'])
-    parser.parse('source', path='path')
-    Parser.transformer.assert_called_with('path')
 
 
 def test_parser_parse_empty(patch, parser):
