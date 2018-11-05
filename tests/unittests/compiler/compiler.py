@@ -25,16 +25,7 @@ def compiler(patch, lines):
 def test_compiler_init(patch):
     patch.init(Lines)
     compiler = Compiler()
-    Lines.__init__.assert_called_with(path=None)
     assert isinstance(compiler.lines, Lines)
-    assert compiler.path is None
-
-
-def test_compiler_init_path(patch):
-    patch.init(Lines)
-    compiler = Compiler(path='path')
-    Lines.__init__.assert_called_with(path='path')
-    assert compiler.path == 'path'
 
 
 def test_compiler_output(tree):
@@ -540,9 +531,8 @@ def test_compiler_parse_tree_parent(compiler, patch):
 
 def test_compiler_compiler(patch):
     patch.init(Compiler)
-    result = Compiler.compiler('path')
+    result = Compiler.compiler()
     assert isinstance(result, Compiler)
-    Compiler.__init__.assert_called_with(path='path')
 
 
 def test_compiler_compile(patch):
@@ -550,20 +540,12 @@ def test_compiler_compile(patch):
     patch.many(Compiler, ['parse_tree', 'compiler'])
     result = Compiler.compile('tree')
     Preprocessor.process.assert_called_with('tree')
-    Compiler.compiler.assert_called_with(None)
     Compiler.compiler().parse_tree.assert_called_with(Preprocessor.process())
     lines = Compiler.compiler().lines
     expected = {'tree': lines.lines, 'version': version,
                 'services': lines.get_services(), 'functions': lines.functions,
                 'entrypoint': lines.first(), 'modules': lines.modules}
     assert result == expected
-
-
-def test_compiler_compile_path(patch):
-    patch.object(Preprocessor, 'process')
-    patch.many(Compiler, ['parse_tree', 'compiler'])
-    Compiler.compile('tree', path='path')
-    Compiler.compiler.assert_called_with('path')
 
 
 def test_compiler_compile_debug(patch):
