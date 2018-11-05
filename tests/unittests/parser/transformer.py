@@ -3,7 +3,7 @@ from lark import Transformer as LarkTransformer
 
 from pytest import fixture, mark, raises
 
-from storyscript.exceptions import StoryError
+from storyscript.exceptions import StorySyntaxError
 from storyscript.parser import Transformer, Tree
 
 
@@ -33,23 +33,24 @@ def test_transformer_assignment(magic, transformer):
 
 
 def test_transformer_assignment_error_backslash(patch, magic, transformer):
-    patch.init(StoryError)
+    patch.init(StorySyntaxError)
     token = magic(value='/')
     matches = [magic(children=[token])]
-    with raises(StoryError):
+    with raises(StorySyntaxError):
         transformer.assignment(matches)
-    error_name = 'variables-backslash'
-    StoryError.__init__.assert_called_with(error_name, token, path='path')
+    error = 'variables-backslash'
+    kwargs = {'line': token.line, 'column': token.column}
+    StorySyntaxError.__init__.assert_called_with(error, **kwargs)
 
 
 def test_transformer_assignment_error_dash(patch, magic, transformer):
-    patch.init(StoryError)
+    patch.init(StorySyntaxError)
     token = magic(value='-')
     matches = [magic(children=[token])]
-    with raises(StoryError):
+    with raises(StorySyntaxError):
         transformer.assignment(matches)
-    error_name = 'variables-dash'
-    StoryError.__init__.assert_called_with(error_name, token, path='path')
+    kwargs = {'line': token.line, 'column': token.column}
+    StorySyntaxError.__init__.assert_called_with('variables-dash', **kwargs)
 
 
 def test_transformer_service_block(transformer):
