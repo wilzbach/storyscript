@@ -9,11 +9,10 @@ from storyscript.parser import Transformer, Tree
 
 @fixture
 def transformer():
-    return Transformer('path')
+    return Transformer()
 
 
 def test_transformer(transformer):
-    assert transformer._path == 'path'
     assert issubclass(Transformer, LarkTransformer)
 
 
