@@ -3,11 +3,9 @@ import io
 import os
 
 from lark import Lark
-from lark.exceptions import UnexpectedInput, UnexpectedToken
 
 from pytest import fixture, mark, raises
 
-from storyscript.exceptions import StoryError
 from storyscript.parser import (CustomIndenter, Grammar, Parser, Transformer,
                                 Tree)
 
@@ -72,42 +70,6 @@ def test_parser_lark(patch, parser):
     assert isinstance(result, Lark)
 
 
-def test_parser_storyerror(patch, parser):
-    """
-    Ensures Parser.story_error can handle unexpected tokens errors.
-    """
-    patch.init(StoryError)
-    patch.object(StoryError, 'echo')
-    error = UnexpectedToken('error', 'exp', 0, 1)
-    with raises(SystemExit):
-        parser.story_error(error, False, 'path')
-    error_name = 'token-unexpected'
-    StoryError.__init__.assert_called_with(error_name, error, path='path')
-    assert StoryError.echo.call_count == 1
-
-
-def test_parser_storyerror_input(patch, parser):
-    """
-    Ensures Parser.story_error can handle unexpected input errors.
-    """
-    patch.init(StoryError)
-    patch.object(StoryError, 'echo')
-    error = UnexpectedInput('error', 'exp', 0, 1)
-    with raises(SystemExit):
-        parser.story_error(error, False, 'path')
-    error_name = 'input-unexpected'
-    StoryError.__init__.assert_called_with(error_name, error, path='path')
-
-
-def test_parser_storyerror_debug(patch, parser):
-    """
-    Ensures Parser.story_error raises the error in debug mode.
-    """
-    error = UnexpectedToken('error', 'exp', 0, 1)
-    with raises(UnexpectedToken):
-        parser.story_error(error, True, 'path')
-
-
 def test_parser_parse(patch, parser):
     """
     Ensures the build method can build the grammar
@@ -131,18 +93,6 @@ def test_parser_parse_empty(patch, parser):
     Ensures that empty stories are parsed correctly
     """
     assert parser.parse('') == Tree('empty', [])
-
-
-@mark.parametrize('exception', [UnexpectedToken, UnexpectedInput])
-def test_parser_parser_exception(patch, exception, parser):
-    """
-    Ensures Parser.parse handles exceptions correctly.
-    """
-    patch.many(Parser, ['lark', 'transformer', 'story_error'])
-    error = exception('error', 'exp', 0, 1)
-    Parser.lark().parse.side_effect = error
-    parser.parse('source')
-    Parser.story_error.assert_called_with(error, False, None)
 
 
 def test_parser_lex(patch, parser):
