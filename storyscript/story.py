@@ -55,25 +55,13 @@ class Story:
         """
         return Story(stream.read())
 
-    def line(self, line):
-        """
-        Gets a single line from the source
-        """
-        return self.story.splitlines(keepends=False)[line]
-
-    def slice(self, start, end):
-        return self.story.splitlines(keepends=False)[start:end]
-
     def error(self, error, debug=False):
         """
         Handles errors by printing a nice message or raising the real error.
         """
         if debug:
             raise error
-        # I don't really need the tree and I can extract line and column from
-        # the error.
-        StoryError(error, self.path, self.story).echo()
-        # most likely echo can exit
+        StoryError(error, self.story, path=self.path).echo()
         exit()
 
     def parse(self, ebnf=None, debug=False):
