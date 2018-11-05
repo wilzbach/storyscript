@@ -24,6 +24,13 @@ class StoryError(SyntaxError):
                 return self.path[len(working_directory) + 1:]
         return 'story'
 
+    def header(self):
+        """
+        Creates the header of the message
+        """
+        template = 'Error: **syntax error** in {} at line {}, column {}'
+        return template.format(self.name(), self.error.line, self.error.column)
+
     def message(self):
         pass
 
