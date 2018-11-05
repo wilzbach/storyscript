@@ -66,8 +66,7 @@ class Story:
         """
         Parses the story, storing the tree
         """
-        kwargs = {'debug': debug, 'path': self.path}
-        self.tree = Parser(ebnf=ebnf).parse(self.story, **kwargs)
+        self.tree = Parser(ebnf=ebnf).parse(self.story, debug=debug)
 
     def modules(self):
         """
@@ -85,9 +84,8 @@ class Story:
         """
         Compiles the story and stores the result.
         """
-        kwargs = {'debug': debug, 'path': self.path}
         try:
-            self.compiled = Compiler.compile(self.tree, **kwargs)
+            self.compiled = Compiler.compile(self.tree, debug=debug)
         except StorySyntaxError as error:
             self.error(error, debug=debug)
 
