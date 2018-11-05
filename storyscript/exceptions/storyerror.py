@@ -37,6 +37,12 @@ class StoryError(SyntaxError):
         template = 'Error: **syntax error** in {} at line {}, column {}'
         return template.format(self.name(), self.error.line, self.error.column)
 
+    def symbols(self):
+        """
+        Creates the repeated symbols that mark the error.
+        """
+        return '^' * (int(self.error.end_column) - int(self.error.column))
+
     def message(self):
         pass
 

@@ -61,6 +61,12 @@ def test_storyerror_header(patch, storyerror, error):
     assert storyerror.header() == template.format(*args)
 
 
+def test_storyerror_symbols(patch, storyerror, error):
+    error.end_column = '4'
+    error.column = '1'
+    assert storyerror.symbols() == '^^^'
+
+
 def test_storyerror_echo(capsys, patch, storyerror):
     """
     Ensures StoryError.echo prints StoryError.message
