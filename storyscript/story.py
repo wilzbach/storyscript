@@ -4,6 +4,7 @@ import os
 import re
 
 from .compiler import Compiler
+from .exceptions import StoryError, StorySyntaxError
 from .parser import Parser
 
 
@@ -52,6 +53,15 @@ class Story:
         """
         return Story(stream.read())
 
+
+    def error(self, error, debug=False):
+        """
+        Handles errors by printing a nice message or raising the real error.
+        """
+        if debug:
+            raise error
+        StoryError(error, self.path, self.story).echo()
+        exit()
     def parse(self, ebnf=None, debug=False):
         """
         Parses the story, storing the tree

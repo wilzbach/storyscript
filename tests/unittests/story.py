@@ -6,6 +6,7 @@ import re
 from pytest import fixture, raises
 
 from storyscript.compiler import Compiler
+from storyscript.exceptions import StoryError, StorySyntaxError
 from storyscript.parser import Parser
 from storyscript.story import Story
 
@@ -72,6 +73,26 @@ def test_story_from_stream(patch, magic):
     result = Story.from_stream(stream)
     Story.__init__.assert_called_with(stream.read())
     assert isinstance(result, Story)
+
+
+def test_story_error(patch, story):
+    """
+    Ensures Story.error handles errors correctly.
+    """
+    patch.init(StoryError)
+    patch.object(StoryError, 'echo')
+    with raises(SystemExit):
+        story.error('error')
+    StoryError.__init__.assert_called_with('error', story.path, story.story)
+    assert StoryError.echo.call_count == 1
+
+
+def test_story_error_debug(patch, story):
+    """
+    Ensures Story.error raises the error in debug mode
+    """
+    with raises(StorySyntaxError):
+        story.error(StorySyntaxError('error'), debug=True)
 
 
 def test_story_parse(patch, story):
