@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from pytest import fixture
+from pytest import fixture, mark
 
 from storyscript.exceptions import StoryError
 
@@ -85,8 +85,21 @@ def test_storyerror_highlight(patch, storyerror, error):
     assert result == '{}|    {}\n{}'.format(*args)
 
 
-def test_storyerror_hint(patch, storyerror):
-    storyerror.hint() == 'You need to assign a value to `x`'
+def test_storyerror_hint(storyerror, error):
+    del error.error
+    assert storyerror.hint() == ''
+
+
+@mark.parametrize('name, message', [
+    ('service-name', "A service name can't contain `.`"),
+    ('arguments-noservice', 'You have defined an argument, but not a service'),
+    ('return-outside', '`return` is allowed only inside functions'),
+    ('variables-backslash', "A variable name can't contain `/`"),
+    ('variables-dash', "A variable name can't contain `-`")
+])
+def test_storyerror_hint_error(storyerror, error, name, message):
+    error.error = name
+    assert storyerror.hint() == message
 
 
 def test_storyerror_message(patch, storyerror):

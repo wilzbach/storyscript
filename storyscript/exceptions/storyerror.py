@@ -59,7 +59,18 @@ class StoryError(SyntaxError):
         """
         Provides an hint for the current error.
         """
-        return 'You need to assign a value to `x`'
+        if hasattr(self.error, 'error'):
+            if self.error.error == 'service-name':
+                return "A service name can't contain `.`"
+            elif self.error.error == 'arguments-noservice':
+                return 'You have defined an argument, but not a service'
+            elif self.error.error == 'return-outside':
+                return '`return` is allowed only inside functions'
+            elif self.error.error == 'variables-backslash':
+                return "A variable name can't contain `/`"
+            elif self.error.error == 'variables-dash':
+                return "A variable name can't contain `-`"
+        return ''
 
     def message(self):
         """
