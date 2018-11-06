@@ -71,6 +71,8 @@ class Story:
         parser = Parser(ebnf=ebnf)
         try:
             self.tree = parser.parse(self.story, debug=debug)
+        except StorySyntaxError as error:
+            self.error(error, debug=debug)
         except UnexpectedToken as error:
             self.error(error, debug=debug)
         except UnexpectedInput as error:

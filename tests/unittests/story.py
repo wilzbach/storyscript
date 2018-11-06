@@ -129,7 +129,8 @@ def test_story_parse_debug(patch, story, parser):
 
 @mark.parametrize('error', [
     UnexpectedToken('token', 'expected'),
-    UnexpectedInput('token', 'expected')
+    UnexpectedInput('token', 'expected'),
+    StorySyntaxError('test'),
 ])
 def test_story_parse_error(patch, story, parser, error):
     """
