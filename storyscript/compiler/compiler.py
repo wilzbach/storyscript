@@ -152,10 +152,9 @@ class Compiler:
         """
         Compiles a return_statement tree
         """
-        line = tree.line()
         if parent is None:
-            column = tree.column()
-            raise CompilerError('return-outside', line=line, column=column)
+            raise CompilerError('return-outside', tree=tree)
+        line = tree.line()
         args = [Objects.values(tree.child(0))]
         self.lines.append('return', line, args=args, parent=parent)
 

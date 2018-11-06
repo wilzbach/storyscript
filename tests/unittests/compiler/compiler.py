@@ -317,8 +317,7 @@ def test_compiler_return_statement_error(patch, compiler, tree):
     patch.init(CompilerError)
     with raises(CompilerError):
         compiler.return_statement(tree, None)
-    kwargs = {'line': tree.line(), 'column': tree.column()}
-    CompilerError.__init__.assert_called_with('return-outside', **kwargs)
+    CompilerError.__init__.assert_called_with('return-outside', tree=tree)
 
 
 def test_compiler_if_block(patch, compiler, lines, tree):
