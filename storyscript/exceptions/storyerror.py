@@ -22,6 +22,7 @@ class StoryError(SyntaxError):
             working_directory = os.getcwd()
             if self.path.startswith(working_directory):
                 return self.path[len(working_directory) + 1:]
+            return self.path
         return 'story'
 
     def get_line(self):

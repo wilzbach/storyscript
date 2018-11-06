@@ -33,6 +33,12 @@ def test_storyerror_name(storyerror):
 
 
 def test_storyerror_name_path(patch, storyerror):
+    patch.object(os, 'getcwd', return_value='/abspath')
+    storyerror.path = 'hello.story'
+    assert storyerror.name() == 'hello.story'
+
+
+def test_storyerror_name_reduce_path(patch, storyerror):
     """
     Ensures that paths are simplified for stories in the current working
     directory.
