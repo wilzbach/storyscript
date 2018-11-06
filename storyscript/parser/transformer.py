@@ -4,7 +4,7 @@ import re
 from lark import Transformer as LarkTransformer
 
 from .tree import Tree
-from ..exceptions import StoryError
+from ..exceptions import StorySyntaxError
 
 
 class Transformer(LarkTransformer):
@@ -14,12 +14,9 @@ class Transformer(LarkTransformer):
     All trees are transformed to Storyscript's custom tree. In some cases,
     additional transformations or checks are performed.
     """
-    def __init__(self, path):
-        self._path = path
-
     def arguments(self, matches):
         """
-        Transform an argument tree. If dealing with is a short-hand argument,
+        Transforms an argument tree. If dealing with is a short-hand argument,
         expand it.
         """
         if len(matches) == 1:
@@ -27,11 +24,15 @@ class Transformer(LarkTransformer):
         return Tree('arguments', matches)
 
     def assignment(self, matches):
+        """
+        Transforms an assignment tree and checks for invalid characters in the
+        variable name.
+        """
         token = matches[0].children[0]
         if '/' in token.value:
-            raise StoryError('variables-backslash', token, path=self._path)
+            raise StorySyntaxError('variables-backslash', token=token)
         if '-' in token.value:
-            raise StoryError('variables-dash', token, path=self._path)
+            raise StorySyntaxError('variables-dash', token=token)
         return Tree('assignment', matches)
 
     def service_block(self, matches):

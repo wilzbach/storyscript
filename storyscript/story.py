@@ -3,11 +3,18 @@ import io
 import os
 import re
 
+from lark.exceptions import UnexpectedInput, UnexpectedToken
+
 from .compiler import Compiler
+from .exceptions import CompilerError, StoryError, StorySyntaxError
 from .parser import Parser
 
 
 class Story:
+    """
+    Represents a single story and exposes methods for reading, parsing and
+    compiling it.
+    """
 
     def __init__(self, story, path=None):
         self.story = story
@@ -48,9 +55,28 @@ class Story:
         """
         return Story(stream.read())
 
+    def error(self, error, debug=False):
+        """
+        Handles errors by printing a nice message or raising the real error.
+        """
+        if debug:
+            raise error
+        StoryError(error, self.story, path=self.path).echo()
+        exit()
+
     def parse(self, ebnf=None, debug=False):
-        kwargs = {'debug': debug, 'path': self.path}
-        self.tree = Parser(ebnf=ebnf).parse(self.story, **kwargs)
+        """
+        Parses the story, storing the tree
+        """
+        parser = Parser(ebnf=ebnf)
+        try:
+            self.tree = parser.parse(self.story, debug=debug)
+        except StorySyntaxError as error:
+            self.error(error, debug=debug)
+        except UnexpectedToken as error:
+            self.error(error, debug=debug)
+        except UnexpectedInput as error:
+            self.error(error, debug=debug)
 
     def modules(self):
         """
@@ -65,13 +91,24 @@ class Story:
         return modules
 
     def compile(self, debug=False):
-        kwargs = {'debug': debug, 'path': self.path}
-        self.compiled = Compiler.compile(self.tree, **kwargs)
+        """
+        Compiles the story and stores the result.
+        """
+        try:
+            self.compiled = Compiler.compile(self.tree, debug=debug)
+        except (CompilerError, StorySyntaxError) as error:
+            self.error(error, debug=debug)
 
     def lex(self, ebnf=None):
+        """
+        Lexes a story
+        """
         return Parser(ebnf=ebnf).lex(self.story)
 
     def process(self, ebnf=None, debug=False):
+        """
+        Parse and compile a story, returning the compiled JSON
+        """
         self.parse(ebnf=ebnf, debug=debug)
         self.compile(debug=debug)
         return self.compiled

@@ -4,7 +4,7 @@ from lark.lexer import Token
 from pytest import fixture, mark, raises
 
 from storyscript.compiler import Compiler, Lines, Objects, Preprocessor
-from storyscript.exceptions import StoryError
+from storyscript.exceptions import CompilerError, StorySyntaxError
 from storyscript.parser import Tree
 from storyscript.version import version
 
@@ -25,16 +25,7 @@ def compiler(patch, lines):
 def test_compiler_init(patch):
     patch.init(Lines)
     compiler = Compiler()
-    Lines.__init__.assert_called_with(path=None)
     assert isinstance(compiler.lines, Lines)
-    assert compiler.path is None
-
-
-def test_compiler_init_path(patch):
-    patch.init(Lines)
-    compiler = Compiler(path='path')
-    Lines.__init__.assert_called_with(path='path')
-    assert compiler.path == 'path'
 
 
 def test_compiler_output(tree):
@@ -196,18 +187,30 @@ def test_compiler_arguments(patch, compiler, lines, tree):
     assert lines.lines['1']['args'] == ['args'] + Objects.arguments()
 
 
+def test_compiler_arguments_fist_line(patch, compiler, lines, tree):
+    """
+    Ensures that if this is the first line, an error is raised.
+    """
+    patch.init(StorySyntaxError)
+    lines.last.return_value = None
+    with raises(StorySyntaxError):
+        compiler.arguments(tree, '0')
+    error = 'arguments-noservice'
+    StorySyntaxError.__init__.assert_called_with(error, tree=tree)
+
+
 def test_compiler_arguments_not_execute(patch, compiler, lines, tree):
     """
-    Ensures that if the previous line is an execute line, an error is raised.
+    Ensures that if the previous line is not an execute, an error is raised.
     """
-    patch.init(StoryError)
+    patch.init(StorySyntaxError)
     patch.object(Objects, 'arguments')
     lines.last.return_value = '1'
     lines.lines = {'1': {'method': 'whatever'}}
-    with raises(StoryError):
+    with raises(StorySyntaxError):
         compiler.arguments(tree, '0')
-    args = ('arguments-noservice', tree)
-    StoryError.__init__.assert_called_with(*args, path=compiler.path)
+    error = 'arguments-noservice'
+    StorySyntaxError.__init__.assert_called_with(error, tree=tree)
 
 
 def test_compiler_service(patch, compiler, lines, tree):
@@ -276,6 +279,16 @@ def test_compiler_service_expressions(patch, compiler, lines, tree):
     Compiler.expression.assert_called_with(tree, 'parent')
 
 
+def test_compiler_service_syntax_error(patch, compiler, lines, tree):
+    patch.object(Objects, 'arguments')
+    patch.object(Compiler, 'output')
+    patch.object(StorySyntaxError, 'tree_position')
+    lines.execute.side_effect = StorySyntaxError('error')
+    with raises(StorySyntaxError):
+        compiler.service(tree, None, 'parent')
+    StorySyntaxError.tree_position.assert_called_with(tree)
+
+
 def test_compiler_when(patch, compiler, lines, tree):
     patch.object(Compiler, 'service')
     lines.lines = {'1': {}}
@@ -296,21 +309,27 @@ def test_compiler_when_path(patch, compiler, lines, tree):
                                     output=Compiler.output(), parent='1')
 
 
-def test_compiler_return_statement(patch, compiler, tree):
-    patch.init(StoryError)
-    with raises(StoryError):
-        compiler.return_statement(tree, None)
-    args = ('return-outside', tree)
-    StoryError.__init__.assert_called_with(*args, path=compiler.path)
-
-
-def test_compiler_return_statement_parent(patch, compiler, lines, tree):
+def test_compiler_return_statement(patch, compiler, lines, tree):
+    """
+    Ensures Compiler.return_statement can compile return statements.
+    """
     patch.object(Objects, 'values')
     compiler.return_statement(tree, '1')
     line = tree.line()
     Objects.values.assert_called_with(tree.child())
-    lines.append.assert_called_with('return', line, args=[Objects.values()],
-                                    parent='1')
+    kwargs = {'args': [Objects.values()], 'parent': '1'}
+    lines.append.assert_called_with('return', line, **kwargs)
+
+
+def test_compiler_return_statement_error(patch, compiler, tree):
+    """
+    Ensures Compiler.return_statement raises CompilerError when the return
+    is outside a function.
+    """
+    patch.init(CompilerError)
+    with raises(CompilerError):
+        compiler.return_statement(tree, None)
+    CompilerError.__init__.assert_called_with('return-outside', tree=tree)
 
 
 def test_compiler_if_block(patch, compiler, lines, tree):
@@ -521,9 +540,8 @@ def test_compiler_parse_tree_parent(compiler, patch):
 
 def test_compiler_compiler(patch):
     patch.init(Compiler)
-    result = Compiler.compiler('path')
+    result = Compiler.compiler()
     assert isinstance(result, Compiler)
-    Compiler.__init__.assert_called_with(path='path')
 
 
 def test_compiler_compile(patch):
@@ -531,20 +549,12 @@ def test_compiler_compile(patch):
     patch.many(Compiler, ['parse_tree', 'compiler'])
     result = Compiler.compile('tree')
     Preprocessor.process.assert_called_with('tree')
-    Compiler.compiler.assert_called_with(None)
     Compiler.compiler().parse_tree.assert_called_with(Preprocessor.process())
     lines = Compiler.compiler().lines
     expected = {'tree': lines.lines, 'version': version,
                 'services': lines.get_services(), 'functions': lines.functions,
                 'entrypoint': lines.first(), 'modules': lines.modules}
     assert result == expected
-
-
-def test_compiler_compile_path(patch):
-    patch.object(Preprocessor, 'process')
-    patch.many(Compiler, ['parse_tree', 'compiler'])
-    Compiler.compile('tree', path='path')
-    Compiler.compiler.assert_called_with('path')
 
 
 def test_compiler_compile_debug(patch):

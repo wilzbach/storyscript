@@ -3,9 +3,12 @@ import io
 import os
 import re
 
-from pytest import fixture, raises
+from lark.exceptions import UnexpectedInput, UnexpectedToken
+
+from pytest import fixture, mark, raises
 
 from storyscript.compiler import Compiler
+from storyscript.exceptions import CompilerError, StoryError, StorySyntaxError
 from storyscript.parser import Parser
 from storyscript.story import Story
 
@@ -13,6 +16,18 @@ from storyscript.story import Story
 @fixture
 def story():
     return Story('story')
+
+
+@fixture
+def parser(patch):
+    patch.init(Parser)
+    patch.many(Parser, ['parse', 'lex'])
+
+
+@fixture
+def compiler(patch, story):
+    patch.object(Compiler, 'compile')
+    story.tree = 'tree'
 
 
 def test_story_init(story):
@@ -74,27 +89,57 @@ def test_story_from_stream(patch, magic):
     assert isinstance(result, Story)
 
 
-def test_story_parse(patch, story):
-    patch.init(Parser)
-    patch.object(Parser, 'parse')
+def test_story_error(patch, story):
+    """
+    Ensures Story.error handles errors correctly.
+    """
+    patch.init(StoryError)
+    patch.object(StoryError, 'echo')
+    with raises(SystemExit):
+        story.error('error')
+    args = ('error', story.story)
+    StoryError.__init__.assert_called_with(*args, path=story.path)
+    assert StoryError.echo.call_count == 1
+
+
+def test_story_error_debug(patch, story):
+    """
+    Ensures Story.error raises the error in debug mode
+    """
+    with raises(StorySyntaxError):
+        story.error(StorySyntaxError('error'), debug=True)
+
+
+def test_story_parse(patch, story, parser):
     story.parse()
     Parser.__init__.assert_called_with(ebnf=None)
-    Parser.parse.assert_called_with(story.story, debug=False, path=story.path)
+    Parser.parse.assert_called_with(story.story, debug=False)
     assert story.tree == Parser.parse()
 
 
-def test_story_parse_ebnf(patch, story):
-    patch.init(Parser)
-    patch.object(Parser, 'parse')
+def test_story_parse_ebnf(patch, story, parser):
     story.parse(ebnf='ebnf')
     Parser.__init__.assert_called_with(ebnf='ebnf')
 
 
-def test_story_parse_debug(patch, story):
-    patch.init(Parser)
-    patch.object(Parser, 'parse')
+def test_story_parse_debug(patch, story, parser):
     story.parse(debug='debug')
-    Parser.parse.assert_called_with(story.story, debug='debug', path=None)
+    Parser.parse.assert_called_with(story.story, debug='debug')
+
+
+@mark.parametrize('error', [
+    UnexpectedToken('token', 'expected'),
+    UnexpectedInput('token', 'expected'),
+    StorySyntaxError('test'),
+])
+def test_story_parse_error(patch, story, parser, error):
+    """
+    Ensures Story.parse uses Story.error for UnexpectedToken errors.
+    """
+    Parser.parse.side_effect = error
+    patch.object(Story, 'error')
+    story.parse()
+    Story.error.assert_called_with(error, debug=False)
 
 
 def test_story_modules(magic, story):
@@ -114,35 +159,36 @@ def test_story_modules_no_extension(magic, story):
     assert result == ['hello.story']
 
 
-def test_story_compile(patch, story):
-    patch.object(Compiler, 'compile')
-    story.tree = 'tree'
+def test_story_compile(patch, story, compiler):
     story.compile()
-    kwargs = {'debug': False, 'path': story.path}
-    Compiler.compile.assert_called_with(story.tree, **kwargs)
+    Compiler.compile.assert_called_with(story.tree, debug=False)
     assert story.compiled == Compiler.compile()
 
 
-def test_story_compile_debug(patch, story):
-    patch.object(Compiler, 'compile')
-    story.tree = 'tree'
-    story.compile(debug='debug')
-    kwargs = {'debug': 'debug', 'path': story.path}
-    Compiler.compile.assert_called_with(story.tree, **kwargs)
+def test_story_compile_debug(patch, story, compiler):
+    story.compile(debug=True)
+    Compiler.compile.assert_called_with(story.tree, debug=True)
 
 
-def test_story_lex(patch, story):
-    patch.init(Parser)
-    patch.object(Parser, 'lex')
+@mark.parametrize('error', [StorySyntaxError('error'), CompilerError('error')])
+def test_story_compiler_error(patch, story, compiler, error):
+    """
+    Ensures Story.compiler uses Story.error in case of StorySyntaxError.
+    """
+    Compiler.compile.side_effect = error
+    patch.object(Story, 'error')
+    story.compile()
+    Story.error.assert_called_with(error, debug=False)
+
+
+def test_story_lex(patch, story, parser):
     result = story.lex()
     Parser.__init__.assert_called_with(ebnf=None)
     Parser.lex.assert_called_with(story.story)
     assert result == Parser.lex()
 
 
-def test_story_lex_ebnf(patch, story):
-    patch.init(Parser)
-    patch.object(Parser, 'lex')
+def test_story_lex_ebnf(patch, story, parser):
     story.lex(ebnf='ebnf')
     Parser.__init__.assert_called_with(ebnf='ebnf')
 

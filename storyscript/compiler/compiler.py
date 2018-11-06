@@ -2,7 +2,7 @@
 from .lines import Lines
 from .objects import Objects
 from .preprocessor import Preprocessor
-from ..exceptions import StoryError
+from ..exceptions import CompilerError, StorySyntaxError
 from ..parser import Tree
 from ..version import version
 
@@ -12,9 +12,8 @@ class Compiler:
     """
     Compiles Storyscript abstract syntax tree to JSON.
     """
-    def __init__(self, path=None):
-        self.lines = Lines(path=path)
-        self.path = path
+    def __init__(self):
+        self.lines = Lines()
 
     @staticmethod
     def output(tree):
@@ -104,10 +103,14 @@ class Compiler:
         """
         Compiles arguments. This is called only for nested arguments.
         """
-        line = self.lines.lines[self.lines.last()]
-        if line['method'] != 'execute':
-            raise StoryError('arguments-noservice', tree, path=self.path)
-        line['args'] = line['args'] + Objects.arguments(tree)
+        previous_line = self.lines.last()
+        if previous_line:
+            line = self.lines.lines[previous_line]
+            if line['method'] != 'execute':
+                raise StorySyntaxError('arguments-noservice', tree=tree)
+            line['args'] = line['args'] + Objects.arguments(tree)
+            return
+        raise StorySyntaxError('arguments-noservice', tree=tree)
 
     def service(self, tree, nested_block, parent):
         """
@@ -129,8 +132,12 @@ class Compiler:
         enter = None
         if nested_block:
             enter = nested_block.line()
-        self.lines.execute(line, service, command, arguments, output, enter,
-                           parent)
+        try:
+            args = (line, service, command, arguments, output, enter, parent)
+            self.lines.execute(*args)
+        except StorySyntaxError as error:
+            error.tree_position(tree)
+            raise error
 
     def when(self, tree, nested_block, parent):
         """
@@ -150,7 +157,7 @@ class Compiler:
         Compiles a return_statement tree
         """
         if parent is None:
-            raise StoryError('return-outside', tree, path=self.path)
+            raise CompilerError('return-outside', tree=tree)
         line = tree.line()
         args = [Objects.values(tree.child(0))]
         self.lines.append('return', line, args=args, parent=parent)
@@ -296,13 +303,13 @@ class Compiler:
                 self.subtree(item, parent=parent)
 
     @staticmethod
-    def compiler(path):
-        return Compiler(path=path)
+    def compiler():
+        return Compiler()
 
     @classmethod
-    def compile(cls, tree, debug=False, path=None):
+    def compile(cls, tree, debug=False):
         tree = Preprocessor.process(tree)
-        compiler = cls.compiler(path)
+        compiler = cls.compiler()
         compiler.parse_tree(tree)
         lines = compiler.lines
         return {'tree': lines.lines, 'services': lines.get_services(),
