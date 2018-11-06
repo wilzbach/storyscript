@@ -103,10 +103,14 @@ class Compiler:
         """
         Compiles arguments. This is called only for nested arguments.
         """
-        line = self.lines.lines[self.lines.last()]
-        if line['method'] != 'execute':
-            raise StorySyntaxError('arguments-noservice', tree=tree)
-        line['args'] = line['args'] + Objects.arguments(tree)
+        previous_line = self.lines.last()
+        if previous_line:
+            line = self.lines.lines[previous_line]
+            if line['method'] != 'execute':
+                raise StorySyntaxError('arguments-noservice', tree=tree)
+            line['args'] = line['args'] + Objects.arguments(tree)
+            return
+        raise StorySyntaxError('arguments-noservice', tree=tree)
 
     def service(self, tree, nested_block, parent):
         """

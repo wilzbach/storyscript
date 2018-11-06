@@ -187,6 +187,18 @@ def test_compiler_arguments(patch, compiler, lines, tree):
     assert lines.lines['1']['args'] == ['args'] + Objects.arguments()
 
 
+def test_compiler_arguments_fist_line(patch, compiler, lines, tree):
+    """
+    Ensures that if this is the first line, an error is raised.
+    """
+    patch.init(StorySyntaxError)
+    lines.last.return_value = None
+    with raises(StorySyntaxError):
+        compiler.arguments(tree, '0')
+    error = 'arguments-noservice'
+    StorySyntaxError.__init__.assert_called_with(error, tree=tree)
+
+
 def test_compiler_arguments_not_execute(patch, compiler, lines, tree):
     """
     Ensures that if the previous line is not an execute, an error is raised.
