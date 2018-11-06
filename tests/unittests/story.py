@@ -97,7 +97,8 @@ def test_story_error(patch, story):
     patch.object(StoryError, 'echo')
     with raises(SystemExit):
         story.error('error')
-    StoryError.__init__.assert_called_with('error', story.path, story.story)
+    args = ('error', story.story)
+    StoryError.__init__.assert_called_with(*args, path=story.path)
     assert StoryError.echo.call_count == 1
 
 
