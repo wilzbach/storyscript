@@ -41,7 +41,10 @@ class StoryError(SyntaxError):
         """
         Creates the repeated symbols that mark the error.
         """
-        return '^' * (int(self.error.end_column) - int(self.error.column))
+        end_column = int(self.error.column) + 1
+        if hasattr(self.error, 'end_column'):
+            end_column = int(self.error.end_column)
+        return '^' * (end_column - int(self.error.column))
 
     def highlight(self):
         """

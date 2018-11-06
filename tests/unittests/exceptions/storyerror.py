@@ -62,6 +62,12 @@ def test_storyerror_header(patch, storyerror, error):
 
 
 def test_storyerror_symbols(patch, storyerror, error):
+    del error.end_column
+    error.column = '1'
+    assert storyerror.symbols() == '^'
+
+
+def test_story_error_symbols_end_column(patch, storyerror, error):
     error.end_column = '4'
     error.column = '1'
     assert storyerror.symbols() == '^^^'
