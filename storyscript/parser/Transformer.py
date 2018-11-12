@@ -3,7 +3,7 @@ import re
 
 from lark import Transformer as LarkTransformer
 
-from .tree import Tree
+from .Tree import Tree
 from ..exceptions import StorySyntaxError
 
 

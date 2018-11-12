@@ -3,10 +3,10 @@ import io
 
 from lark import Lark
 
-from .grammar import Grammar
-from .indenter import CustomIndenter
-from .transformer import Transformer
-from .tree import Tree
+from .Grammar import Grammar
+from .Indenter import CustomIndenter
+from .Transformer import Transformer
+from .Tree import Tree
 
 
 class Parser:

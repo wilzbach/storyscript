@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .ebnf import Ebnf
+from .Ebnf import Ebnf
 
 
 class Grammar:

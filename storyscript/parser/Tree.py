@@ -2,8 +2,6 @@
 from lark.lexer import Token
 from lark.tree import Tree as LarkTree
 
-from ..version import version
-
 
 class Tree(LarkTree):
     """

@@ -5,7 +5,6 @@ from lark.tree import Tree as LarkTree
 from pytest import fixture, mark
 
 from storyscript.parser import Tree
-from storyscript.version import version
 
 
 @fixture
