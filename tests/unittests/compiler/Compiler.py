@@ -3,10 +3,10 @@ from lark.lexer import Token
 
 from pytest import fixture, mark, raises
 
+from storyscript.Version import version
 from storyscript.compiler import Compiler, Lines, Objects, Preprocessor
 from storyscript.exceptions import CompilerError, StorySyntaxError
 from storyscript.parser import Tree
-from storyscript.version import version
 
 
 @fixture
