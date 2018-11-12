@@ -48,7 +48,8 @@ class StoryError(SyntaxError):
         end_column = int(self.error.column) + 1
         if hasattr(self.error, 'end_column'):
             end_column = int(self.error.end_column)
-        return '^' * (end_column - int(self.error.column))
+        symbols = '^' * (end_column - int(self.error.column))
+        return click.style(symbols, fg='red')
 
     def highlight(self):
         """

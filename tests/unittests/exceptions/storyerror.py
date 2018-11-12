@@ -72,15 +72,28 @@ def test_storyerror_header(patch, storyerror, error):
 
 
 def test_storyerror_symbols(patch, storyerror, error):
+    """
+    Ensures StoryError.symbols creates one symbol when there is no end column.
+    """
+    patch.object(click, 'style')
     del error.end_column
     error.column = '1'
-    assert storyerror.symbols() == '^'
+    result = storyerror.symbols()
+    click.style.assert_called_with('^', fg='red')
+    assert result == click.style()
 
 
 def test_story_error_symbols_end_column(patch, storyerror, error):
+    """
+    Ensures StoryError.symbols creates many symbols when there is an end
+    column.
+    """
+    patch.object(click, 'style')
     error.end_column = '4'
     error.column = '1'
-    assert storyerror.symbols() == '^^^'
+    result = storyerror.symbols()
+    click.style.assert_called_with('^^^', fg='red')
+    assert result == click.style()
 
 
 def test_storyerror_highlight(patch, storyerror, error):
