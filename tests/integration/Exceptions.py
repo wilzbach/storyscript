@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from pytest import raises
 
-from storyscript.story import Story
+from storyscript.Story import Story
 
 
 def test_exception_service_name(capsys):
