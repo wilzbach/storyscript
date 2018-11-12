@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+import click
+
 from pytest import fixture, mark
 
 from storyscript.exceptions import StoryError
@@ -59,12 +61,14 @@ def test_storyerror_get_line(patch, storyerror, error):
 
 def test_storyerror_header(patch, storyerror, error):
     """
-    Ensures header returns the correct text.
+    Ensures StoryError.header returns the correct text.
     """
+    patch.object(click, 'style')
     patch.object(StoryError, 'name')
     template = 'Error: syntax error in {} at line {}, column {}'
-    args = (StoryError.name(), error.line, error.column)
-    assert storyerror.header() == template.format(*args)
+    result = storyerror.header()
+    click.style.assert_called_with(StoryError.name(), bold=True)
+    assert result == template.format(click.style(), error.line, error.column)
 
 
 def test_storyerror_symbols(patch, storyerror, error):
