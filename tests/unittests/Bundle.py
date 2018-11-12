@@ -3,8 +3,8 @@ import os
 
 from pytest import fixture
 
-from storyscript.bundle import Bundle
-from storyscript.story import Story
+from storyscript.Bundle import Bundle
+from storyscript.Story import Story
 
 
 @fixture

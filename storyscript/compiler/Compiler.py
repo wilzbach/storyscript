@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from .lines import Lines
-from .objects import Objects
-from .preprocessor import Preprocessor
+from .Lines import Lines
+from .Objects import Objects
+from .Preprocessor import Preprocessor
+from ..Version import version
 from ..exceptions import CompilerError, StorySyntaxError
 from ..parser import Tree
-from ..version import version
 
 
 class Compiler:

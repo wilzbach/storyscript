@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from .compilererror import CompilerError
-from .processingerror import ProcessingError
-from .storyerror import StoryError
-from .storysyntaxerror import StorySyntaxError
+from .CompilerError import CompilerError
+from .ProcessingError import ProcessingError
+from .StoryError import StoryError
+from .StorySyntaxError import StorySyntaxError
 
 __all__ = ['CompilerError', 'ProcessingError', 'StoryError',
            'StorySyntaxError']

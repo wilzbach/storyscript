@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from storyscript.version import version
+from storyscript.Version import version
 
 
 def test_version():

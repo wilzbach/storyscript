@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from storyscript.api import Api
-from storyscript.story import Story
+from storyscript.Api import Api
+from storyscript.Story import Story
 
 
 def test_api_loads(patch):

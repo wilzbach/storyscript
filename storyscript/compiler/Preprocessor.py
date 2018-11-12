@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
 
-from .faketree import FakeTree
+from .Faketree import FakeTree
 from ..parser import Tree
 
 

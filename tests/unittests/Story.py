@@ -7,10 +7,10 @@ from lark.exceptions import UnexpectedInput, UnexpectedToken
 
 from pytest import fixture, mark, raises
 
+from storyscript.Story import Story
 from storyscript.compiler import Compiler
 from storyscript.exceptions import CompilerError, StoryError, StorySyntaxError
 from storyscript.parser import Parser
-from storyscript.story import Story
 
 
 @fixture

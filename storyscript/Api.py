@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .story import Story
+from .Story import Story
 
 
 class Api:

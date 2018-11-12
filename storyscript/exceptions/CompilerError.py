@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .processingerror import ProcessingError
+from .ProcessingError import ProcessingError
 
 
 class CompilerError(ProcessingError):
