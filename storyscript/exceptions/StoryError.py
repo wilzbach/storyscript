@@ -3,6 +3,10 @@ import os
 
 import click
 
+from lark.exceptions import UnexpectedToken
+
+from ..Intention import Intention
+
 
 class StoryError(SyntaxError):
 
@@ -75,6 +79,10 @@ class StoryError(SyntaxError):
                 return "A variable name can't contain `/`"
             elif self.error.error == 'variables-dash':
                 return "A variable name can't contain `-`"
+        elif isinstance(self.error, UnexpectedToken):
+            intention = Intention(self.get_line())
+            if intention.assignment():
+                return 'Missing value after `=`'
         return ''
 
     def message(self):

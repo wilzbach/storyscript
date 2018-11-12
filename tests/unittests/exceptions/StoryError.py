@@ -3,8 +3,11 @@ import os
 
 import click
 
+from lark.exceptions import UnexpectedToken
+
 from pytest import fixture, mark
 
+from storyscript.Intention import Intention
 from storyscript.exceptions import StoryError
 
 
@@ -123,6 +126,14 @@ def test_storyerror_hint(storyerror, error):
 def test_storyerror_hint_error(storyerror, error, name, message):
     error.error = name
     assert storyerror.hint() == message
+
+
+def test_storyerror_hint_intention(patch, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'assignment', return_value=True)
+    patch.object(StoryError, 'get_line')
+    storyerror.error = UnexpectedToken('token', 'expected')
+    assert storyerror.hint() == 'Missing value after `=`'
 
 
 def test_storyerror_message(patch, storyerror):
