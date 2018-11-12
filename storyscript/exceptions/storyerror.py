@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+import click
+
 
 class StoryError(SyntaxError):
 
@@ -36,7 +38,8 @@ class StoryError(SyntaxError):
         Creates the header of the message
         """
         template = 'Error: syntax error in {} at line {}, column {}'
-        return template.format(self.name(), self.error.line, self.error.column)
+        name = click.style(self.name(), bold=True)
+        return template.format(name, self.error.line, self.error.column)
 
     def symbols(self):
         """
@@ -45,7 +48,8 @@ class StoryError(SyntaxError):
         end_column = int(self.error.column) + 1
         if hasattr(self.error, 'end_column'):
             end_column = int(self.error.end_column)
-        return '^' * (end_column - int(self.error.column))
+        symbols = '^' * (end_column - int(self.error.column))
+        return click.style(symbols, fg='red')
 
     def highlight(self):
         """
@@ -84,4 +88,4 @@ class StoryError(SyntaxError):
         """
         Prints the message
         """
-        print(self.message())
+        click.echo(self.message())

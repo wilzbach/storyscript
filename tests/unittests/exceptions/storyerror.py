@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+import click
+
 from pytest import fixture, mark
 
 from storyscript.exceptions import StoryError
@@ -59,24 +61,39 @@ def test_storyerror_get_line(patch, storyerror, error):
 
 def test_storyerror_header(patch, storyerror, error):
     """
-    Ensures header returns the correct text.
+    Ensures StoryError.header returns the correct text.
     """
+    patch.object(click, 'style')
     patch.object(StoryError, 'name')
     template = 'Error: syntax error in {} at line {}, column {}'
-    args = (StoryError.name(), error.line, error.column)
-    assert storyerror.header() == template.format(*args)
+    result = storyerror.header()
+    click.style.assert_called_with(StoryError.name(), bold=True)
+    assert result == template.format(click.style(), error.line, error.column)
 
 
 def test_storyerror_symbols(patch, storyerror, error):
+    """
+    Ensures StoryError.symbols creates one symbol when there is no end column.
+    """
+    patch.object(click, 'style')
     del error.end_column
     error.column = '1'
-    assert storyerror.symbols() == '^'
+    result = storyerror.symbols()
+    click.style.assert_called_with('^', fg='red')
+    assert result == click.style()
 
 
 def test_story_error_symbols_end_column(patch, storyerror, error):
+    """
+    Ensures StoryError.symbols creates many symbols when there is an end
+    column.
+    """
+    patch.object(click, 'style')
     error.end_column = '4'
     error.column = '1'
-    assert storyerror.symbols() == '^^^'
+    result = storyerror.symbols()
+    click.style.assert_called_with('^^^', fg='red')
+    assert result == click.style()
 
 
 def test_storyerror_highlight(patch, storyerror, error):
@@ -114,11 +131,11 @@ def test_storyerror_message(patch, storyerror):
     assert storyerror.message() == '{}\n\n{}\n\n{}'.format(*args)
 
 
-def test_storyerror_echo(capsys, patch, storyerror):
+def test_storyerror_echo(patch, storyerror):
     """
     Ensures StoryError.echo prints StoryError.message
     """
+    patch.object(click, 'echo')
     patch.object(StoryError, 'message')
     storyerror.echo()
-    output, error = capsys.readouterr()
-    assert output == '{}\n'.format(StoryError.message())
+    click.echo.assert_called_with(StoryError.message())
