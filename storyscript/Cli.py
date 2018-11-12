@@ -4,8 +4,8 @@ import os
 
 import click
 
-from .app import App
-from .version import version as app_version
+from .App import App
+from .Version import version as app_version
 
 
 class Cli:

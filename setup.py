@@ -62,5 +62,5 @@ setup(name='storyscript',
           'docs': extras
       },
       entry_points={
-          'console_scripts': ['storyscript=storyscript.cli:Cli.main']
+          'console_scripts': ['storyscript=storyscript.Cli:Cli.main']
       })

@@ -7,9 +7,9 @@ from click.testing import CliRunner
 
 from pytest import fixture, mark
 
-from storyscript.app import App
-from storyscript.cli import Cli
-from storyscript.version import version
+from storyscript.App import App
+from storyscript.Cli import Cli
+from storyscript.Version import version
 
 
 @fixture

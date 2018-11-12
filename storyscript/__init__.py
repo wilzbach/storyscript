@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from .api import Api
-from .version import version
+from .Api import Api
+from .Version import version
 
 
 __version__ = version = version

@@ -2,9 +2,9 @@
 import json
 import os
 
-from .bundle import Bundle
+from .Bundle import Bundle
+from .Story import Story
 from .parser import Grammar
-from .story import Story
 
 
 class App:

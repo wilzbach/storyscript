@@ -4,10 +4,10 @@ import os
 
 from pytest import fixture
 
-from storyscript.app import App
-from storyscript.bundle import Bundle
+from storyscript.App import App
+from storyscript.Bundle import Bundle
+from storyscript.Story import Story
 from storyscript.parser import Grammar
-from storyscript.story import Story
 
 
 @fixture
