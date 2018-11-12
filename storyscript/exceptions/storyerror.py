@@ -87,4 +87,4 @@ class StoryError(SyntaxError):
         """
         Prints the message
         """
-        print(self.message())
+        click.echo(self.message())

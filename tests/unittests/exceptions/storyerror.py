@@ -118,11 +118,11 @@ def test_storyerror_message(patch, storyerror):
     assert storyerror.message() == '{}\n\n{}\n\n{}'.format(*args)
 
 
-def test_storyerror_echo(capsys, patch, storyerror):
+def test_storyerror_echo(patch, storyerror):
     """
     Ensures StoryError.echo prints StoryError.message
     """
+    patch.object(click, 'echo')
     patch.object(StoryError, 'message')
     storyerror.echo()
-    output, error = capsys.readouterr()
-    assert output == '{}\n'.format(StoryError.message())
+    click.echo.assert_called_with(StoryError.message())
