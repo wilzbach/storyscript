@@ -12,7 +12,9 @@ class Transformer(LarkTransformer):
     All trees are transformed to Storyscript's custom tree. In some cases,
     additional transformations or checks are performed.
     """
-    def arguments(self, matches):
+
+    @staticmethod
+    def arguments(matches):
         """
         Transforms an argument tree. If dealing with is a short-hand argument,
         expand it.
@@ -21,7 +23,8 @@ class Transformer(LarkTransformer):
             matches = [matches[0].child(0), matches[0]]
         return Tree('arguments', matches)
 
-    def assignment(self, matches):
+    @staticmethod
+    def assignment(matches):
         """
         Transforms an assignment tree and checks for invalid characters in the
         variable name.
@@ -33,7 +36,8 @@ class Transformer(LarkTransformer):
             raise StorySyntaxError('variables-dash', token=token)
         return Tree('assignment', matches)
 
-    def service_block(self, matches):
+    @staticmethod
+    def service_block(matches):
         """
         Transforms service blocks, moving indented arguments back to the first
         node.
