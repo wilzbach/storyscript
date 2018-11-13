@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import re
-
 from lark import Transformer as LarkTransformer
 
 from .Tree import Tree

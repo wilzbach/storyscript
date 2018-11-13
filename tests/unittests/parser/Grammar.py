@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pytest import fixture, raises
+from pytest import fixture
 
 from storyscript.parser import Ebnf, Grammar
 

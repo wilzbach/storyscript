@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import io
-import os
 
 from lark import Lark
 
-from pytest import fixture, mark, raises
+from pytest import fixture
 
 from storyscript.parser import (CustomIndenter, Grammar, Parser, Transformer,
                                 Tree)
