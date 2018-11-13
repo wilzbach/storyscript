@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 import json
-import os
 
 from pytest import fixture
 
 from storyscript.App import App
 from storyscript.Bundle import Bundle
-from storyscript.Story import Story
 from storyscript.parser import Grammar
 
 
