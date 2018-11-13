@@ -29,14 +29,14 @@ def test_parser_init_ebnf():
     assert parser.ebnf == 'grammar.ebnf'
 
 
-def test_parser_indenter(patch, parser):
+def test_parser_indenter(patch):
     patch.init(CustomIndenter)
-    assert isinstance(parser.indenter(), CustomIndenter)
+    assert isinstance(Parser.indenter(), CustomIndenter)
 
 
-def test_parser_transfomer(patch, parser):
+def test_parser_transfomer(patch):
     patch.init(Transformer)
-    result = parser.transformer()
+    result = Parser.transformer()
     assert isinstance(result, Transformer)
 
 
