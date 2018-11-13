@@ -23,6 +23,19 @@ class Compiler:
                 output.append(item.value)
         return output
 
+    @staticmethod
+    def extract_values(fragment):
+        """
+        Extracts values from an assignment_fragment tree, to be used as
+        arguments in a set method.
+        """
+        if fragment.expression:
+            if fragment.expression.mutation:
+                return [Objects.values(fragment.expression.values),
+                        Objects.mutation(fragment.expression.mutation)]
+            return [Objects.expression(fragment.expression)]
+        return [Objects.values(fragment.child(1))]
+
     @classmethod
     def function_output(cls, tree):
         return cls.output(tree.node('function_output.types'))
@@ -65,18 +78,6 @@ class Compiler:
         Compiles an absolute expression using Compiler.expression
         """
         self.expression(tree, parent)
-
-    def extract_values(self, fragment):
-        """
-        Extracts values from an assignment_fragment tree, to be used as
-        arguments in a set method.
-        """
-        if fragment.expression:
-            if fragment.expression.mutation:
-                return [Objects.values(fragment.expression.values),
-                        Objects.mutation(fragment.expression.mutation)]
-            return [Objects.expression(fragment.expression)]
-        return [Objects.values(fragment.child(1))]
 
     def assignment(self, tree, parent):
         """

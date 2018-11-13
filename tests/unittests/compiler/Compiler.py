@@ -38,6 +38,31 @@ def test_compiler_output_none():
     assert Compiler.output(None) == []
 
 
+def test_compiler_extract_values(patch, tree):
+    patch.object(Objects, 'values')
+    tree.expression = None
+    result = Compiler.extract_values(tree)
+    tree.child.assert_called_with(1)
+    Objects.values.assert_called_with(tree.child())
+    assert result == [Objects.values()]
+
+
+def test_compiler_extract_values_expression(patch, tree):
+    patch.object(Objects, 'expression')
+    tree.expression.mutation = None
+    result = Compiler.extract_values(tree)
+    Objects.expression.assert_called_with(tree.expression)
+    assert result == [Objects.expression()]
+
+
+def test_compiler_extract_values_mutation(patch, tree):
+    patch.many(Objects, ['values', 'mutation'])
+    result = Compiler.extract_values(tree)
+    Objects.values.assert_called_with(tree.expression.values)
+    Objects.mutation.assert_called_with(tree.expression.mutation)
+    assert result == [Objects.values(), Objects.mutation()]
+
+
 def test_compiler_function_output(patch, tree):
     patch.object(Compiler, 'output')
     result = Compiler.function_output(tree)
@@ -103,31 +128,6 @@ def test_compiler_absolute_expression(patch, compiler, lines, tree):
     patch.object(Compiler, 'expression')
     compiler.absolute_expression(tree, '1')
     Compiler.expression.assert_called_with(tree, '1')
-
-
-def test_compiler_extract_values(patch, compiler, tree):
-    patch.object(Objects, 'values')
-    tree.expression = None
-    result = compiler.extract_values(tree)
-    tree.child.assert_called_with(1)
-    Objects.values.assert_called_with(tree.child())
-    assert result == [Objects.values()]
-
-
-def test_compiler_extract_values_expression(patch, compiler, tree):
-    patch.object(Objects, 'expression')
-    tree.expression.mutation = None
-    result = compiler.extract_values(tree)
-    Objects.expression.assert_called_with(tree.expression)
-    assert result == [Objects.expression()]
-
-
-def test_compiler_extract_values_mutation(patch, compiler, tree):
-    patch.many(Objects, ['values', 'mutation'])
-    result = compiler.extract_values(tree)
-    Objects.values.assert_called_with(tree.expression.values)
-    Objects.mutation.assert_called_with(tree.expression.mutation)
-    assert result == [Objects.values(), Objects.mutation()]
 
 
 def test_compiler_assignment(patch, compiler, lines, tree):
