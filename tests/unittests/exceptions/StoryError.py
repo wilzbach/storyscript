@@ -164,9 +164,11 @@ def test_storyerror_identify_unexpected_characters(patch, storyerror):
 
 
 def test_storyerror_message(patch, storyerror):
-    patch.many(StoryError, ['header', 'highlight', 'hint'])
+    patch.many(StoryError, ['process', 'header', 'highlight', 'hint'])
+    result = storyerror.message()
+    assert storyerror.process.call_count == 1
     args = (storyerror.header(), storyerror.highlight(), storyerror.hint())
-    assert storyerror.message() == '{}\n\n{}\n\n{}'.format(*args)
+    assert result == '{}\n\n{}\n\n{}'.format(*args)
 
 
 def test_storyerror_echo(patch, storyerror):

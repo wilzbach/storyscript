@@ -114,6 +114,7 @@ class StoryError(SyntaxError):
         """
         Creates a friendly error message.
         """
+        self.process()
         args = (self.header(), self.highlight(), self.hint())
         return '{}\n\n{}\n\n{}'.format(*args)
 
