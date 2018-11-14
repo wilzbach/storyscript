@@ -113,28 +113,20 @@ def test_storyerror_highlight(patch, storyerror, error):
 
 
 def test_storyerror_hint(storyerror, error):
-    del error.error
     assert storyerror.hint() == ''
 
 
-@mark.parametrize('name, message', [
-    ('service-name', "A service name can't contain `.`"),
-    ('arguments-noservice', 'You have defined an argument, but not a service'),
-    ('return-outside', '`return` is allowed only inside functions'),
-    ('variables-backslash', "A variable name can't contain `/`"),
-    ('variables-dash', "A variable name can't contain `-`")
+@mark.parametrize('code, message', [
+    ('E0002', "A service name can't contain `.`"),
+    ('E0003', 'You have defined an argument, but not a service'),
+    ('E0004', '`return` is allowed only inside functions'),
+    ('E0005', "A variable name can't contain `/`"),
+    ('E0006', "A variable name can't contain `-`"),
+    ('E0007', 'Missing value after `=`')
 ])
-def test_storyerror_hint_error(storyerror, error, name, message):
-    error.error = name
+def test_storyerror_hint_error(storyerror, code, message):
+    storyerror.error_code = code
     assert storyerror.hint() == message
-
-
-def test_storyerror_hint_intention(patch, storyerror):
-    patch.init(Intention)
-    patch.object(Intention, 'assignment', return_value=True)
-    patch.object(StoryError, 'get_line')
-    storyerror.error = UnexpectedToken('token', 'expected')
-    assert storyerror.hint() == 'Missing value after `=`'
 
 
 def test_storyerror_identify(storyerror):

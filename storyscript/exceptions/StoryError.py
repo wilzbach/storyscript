@@ -69,21 +69,18 @@ class StoryError(SyntaxError):
         """
         Provides an hint for the current error.
         """
-        if hasattr(self.error, 'error'):
-            if self.error.error == 'service-name':
-                return "A service name can't contain `.`"
-            elif self.error.error == 'arguments-noservice':
-                return 'You have defined an argument, but not a service'
-            elif self.error.error == 'return-outside':
-                return '`return` is allowed only inside functions'
-            elif self.error.error == 'variables-backslash':
-                return "A variable name can't contain `/`"
-            elif self.error.error == 'variables-dash':
-                return "A variable name can't contain `-`"
-        elif isinstance(self.error, UnexpectedToken):
-            intention = Intention(self.get_line())
-            if intention.assignment():
-                return 'Missing value after `=`'
+        if self.error_code == 'E0002':
+            return "A service name can't contain `.`"
+        elif self.error_code == 'E0003':
+            return 'You have defined an argument, but not a service'
+        elif self.error_code == 'E0004':
+            return '`return` is allowed only inside functions'
+        elif self.error_code == 'E0005':
+            return "A variable name can't contain `/`"
+        elif self.error_code == 'E0006':
+            return "A variable name can't contain `-`"
+        elif self.error_code == 'E0007':
+            return 'Missing value after `=`'
         return ''
 
     def identify(self):
