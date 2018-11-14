@@ -163,6 +163,12 @@ def test_storyerror_identify_unexpected_characters(patch, storyerror):
     assert storyerror.identify() == 'E0008'
 
 
+def test_storyerror_process(patch, storyerror):
+    patch.object(StoryError, 'identify')
+    storyerror.process()
+    assert storyerror.error_code == storyerror.identify()
+
+
 def test_storyerror_message(patch, storyerror):
     patch.many(StoryError, ['process', 'header', 'highlight', 'hint'])
     result = storyerror.message()

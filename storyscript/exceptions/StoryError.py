@@ -110,6 +110,13 @@ class StoryError(SyntaxError):
                 return 'E0008'
         return 'E0001'
 
+    def process(self):
+        """
+        Process the error, assigning the error code and performing other
+        operations when necessary.
+        """
+        self.error_code = self.identify()
+
     def message(self):
         """
         Creates a friendly error message.
