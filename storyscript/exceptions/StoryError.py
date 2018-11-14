@@ -3,7 +3,7 @@ import os
 
 import click
 
-from lark.exceptions import UnexpectedToken
+from lark.exceptions import UnexpectedCharacters, UnexpectedToken
 
 from ..Intention import Intention
 
@@ -98,10 +98,14 @@ class StoryError(SyntaxError):
                 return 'E0005'
             elif self.error.error == 'variables-dash':
                 return 'E0006'
-        elif isinstance(self.error, UnexpectedToken):
-            intention = Intention(self.get_line())
+
+        intention = Intention(self.get_line())
+        if isinstance(self.error, UnexpectedToken):
             if intention.assignment():
                 return 'E0007'
+        elif isinstance(self.error, UnexpectedCharacters):
+            if intention.is_function():
+                return 'E0008'
         return 'E0001'
 
     def message(self):

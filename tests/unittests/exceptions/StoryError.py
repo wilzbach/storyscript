@@ -3,7 +3,7 @@ import os
 
 import click
 
-from lark.exceptions import UnexpectedToken
+from lark.exceptions import UnexpectedCharacters, UnexpectedToken
 
 from pytest import fixture, mark
 
@@ -145,12 +145,21 @@ def test_storyerror_identify_codes(storyerror, error, name, code):
     assert storyerror.identify() == code
 
 
-def test_storyerror_identify_intention(patch, storyerror):
+def test_storyerror_identify_unexpected_token(patch, storyerror):
     patch.init(Intention)
     patch.object(Intention, 'assignment', return_value=True)
     patch.object(StoryError, 'get_line')
     storyerror.error = UnexpectedToken('token', 'expected')
     assert storyerror.identify() == 'E0007'
+
+
+def test_storyerror_identify_unexpected_characters(patch, storyerror):
+    patch.init(UnexpectedCharacters)
+    patch.init(Intention)
+    patch.object(Intention, 'is_function', return_value=True)
+    patch.object(StoryError, 'get_line')
+    storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
+    assert storyerror.identify() == 'E0008'
 
 
 def test_storyerror_message(patch, storyerror):
