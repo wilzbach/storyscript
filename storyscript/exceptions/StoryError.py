@@ -85,6 +85,27 @@ class StoryError(SyntaxError):
                 return 'Missing value after `=`'
         return ''
 
+    def identify(self):
+        """
+        Identifies the error.
+        """
+        if hasattr(self.error, 'error'):
+            if self.error.error == 'service-name':
+                return 'E0002'
+            elif self.error.error == 'arguments-noservice':
+                return 'E0003'
+            elif self.error.error == 'return-outside':
+                return 'E0004'
+            elif self.error.error == 'variables-backslash':
+                return 'E0005'
+            elif self.error.error == 'variables-dash':
+                return 'E0006'
+        elif isinstance(self.error, UnexpectedToken):
+            intention = Intention(self.get_line())
+            if intention.assignment():
+                return 'E0007'
+        return 'E0001'
+
     def message(self):
         """
         Creates a friendly error message.

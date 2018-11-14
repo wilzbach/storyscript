@@ -136,6 +136,30 @@ def test_storyerror_hint_intention(patch, storyerror):
     assert storyerror.hint() == 'Missing value after `=`'
 
 
+def test_storyerror_identify(storyerror):
+    assert storyerror.identify() == 'E0001'
+
+
+@mark.parametrize('name, code', [
+    ('service-name', 'E0002'),
+    ('arguments-noservice', 'E0003'),
+    ('return-outside', 'E0004'),
+    ('variables-backslash', 'E0005'),
+    ('variables-dash', 'E0006')
+])
+def test_storyerror_identify_codes(storyerror, error, name, code):
+    error.error = name
+    assert storyerror.identify() == code
+
+
+def test_storyerror_identify_intention(patch, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'assignment', return_value=True)
+    patch.object(StoryError, 'get_line')
+    storyerror.error = UnexpectedToken('token', 'expected')
+    assert storyerror.identify() == 'E0007'
+
+
 def test_storyerror_message(patch, storyerror):
     patch.many(StoryError, ['header', 'highlight', 'hint'])
     args = (storyerror.header(), storyerror.highlight(), storyerror.hint())
