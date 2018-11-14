@@ -19,6 +19,7 @@ class StoryError(SyntaxError):
         self.error = error
         self.story = story
         self.path = path
+        self.error_code = None
 
     def name(self):
         """

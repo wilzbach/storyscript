@@ -25,6 +25,7 @@ def test_storyerror_init(storyerror, error):
     assert storyerror.error == error
     assert storyerror.story == 'story'
     assert storyerror.path is None
+    assert storyerror.error_code is None
     assert issubclass(StoryError, SyntaxError)
 
 
