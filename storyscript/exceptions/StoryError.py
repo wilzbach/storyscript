@@ -81,6 +81,8 @@ class StoryError(SyntaxError):
             return "A variable name can't contain `-`"
         elif self.error_code == 'E0007':
             return 'Missing value after `=`'
+        elif self.error_code == 'E0008':
+            return 'You have mispelt `function`'
         return ''
 
     def identify(self):
