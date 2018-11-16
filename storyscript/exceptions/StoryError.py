@@ -70,21 +70,7 @@ class StoryError(SyntaxError):
         """
         Provides an hint for the current error.
         """
-        if self.error_code == 'E0002':
-            return "A service name can't contain `.`"
-        elif self.error_code == 'E0003':
-            return 'You have defined an argument, but not a service'
-        elif self.error_code == 'E0004':
-            return '`return` is allowed only inside functions'
-        elif self.error_code == 'E0005':
-            return "A variable name can't contain `/`"
-        elif self.error_code == 'E0006':
-            return "A variable name can't contain `-`"
-        elif self.error_code == 'E0007':
-            return 'Missing value after `=`'
-        elif self.error_code == 'E0008':
-            return 'You have misspelt `function`'
-        return ''
+        return self.error_code[1]
 
     def identify(self):
         """
