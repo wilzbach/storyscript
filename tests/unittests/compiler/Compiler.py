@@ -195,7 +195,7 @@ def test_compiler_arguments_fist_line(patch, compiler, lines, tree):
     lines.last.return_value = None
     with raises(StorySyntaxError):
         compiler.arguments(tree, '0')
-    error = 'arguments-noservice'
+    error = 'arguments_noservice'
     StorySyntaxError.__init__.assert_called_with(error, tree=tree)
 
 
@@ -209,7 +209,7 @@ def test_compiler_arguments_not_execute(patch, compiler, lines, tree):
     lines.lines = {'1': {'method': 'whatever'}}
     with raises(StorySyntaxError):
         compiler.arguments(tree, '0')
-    error = 'arguments-noservice'
+    error = 'arguments_noservice'
     StorySyntaxError.__init__.assert_called_with(error, tree=tree)
 
 
