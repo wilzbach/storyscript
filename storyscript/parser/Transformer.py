@@ -31,9 +31,9 @@ class Transformer(LarkTransformer):
         """
         token = matches[0].children[0]
         if '/' in token.value:
-            raise StorySyntaxError('variables-backslash', token=token)
+            raise StorySyntaxError('variables_backslash', token=token)
         if '-' in token.value:
-            raise StorySyntaxError('variables-dash', token=token)
+            raise StorySyntaxError('variables_dash', token=token)
         return Tree('assignment', matches)
 
     @staticmethod
