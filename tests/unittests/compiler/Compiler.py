@@ -329,7 +329,7 @@ def test_compiler_return_statement_error(patch, compiler, tree):
     patch.init(CompilerError)
     with raises(CompilerError):
         compiler.return_statement(tree, None)
-    CompilerError.__init__.assert_called_with('return-outside', tree=tree)
+    CompilerError.__init__.assert_called_with('return_outside', tree=tree)
 
 
 def test_compiler_if_block(patch, compiler, lines, tree):
