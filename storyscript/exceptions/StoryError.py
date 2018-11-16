@@ -82,7 +82,7 @@ class StoryError(SyntaxError):
         elif self.error_code == 'E0007':
             return 'Missing value after `=`'
         elif self.error_code == 'E0008':
-            return 'You have mispelt `function`'
+            return 'You have misspelt `function`'
         return ''
 
     def identify(self):

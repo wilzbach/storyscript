@@ -123,7 +123,7 @@ def test_storyerror_hint(storyerror, error):
     ('E0005', "A variable name can't contain `/`"),
     ('E0006', "A variable name can't contain `-`"),
     ('E0007', 'Missing value after `=`'),
-    ('E0008', 'You have mispelt `function`')
+    ('E0008', 'You have misspelt `function`')
 ])
 def test_storyerror_hint_error(storyerror, code, message):
     storyerror.error_code = code
