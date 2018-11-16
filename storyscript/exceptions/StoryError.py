@@ -5,6 +5,7 @@ import click
 
 from lark.exceptions import UnexpectedCharacters, UnexpectedToken
 
+from ..ErrorCodes import ErrorCodes
 from ..Intention import Intention
 
 
@@ -90,25 +91,17 @@ class StoryError(SyntaxError):
         Identifies the error.
         """
         if hasattr(self.error, 'error'):
-            if self.error.error == 'service-name':
-                return 'E0002'
-            elif self.error.error == 'arguments-noservice':
-                return 'E0003'
-            elif self.error.error == 'return-outside':
-                return 'E0004'
-            elif self.error.error == 'variables-backslash':
-                return 'E0005'
-            elif self.error.error == 'variables-dash':
-                return 'E0006'
+            if hasattr(ErrorCodes, self.error.error):
+                return getattr(ErrorCodes, self.error.error)
 
         intention = Intention(self.get_line())
         if isinstance(self.error, UnexpectedToken):
             if intention.assignment():
-                return 'E0007'
+                return ErrorCodes.incomplete_assignment
         elif isinstance(self.error, UnexpectedCharacters):
             if intention.is_function():
-                return 'E0008'
-        return 'E0001'
+                return ErrorCodes.misspelt_function
+        return ErrorCodes.unidentified_error
 
     def process(self):
         """

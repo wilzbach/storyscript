@@ -7,6 +7,7 @@ from lark.exceptions import UnexpectedCharacters, UnexpectedToken
 
 from pytest import fixture, mark
 
+from storyscript.ErrorCodes import ErrorCodes
 from storyscript.Intention import Intention
 from storyscript.exceptions import StoryError
 
@@ -131,19 +132,17 @@ def test_storyerror_hint_error(storyerror, code, message):
 
 
 def test_storyerror_identify(storyerror):
-    assert storyerror.identify() == 'E0001'
+    storyerror.error.error = 'none'
+    assert storyerror.identify() == ErrorCodes.unidentified_error
 
 
-@mark.parametrize('name, code', [
-    ('service-name', 'E0002'),
-    ('arguments-noservice', 'E0003'),
-    ('return-outside', 'E0004'),
-    ('variables-backslash', 'E0005'),
-    ('variables-dash', 'E0006')
+@mark.parametrize('name', [
+    'service_name', 'arguments_noservice', 'return_outside',
+    'variables_backslash', 'variables_dash'
 ])
-def test_storyerror_identify_codes(storyerror, error, name, code):
+def test_storyerror_identify_codes(storyerror, error, name):
     error.error = name
-    assert storyerror.identify() == code
+    assert storyerror.identify() == getattr(ErrorCodes, name)
 
 
 def test_storyerror_identify_unexpected_token(patch, storyerror):
@@ -151,7 +150,7 @@ def test_storyerror_identify_unexpected_token(patch, storyerror):
     patch.object(Intention, 'assignment', return_value=True)
     patch.object(StoryError, 'get_line')
     storyerror.error = UnexpectedToken('token', 'expected')
-    assert storyerror.identify() == 'E0007'
+    assert storyerror.identify() == ErrorCodes.incomplete_assignment
 
 
 def test_storyerror_identify_unexpected_characters(patch, storyerror):
@@ -160,7 +159,7 @@ def test_storyerror_identify_unexpected_characters(patch, storyerror):
     patch.object(Intention, 'is_function', return_value=True)
     patch.object(StoryError, 'get_line')
     storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
-    assert storyerror.identify() == 'E0008'
+    assert storyerror.identify() == ErrorCodes.misspelt_function
 
 
 def test_storyerror_process(patch, storyerror):
