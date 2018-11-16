@@ -105,7 +105,7 @@ class Lines:
         if service.split('.')[0] in self.modules:
             return 'call'
         if '.' in service:
-            raise StorySyntaxError('service-name')
+            raise StorySyntaxError('service_name')
         return 'execute'
 
     def append(self, method, line, **kwargs):

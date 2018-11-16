@@ -116,7 +116,7 @@ def test_lines_service_method_error(patch, lines):
     patch.init(StorySyntaxError)
     with raises(StorySyntaxError):
         lines.service_method('wrong.name', '1')
-    StorySyntaxError.__init__.assert_called_with('service-name')
+    StorySyntaxError.__init__.assert_called_with('service_name')
 
 
 def test_lines_append(patch, lines):
