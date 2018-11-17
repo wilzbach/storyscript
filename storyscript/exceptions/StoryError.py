@@ -83,10 +83,10 @@ class StoryError(SyntaxError):
         intention = Intention(self.get_line())
         if isinstance(self.error, UnexpectedToken):
             if intention.assignment():
-                return ErrorCodes.incomplete_assignment
+                return ErrorCodes.assignment_incomplete
         elif isinstance(self.error, UnexpectedCharacters):
             if intention.is_function():
-                return ErrorCodes.misspelt_function
+                return ErrorCodes.function_misspell
         return ErrorCodes.unidentified_error
 
     def process(self):

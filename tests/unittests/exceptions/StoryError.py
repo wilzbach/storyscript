@@ -137,7 +137,7 @@ def test_storyerror_identify_unexpected_token(patch, storyerror):
     patch.object(Intention, 'assignment', return_value=True)
     patch.object(StoryError, 'get_line')
     storyerror.error = UnexpectedToken('token', 'expected')
-    assert storyerror.identify() == ErrorCodes.incomplete_assignment
+    assert storyerror.identify() == ErrorCodes.assignment_incomplete
 
 
 def test_storyerror_identify_unexpected_characters(patch, storyerror):
@@ -146,7 +146,7 @@ def test_storyerror_identify_unexpected_characters(patch, storyerror):
     patch.object(Intention, 'is_function', return_value=True)
     patch.object(StoryError, 'get_line')
     storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
-    assert storyerror.identify() == ErrorCodes.misspelt_function
+    assert storyerror.identify() == ErrorCodes.function_misspell
 
 
 def test_storyerror_process(patch, storyerror):
