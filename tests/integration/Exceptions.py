@@ -61,4 +61,4 @@ def test_exception_missing_value(capsys):
     lines = output.splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 5'
     assert lines[2] == '1|    a = '
-    assert lines[5] == ''
+    assert lines[5] == 'Missing value after `=`'

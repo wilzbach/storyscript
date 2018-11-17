@@ -3,6 +3,11 @@ import os
 
 import click
 
+from lark.exceptions import UnexpectedCharacters, UnexpectedToken
+
+from ..ErrorCodes import ErrorCodes
+from ..Intention import Intention
+
 
 class StoryError(SyntaxError):
 
@@ -15,6 +20,7 @@ class StoryError(SyntaxError):
         self.error = error
         self.story = story
         self.path = path
+        self.error_code = None
 
     def name(self):
         """
@@ -64,23 +70,37 @@ class StoryError(SyntaxError):
         """
         Provides an hint for the current error.
         """
+        return self.error_code[1]
+
+    def identify(self):
+        """
+        Identifies the error.
+        """
         if hasattr(self.error, 'error'):
-            if self.error.error == 'service-name':
-                return "A service name can't contain `.`"
-            elif self.error.error == 'arguments-noservice':
-                return 'You have defined an argument, but not a service'
-            elif self.error.error == 'return-outside':
-                return '`return` is allowed only inside functions'
-            elif self.error.error == 'variables-backslash':
-                return "A variable name can't contain `/`"
-            elif self.error.error == 'variables-dash':
-                return "A variable name can't contain `-`"
-        return ''
+            if hasattr(ErrorCodes, self.error.error):
+                return getattr(ErrorCodes, self.error.error)
+
+        intention = Intention(self.get_line())
+        if isinstance(self.error, UnexpectedToken):
+            if intention.assignment():
+                return ErrorCodes.assignment_incomplete
+        elif isinstance(self.error, UnexpectedCharacters):
+            if intention.is_function():
+                return ErrorCodes.function_misspell
+        return ErrorCodes.unidentified_error
+
+    def process(self):
+        """
+        Process the error, assigning the error code and performing other
+        operations when necessary.
+        """
+        self.error_code = self.identify()
 
     def message(self):
         """
         Creates a friendly error message.
         """
+        self.process()
         args = (self.header(), self.highlight(), self.hint())
         return '{}\n\n{}\n\n{}'.format(*args)
 

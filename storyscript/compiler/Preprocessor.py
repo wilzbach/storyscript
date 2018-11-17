@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-from lark.lexer import Token
-
 from .Faketree import FakeTree
-from ..parser import Tree
 
 
 class Preprocessor:

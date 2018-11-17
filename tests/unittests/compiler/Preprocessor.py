@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-from lark.lexer import Token
-
 from pytest import fixture, mark
 
 from storyscript.compiler import FakeTree, Preprocessor
-from storyscript.parser import Tree
 
 
 @fixture

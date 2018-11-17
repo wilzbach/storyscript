@@ -2,7 +2,7 @@
 from lark.lexer import Token
 from lark.tree import Tree as LarkTree
 
-from pytest import fixture, mark
+from pytest import fixture
 
 from storyscript.parser import Tree
 

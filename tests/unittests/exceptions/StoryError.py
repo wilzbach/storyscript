@@ -3,8 +3,12 @@ import os
 
 import click
 
+from lark.exceptions import UnexpectedCharacters, UnexpectedToken
+
 from pytest import fixture, mark
 
+from storyscript.ErrorCodes import ErrorCodes
+from storyscript.Intention import Intention
 from storyscript.exceptions import StoryError
 
 
@@ -22,6 +26,7 @@ def test_storyerror_init(storyerror, error):
     assert storyerror.error == error
     assert storyerror.story == 'story'
     assert storyerror.path is None
+    assert storyerror.error_code is None
     assert issubclass(StoryError, SyntaxError)
 
 
@@ -108,27 +113,54 @@ def test_storyerror_highlight(patch, storyerror, error):
     assert result == '{}|    {}\n{}'.format(*args)
 
 
-def test_storyerror_hint(storyerror, error):
-    del error.error
-    assert storyerror.hint() == ''
+def test_storyerror_hint(storyerror):
+    storyerror.error_code = ('code', 'hint')
+    assert storyerror.hint() == 'hint'
 
 
-@mark.parametrize('name, message', [
-    ('service-name', "A service name can't contain `.`"),
-    ('arguments-noservice', 'You have defined an argument, but not a service'),
-    ('return-outside', '`return` is allowed only inside functions'),
-    ('variables-backslash', "A variable name can't contain `/`"),
-    ('variables-dash', "A variable name can't contain `-`")
+def test_storyerror_identify(storyerror):
+    storyerror.error.error = 'none'
+    assert storyerror.identify() == ErrorCodes.unidentified_error
+
+
+@mark.parametrize('name', [
+    'service_name', 'arguments_noservice', 'return_outside',
+    'variables_backslash', 'variables_dash'
 ])
-def test_storyerror_hint_error(storyerror, error, name, message):
+def test_storyerror_identify_codes(storyerror, error, name):
     error.error = name
-    assert storyerror.hint() == message
+    assert storyerror.identify() == getattr(ErrorCodes, name)
+
+
+def test_storyerror_identify_unexpected_token(patch, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'assignment', return_value=True)
+    patch.object(StoryError, 'get_line')
+    storyerror.error = UnexpectedToken('token', 'expected')
+    assert storyerror.identify() == ErrorCodes.assignment_incomplete
+
+
+def test_storyerror_identify_unexpected_characters(patch, storyerror):
+    patch.init(UnexpectedCharacters)
+    patch.init(Intention)
+    patch.object(Intention, 'is_function', return_value=True)
+    patch.object(StoryError, 'get_line')
+    storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
+    assert storyerror.identify() == ErrorCodes.function_misspell
+
+
+def test_storyerror_process(patch, storyerror):
+    patch.object(StoryError, 'identify')
+    storyerror.process()
+    assert storyerror.error_code == storyerror.identify()
 
 
 def test_storyerror_message(patch, storyerror):
-    patch.many(StoryError, ['header', 'highlight', 'hint'])
+    patch.many(StoryError, ['process', 'header', 'highlight', 'hint'])
+    result = storyerror.message()
+    assert storyerror.process.call_count == 1
     args = (storyerror.header(), storyerror.highlight(), storyerror.hint())
-    assert storyerror.message() == '{}\n\n{}\n\n{}'.format(*args)
+    assert result == '{}\n\n{}\n\n{}'.format(*args)
 
 
 def test_storyerror_echo(patch, storyerror):

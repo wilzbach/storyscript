@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from lark.lexer import Token
-
 from pytest import fixture
 
 from storyscript.compiler import Compiler

@@ -18,13 +18,15 @@ class Parser:
         self.algo = algo
         self.ebnf = ebnf
 
-    def indenter(self):
+    @staticmethod
+    def indenter():
         """
         Initialize the indenter
         """
         return CustomIndenter()
 
-    def transformer(self):
+    @staticmethod
+    def transformer():
         """
         Initialize the transformer
         """

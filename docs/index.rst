@@ -53,3 +53,4 @@ its tree.
    command-line
    syntax
    compiler
+   error-codes

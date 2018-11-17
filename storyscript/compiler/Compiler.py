@@ -23,6 +23,19 @@ class Compiler:
                 output.append(item.value)
         return output
 
+    @staticmethod
+    def extract_values(fragment):
+        """
+        Extracts values from an assignment_fragment tree, to be used as
+        arguments in a set method.
+        """
+        if fragment.expression:
+            if fragment.expression.mutation:
+                return [Objects.values(fragment.expression.values),
+                        Objects.mutation(fragment.expression.mutation)]
+            return [Objects.expression(fragment.expression)]
+        return [Objects.values(fragment.child(1))]
+
     @classmethod
     def function_output(cls, tree):
         return cls.output(tree.node('function_output.types'))
@@ -66,18 +79,6 @@ class Compiler:
         """
         self.expression(tree, parent)
 
-    def extract_values(self, fragment):
-        """
-        Extracts values from an assignment_fragment tree, to be used as
-        arguments in a set method.
-        """
-        if fragment.expression:
-            if fragment.expression.mutation:
-                return [Objects.values(fragment.expression.values),
-                        Objects.mutation(fragment.expression.mutation)]
-            return [Objects.expression(fragment.expression)]
-        return [Objects.values(fragment.child(1))]
-
     def assignment(self, tree, parent):
         """
         Compiles an assignment tree
@@ -107,10 +108,10 @@ class Compiler:
         if previous_line:
             line = self.lines.lines[previous_line]
             if line['method'] != 'execute':
-                raise StorySyntaxError('arguments-noservice', tree=tree)
+                raise StorySyntaxError('arguments_noservice', tree=tree)
             line['args'] = line['args'] + Objects.arguments(tree)
             return
-        raise StorySyntaxError('arguments-noservice', tree=tree)
+        raise StorySyntaxError('arguments_noservice', tree=tree)
 
     def service(self, tree, nested_block, parent):
         """
@@ -157,7 +158,7 @@ class Compiler:
         Compiles a return_statement tree
         """
         if parent is None:
-            raise CompilerError('return-outside', tree=tree)
+            raise CompilerError('return_outside', tree=tree)
         line = tree.line()
         args = [Objects.values(tree.child(0))]
         self.lines.append('return', line, args=args, parent=parent)

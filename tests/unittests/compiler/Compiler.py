@@ -38,6 +38,31 @@ def test_compiler_output_none():
     assert Compiler.output(None) == []
 
 
+def test_compiler_extract_values(patch, tree):
+    patch.object(Objects, 'values')
+    tree.expression = None
+    result = Compiler.extract_values(tree)
+    tree.child.assert_called_with(1)
+    Objects.values.assert_called_with(tree.child())
+    assert result == [Objects.values()]
+
+
+def test_compiler_extract_values_expression(patch, tree):
+    patch.object(Objects, 'expression')
+    tree.expression.mutation = None
+    result = Compiler.extract_values(tree)
+    Objects.expression.assert_called_with(tree.expression)
+    assert result == [Objects.expression()]
+
+
+def test_compiler_extract_values_mutation(patch, tree):
+    patch.many(Objects, ['values', 'mutation'])
+    result = Compiler.extract_values(tree)
+    Objects.values.assert_called_with(tree.expression.values)
+    Objects.mutation.assert_called_with(tree.expression.mutation)
+    assert result == [Objects.values(), Objects.mutation()]
+
+
 def test_compiler_function_output(patch, tree):
     patch.object(Compiler, 'output')
     result = Compiler.function_output(tree)
@@ -105,31 +130,6 @@ def test_compiler_absolute_expression(patch, compiler, lines, tree):
     Compiler.expression.assert_called_with(tree, '1')
 
 
-def test_compiler_extract_values(patch, compiler, tree):
-    patch.object(Objects, 'values')
-    tree.expression = None
-    result = compiler.extract_values(tree)
-    tree.child.assert_called_with(1)
-    Objects.values.assert_called_with(tree.child())
-    assert result == [Objects.values()]
-
-
-def test_compiler_extract_values_expression(patch, compiler, tree):
-    patch.object(Objects, 'expression')
-    tree.expression.mutation = None
-    result = compiler.extract_values(tree)
-    Objects.expression.assert_called_with(tree.expression)
-    assert result == [Objects.expression()]
-
-
-def test_compiler_extract_values_mutation(patch, compiler, tree):
-    patch.many(Objects, ['values', 'mutation'])
-    result = compiler.extract_values(tree)
-    Objects.values.assert_called_with(tree.expression.values)
-    Objects.mutation.assert_called_with(tree.expression.mutation)
-    assert result == [Objects.values(), Objects.mutation()]
-
-
 def test_compiler_assignment(patch, compiler, lines, tree):
     """
     Ensures a line like "x = value" is compiled correctly
@@ -195,7 +195,7 @@ def test_compiler_arguments_fist_line(patch, compiler, lines, tree):
     lines.last.return_value = None
     with raises(StorySyntaxError):
         compiler.arguments(tree, '0')
-    error = 'arguments-noservice'
+    error = 'arguments_noservice'
     StorySyntaxError.__init__.assert_called_with(error, tree=tree)
 
 
@@ -209,7 +209,7 @@ def test_compiler_arguments_not_execute(patch, compiler, lines, tree):
     lines.lines = {'1': {'method': 'whatever'}}
     with raises(StorySyntaxError):
         compiler.arguments(tree, '0')
-    error = 'arguments-noservice'
+    error = 'arguments_noservice'
     StorySyntaxError.__init__.assert_called_with(error, tree=tree)
 
 
@@ -329,7 +329,7 @@ def test_compiler_return_statement_error(patch, compiler, tree):
     patch.init(CompilerError)
     with raises(CompilerError):
         compiler.return_statement(tree, None)
-    CompilerError.__init__.assert_called_with('return-outside', tree=tree)
+    CompilerError.__init__.assert_called_with('return_outside', tree=tree)
 
 
 def test_compiler_if_block(patch, compiler, lines, tree):
