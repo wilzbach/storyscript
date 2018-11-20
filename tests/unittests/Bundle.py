@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+import delegator
+
 from pytest import fixture
 
 from storyscript.Bundle import Bundle
@@ -15,6 +17,18 @@ def bundle():
 def test_bundle_init(bundle):
     assert bundle.path == 'path'
     assert bundle.stories == {}
+
+
+def test_bundle_gitignores(patch, bundle):
+    """
+    Ensures gitignores uses can produce the list of ignored files.
+    """
+    patch.object(delegator, 'run')
+    result = bundle.gitignores()
+    command = 'git ls-files --others --ignored --exclude-standard'
+    delegator.run.assert_called_with(command)
+    delegator.run().out.split.assert_called_with('\n')
+    assert result == delegator.run().out.split()
 
 
 def test_bundle_find_stories(patch, bundle):

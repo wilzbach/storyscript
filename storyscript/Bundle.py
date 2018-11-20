@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+import delegator
+
 from .Story import Story
 
 
@@ -12,6 +14,13 @@ class Bundle:
     def __init__(self, path):
         self.path = path
         self.stories = {}
+
+    def gitignores(self):
+        """
+        Get the list of files ignored by git
+        """
+        command = 'git ls-files --others --ignored --exclude-standard'
+        return delegator.run(command).out.split('\n')
 
     def find_stories(self):
         """
