@@ -81,7 +81,7 @@ class Objects:
     def fillers_values(cls, matches):
         values = []
         for match in matches:
-            values.append(cls.path(Tree('path', [Token('WORD', match)])))
+            values.append(cls.path(cls.name_to_path(match)))
         return values
 
     @staticmethod

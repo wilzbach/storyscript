@@ -125,9 +125,10 @@ def test_objects_name_to_path_dots():
 
 
 def test_objects_fillers_values(patch):
-    patch.object(Objects, 'path')
+    patch.many(Objects, ['path', 'name_to_path'])
     result = Objects.fillers_values(['one'])
-    Objects.path.assert_called_with(Tree('path', [Token('WORD', 'one')]))
+    Objects.name_to_path.assert_called_with('one')
+    Objects.path.assert_called_with(Objects.name_to_path())
     assert result == [Objects.path()]
 
 
