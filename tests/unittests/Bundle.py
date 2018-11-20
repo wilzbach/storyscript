@@ -31,6 +31,28 @@ def test_bundle_gitignores(patch, bundle):
     assert result == delegator.run().out.split()
 
 
+def test_bundle_parse_directory(patch, bundle):
+    """
+    Ensures parse_directory can parse a directory
+    """
+    patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
+    patch.object(Bundle, 'gitignores')
+    result = bundle.parse_directory('dir')
+    assert Bundle.gitignores.call_count == 1
+    os.walk.assert_called_with('dir')
+    assert result == ['root/one.story']
+
+
+def test_bundle_parse_directory_ignored(patch, bundle):
+    """
+    Ensures parse_directory does not return ignored files
+    """
+    patch.object(os, 'walk', return_value=[('./root', [], ['one.story'])])
+    patch.object(Bundle, 'gitignores', return_value=['root/one.story'])
+    result = bundle.parse_directory('dir')
+    assert result == []
+
+
 def test_bundle_find_stories(patch, bundle):
     """
     Ensures Bundle.find_stories returns the original path if it's not a
