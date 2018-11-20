@@ -64,6 +64,19 @@ class Objects:
             string = string.replace(placeholder, '{}')
         return string
 
+    @staticmethod
+    def name_to_path(name):
+        """
+        Builds the tree for a name or dotted name.
+        """
+        names = name.split('.')
+        tree = Tree('path', [Token('NAME', names[0])])
+        if len(names) > 1:
+            for name in names[1:]:
+                fragment = Tree('path_fragment', [Token('NAME', name)])
+                tree.children.append(fragment)
+        return tree
+
     @classmethod
     def fillers_values(cls, matches):
         values = []
