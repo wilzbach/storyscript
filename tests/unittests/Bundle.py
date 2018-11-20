@@ -42,11 +42,13 @@ def test_bundle_find_stories(patch, bundle):
 
 def test_bundle_find_stories_directory(patch, bundle):
     """
-    Ensures Bundle.find_stories returns stories in a directory
+    Ensures Bundle.find_stories uses Bundle.parse_directory
     """
+    patch.object(Bundle, 'parse_directory')
     patch.object(os.path, 'isdir')
-    patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
-    assert bundle.find_stories() == ['root/one.story']
+    result = bundle.find_stories()
+    Bundle.parse_directory.assert_called_with(bundle.path)
+    assert result == Bundle.parse_directory()
 
 
 def test_bundle_services(bundle):
