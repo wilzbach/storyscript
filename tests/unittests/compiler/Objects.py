@@ -112,10 +112,23 @@ def test_objects_replace_fillers():
     assert result == 'hello, {}'
 
 
+def test_objects_name_to_path():
+    result = Objects.name_to_path('name')
+    assert result == Tree('path', [Token('NAME', 'name')])
+
+
+def test_objects_name_to_path_dots():
+    result = Objects.name_to_path('name.dot')
+    fragment = Tree('path_fragment', [Token('NAME', 'dot')])
+    children = [Token('NAME', 'name'), fragment]
+    assert result == Tree('path', children)
+
+
 def test_objects_fillers_values(patch):
-    patch.object(Objects, 'path')
+    patch.many(Objects, ['path', 'name_to_path'])
     result = Objects.fillers_values(['one'])
-    Objects.path.assert_called_with(Tree('path', [Token('WORD', 'one')]))
+    Objects.name_to_path.assert_called_with('one')
+    Objects.path.assert_called_with(Objects.name_to_path())
     assert result == [Objects.path()]
 
 
