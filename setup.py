@@ -34,6 +34,7 @@ classifiers = [
 
 requirements = [
     'click==7.0',
+    'delegator.py>=0.1.1',
     'lark-parser>=0.6.5'
 ]
 

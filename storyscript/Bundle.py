@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+import delegator
+
 from .Story import Story
 
 
@@ -13,17 +15,33 @@ class Bundle:
         self.path = path
         self.stories = {}
 
+    def gitignores(self):
+        """
+        Get the list of files ignored by git
+        """
+        command = 'git ls-files --others --ignored --exclude-standard'
+        return delegator.run(command).out.split('\n')
+
+    def parse_directory(self, directory):
+        """
+        Parse a directory to find stories.
+        """
+        paths = []
+        ignores = self.gitignores()
+        for root, subdirs, files in os.walk(directory):
+            for file in files:
+                if file.endswith('.story'):
+                    path = os.path.join(root, file)
+                    if path[2:] not in ignores:
+                        paths.append(path)
+        return paths
+
     def find_stories(self):
         """
         Finds bundle stories.
         """
-        stories = []
         if os.path.isdir(self.path):
-            for root, subdirs, files in os.walk(self.path):
-                for file in files:
-                    if file.endswith('.story'):
-                        stories.append(os.path.join(root, file))
-            return stories
+            return self.parse_directory(self.path)
         return [self.path]
 
     def services(self):

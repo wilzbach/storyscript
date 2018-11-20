@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+import delegator
+
 from pytest import fixture
 
 from storyscript.Bundle import Bundle
@@ -17,6 +19,40 @@ def test_bundle_init(bundle):
     assert bundle.stories == {}
 
 
+def test_bundle_gitignores(patch, bundle):
+    """
+    Ensures gitignores uses can produce the list of ignored files.
+    """
+    patch.object(delegator, 'run')
+    result = bundle.gitignores()
+    command = 'git ls-files --others --ignored --exclude-standard'
+    delegator.run.assert_called_with(command)
+    delegator.run().out.split.assert_called_with('\n')
+    assert result == delegator.run().out.split()
+
+
+def test_bundle_parse_directory(patch, bundle):
+    """
+    Ensures parse_directory can parse a directory
+    """
+    patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
+    patch.object(Bundle, 'gitignores')
+    result = bundle.parse_directory('dir')
+    assert Bundle.gitignores.call_count == 1
+    os.walk.assert_called_with('dir')
+    assert result == ['root/one.story']
+
+
+def test_bundle_parse_directory_ignored(patch, bundle):
+    """
+    Ensures parse_directory does not return ignored files
+    """
+    patch.object(os, 'walk', return_value=[('./root', [], ['one.story'])])
+    patch.object(Bundle, 'gitignores', return_value=['root/one.story'])
+    result = bundle.parse_directory('dir')
+    assert result == []
+
+
 def test_bundle_find_stories(patch, bundle):
     """
     Ensures Bundle.find_stories returns the original path if it's not a
@@ -28,11 +64,13 @@ def test_bundle_find_stories(patch, bundle):
 
 def test_bundle_find_stories_directory(patch, bundle):
     """
-    Ensures Bundle.find_stories returns stories in a directory
+    Ensures Bundle.find_stories uses Bundle.parse_directory
     """
+    patch.object(Bundle, 'parse_directory')
     patch.object(os.path, 'isdir')
-    patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
-    assert bundle.find_stories() == ['root/one.story']
+    result = bundle.find_stories()
+    Bundle.parse_directory.assert_called_with(bundle.path)
+    assert result == Bundle.parse_directory()
 
 
 def test_bundle_services(bundle):
