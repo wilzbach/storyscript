@@ -234,6 +234,22 @@ def test_compiler_set_mutation_variable(parser):
     assert result['tree']['2']['args'][1]['$OBJECT'] == 'mutation'
 
 
+def test_compiler_string_template(parser):
+    tree = parser.parse('a = "hello {nl}"')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['args'][0]['string'] == 'hello {}'
+    values = [{'$OBJECT': 'path', 'paths': ['nl']}]
+    assert result['tree']['1']['args'][0]['values'] == values
+
+
+def test_compiler_string_template_dots(parser):
+    tree = parser.parse('a = "hello {nl.ams}"')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['args'][0]['string'] == 'hello {}'
+    values = [{'$OBJECT': 'path', 'paths': ['nl', 'ams']}]
+    assert result['tree']['1']['args'][0]['values'] == values
+
+
 def test_compiler_service(parser):
     """
     Ensures that services are compiled correctly
