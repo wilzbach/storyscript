@@ -1,66 +1,16 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
-from lark.tree import Tree
 
-from pytest import fixture, mark
-
-from storyscript.parser import Parser
+from pytest import mark
 
 
-@fixture
-def parser():
-    return Parser()
-
-
-@fixture
-def int_token():
-    return Token('INT', 3)
-
-
-@fixture
-def name_token():
-    return Token('NAME', 'var')
-
-
-def test_parser_values(parser, int_token):
-    """
-    Ensures that parsing a number produces the expected tree
-    """
-    result = parser.parse('3\n')
-    assert result.block.rules.values.number.child(0) == int_token
-
-
-def test_parser_values_single_quoted_string(parser):
-    result = parser.parse("'red'\n")
-    expected = result.block.rules.values.string.child(0)
-    assert expected == Token('SINGLE_QUOTED', "'red'")
-
-
-def test_parser_values_double_quoted_string(parser):
-    result = parser.parse('"red"\n')
-    expected = result.block.rules.values.string.child(0)
-    assert expected == Token('DOUBLE_QUOTED', '"red"')
-
-
-def test_parser_boolean_true(parser):
-    result = parser.parse('true\n')
-    assert result.block.rules.values.boolean.child(0) == Token('TRUE', 'true')
-
-
-def test_parser_sum(parser, int_token):
+def test_parser_sum(parser):
     result = parser.parse('3 + 3\n')
     expression = result.block.rules.absolute_expression.expression
     fragment = expression.expression_fragment
-    assert expression.values.number.child(0) == int_token
+    assert expression.values.number.child(0) == Token('INT', 3)
     assert fragment.operator.child(0) == Token('PLUS', '+')
-    assert fragment.values.number.child(0) == int_token
-
-
-def test_parser_list(parser, int_token):
-    result = parser.parse('[3,4]\n')
-    list = result.block.rules.values.list
-    assert list.values.number.child(0) == int_token
-    assert list.child(3).number.child(0) == Token('INT', 4)
+    assert fragment.values.number.child(0) == Token('INT', 3)
 
 
 def test_parser_list_path(parser):
@@ -72,47 +22,16 @@ def test_parser_list_path(parser):
     assert list.child(3).child(0) == Token('NAME', 'x')
 
 
-def test_parser_list_empty(parser):
-    result = parser.parse('[]\n')
-    expected = Tree('list', [Token('_OSB', '['), Token('_CSB', ']')])
-    assert result.block.rules.values.list == expected
-
-
-def test_parser_object(parser):
-    result = parser.parse("{'color':'red','shape':1}\n")
-    key_value = result.block.rules.values.objects.key_value
-    assert key_value.string.child(0) == Token('SINGLE_QUOTED', "'color'")
-    assert key_value.values.string.child(0) == Token('SINGLE_QUOTED', "'red'")
-
-
-def test_parser_regular_expression(parser):
-    """
-    Ensures regular expressions are parsed correctly
-    """
-    result = parser.parse('/^foo/')
-    token = Token('REGEXP', '/^foo/')
-    assert result.block.rules.values.regular_expression.child(0) == token
-
-
-def test_parser_regular_expression_flags(parser):
-    """
-    Ensures regular expressions with flags are parsed correctly
-    """
-    result = parser.parse('/^foo/i')
-    token = Token('NAME', 'i')
-    assert result.block.rules.values.regular_expression.child(1) == token
-
-
 @mark.parametrize('code, token', [
     ('var="hello"\n', Token('DOUBLE_QUOTED', '"hello"')),
     ('var = "hello"\n', Token('DOUBLE_QUOTED', '"hello"')),
     ('var=3\n', Token('INT', 3)),
     ('var = 3\n', Token('INT', 3))
 ])
-def test_parser_assignment(parser, name_token, code, token):
+def test_parser_assignment(parser, code, token):
     result = parser.parse(code)
     assignment = result.block.rules.assignment
-    assert assignment.path.child(0) == name_token
+    assert assignment.path.child(0) == Token('NAME', 'var')
     assert assignment.assignment_fragment.child(0) == Token('EQUALS', '=')
     assert assignment.assignment_fragment.values.child(0).child(0) == token
 
@@ -166,22 +85,22 @@ def test_parser_service_output(parser):
     assert node.child(1) == Token('NAME', 'response')
 
 
-def test_parser_if_block(parser, name_token):
+def test_parser_if_block(parser):
     result = parser.parse('if expr\n\tvar=3\n')
     if_block = result.block.if_block
     path = if_block.if_statement.path_value.path
     assignment = if_block.nested_block.block.rules.assignment
     assert path.child(0) == Token('NAME', 'expr')
-    assert assignment.path.child(0) == name_token
+    assert assignment.path.child(0) == Token('NAME', 'var')
 
 
-def test_parser_if_block_nested(parser, name_token):
+def test_parser_if_block_nested(parser):
     result = parser.parse('if expr\n\tif things\n\t\tvar=3\n')
     if_block = result.block.if_block.nested_block.block.if_block
     path = if_block.if_statement.path_value.path
     assignment = if_block.nested_block.block.rules.assignment
     assert path.child(0) == Token('NAME', 'things')
-    assert assignment.path.child(0) == name_token
+    assert assignment.path.child(0) == Token('NAME', 'var')
 
 
 def test_parser_if_block_else(parser):
