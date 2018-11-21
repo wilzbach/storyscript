@@ -2,6 +2,39 @@
 from storyscript.compiler import Compiler
 
 
+def test_assignments_true(parser):
+    """
+    Ensures that assignments to true are compiled correctly
+    """
+    tree = parser.parse('a = true')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['name'] == ['a']
+    assert result['tree']['1']['args'] == [True]
+
+
+def test_assignments_false(parser):
+    """
+    Ensures that assignments to false are compiled correctly
+    """
+    tree = parser.parse('a = false')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['name'] == ['a']
+    assert result['tree']['1']['args'] == [False]
+
+
+def test_assignments_null(parser):
+    """
+    Ensures that assignments to null are compiled correctly
+    """
+    tree = parser.parse('a = null')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['name'] == ['a']
+    assert result['tree']['1']['args'] == [None]
+
+
 def test_assignments_int(parser):
     """
     Ensures that assignments to integers are compiled correctly
