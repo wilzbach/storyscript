@@ -24,6 +24,18 @@ def test_assignments_float(parser):
     assert result['tree']['1']['args'] == [3.14]
 
 
+def test_assignments_string(parser):
+    """
+    Ensures that assignments to strings are compiled correctly
+    """
+    tree = parser.parse('a = "cake"')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['name'] == ['a']
+    expected = [{'$OBJECT': 'string', 'string': 'cake'}]
+    assert result['tree']['1']['args'] == expected
+
+
 def test_assignments_string_template(parser):
     tree = parser.parse('a = "hello {nl}"')
     result = Compiler.compile(tree)
