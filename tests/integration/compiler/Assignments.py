@@ -13,6 +13,17 @@ def test_assignments_int(parser):
     assert result['tree']['1']['args'] == [0]
 
 
+def test_assignments_float(parser):
+    """
+    Ensures that assignments to floats are compiled correctly
+    """
+    tree = parser.parse('a = 3.14')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['name'] == ['a']
+    assert result['tree']['1']['args'] == [3.14]
+
+
 def test_assignments_string_template(parser):
     tree = parser.parse('a = "hello {nl}"')
     result = Compiler.compile(tree)
