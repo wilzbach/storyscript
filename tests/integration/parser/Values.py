@@ -8,6 +8,17 @@ def test_values_true(parser):
     assert result.block.rules.values.boolean.child(0) == Token('TRUE', 'true')
 
 
+def test_values_false(parser):
+    result = parser.parse('false\n')
+    token = Token('FALSE', 'false')
+    assert result.block.rules.values.boolean.child(0) == token
+
+
+def test_values_null(parser):
+    result = parser.parse('null\n')
+    assert result.block.rules.values.void.child(0) == Token('NULL', 'null')
+
+
 def test_values_int(parser):
     """
     Ensures that parsing a number produces the expected tree
