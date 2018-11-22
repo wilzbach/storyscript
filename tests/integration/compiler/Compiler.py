@@ -157,33 +157,6 @@ def test_compiler_service_inline_expression(parser):
     assert result['tree']['1']['args'] == [argument]
 
 
-def test_compiler_function(parser):
-    tree = parser.parse('function sum a:int returns int\n\treturn 0')
-    result = Compiler.compile(tree)
-    args = [{
-        '$OBJECT': 'argument',
-        'argument': {'$OBJECT': 'type', 'type': 'int'}, 'name': 'a'
-    }]
-    assert result['tree']['1']['method'] == 'function'
-    assert result['tree']['1']['function'] == 'sum'
-    assert result['tree']['1']['args'] == args
-    assert result['tree']['1']['output'] == ['int']
-    assert result['tree']['1']['next'] == '2'
-    assert result['tree']['2']['method'] == 'return'
-    assert result['tree']['2']['args'] == [0]
-    assert result['tree']['2']['parent'] == '1'
-
-
-def test_compiler_function_call(parser):
-    source = 'function sum a:int returns int\n\treturn 0\nsum a:1'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
-    args = [{'$OBJECT': 'argument', 'name': 'a', 'argument': 1}]
-    assert result['tree']['3']['method'] == 'call'
-    assert result['tree']['3']['service'] == 'sum'
-    assert result['tree']['3']['args'] == args
-
-
 def test_compiler_try(parser):
     source = 'try\n\tx=0'
     tree = parser.parse(source)
