@@ -53,6 +53,15 @@ def test_compiler_if(parser):
     assert result['tree']['2']['parent'] == '1'
 
 
+def test_compiler_if_inline_expression(parser):
+    tree = parser.parse('if (random numbers)\n\tx = 0')
+    result = Compiler.compile(tree)
+    entry = result['entrypoint']
+    name = result['tree'][entry]['name']
+    assert result['tree']['1']['method'] == 'if'
+    assert result['tree']['1']['args'] == [{'$OBJECT': 'path', 'paths': name}]
+
+
 def test_compiler_if_elseif(parser):
     source = 'if colour == "red"\n\tx = 0\nelse if colour == "blue"\n\tx = 1'
     tree = parser.parse(source)
