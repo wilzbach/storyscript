@@ -184,6 +184,14 @@ def test_assignments_service(parser):
     assert result['tree']['1']['name'] == ['a']
 
 
+def test_assignments_inline_expression(parser):
+    tree = parser.parse('a = (alpine echo)')
+    result = Compiler.compile(tree)
+    entry = result['entrypoint']
+    path = result['tree'][entry]['name']
+    assert result['tree']['1']['args'] == [{'$OBJECT': 'path', 'paths': path}]
+
+
 def test_assignments_mutation(parser):
     """
     Ensures that assigning a mutation on a value is compiled correctly
