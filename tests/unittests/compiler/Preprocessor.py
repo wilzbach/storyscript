@@ -88,7 +88,7 @@ def test_preprocessor_assignments_to_expression(patch, magic, tree):
     assignment.assignment_fragment.service = None
     tree.find_data.return_value = [assignment]
     Preprocessor.assignments(tree)
-    args = (tree, assignment.assignment_fragment.values)
+    args = (tree, assignment.assignment_fragment.path)
     Preprocessor.assignment_expression.assert_called_with(*args)
 
 
@@ -96,7 +96,7 @@ def test_preprocessor_assignments_no_expression(patch, magic, tree):
     patch.object(Preprocessor, 'assignment_expression')
     assignment = magic()
     assignment.assignment_fragment.service = None
-    assignment.assignment_fragment.values.inline_expression = None
+    assignment.assignment_fragment.path.inline_expression = None
     tree.find_data.return_value = [assignment]
     Preprocessor.assignments(tree)
     assert Preprocessor.assignment_expression.call_count == 0
