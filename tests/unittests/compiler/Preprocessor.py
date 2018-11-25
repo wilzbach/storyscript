@@ -42,7 +42,7 @@ def test_preprocessor_service_arguments(patch, magic, tree, fake_tree):
     Preprocessor.service_arguments('block', tree)
     fake_tree.assert_called_with('block')
     tree.find_data.assert_called_with('arguments')
-    argument.node.assert_called_with('values.inline_expression')
+    argument.node.assert_called_with('path.inline_expression')
     args = (fake_tree(), argument, argument.node())
     Preprocessor.replace_expression.assert_called_with(*args)
 
