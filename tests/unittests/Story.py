@@ -40,14 +40,24 @@ def test_story_init_path():
     assert story.path == 'path'
 
 
+def test_story_remove_comments(patch):
+    """
+    Ensures that remove_comments can remove inline comments.
+    """
+    patch.object(re, 'sub')
+    result = Story.remove_comments('source')
+    re.sub.assert_called_with(r'#[^#\n]+', '', 'source')
+    assert result == re.sub()
+
+
 def test_story_clean_source(patch):
     """
     Ensures that a story is cleaned correctly
     """
     patch.object(re, 'sub')
+    patch.object(Story, 'remove_comments')
     result = Story.clean_source('source')
-    expression = r'(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
-    re.sub.assert_called_with(expression, '', 'source')
+    re.sub.assert_called_with(r'###[^#]+###', '', Story.remove_comments())
     assert result == re.sub()
 
 
@@ -83,9 +93,11 @@ def test_story_from_file(patch):
 
 def test_story_from_stream(patch, magic):
     patch.init(Story)
+    patch.object(Story, 'clean_source')
     stream = magic()
     result = Story.from_stream(stream)
-    Story.__init__.assert_called_with(stream.read())
+    Story.clean_source.assert_called_with(stream.read())
+    Story.__init__.assert_called_with(Story.clean_source())
     assert isinstance(result, Story)
 
 

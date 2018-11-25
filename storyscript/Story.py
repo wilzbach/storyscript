@@ -21,12 +21,18 @@ class Story:
         self.path = path
 
     @staticmethod
-    def clean_source(source):
+    def remove_comments(source):
         """
-        Cleans a story by removing comments.
+        Removes inline comments from source.
         """
-        expression = r'(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
-        return re.sub(expression, '', source)
+        return re.sub(r'#[^#\n]+', '', source)
+
+    @classmethod
+    def clean_source(cls, source):
+        """
+        Cleans a story by removing all comments.
+        """
+        return re.sub(r'###[^#]+###', '', cls.remove_comments(source))
 
     @classmethod
     def read(cls, path):
@@ -48,12 +54,12 @@ class Story:
         """
         return Story(cls.read(path), path=path)
 
-    @staticmethod
-    def from_stream(stream):
+    @classmethod
+    def from_stream(cls, stream):
         """
         Creates a story from a stream source
         """
-        return Story(stream.read())
+        return Story(cls.clean_source(stream.read()))
 
     def error(self, error, debug=False):
         """
