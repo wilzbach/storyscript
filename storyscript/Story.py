@@ -21,12 +21,18 @@ class Story:
         self.path = path
 
     @staticmethod
-    def clean_source(source):
+    def remove_comments(source):
         """
-        Cleans a story by removing comments.
+        Removes inline comments from source.
         """
-        expression = r'(?<=###)\s(.*|\\n)+(?=\s###)|#(.*)'
-        return re.sub(expression, '', source)
+        return re.sub(r'#[^#\n]+', '', source)
+
+    @classmethod
+    def clean_source(cls, source):
+        """
+        Cleans a story by removing all comments.
+        """
+        return re.sub(r'###[^#]+###', '', cls.remove_comments(source))
 
     @classmethod
     def read(cls, path):
