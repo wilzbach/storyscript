@@ -21,10 +21,34 @@ def test_values_null(parser):
 
 def test_values_int(parser):
     """
-    Ensures that parsing a number produces the expected tree
+    Ensures that parsing an int produces the expected tree
     """
     result = parser.parse('3\n')
     assert result.block.rules.values.number.child(0) == Token('INT', 3)
+
+
+def test_values_int_negative(parser):
+    """
+    Ensures that parsing a negative int produces the expected tree
+    """
+    result = parser.parse('-3\n')
+    assert result.block.rules.values.number.child(0) == Token('INT', -3)
+
+
+def test_values_float(parser):
+    """
+    Ensures that parsing a float produces the expected tree
+    """
+    result = parser.parse('3.14\n')
+    assert result.block.rules.values.number.child(0) == Token('FLOAT', 3.14)
+
+
+def test_values_float_negative(parser):
+    """
+    Ensures that parsing a negative float produces the expected tree
+    """
+    result = parser.parse('-3.14\n')
+    assert result.block.rules.values.number.child(0) == Token('FLOAT', -3.14)
 
 
 def test_values_single_quoted_string(parser):
