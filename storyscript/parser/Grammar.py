@@ -70,7 +70,7 @@ class Grammar:
         self.ebnf.regular_expression = 'regexp name?'
         self.ebnf.inline_expression = 'op service cp'
         values = ('number, string, boolean, void, list, objects, '
-                  'regular_expression, inline_expression')
+                  'regular_expression')
         self.ebnf.values = values
 
     def assignments(self):
@@ -78,7 +78,8 @@ class Grammar:
         self.ebnf._DOT = '.'
         path_fragment = 'dot name, osb int csb, osb string csb, osb path csb'
         self.ebnf.path_fragment = path_fragment
-        self.ebnf.path = 'name (path_fragment)*'
+        self.ebnf.path = ('name (path_fragment)* | '
+                          'inline_expression (path_fragment)*')
         assignment_fragment = 'equals (values, expression, path, service)'
         self.ebnf.assignment_fragment = assignment_fragment
         self.ebnf.assignment = 'path assignment_fragment'

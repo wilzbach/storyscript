@@ -22,14 +22,15 @@ def test_preprocessor_replace_expression(magic, tree):
     expression = magic()
     Preprocessor.replace_expression(tree, parent, expression)
     tree.add_assignment.assert_called_with(expression.service)
-    parent.replace.assert_called_with(1, tree.add_assignment().path)
+    assignment = tree.add_assignment().path.child()
+    parent.child().replace.assert_called_with(0, assignment)
 
 
 def test_preprocessor_replace_pathvalue(magic, tree, block, fake_tree):
     path_value = magic()
     Preprocessor.replace_pathvalue(block, tree, path_value)
     fake_tree.assert_called_with(block)
-    service = path_value.values.inline_expression.service
+    service = path_value.path.inline_expression.service
     fake_tree().add_assignment.assert_called_with(service)
     path_value.replace.assert_called_with(0, fake_tree().add_assignment().path)
     assert path_value.path.children[0].line == tree.line()
@@ -42,7 +43,7 @@ def test_preprocessor_service_arguments(patch, magic, tree, fake_tree):
     Preprocessor.service_arguments('block', tree)
     fake_tree.assert_called_with('block')
     tree.find_data.assert_called_with('arguments')
-    argument.node.assert_called_with('values.inline_expression')
+    argument.node.assert_called_with('path.inline_expression')
     args = (fake_tree(), argument, argument.node())
     Preprocessor.replace_expression.assert_called_with(*args)
 
@@ -88,7 +89,7 @@ def test_preprocessor_assignments_to_expression(patch, magic, tree):
     assignment.assignment_fragment.service = None
     tree.find_data.return_value = [assignment]
     Preprocessor.assignments(tree)
-    args = (tree, assignment.assignment_fragment.values)
+    args = (tree, assignment.assignment_fragment.path)
     Preprocessor.assignment_expression.assert_called_with(*args)
 
 
@@ -96,7 +97,7 @@ def test_preprocessor_assignments_no_expression(patch, magic, tree):
     patch.object(Preprocessor, 'assignment_expression')
     assignment = magic()
     assignment.assignment_fragment.service = None
-    assignment.assignment_fragment.values.inline_expression = None
+    assignment.assignment_fragment.path.inline_expression = None
     tree.find_data.return_value = [assignment]
     Preprocessor.assignments(tree)
     assert Preprocessor.assignment_expression.call_count == 0
@@ -192,7 +193,7 @@ def test_preprocessor_flow_statement(patch, magic, tree):
     tree.find_data.return_value = [statement]
     Preprocessor.flow_statement('statement', tree)
     tree.find_data.assert_called_with('statement')
-    statement.node.assert_called_with('path_value.values.inline_expression')
+    statement.node.assert_called_with('path_value.path.inline_expression')
     args = (tree, statement, statement.path_value)
     Preprocessor.replace_pathvalue.assert_called_with(*args)
 

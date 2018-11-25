@@ -21,7 +21,7 @@ class Preprocessor:
         Replaces an inline expression with a fake assignment
         """
         assignment = fake_tree.add_assignment(inline_expression.service)
-        parent.replace(1, assignment.path)
+        parent.child(1).replace(0, assignment.path.child(0))
 
     @classmethod
     def replace_pathvalue(cls, block, statement, path_value):
@@ -30,7 +30,7 @@ class Preprocessor:
         """
         fake_tree = cls.fake_tree(block)
         line = statement.line()
-        service = path_value.values.inline_expression.service
+        service = path_value.path.inline_expression.service
         assignment = fake_tree.add_assignment(service)
         path_value.replace(0, assignment.path)
         path_value.path.children[0].line = line
@@ -42,7 +42,7 @@ class Preprocessor:
         """
         fake_tree = cls.fake_tree(block)
         for argument in service.find_data('arguments'):
-            expression = argument.node('values.inline_expression')
+            expression = argument.node('path.inline_expression')
             if expression:
                 cls.replace_expression(fake_tree, argument, expression)
 
@@ -65,9 +65,9 @@ class Preprocessor:
             fragment = assignment.assignment_fragment
             if fragment.service:
                 cls.service_arguments(block, fragment.service)
-            elif fragment.values:
-                if fragment.values.inline_expression:
-                    cls.assignment_expression(block, fragment.values)
+            elif fragment.path:
+                if fragment.path.inline_expression:
+                    cls.assignment_expression(block, fragment.path)
 
     @classmethod
     def service(cls, tree):
@@ -129,11 +129,12 @@ class Preprocessor:
         Processes if statements, looking inline expressions.
         """
         for statement in block.find_data(name):
-            if statement.node('path_value.values.inline_expression'):
+            print(statement.pretty())
+            if statement.node('path_value.path.inline_expression'):
                 cls.replace_pathvalue(block, statement, statement.path_value)
 
             if statement.child(2):
-                if statement.child(2).node('values.inline_expression'):
+                if statement.child(2).node('path.inline_expression'):
                     cls.replace_pathvalue(block, statement, statement.child(2))
 
     @classmethod

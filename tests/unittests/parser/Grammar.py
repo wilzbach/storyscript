@@ -70,7 +70,7 @@ def test_grammar_values(grammar, ebnf):
     assert ebnf.regular_expression == 'regexp name?'
     assert ebnf.inline_expression == 'op service cp'
     values = ('number, string, boolean, void, list, objects, '
-              'regular_expression, inline_expression')
+              'regular_expression')
     assert ebnf.values == values
 
 
@@ -80,7 +80,8 @@ def test_grammar_assignments(grammar, ebnf):
     assert ebnf._DOT == '.'
     path_fragment = 'dot name, osb int csb, osb string csb, osb path csb'
     assert ebnf.path_fragment == path_fragment
-    assert ebnf.path == 'name (path_fragment)*'
+    assert ebnf.path == ('name (path_fragment)* | '
+                         'inline_expression (path_fragment)*')
     assignment_fragment = 'equals (values, expression, path, service)'
     assert ebnf.assignment_fragment == assignment_fragment
     assert ebnf.assignment == 'path assignment_fragment'
