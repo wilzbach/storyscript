@@ -48,12 +48,12 @@ class Story:
         """
         return Story(cls.read(path), path=path)
 
-    @staticmethod
-    def from_stream(stream):
+    @classmethod
+    def from_stream(cls, stream):
         """
         Creates a story from a stream source
         """
-        return Story(stream.read())
+        return Story(cls.clean_source(stream.read()))
 
     def error(self, error, debug=False):
         """

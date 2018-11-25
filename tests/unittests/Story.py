@@ -83,9 +83,11 @@ def test_story_from_file(patch):
 
 def test_story_from_stream(patch, magic):
     patch.init(Story)
+    patch.object(Story, 'clean_source')
     stream = magic()
     result = Story.from_stream(stream)
-    Story.__init__.assert_called_with(stream.read())
+    Story.clean_source.assert_called_with(stream.read())
+    Story.__init__.assert_called_with(Story.clean_source())
     assert isinstance(result, Story)
 
 
