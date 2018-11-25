@@ -22,7 +22,8 @@ def test_preprocessor_replace_expression(magic, tree):
     expression = magic()
     Preprocessor.replace_expression(tree, parent, expression)
     tree.add_assignment.assert_called_with(expression.service)
-    parent.replace.assert_called_with(1, tree.add_assignment().path)
+    assignment = tree.add_assignment().path.child()
+    parent.child().replace.assert_called_with(0, assignment)
 
 
 def test_preprocessor_replace_pathvalue(magic, tree, block, fake_tree):

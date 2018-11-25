@@ -21,7 +21,7 @@ class Preprocessor:
         Replaces an inline expression with a fake assignment
         """
         assignment = fake_tree.add_assignment(inline_expression.service)
-        parent.replace(1, assignment.path)
+        parent.child(1).replace(0, assignment.path.child(0))
 
     @classmethod
     def replace_pathvalue(cls, block, statement, path_value):

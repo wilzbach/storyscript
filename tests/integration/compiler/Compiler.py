@@ -166,6 +166,19 @@ def test_compiler_service_inline_expression(parser):
     assert result['tree']['1']['args'] == [argument]
 
 
+def test_compiler_inline_expression_access(parser):
+    """
+    Ensures that inline expressions followed a bracket accesso are compiled
+    correctly.
+    """
+    tree = parser.parse('x = (random array)[0]')
+    result = Compiler.compile(tree)
+    entry = result['entrypoint']
+    name = result['tree'][entry]['name'][0]
+    args = [{'$OBJECT': 'path', 'paths': [name, '0']}]
+    assert result['tree']['1']['args'] == args
+
+
 def test_compiler_try(parser):
     source = 'try\n\tx=0'
     tree = parser.parse(source)
