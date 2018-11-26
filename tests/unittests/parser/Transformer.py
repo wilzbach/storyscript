@@ -15,7 +15,7 @@ def syntax_error(patch):
 
 def test_transformer():
     keywords = ['function', 'if', 'else', 'foreach', 'return', 'returns',
-                'try', 'catch', 'finally']
+                'try', 'catch', 'finally', 'when', 'as', 'import']
     assert Transformer.reserved_keywords == keywords
     assert issubclass(Transformer, LarkTransformer)
 
@@ -58,7 +58,7 @@ def test_transformer_command(patch, magic):
 
 @mark.parametrize('keyword', [
     'function', 'if', 'else', 'foreach', 'return', 'returns', 'try', 'catch',
-    'finally'
+    'finally', 'when', 'as', 'import'
 ])
 def test_transformer_command_keyword_error(syntax_error, magic, keyword):
     token = magic(value=keyword)
@@ -76,7 +76,7 @@ def test_transformer_path(patch, magic):
 
 @mark.parametrize('keyword', [
     'function', 'if', 'else', 'foreach', 'return', 'returns', 'try', 'catch',
-    'finally'
+    'finally', 'when', 'as', 'import'
 ])
 def test_transformer_path_keyword_error(syntax_error, magic, keyword):
     token = magic(value=keyword)

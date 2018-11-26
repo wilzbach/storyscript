@@ -13,7 +13,8 @@ class Transformer(LarkTransformer):
     additional transformations or checks are performed.
     """
     reserved_keywords = ['function', 'if', 'else', 'foreach', 'return',
-                         'returns', 'try', 'catch', 'finally']
+                         'returns', 'try', 'catch', 'finally', 'when', 'as',
+                         'import']
 
     @staticmethod
     def arguments(matches):
