@@ -33,3 +33,6 @@ class ErrorCodes:
     reserved_keyword_try = ('E0026', '`try` is a reserved keyword')
     reserved_keyword_catch = ('E0027', '`catch` is a reserved keyword')
     reserved_keyword_finally = ('E0028', '`finally` is a reserved keyword')
+    reserved_keyword_when = ('E0029', '`when` is a reserved keyword')
+    reserved_keyword_as = ('E0030', '`as` is a reserved keyword')
+    reserved_keyword_import = ('E0031', '`import` is a reserved keyword')
