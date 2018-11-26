@@ -30,7 +30,17 @@ from storyscript.ErrorCodes import ErrorCodes
     )),
     ('object_closing_bracket', ('E0018',
                                 'Missing closing bracket for object')),
-    ('service_argument_colon', ('E0019', 'Missing colon in service argument'))
+    ('service_argument_colon', ('E0019', 'Missing colon in service argument')),
+    ('reserved_keyword_function', ('E0020',
+                                   '`function` is a reserved keyword')),
+    ('reserved_keyword_if', ('E0021', '`if` is a reserved keyword')),
+    ('reserved_keyword_else', ('E0022', '`else` is a reserved keyword')),
+    ('reserved_keyword_foreach', ('E0023', '`foreach` is a reserved keyword')),
+    ('reserved_keyword_return', ('E0024', '`return` is a reserved keyword')),
+    ('reserved_keyword_returns', ('E0025', '`returns` is a reserved keyword')),
+    ('reserved_keyword_try', ('E0026', '`try` is a reserved keyword')),
+    ('reserved_keyword_catch', ('E0027', '`catch` is a reserved keyword')),
+    ('reserved_keyword_finally', ('E0028', '`finally` is a reserved keyword')),
 ])
 def test_errorcodes(name, definition):
     assert getattr(ErrorCodes, name) == definition
