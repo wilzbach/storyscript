@@ -38,11 +38,12 @@ class Transformer(LarkTransformer):
             raise StorySyntaxError('variables_dash', token=token)
         return Tree('assignment', matches)
 
-    @staticmethod
-    def command(matches):
+    @classmethod
+    def command(cls, matches):
         token = matches[0]
-        if matches[0].value == 'returns':
-            raise StorySyntaxError('reserved_keyword_returns', token=token)
+        if matches[0].value in cls.reserved_keywords:
+            error_name = 'reserved_keyword_{}'.format(matches[0].value)
+            raise StorySyntaxError(error_name, token=token)
         return Tree('command', matches)
 
     @classmethod

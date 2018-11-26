@@ -56,12 +56,17 @@ def test_transformer_command(patch, magic):
     assert Transformer.command(matches) == Tree('command', matches)
 
 
-def test_transformer_command_keyword_error(syntax_error, magic):
-    token = magic(value='returns')
+@mark.parametrize('keyword', [
+    'function', 'if', 'else', 'foreach', 'return', 'returns', 'try', 'catch',
+    'finally'
+])
+def test_transformer_command_keyword_error(syntax_error, magic, keyword):
+    token = magic(value=keyword)
     matches = [token]
     with raises(StorySyntaxError):
         Transformer.command(matches)
-    syntax_error.assert_called_with('reserved_keyword_returns', token=token)
+    error_name = 'reserved_keyword_{}'.format(keyword)
+    syntax_error.assert_called_with(error_name, token=token)
 
 
 def test_transformer_path(patch, magic):
