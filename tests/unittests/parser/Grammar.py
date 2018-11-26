@@ -38,8 +38,9 @@ def test_grammar_types(grammar, ebnf):
     assert ebnf.OBJECT_TYPE == 'object'
     assert ebnf.REGEXP_TYPE == 'regex'
     assert ebnf.FUNCTION_TYPE == 'function'
+    assert ebnf.ANY_TYPE == 'any'
     rule = ('int_type, float_type, number_type, string_type, list_type, '
-            'object_type, regexp_type, function_type')
+            'object_type, regexp_type, function_type, any_type')
     assert ebnf.types == rule
 
 
