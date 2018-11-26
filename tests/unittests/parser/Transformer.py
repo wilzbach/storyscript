@@ -48,6 +48,19 @@ def test_transformer_assignment_error_dash(syntax_error, magic):
     syntax_error.assert_called_with('variables_dash', token=token)
 
 
+def test_transformer_command(patch, magic):
+    matches = [magic()]
+    assert Transformer.command(matches) == Tree('command', matches)
+
+
+def test_transformer_command_keyword_error(syntax_error, magic):
+    token = magic(value='returns')
+    matches = [token]
+    with raises(StorySyntaxError):
+        Transformer.command(matches)
+    syntax_error.assert_called_with('reserved_keyword_returns', token=token)
+
+
 def test_transformer_path(patch, magic):
     matches = [magic()]
     assert Transformer.path(matches) == Tree('path', matches)
@@ -90,7 +103,7 @@ def test_transformer_service_block_indented_args(tree, magic):
     assert result == Tree('service_block', [block])
 
 
-@mark.parametrize('rule', ['start', 'line', 'block', 'command', 'statement'])
+@mark.parametrize('rule', ['start', 'line', 'block', 'statement'])
 def test_transformer_rules(rule):
     result = getattr(Transformer(), rule)(['matches'])
     assert isinstance(result, Tree)

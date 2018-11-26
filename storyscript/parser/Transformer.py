@@ -37,6 +37,13 @@ class Transformer(LarkTransformer):
         return Tree('assignment', matches)
 
     @staticmethod
+    def command(matches):
+        token = matches[0]
+        if matches[0].value == 'returns':
+            raise StorySyntaxError('reserved_keyword_returns', token=token)
+        return Tree('command', matches)
+
+    @staticmethod
     def path(matches):
         token = matches[0]
         if matches[0].value == 'function':
