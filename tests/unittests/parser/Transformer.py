@@ -14,6 +14,9 @@ def syntax_error(patch):
 
 
 def test_transformer():
+    keywords = ['function', 'if', 'else', 'foreach', 'return', 'returns',
+                'try', 'catch', 'finally']
+    assert Transformer.reserved_keywords == keywords
     assert issubclass(Transformer, LarkTransformer)
 
 
@@ -66,12 +69,17 @@ def test_transformer_path(patch, magic):
     assert Transformer.path(matches) == Tree('path', matches)
 
 
-def test_transformer_path_keyword_error(syntax_error, magic):
-    token = magic(value='function')
+@mark.parametrize('keyword', [
+    'function', 'if', 'else', 'foreach', 'return', 'returns', 'try', 'catch',
+    'finally'
+])
+def test_transformer_path_keyword_error(syntax_error, magic, keyword):
+    token = magic(value=keyword)
     matches = [token]
     with raises(StorySyntaxError):
         Transformer.path(matches)
-    syntax_error.assert_called_with('reserved_keyword_function', token=token)
+    error_name = 'reserved_keyword_{}'.format(keyword)
+    syntax_error.assert_called_with(error_name, token=token)
 
 
 def test_transformer_service_block():
