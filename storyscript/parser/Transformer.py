@@ -37,6 +37,13 @@ class Transformer(LarkTransformer):
         return Tree('assignment', matches)
 
     @staticmethod
+    def path(matches):
+        token = matches[0]
+        if matches[0].value == 'function':
+            raise StorySyntaxError('reserved_keyword_function', token=token)
+        return Tree('path', matches)
+
+    @staticmethod
     def service_block(matches):
         """
         Transforms service blocks, moving indented arguments back to the first
