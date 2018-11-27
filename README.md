@@ -1,6 +1,5 @@
 ![storyscript-logo](https://user-images.githubusercontent.com/2041757/44708914-9c66a380-aaa8-11e8-8e53-502c17ab5be3.png)
 
-
 [![CircleCI](https://circleci.com/gh/storyscript/storyscript.svg?style=svg)](https://circleci.com/gh/storyscript/storyscript)
 [![Codecov](https://codecov.io/gh/storyscript/storyscript/graphs/badge.svg)](https://codecov.io/github/asyncy/storyscript)
 [![PyPi](https://img.shields.io/pypi/v/storyscript.svg)](https://pypi.python.org/pypi/storyscript)
@@ -12,20 +11,24 @@
 
 StoryScript is an high-level language that can be used to orchestrate
 microservices in an algorithmic way. Unlike a traditional language, StoryScript
-describes operations against or with services::
+describes operations against or with services:
 
-    today = date now
-    invoices = database get items:"invoices" where:"month={{today.month}}"
-    if today.day == 1
-      send invoices
+```coffee
+today = date now
+invoices = database get items:"invoices" where:"month={{today.month}}"
+if today.day == 1
+  send invoices
+```
 
-You can launch a scalable web application with a five-liner::
+You can launch a scalable web application with a five-liner:
 
-    stream http-server as request
-      query = parse-request request:request
-      data = database get query:query
-      html = erb template:'/assets/template.erb' data:data
-      request.write input:html
+```coffee
+stream http-server as request
+  query = parse-request request:request
+  data = database get query:query
+  html = erb template:'/assets/template.erb' data:data
+  request.write input:html
+```
 
 These stories are compiled into event trees and run by a platform that
 implements StoryScript execution, like [Asyncy](https://github.com/Asyncy)
