@@ -12,6 +12,9 @@ class Transformer(LarkTransformer):
     All trees are transformed to Storyscript's custom tree. In some cases,
     additional transformations or checks are performed.
     """
+    reserved_keywords = ['function', 'if', 'else', 'foreach', 'return',
+                         'returns', 'try', 'catch', 'finally', 'when', 'as',
+                         'import']
 
     @staticmethod
     def arguments(matches):
@@ -35,6 +38,22 @@ class Transformer(LarkTransformer):
         if '-' in token.value:
             raise StorySyntaxError('variables_dash', token=token)
         return Tree('assignment', matches)
+
+    @classmethod
+    def command(cls, matches):
+        token = matches[0]
+        if matches[0].value in cls.reserved_keywords:
+            error_name = 'reserved_keyword_{}'.format(matches[0].value)
+            raise StorySyntaxError(error_name, token=token)
+        return Tree('command', matches)
+
+    @classmethod
+    def path(cls, matches):
+        token = matches[0]
+        if matches[0].value in cls.reserved_keywords:
+            error_name = 'reserved_keyword_{}'.format(matches[0].value)
+            raise StorySyntaxError(error_name, token=token)
+        return Tree('path', matches)
 
     @staticmethod
     def service_block(matches):

@@ -1,13 +1,22 @@
 # -*- coding: utf-8 -*-
 from lark import Transformer as LarkTransformer
 
-from pytest import mark, raises
+from pytest import fixture, mark, raises
 
 from storyscript.exceptions import StorySyntaxError
 from storyscript.parser import Transformer, Tree
 
 
+@fixture
+def syntax_error(patch):
+    patch.init(StorySyntaxError)
+    return StorySyntaxError.__init__
+
+
 def test_transformer():
+    keywords = ['function', 'if', 'else', 'foreach', 'return', 'returns',
+                'try', 'catch', 'finally', 'when', 'as', 'import']
+    assert Transformer.reserved_keywords == keywords
     assert issubclass(Transformer, LarkTransformer)
 
 
@@ -26,23 +35,56 @@ def test_transformer_assignment(magic):
     assert Transformer.assignment(matches) == Tree('assignment', matches)
 
 
-def test_transformer_assignment_error_backslash(patch, magic):
-    patch.init(StorySyntaxError)
+def test_transformer_assignment_error_backslash(syntax_error, magic):
     token = magic(value='/')
     matches = [magic(children=[token])]
     with raises(StorySyntaxError):
         Transformer.assignment(matches)
-    error = 'variables_backslash'
-    StorySyntaxError.__init__.assert_called_with(error, token=token)
+    syntax_error.assert_called_with('variables_backslash', token=token)
 
 
-def test_transformer_assignment_error_dash(patch, magic):
-    patch.init(StorySyntaxError)
+def test_transformer_assignment_error_dash(syntax_error, magic):
     token = magic(value='-')
     matches = [magic(children=[token])]
     with raises(StorySyntaxError):
         Transformer.assignment(matches)
-    StorySyntaxError.__init__.assert_called_with('variables_dash', token=token)
+    syntax_error.assert_called_with('variables_dash', token=token)
+
+
+def test_transformer_command(patch, magic):
+    matches = [magic()]
+    assert Transformer.command(matches) == Tree('command', matches)
+
+
+@mark.parametrize('keyword', [
+    'function', 'if', 'else', 'foreach', 'return', 'returns', 'try', 'catch',
+    'finally', 'when', 'as', 'import'
+])
+def test_transformer_command_keyword_error(syntax_error, magic, keyword):
+    token = magic(value=keyword)
+    matches = [token]
+    with raises(StorySyntaxError):
+        Transformer.command(matches)
+    error_name = 'reserved_keyword_{}'.format(keyword)
+    syntax_error.assert_called_with(error_name, token=token)
+
+
+def test_transformer_path(patch, magic):
+    matches = [magic()]
+    assert Transformer.path(matches) == Tree('path', matches)
+
+
+@mark.parametrize('keyword', [
+    'function', 'if', 'else', 'foreach', 'return', 'returns', 'try', 'catch',
+    'finally', 'when', 'as', 'import'
+])
+def test_transformer_path_keyword_error(syntax_error, magic, keyword):
+    token = magic(value=keyword)
+    matches = [token]
+    with raises(StorySyntaxError):
+        Transformer.path(matches)
+    error_name = 'reserved_keyword_{}'.format(keyword)
+    syntax_error.assert_called_with(error_name, token=token)
 
 
 def test_transformer_service_block():
@@ -74,7 +116,7 @@ def test_transformer_service_block_indented_args(tree, magic):
     assert result == Tree('service_block', [block])
 
 
-@mark.parametrize('rule', ['start', 'line', 'block', 'command', 'statement'])
+@mark.parametrize('rule', ['start', 'line', 'block', 'statement'])
 def test_transformer_rules(rule):
     result = getattr(Transformer(), rule)(['matches'])
     assert isinstance(result, Tree)

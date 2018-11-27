@@ -12,7 +12,7 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 
-version = '0.7.1'
+version = '0.8.0'
 
 description = io.open('README.rst', 'r', encoding='utf-8').read()
 short_description = ('StoryScript is an high-level language that can be used '
