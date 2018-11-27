@@ -1,10 +1,10 @@
 ![storyscript-logo](https://user-images.githubusercontent.com/2041757/44708914-9c66a380-aaa8-11e8-8e53-502c17ab5be3.png)
 
-[![CircleCI](https://circleci.com/gh/storyscript/storyscript.svg?style=svg)](https://circleci.com/gh/storyscript/storyscript)
-[![Codecov](https://codecov.io/gh/storyscript/storyscript/graphs/badge.svg)](https://codecov.io/github/asyncy/storyscript)
-[![PyPi](https://img.shields.io/pypi/v/storyscript.svg)](https://pypi.python.org/pypi/storyscript)
-[![Docs](https://img.shields.io/badge/docs-online-brightgreen.svg)](https://docs.asyncy.com/storyscript)
-[![Devdocs](https://img.shields.io/badge/devdocs-online-brightgreen.svg)](https://storyscript.readthedocs.io)
+[![PyPi](https://img.shields.io/pypi/v/storyscript.svg?maxAge=600&style=for-the-badge)](https://pypi.python.org/pypi/storyscript)
+[![CircleCI](https://img.shields.io/circleci/project/github/storyscript/storyscript.svg?style=for-the-badge)](https://circleci.com/gh/storyscript/storyscript)
+[![Codecov](https://img.shields.io/codecov/c/github/storyscript/storyscript.svg?style=for-the-badge)](https://codecov.io/github/asyncy/storyscript)
+[![Docs](https://img.shields.io/badge/docs-online-brightgreen.svg?style=for-the-badge)](https://docs.asyncy.com/storyscript)
+[![Devdocs](https://img.shields.io/badge/devdocs-online-brightgreen.svg?style=for-the-badge)](https://storyscript.readthedocs.io)
 
 
 # Storyscript
