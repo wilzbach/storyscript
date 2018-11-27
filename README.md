@@ -2,7 +2,7 @@
 
 [![PyPi](https://img.shields.io/pypi/v/storyscript.svg?maxAge=600&style=for-the-badge)](https://pypi.python.org/pypi/storyscript)
 [![CircleCI](https://img.shields.io/circleci/project/github/storyscript/storyscript.svg?style=for-the-badge)](https://circleci.com/gh/storyscript/storyscript)
-[![Codecov](https://img.shields.io/codecov/c/github/storyscript/storyscript.svg?style=for-the-badge)](https://codecov.io/github/asyncy/storyscript)
+[![Codecov](https://img.shields.io/codecov/c/github/storyscript/storyscript.svg?style=for-the-badge)](https://codecov.io/github/storyscript/storyscript)
 [![Docs](https://img.shields.io/badge/docs-online-brightgreen.svg?style=for-the-badge)](https://docs.asyncy.com/storyscript)
 [![Devdocs](https://img.shields.io/badge/devdocs-online-brightgreen.svg?style=for-the-badge)](https://storyscript.readthedocs.io)
 
