@@ -197,6 +197,12 @@ def test_grammar_try_block(grammar, ebnf):
     assert ebnf.try_block == try_block
 
 
+def test_grammar_raise_statement(grammar, ebnf):
+    grammar.raise_statement()
+    assert ebnf._RAISE == 'raise'
+    assert ebnf.raise_statement == 'raise entity?'
+
+
 def test_grammar_block(grammar, ebnf):
     grammar.block()
     assert ebnf._WHEN == 'when'
@@ -206,7 +212,7 @@ def test_grammar_block(grammar, ebnf):
     assert ebnf.indented_arguments == 'indent (arguments nl)+ dedent'
     block = ('rules nl, if_block, foreach_block, function_block, arguments, '
              'service_block, when_block, try_block, indented_arguments, '
-             'while_block')
+             'while_block, raise_statement')
     assert ebnf.block == block
     assert ebnf.nested_block == 'indent block+ dedent'
 
@@ -214,7 +220,7 @@ def test_grammar_block(grammar, ebnf):
 def test_grammar_build(patch, call_count, grammar, ebnf):
     methods = ['macros', 'types', 'values', 'assignments', 'imports',
                'service', 'expressions', 'rules', 'if_block', 'foreach_block',
-               'function_block', 'try_block', 'block', 'while_block']
+               'function_block', 'try_block', 'block', 'while_block', 'raise_statement']
     patch.many(Grammar, methods)
     result = grammar.build()
     assert ebnf._WS == '(" ")+'

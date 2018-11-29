@@ -162,6 +162,10 @@ class Grammar:
         self.ebnf.function_statement = function_statement
         self.ebnf.function_block = self.ebnf.simple_block('function_statement')
 
+    def raise_statement(self):
+        self.ebnf._RAISE = 'raise'
+        self.ebnf.raise_statement = ('raise entity?')
+
     def try_block(self):
         self.ebnf.TRY = 'try'
         self.ebnf._CATCH = 'catch'
@@ -183,7 +187,7 @@ class Grammar:
         self.ebnf.indented_arguments = 'indent (arguments nl)+ dedent'
         block = ('rules nl, if_block, foreach_block, function_block, '
                  'arguments, service_block, when_block, try_block, '
-                 'indented_arguments, while_block')
+                 'indented_arguments, while_block, raise_statement')
         self.ebnf.block = block
         self.ebnf.nested_block = 'indent block+ dedent'
 
@@ -202,6 +206,7 @@ class Grammar:
         self.while_block()
         self.function_block()
         self.try_block()
+        self.raise_statement()
         self.block()
         self.ebnf.start = 'nl? block+'
         self.ebnf.ignore('_WS')
