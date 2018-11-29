@@ -8,9 +8,9 @@ def test_parser_sum(parser):
     result = parser.parse('3 + 3\n')
     expression = result.block.rules.absolute_expression.expression
     fragment = expression.expression_fragment
-    assert expression.values.number.child(0) == Token('INT', 3)
+    assert expression.entity.values.number.child(0) == Token('INT', 3)
     assert fragment.operator.child(0) == Token('PLUS', '+')
-    assert fragment.values.number.child(0) == Token('INT', 3)
+    assert fragment.entity.values.number.child(0) == Token('INT', 3)
 
 
 def test_parser_list_path(parser):
@@ -18,8 +18,8 @@ def test_parser_list_path(parser):
     Ensures that paths in lists can be parsed.
     """
     result = parser.parse('x = 0\n[3, x]\n')
-    list = result.child(1).rules.values.list
-    assert list.child(3).child(0) == Token('NAME', 'x')
+    list = result.child(1).rules.entity.values.list
+    assert list.child(3).path.child(0) == Token('NAME', 'x')
 
 
 @mark.parametrize('code, token', [
@@ -33,7 +33,8 @@ def test_parser_assignment(parser, code, token):
     assignment = result.block.rules.assignment
     assert assignment.path.child(0) == Token('NAME', 'var')
     assert assignment.assignment_fragment.child(0) == Token('EQUALS', '=')
-    assert assignment.assignment_fragment.values.child(0).child(0) == token
+    entity = assignment.assignment_fragment.entity
+    assert entity.values.child(0).child(0) == token
 
 
 def test_parser_assignment_path(parser):
@@ -50,8 +51,8 @@ def test_parser_assignment_indented_arguments(parser):
     correctly
     """
     result = parser.parse('x = alpine echo\n\tmessage:"hello"')
-    argument = result.child(1).indented_arguments.arguments.values.string
-    assert argument.child(0) == Token('DOUBLE_QUOTED', '"hello"')
+    values = result.child(1).indented_arguments.arguments.entity.values
+    assert values.string.child(0) == Token('DOUBLE_QUOTED', '"hello"')
 
 
 def test_parser_foreach_block(parser):
@@ -75,7 +76,8 @@ def test_parser_service_arguments(parser):
     result = parser.parse('container key:"value"\n')
     args = result.block.service_block.service.service_fragment.arguments
     assert args.child(0) == Token('NAME', 'key')
-    assert args.values.string.child(0) == Token('DOUBLE_QUOTED', '"value"')
+    entity = args.entity
+    assert entity.values.string.child(0) == Token('DOUBLE_QUOTED', '"value"')
 
 
 def test_parser_service_output(parser):
@@ -88,7 +90,7 @@ def test_parser_service_output(parser):
 def test_parser_if_block(parser):
     result = parser.parse('if expr\n\tvar=3\n')
     if_block = result.block.if_block
-    path = if_block.if_statement.path_value.path
+    path = if_block.if_statement.entity.path
     assignment = if_block.nested_block.block.rules.assignment
     assert path.child(0) == Token('NAME', 'expr')
     assert assignment.path.child(0) == Token('NAME', 'var')
@@ -97,7 +99,7 @@ def test_parser_if_block(parser):
 def test_parser_if_block_nested(parser):
     result = parser.parse('if expr\n\tif things\n\t\tvar=3\n')
     if_block = result.block.if_block.nested_block.block.if_block
-    path = if_block.if_statement.path_value.path
+    path = if_block.if_statement.entity.path
     assignment = if_block.nested_block.block.rules.assignment
     assert path.child(0) == Token('NAME', 'things')
     assert assignment.path.child(0) == Token('NAME', 'var')
