@@ -76,3 +76,12 @@ class Intention:
         if line.endswith('as'):
             if line.startswith('as') is False:
                 return True
+
+    def while_(self):
+        """
+        Whether the intention is to spell "while". Starts at "wh", ends at
+        "while".
+        """
+        if self.line.startswith('wh'):
+            if self.line.endswith('while') is False:
+                return True
