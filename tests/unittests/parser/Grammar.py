@@ -66,7 +66,7 @@ def test_grammar_values(grammar, ebnf):
     assert ebnf.void == 'null'
     assert ebnf.number == 'int, float'
     assert ebnf.string == 'single_quoted, double_quoted'
-    assert ebnf.key_value == '(string, path) colon entity'
+    assert ebnf.key_value == '(string, path) colon (values, path)'
     assert ebnf.objects == ebnf.collection()
     assert ebnf.regular_expression == 'regexp name?'
     assert ebnf.inline_expression == 'op service cp'
@@ -83,7 +83,7 @@ def test_grammar_assignments(grammar, ebnf):
     assert ebnf.path_fragment == path_fragment
     assert ebnf.path == ('name (path_fragment)* | '
                          'inline_expression (path_fragment)*')
-    assignment_fragment = 'equals (entity, expression, service)'
+    assignment_fragment = 'equals (values, expression, path, service)'
     assert ebnf.assignment_fragment == assignment_fragment
     assert ebnf.assignment == 'path assignment_fragment'
 
@@ -98,7 +98,7 @@ def test_grammar_imports(grammar, ebnf):
 def test_grammar_service(grammar, ebnf):
     grammar.service()
     assert ebnf.command == 'name'
-    assert ebnf.arguments == 'name? colon entity'
+    assert ebnf.arguments == 'name? colon (values, path)'
     assert ebnf.output == '(as name (comma name)*)'
     assert ebnf.service_fragment == '(command arguments*|arguments+) output?'
     assert ebnf.service == 'path service_fragment'
@@ -118,8 +118,8 @@ def test_grammar_expressions(grammar, ebnf):
     assert ebnf.operator == ('plus, dash, multiplier, bslash, modulus, '
                              'power, not, and, or')
     assert ebnf.mutation == 'name arguments*'
-    assert ebnf.expression_fragment == 'operator entity'
-    assert ebnf.expression == ('entity (expression_fragment)+, '
+    assert ebnf.expression_fragment == 'operator (values, path)'
+    assert ebnf.expression == ('(values, path) (expression_fragment)+, '
                                'values mutation')
     assert ebnf.absolute_expression == 'expression'
 
@@ -127,9 +127,8 @@ def test_grammar_expressions(grammar, ebnf):
 def test_grammar_rules(grammar, ebnf):
     grammar.rules()
     assert ebnf._RETURN == 'return'
-    assert ebnf.entity == 'values, path'
-    assert ebnf.return_statement == 'return entity'
-    rules = ('entity, absolute_expression, assignment, imports, '
+    assert ebnf.return_statement == 'return (path, values)'
+    rules = ('values, absolute_expression, assignment, imports, '
              'return_statement, block')
     assert ebnf.rules == rules
 
@@ -144,10 +143,11 @@ def test_grammar_if_block(grammar, ebnf):
     assert ebnf.EQUAL == '=='
     assert ebnf._IF == 'if'
     assert ebnf._ELSE == 'else'
+    assert ebnf.path_value == 'path, values'
     comparisons = 'greater, greater_equal, lesser, lesser_equal, not, equal'
     assert ebnf.comparisons == comparisons
-    assert ebnf.if_statement == 'if entity (comparisons entity)?'
-    elseif_statement = 'else if entity (comparisons entity)?'
+    assert ebnf.if_statement == 'if path_value (comparisons path_value)?'
+    elseif_statement = 'else if path_value (comparisons path_value)?'
     assert ebnf.elseif_statement == elseif_statement
     assert ebnf.elseif_block == ebnf.simple_block()
     ebnf.set_rule.assert_called_with('!else_statement', 'else')

@@ -171,22 +171,22 @@ def test_objects_boolean_false():
 
 
 def test_objects_list(patch, tree):
-    patch.object(Objects, 'entity')
+    patch.object(Objects, 'values')
     tree.children = [Tree('value', 'value'), 'token']
     result = Objects.list(tree)
-    Objects.entity.assert_called_with(Tree('value', 'value'))
-    assert result == {'$OBJECT': 'list', 'items': [Objects.entity()]}
+    Objects.values.assert_called_with(Tree('value', 'value'))
+    assert result == {'$OBJECT': 'list', 'items': [Objects.values()]}
 
 
 def test_objects_objects(patch, tree):
-    patch.many(Objects, ['string', 'entity'])
+    patch.many(Objects, ['string', 'values'])
     subtree = Tree('key_value', [Tree('string', ['key']), 'value'])
     tree.children = [subtree]
     result = Objects.objects(tree)
     Objects.string.assert_called_with(subtree.string)
-    Objects.entity.assert_called_with('value')
+    Objects.values.assert_called_with('value')
     expected = {'$OBJECT': 'dict', 'items': [[Objects.string(),
-                                              Objects.entity()]]}
+                                              Objects.values()]]}
     assert result == expected
 
 
@@ -194,7 +194,7 @@ def test_objects_objects_key_path(patch, tree):
     """
     Ensures that objects like {x: 0} are compiled
     """
-    patch.many(Objects, ['path', 'entity'])
+    patch.many(Objects, ['path', 'values'])
     subtree = Tree('key_value', [Tree('path', ['path'])])
     tree.children = [subtree]
     result = Objects.objects(tree)
@@ -219,14 +219,6 @@ def test_objects_regular_expression_flags():
 def test_objects_types(tree):
     token = tree.child(0)
     assert Objects.types(tree) == {'$OBJECT': 'type', 'type': token.value}
-
-
-def test_objects_entity(patch, tree):
-    patch.object(Objects, 'values')
-    result = Objects.entity(tree)
-    tree.child.assert_called_with(0)
-    Objects.values.assert_called_with(tree.child())
-    assert result == Objects.values()
 
 
 @mark.parametrize('value_type', [
@@ -261,12 +253,12 @@ def test_objects_values_path(patch, magic):
 
 
 def test_objects_argument(patch, tree):
-    patch.object(Objects, 'entity')
+    patch.object(Objects, 'values')
     result = Objects.argument(tree)
     assert tree.child.call_count == 2
-    Objects.entity.assert_called_with(tree.child())
+    Objects.values.assert_called_with(tree.child())
     expected = {'$OBJECT': 'argument', 'name': tree.child().value,
-                'argument': Objects.entity()}
+                'argument': Objects.values()}
     assert result == expected
 
 
@@ -312,15 +304,13 @@ def test_objects_expression(patch, tree):
     """
     Ensures Objects.expression can compile expressions
     """
-    patch.many(Objects, ['entity', 'values', 'expression_type'])
+    patch.many(Objects, ['values', 'expression_type'])
     result = Objects.expression(tree)
     operator = tree.expression_fragment.operator.child().value
     Objects.expression_type.assert_called_with(operator)
-    Objects.entity.assert_called_with(tree.entity)
-    Objects.values.assert_called_with(tree.expression_fragment.entity.values)
     assert result == {'$OBJECT': 'expression',
                       'expression': Objects.expression_type(),
-                      'values': [Objects.entity(), Objects.values()]}
+                      'values': [Objects.values(), Objects.values()]}
 
 
 def test_objects_expression_rhs(patch, tree):
@@ -329,19 +319,18 @@ def test_objects_expression_rhs(patch, tree):
     a path.
     """
     patch.many(Objects, ['values', 'expression_type'])
-    tree.expression_fragment.entity.values = None
+    tree.expression_fragment.values = None
     Objects.expression(tree)
     Objects.values.assert_called_with(tree.expression_fragment.path)
 
 
 def test_objects_assertion(patch, tree):
-    patch.many(Objects, ['entity', 'values', 'expression_type'])
+    patch.many(Objects, ['values', 'expression_type'])
     result = Objects.assertion(tree)
-    Objects.entity.assert_called_with(tree.entity)
     Objects.values.assert_called_with(tree.child().child())
     Objects.expression_type.assert_called_with(tree.child().child())
     expected = [
         {'$OBJECT': 'assertion', 'assertion': Objects.expression_type(),
-         'values': [Objects.entity(), Objects.values()]}
+         'values': [Objects.values(), Objects.values()]}
     ]
     assert result == expected

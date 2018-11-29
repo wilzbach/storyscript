@@ -21,19 +21,19 @@ class Preprocessor:
         Replaces an inline expression with a fake assignment
         """
         assignment = fake_tree.add_assignment(inline_expression.service)
-        parent.child(1).child(0).replace(0, assignment.path.child(0))
+        parent.child(1).replace(0, assignment.path.child(0))
 
     @classmethod
-    def replace_in_entity(cls, block, statement, entity):
+    def replace_pathvalue(cls, block, statement, path_value):
         """
-        Replaces an inline expression inside an entity branch.
+        Replaces an inline expression inside a path_value branch.
         """
         fake_tree = cls.fake_tree(block)
         line = statement.line()
-        service = entity.path.inline_expression.service
+        service = path_value.path.inline_expression.service
         assignment = fake_tree.add_assignment(service)
-        entity.replace(0, assignment.path)
-        entity.path.children[0].line = line
+        path_value.replace(0, assignment.path)
+        path_value.path.children[0].line = line
 
     @classmethod
     def service_arguments(cls, block, service):
@@ -42,7 +42,7 @@ class Preprocessor:
         """
         fake_tree = cls.fake_tree(block)
         for argument in service.find_data('arguments'):
-            expression = argument.node('entity.path.inline_expression')
+            expression = argument.node('path.inline_expression')
             if expression:
                 cls.replace_expression(fake_tree, argument, expression)
 
@@ -65,9 +65,9 @@ class Preprocessor:
             fragment = assignment.assignment_fragment
             if fragment.service:
                 cls.service_arguments(block, fragment.service)
-            elif fragment.entity.path:
-                if fragment.entity.path.inline_expression:
-                    cls.assignment_expression(block, fragment.entity.path)
+            elif fragment.path:
+                if fragment.path.inline_expression:
+                    cls.assignment_expression(block, fragment.path)
 
     @classmethod
     def service(cls, tree):
@@ -129,12 +129,13 @@ class Preprocessor:
         Processes if statements, looking inline expressions.
         """
         for statement in block.find_data(name):
-            if statement.node('entity.path.inline_expression'):
-                cls.replace_in_entity(block, statement, statement.entity)
+            print(statement.pretty())
+            if statement.node('path_value.path.inline_expression'):
+                cls.replace_pathvalue(block, statement, statement.path_value)
 
             if statement.child(2):
-                if statement.child(2).node('entitypath.inline_expression'):
-                    cls.replace_in_entity(block, statement, statement.child(2))
+                if statement.child(2).node('path.inline_expression'):
+                    cls.replace_pathvalue(block, statement, statement.child(2))
 
     @classmethod
     def process(cls, tree):

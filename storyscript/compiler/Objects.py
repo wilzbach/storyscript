@@ -118,7 +118,7 @@ class Objects:
         items = []
         for value in tree.children:
             if isinstance(value, Tree):
-                items.append(cls.entity(value))
+                items.append(cls.values(value))
         return {'$OBJECT': 'list', 'items': items}
 
     @classmethod
@@ -130,7 +130,7 @@ class Objects:
                 key = cls.string(child)
             elif child.data == 'path':
                 key = cls.path(child)
-            value = cls.entity(item.child(1))
+            value = cls.values(item.child(1))
             items.append([key, value])
         return {'$OBJECT': 'dict', 'items': items}
 
@@ -148,10 +148,6 @@ class Objects:
     @staticmethod
     def types(tree):
         return {'$OBJECT': 'type', 'type': tree.child(0).value}
-
-    @classmethod
-    def entity(cls, tree):
-        return cls.values(tree.child(0))
 
     @classmethod
     def values(cls, tree):
@@ -183,7 +179,7 @@ class Objects:
         Compiles an argument tree to the corresponding object.
         """
         name = tree.child(0).value
-        value = cls.entity(tree.child(1))
+        value = cls.values(tree.child(1))
         return {'$OBJECT': 'argument', 'name': name, 'argument': value}
 
     @classmethod
@@ -225,10 +221,13 @@ class Objects:
         """
         operator = tree.expression_fragment.operator.child(0).value
         expression_type = Objects.expression_type(operator)
-        rhs = tree.expression_fragment.entity.values
+        rhs = tree.expression_fragment.values
         if rhs is None:
             rhs = tree.expression_fragment.path
-        values = [cls.entity(tree.entity), cls.values(rhs)]
+        lhs = tree.values
+        if lhs is None:
+            lhs = tree.path
+        values = [cls.values(lhs), cls.values(rhs)]
         return {'$OBJECT': 'expression', 'expression': expression_type,
                 'values': values}
 
@@ -237,7 +236,7 @@ class Objects:
         """
         Compiles an assertion object.
         """
-        lhs = cls.entity(tree.entity)
+        lhs = cls.values(tree.path_value.child(0))
         operator = tree.child(1)
         if operator is None:
             return [lhs]

@@ -34,7 +34,7 @@ class Compiler:
                 return [Objects.values(fragment.expression.values),
                         Objects.mutation(fragment.expression.mutation)]
             return [Objects.expression(fragment.expression)]
-        return [Objects.entity(fragment.child(1))]
+        return [Objects.values(fragment.child(1))]
 
     @classmethod
     def function_output(cls, tree):
@@ -160,7 +160,7 @@ class Compiler:
         if parent is None:
             raise CompilerError('return_outside', tree=tree)
         line = tree.line()
-        args = [Objects.entity(tree.child(0))]
+        args = [Objects.values(tree.child(0))]
         self.lines.append('return', line, args=args, parent=parent)
 
     def if_block(self, tree, parent):
