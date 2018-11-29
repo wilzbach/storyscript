@@ -39,12 +39,12 @@ def test_compiler_output_none():
 
 
 def test_compiler_extract_values(patch, tree):
-    patch.object(Objects, 'values')
+    patch.object(Objects, 'entity')
     tree.expression = None
     result = Compiler.extract_values(tree)
     tree.child.assert_called_with(1)
-    Objects.values.assert_called_with(tree.child())
-    assert result == [Objects.values()]
+    Objects.entity.assert_called_with(tree.child())
+    assert result == [Objects.entity()]
 
 
 def test_compiler_extract_values_expression(patch, tree):
@@ -313,11 +313,11 @@ def test_compiler_return_statement(patch, compiler, lines, tree):
     """
     Ensures Compiler.return_statement can compile return statements.
     """
-    patch.object(Objects, 'values')
+    patch.object(Objects, 'entity')
     compiler.return_statement(tree, '1')
     line = tree.line()
-    Objects.values.assert_called_with(tree.child())
-    kwargs = {'args': [Objects.values()], 'parent': '1'}
+    Objects.entity.assert_called_with(tree.child())
+    kwargs = {'args': [Objects.entity()], 'parent': '1'}
     lines.append.assert_called_with('return', line, **kwargs)
 
 
