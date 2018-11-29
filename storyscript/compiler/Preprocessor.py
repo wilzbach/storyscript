@@ -129,7 +129,6 @@ class Preprocessor:
         Processes if statements, looking inline expressions.
         """
         for statement in block.find_data(name):
-            print(statement.pretty())
             if statement.node('path_value.path.inline_expression'):
                 cls.replace_pathvalue(block, statement, statement.path_value)
 
