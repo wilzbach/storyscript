@@ -209,6 +209,15 @@ class Compiler:
                           parent=parent, output=output)
         self.subtree(nested_block, parent=line)
 
+    def while_block(self, tree, parent):
+        line = tree.line()
+        path = Tree('path', [tree.while_statement.child(0)])
+        args = [Objects.path(path)]
+        nested_block = tree.nested_block
+        self.lines.append('while', line, args=args, enter=nested_block.line(),
+                          parent=parent)
+        self.subtree(nested_block, parent=line)
+
     def function_block(self, tree, parent):
         """
         Compiles a function and its nested block of code.
@@ -289,7 +298,7 @@ class Compiler:
                          'if_block', 'elseif_block', 'else_block',
                          'foreach_block', 'function_block', 'when_block',
                          'try_block', 'return_statement', 'arguments',
-                         'imports']
+                         'imports', 'while_block']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return
