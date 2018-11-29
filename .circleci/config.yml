@@ -8,6 +8,7 @@ jobs:
             - checkout
             - restore_cache:
                 keys:
+                    - v1-dependencies-{{ checksum "setup.py" }}
                     - v1-dependencies-
 
             - run:
@@ -21,7 +22,7 @@ jobs:
             - save_cache:
                 paths:
                     - ./venv
-                key: v1-dependencies-0.8.1
+                key: v1-dependencies-{{ checksum "setup.py" }}
 
             - run:
                 name: run unit tests
