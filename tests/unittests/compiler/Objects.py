@@ -221,6 +221,14 @@ def test_objects_types(tree):
     assert Objects.types(tree) == {'$OBJECT': 'type', 'type': token.value}
 
 
+def test_objects_entity(patch, tree):
+    patch.object(Objects, 'values')
+    result = Objects.entity(tree)
+    tree.child.assert_called_with(0)
+    Objects.values.assert_called_with(tree.child())
+    assert result == Objects.values()
+
+
 @mark.parametrize('value_type', [
     'string', 'boolean', 'list', 'number', 'objects', 'regular_expression',
     'types'

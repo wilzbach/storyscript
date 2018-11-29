@@ -150,6 +150,10 @@ class Objects:
         return {'$OBJECT': 'type', 'type': tree.child(0).value}
 
     @classmethod
+    def entity(cls, tree):
+        return cls.values(tree.child(0))
+
+    @classmethod
     def values(cls, tree):
         """
         Parses a values subtree
