@@ -28,7 +28,7 @@ jobs:
                 name: run unit tests
                 command: |
                     . venv/bin/activate
-                    tox -e pep8,py36-unit
+                    tox -e pep8,unit
 
             - run:
                 name: collect unit coverage
@@ -39,7 +39,7 @@ jobs:
                 name: run integration tests
                 command: |
                     . venv/bin/activate
-                    tox -e py36-integration
+                    tox -e integration
 
             - run:
                 name: collect integration coverage
