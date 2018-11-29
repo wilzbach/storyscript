@@ -15,6 +15,18 @@ class Transformer(LarkTransformer):
     reserved_keywords = ['function', 'if', 'else', 'foreach', 'return',
                          'returns', 'try', 'catch', 'finally', 'when', 'as',
                          'import']
+    future_reserved_keywords = ['async', 'story', 'while', 'assert',
+                                'called', 'mock']
+
+    @classmethod
+    def is_keyword(cls, token):
+        keyword = token.value
+        if keyword in cls.reserved_keywords:
+            error_name = 'reserved_keyword_{}'.format(keyword)
+            raise StorySyntaxError(error_name, token=token)
+        if keyword in cls.future_reserved_keywords:
+            error_name = 'future_reserved_keyword_{}'.format(keyword)
+            raise StorySyntaxError(error_name, token=token)
 
     @staticmethod
     def arguments(matches):
@@ -42,17 +54,13 @@ class Transformer(LarkTransformer):
     @classmethod
     def command(cls, matches):
         token = matches[0]
-        if matches[0].value in cls.reserved_keywords:
-            error_name = 'reserved_keyword_{}'.format(matches[0].value)
-            raise StorySyntaxError(error_name, token=token)
+        cls.is_keyword(token)
         return Tree('command', matches)
 
     @classmethod
     def path(cls, matches):
         token = matches[0]
-        if matches[0].value in cls.reserved_keywords:
-            error_name = 'reserved_keyword_{}'.format(matches[0].value)
-            raise StorySyntaxError(error_name, token=token)
+        cls.is_keyword(token)
         return Tree('path', matches)
 
     @staticmethod

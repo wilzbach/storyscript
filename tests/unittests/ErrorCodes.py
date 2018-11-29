@@ -43,7 +43,26 @@ from storyscript.ErrorCodes import ErrorCodes
     ('reserved_keyword_finally', ('E0028', '`finally` is a reserved keyword')),
     ('reserved_keyword_when', ('E0029', '`when` is a reserved keyword')),
     ('reserved_keyword_as', ('E0030', '`as` is a reserved keyword')),
-    ('reserved_keyword_import', ('E0031', '`import` is a reserved keyword'))
+    ('reserved_keyword_import', ('E0031', '`import` is a reserved keyword')),
+
+    ('future_reserved_keyword_async', (
+        'E0032',
+        '`async` is reserved for future use')),
+    ('future_reserved_keyword_story', (
+        'E0033',
+        '`story` is reserved for future use')),
+    ('future_reserved_keyword_while', (
+        'E0034',
+        '`while` is reserved for future use')),
+    ('future_reserved_keyword_assert', (
+        'E0035',
+        '`assert` is reserved for future use')),
+    ('future_reserved_keyword_called', (
+        'E0036',
+        '`called` is reserved for future use')),
+    ('future_reserved_keyword_mock', (
+        'E0037',
+        '`mock` is reserved for future use')),
 ])
 def test_errorcodes(name, definition):
     assert getattr(ErrorCodes, name) == definition
