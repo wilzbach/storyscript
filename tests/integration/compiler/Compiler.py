@@ -216,3 +216,39 @@ def test_compiler_try_finally(parser):
     assert result['tree']['3']['method'] == 'finally'
     assert result['tree']['3']['enter'] == '4'
     assert result['tree']['4']['parent'] == '3'
+
+
+def test_compiler_try_raise(parser):
+    source = 'try\n\tx=0\ncatch as error\n\traise'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['exit'] == '3'
+    assert result['tree']['3']['method'] == 'catch'
+    assert result['tree']['4']['method'] == 'raise'
+    assert result['tree']['4']['parent'] == '3'
+
+
+def test_compiler_try_raise_error(parser):
+    source = 'try\n\tx=0\ncatch as error\n\traise error'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    args = [{'$OBJECT': 'path', 'paths': ['error']}]
+    assert result['tree']['1']['exit'] == '3'
+    assert result['tree']['3']['method'] == 'catch'
+    assert result['tree']['3']['enter'] == '4'
+    assert result['tree']['4']['method'] == 'raise'
+    assert result['tree']['4']['parent'] == '3'
+    assert result['tree']['4']['args'] == args
+
+
+def test_compiler_try_nested_raise_error(parser):
+    source = 'try\n\tx=0\ncatch as error\n\tif TRUE\n\t\traise error'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    args = [{'$OBJECT': 'path', 'paths': ['error']}]
+    assert result['tree']['1']['exit'] == '3'
+    assert result['tree']['3']['method'] == 'catch'
+    assert result['tree']['3']['enter'] == '4'
+    assert result['tree']['5']['method'] == 'raise'
+    assert result['tree']['5']['parent'] == '4'
+    assert result['tree']['5']['args'] == args

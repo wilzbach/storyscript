@@ -426,6 +426,54 @@ def test_compiler_function_block(patch, compiler, lines, tree):
     compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
+def test_compiler_find_parent(patch, compiler, lines, tree):
+    def cond(n):
+        return 'method' in n and n['method'] == 'catch'
+
+    assert compiler.find_parent(None, cond) is None
+    catch_node = {'method': 'catch'}
+    lines.lines = {'1': catch_node}
+    assert compiler.find_parent('1', cond) == catch_node
+
+    lines.lines = {'1': catch_node, '2': {'parent': '1'}}
+    assert compiler.find_parent('2', cond) == catch_node
+
+    lines.lines = {'1': {'parent': None}, '2': {'parent': '1'}}
+    assert compiler.find_parent('2', cond) is None
+
+
+def test_compiler_raise_statement(patch, compiler, lines, tree):
+    patch.object(Compiler, 'find_parent')
+    Compiler.find_parent.return_value = True
+    tree.children = [Token('RAISE', 'raise')]
+    compiler.raise_statement(tree, '1')
+    lines.append.assert_called_with('raise', tree.line(), args=[],
+                                    parent='1')
+
+
+def test_compiler_raise_name_statement(patch, compiler, lines, tree):
+    patch.object(Compiler, 'find_parent')
+    patch.object(Objects, 'entity')
+    Compiler.find_parent.return_value = True
+    tree.children = [Token('RAISE', 'raise'), Token('NAME', 'error')]
+    compiler.raise_statement(tree, '1')
+    args = [Objects.entity()]
+    lines.append.assert_called_with('raise', tree.line(), args=args,
+                                    parent='1')
+
+
+def test_compiler_raise_statement_throw(patch, compiler, lines, tree):
+    patch.object(Compiler, 'find_parent')
+    patch.init(CompilerError)
+    Compiler.find_parent.return_value = None
+    tree.children = [Token('RAISE', 'raise')]
+    with raises(CompilerError):
+        compiler.raise_statement(tree, '1')
+
+    error = 'raise_outside'
+    CompilerError.__init__.assert_called_with(error, tree=tree)
+
+
 def test_compiler_service_block(patch, compiler, tree):
     patch.object(Compiler, 'service')
     tree.node.return_value = None
