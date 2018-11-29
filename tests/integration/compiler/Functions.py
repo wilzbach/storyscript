@@ -64,3 +64,28 @@ def test_functions_function_call_arguments(parser):
     assert result['tree']['3']['method'] == 'call'
     assert result['tree']['3']['service'] == 'f'
     assert result['tree']['3']['args'] == args
+
+
+def test_functions_function_call_without_arguments(parser):
+    """
+    Ensures that functions can be called without arguments
+    """
+    source = 'function clap\n\tx = 0\nclap\n'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    assert result['tree']['3']['method'] == 'call'
+    assert result['tree']['3']['service'] == 'clap'
+    assert result['tree']['3']['args'] == []
+
+
+def test_functions_nested_function_call_without_arguments(parser):
+    """
+    Ensures that functions in nested scopes can be called without arguments
+    """
+    source = 'function clap\n\tx = 0\nif 2 > 1\n\tclap\n'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    print(result)
+    assert result['tree']['4']['method'] == 'call'
+    assert result['tree']['4']['service'] == 'clap'
+    assert result['tree']['4']['args'] == []

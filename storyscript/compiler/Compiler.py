@@ -122,12 +122,18 @@ class Compiler:
             self.expression(tree, parent)
             return
         line = tree.line()
-        command = tree.service_fragment.command
+        command = None
+        if tree.service_fragment:
+            command = tree.service_fragment.command
         if command:
             command = command.child(0)
-        arguments = Objects.arguments(tree.service_fragment)
+        arguments = []
+        if tree.service_fragment:
+            arguments = Objects.arguments(tree.service_fragment)
         service = tree.path.extract_path()
-        output = self.output(tree.service_fragment.output)
+        output = []
+        if tree.service_fragment:
+            output = self.output(tree.service_fragment.output)
         if output:
             self.lines.set_output(line, output)
         enter = None

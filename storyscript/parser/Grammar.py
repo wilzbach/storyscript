@@ -96,6 +96,7 @@ class Grammar:
         self.ebnf.output = '(as name (comma name)*)'
         self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
         self.ebnf.service = 'path service_fragment'
+        self.ebnf.block_service = 'path service_fragment?'
 
     def expressions(self):
         self.ebnf.PLUS = '+'
@@ -173,7 +174,7 @@ class Grammar:
 
     def block(self):
         self.ebnf._WHEN = 'when'
-        self.ebnf.service_block = 'service nl (nested_block)?'
+        self.ebnf.service_block = 'block_service nl (nested_block)?'
         when = 'when (path output|service)'
         self.ebnf.when_block = self.ebnf.simple_block(when)
         self.ebnf.indented_arguments = 'indent (arguments nl)+ dedent'

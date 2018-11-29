@@ -192,7 +192,7 @@ def test_grammar_try_block(grammar, ebnf):
 def test_grammar_block(grammar, ebnf):
     grammar.block()
     assert ebnf._WHEN == 'when'
-    assert ebnf.service_block == 'service nl (nested_block)?'
+    assert ebnf.service_block == 'block_service nl (nested_block)?'
     ebnf.simple_block.assert_called_with('when (path output|service)')
     assert ebnf.when_block == ebnf.simple_block()
     assert ebnf.indented_arguments == 'indent (arguments nl)+ dedent'

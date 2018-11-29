@@ -61,6 +61,10 @@ class Transformer(LarkTransformer):
         Transforms service blocks, moving indented arguments back to the first
         node.
         """
+        # rename a global block_service to a pure service
+        for match in matches:
+            if hasattr(match, 'data') and match.data == 'block_service':
+                match.data = 'service'
         if len(matches) > 1:
             if matches[1].block.rules:
                 for argument in matches[1].find_data('arguments'):
