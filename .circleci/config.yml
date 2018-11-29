@@ -21,6 +21,7 @@ jobs:
             - save_cache:
                 paths:
                     - ./venv
+                key: v1-dependencies-0.8.1
 
             - run:
                 name: run unit tests
