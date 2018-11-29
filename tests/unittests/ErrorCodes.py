@@ -61,6 +61,9 @@ from storyscript.ErrorCodes import ErrorCodes
     ('future_reserved_keyword_mock', (
         'E0038',
         '`mock` is reserved for future use')),
+    ('raise_outside',
+        ('E0039',
+         '`raise` is allowed only inside catch blocks')),
 ])
 def test_errorcodes(name, definition):
     assert getattr(ErrorCodes, name) == definition
