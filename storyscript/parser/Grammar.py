@@ -62,10 +62,9 @@ class Grammar:
         self.ebnf.void = 'null'
         self.ebnf.number = 'int, float'
         self.ebnf.string = 'single_quoted, double_quoted'
-        values_path = '(values, path)'
-        list = self.ebnf.collection('osb', values_path, values_path, 'csb')
+        list = self.ebnf.collection('osb', 'entity', 'entity', 'csb')
         self.ebnf.set_rule('!list', list)
-        self.ebnf.key_value = '(string, path) colon {}'.format(values_path)
+        self.ebnf.key_value = '(string, path) colon entity'
         objects = ('ocb', 'key_value', 'key_value', 'ccb')
         self.ebnf.objects = self.ebnf.collection(*objects)
         self.ebnf.regular_expression = 'regexp name?'
@@ -81,7 +80,7 @@ class Grammar:
         self.ebnf.path_fragment = path_fragment
         self.ebnf.path = ('name (path_fragment)* | '
                           'inline_expression (path_fragment)*')
-        assignment_fragment = 'equals (values, expression, path, service)'
+        assignment_fragment = 'equals (entity, expression, service)'
         self.ebnf.assignment_fragment = assignment_fragment
         self.ebnf.assignment = 'path assignment_fragment'
 
@@ -92,7 +91,7 @@ class Grammar:
 
     def service(self):
         self.ebnf.command = 'name'
-        self.ebnf.arguments = 'name? colon (values, path)'
+        self.ebnf.arguments = 'name? colon entity'
         self.ebnf.output = '(as name (comma name)*)'
         self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
         self.ebnf.service = 'path service_fragment'
@@ -110,15 +109,16 @@ class Grammar:
         self.ebnf.operator = ('plus, dash, multiplier, bslash, modulus, '
                               'power, not, and, or')
         self.ebnf.mutation = 'name arguments*'
-        self.ebnf.expression_fragment = 'operator (values, path)'
-        self.ebnf.expression = ('(values, path) (expression_fragment)+, '
+        self.ebnf.expression_fragment = 'operator entity'
+        self.ebnf.expression = ('entity (expression_fragment)+, '
                                 'values mutation')
         self.ebnf.absolute_expression = 'expression'
 
     def rules(self):
         self.ebnf._RETURN = 'return'
-        self.ebnf.return_statement = 'return (path, values)'
-        rules = ('values, absolute_expression, assignment, imports, '
+        self.ebnf.return_statement = 'return entity'
+        self.ebnf.entity = 'values, path'
+        rules = ('entity, absolute_expression, assignment, imports, '
                  'return_statement, block')
         self.ebnf.rules = rules
 
@@ -131,12 +131,11 @@ class Grammar:
         self.ebnf.EQUAL = '=='
         self.ebnf._IF = 'if'
         self.ebnf._ELSE = 'else'
-        self.ebnf.path_value = 'path, values'
         comparisons = ('greater, greater_equal, lesser, lesser_equal, not, '
                        'equal')
         self.ebnf.comparisons = comparisons
-        self.ebnf.if_statement = 'if path_value (comparisons path_value)?'
-        elseif_statement = 'else if path_value (comparisons path_value)?'
+        self.ebnf.if_statement = 'if entity (comparisons entity)?'
+        elseif_statement = 'else if entity (comparisons entity)?'
         self.ebnf.elseif_statement = elseif_statement
         self.ebnf.elseif_block = self.ebnf.simple_block('elseif_statement')
         self.ebnf.set_rule('!else_statement', 'else')
