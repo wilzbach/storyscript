@@ -167,7 +167,7 @@ def test_grammar_foreach_block(grammar, ebnf):
 def test_grammar_while_block(grammar, ebnf):
     grammar.while_block()
     assert ebnf._WHILE == 'while'
-    assert ebnf.while_statement == 'while name'
+    assert ebnf.while_statement == 'while entity'
     ebnf.simple_block.assert_called_with('while_statement')
     assert ebnf.while_block == ebnf.simple_block()
 

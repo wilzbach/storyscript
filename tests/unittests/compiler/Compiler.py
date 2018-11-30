@@ -401,12 +401,10 @@ def test_compiler_foreach_block(patch, compiler, lines, tree):
 
 def test_compiler_while_block(patch, compiler, lines, tree):
     patch.init(Tree)
-    patch.object(Objects, 'path')
+    patch.object(Objects, 'entity')
     patch.many(Compiler, ['subtree'])
     compiler.while_block(tree, '1')
-    Tree.__init__.assert_called_with('path', [tree.while_statement.child()])
-    assert Objects.path.call_count == 1
-    args = [Objects.path()]
+    args = [Objects.entity()]
     lines.append.assert_called_with('while', tree.line(), args=args,
                                     enter=tree.nested_block.line(),
                                     parent='1')

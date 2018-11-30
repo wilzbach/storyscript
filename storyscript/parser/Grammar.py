@@ -145,7 +145,7 @@ class Grammar:
 
     def while_block(self):
         self.ebnf._WHILE = 'while'
-        self.ebnf.while_statement = 'while name'
+        self.ebnf.while_statement = 'while entity'
         self.ebnf.while_block = self.ebnf.simple_block('while_statement')
 
     def foreach_block(self):

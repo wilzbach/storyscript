@@ -211,8 +211,7 @@ class Compiler:
 
     def while_block(self, tree, parent):
         line = tree.line()
-        path = Tree('path', [tree.while_statement.child(0)])
-        args = [Objects.path(path)]
+        args = [Objects.entity(tree.while_statement.child(0))]
         nested_block = tree.nested_block
         self.lines.append('while', line, args=args, enter=nested_block.line(),
                           parent=parent)
