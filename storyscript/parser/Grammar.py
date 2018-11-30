@@ -163,7 +163,7 @@ class Grammar:
         self.ebnf.function_block = self.ebnf.simple_block('function_statement')
 
     def raise_statement(self):
-        self.ebnf._RAISE = 'raise'
+        self.ebnf.RAISE = 'raise'
         self.ebnf.raise_statement = ('raise entity?')
 
     def try_block(self):

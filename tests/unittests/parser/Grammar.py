@@ -199,7 +199,7 @@ def test_grammar_try_block(grammar, ebnf):
 
 def test_grammar_raise_statement(grammar, ebnf):
     grammar.raise_statement()
-    assert ebnf._RAISE == 'raise'
+    assert ebnf.RAISE == 'raise'
     assert ebnf.raise_statement == 'raise entity?'
 
 
