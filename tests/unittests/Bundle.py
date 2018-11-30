@@ -10,12 +10,13 @@ from storyscript.Story import Story
 
 
 @fixture
-def bundle():
-    return Bundle('path')
+def bundle(patch):
+    patch.object(Story, 'read')
+    return Bundle.from_path('path')
 
 
 def test_bundle_init(bundle):
-    assert bundle.path == 'path'
+    assert 'path' in bundle.story_files
     assert bundle.stories == {}
 
 
@@ -62,15 +63,19 @@ def test_bundle_find_stories(patch, bundle):
     assert bundle.find_stories() == ['path']
 
 
-def test_bundle_find_stories_directory(patch, bundle):
+def test_bundle_find_stories_directory(patch):
     """
     Ensures Bundle.find_stories uses Bundle.parse_directory
     """
+    patch.object(Story, 'read')
     patch.object(Bundle, 'parse_directory')
     patch.object(os.path, 'isdir')
+    os.path.isdir.return_value = True
+    path = 'path'
+    bundle = Bundle.from_path(path)
     result = bundle.find_stories()
-    Bundle.parse_directory.assert_called_with(bundle.path)
-    assert result == Bundle.parse_directory()
+    Bundle.parse_directory.assert_called_with(path)
+    assert result == []
 
 
 def test_bundle_services(bundle):
@@ -98,22 +103,22 @@ def test_bundle_parse_modules(patch, bundle):
 
 
 def test_bundle_parse(patch, bundle):
-    patch.object(Story, 'from_file')
-    patch.object(Bundle, 'parse_modules')
+    patch.many(Bundle, ['parse_modules', 'load_story'])
     bundle.parse(['one.story'], None, False)
-    Story.from_file.assert_called_with('one.story')
-    story = Story.from_file()
+    Bundle.load_story.assert_called_with('one.story')
+    story = Bundle.load_story()
     Bundle.parse_modules.assert_called_with(story.modules(), None, False)
     assert bundle.stories['one.story'] == story.tree
 
 
-def test_bundle_compile(patch, bundle):
-    patch.object(Story, 'from_file')
-    patch.object(Bundle, 'compile_modules')
+def test_bundle_compile(mocker, patch, bundle):
+    patch.many(Bundle, ['compile_modules', 'load_story'])
+    patch.many(Story, ['parse'])
+
     bundle.compile(['one.story'], None, False)
-    Story.from_file.assert_called_with('one.story')
-    story = Story.from_file()
-    story.parse.assert_called_with(ebnf=None, debug=False)
+    Bundle.load_story.assert_called_with('one.story')
+
+    story = Bundle.load_story()
     Bundle.compile_modules.assert_called_with(story.modules(), None, False)
     story.compile.assert_called_with(debug=False)
     assert bundle.stories['one.story'] == story.compiled
@@ -179,3 +184,17 @@ def test_bundle_lex_ebnf(patch, bundle):
     patch.object(Bundle, 'find_stories', return_value=['story'])
     bundle.lex(ebnf='ebnf')
     Story.from_file().lex.assert_called_with(ebnf='ebnf')
+
+
+def test_bundle_load_story_twice(patch, bundle):
+    patch.object(Story, 'read')
+    mocked_file = 'x = 2'
+    Story.read.return_value = mocked_file
+
+    story = bundle.load_story('one.story')
+    Story.read.assert_called_with('one.story')
+
+    # don't reread the story
+    Story.read.reset_mock()
+    assert bundle.load_story('one.story').story == story.story
+    Story.read.assert_not_called()

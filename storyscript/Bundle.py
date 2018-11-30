@@ -11,9 +11,12 @@ class Bundle:
     Bundles all stories that must be compiled together.
     """
 
-    def __init__(self, path):
-        self.path = path
+    def __init__(self, story_files=None):
         self.stories = {}
+        if story_files is None:
+            self.story_files = {}
+        else:
+            self.story_files = story_files
 
     def gitignores(self):
         """
@@ -36,13 +39,40 @@ class Bundle:
                         paths.append(path)
         return paths
 
+    @classmethod
+    def from_path(cls, path):
+        """
+        Load a bundle of stories from the filesystem.
+        If a directory is given. all `.story` files in the directory will be
+        loaded.
+
+        Arguments:
+            path -- path to file or directory to load stories from
+        """
+        bundle = Bundle()
+        for e in cls._from_path(path):
+            bundle.load_story(e)
+        return bundle
+
+    @classmethod
+    def _from_path(cls, path):
+        if os.path.isdir(path):
+            return cls.parse_directory(path)
+        return [path]
+
+    def load_story(self, path):
+        """
+        Reads a story file and adds it to the loaded stories
+        """
+        if path not in self.story_files:
+            self.story_files[path] = Story.read(path)
+        return Story(self.story_files[path])
+
     def find_stories(self):
         """
         Finds bundle stories.
         """
-        if os.path.isdir(self.path):
-            return self.parse_directory(self.path)
-        return [self.path]
+        return list(self.story_files.keys())
 
     def services(self):
         services = []
@@ -63,7 +93,7 @@ class Bundle:
         Parse stories.
         """
         for storypath in stories:
-            story = Story.from_file(storypath)
+            story = self.load_story(storypath)
             story.parse(ebnf=ebnf, debug=debug)
             self.parse_modules(story.modules(), ebnf, debug)
             self.stories[storypath] = story.tree
@@ -74,7 +104,7 @@ class Bundle:
         compiles the story itself.
         """
         for storypath in stories:
-            story = Story.from_file(storypath)
+            story = self.load_story(storypath)
             story.parse(ebnf=ebnf, debug=debug)
             self.compile_modules(story.modules(), ebnf, debug)
             story.compile(debug=debug)
