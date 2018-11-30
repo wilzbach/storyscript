@@ -83,7 +83,7 @@ def test_grammar_assignments(grammar, ebnf):
     assert ebnf.path_fragment == path_fragment
     assert ebnf.path == ('name (path_fragment)* | '
                          'inline_expression (path_fragment)*')
-    assignment_fragment = 'equals (entity, expression, service)'
+    assignment_fragment = 'equals (expression, service)'
     assert ebnf.assignment_fragment == assignment_fragment
     assert ebnf.assignment == 'path assignment_fragment'
 
@@ -107,20 +107,20 @@ def test_grammar_service(grammar, ebnf):
 def test_grammar_expressions(grammar, ebnf):
     grammar.expressions()
     assert ebnf.PLUS == '+'
-    assert ebnf.DASH == '-'
     assert ebnf.MULTIPLIER == '*'
-    assert ebnf.BSLASH == '/'
     assert ebnf.MODULUS == '%'
     assert ebnf.POWER == '^'
     assert ebnf.NOT == 'not'
     assert ebnf.AND == 'and'
     assert ebnf.OR == 'or'
-    assert ebnf.operator == ('plus, dash, multiplier, bslash, modulus, '
-                             'power, not, and, or')
     assert ebnf.mutation == 'name arguments*'
-    assert ebnf.expression_fragment == 'operator entity'
-    assert ebnf.expression == ('entity (expression_fragment)+, '
-                               'values mutation')
+    assert ebnf.factor == 'entity, op expression cp'
+    assert ebnf.exponential == 'factor (power exponential)?'
+    assert ebnf.multiplication == ('exponential (( multiplier, bslash, '
+                                   'modulus ) exponential)*')
+    assert ebnf.expression == ('multiplication ( ( plus, dash ) '
+                               'multiplication)*, number multiplication+, '
+                               'entity mutation')
     assert ebnf.absolute_expression == 'expression'
 
 
@@ -129,8 +129,8 @@ def test_grammar_rules(grammar, ebnf):
     assert ebnf._RETURN == 'return'
     assert ebnf.entity == 'values, path'
     assert ebnf.return_statement == 'return entity'
-    rules = ('entity, absolute_expression, assignment, imports, '
-             'return_statement, block')
+    rules = ('absolute_expression, assignment, imports, return_statement, '
+             'block')
     assert ebnf.rules == rules
 
 

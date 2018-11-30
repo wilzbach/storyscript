@@ -80,7 +80,7 @@ class Grammar:
         self.ebnf.path_fragment = path_fragment
         self.ebnf.path = ('name (path_fragment)* | '
                           'inline_expression (path_fragment)*')
-        assignment_fragment = 'equals (entity, expression, service)'
+        assignment_fragment = 'equals (expression, service)'
         self.ebnf.assignment_fragment = assignment_fragment
         self.ebnf.assignment = 'path assignment_fragment'
 
@@ -98,28 +98,30 @@ class Grammar:
 
     def expressions(self):
         self.ebnf.PLUS = '+'
-        self.ebnf.DASH = '-'
+        self.ebnf.set_token('DASH.4', '-')
         self.ebnf.MULTIPLIER = '*'
-        self.ebnf.BSLASH = '/'
+        self.ebnf.set_token('BSLASH.3', '/')
         self.ebnf.MODULUS = '%'
         self.ebnf.POWER = '^'
         self.ebnf.NOT = 'not'
         self.ebnf.AND = 'and'
         self.ebnf.OR = 'or'
-        self.ebnf.operator = ('plus, dash, multiplier, bslash, modulus, '
-                              'power, not, and, or')
         self.ebnf.mutation = 'name arguments*'
-        self.ebnf.expression_fragment = 'operator entity'
-        self.ebnf.expression = ('entity (expression_fragment)+, '
-                                'values mutation')
+        self.ebnf.factor = 'entity, op expression cp'
+        self.ebnf.exponential = 'factor (power exponential)?'
+        self.ebnf.multiplication = ('exponential (( multiplier, bslash, '
+                                    'modulus ) exponential)*')
+        self.ebnf.expression = ('multiplication ( ( plus, dash ) '
+                                'multiplication)*, number multiplication+, '
+                                'entity mutation')
         self.ebnf.absolute_expression = 'expression'
 
     def rules(self):
         self.ebnf._RETURN = 'return'
         self.ebnf.return_statement = 'return entity'
         self.ebnf.entity = 'values, path'
-        rules = ('entity, absolute_expression, assignment, imports, '
-                 'return_statement, block')
+        rules = ('absolute_expression, assignment, imports, return_statement, '
+                 'block')
         self.ebnf.rules = rules
 
     def if_block(self):
