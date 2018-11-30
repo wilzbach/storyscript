@@ -46,6 +46,15 @@ def test_assignments_int(parser):
     assert result['tree']['1']['args'] == [0]
 
 
+def test_assignments_int_positive(parser):
+    """
+    Ensures that assignments to positive integers are compiled correctly
+    """
+    tree = parser.parse('a = +3')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['args'] == [3]
+
+
 def test_assignments_float(parser):
     """
     Ensures that assignments to floats are compiled correctly

@@ -44,7 +44,7 @@ class Grammar:
         self.ebnf.TRUE = 'true'
         self.ebnf.FALSE = 'false'
         self.ebnf.NULL = 'null'
-        self.ebnf.set_token('INT.2', r'/(-)?[0-9]+/')
+        self.ebnf.set_token('INT.2', r'/(-|\+)?[0-9]+/')
         self.ebnf.set_token('FLOAT.2', 'INT "." INT? | "." INT')
         self.ebnf.SINGLE_QUOTED = "/'([^']*)'/"
         self.ebnf.DOUBLE_QUOTED = '/"([^"]*)"/'
