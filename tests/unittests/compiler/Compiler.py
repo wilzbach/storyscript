@@ -386,13 +386,12 @@ def test_compiler_else_block(patch, compiler, lines, tree):
 
 def test_compiler_foreach_block(patch, compiler, lines, tree):
     patch.init(Tree)
-    patch.object(Objects, 'path')
+    patch.object(Objects, 'entity')
     patch.many(Compiler, ['subtree', 'output'])
     compiler.foreach_block(tree, '1')
-    Tree.__init__.assert_called_with('path', [tree.foreach_statement.child()])
-    assert Objects.path.call_count == 1
+    assert Objects.entity.call_count == 1
     compiler.output.assert_called_with(tree.foreach_statement.output)
-    args = [Objects.path()]
+    args = [Objects.entity()]
     lines.append.assert_called_with('for', tree.line(), args=args,
                                     enter=tree.nested_block.line(),
                                     output=Compiler.output(), parent='1')
