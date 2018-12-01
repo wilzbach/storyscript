@@ -114,7 +114,7 @@ def test_grammar_expressions(grammar, ebnf):
     assert ebnf.AND == 'and'
     assert ebnf.OR == 'or'
     assert ebnf.mutation == 'name arguments*'
-    assert ebnf.factor == 'entity, op expression cp'
+    assert ebnf.factor == '(dash, plus)? entity, op expression cp'
     assert ebnf.exponential == 'factor (power exponential)?'
     assert ebnf.multiplication == ('exponential (( multiplier, bslash, '
                                    'modulus ) exponential)*')

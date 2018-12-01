@@ -7,12 +7,10 @@ from pytest import mark
 def test_parser_sum(parser):
     result = parser.parse('3 + 4\n')
     expression = result.block.rules.absolute_expression.expression
-    print(expression.pretty())
-    lhs = expression.multiplication.exponential.factor.entity.values.number
-    assert lhs.child(0) == Token('INT', 3)
-    assert expression.child(1) == Token('PLUS', '+')
-    rhs = expression.child(2).exponential.factor.entity.values.number
-    assert rhs.child(0) == Token('INT', 4)
+    assert expression.number.child(0) == Token('INT', 3)
+    factor = expression.multiplication.exponential.factor
+    assert factor.child(0) == Token('PLUS', '+')
+    assert factor.entity.values.number.child(0) == Token('INT', 4)
 
 
 def test_parser_list_path(parser):
@@ -21,7 +19,6 @@ def test_parser_list_path(parser):
     """
     result = parser.parse('x = 0\n[3, x]\n')
     expression = result.child(1).rules.absolute_expression.expression
-    print(expression.pretty())
     list = expression.multiplication.exponential.factor.entity.values.list
     assert list.child(3).path.child(0) == Token('NAME', 'x')
 

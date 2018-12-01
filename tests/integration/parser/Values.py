@@ -41,8 +41,9 @@ def test_values_int_negative(parser):
     """
     result = parser.parse('-3\n')
     expression = result.block.rules.absolute_expression.expression
-    entity = expression.multiplication.exponential.factor.entity
-    assert entity.values.number.child(0) == Token('INT', -3)
+    factor = expression.multiplication.exponential.factor
+    assert factor.child(0) == '-'
+    assert factor.entity.values.number.child(0) == Token('INT', 3)
 
 
 def test_values_float(parser):
@@ -61,8 +62,9 @@ def test_values_float_negative(parser):
     """
     result = parser.parse('-3.14\n')
     expression = result.block.rules.absolute_expression.expression
-    entity = expression.multiplication.exponential.factor.entity
-    assert entity.values.number.child(0) == Token('FLOAT', -3.14)
+    factor = expression.multiplication.exponential.factor
+    assert factor.child(0) == '-'
+    assert factor.entity.values.number.child(0) == Token('FLOAT', 3.14)
 
 
 def test_values_single_quoted_string(parser):
