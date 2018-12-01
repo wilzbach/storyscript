@@ -14,7 +14,7 @@ class Transformer(LarkTransformer):
     """
     reserved_keywords = ['function', 'if', 'else', 'foreach', 'return',
                          'returns', 'try', 'catch', 'finally', 'when', 'as',
-                         'import']
+                         'import', 'while']
 
     @staticmethod
     def arguments(matches):

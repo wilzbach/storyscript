@@ -164,6 +164,14 @@ def test_grammar_foreach_block(grammar, ebnf):
     assert ebnf.foreach_block == ebnf.simple_block()
 
 
+def test_grammar_while_block(grammar, ebnf):
+    grammar.while_block()
+    assert ebnf._WHILE == 'while'
+    assert ebnf.while_statement == 'while entity'
+    ebnf.simple_block.assert_called_with('while_statement')
+    assert ebnf.while_block == ebnf.simple_block()
+
+
 def test_grammar_function_block(grammar, ebnf):
     grammar.function_block()
     assert ebnf._RETURNS == 'returns'
@@ -197,7 +205,8 @@ def test_grammar_block(grammar, ebnf):
     assert ebnf.when_block == ebnf.simple_block()
     assert ebnf.indented_arguments == 'indent (arguments nl)+ dedent'
     block = ('rules nl, if_block, foreach_block, function_block, arguments, '
-             'service_block, when_block, try_block, indented_arguments')
+             'service_block, when_block, try_block, indented_arguments, '
+             'while_block')
     assert ebnf.block == block
     assert ebnf.nested_block == 'indent block+ dedent'
 
@@ -205,7 +214,7 @@ def test_grammar_block(grammar, ebnf):
 def test_grammar_build(patch, call_count, grammar, ebnf):
     methods = ['macros', 'types', 'values', 'assignments', 'imports',
                'service', 'expressions', 'rules', 'if_block', 'foreach_block',
-               'function_block', 'try_block', 'block']
+               'function_block', 'try_block', 'block', 'while_block']
     patch.many(Grammar, methods)
     result = grammar.build()
     assert ebnf._WS == '(" ")+'

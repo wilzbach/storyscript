@@ -65,6 +65,14 @@ def test_parser_foreach_block(parser):
     assert block.nested_block.data == 'nested_block'
 
 
+def test_parser_while_block(parser):
+    result = parser.parse('while cond\n\tvar=3\n')
+    block = result.block.while_block
+    while_ = block.while_statement
+    assert while_.entity.path.child(0) == Token('NAME', 'cond')
+    assert block.nested_block.data == 'nested_block'
+
+
 def test_parser_service(parser):
     result = parser.parse('org/container-name command\n')
     service = result.block.service_block.service

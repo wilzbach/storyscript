@@ -398,6 +398,18 @@ def test_compiler_foreach_block(patch, compiler, lines, tree):
     compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
+def test_compiler_while_block(patch, compiler, lines, tree):
+    patch.init(Tree)
+    patch.object(Objects, 'entity')
+    patch.many(Compiler, ['subtree'])
+    compiler.while_block(tree, '1')
+    args = [Objects.entity()]
+    lines.append.assert_called_with('while', tree.line(), args=args,
+                                    enter=tree.nested_block.line(),
+                                    parent='1')
+    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+
+
 def test_compiler_function_block(patch, compiler, lines, tree):
     patch.object(Objects, 'function_arguments')
     patch.many(Compiler, ['subtree', 'function_output'])

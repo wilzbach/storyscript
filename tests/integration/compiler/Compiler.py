@@ -102,6 +102,16 @@ def test_compiler_foreach_key_value(parser):
     assert result['tree']['1']['output'] == ['key', 'value']
 
 
+def test_compiler_while(parser):
+    tree = parser.parse('while cond\n\tx = 0')
+    result = Compiler.compile(tree)
+    args = [{'$OBJECT': 'path', 'paths': ['cond']}]
+    assert result['tree']['1']['method'] == 'while'
+    assert result['tree']['1']['args'] == args
+    assert result['tree']['1']['enter'] == '2'
+    assert result['tree']['2']['parent'] == '1'
+
+
 def test_compiler_service(parser):
     """
     Ensures that services are compiled correctly
