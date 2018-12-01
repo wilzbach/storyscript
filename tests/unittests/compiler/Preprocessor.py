@@ -23,7 +23,17 @@ def test_preprocessor_replace_expression(magic, tree):
     Preprocessor.replace_expression(tree, parent, expression)
     tree.add_assignment.assert_called_with(expression.service)
     assignment = tree.add_assignment().path.child()
-    parent.child().child().replace.assert_called_with(0, assignment)
+    entity = parent.expression.multiplication.exponential.factor.entity
+    entity.path.replace.assert_called_with(0, assignment)
+
+
+def test_preprocessor_replace_expression_argument(magic, tree):
+    parent = magic(expression=None)
+    expression = magic()
+    Preprocessor.replace_expression(tree, parent, expression)
+    tree.add_assignment.assert_called_with(expression.service)
+    assignment = tree.add_assignment().path.child()
+    parent.entity.path.replace.assert_called_with(0, assignment)
 
 
 def test_preprocessor_replace_in_entity(magic, tree, block, fake_tree):

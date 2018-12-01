@@ -21,7 +21,10 @@ class Preprocessor:
         Replaces an inline expression with a fake assignment
         """
         assignment = fake_tree.add_assignment(inline_expression.service)
-        parent.child(1).child(0).replace(0, assignment.path.child(0))
+        entity = parent.entity
+        if parent.expression:
+            entity = parent.expression.multiplication.exponential.factor.entity
+        entity.path.replace(0, assignment.path.child(0))
 
     @classmethod
     def replace_in_entity(cls, block, statement, entity):
