@@ -91,7 +91,7 @@ def test_preprocessor_assignments(patch, magic, tree):
 
 def test_preprocessor_assignments_to_expression(patch, magic, tree):
     """
-    Ensures Preprocessor.assignments can processs lines like
+    Ensures Preprocessor.assignments can process lines like
     a = (alpine echo message:'text')
     """
     patch.object(Preprocessor, 'assignment_expression')
@@ -99,7 +99,9 @@ def test_preprocessor_assignments_to_expression(patch, magic, tree):
     assignment.assignment_fragment.service = None
     tree.find_data.return_value = [assignment]
     Preprocessor.assignments(tree)
-    args = (tree, assignment.assignment_fragment.entity.path)
+    fragment = assignment.assignment_fragment
+    factor = fragment.expression.multiplication.exponential.factor
+    args = (tree, factor.entity.path)
     Preprocessor.assignment_expression.assert_called_with(*args)
 
 
@@ -107,7 +109,9 @@ def test_preprocessor_assignments_no_expression(patch, magic, tree):
     patch.object(Preprocessor, 'assignment_expression')
     assignment = magic()
     assignment.assignment_fragment.service = None
-    assignment.assignment_fragment.entity.path.inline_expression = None
+    fragment = assignment.assignment_fragment
+    factor = fragment.expression.multiplication.exponential.factor
+    factor.entity.path.inline_expression = None
     tree.find_data.return_value = [assignment]
     Preprocessor.assignments(tree)
     assert Preprocessor.assignment_expression.call_count == 0

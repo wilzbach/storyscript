@@ -68,9 +68,11 @@ class Preprocessor:
             fragment = assignment.assignment_fragment
             if fragment.service:
                 cls.service_arguments(block, fragment.service)
-            elif fragment.entity.path:
-                if fragment.entity.path.inline_expression:
-                    cls.assignment_expression(block, fragment.entity.path)
+            elif fragment.expression:
+                factor = fragment.expression.multiplication.exponential.factor
+                if factor.entity.path:
+                    if factor.entity.path.inline_expression:
+                        cls.assignment_expression(block, factor.entity.path)
 
     @classmethod
     def service(cls, tree):
