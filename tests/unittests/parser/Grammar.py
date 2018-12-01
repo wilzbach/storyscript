@@ -159,7 +159,7 @@ def test_grammar_if_block(grammar, ebnf):
 def test_grammar_foreach_block(grammar, ebnf):
     grammar.foreach_block()
     assert ebnf._FOREACH == 'foreach'
-    assert ebnf.foreach_statement == 'foreach name output'
+    assert ebnf.foreach_statement == 'foreach entity output'
     ebnf.simple_block.assert_called_with('foreach_statement')
     assert ebnf.foreach_block == ebnf.simple_block()
 

@@ -150,7 +150,7 @@ class Grammar:
 
     def foreach_block(self):
         self.ebnf._FOREACH = 'foreach'
-        self.ebnf.foreach_statement = 'foreach name output'
+        self.ebnf.foreach_statement = 'foreach entity output'
         self.ebnf.foreach_block = self.ebnf.simple_block('foreach_statement')
 
     def function_block(self):
