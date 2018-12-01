@@ -70,7 +70,7 @@ def test_transformer_command_keyword_error(syntax_error, magic, keyword):
 
 
 @mark.parametrize('keyword', [
-    'async', 'story', 'mock', 'while', 'assert', 'called', 'mock'
+    'async', 'story', 'mock', 'assert', 'called', 'mock'
 ])
 def test_transformer_command_future_keyword_error(syntax_error,
                                                   magic, keyword):
@@ -101,7 +101,7 @@ def test_transformer_path_keyword_error(syntax_error, magic, keyword):
 
 
 @mark.parametrize('keyword', [
-    'async', 'story', 'mock', 'while', 'assert', 'called', 'mock'
+    'async', 'story', 'mock', 'assert', 'called', 'mock'
 ])
 def test_transformer_path_future_keyword_error(syntax_error, magic, keyword):
     token = magic(value=keyword)
