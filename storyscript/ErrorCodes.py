@@ -37,3 +37,18 @@ class ErrorCodes:
     reserved_keyword_as = ('E0030', '`as` is a reserved keyword')
     reserved_keyword_import = ('E0031', '`import` is a reserved keyword')
     reserved_keyword_while = ('E0032', '`while` is a reserved keyword')
+    future_reserved_keyword_async = (
+        'E0033',
+        '`async` is reserved for future use')
+    future_reserved_keyword_story = (
+        'E0034',
+        '`story` is reserved for future use')
+    future_reserved_keyword_assert = (
+        'E0035',
+        '`assert` is reserved for future use')
+    future_reserved_keyword_called = (
+        'E0036',
+        '`called` is reserved for future use')
+    future_reserved_keyword_mock = (
+        'E0037',
+        '`mock` is reserved for future use')

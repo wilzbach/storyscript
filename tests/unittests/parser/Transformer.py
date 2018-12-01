@@ -69,6 +69,19 @@ def test_transformer_command_keyword_error(syntax_error, magic, keyword):
     syntax_error.assert_called_with(error_name, token=token)
 
 
+@mark.parametrize('keyword', [
+    'async', 'story', 'mock', 'while', 'assert', 'called', 'mock'
+])
+def test_transformer_command_future_keyword_error(syntax_error,
+                                                  magic, keyword):
+    token = magic(value=keyword)
+    matches = [token]
+    with raises(StorySyntaxError):
+        Transformer.command(matches)
+    error_name = 'future_reserved_keyword_{}'.format(keyword)
+    syntax_error.assert_called_with(error_name, token=token)
+
+
 def test_transformer_path(patch, magic):
     matches = [magic()]
     assert Transformer.path(matches) == Tree('path', matches)
@@ -84,6 +97,18 @@ def test_transformer_path_keyword_error(syntax_error, magic, keyword):
     with raises(StorySyntaxError):
         Transformer.path(matches)
     error_name = 'reserved_keyword_{}'.format(keyword)
+    syntax_error.assert_called_with(error_name, token=token)
+
+
+@mark.parametrize('keyword', [
+    'async', 'story', 'mock', 'while', 'assert', 'called', 'mock'
+])
+def test_transformer_path_future_keyword_error(syntax_error, magic, keyword):
+    token = magic(value=keyword)
+    matches = [token]
+    with raises(StorySyntaxError):
+        Transformer.path(matches)
+    error_name = 'future_reserved_keyword_{}'.format(keyword)
     syntax_error.assert_called_with(error_name, token=token)
 
 
