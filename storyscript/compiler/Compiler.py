@@ -201,8 +201,7 @@ class Compiler:
 
     def foreach_block(self, tree, parent):
         line = tree.line()
-        path = Tree('path', [tree.foreach_statement.child(0)])
-        args = [Objects.path(path)]
+        args = [Objects.entity(tree.foreach_statement.child(0))]
         output = self.output(tree.foreach_statement.output)
         nested_block = tree.nested_block
         self.lines.append('for', line, args=args, enter=nested_block.line(),
