@@ -14,8 +14,8 @@ class Transformer(LarkTransformer):
     """
     reserved_keywords = ['function', 'if', 'else', 'foreach', 'return',
                          'returns', 'try', 'catch', 'finally', 'when', 'as',
-                         'import']
-    future_reserved_keywords = ['async', 'story', 'while', 'assert',
+                         'import', 'while']
+    future_reserved_keywords = ['async', 'story', 'assert',
                                 'called', 'mock']
 
     @classmethod
