@@ -1,0 +1,67 @@
+omg: 1
+lifecycle:
+  startup:
+    command: ["python", "/app/app.py"]
+actions:
+  lex:
+    http:
+      path: /lex
+      method: post
+      port: 8000
+    arguments:
+      files:
+        type: map
+        required: true
+        in: requestBody
+    output:
+      type: string
+      contentType: text/plain
+  parse:
+    http:
+      path: /parse
+      method: post
+      port: 8000
+    arguments:
+      files:
+        type: map
+        required: true
+        in: requestBody
+    output:
+      type: string
+      contentType: text/plain
+  compile:
+    http:
+      path: /compile
+      method: post
+      port: 8000
+    arguments:
+      files:
+        type: map
+        required: true
+        in: requestBody
+    output:
+      type: object
+      contentType: application/json
+      properties:
+        stories:
+          type: object
+        services:
+          type: list
+        entrypoint:
+          type: list
+  grammar:
+    http:
+      path: /grammar
+      method: get
+      port: 8000
+    output:
+      type: string
+      contentType: text/plain
+  version:
+    http:
+      path: /version
+      method: get
+      port: 8000
+    output:
+      type: string
+      contentType: text/plain
