@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 import io
+from os import path
 
 from setuptools import find_packages, setup
 
 
 version = '0.8.1'
 
-description = io.open('README.md', 'r', encoding='utf-8').read()
+project_dir = path.dirname(path.realpath(__file__))
+
+description = io.open(path.join(project_dir, 'README.md'),
+                      'r', encoding='utf-8').read()
 short_description = ('StoryScript is an high-level language that can be used '
                      'to orchestrate microservices in an algorithmic way.')
 
