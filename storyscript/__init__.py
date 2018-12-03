@@ -8,3 +8,4 @@ __version__ = version = version
 
 loads = Api.loads
 load = Api.load
+grammar = Api.grammar
