@@ -62,23 +62,3 @@ def test_exception_missing_value(capsys):
     assert lines[0] == 'Error: syntax error in story at line 1, column 5'
     assert lines[2] == '1|    a = '
     assert lines[5] == 'Missing value after `=`'
-
-
-def test_exception_raise_outside(capsys):
-    with raises(SystemExit):
-        Story('raise').process()
-    output, error = capsys.readouterr()
-    lines = output.splitlines()
-    assert lines[0] == 'Error: syntax error in story at line 1, column 1'
-    assert lines[2] == '1|    raise'
-    assert lines[5] == '`raise` is allowed only inside catch blocks'
-
-
-def test_exception_nested_raise_outside(capsys):
-    with raises(SystemExit):
-        Story('if TRUE\n\traise').process()
-    output, error = capsys.readouterr()
-    lines = output.splitlines()
-    assert lines[0] == 'Error: syntax error in story at line 2, column 2'
-    assert lines[2] == '2|    \traise'
-    assert lines[5] == '`raise` is allowed only inside catch blocks'
