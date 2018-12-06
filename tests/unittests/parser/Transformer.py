@@ -15,7 +15,8 @@ def syntax_error(patch):
 
 def test_transformer():
     keywords = ['function', 'if', 'else', 'foreach', 'return', 'returns',
-                'try', 'catch', 'finally', 'when', 'as', 'import', 'while', 'raise']
+                'try', 'catch', 'finally', 'when', 'as', 'import', 'while',
+                'raise']
     assert Transformer.reserved_keywords == keywords
     assert issubclass(Transformer, LarkTransformer)
 

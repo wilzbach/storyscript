@@ -220,7 +220,8 @@ def test_grammar_block(grammar, ebnf):
 def test_grammar_build(patch, call_count, grammar, ebnf):
     methods = ['macros', 'types', 'values', 'assignments', 'imports',
                'service', 'expressions', 'rules', 'if_block', 'foreach_block',
-               'function_block', 'try_block', 'block', 'while_block', 'raise_statement']
+               'function_block', 'try_block', 'block', 'while_block',
+               'raise_statement']
     patch.many(Grammar, methods)
     result = grammar.build()
     assert ebnf._WS == '(" ")+'
