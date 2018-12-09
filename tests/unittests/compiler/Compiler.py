@@ -134,14 +134,15 @@ def test_compiler_assignment(patch, compiler, lines, tree):
     """
     Ensures a line like "x = value" is compiled correctly
     """
-    patch.object(Objects, 'names')
-    patch.object(Compiler, 'extract_values')
+    patch.many(Objects, ['names', 'entity'])
     tree.assignment_fragment.service = None
-    tree.assignment_fragment.expression = None
+    tree.assignment_fragment.expression.number = None
     compiler.assignment(tree, '1')
     Objects.names.assert_called_with(tree.path)
-    Compiler.extract_values.assert_called_with(tree.assignment_fragment)
-    kwargs = {'name': Objects.names(), 'args': Compiler.extract_values(),
+    fragment = tree.assignment_fragment
+    entity = fragment.expression.multiplication.exponential.factor.entity
+    Objects.entity.assert_called_with(entity)
+    kwargs = {'name': Objects.names(), 'args': [Objects.entity()],
               'parent': '1'}
     lines.append.assert_called_with('set', tree.line(), **kwargs)
 

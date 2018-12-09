@@ -84,6 +84,7 @@ class Compiler:
         Compiles an assignment tree
         """
         name = Objects.names(tree.path)
+        line = tree.line()
         fragment = tree.assignment_fragment
         service = fragment.service
         if service:
@@ -95,9 +96,10 @@ class Compiler:
             else:
                 return self.expression_assignment(service, name, parent)
         elif fragment.expression:
-            return self.expression_assignment(fragment, name, parent)
-        line = tree.line()
-        args = self.extract_values(fragment)
+            if fragment.expression.number:
+                return self.expression_assignment(fragment, name, parent)
+        entity = fragment.expression.multiplication.exponential.factor.entity
+        args = [Objects.entity(entity)]
         self.lines.append('set', line, name=name, args=args, parent=parent)
 
     def arguments(self, tree, parent):
