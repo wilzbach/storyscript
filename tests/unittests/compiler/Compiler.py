@@ -108,11 +108,11 @@ def test_compiler_expression_absolute_mutation(patch, compiler, lines, tree):
     """
     Ensures that absolute expressions with mutations are compiled correctly
     """
-    patch.many(Objects, ['mutation', 'values'])
+    patch.many(Objects, ['mutation', 'entity'])
     compiler.expression(tree, '1')
     Objects.mutation.assert_called_with(tree.expression.mutation)
-    Objects.values.assert_called_with(tree.expression.values)
-    args = [Objects.values(), Objects.mutation()]
+    Objects.entity.assert_called_with(tree.expression.entity)
+    args = [Objects.entity(), Objects.mutation()]
     lines.append.assert_called_with('expression', tree.line(), args=args,
                                     parent='1')
 

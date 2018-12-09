@@ -54,7 +54,7 @@ class Compiler:
         mutation = None
         if tree.expression:
             if tree.expression.mutation:
-                value = Objects.values(tree.expression.values)
+                value = Objects.entity(tree.expression.entity)
                 mutation = Objects.mutation(tree.expression.mutation)
             else:
                 value = Objects.expression(tree.expression)
