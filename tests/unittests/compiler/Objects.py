@@ -312,26 +312,35 @@ def test_objects_expression(patch, tree):
     """
     Ensures Objects.expression can compile expressions
     """
+    patch.many(Objects, ['entity', 'expression_type'])
+    tree.number = None
+    result = Objects.expression(tree)
+    Objects.expression_type.assert_called_with(tree.child())
+    assert Objects.entity.call_count == 2
+    expected = {
+        '$OBJECT': 'expression', 'expression': Objects.expression_type(),
+        'values': [Objects.entity(), Objects.entity()]
+    }
+    assert result == expected
+
+
+def test_objects_expresssion_number(patch, tree):
+    """
+    Ensures Objects.expression can compile expressions with a number as first
+    element, like '1 + 2'
+    """
     patch.many(Objects, ['entity', 'values', 'expression_type'])
     result = Objects.expression(tree)
-    operator = tree.expression_fragment.operator.child().value
+    operator = tree.multiplication.exponential.factor.child(0)
+    Objects.values.assert_called_with(tree)
+    entity = tree.multiplication.exponential.factor.entity
+    Objects.entity.assert_called_with(entity)
     Objects.expression_type.assert_called_with(operator)
-    Objects.entity.assert_called_with(tree.entity)
-    Objects.values.assert_called_with(tree.expression_fragment.entity.values)
-    assert result == {'$OBJECT': 'expression',
-                      'expression': Objects.expression_type(),
-                      'values': [Objects.entity(), Objects.values()]}
-
-
-def test_objects_expression_rhs(patch, tree):
-    """
-    Ensures Objects.expression can deal with right hand-side operand being
-    a path.
-    """
-    patch.many(Objects, ['values', 'expression_type'])
-    tree.expression_fragment.entity.values = None
-    Objects.expression(tree)
-    Objects.values.assert_called_with(tree.expression_fragment.path)
+    expected = {
+        '$OBJECT': 'expression', 'expression': Objects.expression_type(),
+        'values': [Objects.values(), Objects.entity()]
+    }
+    assert result == expected
 
 
 def test_objects_assertion(patch, tree):

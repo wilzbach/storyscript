@@ -223,14 +223,18 @@ class Objects:
         """
         Compiles an expression object with the given tree.
         """
-        operator = tree.expression_fragment.operator.child(0).value
-        expression_type = Objects.expression_type(operator)
-        rhs = tree.expression_fragment.entity.values
-        if rhs is None:
-            rhs = tree.expression_fragment.path
-        values = [cls.entity(tree.entity), cls.values(rhs)]
+        if tree.number:
+            lhs = cls.values(tree)
+            rhs = cls.entity(tree.multiplication.exponential.factor.entity)
+            operator = tree.multiplication.exponential.factor.child(0)
+            expression_type = Objects.expression_type(operator)
+        else:
+            lhs = cls.entity(tree.multiplication.exponential.factor.entity)
+            rhs = cls.entity(tree.child(2).exponential.factor.entity)
+            operator = tree.child(1)
+            expression_type = Objects.expression_type(operator)
         return {'$OBJECT': 'expression', 'expression': expression_type,
-                'values': values}
+                'values': [lhs, rhs]}
 
     @classmethod
     def assertion(cls, tree):
