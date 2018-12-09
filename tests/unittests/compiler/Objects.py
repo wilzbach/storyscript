@@ -324,6 +324,17 @@ def test_objects_expression(patch, tree):
     assert result == expected
 
 
+def test_objects_expression_multiplication(patch, tree):
+    """
+    Ensures Objects.expression can compile multiplication expressions
+    """
+    patch.many(Objects, ['entity', 'expression_type'])
+    tree.number = None
+    tree.child.return_value = None
+    Objects.expression(tree)
+    Objects.expression_type.assert_called_with(tree.multiplication.child())
+
+
 def test_objects_expresssion_number(patch, tree):
     """
     Ensures Objects.expression can compile expressions with a number as first

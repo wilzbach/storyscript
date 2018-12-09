@@ -228,6 +228,11 @@ class Objects:
             rhs = cls.entity(tree.multiplication.exponential.factor.entity)
             operator = tree.multiplication.exponential.factor.child(0)
             expression_type = Objects.expression_type(operator)
+        elif tree.child(2) is None:
+            lhs = cls.entity(tree.multiplication.exponential.factor.entity)
+            rhs = cls.entity(tree.multiplication.child(2).factor.entity)
+            operator = tree.multiplication.child(1)
+            expression_type = Objects.expression_type(operator)
         else:
             lhs = cls.entity(tree.multiplication.exponential.factor.entity)
             rhs = cls.entity(tree.child(2).exponential.factor.entity)
