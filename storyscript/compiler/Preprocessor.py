@@ -85,50 +85,6 @@ class Preprocessor:
             cls.service_arguments(tree, service)
 
     @classmethod
-    def merge_operands(cls, block, lhs, rhs):
-        """
-        Replaces the right hand-side operand and the right part of the left
-        one with a fake assignment to a simpler expression.
-        """
-        fake_tree = cls.fake_tree(block)
-        left_value = lhs.values
-        if left_value is None:
-            left_value = lhs
-        right_value = rhs.child(1)
-        args = (left_value, rhs.operator, right_value)
-        expression = fake_tree.expression(*args)
-        assignment = fake_tree.add_assignment(expression)
-        children = len(lhs.children)
-        if children == 1:
-            lhs.replace(0, assignment.path.child(0))
-            lhs.rename('path')
-            return
-        lhs.replace(children - 1, assignment.path)
-
-    @classmethod
-    def expression_stack(cls, block, tree):
-        """
-        Rebuilds the expression tree, replacing fragments according to the
-        order that needs to be followed.
-        """
-        stack = []
-        for child in tree.children:
-            if child.operator:
-                if child.operator.child(0) in ['*', '/', '%', '^']:
-                    cls.merge_operands(block, stack[-1], child)
-                else:
-                    stack.append(child)
-            else:
-                stack.append(child)
-        tree.children = stack
-
-    @classmethod
-    def expression(cls, block):
-        for expression in block.find_data('expression'):
-            if len(expression.children) > 2:
-                cls.expression_stack(block, expression)
-
-    @classmethod
     def flow_statement(cls, name, block):
         """
         Processes if statements, looking inline expressions.
@@ -146,7 +102,6 @@ class Preprocessor:
         for block in tree.find_data('block'):
             cls.assignments(block)
             cls.service(block)
-            cls.expression(block)
             cls.flow_statement('if_statement', block)
             cls.flow_statement('elseif_statement', block)
         return tree

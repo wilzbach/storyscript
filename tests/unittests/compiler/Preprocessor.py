@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pytest import fixture, mark
+from pytest import fixture
 
 from storyscript.compiler import FakeTree, Preprocessor
 
@@ -131,72 +131,6 @@ def test_preprocessor_service_no_service(patch, magic, tree):
     assert Preprocessor.service_arguments.call_count == 0
 
 
-def test_preprocessor_merge_operands(magic, tree, fake_tree):
-    """
-    Ensures Preprocessor.merge_operands can merge operands
-    """
-    rhs = magic()
-    Preprocessor.merge_operands('block', tree, rhs)
-    fake_tree.assert_called_with('block')
-    args = (tree.values, rhs.operator, rhs.child(1))
-    Preprocessor.fake_tree().expression.assert_called_with(*args)
-    fake_tree().add_assignment.assert_called_with(fake_tree().expression())
-    tree.replace.assert_called_with(len(tree.children) - 1,
-                                    fake_tree().add_assignment().path)
-
-
-def test_preprocessor_merge_operands_lhs(magic, tree, fake_tree):
-    """
-    Ensures Preprocessor.merge_operands can deal with lhs having no values
-    branch.
-    """
-    rhs = magic()
-    tree.values = None
-    Preprocessor.merge_operands('block', tree, rhs)
-    args = (tree, rhs.operator, rhs.child(1))
-    Preprocessor.fake_tree().expression.assert_called_with(*args)
-
-
-def test_preprocessor_merge_operands_lhs_child(magic, tree, fake_tree):
-    """
-    Ensures Preprocessor.merge_operands can deal with lhs having one child
-    """
-    rhs = magic()
-    tree.children = ['one']
-    Preprocessor.merge_operands('block', tree, rhs)
-    fake_tree.assert_called_with('block')
-    args = (tree.values, rhs.operator, rhs.child(1))
-    Preprocessor.fake_tree().expression.assert_called_with(*args)
-    fake_tree().add_assignment.assert_called_with(fake_tree().expression())
-    tree.replace.assert_called_with(0,
-                                    fake_tree().add_assignment().path.child())
-    tree.rename.assert_called_with('path')
-
-
-@mark.parametrize('operator', ['*', '/', '%', '^'])
-def test_preprocessor_expression_stack(patch, magic, tree, operator):
-    """
-    Ensures expression_stack can replace the expression tree
-    """
-    patch.object(Preprocessor, 'merge_operands')
-    child = magic()
-    child.operator.child.return_value = operator
-    tree.children = [magic(), child]
-    Preprocessor.expression_stack('block', tree)
-    args = ('block', tree.children[0], child)
-    Preprocessor.merge_operands.assert_called_with(*args)
-    assert tree.children == [tree.children[0]]
-
-
-def test_preprocessor_expression(patch, magic, tree):
-    patch.object(Preprocessor, 'expression_stack')
-    expression = magic(children=[1, 2, 3])
-    tree.find_data.return_value = [expression]
-    Preprocessor.expression(tree)
-    tree.find_data.assert_called_with('expression')
-    Preprocessor.expression_stack.assert_called_with(tree, expression)
-
-
 def test_preprocessor_flow_statement(patch, magic, tree):
     """
     Ensures flow_statement replaces inline expressions inside if statements
@@ -240,12 +174,10 @@ def test_preprocessor_flow_statement_no_expression(patch, magic, tree):
 
 
 def test_preprocessor_process(patch, magic, tree, block):
-    patch.many(Preprocessor, ['assignments', 'service', 'expression',
-                              'flow_statement'])
+    patch.many(Preprocessor, ['assignments', 'service', 'flow_statement'])
     tree.find_data.return_value = [block]
     result = Preprocessor.process(tree)
     Preprocessor.assignments.assert_called_with(block)
     Preprocessor.service.assert_called_with(block)
-    Preprocessor.expression.assert_called_with(block)
     Preprocessor.flow_statement.assert_called_with('elseif_statement', block)
     assert result == tree
