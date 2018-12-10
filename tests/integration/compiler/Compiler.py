@@ -15,6 +15,20 @@ def test_compiler_expression_sum(parser):
     assert result['tree']['1']['args'] == args
 
 
+def test_compiler_expression_sum_many(parser):
+    """
+    Ensures that sums of N-numbers are compiled correctly
+    """
+    tree = parser.parse('3 + 2 + 1')
+    result = Compiler.compile(tree)
+    first_operand = {'$OBJECT': 'expression', 'expression': 'sum',
+                     'values': [3, 2]}
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'][0]['expression'] == 'sum'
+    assert result['tree']['1']['args'][0]['values'][0] == first_operand
+    assert result['tree']['1']['args'][0]['values'][1] == 1
+
+
 def test_compiler_expression_multiplication(parser):
     """
     Ensures that multiplications are compiled correctly
