@@ -264,7 +264,7 @@ class Compiler:
         line = tree.line()
         args = []
         # the first child is `raise` which isn't ignored as
-        # its needed to infer the line number in case no other
+        # it is needed to infer the line number in case no other
         # childrens were provided
         if len(tree.children) > 1:
             args = [Objects.entity(tree.child(1))]
