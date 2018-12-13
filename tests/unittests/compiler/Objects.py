@@ -331,6 +331,14 @@ def test_objects_resolve_operand_exponential(patch, tree):
     assert result == Objects.entity()
 
 
+def test_objects_expression_values(patch):
+    patch.object(Objects, 'resolve_operand')
+    tree = Tree('test', [])
+    result = Objects.expression_values([tree, 'not_a_tree'])
+    Objects.resolve_operand.assert_called_with(tree)
+    assert result == [Objects.resolve_operand()]
+
+
 def test_objects_expression(patch, tree):
     """
     Ensures Objects.expression can compile expressions

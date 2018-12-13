@@ -230,6 +230,14 @@ class Objects:
         return cls.entity(tree.factor.entity)
 
     @classmethod
+    def expression_values(cls, children):
+        values = []
+        for child in children:
+            if isinstance(child, Tree):
+                values.append(cls.resolve_operand(child))
+        return values
+
+    @classmethod
     def expression(cls, tree):
         """
         Compiles an expression object with the given tree.
