@@ -219,6 +219,17 @@ class Objects:
         return types[operator]
 
     @classmethod
+    def resolve_operand(cls, tree):
+        """
+        Resolves an operand
+        """
+        if tree.data == 'number':
+            return cls.number(tree)
+        elif tree.exponential:
+            return cls.entity(tree.exponential.factor.entity)
+        return cls.entity(tree.factor.entity)
+
+    @classmethod
     def expression(cls, tree):
         """
         Compiles an expression object with the given tree.

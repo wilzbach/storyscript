@@ -308,6 +308,29 @@ def test_objects_expression_type(operator, expression):
     assert Objects.expression_type(operator) == expression
 
 
+def test_objects_resolve_operand(patch, tree):
+    patch.object(Objects, 'entity')
+    tree.exponential = None
+    result = Objects.resolve_operand(tree)
+    Objects.entity.assert_called_with(tree.factor.entity)
+    assert result == Objects.entity()
+
+
+def test_objects_resolve_operand_number(patch, tree):
+    patch.object(Objects, 'number')
+    tree.data = 'number'
+    result = Objects.resolve_operand(tree)
+    Objects.number.assert_called_with(tree)
+    assert result == Objects.number()
+
+
+def test_objects_resolve_operand_exponential(patch, tree):
+    patch.object(Objects, 'entity')
+    result = Objects.resolve_operand(tree)
+    Objects.entity.assert_called_with(tree.exponential.factor.entity)
+    assert result == Objects.entity()
+
+
 def test_objects_expression(patch, tree):
     """
     Ensures Objects.expression can compile expressions
