@@ -221,12 +221,19 @@ class Objects:
     @classmethod
     def resolve_operand(cls, tree):
         """
-        Resolves an operand
+        Resolves an operand to its value or to the corresponding expression,
+        in case of nested operands.
         """
+        if (len(tree.children) > 1):
+            return cls.expression(tree)
         if tree.data == 'number':
             return cls.number(tree)
         elif tree.exponential:
+            if (len(tree.child(0).children)) > 1:
+                return cls.expression(tree.child(0))
             return cls.entity(tree.exponential.factor.entity)
+        elif tree.entity:
+            return cls.entity(tree.entity)
         return cls.entity(tree.factor.entity)
 
     @classmethod

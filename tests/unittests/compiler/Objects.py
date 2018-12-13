@@ -309,14 +309,32 @@ def test_objects_expression_type(operator, expression):
 
 
 def test_objects_resolve_operand(patch, tree):
+    """
+    Ensures resolve_operand can resolve a simple operand.
+    """
     patch.object(Objects, 'entity')
     tree.exponential = None
+    tree.entity = None
     result = Objects.resolve_operand(tree)
     Objects.entity.assert_called_with(tree.factor.entity)
     assert result == Objects.entity()
 
 
+def test_objects_resolve_operand_children(patch, tree):
+    """
+    Ensures resolve_operand can resolve nested operands.
+    """
+    patch.object(Objects, 'expression')
+    tree.children = [1, 2]
+    result = Objects.resolve_operand(tree)
+    Objects.expression.assert_called_with(tree)
+    assert result == Objects.expression()
+
+
 def test_objects_resolve_operand_number(patch, tree):
+    """
+    Ensures resolve_operand can resolve a number.
+    """
     patch.object(Objects, 'number')
     tree.data = 'number'
     result = Objects.resolve_operand(tree)
@@ -324,10 +342,36 @@ def test_objects_resolve_operand_number(patch, tree):
     assert result == Objects.number()
 
 
-def test_objects_resolve_operand_exponential(patch, tree):
+def test_objects_resolve_operand_multiplication(patch, tree):
+    """
+    Ensures resolve_operand can resolve a multiplication tree.
+    """
     patch.object(Objects, 'entity')
     result = Objects.resolve_operand(tree)
     Objects.entity.assert_called_with(tree.exponential.factor.entity)
+    assert result == Objects.entity()
+
+
+def test_objects_resolve_operand_multiplication_nested(patch, magic, tree):
+    """
+    Ensures resolve_operand can resolve a multiplication tree with nested
+    operands.
+    """
+    patch.object(Objects, 'expression')
+    tree.child.return_value = magic(children=[1, 2])
+    result = Objects.resolve_operand(tree)
+    Objects.expression.assert_called_with(tree.child(0))
+    assert result == Objects.expression()
+
+
+def test_objects_resolve_operand_factor(patch, tree):
+    """
+    Ensures resolve_operand can resolve a factor tree.
+    """
+    patch.object(Objects, 'entity')
+    tree.exponential = None
+    result = Objects.resolve_operand(tree)
+    Objects.entity.assert_called_with(tree.entity)
     assert result == Objects.entity()
 
 
