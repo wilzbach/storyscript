@@ -387,46 +387,38 @@ def test_objects_expression(patch, tree):
     """
     Ensures Objects.expression can compile expressions
     """
-    patch.many(Objects, ['entity', 'expression_type'])
+    patch.many(Objects, ['expression_type', 'expression_values'])
     tree.number = None
     result = Objects.expression(tree)
+    Objects.expression_values.assert_called_with(tree.children)
     Objects.expression_type.assert_called_with(tree.child())
-    assert Objects.entity.call_count == 2
-    expected = {
-        '$OBJECT': 'expression', 'expression': Objects.expression_type(),
-        'values': [Objects.entity(), Objects.entity()]
-    }
+    expected = {'$OBJECT': 'expression',
+                'values': Objects.expression_values(),
+                'expression': Objects.expression_type()}
     assert result == expected
 
 
-def test_objects_expression_multiplication(patch, tree):
+def test_objects_expression_number(patch, tree):
     """
-    Ensures Objects.expression can compile multiplication expressions
+    Ensures Objects.expression can compile an expression that starts with a
+    number
     """
-    patch.many(Objects, ['entity', 'expression_type'])
-    tree.number = None
-    tree.child.return_value = None
+    patch.many(Objects, ['expression_values', 'expression_type'])
     Objects.expression(tree)
-    Objects.expression_type.assert_called_with(tree.multiplication.child())
-
-
-def test_objects_expresssion_number(patch, tree):
-    """
-    Ensures Objects.expression can compile expressions with a number as first
-    element, like '1 + 2'
-    """
-    patch.many(Objects, ['entity', 'values', 'expression_type'])
-    result = Objects.expression(tree)
-    operator = tree.multiplication.exponential.factor.child(0)
-    Objects.values.assert_called_with(tree)
-    entity = tree.multiplication.exponential.factor.entity
-    Objects.entity.assert_called_with(entity)
+    operator = tree.multiplication.exponential.factor.child()
     Objects.expression_type.assert_called_with(operator)
-    expected = {
-        '$OBJECT': 'expression', 'expression': Objects.expression_type(),
-        'values': [Objects.values(), Objects.entity()]
-    }
-    assert result == expected
+
+
+def test_objects_expression_one_child(patch, tree):
+    """
+    Ensures Objects.expression can compile expressions with one child tree
+    """
+    patch.many(Objects, ['expression_type', 'expression_values'])
+    tree.number = None
+    tree.children = [1]
+    Objects.expression(tree)
+    Objects.expression_values.assert_called_with(tree.child().children)
+    Objects.expression_type.assert_called_with(tree.child().child())
 
 
 def test_objects_assertion(patch, tree):
