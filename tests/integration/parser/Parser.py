@@ -5,12 +5,12 @@ from pytest import mark
 
 
 def test_parser_sum(parser):
-    result = parser.parse('3 + 3\n')
+    result = parser.parse('3 + 4\n')
     expression = result.block.rules.absolute_expression.expression
-    fragment = expression.expression_fragment
-    assert expression.entity.values.number.child(0) == Token('INT', 3)
-    assert fragment.operator.child(0) == Token('PLUS', '+')
-    assert fragment.entity.values.number.child(0) == Token('INT', 3)
+    assert expression.number.child(0) == Token('INT', 3)
+    factor = expression.multiplication.exponential.factor
+    assert factor.child(0) == Token('PLUS', '+')
+    assert factor.entity.values.number.child(0) == Token('INT', 4)
 
 
 def test_parser_list_path(parser):
@@ -18,7 +18,8 @@ def test_parser_list_path(parser):
     Ensures that paths in lists can be parsed.
     """
     result = parser.parse('x = 0\n[3, x]\n')
-    list = result.child(1).rules.entity.values.list
+    expression = result.child(1).rules.absolute_expression.expression
+    list = expression.multiplication.exponential.factor.entity.values.list
     assert list.child(3).path.child(0) == Token('NAME', 'x')
 
 
@@ -33,7 +34,8 @@ def test_parser_assignment(parser, code, token):
     assignment = result.block.rules.assignment
     assert assignment.path.child(0) == Token('NAME', 'var')
     assert assignment.assignment_fragment.child(0) == Token('EQUALS', '=')
-    entity = assignment.assignment_fragment.entity
+    expression = assignment.assignment_fragment.expression
+    entity = expression.multiplication.exponential.factor.entity
     assert entity.values.child(0).child(0) == token
 
 

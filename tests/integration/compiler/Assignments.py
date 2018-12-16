@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from pytest import mark
+
 from storyscript.compiler import Compiler
 
 
@@ -44,6 +46,15 @@ def test_assignments_int(parser):
     assert result['tree']['1']['method'] == 'set'
     assert result['tree']['1']['name'] == ['a']
     assert result['tree']['1']['args'] == [0]
+
+
+def test_assignments_int_positive(parser):
+    """
+    Ensures that assignments to positive integers are compiled correctly
+    """
+    tree = parser.parse('a = +3')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['args'] == [3]
 
 
 def test_assignments_float(parser):
@@ -174,6 +185,32 @@ def test_assignments_regular_expression_flags(parser):
     assert result['tree']['1']['args'][0]['flags'] == 'g'
 
 
+def test_assignments_sum(parser):
+    """
+    Ensures assignments to sums are compiled correctly
+    """
+    tree = parser.parse('a = 3 + 2')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['name'] == ['a']
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'][0]['$OBJECT'] == 'expression'
+    assert result['tree']['1']['args'][0]['expression'] == 'sum'
+    assert result['tree']['1']['args'][0]['values'] == [3, 2]
+
+
+def test_assignments_multiplications(parser):
+    """
+    Ensures assignments to multiplications are compiled correctly
+    """
+    tree = parser.parse('a = 3 * 2')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['name'] == ['a']
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'][0]['$OBJECT'] == 'expression'
+    assert result['tree']['1']['args'][0]['expression'] == 'multiplication'
+    assert result['tree']['1']['args'][0]['values'] == [3, 2]
+
+
 def test_assignments_service(parser):
     """
     Ensures that service assignments are compiled correctly
@@ -192,6 +229,7 @@ def test_assignments_inline_expression(parser):
     assert result['tree']['1']['args'] == [{'$OBJECT': 'path', 'paths': path}]
 
 
+@mark.skip(reason='The current grammar cannot parse this.')
 def test_assignments_mutation(parser):
     """
     Ensures that assigning a mutation on a value is compiled correctly

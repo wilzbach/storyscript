@@ -4,13 +4,64 @@ from storyscript.compiler import Compiler
 
 def test_compiler_expression_sum(parser):
     """
-    Ensures that numbers are compiled correctly
+    Ensures that sums are compiled correctly
     """
     tree = parser.parse('3 + 2')
     result = Compiler.compile(tree)
     args = [
         {'$OBJECT': 'expression', 'expression': 'sum', 'values': [3, 2]}
     ]
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == args
+
+
+def test_compiler_expression_sum_many(parser):
+    """
+    Ensures that sums of N-numbers are compiled correctly
+    """
+    tree = parser.parse('3 + 2 + 1')
+    result = Compiler.compile(tree)
+    args = [{'$OBJECT': 'expression', 'expression': 'sum',
+            'values': [3, 2, 1]}]
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == args
+
+
+def test_compiler_expression_multiplication(parser):
+    """
+    Ensures that multiplications are compiled correctly
+    """
+    tree = parser.parse('3 * 2')
+    result = Compiler.compile(tree)
+    args = [
+        {'$OBJECT': 'expression', 'expression': 'multiplication',
+         'values': [3, 2]}
+    ]
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == args
+
+
+def test_compiler_expression_multiplication_many(parser):
+    """
+    Ensures that sums of N-numbers are compiled correctly
+    """
+    tree = parser.parse('3 * 2 * 1')
+    result = Compiler.compile(tree)
+    args = [{'$OBJECT': 'expression', 'expression': 'multiplication',
+            'values': [3, 2, 1]}]
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == args
+
+
+def test_compiler_expression_complex(parser):
+    tree = parser.parse('3 * 2 + 1 ^ 5')
+    result = Compiler.compile(tree)
+    lhs = {'$OBJECT': 'expression', 'expression': 'multiplication',
+           'values': [3, 2]}
+    rhs = {'$OBJECT': 'expression', 'expression': 'exponential',
+           'values': [1, 5]}
+    args = [{'$OBJECT': 'expression', 'expression': 'sum',
+            'values': [lhs, rhs]}]
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == args
 

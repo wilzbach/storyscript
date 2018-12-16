@@ -219,16 +219,41 @@ class Objects:
         return types[operator]
 
     @classmethod
+    def resolve_operand(cls, tree):
+        """
+        Resolves an operand to its value or to the corresponding expression,
+        in case of nested operands.
+        """
+        if (len(tree.children) > 1):
+            return cls.expression(tree)
+        if tree.data == 'number':
+            return cls.number(tree)
+        elif tree.exponential:
+            if (len(tree.exponential.children)) > 1:
+                return cls.expression(tree.exponential)
+            return cls.entity(tree.exponential.factor.entity)
+        elif tree.entity:
+            return cls.entity(tree.entity)
+        return cls.entity(tree.factor.entity)
+
+    @classmethod
+    def expression_values(cls, children):
+        values = []
+        for child in children:
+            if isinstance(child, Tree):
+                values.append(cls.resolve_operand(child))
+        return values
+
+    @classmethod
     def expression(cls, tree):
         """
         Compiles an expression object with the given tree.
         """
-        operator = tree.expression_fragment.operator.child(0).value
-        expression_type = Objects.expression_type(operator)
-        rhs = tree.expression_fragment.entity.values
-        if rhs is None:
-            rhs = tree.expression_fragment.path
-        values = [cls.entity(tree.entity), cls.values(rhs)]
+        if len(tree.children) == 1:
+            values = cls.expression_values(tree.child(0).children)
+        else:
+            values = cls.expression_values(tree.children)
+        expression_type = Objects.expression_type(tree.find_operator())
         return {'$OBJECT': 'expression', 'expression': expression_type,
                 'values': values}
 

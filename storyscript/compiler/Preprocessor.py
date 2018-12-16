@@ -21,7 +21,10 @@ class Preprocessor:
         Replaces an inline expression with a fake assignment
         """
         assignment = fake_tree.add_assignment(inline_expression.service)
-        parent.child(1).child(0).replace(0, assignment.path.child(0))
+        entity = parent.entity
+        if parent.expression:
+            entity = parent.expression.multiplication.exponential.factor.entity
+        entity.path.replace(0, assignment.path.child(0))
 
     @classmethod
     def replace_in_entity(cls, block, statement, entity):
@@ -65,9 +68,11 @@ class Preprocessor:
             fragment = assignment.assignment_fragment
             if fragment.service:
                 cls.service_arguments(block, fragment.service)
-            elif fragment.entity.path:
-                if fragment.entity.path.inline_expression:
-                    cls.assignment_expression(block, fragment.entity.path)
+            elif fragment.expression:
+                factor = fragment.expression.multiplication.exponential.factor
+                if factor.entity.path:
+                    if factor.entity.path.inline_expression:
+                        cls.assignment_expression(block, factor.entity.path)
 
     @classmethod
     def service(cls, tree):
@@ -78,50 +83,6 @@ class Preprocessor:
         service = tree.node('service_block.service')
         if service:
             cls.service_arguments(tree, service)
-
-    @classmethod
-    def merge_operands(cls, block, lhs, rhs):
-        """
-        Replaces the right hand-side operand and the right part of the left
-        one with a fake assignment to a simpler expression.
-        """
-        fake_tree = cls.fake_tree(block)
-        left_value = lhs.values
-        if left_value is None:
-            left_value = lhs
-        right_value = rhs.child(1)
-        args = (left_value, rhs.operator, right_value)
-        expression = fake_tree.expression(*args)
-        assignment = fake_tree.add_assignment(expression)
-        children = len(lhs.children)
-        if children == 1:
-            lhs.replace(0, assignment.path.child(0))
-            lhs.rename('path')
-            return
-        lhs.replace(children - 1, assignment.path)
-
-    @classmethod
-    def expression_stack(cls, block, tree):
-        """
-        Rebuilds the expression tree, replacing fragments according to the
-        order that needs to be followed.
-        """
-        stack = []
-        for child in tree.children:
-            if child.operator:
-                if child.operator.child(0) in ['*', '/', '%', '^']:
-                    cls.merge_operands(block, stack[-1], child)
-                else:
-                    stack.append(child)
-            else:
-                stack.append(child)
-        tree.children = stack
-
-    @classmethod
-    def expression(cls, block):
-        for expression in block.find_data('expression'):
-            if len(expression.children) > 2:
-                cls.expression_stack(block, expression)
 
     @classmethod
     def flow_statement(cls, name, block):
@@ -141,7 +102,6 @@ class Preprocessor:
         for block in tree.find_data('block'):
             cls.assignments(block)
             cls.service(block)
-            cls.expression(block)
             cls.flow_statement('if_statement', block)
             cls.flow_statement('elseif_statement', block)
         return tree

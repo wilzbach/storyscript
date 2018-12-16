@@ -108,11 +108,11 @@ def test_compiler_expression_absolute_mutation(patch, compiler, lines, tree):
     """
     Ensures that absolute expressions with mutations are compiled correctly
     """
-    patch.many(Objects, ['mutation', 'values'])
+    patch.many(Objects, ['mutation', 'entity'])
     compiler.expression(tree, '1')
     Objects.mutation.assert_called_with(tree.expression.mutation)
-    Objects.values.assert_called_with(tree.expression.values)
-    args = [Objects.values(), Objects.mutation()]
+    Objects.entity.assert_called_with(tree.expression.entity)
+    args = [Objects.entity(), Objects.mutation()]
     lines.append.assert_called_with('expression', tree.line(), args=args,
                                     parent='1')
 
@@ -134,14 +134,15 @@ def test_compiler_assignment(patch, compiler, lines, tree):
     """
     Ensures a line like "x = value" is compiled correctly
     """
-    patch.object(Objects, 'names')
-    patch.object(Compiler, 'extract_values')
+    patch.many(Objects, ['names', 'entity'])
     tree.assignment_fragment.service = None
-    tree.assignment_fragment.expression = None
+    tree.assignment_fragment.expression.number = None
     compiler.assignment(tree, '1')
     Objects.names.assert_called_with(tree.path)
-    Compiler.extract_values.assert_called_with(tree.assignment_fragment)
-    kwargs = {'name': Objects.names(), 'args': Compiler.extract_values(),
+    fragment = tree.assignment_fragment
+    entity = fragment.expression.multiplication.exponential.factor.entity
+    Objects.entity.assert_called_with(entity)
+    kwargs = {'name': Objects.names(), 'args': [Objects.entity()],
               'parent': '1'}
     lines.append.assert_called_with('set', tree.line(), **kwargs)
 
@@ -173,6 +174,7 @@ def test_compiler_assignment_expression(patch, compiler, lines, tree):
     patch.object(Objects, 'names', return_value='name')
     patch.object(Compiler, 'expression_assignment')
     tree.assignment_fragment.service = None
+    tree.assignment_fragment.expression.is_unary.return_value = False
     compiler.assignment(tree, '1')
     fragment = tree.assignment_fragment
     Compiler.expression_assignment.assert_called_with(fragment, 'name', '1')
