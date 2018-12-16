@@ -125,6 +125,12 @@ Or::
     foreach items as key, value
         # ...
 
+Loops
+-----
+::
+
+    while cond
+
 
 Functions
 ---------

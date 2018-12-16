@@ -100,3 +100,15 @@ def test_intention_foreach_as(line):
 def test_intention_foreach_as_not(line):
     intention = Intention(line)
     assert intention.foreach_as() is None
+
+
+@mark.parametrize('line', ['wh', 'whi', 'whil'])
+def test_intention_while(line):
+    intention = Intention(line)
+    assert intention.while_() is True
+
+
+@mark.parametrize('line', ['while'])
+def test_intention_while_not(line):
+    intention = Intention(line)
+    assert intention.while_() is None

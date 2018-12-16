@@ -145,9 +145,14 @@ class Grammar:
         if_block = 'if_statement nl nested_block elseif_block* else_block?'
         self.ebnf.if_block = if_block
 
+    def while_block(self):
+        self.ebnf._WHILE = 'while'
+        self.ebnf.while_statement = 'while entity'
+        self.ebnf.while_block = self.ebnf.simple_block('while_statement')
+
     def foreach_block(self):
         self.ebnf._FOREACH = 'foreach'
-        self.ebnf.foreach_statement = 'foreach name output'
+        self.ebnf.foreach_statement = 'foreach entity output'
         self.ebnf.foreach_block = self.ebnf.simple_block('foreach_statement')
 
     def function_block(self):
@@ -158,6 +163,10 @@ class Grammar:
                               'function_output?')
         self.ebnf.function_statement = function_statement
         self.ebnf.function_block = self.ebnf.simple_block('function_statement')
+
+    def raise_statement(self):
+        self.ebnf.RAISE = 'raise'
+        self.ebnf.raise_statement = ('raise entity?')
 
     def try_block(self):
         self.ebnf.TRY = 'try'
@@ -180,7 +189,7 @@ class Grammar:
         self.ebnf.indented_arguments = 'indent (arguments nl)+ dedent'
         block = ('rules nl, if_block, foreach_block, function_block, '
                  'arguments, service_block, when_block, try_block, '
-                 'indented_arguments')
+                 'indented_arguments, while_block, raise_statement')
         self.ebnf.block = block
         self.ebnf.nested_block = 'indent block+ dedent'
 
@@ -196,8 +205,10 @@ class Grammar:
         self.rules()
         self.if_block()
         self.foreach_block()
+        self.while_block()
         self.function_block()
         self.try_block()
+        self.raise_statement()
         self.block()
         self.ebnf.start = 'nl? block+'
         self.ebnf.ignore('_WS')

@@ -15,14 +15,14 @@ class App:
         """
         Parses stories found in path, returning their trees
         """
-        return Bundle(path).bundle_trees(ebnf=ebnf, debug=debug)
+        return Bundle.from_path(path).bundle_trees(ebnf=ebnf, debug=debug)
 
     @staticmethod
     def compile(path, ebnf=None, debug=False):
         """
         Parses and compiles stories found in path, returning JSON
         """
-        bundle = Bundle(path).bundle(ebnf=ebnf, debug=debug)
+        bundle = Bundle.from_path(path).bundle(ebnf=ebnf, debug=debug)
         return json.dumps(bundle, indent=2)
 
     @staticmethod
@@ -30,7 +30,7 @@ class App:
         """
         Lex stories, producing the list of used tokens
         """
-        return Bundle(path).lex(ebnf=ebnf)
+        return Bundle.from_path(path).lex(ebnf=ebnf)
 
     @staticmethod
     def grammar():

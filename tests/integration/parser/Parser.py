@@ -61,9 +61,17 @@ def test_parser_foreach_block(parser):
     result = parser.parse('foreach items as one, two\n\tvar=3\n')
     block = result.block.foreach_block
     foreach = block.foreach_statement
-    assert foreach.child(0) == Token('NAME', 'items')
+    assert foreach.entity.path.child(0) == Token('NAME', 'items')
     assert foreach.output.child(0) == Token('NAME', 'one')
     assert foreach.output.child(1) == Token('NAME', 'two')
+    assert block.nested_block.data == 'nested_block'
+
+
+def test_parser_while_block(parser):
+    result = parser.parse('while cond\n\tvar=3\n')
+    block = result.block.while_block
+    while_ = block.while_statement
+    assert while_.entity.path.child(0) == Token('NAME', 'cond')
     assert block.nested_block.data == 'nested_block'
 
 
@@ -163,3 +171,28 @@ def test_parser_try_finally(parser):
     assert finally_block.finally_statement.child(0) == token
     path = finally_block.nested_block.block.rules.assignment.path
     assert path.child(0) == Token('NAME', 'x')
+
+
+def test_parser_try_raise(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\traise')
+    catch_block = result.block.try_block.catch_block.nested_block \
+                        .block.rules.block
+    assert catch_block.child(0).data == 'raise_statement'
+
+
+def test_parser_try_raise_error(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\traise error')
+    catch_block = result.block.try_block.catch_block.nested_block \
+                        .block.rules.block
+    assert catch_block.child(0).data == 'raise_statement'
+    entity = catch_block.child(0).entity.path
+    assert entity.child(0) == Token('NAME', 'error')
+
+
+def test_parser_try_raise_error_message(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\traise "error msg"')
+    catch_block = result.block.try_block.catch_block.nested_block \
+                        .block.rules.block
+    assert catch_block.child(0).data == 'raise_statement'
+    entity = catch_block.child(0).entity.values.string
+    assert entity.child(0) == Token('DOUBLE_QUOTED', '"error msg"')

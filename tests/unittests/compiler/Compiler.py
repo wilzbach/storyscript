@@ -388,16 +388,27 @@ def test_compiler_else_block(patch, compiler, lines, tree):
 
 def test_compiler_foreach_block(patch, compiler, lines, tree):
     patch.init(Tree)
-    patch.object(Objects, 'path')
+    patch.object(Objects, 'entity')
     patch.many(Compiler, ['subtree', 'output'])
     compiler.foreach_block(tree, '1')
-    Tree.__init__.assert_called_with('path', [tree.foreach_statement.child()])
-    assert Objects.path.call_count == 1
+    assert Objects.entity.call_count == 1
     compiler.output.assert_called_with(tree.foreach_statement.output)
-    args = [Objects.path()]
+    args = [Objects.entity()]
     lines.append.assert_called_with('for', tree.line(), args=args,
                                     enter=tree.nested_block.line(),
                                     output=Compiler.output(), parent='1')
+    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+
+
+def test_compiler_while_block(patch, compiler, lines, tree):
+    patch.init(Tree)
+    patch.object(Objects, 'entity')
+    patch.many(Compiler, ['subtree'])
+    compiler.while_block(tree, '1')
+    args = [Objects.entity()]
+    lines.append.assert_called_with('while', tree.line(), args=args,
+                                    enter=tree.nested_block.line(),
+                                    parent='1')
     compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
@@ -415,6 +426,22 @@ def test_compiler_function_block(patch, compiler, lines, tree):
                                     enter=tree.nested_block.line(),
                                     parent='1')
     compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+
+
+def test_compiler_raise_statement(patch, compiler, lines, tree):
+    tree.children = [Token('RAISE', 'raise')]
+    compiler.raise_statement(tree, '1')
+    lines.append.assert_called_with('raise', tree.line(), args=[],
+                                    parent='1')
+
+
+def test_compiler_raise_name_statement(patch, compiler, lines, tree):
+    patch.object(Objects, 'entity')
+    tree.children = [Token('RAISE', 'raise'), Token('NAME', 'error')]
+    compiler.raise_statement(tree, '1')
+    args = [Objects.entity()]
+    lines.append.assert_called_with('raise', tree.line(), args=args,
+                                    parent='1')
 
 
 def test_compiler_service_block(patch, compiler, tree):
