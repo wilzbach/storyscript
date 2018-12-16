@@ -98,5 +98,15 @@ class Tree(LarkTree):
                 string += child.value
         return string
 
+    def is_unary(self):
+        """
+        Whether the current expression tree is an unary expression.
+        """
+        if self.data == 'expression':
+            if len(self.children) == 1:
+                if len(self.child(0).children) == 1:
+                    return True
+        return False
+
     def __getattr__(self, attribute):
         return self.node(attribute)
