@@ -426,6 +426,22 @@ def test_compiler_function_block(patch, compiler, lines, tree):
     compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
+def test_compiler_raise_statement(patch, compiler, lines, tree):
+    tree.children = [Token('RAISE', 'raise')]
+    compiler.raise_statement(tree, '1')
+    lines.append.assert_called_with('raise', tree.line(), args=[],
+                                    parent='1')
+
+
+def test_compiler_raise_name_statement(patch, compiler, lines, tree):
+    patch.object(Objects, 'entity')
+    tree.children = [Token('RAISE', 'raise'), Token('NAME', 'error')]
+    compiler.raise_statement(tree, '1')
+    args = [Objects.entity()]
+    lines.append.assert_called_with('raise', tree.line(), args=args,
+                                    parent='1')
+
+
 def test_compiler_service_block(patch, compiler, tree):
     patch.object(Compiler, 'service')
     tree.node.return_value = None
