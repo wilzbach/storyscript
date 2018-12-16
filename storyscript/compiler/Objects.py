@@ -229,8 +229,8 @@ class Objects:
         if tree.data == 'number':
             return cls.number(tree)
         elif tree.exponential:
-            if (len(tree.child(0).children)) > 1:
-                return cls.expression(tree.child(0))
+            if (len(tree.exponential.children)) > 1:
+                return cls.expression(tree.exponential)
             return cls.entity(tree.exponential.factor.entity)
         elif tree.entity:
             return cls.entity(tree.entity)

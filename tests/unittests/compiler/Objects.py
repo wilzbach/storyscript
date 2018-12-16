@@ -352,15 +352,14 @@ def test_objects_resolve_operand_multiplication(patch, tree):
     assert result == Objects.entity()
 
 
-def test_objects_resolve_operand_multiplication_nested(patch, magic, tree):
+def test_objects_resolve_operand_exponential(patch, magic, tree):
     """
-    Ensures resolve_operand can resolve a multiplication tree with nested
-    operands.
+    Ensures resolve_operand can resolve an exponential tree
     """
     patch.object(Objects, 'expression')
-    tree.child.return_value = magic(children=[1, 2])
+    tree.exponential.children = [1, 2]
     result = Objects.resolve_operand(tree)
-    Objects.expression.assert_called_with(tree.child(0))
+    Objects.expression.assert_called_with(tree.exponential)
     assert result == Objects.expression()
 
 
