@@ -249,16 +249,11 @@ class Objects:
         """
         Compiles an expression object with the given tree.
         """
-        if tree.number:
-            values = cls.expression_values(tree.children)
-            operator = tree.multiplication.exponential.factor.child(0)
-        elif len(tree.children) == 1:
+        if len(tree.children) == 1:
             values = cls.expression_values(tree.child(0).children)
-            operator = tree.child(0).child(1)
         else:
             values = cls.expression_values(tree.children)
-            operator = tree.child(1)
-        expression_type = Objects.expression_type(operator)
+        expression_type = Objects.expression_type(tree.find_operator())
         return {'$OBJECT': 'expression', 'expression': expression_type,
                 'values': values}
 

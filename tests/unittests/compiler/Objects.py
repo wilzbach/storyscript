@@ -391,22 +391,11 @@ def test_objects_expression(patch, tree):
     tree.number = None
     result = Objects.expression(tree)
     Objects.expression_values.assert_called_with(tree.children)
-    Objects.expression_type.assert_called_with(tree.child())
+    Objects.expression_type.assert_called_with(tree.find_operator())
     expected = {'$OBJECT': 'expression',
                 'values': Objects.expression_values(),
                 'expression': Objects.expression_type()}
     assert result == expected
-
-
-def test_objects_expression_number(patch, tree):
-    """
-    Ensures Objects.expression can compile an expression that starts with a
-    number
-    """
-    patch.many(Objects, ['expression_values', 'expression_type'])
-    Objects.expression(tree)
-    operator = tree.multiplication.exponential.factor.child()
-    Objects.expression_type.assert_called_with(operator)
 
 
 def test_objects_expression_one_child(patch, tree):
@@ -418,7 +407,7 @@ def test_objects_expression_one_child(patch, tree):
     tree.children = [1]
     Objects.expression(tree)
     Objects.expression_values.assert_called_with(tree.child().children)
-    Objects.expression_type.assert_called_with(tree.child().child())
+    Objects.expression_type.assert_called_with(tree.find_operator())
 
 
 def test_objects_assertion(patch, tree):
