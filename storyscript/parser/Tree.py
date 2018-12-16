@@ -109,5 +109,20 @@ class Tree(LarkTree):
                         return True
         return False
 
+    def find_operator(self):
+        """
+        Finds the operator of a simple expression (two operands). The operator
+        can be at different depths, depending on the expression type.
+        """
+        if isinstance(self.child(1), Token):
+            return self.child(1)
+        if self.child(0):
+            if isinstance(self.multiplication.child(1), Token):
+                return self.multiplication.child(1)
+            if isinstance(self.multiplication.exponential, Tree):
+                if isinstance(self.multiplication.exponential.child(1), Token):
+                    return self.multiplication.exponential.child(1)
+        return self.multiplication.exponential.factor.child(0)
+
     def __getattr__(self, attribute):
         return self.node(attribute)

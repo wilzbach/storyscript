@@ -147,3 +147,27 @@ def test_tree_is_unary_false(tree):
     Ensures is_unary returns False when the tree is not an unary
     """
     assert tree.is_unary() is False
+
+
+def test_tree_find_operator(magic):
+    """
+    Ensures find_operator can find the operator.
+    """
+    tree = Tree('any', [])
+    tree.multiplication = magic()
+    result = tree.find_operator()
+    assert result == tree.multiplication.exponential.factor.child()
+
+
+@mark.parametrize('tree', [
+    Tree('any', [0, Token('t', 't')]),
+    Tree('any', [Tree('multiplication', [0, Token('t', 't')])]),
+    Tree('any', [Tree('multiplication', [
+        Tree('exponential', [0, Token('t', 't')])
+    ])])
+])
+def test_tree_find_operator_depths(tree):
+    """
+    Ensures find_operator can find operators at various depths
+    """
+    assert tree.find_operator() == Token('t', 't')
