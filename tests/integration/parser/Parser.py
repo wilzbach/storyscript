@@ -169,3 +169,28 @@ def test_parser_try_finally(parser):
     assert finally_block.finally_statement.child(0) == token
     path = finally_block.nested_block.block.rules.assignment.path
     assert path.child(0) == Token('NAME', 'x')
+
+
+def test_parser_try_raise(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\traise')
+    catch_block = result.block.try_block.catch_block.nested_block \
+                        .block.rules.block
+    assert catch_block.child(0).data == 'raise_statement'
+
+
+def test_parser_try_raise_error(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\traise error')
+    catch_block = result.block.try_block.catch_block.nested_block \
+                        .block.rules.block
+    assert catch_block.child(0).data == 'raise_statement'
+    entity = catch_block.child(0).entity.path
+    assert entity.child(0) == Token('NAME', 'error')
+
+
+def test_parser_try_raise_error_message(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\traise "error msg"')
+    catch_block = result.block.try_block.catch_block.nested_block \
+                        .block.rules.block
+    assert catch_block.child(0).data == 'raise_statement'
+    entity = catch_block.child(0).entity.values.string
+    assert entity.child(0) == Token('DOUBLE_QUOTED', '"error msg"')

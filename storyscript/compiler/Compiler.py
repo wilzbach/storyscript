@@ -257,6 +257,19 @@ class Compiler:
         if tree.finally_block:
             self.finally_block(tree.finally_block, parent=parent)
 
+    def raise_statement(self, tree, parent):
+        """
+        Compiles a raise statement
+        """
+        line = tree.line()
+        args = []
+        # the first child is `raise` which isn't ignored as
+        # it is needed to infer the line number in case no other
+        # childrens were provided
+        if len(tree.children) > 1:
+            args = [Objects.entity(tree.child(1))]
+        self.lines.append('raise', line, args=args, parent=parent)
+
     def catch_block(self, tree, parent):
         """
         Compiles a catch block
@@ -296,7 +309,7 @@ class Compiler:
                          'if_block', 'elseif_block', 'else_block',
                          'foreach_block', 'function_block', 'when_block',
                          'try_block', 'return_statement', 'arguments',
-                         'imports', 'while_block']
+                         'imports', 'while_block', 'raise_statement']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return
