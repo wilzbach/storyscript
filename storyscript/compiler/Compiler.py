@@ -96,7 +96,7 @@ class Compiler:
             else:
                 return self.expression_assignment(service, name, parent)
         elif fragment.expression:
-            if fragment.expression.number:
+            if fragment.expression.is_unary() is False:
                 return self.expression_assignment(fragment, name, parent)
         entity = fragment.expression.multiplication.exponential.factor.entity
         args = [Objects.entity(entity)]

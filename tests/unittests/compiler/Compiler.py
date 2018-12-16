@@ -174,6 +174,7 @@ def test_compiler_assignment_expression(patch, compiler, lines, tree):
     patch.object(Objects, 'names', return_value='name')
     patch.object(Compiler, 'expression_assignment')
     tree.assignment_fragment.service = None
+    tree.assignment_fragment.expression.is_unary.return_value = False
     compiler.assignment(tree, '1')
     fragment = tree.assignment_fragment
     Compiler.expression_assignment.assert_called_with(fragment, 'name', '1')
