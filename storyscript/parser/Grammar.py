@@ -165,6 +165,8 @@ class Grammar:
         self.ebnf.function_block = self.ebnf.simple_block('function_statement')
 
     def raise_statement(self):
+        # NOTE(@wilzbach): raise can't be ignored as it is required to infer
+        # the line without children
         self.ebnf.RAISE = 'raise'
         self.ebnf.raise_statement = ('raise entity?')
 

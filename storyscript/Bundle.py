@@ -11,26 +11,25 @@ class Bundle:
     Bundles all stories that must be compiled together.
     """
 
-    def __init__(self, story_files=None):
+    def __init__(self, story_files={}):
         self.stories = {}
-        if story_files is None:
-            self.story_files = {}
-        else:
-            self.story_files = story_files
+        self.story_files = story_files
 
-    def gitignores(self):
+    @staticmethod
+    def gitignores():
         """
         Get the list of files ignored by git
         """
         command = 'git ls-files --others --ignored --exclude-standard'
         return delegator.run(command).out.split('\n')
 
-    def parse_directory(self, directory):
+    @classmethod
+    def parse_directory(cls, directory):
         """
         Parse a directory to find stories.
         """
         paths = []
-        ignores = self.gitignores()
+        ignores = cls.gitignores()
         for root, subdirs, files in os.walk(directory):
             for file in files:
                 if file.endswith('.story'):
@@ -45,20 +44,14 @@ class Bundle:
         Load a bundle of stories from the filesystem.
         If a directory is given. all `.story` files in the directory will be
         loaded.
-
-        Arguments:
-            path -- path to file or directory to load stories from
         """
         bundle = Bundle()
-        for e in cls._from_path(path):
-            bundle.load_story(e)
-        return bundle
-
-    @classmethod
-    def _from_path(cls, path):
         if os.path.isdir(path):
-            return cls.parse_directory(path)
-        return [path]
+            for story in cls.parse_directory(path):
+                bundle.load_story(story)
+            return bundle
+        bundle.load_story(path)
+        return bundle
 
     def load_story(self, path):
         """

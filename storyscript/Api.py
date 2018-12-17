@@ -27,4 +27,4 @@ class Api:
         """
         Load multiple stories from a file mapping
         """
-        return Bundle(files).bundle(debug=True)
+        return Bundle(story_files=files).bundle(debug=True)

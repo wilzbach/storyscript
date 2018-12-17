@@ -11,13 +11,17 @@ from storyscript.Story import Story
 
 @fixture
 def bundle(patch):
-    patch.object(Story, 'read')
-    return Bundle.from_path('path')
+    return Bundle()
 
 
 def test_bundle_init(bundle):
-    assert 'path' in bundle.story_files
     assert bundle.stories == {}
+    assert bundle.story_files == {}
+
+
+def test_bundle_init_files():
+    bundle = Bundle(story_files={'one.story': 'hello'})
+    assert bundle.story_files == {'one.story': 'hello'}
 
 
 def test_bundle_gitignores(patch, bundle):
@@ -25,7 +29,7 @@ def test_bundle_gitignores(patch, bundle):
     Ensures gitignores uses can produce the list of ignored files.
     """
     patch.object(delegator, 'run')
-    result = bundle.gitignores()
+    result = Bundle.gitignores()
     command = 'git ls-files --others --ignored --exclude-standard'
     delegator.run.assert_called_with(command)
     delegator.run().out.split.assert_called_with('\n')
@@ -38,7 +42,7 @@ def test_bundle_parse_directory(patch, bundle):
     """
     patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
     patch.object(Bundle, 'gitignores')
-    result = bundle.parse_directory('dir')
+    result = Bundle.parse_directory('dir')
     assert Bundle.gitignores.call_count == 1
     os.walk.assert_called_with('dir')
     assert result == ['root/one.story']
@@ -50,32 +54,64 @@ def test_bundle_parse_directory_ignored(patch, bundle):
     """
     patch.object(os, 'walk', return_value=[('./root', [], ['one.story'])])
     patch.object(Bundle, 'gitignores', return_value=['root/one.story'])
-    result = bundle.parse_directory('dir')
+    result = Bundle.parse_directory('dir')
     assert result == []
+
+
+def test_bundle_from_path(patch):
+    """
+    Ensures Bundle.from_path can create a Bundle from a filepath
+    """
+    patch.object(os.path, 'isdir', return_value=False)
+    patch.init(Bundle)
+    patch.object(Bundle, 'load_story')
+    result = Bundle.from_path('path')
+    Bundle.load_story.assert_called_with('path')
+    assert isinstance(result, Bundle)
+
+
+def test_bundle_from_path_directory(patch):
+    """
+    Ensures Bundle.from_path can create a Bundle from a directory path
+    """
+    patch.object(os.path, 'isdir')
+    patch.init(Bundle)
+    patch.many(Bundle, ['load_story', 'parse_directory'])
+    Bundle.parse_directory.return_value = ['one.story']
+    Bundle.from_path('path')
+    Bundle.parse_directory.assert_called_with('path')
+    Bundle.load_story.assert_called_with('one.story')
+
+
+def test_bundle_load_story(patch, bundle):
+    """
+    Ensures Bundle.load_story can load a story
+    """
+    patch.init(Story)
+    bundle.story_files['one.story'] = 'hello'
+    result = bundle.load_story('one.story')
+    Story.__init__.assert_called_with('hello')
+    assert isinstance(result, Story)
+
+
+def test_bundle_load_story_not_read(patch, bundle):
+    """
+    Ensures Bundle.load_story reads a story before loading it
+    """
+    patch.init(Story)
+    patch.object(Story, 'read')
+    bundle.story_files = {}
+    bundle.load_story('one.story')
+    Story.read.assert_called_with('one.story')
+    assert bundle.story_files['one.story'] == Story.read()
 
 
 def test_bundle_find_stories(patch, bundle):
     """
-    Ensures Bundle.find_stories returns the original path if it's not a
-    directory
+    Ensures Bundle.find_stories returns the list of loaded stories
     """
-    patch.object(os.path, 'isdir', return_value=False)
-    assert bundle.find_stories() == ['path']
-
-
-def test_bundle_find_stories_directory(patch):
-    """
-    Ensures Bundle.find_stories uses Bundle.parse_directory
-    """
-    patch.object(Story, 'read')
-    patch.object(Bundle, 'parse_directory')
-    patch.object(os.path, 'isdir')
-    os.path.isdir.return_value = True
-    path = 'path'
-    bundle = Bundle.from_path(path)
-    result = bundle.find_stories()
-    Bundle.parse_directory.assert_called_with(path)
-    assert result == []
+    bundle.story_files = {'one.story': 'hello'}
+    assert bundle.find_stories() == ['one.story']
 
 
 def test_bundle_services(bundle):
@@ -184,17 +220,3 @@ def test_bundle_lex_ebnf(patch, bundle):
     patch.object(Bundle, 'find_stories', return_value=['story'])
     bundle.lex(ebnf='ebnf')
     Story.from_file().lex.assert_called_with(ebnf='ebnf')
-
-
-def test_bundle_load_story_twice(patch, bundle):
-    patch.object(Story, 'read')
-    mocked_file = 'x = 2'
-    Story.read.return_value = mocked_file
-
-    story = bundle.load_story('one.story')
-    Story.read.assert_called_with('one.story')
-
-    # don't reread the story
-    Story.read.reset_mock()
-    assert bundle.load_story('one.story').story == story.story
-    Story.read.assert_not_called()
