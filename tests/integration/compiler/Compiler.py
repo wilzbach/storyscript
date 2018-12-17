@@ -227,6 +227,21 @@ def test_compiler_service_inline_expression(parser):
     assert result['tree']['1']['args'] == [argument]
 
 
+def test_compiler_service_inline_expression_nested(parser):
+    """
+    Ensures that nested inline expressions are compiled correctly
+    """
+    source = 'slack message text:(twitter get id:(sql select))'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    entry = result['entrypoint']
+    next = result['tree'][entry]['next']
+    last = result['tree'][next]['next']
+    assert result['tree'][entry]['service'] == 'sql'
+    assert result['tree'][next]['service'] == 'twitter'
+    assert result['tree'][last]['service'] == 'slack'
+
+
 def test_compiler_inline_expression_access(parser):
     """
     Ensures that inline expressions followed a bracket accesso are compiled
