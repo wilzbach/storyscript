@@ -21,6 +21,21 @@ def test_transformer():
     assert issubclass(Transformer, LarkTransformer)
 
 
+def test_transformer_implicit_output(tree):
+    """
+    Ensures Transformer.implicit_output adds an output tree when needed
+    """
+    tree.service_fragment.output = None
+    tree.service_fragment.children = []
+    Transformer.implicit_output(tree)
+    expected = Tree('output', [tree.service_fragment.command.child()])
+    assert tree.service_fragment.children[-1] == expected
+
+
+def test_transformer_implicit_output_none(tree):
+    assert Transformer.implicit_output(tree) is None
+
+
 def test_transformer_arguments():
     assert Transformer.arguments('matches') == Tree('arguments', 'matches')
 
@@ -142,22 +157,14 @@ def test_transformer_service_block_indented_args(tree, magic):
     assert result == Tree('service_block', [block])
 
 
-def test_transformer_when_block(tree):
+def test_transformer_when_block(patch, tree):
     """
     Ensures when_block nodes are transformed correctly
     """
-    assert Transformer.when_block([tree]) == Tree('when_block', [tree])
-
-
-def test_transformer_when_block_output(tree):
-    """
-    Ensures when blocks without an output are transformed
-    """
-    tree.service_fragment.output = None
-    tree.service_fragment.children = []
-    Transformer.when_block([tree])
-    expected = Tree('output', [tree.service_fragment.command.child()])
-    assert tree.service_fragment.children[-1] == expected
+    patch.object(Transformer, 'implicit_output')
+    result = Transformer.when_block([tree])
+    Transformer.implicit_output.assert_called_with(tree)
+    assert result == Tree('when_block', [tree])
 
 
 @mark.parametrize('rule', ['start', 'line', 'block', 'statement'])

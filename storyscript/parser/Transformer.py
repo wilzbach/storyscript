@@ -29,6 +29,16 @@ class Transformer(LarkTransformer):
             raise StorySyntaxError(error_name, token=token)
 
     @staticmethod
+    def implicit_output(tree):
+        """
+        Adds implicit output to a service.
+        """
+        fragment = tree.service_fragment
+        if fragment.output is None:
+            output = Tree('output', [fragment.command.child(0)])
+            fragment.children.append(output)
+
+    @staticmethod
     def arguments(matches):
         """
         Transforms an argument tree. If dealing with is a short-hand argument,
@@ -76,15 +86,12 @@ class Transformer(LarkTransformer):
                 return Tree('service_block', [matches[0]])
         return Tree('service_block', matches)
 
-    @staticmethod
-    def when_block(matches):
+    @classmethod
+    def when_block(cls, matches):
         """
-        Transforms when blocks, adding implicit outputs
+        Transforms when blocks.
         """
-        fragment = matches[0].service_fragment
-        if fragment.output is None:
-            output = Tree('output', [fragment.command.child(0)])
-            fragment.children.append(output)
+        cls.implicit_output(matches[0])
         return Tree('when_block', matches)
 
     def __getattr__(self, attribute, *args):
