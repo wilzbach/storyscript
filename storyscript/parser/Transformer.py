@@ -73,13 +73,15 @@ class Transformer(LarkTransformer):
         cls.is_keyword(token)
         return Tree('path', matches)
 
-    @staticmethod
-    def service_block(matches):
+    @classmethod
+    def service_block(cls, matches):
         """
         Transforms service blocks, moving indented arguments back to the first
         node.
         """
         if len(matches) > 1:
+            if matches[1].block.when_block:
+                cls.implicit_output(matches[0])
             if matches[1].block.rules:
                 for argument in matches[1].find_data('arguments'):
                     matches[0].service_fragment.children.append(argument)

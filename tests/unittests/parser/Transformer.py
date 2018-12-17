@@ -135,13 +135,15 @@ def test_transformer_service_block():
     assert Transformer.service_block([]) == Tree('service_block', [])
 
 
-def test_transformer_service_block_when(tree):
+def test_transformer_service_block_when(patch, tree):
     """
     Ensures service_block nodes with a when block are transformed correctly
     """
+    patch.object(Transformer, 'implicit_output')
     tree.block.rules = None
     matches = ['service_block', tree]
     result = Transformer.service_block(matches)
+    Transformer.implicit_output.assert_called_with('service_block')
     assert result == Tree('service_block', matches)
 
 
