@@ -63,5 +63,9 @@ class FakeTree:
         Creates an assignments and adds it to the current block
         """
         assignment = self.assignment(value)
-        self.block.insert(assignment)
+        if self.block.child(1):
+            children = [self.block.child(0), assignment, self.block.child(1)]
+            self.block.children = children
+        else:
+            self.block.children = [assignment, self.block.child(0)]
         return assignment
