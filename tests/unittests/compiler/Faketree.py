@@ -40,7 +40,7 @@ def test_faketree_line_successive(patch, fake_tree):
     patch.object(random, 'uniform')
     fake_tree.new_lines = [0.2]
     fake_tree.line()
-    random.uniform.assert_called_with(0, 0.2)
+    random.uniform.assert_called_with(0.2, 1)
 
 
 def test_faketree_get_line(patch, tree, fake_tree):

@@ -24,7 +24,7 @@ class FakeTree:
         lower_bound = float(self.original_line) - 1.0
         upper_bound = float(self.original_line)
         if len(self.new_lines) > 0:
-            upper_bound = self.new_lines[-1]
+            lower_bound = self.new_lines[-1]
         fake_line = random.uniform(lower_bound, upper_bound)
         self.new_lines.append(fake_line)
         return str(fake_line)
