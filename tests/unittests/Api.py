@@ -5,6 +5,9 @@ from storyscript.Story import Story
 
 
 def test_api_loads(patch):
+    """
+    Ensures Api.loads can compile a story from a string
+    """
     patch.init(Story)
     patch.object(Story, 'process')
     result = Api.loads('string')
@@ -14,6 +17,9 @@ def test_api_loads(patch):
 
 
 def test_api_load(patch, magic):
+    """
+    Ensures Api.load can compile stories from a file stream
+    """
     patch.object(Story, 'from_stream')
     stream = magic()
     result = Api.load(stream)
@@ -24,15 +30,13 @@ def test_api_load(patch, magic):
 
 
 def test_api_load_map(patch, magic):
-    patch.object(Bundle, 'load_story')
-    result = Api.load_map({'a.story': "import 'b' as b", 'b.story': 'string'})
-    Bundle.load_story().parse.assert_called_with(debug=True, ebnf=None)
-    Bundle.load_story().compile.assert_called_with(debug=True)
-    assert result == {
-        'services': [],
-        'entrypoint': ['a.story', 'b.story'],
-        'stories': {
-            'a.story': Bundle.load_story().compiled,
-            'b.story': Bundle.load_story().compiled,
-        }
-    }
+    """
+    Ensures Api.load_map can compile stories from a map
+    """
+    patch.init(Bundle)
+    patch.object(Bundle, 'bundle')
+    files = {'a.story': "import 'b' as b", 'b.story': 'x = 0'}
+    result = Api.load_map(files)
+    Bundle.__init__.assert_called_with(story_files=files)
+    Bundle.bundle.assert_called_with(debug=True)
+    assert result == Bundle.bundle()
