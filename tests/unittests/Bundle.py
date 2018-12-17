@@ -58,6 +58,27 @@ def test_bundle_parse_directory_ignored(patch, bundle):
     assert result == []
 
 
+def test_bundle_load_story(patch, bundle):
+    """
+    Ensures Bundle.load_story can load a story
+    """
+    patch.init(Story)
+    bundle.story_files['one.story'] = 'hello'
+    result = bundle.load_story('one.story')
+    Story.__init__.assert_called_with('hello')
+    assert isinstance(result, Story)
+
+
+def test_bundle_load_story_not_read(patch, bundle):
+    """
+    Ensures Bundle.load_story reads a story before loading it
+    """
+    patch.init(Story)
+    patch.object(Story, 'read')
+    bundle.story_files = {}
+    bundle.load_story('one.story')
+    Story.read.assert_called_with('one.story')
+    assert bundle.story_files['one.story'] == Story.read()
 
 
 def test_bundle_find_stories(patch, bundle):
@@ -174,24 +195,3 @@ def test_bundle_lex_ebnf(patch, bundle):
     patch.object(Bundle, 'find_stories', return_value=['story'])
     bundle.lex(ebnf='ebnf')
     Story.from_file().lex.assert_called_with(ebnf='ebnf')
-
-
-def test_bundle_load_story(patch, bundle):
-    """
-    Ensures Bundle.load_story can load a story
-    """
-    patch.init(Story)
-    bundle.story_files['one.story'] = 'hello'
-    result = bundle.load_story('one.story')
-    Story.__init__.assert_called_with('hello')
-    assert isinstance(result, Story)
-
-
-def test_bundle_load_read(patch, bundle):
-    """
-    Ensures Bundle.load_story reads a story before loading it
-    """
-    patch.init(Story)
-    patch.object(Story, 'read')
-    bundle.load_story('one.story')
-    Story.read.assert_called_with('one.story')
