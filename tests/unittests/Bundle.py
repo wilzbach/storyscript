@@ -11,13 +11,17 @@ from storyscript.Story import Story
 
 @fixture
 def bundle(patch):
-    patch.object(Story, 'read')
-    return Bundle.from_path('path')
+    return Bundle()
 
 
 def test_bundle_init(bundle):
-    assert 'path' in bundle.story_files
     assert bundle.stories == {}
+    assert bundle.story_files == {}
+
+
+def test_bundle_init_files():
+    bundle = Bundle(story_files={'one.story': 'hello'})
+    assert bundle.story_files == {'one.story': 'hello'}
 
 
 def test_bundle_gitignores(patch, bundle):

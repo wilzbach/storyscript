@@ -11,12 +11,9 @@ class Bundle:
     Bundles all stories that must be compiled together.
     """
 
-    def __init__(self, story_files=None):
+    def __init__(self, story_files={}):
         self.stories = {}
-        if story_files is None:
-            self.story_files = {}
-        else:
-            self.story_files = story_files
+        self.story_files = story_files
 
     def gitignores(self):
         """
