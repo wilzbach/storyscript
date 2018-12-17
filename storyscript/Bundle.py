@@ -15,7 +15,8 @@ class Bundle:
         self.stories = {}
         self.story_files = story_files
 
-    def gitignores(self):
+    @staticmethod
+    def gitignores():
         """
         Get the list of files ignored by git
         """

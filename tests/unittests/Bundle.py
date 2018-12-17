@@ -29,7 +29,7 @@ def test_bundle_gitignores(patch, bundle):
     Ensures gitignores uses can produce the list of ignored files.
     """
     patch.object(delegator, 'run')
-    result = bundle.gitignores()
+    result = Bundle.gitignores()
     command = 'git ls-files --others --ignored --exclude-standard'
     delegator.run.assert_called_with(command)
     delegator.run().out.split.assert_called_with('\n')
