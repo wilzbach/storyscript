@@ -265,9 +265,6 @@ class Compiler:
         """
         line = tree.line()
         args = []
-        # the first child is `raise` which isn't ignored as
-        # it is needed to infer the line number in case no other
-        # childrens were provided
         if len(tree.children) > 1:
             args = [Objects.entity(tree.child(1))]
         self.lines.append('raise', line, args=args, parent=parent)
