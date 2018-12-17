@@ -186,15 +186,22 @@ def test_bundle_lex_ebnf(patch, bundle):
     Story.from_file().lex.assert_called_with(ebnf='ebnf')
 
 
-def test_bundle_load_story_twice(patch, bundle):
+def test_bundle_load_story(patch, bundle):
+    """
+    Ensures Bundle.load_story can load a story
+    """
+    patch.init(Story)
+    bundle.story_files['one.story'] = 'hello'
+    result = bundle.load_story('one.story')
+    Story.__init__.assert_called_with('hello')
+    assert isinstance(result, Story)
+
+
+def test_bundle_load_read(patch, bundle):
+    """
+    Ensures Bundle.load_story reads a story before loading it
+    """
+    patch.init(Story)
     patch.object(Story, 'read')
-    mocked_file = 'x = 2'
-    Story.read.return_value = mocked_file
-
-    story = bundle.load_story('one.story')
+    bundle.load_story('one.story')
     Story.read.assert_called_with('one.story')
-
-    # don't reread the story
-    Story.read.reset_mock()
-    assert bundle.load_story('one.story').story == story.story
-    Story.read.assert_not_called()
