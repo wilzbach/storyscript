@@ -24,7 +24,7 @@ class FakeTree:
         lower_bound = float(self.original_line) - 1.0
         upper_bound = float(self.original_line)
         if len(self.new_lines) > 0:
-            upper_bound = self.new_lines[-1]
+            lower_bound = self.new_lines[-1]
         fake_line = random.uniform(lower_bound, upper_bound)
         self.new_lines.append(fake_line)
         return str(fake_line)
@@ -63,5 +63,9 @@ class FakeTree:
         Creates an assignments and adds it to the current block
         """
         assignment = self.assignment(value)
-        self.block.insert(assignment)
+        if self.block.child(1):
+            children = [self.block.child(0), assignment, self.block.child(1)]
+            self.block.children = children
+        else:
+            self.block.children = [assignment, self.block.child(0)]
         return assignment
