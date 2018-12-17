@@ -44,20 +44,14 @@ class Bundle:
         Load a bundle of stories from the filesystem.
         If a directory is given. all `.story` files in the directory will be
         loaded.
-
-        Arguments:
-            path -- path to file or directory to load stories from
         """
         bundle = Bundle()
-        for e in cls._from_path(path):
-            bundle.load_story(e)
-        return bundle
-
-    @classmethod
-    def _from_path(cls, path):
         if os.path.isdir(path):
-            return cls.parse_directory(path)
-        return [path]
+            for story in cls.parse_directory(path):
+                bundle.load_story(story)
+            return bundle
+        bundle.load_story(path)
+        return bundle
 
     def load_story(self, path):
         """

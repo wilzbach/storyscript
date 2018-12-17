@@ -58,6 +58,31 @@ def test_bundle_parse_directory_ignored(patch, bundle):
     assert result == []
 
 
+def test_bundle_from_path(patch):
+    """
+    Ensures Bundle.from_path can create a Bundle from a filepath
+    """
+    patch.object(os.path, 'isdir', return_value=False)
+    patch.init(Bundle)
+    patch.object(Bundle, 'load_story')
+    result = Bundle.from_path('path')
+    Bundle.load_story.assert_called_with('path')
+    assert isinstance(result, Bundle)
+
+
+def test_bundle_from_path_directory(patch):
+    """
+    Ensures Bundle.from_path can create a Bundle from a directory path
+    """
+    patch.object(os.path, 'isdir')
+    patch.init(Bundle)
+    patch.many(Bundle, ['load_story', 'parse_directory'])
+    Bundle.parse_directory.return_value = ['one.story']
+    Bundle.from_path('path')
+    Bundle.parse_directory.assert_called_with('path')
+    Bundle.load_story.assert_called_with('one.story')
+
+
 def test_bundle_load_story(patch, bundle):
     """
     Ensures Bundle.load_story can load a story
