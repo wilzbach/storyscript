@@ -42,7 +42,7 @@ def test_bundle_parse_directory(patch, bundle):
     """
     patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
     patch.object(Bundle, 'gitignores')
-    result = bundle.parse_directory('dir')
+    result = Bundle.parse_directory('dir')
     assert Bundle.gitignores.call_count == 1
     os.walk.assert_called_with('dir')
     assert result == ['root/one.story']
@@ -54,7 +54,7 @@ def test_bundle_parse_directory_ignored(patch, bundle):
     """
     patch.object(os, 'walk', return_value=[('./root', [], ['one.story'])])
     patch.object(Bundle, 'gitignores', return_value=['root/one.story'])
-    result = bundle.parse_directory('dir')
+    result = Bundle.parse_directory('dir')
     assert result == []
 
 

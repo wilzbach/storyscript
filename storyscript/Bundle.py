@@ -23,12 +23,13 @@ class Bundle:
         command = 'git ls-files --others --ignored --exclude-standard'
         return delegator.run(command).out.split('\n')
 
-    def parse_directory(self, directory):
+    @classmethod
+    def parse_directory(cls, directory):
         """
         Parse a directory to find stories.
         """
         paths = []
-        ignores = self.gitignores()
+        ignores = cls.gitignores()
         for root, subdirs, files in os.walk(directory):
             for file in files:
                 if file.endswith('.story'):
