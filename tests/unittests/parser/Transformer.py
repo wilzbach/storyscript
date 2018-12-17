@@ -142,6 +142,24 @@ def test_transformer_service_block_indented_args(tree, magic):
     assert result == Tree('service_block', [block])
 
 
+def test_transformer_when_block(tree):
+    """
+    Ensures when_block nodes are transformed correctly
+    """
+    assert Transformer.when_block([tree]) == Tree('when_block', [tree])
+
+
+def test_transformer_when_block_output(tree):
+    """
+    Ensures when blocks without an output are transformed
+    """
+    tree.service_fragment.output = None
+    tree.service_fragment.children = []
+    Transformer.when_block([tree])
+    expected = Tree('output', [tree.service_fragment.command.child()])
+    assert tree.service_fragment.children[-1] == expected
+
+
 @mark.parametrize('rule', ['start', 'line', 'block', 'statement'])
 def test_transformer_rules(rule):
     result = getattr(Transformer(), rule)(['matches'])

@@ -76,5 +76,16 @@ class Transformer(LarkTransformer):
                 return Tree('service_block', [matches[0]])
         return Tree('service_block', matches)
 
+    @staticmethod
+    def when_block(matches):
+        """
+        Transforms when blocks, adding implicit outputs
+        """
+        fragment = matches[0].service_fragment
+        if fragment.output is None:
+            output = Tree('output', [fragment.command.child(0)])
+            fragment.children.append(output)
+        return Tree('when_block', matches)
+
     def __getattr__(self, attribute, *args):
         return lambda matches: Tree(attribute, matches)
