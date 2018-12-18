@@ -9,6 +9,7 @@ from pytest import fixture, mark
 
 from storyscript.App import App
 from storyscript.Cli import Cli
+from storyscript.Project import Project
 from storyscript.Version import version
 
 
@@ -181,6 +182,15 @@ def test_cli_grammar(patch, runner, app, echo):
     runner.invoke(Cli.grammar, [])
     assert app.grammar.call_count == 1
     click.echo.assert_called_with(app.grammar())
+
+
+def test_cli_new(patch, runner):
+    """
+    Ensures Cli.new uses Project.new
+    """
+    patch.object(Project, 'new')
+    runner.invoke(Cli.new, 'project')
+    Project.new.assert_called_with('project')
 
 
 def test_cli_help(patch, runner, echo):

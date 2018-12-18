@@ -5,6 +5,7 @@ import os
 import click
 
 from .App import App
+from .Project import Project
 from .Version import version as app_version
 
 
@@ -91,6 +92,15 @@ class Cli:
         Prints the grammar specification
         """
         click.echo(App.grammar())
+
+    @staticmethod
+    @main.command()
+    @click.argument('name')
+    def new(name):
+        """
+        Creates a new project
+        """
+        Project.new(name)
 
     @staticmethod
     @main.command()
