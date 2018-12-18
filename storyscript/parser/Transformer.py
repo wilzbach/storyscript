@@ -15,8 +15,7 @@ class Transformer(LarkTransformer):
     reserved_keywords = ['function', 'if', 'else', 'foreach', 'return',
                          'returns', 'try', 'catch', 'finally', 'when', 'as',
                          'import', 'while', 'raise']
-    future_reserved_keywords = ['async', 'story', 'assert',
-                                'called', 'mock']
+    future_reserved_keywords = ['async', 'story', 'assert', 'called', 'mock']
 
     @classmethod
     def is_keyword(cls, token):
@@ -27,6 +26,16 @@ class Transformer(LarkTransformer):
         if keyword in cls.future_reserved_keywords:
             error_name = 'future_reserved_keyword_{}'.format(keyword)
             raise StorySyntaxError(error_name, token=token)
+
+    @staticmethod
+    def implicit_output(tree):
+        """
+        Adds implicit output to a service.
+        """
+        fragment = tree.service_fragment
+        if fragment.output is None:
+            output = Tree('output', [fragment.command.child(0)])
+            fragment.children.append(output)
 
     @staticmethod
     def arguments(matches):
@@ -53,28 +62,36 @@ class Transformer(LarkTransformer):
 
     @classmethod
     def command(cls, matches):
-        token = matches[0]
-        cls.is_keyword(token)
+        cls.is_keyword(matches[0])
         return Tree('command', matches)
 
     @classmethod
     def path(cls, matches):
-        token = matches[0]
-        cls.is_keyword(token)
+        cls.is_keyword(matches[0])
         return Tree('path', matches)
 
-    @staticmethod
-    def service_block(matches):
+    @classmethod
+    def service_block(cls, matches):
         """
         Transforms service blocks, moving indented arguments back to the first
         node.
         """
         if len(matches) > 1:
+            if matches[1].block.when_block:
+                cls.implicit_output(matches[0])
             if matches[1].block.rules:
                 for argument in matches[1].find_data('arguments'):
                     matches[0].service_fragment.children.append(argument)
                 return Tree('service_block', [matches[0]])
         return Tree('service_block', matches)
+
+    @classmethod
+    def when_block(cls, matches):
+        """
+        Transforms when blocks.
+        """
+        cls.implicit_output(matches[0])
+        return Tree('when_block', matches)
 
     def __getattr__(self, attribute, *args):
         return lambda matches: Tree(attribute, matches)
