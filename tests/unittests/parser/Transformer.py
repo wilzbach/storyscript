@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from lark import Transformer as LarkTransformer
+from lark.lexer import Token
 
 from pytest import fixture, mark, raises
 
@@ -17,8 +18,33 @@ def test_transformer():
     keywords = ['function', 'if', 'else', 'foreach', 'return', 'returns',
                 'try', 'catch', 'finally', 'when', 'as', 'import', 'while',
                 'raise']
+    future_keywords = ['async', 'story', 'assert', 'called', 'mock']
     assert Transformer.reserved_keywords == keywords
+    assert Transformer.future_reserved_keywords == future_keywords
     assert issubclass(Transformer, LarkTransformer)
+
+
+@mark.parametrize('keyword', [
+    'function', 'if', 'else', 'foreach', 'return', 'returns', 'try', 'catch',
+    'finally', 'when', 'as', 'import', 'while', 'raise'
+])
+def test_transformer_is_keyword(syntax_error, keyword):
+    token = Token('any', keyword)
+    with raises(StorySyntaxError):
+        Transformer.is_keyword(token)
+    name = 'reserved_keyword_{}'.format(keyword)
+    syntax_error.assert_called_with(name, token=token)
+
+
+@mark.parametrize('keyword', [
+    'async', 'story', 'mock', 'assert', 'called', 'mock'
+])
+def test_transformer_is_keyword_future(syntax_error, keyword):
+    token = Token('any', keyword)
+    with raises(StorySyntaxError):
+        Transformer.is_keyword(token)
+    name = 'future_reserved_keyword_{}'.format(keyword)
+    syntax_error.assert_called_with(name, token=token)
 
 
 def test_transformer_implicit_output(tree):
@@ -68,64 +94,17 @@ def test_transformer_assignment_error_dash(syntax_error, magic):
 
 
 def test_transformer_command(patch, magic):
-    matches = [magic()]
-    assert Transformer.command(matches) == Tree('command', matches)
+    patch.object(Transformer, 'is_keyword')
+    result = Transformer.command(['matches'])
+    Transformer.is_keyword.assert_called_with('matches')
+    assert result == Tree('command', ['matches'])
 
 
-@mark.parametrize('keyword', [
-    'function', 'if', 'else', 'foreach', 'return', 'returns', 'try', 'catch',
-    'finally', 'when', 'as', 'import', 'while', 'raise'
-])
-def test_transformer_command_keyword_error(syntax_error, magic, keyword):
-    token = magic(value=keyword)
-    matches = [token]
-    with raises(StorySyntaxError):
-        Transformer.command(matches)
-    error_name = 'reserved_keyword_{}'.format(keyword)
-    syntax_error.assert_called_with(error_name, token=token)
-
-
-@mark.parametrize('keyword', [
-    'async', 'story', 'mock', 'assert', 'called', 'mock'
-])
-def test_transformer_command_future_keyword_error(syntax_error,
-                                                  magic, keyword):
-    token = magic(value=keyword)
-    matches = [token]
-    with raises(StorySyntaxError):
-        Transformer.command(matches)
-    error_name = 'future_reserved_keyword_{}'.format(keyword)
-    syntax_error.assert_called_with(error_name, token=token)
-
-
-def test_transformer_path(patch, magic):
-    matches = [magic()]
-    assert Transformer.path(matches) == Tree('path', matches)
-
-
-@mark.parametrize('keyword', [
-    'function', 'if', 'else', 'foreach', 'return', 'returns', 'try', 'catch',
-    'finally', 'when', 'as', 'import', 'while', 'raise'
-])
-def test_transformer_path_keyword_error(syntax_error, magic, keyword):
-    token = magic(value=keyword)
-    matches = [token]
-    with raises(StorySyntaxError):
-        Transformer.path(matches)
-    error_name = 'reserved_keyword_{}'.format(keyword)
-    syntax_error.assert_called_with(error_name, token=token)
-
-
-@mark.parametrize('keyword', [
-    'async', 'story', 'mock', 'assert', 'called', 'mock'
-])
-def test_transformer_path_future_keyword_error(syntax_error, magic, keyword):
-    token = magic(value=keyword)
-    matches = [token]
-    with raises(StorySyntaxError):
-        Transformer.path(matches)
-    error_name = 'future_reserved_keyword_{}'.format(keyword)
-    syntax_error.assert_called_with(error_name, token=token)
+def test_transformer_path(patch):
+    patch.object(Transformer, 'is_keyword')
+    result = Transformer.path(['matches'])
+    Transformer.is_keyword.assert_called_with('matches')
+    assert result == Tree('path', ['matches'])
 
 
 def test_transformer_service_block():

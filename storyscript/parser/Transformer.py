@@ -15,8 +15,7 @@ class Transformer(LarkTransformer):
     reserved_keywords = ['function', 'if', 'else', 'foreach', 'return',
                          'returns', 'try', 'catch', 'finally', 'when', 'as',
                          'import', 'while', 'raise']
-    future_reserved_keywords = ['async', 'story', 'assert',
-                                'called', 'mock']
+    future_reserved_keywords = ['async', 'story', 'assert', 'called', 'mock']
 
     @classmethod
     def is_keyword(cls, token):
@@ -63,14 +62,12 @@ class Transformer(LarkTransformer):
 
     @classmethod
     def command(cls, matches):
-        token = matches[0]
-        cls.is_keyword(token)
+        cls.is_keyword(matches[0])
         return Tree('command', matches)
 
     @classmethod
     def path(cls, matches):
-        token = matches[0]
-        cls.is_keyword(token)
+        cls.is_keyword(matches[0])
         return Tree('path', matches)
 
     @classmethod
