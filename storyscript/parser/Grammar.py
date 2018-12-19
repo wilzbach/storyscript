@@ -112,8 +112,7 @@ class Grammar:
         self.ebnf.multiplication = ('exponential (( multiplier, bslash, '
                                     'modulus ) exponential)*')
         self.ebnf.expression = ('multiplication ( ( plus, dash ) '
-                                'multiplication)*, number multiplication+, '
-                                'entity mutation')
+                                'multiplication)*, entity mutation')
         self.ebnf.absolute_expression = 'expression'
 
     def rules(self):

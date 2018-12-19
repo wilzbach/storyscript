@@ -119,8 +119,7 @@ def test_grammar_expressions(grammar, ebnf):
     assert ebnf.multiplication == ('exponential (( multiplier, bslash, '
                                    'modulus ) exponential)*')
     assert ebnf.expression == ('multiplication ( ( plus, dash ) '
-                               'multiplication)*, number multiplication+, '
-                               'entity mutation')
+                               'multiplication)*, entity mutation')
     assert ebnf.absolute_expression == 'expression'
 
 
