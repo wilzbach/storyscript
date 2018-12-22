@@ -113,13 +113,12 @@ def test_grammar_expressions(grammar, ebnf):
     assert ebnf.NOT == 'not'
     assert ebnf.AND == 'and'
     assert ebnf.OR == 'or'
-    assert ebnf.mutation == 'name arguments*'
     assert ebnf.factor == '(dash, plus)? entity, op expression cp'
     assert ebnf.exponential == 'factor (power exponential)?'
     assert ebnf.multiplication == ('exponential (( multiplier, bslash, '
                                    'modulus ) exponential)*')
     assert ebnf.expression == ('multiplication ( ( plus, dash ) '
-                               'multiplication)*, entity mutation')
+                               'multiplication)*')
     assert ebnf.absolute_expression == 'expression'
 
 
@@ -131,6 +130,16 @@ def test_grammar_rules(grammar, ebnf):
     rules = ('absolute_expression, assignment, imports, return_statement, '
              'block')
     assert ebnf.rules == rules
+
+
+def test_mutation_block(grammar, ebnf):
+    grammar.mutation_block()
+    assert ebnf._THEN == 'then'
+    assert ebnf.mutation_fragment == 'name arguments*'
+    assert ebnf.chained_mutation == 'then mutation_fragment'
+    assert ebnf.mutation == 'entity (mutation_fragment (chained_mutation)*)'
+    assert ebnf.mutation_block == 'mutation nl (nested_block)?'
+    assert ebnf.indented_chain == 'indent (chained_mutation nl)+ dedent'
 
 
 def test_grammar_if_block(grammar, ebnf):

@@ -106,13 +106,12 @@ class Grammar:
         self.ebnf.NOT = 'not'
         self.ebnf.AND = 'and'
         self.ebnf.OR = 'or'
-        self.ebnf.mutation = 'name arguments*'
         self.ebnf.factor = '(dash, plus)? entity, op expression cp'
         self.ebnf.exponential = 'factor (power exponential)?'
         self.ebnf.multiplication = ('exponential (( multiplier, bslash, '
                                     'modulus ) exponential)*')
         self.ebnf.expression = ('multiplication ( ( plus, dash ) '
-                                'multiplication)*, entity mutation')
+                                'multiplication)*')
         self.ebnf.absolute_expression = 'expression'
 
     def rules(self):
@@ -122,6 +121,14 @@ class Grammar:
         rules = ('absolute_expression, assignment, imports, return_statement, '
                  'block')
         self.ebnf.rules = rules
+
+    def mutation_block(self):
+        self.ebnf._THEN = 'then'
+        self.ebnf.mutation_fragment = 'name arguments*'
+        self.ebnf.chained_mutation = 'then mutation_fragment'
+        self.ebnf.mutation = 'entity (mutation_fragment (chained_mutation)*)'
+        self.ebnf.mutation_block = 'mutation nl (nested_block)?'
+        self.ebnf.indented_chain = 'indent (chained_mutation nl)+ dedent'
 
     def if_block(self):
         self.ebnf.GREATER = '>'
