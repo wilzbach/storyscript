@@ -114,12 +114,19 @@ class Grammar:
                                 'multiplication)*')
         self.ebnf.absolute_expression = 'expression'
 
+    def raise_statement(self):
+        # NOTE(@wilzbach): raise can't be ignored as it is required to infer
+        # the line without children
+        # raise is a statement or a block?????
+        self.ebnf.RAISE = 'raise'
+        self.ebnf.raise_statement = ('raise entity?')
+
     def rules(self):
         self.ebnf._RETURN = 'return'
         self.ebnf.return_statement = 'return entity'
         self.ebnf.entity = 'values, path'
         rules = ('absolute_expression, assignment, imports, return_statement, '
-                 'block')
+                 'raise_statement, block')
         self.ebnf.rules = rules
 
     def mutation_block(self):
@@ -170,12 +177,6 @@ class Grammar:
         self.ebnf.function_statement = function_statement
         self.ebnf.function_block = self.ebnf.simple_block('function_statement')
 
-    def raise_statement(self):
-        # NOTE(@wilzbach): raise can't be ignored as it is required to infer
-        # the line without children
-        self.ebnf.RAISE = 'raise'
-        self.ebnf.raise_statement = ('raise entity?')
-
     def try_block(self):
         self.ebnf.TRY = 'try'
         self.ebnf._CATCH = 'catch'
@@ -198,7 +199,7 @@ class Grammar:
         block = ('rules nl, if_block, foreach_block, function_block, '
                  'arguments, indented_chain, chained_mutation, '
                  'mutation_block, service_block, when_block, try_block, '
-                 'indented_arguments, while_block, raise_statement')
+                 'indented_arguments, while_block')
         self.ebnf.block = block
         self.ebnf.nested_block = 'indent block+ dedent'
 

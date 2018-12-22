@@ -122,13 +122,19 @@ def test_grammar_expressions(grammar, ebnf):
     assert ebnf.absolute_expression == 'expression'
 
 
+def test_grammar_raise_statement(grammar, ebnf):
+    grammar.raise_statement()
+    assert ebnf.RAISE == 'raise'
+    assert ebnf.raise_statement == 'raise entity?'
+
+
 def test_grammar_rules(grammar, ebnf):
     grammar.rules()
     assert ebnf._RETURN == 'return'
     assert ebnf.entity == 'values, path'
     assert ebnf.return_statement == 'return entity'
     rules = ('absolute_expression, assignment, imports, return_statement, '
-             'block')
+             'raise_statement, block')
     assert ebnf.rules == rules
 
 
@@ -205,12 +211,6 @@ def test_grammar_try_block(grammar, ebnf):
     assert ebnf.try_block == try_block
 
 
-def test_grammar_raise_statement(grammar, ebnf):
-    grammar.raise_statement()
-    assert ebnf.RAISE == 'raise'
-    assert ebnf.raise_statement == 'raise entity?'
-
-
 def test_grammar_block(grammar, ebnf):
     grammar.block()
     assert ebnf._WHEN == 'when'
@@ -221,7 +221,7 @@ def test_grammar_block(grammar, ebnf):
     block = ('rules nl, if_block, foreach_block, function_block, arguments, '
              'indented_chain, chained_mutation, mutation_block, '
              'service_block, when_block, try_block, indented_arguments, '
-             'while_block, raise_statement')
+             'while_block')
     assert ebnf.block == block
     assert ebnf.nested_block == 'indent block+ dedent'
 
