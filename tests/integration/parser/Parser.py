@@ -176,24 +176,23 @@ def test_parser_try_finally(parser):
 
 def test_parser_try_raise(parser):
     result = parser.parse('try\n\tx=0\ncatch as error\n\traise')
-    catch_block = result.block.try_block.catch_block.nested_block \
-                        .block.rules.block
-    assert catch_block.child(0).data == 'raise_statement'
+    nested_block = result.block.try_block.catch_block.nested_block
+    assert nested_block.block.rules.raise_statement.child(0) == 'raise'
 
 
 def test_parser_try_raise_error(parser):
     result = parser.parse('try\n\tx=0\ncatch as error\n\traise error')
-    catch_block = result.block.try_block.catch_block.nested_block \
-                        .block.rules.block
-    assert catch_block.child(0).data == 'raise_statement'
-    entity = catch_block.child(0).entity.path
-    assert entity.child(0) == Token('NAME', 'error')
+    nested_block = result.block.try_block.catch_block.nested_block
+    raise_statement = nested_block.block.rules.raise_statement
+    assert raise_statement.child(0) == 'raise'
+    assert raise_statement.entity.path.child(0) == Token('NAME', 'error')
 
 
 def test_parser_try_raise_error_message(parser):
-    result = parser.parse('try\n\tx=0\ncatch as error\n\traise "error msg"')
-    catch_block = result.block.try_block.catch_block.nested_block \
-                        .block.rules.block
-    assert catch_block.child(0).data == 'raise_statement'
-    entity = catch_block.child(0).entity.values.string
-    assert entity.child(0) == Token('DOUBLE_QUOTED', '"error msg"')
+    result = parser.parse('try\n\tx=0\ncatch as error\n\traise "error"')
+    nested_block = result.block.try_block.catch_block.nested_block
+    raise_statement = nested_block.block.rules.raise_statement
+    print(raise_statement.pretty())
+    assert raise_statement.child(0) == 'raise'
+    token = Token('DOUBLE_QUOTED', '"error"')
+    assert raise_statement.entity.values.string.child(0) == token
