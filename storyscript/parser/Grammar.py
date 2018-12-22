@@ -89,13 +89,6 @@ class Grammar:
         self.ebnf._IMPORT = 'import'
         self.ebnf.imports = 'import string as name'
 
-    def service(self):
-        self.ebnf.command = 'name'
-        self.ebnf.arguments = 'name? colon entity'
-        self.ebnf.output = '(as name (comma name)*)'
-        self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
-        self.ebnf.service = 'path service_fragment'
-
     def expressions(self):
         self.ebnf.PLUS = '+'
         self.ebnf.set_token('DASH.4', '-')
@@ -136,6 +129,14 @@ class Grammar:
         self.ebnf.mutation = 'entity (mutation_fragment (chained_mutation)*)'
         self.ebnf.mutation_block = 'mutation nl (nested_block)?'
         self.ebnf.indented_chain = 'indent (chained_mutation nl)+ dedent'
+
+    def service_block(self):
+        self.ebnf.command = 'name'
+        self.ebnf.arguments = 'name? colon entity'
+        self.ebnf.output = '(as name (comma name)*)'
+        self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
+        self.ebnf.service = 'path service_fragment'
+        self.ebnf.service_block = 'service nl (nested_block)?'
 
     def if_block(self):
         self.ebnf.GREATER = '>'
@@ -192,7 +193,6 @@ class Grammar:
 
     def block(self):
         self.ebnf._WHEN = 'when'
-        self.ebnf.service_block = 'service nl (nested_block)?'
         when = 'when (path output|service)'
         self.ebnf.when_block = self.ebnf.simple_block(when)
         self.ebnf.indented_arguments = 'indent (arguments nl)+ dedent'
@@ -210,10 +210,10 @@ class Grammar:
         self.values()
         self.assignments()
         self.imports()
-        self.service()
         self.expressions()
         self.rules()
         self.mutation_block()
+        self.service_block()
         self.if_block()
         self.foreach_block()
         self.while_block()

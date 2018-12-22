@@ -95,15 +95,6 @@ def test_grammar_imports(grammar, ebnf):
     assert ebnf.imports == 'import string as name'
 
 
-def test_grammar_service(grammar, ebnf):
-    grammar.service()
-    assert ebnf.command == 'name'
-    assert ebnf.arguments == 'name? colon entity'
-    assert ebnf.output == '(as name (comma name)*)'
-    assert ebnf.service_fragment == '(command arguments*|arguments+) output?'
-    assert ebnf.service == 'path service_fragment'
-
-
 def test_grammar_expressions(grammar, ebnf):
     grammar.expressions()
     assert ebnf.PLUS == '+'
@@ -146,6 +137,16 @@ def test_mutation_block(grammar, ebnf):
     assert ebnf.mutation == 'entity (mutation_fragment (chained_mutation)*)'
     assert ebnf.mutation_block == 'mutation nl (nested_block)?'
     assert ebnf.indented_chain == 'indent (chained_mutation nl)+ dedent'
+
+
+def test_grammar_service_block(grammar, ebnf):
+    grammar.service_block()
+    assert ebnf.command == 'name'
+    assert ebnf.arguments == 'name? colon entity'
+    assert ebnf.output == '(as name (comma name)*)'
+    assert ebnf.service_fragment == '(command arguments*|arguments+) output?'
+    assert ebnf.service == 'path service_fragment'
+    assert ebnf.service_block == 'service nl (nested_block)?'
 
 
 def test_grammar_if_block(grammar, ebnf):
@@ -214,7 +215,6 @@ def test_grammar_try_block(grammar, ebnf):
 def test_grammar_block(grammar, ebnf):
     grammar.block()
     assert ebnf._WHEN == 'when'
-    assert ebnf.service_block == 'service nl (nested_block)?'
     ebnf.simple_block.assert_called_with('when (path output|service)')
     assert ebnf.when_block == ebnf.simple_block()
     assert ebnf.indented_arguments == 'indent (arguments nl)+ dedent'
@@ -228,9 +228,9 @@ def test_grammar_block(grammar, ebnf):
 
 def test_grammar_build(patch, call_count, grammar, ebnf):
     methods = ['macros', 'types', 'values', 'assignments', 'imports',
-               'service', 'expressions', 'rules', 'mutation_block', 'if_block',
-               'foreach_block', 'function_block', 'try_block', 'block',
-               'while_block', 'raise_statement']
+               'expressions', 'rules', 'mutation_block', 'service_block',
+               'if_block', 'foreach_block', 'function_block', 'try_block',
+               'block', 'while_block', 'raise_statement']
     patch.many(Grammar, methods)
     result = grammar.build()
     assert ebnf._WS == '(" ")+'
