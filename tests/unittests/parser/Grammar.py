@@ -83,7 +83,7 @@ def test_grammar_assignments(grammar, ebnf):
     assert ebnf.path_fragment == path_fragment
     assert ebnf.path == ('name (path_fragment)* | '
                          'inline_expression (path_fragment)*')
-    assignment_fragment = 'equals (expression, service)'
+    assignment_fragment = 'equals (expression, service, mutation)'
     assert ebnf.assignment_fragment == assignment_fragment
     assert ebnf.assignment == 'path assignment_fragment'
 
@@ -219,6 +219,7 @@ def test_grammar_block(grammar, ebnf):
     assert ebnf.when_block == ebnf.simple_block()
     assert ebnf.indented_arguments == 'indent (arguments nl)+ dedent'
     block = ('rules nl, if_block, foreach_block, function_block, arguments, '
+             'indented_chain, chained_mutation, mutation_block, '
              'service_block, when_block, try_block, indented_arguments, '
              'while_block, raise_statement')
     assert ebnf.block == block
@@ -227,9 +228,9 @@ def test_grammar_block(grammar, ebnf):
 
 def test_grammar_build(patch, call_count, grammar, ebnf):
     methods = ['macros', 'types', 'values', 'assignments', 'imports',
-               'service', 'expressions', 'rules', 'if_block', 'foreach_block',
-               'function_block', 'try_block', 'block', 'while_block',
-               'raise_statement']
+               'service', 'expressions', 'rules', 'mutation_block', 'if_block',
+               'foreach_block', 'function_block', 'try_block', 'block',
+               'while_block', 'raise_statement']
     patch.many(Grammar, methods)
     result = grammar.build()
     assert ebnf._WS == '(" ")+'

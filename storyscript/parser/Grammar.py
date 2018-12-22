@@ -80,7 +80,7 @@ class Grammar:
         self.ebnf.path_fragment = path_fragment
         self.ebnf.path = ('name (path_fragment)* | '
                           'inline_expression (path_fragment)*')
-        assignment_fragment = 'equals (expression, service)'
+        assignment_fragment = 'equals (expression, service, mutation)'
         self.ebnf.assignment_fragment = assignment_fragment
         self.ebnf.assignment = 'path assignment_fragment'
 
@@ -196,7 +196,8 @@ class Grammar:
         self.ebnf.when_block = self.ebnf.simple_block(when)
         self.ebnf.indented_arguments = 'indent (arguments nl)+ dedent'
         block = ('rules nl, if_block, foreach_block, function_block, '
-                 'arguments, service_block, when_block, try_block, '
+                 'arguments, indented_chain, chained_mutation, '
+                 'mutation_block, service_block, when_block, try_block, '
                  'indented_arguments, while_block, raise_statement')
         self.ebnf.block = block
         self.ebnf.nested_block = 'indent block+ dedent'
@@ -211,6 +212,7 @@ class Grammar:
         self.service()
         self.expressions()
         self.rules()
+        self.mutation_block()
         self.if_block()
         self.foreach_block()
         self.while_block()
