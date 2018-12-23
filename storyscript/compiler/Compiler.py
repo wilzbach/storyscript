@@ -93,8 +93,10 @@ class Compiler:
                 self.service(service, None, parent)
                 self.lines.set_name(name)
                 return
-            else:
-                return self.expression_assignment(service, name, parent)
+        elif fragment.mutation:
+            self.mutation_block(fragment, parent)
+            self.lines.set_name(name)
+            return
         elif fragment.expression:
             if fragment.expression.is_unary() is False:
                 return self.expression_assignment(fragment, name, parent)
@@ -316,7 +318,7 @@ class Compiler:
                          'foreach_block', 'function_block', 'when_block',
                          'try_block', 'return_statement', 'arguments',
                          'imports', 'while_block', 'raise_statement',
-                         'mutation_block',]
+                         'mutation_block']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return

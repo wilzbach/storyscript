@@ -136,7 +136,7 @@ def test_compiler_assignment(patch, compiler, lines, tree):
     """
     patch.many(Objects, ['names', 'entity'])
     tree.assignment_fragment.service = None
-    tree.assignment_fragment.expression.number = None
+    tree.assignment_fragment.mutation = None
     compiler.assignment(tree, '1')
     Objects.names.assert_called_with(tree.path)
     fragment = tree.assignment_fragment
@@ -156,24 +156,23 @@ def test_compiler_assignment_service(patch, compiler, lines, tree):
     lines.set_name.assert_called_with(Objects.names())
 
 
-def test_compiler_assignment_expression_service(patch, compiler, lines, tree):
+def test_compiler_assignment_mutation(patch, compiler, lines, tree):
     """
-    Ensures that assignments like 'x = a mutation' are compiled correctly.
-    This works by checking that 'a' was infact previously assigned, thus
-    it's not a service but a variable.
+    Ensures that assignments to mutations are compiled correctly.
     """
     patch.object(Objects, 'names', return_value='name')
-    patch.object(Compiler, 'expression_assignment')
-    lines.variables = ['name']
+    patch.object(Compiler, 'mutation_block')
+    tree.assignment_fragment.service = None
     compiler.assignment(tree, '1')
-    service = tree.assignment_fragment.service
-    Compiler.expression_assignment.assert_called_with(service, 'name', '1')
+    Compiler.mutation_block.assert_called_with(tree.assignment_fragment, '1')
+    lines.set_name.assert_called_with('name')
 
 
 def test_compiler_assignment_expression(patch, compiler, lines, tree):
     patch.object(Objects, 'names', return_value='name')
     patch.object(Compiler, 'expression_assignment')
     tree.assignment_fragment.service = None
+    tree.assignment_fragment.mutation = None
     tree.assignment_fragment.expression.is_unary.return_value = False
     compiler.assignment(tree, '1')
     fragment = tree.assignment_fragment
