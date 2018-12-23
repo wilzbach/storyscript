@@ -63,6 +63,15 @@ def test_compiler_extract_values_mutation(patch, tree):
     assert result == [Objects.values(), Objects.mutation()]
 
 
+def test_compiler_chained_mutations(patch, magic, tree):
+    patch.object(Objects, 'mutation')
+    mutation = magic()
+    tree.find_data.return_value = [mutation]
+    result = Compiler.chained_mutations(tree)
+    Objects.mutation.assert_called_with(mutation.mutation_fragment)
+    assert result == [Objects.mutation()]
+
+
 def test_compiler_function_output(patch, tree):
     patch.object(Compiler, 'output')
     result = Compiler.function_output(tree)

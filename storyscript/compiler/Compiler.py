@@ -36,6 +36,16 @@ class Compiler:
             return [Objects.expression(fragment.expression)]
         return [Objects.entity(fragment.child(1))]
 
+    @staticmethod
+    def chained_mutations(tree):
+        """
+        Finds and compile chained mutations
+        """
+        mutations = []
+        for mutation in tree.find_data('chained_mutation'):
+            mutations.append(Objects.mutation(mutation.mutation_fragment))
+        return mutations
+
     @classmethod
     def function_output(cls, tree):
         return cls.output(tree.node('function_output.types'))
