@@ -444,10 +444,22 @@ def test_compiler_raise_name_statement(patch, compiler, lines, tree):
 
 
 def test_compiler_mutation_block(patch, compiler, lines, tree):
-    patch.object(Objects, 'mutation')
+    patch.many(Objects, ['entity', 'mutation'])
     compiler.mutation_block(tree, None)
-    Objects.mutation.assert_called_with(tree.mutation)
-    kwargs = {'args': Objects.mutation(), 'parent': None}
+    Objects.entity.assert_called_with(tree.mutation.entity)
+    Objects.mutation.assert_called_with(tree.mutation.mutation_fragment)
+    kwargs = {'args': [Objects.entity(), Objects.mutation()], 'parent': None}
+    lines.append.assert_called_with('mutation', tree.line(), **kwargs)
+
+
+def test_compiler_mutation_block_chained(patch, magic, compiler, lines, tree):
+    patch.many(Objects, ['entity', 'mutation'])
+    chained_mutation = magic()
+    tree.mutation.find_data.return_value = [chained_mutation]
+    compiler.mutation_block(tree, None)
+    Objects.mutation.assert_called_with(chained_mutation.mutation_fragment)
+    args = [Objects.entity(), Objects.mutation(), Objects.mutation()]
+    kwargs = {'args': args, 'parent': None}
     lines.append.assert_called_with('mutation', tree.line(), **kwargs)
 
 

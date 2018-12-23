@@ -238,7 +238,12 @@ class Compiler:
         """
         Compiles a mutation
         """
-        args = Objects.mutation(tree.mutation)
+        args = [
+            Objects.entity(tree.mutation.entity),
+            Objects.mutation(tree.mutation.mutation_fragment)
+        ]
+        for mutation in tree.mutation.find_data('chained_mutation'):
+            args.append(Objects.mutation(mutation.mutation_fragment))
         self.lines.append('mutation', tree.line(), args=args, parent=parent)
 
     def service_block(self, tree, parent):
