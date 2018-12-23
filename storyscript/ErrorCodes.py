@@ -53,3 +53,6 @@ class ErrorCodes:
     future_reserved_keyword_mock = (
         'E0038',
         '`mock` is reserved for future use')
+    arguments_nomutation = (
+        'E0039',
+        'You have defined a chained mutation, but not a mutation')
