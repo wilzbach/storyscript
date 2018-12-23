@@ -232,6 +232,13 @@ class Compiler:
                           parent=parent)
         self.subtree(nested_block, parent=line)
 
+    def mutation_block(self, tree, parent):
+        """
+        Compiles a mutation
+        """
+        args = Objects.mutation(tree.mutation)
+        self.lines.append('mutation', tree.line(), args=args, parent=parent)
+
     def service_block(self, tree, parent):
         """
         Compiles a service block and the eventual nested block.
@@ -308,7 +315,8 @@ class Compiler:
                          'if_block', 'elseif_block', 'else_block',
                          'foreach_block', 'function_block', 'when_block',
                          'try_block', 'return_statement', 'arguments',
-                         'imports', 'while_block', 'raise_statement']
+                         'imports', 'while_block', 'raise_statement',
+                         'mutation_block',]
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return

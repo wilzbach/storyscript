@@ -444,6 +444,14 @@ def test_compiler_raise_name_statement(patch, compiler, lines, tree):
                                     parent='1')
 
 
+def test_compiler_mutation_block(patch, compiler, lines, tree):
+    patch.object(Objects, 'mutation')
+    compiler.mutation_block(tree, None)
+    Objects.mutation.assert_called_with(tree.mutation)
+    kwargs = {'args': Objects.mutation(), 'parent': None}
+    lines.append.assert_called_with('mutation', tree.line(), **kwargs)
+
+
 def test_compiler_service_block(patch, compiler, tree):
     patch.object(Compiler, 'service')
     tree.node.return_value = None
@@ -526,7 +534,8 @@ def test_compiler_finally_block(patch, compiler, lines, tree):
 @mark.parametrize('method_name', [
     'service_block', 'absolute_expression', 'assignment', 'if_block',
     'elseif_block', 'else_block', 'foreach_block', 'function_block',
-    'when_block', 'try_block', 'return_statement', 'arguments', 'imports'
+    'when_block', 'try_block', 'return_statement', 'arguments', 'imports',
+    'mutation_block'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)
