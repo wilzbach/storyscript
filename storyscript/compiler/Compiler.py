@@ -61,19 +61,7 @@ class Compiler:
         """
         Compiles an expression
         """
-        mutation = None
-        if tree.expression:
-            if tree.expression.mutation:
-                value = Objects.entity(tree.expression.entity)
-                mutation = Objects.mutation(tree.expression.mutation)
-            else:
-                value = Objects.expression(tree.expression)
-        elif tree.service_fragment:
-            value = Objects.path(tree.path)
-            mutation = Objects.mutation(tree.service_fragment)
-        args = [value]
-        if mutation:
-            args.append(mutation)
+        args = [Objects.expression(tree.expression)]
         self.lines.append('expression', tree.line(), args=args, parent=parent)
 
     def expression_assignment(self, tree, name, parent):

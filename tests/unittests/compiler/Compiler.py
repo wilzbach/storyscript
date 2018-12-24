@@ -90,38 +90,10 @@ def test_compiler_expression(patch, compiler, lines, tree):
     """
     Ensures that expressions are compiled correctly
     """
-    patch.many(Objects, ['mutation', 'path'])
-    tree.expression = None
-    compiler.expression(tree, '1')
-    Objects.mutation.assert_called_with(tree.service_fragment)
-    Objects.path.assert_called_with(tree.path)
-    args = [Objects.path(), Objects.mutation()]
-    lines.append.assert_called_with('expression', tree.line(), args=args,
-                                    parent='1')
-
-
-def test_compiler_expression_absolute(patch, compiler, lines, tree):
-    """
-    Ensures that absolute expressions are compiled correctly
-    """
     patch.object(Objects, 'expression')
-    tree.expression.mutation = None
     compiler.expression(tree, '1')
     Objects.expression.assert_called_with(tree.expression)
     args = [Objects.expression()]
-    lines.append.assert_called_with('expression', tree.line(), args=args,
-                                    parent='1')
-
-
-def test_compiler_expression_absolute_mutation(patch, compiler, lines, tree):
-    """
-    Ensures that absolute expressions with mutations are compiled correctly
-    """
-    patch.many(Objects, ['mutation', 'entity'])
-    compiler.expression(tree, '1')
-    Objects.mutation.assert_called_with(tree.expression.mutation)
-    Objects.entity.assert_called_with(tree.expression.entity)
-    args = [Objects.entity(), Objects.mutation()]
     lines.append.assert_called_with('expression', tree.line(), args=args,
                                     parent='1')
 
