@@ -133,7 +133,7 @@ class Compiler:
         """
         service_name = Objects.names(tree.path)
         if service_name in self.lines.variables:
-            self.expression(tree, parent)
+            self.mutation_block(tree, parent)
             return
         line = tree.line()
         command = tree.service_fragment.command

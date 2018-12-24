@@ -282,11 +282,11 @@ def test_compiler_service_expressions(patch, compiler, lines, tree):
     correctly
     """
     patch.object(Objects, 'names', return_value='x')
-    patch.object(Compiler, 'expression')
+    patch.object(Compiler, 'mutation_block')
     lines.variables = ['x']
     compiler.service(tree, None, 'parent')
     Objects.names.assert_called_with(tree.path)
-    Compiler.expression.assert_called_with(tree, 'parent')
+    Compiler.mutation_block.assert_called_with(tree, 'parent')
 
 
 def test_compiler_service_syntax_error(patch, compiler, lines, tree):
