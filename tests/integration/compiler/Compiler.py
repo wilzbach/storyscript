@@ -76,7 +76,7 @@ def test_compiler_expression_mutation(parser):
         {'$OBJECT': 'string', 'string': 'hello'},
         {'$OBJECT': 'mutation', 'mutation': 'length', 'arguments': []}
     ]
-    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['method'] == 'mutation'
     assert result['tree']['1']['args'] == args
 
 
