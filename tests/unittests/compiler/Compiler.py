@@ -464,6 +464,41 @@ def test_compiler_mutation_block(patch, compiler, lines, tree):
     lines.append.assert_called_with('mutation', tree.line(), **kwargs)
 
 
+def test_compiler_indented_chain(patch, compiler, lines, tree):
+    patch.object(Compiler, 'chained_mutations')
+    lines.last.return_value = '1'
+    lines.lines = {'1': {'method': 'mutation', 'args': ['args']}}
+    compiler.indented_chain(tree, '0')
+    Compiler.chained_mutations.assert_called_with(tree)
+    assert lines.lines['1']['args'] == ['args'] + Compiler.chained_mutations()
+
+
+def test_compiler_indented_chain_first_line(patch, compiler, lines, tree):
+    """
+    Ensures that if this is the first line, an error is raised.
+    """
+    patch.init(StorySyntaxError)
+    lines.last.return_value = None
+    with raises(StorySyntaxError):
+        compiler.indented_chain(tree, '0')
+    error = 'arguments_nomutation'
+    StorySyntaxError.__init__.assert_called_with(error, tree=tree)
+
+
+def test_compiler_indented_chain_not_mutation(patch, compiler, lines, tree):
+    """
+    Ensures that if the previous line is not a mutation, an error is raised.
+    """
+    patch.init(StorySyntaxError)
+    patch.object(Compiler, 'chained_mutations')
+    lines.last.return_value = '1'
+    lines.lines = {'1': {'method': 'whatever'}}
+    with raises(StorySyntaxError):
+        compiler.indented_chain(tree, '0')
+    error = 'arguments_nomutation'
+    StorySyntaxError.__init__.assert_called_with(error, tree=tree)
+
+
 def test_compiler_service_block(patch, compiler, tree):
     patch.object(Compiler, 'service')
     tree.node.return_value = None
@@ -547,7 +582,7 @@ def test_compiler_finally_block(patch, compiler, lines, tree):
     'service_block', 'absolute_expression', 'assignment', 'if_block',
     'elseif_block', 'else_block', 'foreach_block', 'function_block',
     'when_block', 'try_block', 'return_statement', 'arguments', 'imports',
-    'mutation_block'
+    'mutation_block', 'indented_chain'
 ])
 def test_compiler_subtree(patch, compiler, method_name):
     patch.object(Compiler, method_name)

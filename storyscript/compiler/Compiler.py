@@ -255,6 +255,19 @@ class Compiler:
         args = args + self.chained_mutations(tree.mutation)
         self.lines.append('mutation', tree.line(), args=args, parent=parent)
 
+    def indented_chain(self, tree, parent):
+        """
+        Compiles an indented mutation.
+        """
+        previous_line = self.lines.last()
+        if previous_line:
+            line = self.lines.lines[previous_line]
+            if line['method'] != 'mutation':
+                raise StorySyntaxError('arguments_nomutation', tree=tree)
+            line['args'] = line['args'] + self.chained_mutations(tree)
+            return
+        raise StorySyntaxError('arguments_nomutation', tree=tree)
+
     def service_block(self, tree, parent):
         """
         Compiles a service block and the eventual nested block.
@@ -332,7 +345,7 @@ class Compiler:
                          'foreach_block', 'function_block', 'when_block',
                          'try_block', 'return_statement', 'arguments',
                          'imports', 'while_block', 'raise_statement',
-                         'mutation_block']
+                         'mutation_block', 'indented_chain']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return
