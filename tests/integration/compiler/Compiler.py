@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from pytest import mark
+
 from storyscript.compiler import Compiler
 
 
@@ -66,9 +68,9 @@ def test_compiler_expression_complex(parser):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_expression_mutation(parser):
+def test_compiler_mutation(parser):
     """
-    Ensures that mutation expressions are compiled correctly
+    Ensures that mutations are compiled correctly
     """
     tree = parser.parse("'hello' length")
     result = Compiler.compile(tree)
@@ -77,6 +79,24 @@ def test_compiler_expression_mutation(parser):
         {'$OBJECT': 'mutation', 'mutation': 'length', 'arguments': []}
     ]
     assert result['tree']['1']['method'] == 'mutation'
+    assert result['tree']['1']['args'] == args
+
+
+@mark.parametrize('source', [
+    '1 increment then format to:"string"',
+    '1 increment\n\tthen format to:"string"'
+])
+def test_compiler_mutation_chained(parser, source):
+    """
+    Ensures that chained mutations are compiled correctly
+    """
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    args = [1,
+            {'$OBJECT': 'mutation', 'mutation': 'increment', 'arguments': []},
+            {'$OBJECT': 'mutation', 'mutation': 'format', 'arguments': [
+                {'$OBJECT': 'argument', 'name': 'to',
+                 'argument': {'$OBJECT': 'string', 'string': 'string'}}]}]
     assert result['tree']['1']['args'] == args
 
 
