@@ -80,7 +80,7 @@ class Grammar:
         self.ebnf.path_fragment = path_fragment
         self.ebnf.path = ('name (path_fragment)* | '
                           'inline_expression (path_fragment)*')
-        assignment_fragment = 'equals (expression, service)'
+        assignment_fragment = 'equals (expression, service, mutation)'
         self.ebnf.assignment_fragment = assignment_fragment
         self.ebnf.assignment = 'path assignment_fragment'
 
@@ -88,13 +88,6 @@ class Grammar:
         self.ebnf._AS = 'as'
         self.ebnf._IMPORT = 'import'
         self.ebnf.imports = 'import string as name'
-
-    def service(self):
-        self.ebnf.command = 'name'
-        self.ebnf.arguments = 'name? colon entity'
-        self.ebnf.output = '(as name (comma name)*)'
-        self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
-        self.ebnf.service = 'path service_fragment'
 
     def expressions(self):
         self.ebnf.PLUS = '+'
@@ -106,22 +99,44 @@ class Grammar:
         self.ebnf.NOT = 'not'
         self.ebnf.AND = 'and'
         self.ebnf.OR = 'or'
-        self.ebnf.mutation = 'name arguments*'
         self.ebnf.factor = '(dash, plus)? entity, op expression cp'
         self.ebnf.exponential = 'factor (power exponential)?'
         self.ebnf.multiplication = ('exponential (( multiplier, bslash, '
                                     'modulus ) exponential)*')
         self.ebnf.expression = ('multiplication ( ( plus, dash ) '
-                                'multiplication)*, entity mutation')
+                                'multiplication)*')
         self.ebnf.absolute_expression = 'expression'
+
+    def raise_statement(self):
+        # NOTE(@wilzbach): raise can't be ignored as it is required to infer
+        # the line without children
+        # raise is a statement or a block?????
+        self.ebnf.RAISE = 'raise'
+        self.ebnf.raise_statement = ('raise entity?')
 
     def rules(self):
         self.ebnf._RETURN = 'return'
         self.ebnf.return_statement = 'return entity'
         self.ebnf.entity = 'values, path'
         rules = ('absolute_expression, assignment, imports, return_statement, '
-                 'block')
+                 'raise_statement, block')
         self.ebnf.rules = rules
+
+    def mutation_block(self):
+        self.ebnf._THEN = 'then'
+        self.ebnf.mutation_fragment = 'name arguments*'
+        self.ebnf.chained_mutation = 'then mutation_fragment'
+        self.ebnf.mutation = 'entity (mutation_fragment (chained_mutation)*)'
+        self.ebnf.mutation_block = 'mutation nl (nested_block)?'
+        self.ebnf.indented_chain = 'indent (chained_mutation nl)+ dedent'
+
+    def service_block(self):
+        self.ebnf.command = 'name'
+        self.ebnf.arguments = 'name? colon entity'
+        self.ebnf.output = '(as name (comma name)*)'
+        self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
+        self.ebnf.service = 'path service_fragment chained_mutation*'
+        self.ebnf.service_block = 'service nl (nested_block)?'
 
     def if_block(self):
         self.ebnf.GREATER = '>'
@@ -163,12 +178,6 @@ class Grammar:
         self.ebnf.function_statement = function_statement
         self.ebnf.function_block = self.ebnf.simple_block('function_statement')
 
-    def raise_statement(self):
-        # NOTE(@wilzbach): raise can't be ignored as it is required to infer
-        # the line without children
-        self.ebnf.RAISE = 'raise'
-        self.ebnf.raise_statement = ('raise entity?')
-
     def try_block(self):
         self.ebnf.TRY = 'try'
         self.ebnf._CATCH = 'catch'
@@ -184,13 +193,13 @@ class Grammar:
 
     def block(self):
         self.ebnf._WHEN = 'when'
-        self.ebnf.service_block = 'service nl (nested_block)?'
         when = 'when (path output|service)'
         self.ebnf.when_block = self.ebnf.simple_block(when)
         self.ebnf.indented_arguments = 'indent (arguments nl)+ dedent'
         block = ('rules nl, if_block, foreach_block, function_block, '
-                 'arguments, service_block, when_block, try_block, '
-                 'indented_arguments, while_block, raise_statement')
+                 'arguments, indented_chain, chained_mutation, '
+                 'mutation_block, service_block, when_block, try_block, '
+                 'indented_arguments, while_block')
         self.ebnf.block = block
         self.ebnf.nested_block = 'indent block+ dedent'
 
@@ -201,9 +210,10 @@ class Grammar:
         self.values()
         self.assignments()
         self.imports()
-        self.service()
         self.expressions()
         self.rules()
+        self.mutation_block()
+        self.service_block()
         self.if_block()
         self.foreach_block()
         self.while_block()

@@ -234,7 +234,7 @@ def test_assignments_mutation(parser):
     tree = parser.parse('0 increase by:1')
     result = Compiler.compile(tree)
     assert result['services'] == []
-    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['method'] == 'mutation'
     assert result['tree']['1']['args'][1]['$OBJECT'] == 'mutation'
 
 
@@ -246,5 +246,5 @@ def test_assignments_mutation_variable(parser):
     tree = parser.parse('a = 0\na increase by:1')
     result = Compiler.compile(tree)
     assert result['services'] == []
-    assert result['tree']['2']['method'] == 'expression'
+    assert result['tree']['2']['method'] == 'mutation'
     assert result['tree']['2']['args'][1]['$OBJECT'] == 'mutation'

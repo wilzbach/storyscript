@@ -36,6 +36,16 @@ class Compiler:
             return [Objects.expression(fragment.expression)]
         return [Objects.entity(fragment.child(1))]
 
+    @staticmethod
+    def chained_mutations(tree):
+        """
+        Finds and compile chained mutations
+        """
+        mutations = []
+        for mutation in tree.find_data('chained_mutation'):
+            mutations.append(Objects.mutation(mutation.mutation_fragment))
+        return mutations
+
     @classmethod
     def function_output(cls, tree):
         return cls.output(tree.node('function_output.types'))
@@ -51,19 +61,7 @@ class Compiler:
         """
         Compiles an expression
         """
-        mutation = None
-        if tree.expression:
-            if tree.expression.mutation:
-                value = Objects.entity(tree.expression.entity)
-                mutation = Objects.mutation(tree.expression.mutation)
-            else:
-                value = Objects.expression(tree.expression)
-        elif tree.service_fragment:
-            value = Objects.path(tree.path)
-            mutation = Objects.mutation(tree.service_fragment)
-        args = [value]
-        if mutation:
-            args.append(mutation)
+        args = [Objects.expression(tree.expression)]
         self.lines.append('expression', tree.line(), args=args, parent=parent)
 
     def expression_assignment(self, tree, name, parent):
@@ -93,8 +91,10 @@ class Compiler:
                 self.service(service, None, parent)
                 self.lines.set_name(name)
                 return
-            else:
-                return self.expression_assignment(service, name, parent)
+        elif fragment.mutation:
+            self.mutation_block(fragment, parent)
+            self.lines.set_name(name)
+            return
         elif fragment.expression:
             if fragment.expression.is_unary() is False:
                 return self.expression_assignment(fragment, name, parent)
@@ -121,7 +121,7 @@ class Compiler:
         """
         service_name = Objects.names(tree.path)
         if service_name in self.lines.variables:
-            self.expression(tree, parent)
+            self.mutation_block(tree, parent)
             return
         line = tree.line()
         command = tree.service_fragment.command
@@ -232,6 +232,39 @@ class Compiler:
                           parent=parent)
         self.subtree(nested_block, parent=line)
 
+    def mutation_block(self, tree, parent):
+        """
+        Compiles a mutation or a service that is actually a mutation.
+        """
+        if tree.path:
+            args = [
+                Objects.path(tree.path),
+                Objects.mutation(tree.service_fragment)
+            ]
+            args = args + self.chained_mutations(tree)
+        else:
+            args = [
+                Objects.entity(tree.mutation.entity),
+                Objects.mutation(tree.mutation.mutation_fragment)
+            ]
+            args = args + self.chained_mutations(tree.mutation)
+        if tree.nested_block:
+            args = args + self.chained_mutations(tree.nested_block)
+        self.lines.append('mutation', tree.line(), args=args, parent=parent)
+
+    def indented_chain(self, tree, parent):
+        """
+        Compiles an indented mutation.
+        """
+        previous_line = self.lines.last()
+        if previous_line:
+            line = self.lines.lines[previous_line]
+            if line['method'] != 'mutation':
+                raise StorySyntaxError('arguments_nomutation', tree=tree)
+            line['args'] = line['args'] + self.chained_mutations(tree)
+            return
+        raise StorySyntaxError('arguments_nomutation', tree=tree)
+
     def service_block(self, tree, parent):
         """
         Compiles a service block and the eventual nested block.
@@ -308,7 +341,8 @@ class Compiler:
                          'if_block', 'elseif_block', 'else_block',
                          'foreach_block', 'function_block', 'when_block',
                          'try_block', 'return_statement', 'arguments',
-                         'imports', 'while_block', 'raise_statement']
+                         'imports', 'while_block', 'raise_statement',
+                         'mutation_block', 'indented_chain']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return
