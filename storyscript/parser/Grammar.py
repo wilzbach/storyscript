@@ -135,7 +135,7 @@ class Grammar:
         self.ebnf.arguments = 'name? colon entity'
         self.ebnf.output = '(as name (comma name)*)'
         self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
-        self.ebnf.service = 'path service_fragment'
+        self.ebnf.service = 'path service_fragment chained_mutation*'
         self.ebnf.service_block = 'service nl (nested_block)?'
 
     def if_block(self):

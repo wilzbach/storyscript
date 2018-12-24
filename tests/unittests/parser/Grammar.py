@@ -145,7 +145,7 @@ def test_grammar_service_block(grammar, ebnf):
     assert ebnf.arguments == 'name? colon entity'
     assert ebnf.output == '(as name (comma name)*)'
     assert ebnf.service_fragment == '(command arguments*|arguments+) output?'
-    assert ebnf.service == 'path service_fragment'
+    assert ebnf.service == 'path service_fragment chained_mutation*'
     assert ebnf.service_block == 'service nl (nested_block)?'
 
 
