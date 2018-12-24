@@ -234,13 +234,20 @@ class Compiler:
 
     def mutation_block(self, tree, parent):
         """
-        Compiles a mutation
+        Compiles a mutation or a service that is actually a mutation.
         """
-        args = [
-            Objects.entity(tree.mutation.entity),
-            Objects.mutation(tree.mutation.mutation_fragment)
-        ]
-        args = args + self.chained_mutations(tree.mutation)
+        if tree.path:
+            args = [
+                Objects.path(tree.path),
+                Objects.mutation(tree.service_fragment)
+            ]
+            args = args + self.chained_mutations(tree)
+        else:
+            args = [
+                Objects.entity(tree.mutation.entity),
+                Objects.mutation(tree.mutation.mutation_fragment)
+            ]
+            args = args + self.chained_mutations(tree.mutation)
         self.lines.append('mutation', tree.line(), args=args, parent=parent)
 
     def indented_chain(self, tree, parent):
