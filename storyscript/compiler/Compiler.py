@@ -248,6 +248,8 @@ class Compiler:
                 Objects.mutation(tree.mutation.mutation_fragment)
             ]
             args = args + self.chained_mutations(tree.mutation)
+        if tree.nested_block:
+            args = args + self.chained_mutations(tree.nested_block)
         self.lines.append('mutation', tree.line(), args=args, parent=parent)
 
     def indented_chain(self, tree, parent):

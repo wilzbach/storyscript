@@ -428,6 +428,7 @@ def test_compiler_mutation_block(patch, compiler, lines, tree):
     patch.many(Objects, ['entity', 'mutation'])
     patch.object(Compiler, 'chained_mutations', return_value=['chained'])
     tree.path = None
+    tree.nested_block = None
     compiler.mutation_block(tree, None)
     Objects.entity.assert_called_with(tree.mutation.entity)
     Objects.mutation.assert_called_with(tree.mutation.mutation_fragment)
@@ -437,9 +438,21 @@ def test_compiler_mutation_block(patch, compiler, lines, tree):
     lines.append.assert_called_with('mutation', tree.line(), **kwargs)
 
 
+def test_compiler_mutation_block_nested(patch, compiler, lines, tree):
+    patch.many(Objects, ['entity', 'mutation'])
+    patch.object(Compiler, 'chained_mutations', return_value=['chained'])
+    tree.path = None
+    compiler.mutation_block(tree, None)
+    Compiler.chained_mutations.assert_called_with(tree.nested_block)
+    args = [Objects.entity(), Objects.mutation(), 'chained', 'chained']
+    kwargs = {'args': args, 'parent': None}
+    lines.append.assert_called_with('mutation', tree.line(), **kwargs)
+
+
 def test_compiler_mutation_block_from_service(patch, compiler, lines, tree):
     patch.many(Objects, ['path', 'mutation'])
     patch.object(Compiler, 'chained_mutations', return_value=['chained'])
+    tree.nested_block = None
     compiler.mutation_block(tree, None)
     Objects.path.assert_called_with(tree.path)
     Objects.mutation.assert_called_with(tree.service_fragment)
