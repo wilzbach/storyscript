@@ -35,11 +35,12 @@ class Cli:
     @click.option('--debug', is_flag=True)
     @click.option('--ebnf', help=ebnf_help)
     @click.option('--raw', is_flag=True)
-    def parse(path, debug, ebnf, raw):
+    @click.option('--ignore', default=None, help='ignore path')
+    def parse(path, debug, ebnf, raw, ignore):
         """
         Parses stories, producing the abstract syntax tree.
         """
-        trees = App.parse(path, ebnf=ebnf, debug=debug)
+        trees = App.parse(path, ignored_path=ignore, ebnf=ebnf, debug=debug)
         for story, tree in trees.items():
             click.echo('File: {}'.format(story))
             if raw:

@@ -49,7 +49,7 @@ def test_cli_parse(runner, echo, app, tree):
     """
     App.parse.return_value = {'path': tree}
     runner.invoke(Cli.parse, [])
-    App.parse.assert_called_with(os.getcwd(), ebnf=None, debug=False)
+    App.parse.assert_called_with(os.getcwd(), ebnf=None, debug=False, ignored_path=None)
     click.echo.assert_called_with(tree.pretty())
 
 
@@ -67,7 +67,7 @@ def test_cli_parse_path(runner, echo, app):
     Ensures the parse command supports specifying a path.
     """
     runner.invoke(Cli.parse, ['/path'])
-    App.parse.assert_called_with('/path', ebnf=None, debug=False)
+    App.parse.assert_called_with('/path', ebnf=None, debug=False, ignored_path=None)
 
 
 def test_cli_parse_ebnf(runner, echo, app):
@@ -75,7 +75,7 @@ def test_cli_parse_ebnf(runner, echo, app):
     Ensures the parse command supports specifying an ebnf file.
     """
     runner.invoke(Cli.parse, ['--ebnf', 'test.ebnf'])
-    App.parse.assert_called_with(os.getcwd(), ebnf='test.ebnf', debug=False)
+    App.parse.assert_called_with(os.getcwd(), ebnf='test.ebnf', debug=False, ignored_path=None)
 
 
 def test_cli_parse_debug(runner, echo, app):
@@ -83,7 +83,7 @@ def test_cli_parse_debug(runner, echo, app):
     Ensures the parse command supports a debug flag.
     """
     runner.invoke(Cli.parse, ['--debug'])
-    App.parse.assert_called_with(os.getcwd(), ebnf=None, debug=True)
+    App.parse.assert_called_with(os.getcwd(), ebnf=None, debug=True, ignored_path=None)
 
 
 def test_cli_compile(patch, runner, echo, app):
