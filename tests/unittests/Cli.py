@@ -92,7 +92,7 @@ def test_cli_compile(patch, runner, echo, app):
     """
     patch.object(click, 'style')
     runner.invoke(Cli.compile, [])
-    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False)
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False, ignored_path=None)
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
 
@@ -102,7 +102,7 @@ def test_cli_compile_path(patch, runner, app):
     Ensures the compile command supports specifying a path
     """
     runner.invoke(Cli.compile, ['/path'])
-    App.compile.assert_called_with('/path', ebnf=None, debug=False)
+    App.compile.assert_called_with('/path', ebnf=None, debug=False, ignored_path=None)
 
 
 def test_cli_compile_output_file(patch, runner, app):
@@ -121,14 +121,14 @@ def test_cli_compile_silent(runner, echo, app, option):
     Ensures --silent makes everything quiet
     """
     result = runner.invoke(Cli.compile, [option])
-    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False)
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False, ignored_path=None)
     assert result.output == ''
     assert click.echo.call_count == 0
 
 
 def test_cli_compile_debug(runner, echo, app):
     runner.invoke(Cli.compile, ['--debug'])
-    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=True)
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=True, ignored_path=None)
 
 
 @mark.parametrize('option', ['--json', '-j'])
@@ -137,13 +137,13 @@ def test_cli_compile_json(runner, echo, app, option):
     Ensures --json outputs json
     """
     runner.invoke(Cli.compile, [option])
-    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False)
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False, ignored_path=None)
     click.echo.assert_called_with(App.compile())
 
 
 def test_cli_compile_ebnf(runner, echo, app):
     runner.invoke(Cli.compile, ['--ebnf', 'test.ebnf'])
-    App.compile.assert_called_with(os.getcwd(), ebnf='test.ebnf', debug=False)
+    App.compile.assert_called_with(os.getcwd(), ebnf='test.ebnf', debug=False, ignored_path=None)
 
 
 def test_cli_lex(patch, magic, runner, app, echo):

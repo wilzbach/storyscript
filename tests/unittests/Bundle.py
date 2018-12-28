@@ -179,3 +179,4 @@ def test_bundle_lex_ebnf(patch, bundle):
     patch.object(Bundle, 'find_stories', return_value=['story'])
     bundle.lex(ebnf='ebnf')
     Story.from_file().lex.assert_called_with(ebnf='ebnf')
+

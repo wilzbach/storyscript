@@ -19,7 +19,7 @@ def test_app_parse(bundle):
     Ensures App.parse returns the parsed bundle
     """
     result = App.parse('path')
-    Bundle.__init__.assert_called_with('path')
+    Bundle.__init__.assert_called_with('path', ignored_path=None)
     Bundle.bundle_trees.assert_called_with(ebnf=None, debug=None)
     assert result == Bundle.bundle_trees()
 
@@ -43,7 +43,7 @@ def test_app_parse_debug(bundle):
 def test_app_compile(patch, bundle):
     patch.object(json, 'dumps')
     result = App.compile('path')
-    Bundle.__init__.assert_called_with('path')
+    Bundle.__init__.assert_called_with('path', ignored_path=None)
     Bundle.bundle.assert_called_with(ebnf=None, debug=False)
     json.dumps.assert_called_with(Bundle.bundle(), indent=2)
     assert result == json.dumps()

@@ -55,20 +55,21 @@ class Cli:
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
     @click.option('--debug', is_flag=True)
     @click.option('--ebnf', help=ebnf_help)
-    def compile(path, output, json, silent, debug, ebnf):
+    @click.option('--ignore', default=None, help='ignore path')
+    def compile(path, output, json, silent, debug, ebnf, ignore):
         """
         Compiles stories and prints the resulting json
         """
-        results = App.compile(path, ebnf=ebnf, debug=debug)
+        results = App.compile(path, ignored_path=ignore, ebnf=ebnf, debug=debug)
         if not silent:
-            if json:
-                if output:
-                    with io.open(output, 'w') as f:
-                        f.write(results)
-                    exit()
-                click.echo(results)
-            else:
-                click.echo(click.style('Script syntax passed!', fg='green'))
+             if json:
+                 if output:
+                     with io.open(output, 'w') as f:
+                         f.write(results)
+                     exit()
+                 click.echo(results)
+             else:
+                 click.echo(click.style('Script syntax passed!', fg='green'))
 
     @staticmethod
     @main.command()
@@ -105,3 +106,4 @@ class Cli:
     @main.command()
     def version():
         click.echo(app_version)
+

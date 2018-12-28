@@ -48,3 +48,4 @@ def test_story_comments_nested():
     stream = StringIO('###\nmultiline\n# nested\n###')
     story = Story.from_stream(stream)
     assert story.story == ''
+
