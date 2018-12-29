@@ -43,6 +43,22 @@ def test_cli_version_flag(runner, echo):
     click.echo.assert_called_with(message)
 
 
+def test_cli_compile_with_ignore_option(runner, app):
+    """
+    Ensures that ignore option works on compilation
+    """
+    runner.invoke(Cli.compile, ['path/fake.story', '--ignore', 'path/sub_dir/my_fake.story'])
+    App.compile.assert_called_with('path/fake.story', ebnf=None, debug=False, ignored_path='path/sub_dir/my_fake.story')
+
+
+def test_cli_compile_with_ignore_option(runner, app):
+    """
+    Ensures that ignore option works on parsing
+    """
+    runner.invoke(Cli.parse, ['path/fake.story', '--ignore', 'path/sub_dir/my_fake.story'])
+    App.parse.assert_called_with('path/fake.story', ebnf=None, debug=False, ignored_path='path/sub_dir/my_fake.story')
+
+
 def test_cli_parse(runner, echo, app, tree):
     """
     Ensures the parse command produces the trees for given stories.

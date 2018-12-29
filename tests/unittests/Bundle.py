@@ -43,6 +43,33 @@ def test_bundle_parse_directory(patch, bundle):
     assert result == ['root/one.story']
 
 
+def test_bundle_parse_directory_with_ignored_path(patch, bundle):
+    """
+    Ensures parse directory parse the specified directory and ignoring other stories in the directory
+    """
+    patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two.story'])])
+    patch.object(Bundle, 'gitignores')
+    bundle.ignored_path = 'root/two.story'
+    result = bundle.parse_directory('dir')
+    assert Bundle.gitignores.call_count == 1
+    os.walk.assert_called_with('dir')
+    assert result == ['root/one.story']
+
+
+def test_bundle_parse_directory_with_ignored_subdirectory(patch, bundle):
+    """
+    Ensures parse directory parse the specified directory and ignoring other stories in a subdirectory
+    """
+    patch.object(os, 'walk', return_value=[('root', ['subdir'], ['one.story', 'two.story']),
+                                           ('root/subdir', [''], ['three.story'])])
+    patch.object(Bundle, 'gitignores')
+    bundle.ignored_path = 'root/subdir'
+    result = bundle.parse_directory('dir')
+    assert Bundle.gitignores.call_count == 1
+    os.walk.assert_called_with('dir')
+    assert result == ['root/one.story', 'root/two.story']
+
+
 def test_bundle_parse_directory_ignored(patch, bundle):
     """
     Ensures parse_directory does not return ignored files
