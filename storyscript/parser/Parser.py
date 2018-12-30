@@ -44,7 +44,7 @@ class Parser:
         """
         return Lark(self.grammar(), parser=self.algo, postlex=self.indenter())
 
-    def parse(self, source, debug=False):
+    def parse(self, source):
         """
         Parses the source string.
         """

@@ -90,10 +90,9 @@ def test_story_read(patch):
 def test_story_read_not_found(patch, capsys):
     patch.object(io, 'open', side_effect=FileNotFoundError)
     patch.object(os, 'path')
-    with raises(SystemExit):
+    with raises(StoryError) as e:
         Story.read('whatever')
-    out, err = capsys.readouterr()
-    assert out == 'File "whatever" not found at {}\n'.format(os.path.abspath())
+    assert 'E0001: File "whatever" not found at ' in e.value.short_message()
 
 
 def test_story_from_file(patch):
@@ -117,29 +116,15 @@ def test_story_from_stream(patch, magic):
 
 def test_story_error(patch, story):
     """
-    Ensures Story.error handles errors correctly.
+    Ensures Story.error creates a StoryError error
     """
-    patch.init(StoryError)
-    patch.object(StoryError, 'echo')
-    with raises(SystemExit):
-        story.error('error')
-    args = ('error', story.story)
-    StoryError.__init__.assert_called_with(*args, path=story.path)
-    assert StoryError.echo.call_count == 1
-
-
-def test_story_error_debug(patch, story):
-    """
-    Ensures Story.error raises the error in debug mode
-    """
-    with raises(StorySyntaxError):
-        story.error(StorySyntaxError('error'), debug=True)
+    assert isinstance(story.error(StorySyntaxError('error')), StoryError)
 
 
 def test_story_parse(patch, story, parser):
     story.parse()
     Parser.__init__.assert_called_with(ebnf=None)
-    Parser.parse.assert_called_with(story.story, debug=False)
+    Parser.parse.assert_called_with(story.story)
     assert story.tree == Parser.parse()
 
 
@@ -149,8 +134,8 @@ def test_story_parse_ebnf(patch, story, parser):
 
 
 def test_story_parse_debug(patch, story, parser):
-    story.parse(debug='debug')
-    Parser.parse.assert_called_with(story.story, debug='debug')
+    story.parse()
+    Parser.parse.assert_called_with(story.story)
 
 
 @mark.parametrize('error', [
@@ -164,8 +149,9 @@ def test_story_parse_error(patch, story, parser, error):
     """
     Parser.parse.side_effect = error
     patch.object(Story, 'error')
-    story.parse()
-    Story.error.assert_called_with(error, debug=False)
+    with raises(Exception):
+        story.parse()
+    Story.error.assert_called_with(error)
 
 
 def test_story_modules(magic, story):
@@ -187,13 +173,8 @@ def test_story_modules_no_extension(magic, story):
 
 def test_story_compile(patch, story, compiler):
     story.compile()
-    Compiler.compile.assert_called_with(story.tree, debug=False)
+    Compiler.compile.assert_called_with(story.tree)
     assert story.compiled == Compiler.compile()
-
-
-def test_story_compile_debug(patch, story, compiler):
-    story.compile(debug=True)
-    Compiler.compile.assert_called_with(story.tree, debug=True)
 
 
 @mark.parametrize('error', [StorySyntaxError('error'), CompilerError('error')])
@@ -202,9 +183,10 @@ def test_story_compiler_error(patch, story, compiler, error):
     Ensures Story.compiler uses Story.error in case of StorySyntaxError.
     """
     Compiler.compile.side_effect = error
-    patch.object(Story, 'error')
-    story.compile()
-    Story.error.assert_called_with(error, debug=False)
+    patch.object(Story, 'error', return_value=Exception('error'))
+    with raises(Exception):
+        story.compile()
+    Story.error.assert_called_with(error)
 
 
 def test_story_lex(patch, story, parser):
@@ -223,21 +205,13 @@ def test_story_process(patch, story):
     patch.many(Story, ['parse', 'compile'])
     story.compiled = 'compiled'
     result = story.process()
-    Story.parse.assert_called_with(ebnf=None, debug=False)
-    Story.compile.assert_called_with(debug=False)
+    Story.parse.assert_called_with(ebnf=None)
+    Story.compile.assert_called_with()
     assert result == story.compiled
-
-
-def test_story_process_debug(patch, story):
-    patch.many(Story, ['parse', 'compile'])
-    story.compiled = 'compiled'
-    story.process(debug='debug')
-    Story.parse.assert_called_with(ebnf=None, debug='debug')
-    Story.compile.assert_called_with(debug='debug')
 
 
 def test_story_process_ebnf(patch, story):
     patch.many(Story, ['parse', 'compile'])
     story.compiled = 'compiled'
     story.process(ebnf='ebnf')
-    Story.parse.assert_called_with(ebnf='ebnf', debug=False)
+    Story.parse.assert_called_with(ebnf='ebnf')

@@ -56,3 +56,18 @@ class ErrorCodes:
     arguments_nomutation = (
         'E0039',
         'You have defined a chained mutation, but not a mutation')
+    compiler_error_no_operator = ('E0040', 'No operator provided')
+
+    @staticmethod
+    def is_error(error_name):
+        """
+        Checks whether a given error name is a valid error.
+        """
+        return isinstance(error_name, str) and hasattr(ErrorCodes, error_name)
+
+    @staticmethod
+    def get_error(error_name):
+        """
+        Retrieve the error object for a valid error name.
+        """
+        return getattr(ErrorCodes, error_name)

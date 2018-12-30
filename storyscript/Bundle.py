@@ -96,48 +96,48 @@ class Bundle:
         services.sort()
         return services
 
-    def compile_modules(self, stories, ebnf, debug):
-        self.compile(stories, ebnf, debug)
+    def compile_modules(self, stories, ebnf):
+        self.compile(stories, ebnf)
 
-    def parse_modules(self, stories, ebnf, debug):
-        self.parse(stories, ebnf, debug)
+    def parse_modules(self, stories, ebnf):
+        self.parse(stories, ebnf)
 
-    def parse(self, stories, ebnf, debug):
+    def parse(self, stories, ebnf):
         """
         Parse stories.
         """
         for storypath in stories:
             story = self.load_story(storypath)
-            story.parse(ebnf=ebnf, debug=debug)
-            self.parse_modules(story.modules(), ebnf, debug)
+            story.parse(ebnf=ebnf)
+            self.parse_modules(story.modules(), ebnf)
             self.stories[storypath] = story.tree
 
-    def compile(self, stories, ebnf, debug):
+    def compile(self, stories, ebnf):
         """
         Reads and parses a story, then compiles its modules and finally
         compiles the story itself.
         """
         for storypath in stories:
             story = self.load_story(storypath)
-            story.parse(ebnf=ebnf, debug=debug)
-            self.compile_modules(story.modules(), ebnf, debug)
-            story.compile(debug=debug)
+            story.parse(ebnf=ebnf)
+            self.compile_modules(story.modules(), ebnf)
+            story.compile()
             self.stories[storypath] = story.compiled
 
-    def bundle(self, ebnf=None, debug=False):
+    def bundle(self, ebnf=None):
         """
         Makes the bundle
         """
         entrypoint = self.find_stories()
-        self.compile(entrypoint, ebnf, debug)
+        self.compile(entrypoint, ebnf)
         return {'stories': self.stories, 'services': self.services(),
                 'entrypoint': entrypoint}
 
-    def bundle_trees(self, ebnf=None, debug=None):
+    def bundle_trees(self, ebnf=None):
         """
         Makes a bundle of syntax trees
         """
-        self.parse(self.find_stories(), ebnf, debug)
+        self.parse(self.find_stories(), ebnf)
         return self.stories
 
     def lex(self, ebnf=None):

@@ -646,9 +646,3 @@ def test_compiler_compile(patch):
                 'services': lines.get_services(), 'functions': lines.functions,
                 'entrypoint': lines.first(), 'modules': lines.modules}
     assert result == expected
-
-
-def test_compiler_compile_debug(patch):
-    patch.object(Preprocessor, 'process')
-    patch.many(Compiler, ['parse_tree', 'compiler'])
-    Compiler.compile('tree', debug='debug')
