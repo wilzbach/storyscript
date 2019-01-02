@@ -50,14 +50,28 @@ def test_story_remove_comments(patch):
     assert result == re.sub()
 
 
+def test_story_delete_line(patch):
+    """
+    Ensures that delete_line can delete lines.
+    """
+    patch.object(re, 'sub')
+    patch.object(re, 'match')
+    result = Story.delete_line(re.match())
+    re.sub.assert_called_with(r'.*', '', re.match().group())
+    assert result == re.sub()
+
+
 def test_story_clean_source(patch):
     """
     Ensures that a story is cleaned correctly
     """
     patch.object(re, 'sub')
     patch.object(Story, 'remove_comments')
+    patch.object(Story, 'delete_line')
     result = Story.clean_source('source')
-    re.sub.assert_called_with(r'###[^#]+###', '', Story.remove_comments())
+    re.sub.assert_called_with(
+        r'###[^#]+###', Story.delete_line, Story.remove_comments()
+    )
     assert result == re.sub()
 
 
