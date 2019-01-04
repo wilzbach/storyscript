@@ -11,7 +11,7 @@ class Lines:
         self.variables = []
         self.services = []
         self.functions = {}
-        self.outputs = {}
+        self.output_scopes = {}
         self.modules = {}
 
     def sort(self):
@@ -61,16 +61,24 @@ class Lines:
                 self.lines[line_number]['exit'] = line
                 break
 
-    def set_output(self, line, output):
-        self.outputs[line] = output
+    def set_scope(self, line, parent, output=[]):
+        """
+        Keeps track of output scopes so that defined outputs are recognized for
+        nested children.
+        """
+        self.output_scopes[line] = {'parent': parent, 'output': output}
 
-    def is_output(self, parent_line, service):
+    def is_output(self, parent, service):
         """
         Checks whether a service has been defined as output for this block
+        or for its parents.
         """
-        if parent_line in self.outputs:
-            if service in self.outputs[parent_line]:
+        if parent in self.output_scopes:
+            scope = self.output_scopes[parent]
+            if service in scope['output']:
                 return True
+            if scope['parent']:
+                return self.is_output(scope['parent'], service)
         return False
 
     def make(self, method, line, name=None, args=None, service=None,
