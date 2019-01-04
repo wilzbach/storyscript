@@ -25,13 +25,13 @@ def test_story_comments_indented():
 def test_story_comments_multiline():
     stream = StringIO('###\nmultiline\n###')
     story = Story.from_stream(stream)
-    assert story.story == ''
+    assert story.story == '\n\n'
 
 
 def test_story_comments_multiline_idented():
     stream = StringIO('function test\n\t###\nmultiline\n\t###\n\tx = 0')
     story = Story.from_stream(stream)
-    assert story.story == 'function test\n\t\n\tx = 0'
+    assert story.story == 'function test\n\t\n\n\n\tx = 0'
 
 
 def test_story_comments_multiline_catastrophic():
@@ -41,10 +41,10 @@ def test_story_comments_multiline_catastrophic():
     """
     stream = StringIO('###\nFiller filler filler filler\n\n###\nx = 0')
     story = Story.from_stream(stream)
-    assert story.story == '\nx = 0'
+    assert story.story == '\n\n\n\nx = 0'
 
 
 def test_story_comments_nested():
     stream = StringIO('###\nmultiline\n# nested\n###')
     story = Story.from_stream(stream)
-    assert story.story == ''
+    assert story.story == '\n\n\n'
