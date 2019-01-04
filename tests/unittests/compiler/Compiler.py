@@ -220,7 +220,7 @@ def test_compiler_service_command(patch, compiler, lines, tree):
     line = tree.line()
     service = tree.path.extract_path()
     command = tree.service_fragment.command.child()
-    lines.set_output.assert_called_with(line, Compiler.output())
+    lines.set_scope.assert_called_with(line, 'parent', Compiler.output())
     lines.execute.assert_called_with(line, service, command,
                                      Objects.arguments(), Compiler.output(),
                                      None, 'parent')

@@ -131,7 +131,7 @@ class Compiler:
         service = tree.path.extract_path()
         output = self.output(tree.service_fragment.output)
         if output:
-            self.lines.set_output(line, output)
+            self.lines.set_scope(line, parent, output)
         enter = None
         if nested_block:
             enter = nested_block.line()
