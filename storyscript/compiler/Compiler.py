@@ -169,6 +169,7 @@ class Compiler:
         line = tree.line()
         nested_block = tree.nested_block
         args = Objects.assertion(tree.if_statement)
+        self.lines.set_scope(line, parent)
         self.lines.append('if', line, args=args, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
@@ -186,6 +187,7 @@ class Compiler:
         self.lines.set_exit(line)
         args = Objects.assertion(tree.elseif_statement)
         nested_block = tree.nested_block
+        self.lines.set_scope(line, parent)
         self.lines.append('elif', line, args=args, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
@@ -197,6 +199,7 @@ class Compiler:
         line = tree.line()
         self.lines.set_exit(line)
         nested_block = tree.nested_block
+        self.lines.set_scope(line, parent)
         self.lines.append('else', line, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
@@ -206,6 +209,7 @@ class Compiler:
         args = [Objects.entity(tree.foreach_statement.child(0))]
         output = self.output(tree.foreach_statement.output)
         nested_block = tree.nested_block
+        self.lines.set_scope(line, parent, output)
         self.lines.append('for', line, args=args, enter=nested_block.line(),
                           parent=parent, output=output)
         self.subtree(nested_block, parent=line)
@@ -214,6 +218,7 @@ class Compiler:
         line = tree.line()
         args = [Objects.entity(tree.while_statement.child(0))]
         nested_block = tree.nested_block
+        self.lines.set_scope(line, parent)
         self.lines.append('while', line, args=args, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
@@ -284,6 +289,7 @@ class Compiler:
         """
         line = tree.line()
         nested_block = tree.nested_block
+        self.lines.set_scope(line, parent)
         self.lines.append('try', line, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
@@ -310,6 +316,7 @@ class Compiler:
         self.lines.set_exit(line)
         nested_block = tree.nested_block
         output = Objects.names(tree.catch_statement)
+        self.lines.set_scope(line, parent, output)
         self.lines.append('catch', line, enter=nested_block.line(),
                           output=output, parent=parent)
         self.subtree(nested_block, parent=line)
@@ -321,6 +328,7 @@ class Compiler:
         line = tree.line()
         self.lines.set_exit(line)
         nested_block = tree.nested_block
+        self.lines.set_scope(line, parent)
         self.lines.append('finally', line, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
