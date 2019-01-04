@@ -68,13 +68,17 @@ class Lines:
         """
         self.output_scopes[line] = {'parent': parent, 'output': output}
 
-    def is_output(self, parent_line, service):
+    def is_output(self, parent, service):
         """
         Checks whether a service has been defined as output for this block
+        or for its parents.
         """
-        if parent_line in self.outputs:
-            if service in self.outputs[parent_line]:
+        if parent in self.output_scopes:
+            scope = self.output_scopes[parent]
+            if service in scope['output']:
                 return True
+            if scope['parent']:
+                return self.is_output(scope['parent'], service)
         return False
 
     def make(self, method, line, name=None, args=None, service=None,

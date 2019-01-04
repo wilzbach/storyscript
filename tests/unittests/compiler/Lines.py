@@ -72,13 +72,21 @@ def test_lines_set_scope(lines):
     assert lines.output_scopes['2'] == {'parent': '1', 'output': 'output'}
 
 
-def test_lines_is_output(patch, lines):
-    lines.outputs = {'parent_line': ['service']}
-    assert lines.is_output('parent_line', 'service') is True
+def test_lines_is_output(lines):
+    lines.output_scopes = {'1': {'parent': None, 'output': ['service']}}
+    assert lines.is_output('1', 'service') is True
 
 
-def test_lines_is_output_false(patch, lines):
-    assert lines.is_output('parent_line', 'service') is False
+def test_lines_is_output_from_parent(lines):
+    lines.output_scopes = {
+        '2': {'parent': '1', 'output': []},
+        '1': {'output': ['service']}
+    }
+    assert lines.is_output('1', 'service') is True
+
+
+def test_lines_is_output_false(lines):
+    assert lines.is_output('1', 'service') is False
 
 
 def test_lines_make(lines):
