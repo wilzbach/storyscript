@@ -27,11 +27,11 @@ def test_lines_sort(lines):
 def test_lines_first(patch, lines):
     patch.object(Lines, 'sort')
     lines.lines = {'1': '1'}
-    assert lines.last() == lines.sort()[0]
+    assert lines.first() == lines.sort()[0]
 
 
 def test_lines_first_none(lines):
-    assert lines.last() is None
+    assert lines.first() is None
 
 
 def test_lines_last(patch, lines):
