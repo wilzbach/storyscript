@@ -61,7 +61,7 @@ class Lines:
                 self.lines[line_number]['exit'] = line
                 break
 
-    def set_scope(self, line, parent, output):
+    def set_scope(self, line, parent, output=[]):
         """
         Keeps track of output scopes so that defined outputs are recognized for
         nested children.

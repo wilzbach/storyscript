@@ -68,8 +68,13 @@ def test_lines_set_exit(patch, lines, method):
 
 
 def test_lines_set_scope(lines):
-    lines.set_scope('2', '1', 'output')
-    assert lines.output_scopes['2'] == {'parent': '1', 'output': 'output'}
+    lines.set_scope('2', '1')
+    assert lines.output_scopes['2'] == {'parent': '1', 'output': []}
+
+
+def test_lines_set_scope_output(lines):
+    lines.set_scope('2', '1', output=['x'])
+    assert lines.output_scopes['2']['output'] == ['x']
 
 
 def test_lines_is_output(lines):
