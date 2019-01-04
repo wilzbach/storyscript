@@ -11,7 +11,7 @@ class Lines:
         self.variables = []
         self.services = []
         self.functions = {}
-        self.outputs = {}
+        self.output_scopes = {}
         self.modules = {}
 
     def sort(self):
@@ -61,8 +61,12 @@ class Lines:
                 self.lines[line_number]['exit'] = line
                 break
 
-    def set_output(self, line, output):
-        self.outputs[line] = output
+    def set_scope(self, line, parent, output):
+        """
+        Keeps track of output scopes so that defined outputs are recognized for
+        nested children.
+        """
+        self.output_scopes[line] = {'parent': parent, 'output': output}
 
     def is_output(self, parent_line, service):
         """

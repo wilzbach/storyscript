@@ -15,7 +15,7 @@ def test_lines_init(lines):
     assert lines.variables == []
     assert lines.services == []
     assert lines.functions == {}
-    assert lines.outputs == {}
+    assert lines.output_scopes == {}
     assert lines.modules == {}
 
 
@@ -67,9 +67,9 @@ def test_lines_set_exit(patch, lines, method):
     assert lines.lines['2']['exit'] == '3'
 
 
-def test_lines_set_output(lines):
-    lines.set_output('line', 'output')
-    assert lines.outputs['line'] == 'output'
+def test_lines_set_scope(lines):
+    lines.set_scope('2', '1', 'output')
+    assert lines.output_scopes['2'] == {'parent': '1', 'output': 'output'}
 
 
 def test_lines_is_output(patch, lines):
