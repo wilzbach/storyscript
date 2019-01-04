@@ -87,7 +87,7 @@ def test_lines_is_output_from_parent(lines):
         '2': {'parent': '1', 'output': []},
         '1': {'output': ['service']}
     }
-    assert lines.is_output('1', 'service') is True
+    assert lines.is_output('2', 'service') is True
 
 
 def test_lines_is_output_false(lines):
