@@ -35,7 +35,7 @@ class Cli:
     @click.option('--debug', is_flag=True)
     @click.option('--ebnf', help=ebnf_help)
     @click.option('--raw', is_flag=True)
-    @click.option('--ignore', default=None, help='ignore path')
+    @click.option('--ignore', default=None, help='Specify path of ignored files')
     def parse(path, debug, ebnf, raw, ignore):
         """
         Parses stories, producing the abstract syntax tree.
@@ -56,21 +56,21 @@ class Cli:
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
     @click.option('--debug', is_flag=True)
     @click.option('--ebnf', help=ebnf_help)
-    @click.option('--ignore', default=None, help='ignore path')
+    @click.option('--ignore', default=None, help='Specify path of ignored files')
     def compile(path, output, json, silent, debug, ebnf, ignore):
         """
         Compiles stories and prints the resulting json
         """
         results = App.compile(path, ignored_path=ignore, ebnf=ebnf, debug=debug)
         if not silent:
-             if json:
-                 if output:
-                     with io.open(output, 'w') as f:
-                         f.write(results)
-                     exit()
-                 click.echo(results)
-             else:
-                 click.echo(click.style('Script syntax passed!', fg='green'))
+            if json:
+                if output:
+                    with io.open(output, 'w') as f:
+                        f.write(results)
+                    exit()
+                click.echo(results)
+            else:
+                click.echo(click.style('Script syntax passed!', fg='green'))
 
     @staticmethod
     @main.command()
