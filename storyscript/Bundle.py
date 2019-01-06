@@ -35,16 +35,23 @@ class Bundle:
                     path = os.path.join(root, file)
                     if path[2:] not in ignores:
                         paths.append(path)
+
         return self.filter_paths(paths)
 
+    def compare_paths(self, path, ignored_path):
+         """
+          Compare path and ignored_path
+         """
+         return path[:len(ignored_path)] == ignored_path
+
     def filter_paths(self, paths):
-         """
-          Filter paths from ignored path
-         """
-         if self.ignored_path is None:
-             return paths
-         paths = [path for path in paths if self.ignored_path not in path]
-         return paths
+        """
+         Filter paths from ignored_path
+        """
+        if self.ignored_path is None:
+            return paths
+        paths = [path for path in paths if not self.compare_paths(path, self.ignored_path)]
+        return paths
 
     def find_stories(self):
         """
