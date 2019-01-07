@@ -18,7 +18,7 @@ class Cli:
     @click.group(invoke_without_command=True)
     @click.option('--version', is_flag=True, help=version_help)
     @click.pass_context
-    def main(context, version): # noqa N805
+    def main(context, version):  # noqa N805
         """
         Learn more at http://storyscript.org
         """
@@ -36,11 +36,13 @@ class Cli:
     @click.option('--debug', is_flag=True)
     @click.option('--ebnf', help=ebnf_help)
     @click.option('--raw', is_flag=True)
-    def parse(path, debug, ebnf, raw):
+    @click.option('--ignore', default=None,
+                  help='Specify path of ignored files')
+    def parse(path, debug, ebnf, raw, ignore):
         """
         Parses stories, producing the abstract syntax tree.
         """
-        trees = App.parse(path, ebnf=ebnf, debug=debug)
+        trees = App.parse(path, ignored_path=ignore, ebnf=ebnf, debug=debug)
         for story, tree in trees.items():
             click.echo('File: {}'.format(story))
             if raw:
@@ -56,11 +58,14 @@ class Cli:
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
     @click.option('--debug', is_flag=True)
     @click.option('--ebnf', help=ebnf_help)
-    def compile(path, output, json, silent, debug, ebnf):
+    @click.option('--ignore', default=None,
+                  help='Specify path of ignored files')
+    def compile(path, output, json, silent, debug, ebnf, ignore):
         """
         Compiles stories and prints the resulting json
         """
-        results = App.compile(path, ebnf=ebnf, debug=debug)
+        results = App.compile(path, ignored_path=ignore,
+                              ebnf=ebnf, debug=debug)
         if not silent:
             if json:
                 if output:

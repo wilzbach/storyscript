@@ -11,9 +11,11 @@ class Bundle:
     Bundles all stories that must be compiled together.
     """
 
-    def __init__(self, story_files={}):
+    def __init__(self, path, story_files={}, ignored_path=None):
+        self.path = path
         self.stories = {}
         self.story_files = story_files
+        self.ignored_path = ignored_path
 
     @staticmethod
     def gitignores():
@@ -36,6 +38,23 @@ class Bundle:
                     path = os.path.join(root, file)
                     if path[2:] not in ignores:
                         paths.append(path)
+
+        return self.filter_paths(paths)
+
+    def compare_paths(self, path, ignored_path):
+        """
+        compare two paths
+        """
+        return path[:len(ignored_path)] == ignored_path
+
+    def filter_paths(self, paths):
+        """
+         Filter paths from ignored_path
+        """
+        if self.ignored_path is None:
+            return paths
+        paths = [path for path in paths
+                 if not self.compare_paths(path, self.ignored_path)]
         return paths
 
     @classmethod

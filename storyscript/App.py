@@ -11,18 +11,20 @@ class App:
     """
 
     @staticmethod
-    def parse(path, ebnf=None, debug=None):
+    def parse(path, ignored_path=None, ebnf=None, debug=None):
         """
         Parses stories found in path, returning their trees
         """
-        return Bundle.from_path(path).bundle_trees(ebnf=ebnf, debug=debug)
+        return Bundle(path, ignored_path=ignored_path).\
+            bundle_trees(ebnf=ebnf, debug=debug)
 
     @staticmethod
-    def compile(path, ebnf=None, debug=False):
+    def compile(path, ignored_path=None, ebnf=None, debug=False):
         """
         Parses and compiles stories found in path, returning JSON
         """
-        bundle = Bundle.from_path(path).bundle(ebnf=ebnf, debug=debug)
+        bundle = Bundle(path, ignored_path=ignored_path).\
+            bundle(ebnf=ebnf, debug=debug)
         return json.dumps(bundle, indent=2)
 
     @staticmethod
