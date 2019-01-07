@@ -27,12 +27,21 @@ class Story:
         """
         return re.sub(r'#[^#\n]+', '', source)
 
+    @staticmethod
+    def delete_line(match):
+        """
+        Clears the contents of a line.
+        """
+        return re.sub(r'.*', '', match.group())
+
     @classmethod
     def clean_source(cls, source):
         """
         Cleans a story by removing all comments.
         """
-        return re.sub(r'###[^#]+###', '', cls.remove_comments(source))
+        return re.sub(
+            r'###[^#]+###', cls.delete_line, cls.remove_comments(source)
+        )
 
     @classmethod
     def read(cls, path):

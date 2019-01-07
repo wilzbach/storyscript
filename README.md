@@ -73,7 +73,7 @@ echo "alpine echo text:'hello world!'" > hello.story
 Compile a story to JSON:
 
 ```sh
-storyscript parse -j hello.story
+storyscript compile -j hello.story
 ```
 
 ## Development documentation

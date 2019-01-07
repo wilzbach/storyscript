@@ -5,12 +5,13 @@ from pytest import mark
 
 
 def test_parser_sum(parser):
-    result = parser.parse('3 + 3\n')
+    result = parser.parse('3 + 4\n')
     expression = result.block.rules.absolute_expression.expression
-    fragment = expression.expression_fragment
-    assert expression.entity.values.number.child(0) == Token('INT', 3)
-    assert fragment.operator.child(0) == Token('PLUS', '+')
-    assert fragment.entity.values.number.child(0) == Token('INT', 3)
+    lhs = expression.multiplication.exponential.factor.entity.values.number
+    assert lhs.child(0) == Token('INT', 3)
+    assert expression.child(1) == Token('PLUS', '+')
+    rhs = expression.child(2).exponential.factor.entity.values.number
+    assert rhs.child(0) == Token('INT', 4)
 
 
 def test_parser_list_path(parser):
@@ -18,7 +19,8 @@ def test_parser_list_path(parser):
     Ensures that paths in lists can be parsed.
     """
     result = parser.parse('x = 0\n[3, x]\n')
-    list = result.child(1).rules.entity.values.list
+    expression = result.child(1).rules.absolute_expression.expression
+    list = expression.multiplication.exponential.factor.entity.values.list
     assert list.child(3).path.child(0) == Token('NAME', 'x')
 
 
@@ -33,7 +35,8 @@ def test_parser_assignment(parser, code, token):
     assignment = result.block.rules.assignment
     assert assignment.path.child(0) == Token('NAME', 'var')
     assert assignment.assignment_fragment.child(0) == Token('EQUALS', '=')
-    entity = assignment.assignment_fragment.entity
+    expression = assignment.assignment_fragment.expression
+    entity = expression.multiplication.exponential.factor.entity
     assert entity.values.child(0).child(0) == token
 
 
@@ -169,3 +172,27 @@ def test_parser_try_finally(parser):
     assert finally_block.finally_statement.child(0) == token
     path = finally_block.nested_block.block.rules.assignment.path
     assert path.child(0) == Token('NAME', 'x')
+
+
+def test_parser_try_raise(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\traise')
+    nested_block = result.block.try_block.catch_block.nested_block
+    assert nested_block.block.rules.raise_statement.child(0) == 'raise'
+
+
+def test_parser_try_raise_error(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\traise error')
+    nested_block = result.block.try_block.catch_block.nested_block
+    raise_statement = nested_block.block.rules.raise_statement
+    assert raise_statement.child(0) == 'raise'
+    assert raise_statement.entity.path.child(0) == Token('NAME', 'error')
+
+
+def test_parser_try_raise_error_message(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\traise "error"')
+    nested_block = result.block.try_block.catch_block.nested_block
+    raise_statement = nested_block.block.rules.raise_statement
+    print(raise_statement.pretty())
+    assert raise_statement.child(0) == 'raise'
+    token = Token('DOUBLE_QUOTED', '"error"')
+    assert raise_statement.entity.values.string.child(0) == token

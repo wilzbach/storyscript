@@ -45,21 +45,25 @@ from storyscript.ErrorCodes import ErrorCodes
     ('reserved_keyword_as', ('E0030', '`as` is a reserved keyword')),
     ('reserved_keyword_import', ('E0031', '`import` is a reserved keyword')),
     ('reserved_keyword_while', ('E0032', '`while` is a reserved keyword')),
+    ('reserved_keyword_raise', ('E0033', '`raise` is a reserved keyword')),
     ('future_reserved_keyword_async', (
-        'E0033',
+        'E0034',
         '`async` is reserved for future use')),
     ('future_reserved_keyword_story', (
-        'E0034',
+        'E0035',
         '`story` is reserved for future use')),
     ('future_reserved_keyword_assert', (
-        'E0035',
+        'E0036',
         '`assert` is reserved for future use')),
     ('future_reserved_keyword_called', (
-        'E0036',
+        'E0037',
         '`called` is reserved for future use')),
     ('future_reserved_keyword_mock', (
-        'E0037',
+        'E0038',
         '`mock` is reserved for future use')),
+    ('arguments_nomutation', (
+        'E0039',
+        'You have defined a chained mutation, but not a mutation'))
 ])
 def test_errorcodes(name, definition):
     assert getattr(ErrorCodes, name) == definition

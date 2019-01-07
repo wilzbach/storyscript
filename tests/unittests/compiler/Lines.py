@@ -15,7 +15,7 @@ def test_lines_init(lines):
     assert lines.variables == []
     assert lines.services == []
     assert lines.functions == {}
-    assert lines.outputs == {}
+    assert lines.output_scopes == {}
     assert lines.modules == {}
 
 
@@ -27,11 +27,11 @@ def test_lines_sort(lines):
 def test_lines_first(patch, lines):
     patch.object(Lines, 'sort')
     lines.lines = {'1': '1'}
-    assert lines.last() == lines.sort()[0]
+    assert lines.first() == lines.sort()[0]
 
 
 def test_lines_first_none(lines):
-    assert lines.last() is None
+    assert lines.first() is None
 
 
 def test_lines_last(patch, lines):
@@ -67,18 +67,31 @@ def test_lines_set_exit(patch, lines, method):
     assert lines.lines['2']['exit'] == '3'
 
 
-def test_lines_set_output(lines):
-    lines.set_output('line', 'output')
-    assert lines.outputs['line'] == 'output'
+def test_lines_set_scope(lines):
+    lines.set_scope('2', '1')
+    assert lines.output_scopes['2'] == {'parent': '1', 'output': []}
 
 
-def test_lines_is_output(patch, lines):
-    lines.outputs = {'parent_line': ['service']}
-    assert lines.is_output('parent_line', 'service') is True
+def test_lines_set_scope_output(lines):
+    lines.set_scope('2', '1', output=['x'])
+    assert lines.output_scopes['2']['output'] == ['x']
 
 
-def test_lines_is_output_false(patch, lines):
-    assert lines.is_output('parent_line', 'service') is False
+def test_lines_is_output(lines):
+    lines.output_scopes = {'1': {'parent': None, 'output': ['service']}}
+    assert lines.is_output('1', 'service') is True
+
+
+def test_lines_is_output_from_parent(lines):
+    lines.output_scopes = {
+        '2': {'parent': '1', 'output': []},
+        '1': {'output': ['service']}
+    }
+    assert lines.is_output('2', 'service') is True
+
+
+def test_lines_is_output_false(lines):
+    assert lines.is_output('1', 'service') is False
 
 
 def test_lines_make(lines):

@@ -32,7 +32,7 @@ class App:
         """
         Lex stories, producing the list of used tokens
         """
-        return Bundle(path).lex(ebnf=ebnf)
+        return Bundle.from_path(path).lex(ebnf=ebnf)
 
     @staticmethod
     def grammar():

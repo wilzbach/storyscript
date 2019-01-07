@@ -2,7 +2,7 @@
 from lark.lexer import Token
 from lark.tree import Tree as LarkTree
 
-from pytest import fixture
+from pytest import fixture, mark
 
 from storyscript.parser import Tree
 
@@ -126,3 +126,48 @@ def test_tree_find():
     expected = Tree('assignment', ['x'])
     tree = Tree('start', [Tree('block', [Tree('line', [expected])])])
     assert tree.find('assignment') == [expected]
+
+
+def test_tree_is_unary():
+    """
+    Ensures is_unary can find out whether an expression is unary
+    """
+    tree = Tree('expression', [Tree('any', [Tree('any', [1])])])
+    assert tree.is_unary() is True
+
+
+@mark.parametrize('tree', [
+    Tree('any', []),
+    Tree('expression', [1, 2]),
+    Tree('expression', [Tree('any', [1, 2])]),
+    Tree('expression', [Tree('any', [Tree('any', [1, 2])])])
+])
+def test_tree_is_unary_false(tree):
+    """
+    Ensures is_unary returns False when the tree is not an unary
+    """
+    assert tree.is_unary() is False
+
+
+def test_tree_find_operator(magic):
+    """
+    Ensures find_operator can find the operator.
+    """
+    tree = Tree('any', [])
+    tree.multiplication = magic()
+    result = tree.find_operator()
+    assert result == tree.multiplication.exponential.factor.child()
+
+
+@mark.parametrize('tree', [
+    Tree('any', [0, Token('t', 't')]),
+    Tree('any', [Tree('multiplication', [0, Token('t', 't')])]),
+    Tree('any', [Tree('multiplication', [
+        Tree('exponential', [0, Token('t', 't')])
+    ])])
+])
+def test_tree_find_operator_depths(tree):
+    """
+    Ensures find_operator can find operators at various depths
+    """
+    assert tree.find_operator() == Token('t', 't')

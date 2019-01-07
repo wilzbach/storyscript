@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+from pytest import mark
+
 from storyscript.compiler import Compiler
 
 
 def test_compiler_expression_sum(parser):
     """
-    Ensures that numbers are compiled correctly
+    Ensures that sums are compiled correctly
     """
     tree = parser.parse('3 + 2')
     result = Compiler.compile(tree)
@@ -15,9 +17,60 @@ def test_compiler_expression_sum(parser):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_expression_mutation(parser):
+def test_compiler_expression_sum_many(parser):
     """
-    Ensures that mutation expressions are compiled correctly
+    Ensures that sums of N-numbers are compiled correctly
+    """
+    tree = parser.parse('3 + 2 + 1')
+    result = Compiler.compile(tree)
+    args = [{'$OBJECT': 'expression', 'expression': 'sum',
+            'values': [3, 2, 1]}]
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == args
+
+
+def test_compiler_expression_multiplication(parser):
+    """
+    Ensures that multiplications are compiled correctly
+    """
+    tree = parser.parse('3 * 2')
+    result = Compiler.compile(tree)
+    args = [
+        {'$OBJECT': 'expression', 'expression': 'multiplication',
+         'values': [3, 2]}
+    ]
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == args
+
+
+def test_compiler_expression_multiplication_many(parser):
+    """
+    Ensures that sums of N-numbers are compiled correctly
+    """
+    tree = parser.parse('3 * 2 * 1')
+    result = Compiler.compile(tree)
+    args = [{'$OBJECT': 'expression', 'expression': 'multiplication',
+            'values': [3, 2, 1]}]
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == args
+
+
+def test_compiler_expression_complex(parser):
+    tree = parser.parse('3 * 2 + 1 ^ 5')
+    result = Compiler.compile(tree)
+    lhs = {'$OBJECT': 'expression', 'expression': 'multiplication',
+           'values': [3, 2]}
+    rhs = {'$OBJECT': 'expression', 'expression': 'exponential',
+           'values': [1, 5]}
+    args = [{'$OBJECT': 'expression', 'expression': 'sum',
+            'values': [lhs, rhs]}]
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == args
+
+
+def test_compiler_mutation(parser):
+    """
+    Ensures that mutations are compiled correctly
     """
     tree = parser.parse("'hello' length")
     result = Compiler.compile(tree)
@@ -25,7 +78,25 @@ def test_compiler_expression_mutation(parser):
         {'$OBJECT': 'string', 'string': 'hello'},
         {'$OBJECT': 'mutation', 'mutation': 'length', 'arguments': []}
     ]
-    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['method'] == 'mutation'
+    assert result['tree']['1']['args'] == args
+
+
+@mark.parametrize('source', [
+    '1 increment then format to:"string"',
+    '1 increment\n\tthen format to:"string"'
+])
+def test_compiler_mutation_chained(parser, source):
+    """
+    Ensures that chained mutations are compiled correctly
+    """
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    args = [1,
+            {'$OBJECT': 'mutation', 'mutation': 'increment', 'arguments': []},
+            {'$OBJECT': 'mutation', 'mutation': 'format', 'arguments': [
+                {'$OBJECT': 'argument', 'name': 'to',
+                 'argument': {'$OBJECT': 'string', 'string': 'string'}}]}]
     assert result['tree']['1']['args'] == args
 
 
@@ -176,6 +247,21 @@ def test_compiler_service_inline_expression(parser):
     assert result['tree']['1']['args'] == [argument]
 
 
+def test_compiler_service_inline_expression_nested(parser):
+    """
+    Ensures that nested inline expressions are compiled correctly
+    """
+    source = 'slack message text:(twitter get id:(sql select))'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    entry = result['entrypoint']
+    next = result['tree'][entry]['next']
+    last = result['tree'][next]['next']
+    assert result['tree'][entry]['service'] == 'sql'
+    assert result['tree'][next]['service'] == 'twitter'
+    assert result['tree'][last]['service'] == 'slack'
+
+
 def test_compiler_inline_expression_access(parser):
     """
     Ensures that inline expressions followed a bracket accesso are compiled
@@ -216,3 +302,39 @@ def test_compiler_try_finally(parser):
     assert result['tree']['3']['method'] == 'finally'
     assert result['tree']['3']['enter'] == '4'
     assert result['tree']['4']['parent'] == '3'
+
+
+def test_compiler_try_raise(parser):
+    source = 'try\n\tx=0\ncatch as error\n\traise'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['exit'] == '3'
+    assert result['tree']['3']['method'] == 'catch'
+    assert result['tree']['4']['method'] == 'raise'
+    assert result['tree']['4']['parent'] == '3'
+
+
+def test_compiler_try_raise_error(parser):
+    source = 'try\n\tx=0\ncatch as error\n\traise error'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    args = [{'$OBJECT': 'path', 'paths': ['error']}]
+    assert result['tree']['1']['exit'] == '3'
+    assert result['tree']['3']['method'] == 'catch'
+    assert result['tree']['3']['enter'] == '4'
+    assert result['tree']['4']['method'] == 'raise'
+    assert result['tree']['4']['parent'] == '3'
+    assert result['tree']['4']['args'] == args
+
+
+def test_compiler_try_nested_raise_error(parser):
+    source = 'try\n\tx=0\ncatch as error\n\tif TRUE\n\t\traise error'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    args = [{'$OBJECT': 'path', 'paths': ['error']}]
+    assert result['tree']['1']['exit'] == '3'
+    assert result['tree']['3']['method'] == 'catch'
+    assert result['tree']['3']['enter'] == '4'
+    assert result['tree']['5']['method'] == 'raise'
+    assert result['tree']['5']['parent'] == '4'
+    assert result['tree']['5']['args'] == args

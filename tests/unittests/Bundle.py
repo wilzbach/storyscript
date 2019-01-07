@@ -10,13 +10,18 @@ from storyscript.Story import Story
 
 
 @fixture
-def bundle():
-    return Bundle('path')
+def bundle(patch):
+    return Bundle()
 
 
 def test_bundle_init(bundle):
-    assert bundle.path == 'path'
     assert bundle.stories == {}
+    assert bundle.story_files == {}
+
+
+def test_bundle_init_files():
+    bundle = Bundle(story_files={'one.story': 'hello'})
+    assert bundle.story_files == {'one.story': 'hello'}
 
 
 def test_bundle_gitignores(patch, bundle):
@@ -24,7 +29,7 @@ def test_bundle_gitignores(patch, bundle):
     Ensures gitignores uses can produce the list of ignored files.
     """
     patch.object(delegator, 'run')
-    result = bundle.gitignores()
+    result = Bundle.gitignores()
     command = 'git ls-files --others --ignored --exclude-standard'
     delegator.run.assert_called_with(command)
     delegator.run().out.split.assert_called_with('\n')
@@ -37,7 +42,7 @@ def test_bundle_parse_directory(patch, bundle):
     """
     patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
     patch.object(Bundle, 'gitignores')
-    result = bundle.parse_directory('dir')
+    result = Bundle.parse_directory('dir')
     assert Bundle.gitignores.call_count == 1
     os.walk.assert_called_with('dir')
     assert result == ['root/one.story']
@@ -81,28 +86,64 @@ def test_bundle_parse_directory_ignored(patch, bundle):
     """
     patch.object(os, 'walk', return_value=[('./root', [], ['one.story'])])
     patch.object(Bundle, 'gitignores', return_value=['root/one.story'])
-    result = bundle.parse_directory('dir')
+    result = Bundle.parse_directory('dir')
     assert result == []
+
+
+def test_bundle_from_path(patch):
+    """
+    Ensures Bundle.from_path can create a Bundle from a filepath
+    """
+    patch.object(os.path, 'isdir', return_value=False)
+    patch.init(Bundle)
+    patch.object(Bundle, 'load_story')
+    result = Bundle.from_path('path')
+    Bundle.load_story.assert_called_with('path')
+    assert isinstance(result, Bundle)
+
+
+def test_bundle_from_path_directory(patch):
+    """
+    Ensures Bundle.from_path can create a Bundle from a directory path
+    """
+    patch.object(os.path, 'isdir')
+    patch.init(Bundle)
+    patch.many(Bundle, ['load_story', 'parse_directory'])
+    Bundle.parse_directory.return_value = ['one.story']
+    Bundle.from_path('path')
+    Bundle.parse_directory.assert_called_with('path')
+    Bundle.load_story.assert_called_with('one.story')
+
+
+def test_bundle_load_story(patch, bundle):
+    """
+    Ensures Bundle.load_story can load a story
+    """
+    patch.init(Story)
+    bundle.story_files['one.story'] = 'hello'
+    result = bundle.load_story('one.story')
+    Story.__init__.assert_called_with('hello')
+    assert isinstance(result, Story)
+
+
+def test_bundle_load_story_not_read(patch, bundle):
+    """
+    Ensures Bundle.load_story reads a story before loading it
+    """
+    patch.init(Story)
+    patch.object(Story, 'read')
+    bundle.story_files = {}
+    bundle.load_story('one.story')
+    Story.read.assert_called_with('one.story')
+    assert bundle.story_files['one.story'] == Story.read()
 
 
 def test_bundle_find_stories(patch, bundle):
     """
-    Ensures Bundle.find_stories returns the original path if it's not a
-    directory
+    Ensures Bundle.find_stories returns the list of loaded stories
     """
-    patch.object(os.path, 'isdir', return_value=False)
-    assert bundle.find_stories() == ['path']
-
-
-def test_bundle_find_stories_directory(patch, bundle):
-    """
-    Ensures Bundle.find_stories uses Bundle.parse_directory
-    """
-    patch.object(Bundle, 'parse_directory')
-    patch.object(os.path, 'isdir')
-    result = bundle.find_stories()
-    Bundle.parse_directory.assert_called_with(bundle.path)
-    assert result == Bundle.parse_directory()
+    bundle.story_files = {'one.story': 'hello'}
+    assert bundle.find_stories() == ['one.story']
 
 
 def test_bundle_services(bundle):
@@ -130,22 +171,22 @@ def test_bundle_parse_modules(patch, bundle):
 
 
 def test_bundle_parse(patch, bundle):
-    patch.object(Story, 'from_file')
-    patch.object(Bundle, 'parse_modules')
+    patch.many(Bundle, ['parse_modules', 'load_story'])
     bundle.parse(['one.story'], None, False)
-    Story.from_file.assert_called_with('one.story')
-    story = Story.from_file()
+    Bundle.load_story.assert_called_with('one.story')
+    story = Bundle.load_story()
     Bundle.parse_modules.assert_called_with(story.modules(), None, False)
     assert bundle.stories['one.story'] == story.tree
 
 
-def test_bundle_compile(patch, bundle):
-    patch.object(Story, 'from_file')
-    patch.object(Bundle, 'compile_modules')
+def test_bundle_compile(mocker, patch, bundle):
+    patch.many(Bundle, ['compile_modules', 'load_story'])
+    patch.many(Story, ['parse'])
+
     bundle.compile(['one.story'], None, False)
-    Story.from_file.assert_called_with('one.story')
-    story = Story.from_file()
-    story.parse.assert_called_with(ebnf=None, debug=False)
+    Bundle.load_story.assert_called_with('one.story')
+
+    story = Bundle.load_story()
     Bundle.compile_modules.assert_called_with(story.modules(), None, False)
     story.compile.assert_called_with(debug=False)
     assert bundle.stories['one.story'] == story.compiled

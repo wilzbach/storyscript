@@ -11,24 +11,27 @@ class Bundle:
     Bundles all stories that must be compiled together.
     """
 
-    def __init__(self, path, ignored_path=None):
+    def __init__(self, path, story_files={}, ignored_path=None):
         self.path = path
         self.stories = {}
+        self.story_files = story_files
         self.ignored_path = ignored_path
 
-    def gitignores(self):
+    @staticmethod
+    def gitignores():
         """
         Get the list of files ignored by git
         """
         command = 'git ls-files --others --ignored --exclude-standard'
         return delegator.run(command).out.split('\n')
 
-    def parse_directory(self, directory):
+    @classmethod
+    def parse_directory(cls, directory):
         """
         Parse a directory to find stories.
         """
         paths = []
-        ignores = self.gitignores()
+        ignores = cls.gitignores()
         for root, subdirs, files in os.walk(directory):
             for file in files:
                 if file.endswith('.story'):
@@ -54,13 +57,34 @@ class Bundle:
                  if not self.compare_paths(path, self.ignored_path)]
         return paths
 
+    @classmethod
+    def from_path(cls, path):
+        """
+        Load a bundle of stories from the filesystem.
+        If a directory is given. all `.story` files in the directory will be
+        loaded.
+        """
+        bundle = Bundle()
+        if os.path.isdir(path):
+            for story in cls.parse_directory(path):
+                bundle.load_story(story)
+            return bundle
+        bundle.load_story(path)
+        return bundle
+
+    def load_story(self, path):
+        """
+        Reads a story file and adds it to the loaded stories
+        """
+        if path not in self.story_files:
+            self.story_files[path] = Story.read(path)
+        return Story(self.story_files[path])
+
     def find_stories(self):
         """
         Finds bundle stories.
         """
-        if os.path.isdir(self.path):
-            return self.parse_directory(self.path)
-        return [self.path]
+        return list(self.story_files.keys())
 
     def services(self):
         services = []
@@ -81,7 +105,7 @@ class Bundle:
         Parse stories.
         """
         for storypath in stories:
-            story = Story.from_file(storypath)
+            story = self.load_story(storypath)
             story.parse(ebnf=ebnf, debug=debug)
             self.parse_modules(story.modules(), ebnf, debug)
             self.stories[storypath] = story.tree
@@ -92,7 +116,7 @@ class Bundle:
         compiles the story itself.
         """
         for storypath in stories:
-            story = Story.from_file(storypath)
+            story = self.load_story(storypath)
             story.parse(ebnf=ebnf, debug=debug)
             self.compile_modules(story.modules(), ebnf, debug)
             story.compile(debug=debug)

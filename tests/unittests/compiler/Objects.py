@@ -308,30 +308,105 @@ def test_objects_expression_type(operator, expression):
     assert Objects.expression_type(operator) == expression
 
 
+def test_objects_resolve_operand(patch, tree):
+    """
+    Ensures resolve_operand can resolve a simple operand.
+    """
+    patch.object(Objects, 'entity')
+    tree.exponential = None
+    tree.entity = None
+    result = Objects.resolve_operand(tree)
+    Objects.entity.assert_called_with(tree.factor.entity)
+    assert result == Objects.entity()
+
+
+def test_objects_resolve_operand_children(patch, tree):
+    """
+    Ensures resolve_operand can resolve nested operands.
+    """
+    patch.object(Objects, 'expression')
+    tree.children = [1, 2]
+    result = Objects.resolve_operand(tree)
+    Objects.expression.assert_called_with(tree)
+    assert result == Objects.expression()
+
+
+def test_objects_resolve_operand_number(patch, tree):
+    """
+    Ensures resolve_operand can resolve a number.
+    """
+    patch.object(Objects, 'number')
+    tree.data = 'number'
+    result = Objects.resolve_operand(tree)
+    Objects.number.assert_called_with(tree)
+    assert result == Objects.number()
+
+
+def test_objects_resolve_operand_multiplication(patch, tree):
+    """
+    Ensures resolve_operand can resolve a multiplication tree.
+    """
+    patch.object(Objects, 'entity')
+    result = Objects.resolve_operand(tree)
+    Objects.entity.assert_called_with(tree.exponential.factor.entity)
+    assert result == Objects.entity()
+
+
+def test_objects_resolve_operand_exponential(patch, magic, tree):
+    """
+    Ensures resolve_operand can resolve an exponential tree
+    """
+    patch.object(Objects, 'expression')
+    tree.exponential.children = [1, 2]
+    result = Objects.resolve_operand(tree)
+    Objects.expression.assert_called_with(tree.exponential)
+    assert result == Objects.expression()
+
+
+def test_objects_resolve_operand_factor(patch, tree):
+    """
+    Ensures resolve_operand can resolve a factor tree.
+    """
+    patch.object(Objects, 'entity')
+    tree.exponential = None
+    result = Objects.resolve_operand(tree)
+    Objects.entity.assert_called_with(tree.entity)
+    assert result == Objects.entity()
+
+
+def test_objects_expression_values(patch):
+    patch.object(Objects, 'resolve_operand')
+    tree = Tree('test', [])
+    result = Objects.expression_values([tree, 'not_a_tree'])
+    Objects.resolve_operand.assert_called_with(tree)
+    assert result == [Objects.resolve_operand()]
+
+
 def test_objects_expression(patch, tree):
     """
     Ensures Objects.expression can compile expressions
     """
-    patch.many(Objects, ['entity', 'values', 'expression_type'])
+    patch.many(Objects, ['expression_type', 'expression_values'])
+    tree.number = None
     result = Objects.expression(tree)
-    operator = tree.expression_fragment.operator.child().value
-    Objects.expression_type.assert_called_with(operator)
-    Objects.entity.assert_called_with(tree.entity)
-    Objects.values.assert_called_with(tree.expression_fragment.entity.values)
-    assert result == {'$OBJECT': 'expression',
-                      'expression': Objects.expression_type(),
-                      'values': [Objects.entity(), Objects.values()]}
+    Objects.expression_values.assert_called_with(tree.children)
+    Objects.expression_type.assert_called_with(tree.find_operator())
+    expected = {'$OBJECT': 'expression',
+                'values': Objects.expression_values(),
+                'expression': Objects.expression_type()}
+    assert result == expected
 
 
-def test_objects_expression_rhs(patch, tree):
+def test_objects_expression_one_child(patch, tree):
     """
-    Ensures Objects.expression can deal with right hand-side operand being
-    a path.
+    Ensures Objects.expression can compile expressions with one child tree
     """
-    patch.many(Objects, ['values', 'expression_type'])
-    tree.expression_fragment.entity.values = None
+    patch.many(Objects, ['expression_type', 'expression_values'])
+    tree.number = None
+    tree.children = [1]
     Objects.expression(tree)
-    Objects.values.assert_called_with(tree.expression_fragment.path)
+    Objects.expression_values.assert_called_with(tree.child().children)
+    Objects.expression_type.assert_called_with(tree.find_operator())
 
 
 def test_objects_assertion(patch, tree):

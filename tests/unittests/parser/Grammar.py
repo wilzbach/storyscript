@@ -83,7 +83,7 @@ def test_grammar_assignments(grammar, ebnf):
     assert ebnf.path_fragment == path_fragment
     assert ebnf.path == ('name (path_fragment)* | '
                          'inline_expression (path_fragment)*')
-    assignment_fragment = 'equals (entity, expression, service)'
+    assignment_fragment = 'equals (expression, service, mutation)'
     assert ebnf.assignment_fragment == assignment_fragment
     assert ebnf.assignment == 'path assignment_fragment'
 
@@ -95,33 +95,28 @@ def test_grammar_imports(grammar, ebnf):
     assert ebnf.imports == 'import string as name'
 
 
-def test_grammar_service(grammar, ebnf):
-    grammar.service()
-    assert ebnf.command == 'name'
-    assert ebnf.arguments == 'name? colon entity'
-    assert ebnf.output == '(as name (comma name)*)'
-    assert ebnf.service_fragment == '(command arguments*|arguments+) output?'
-    assert ebnf.service == 'path service_fragment'
-
-
 def test_grammar_expressions(grammar, ebnf):
     grammar.expressions()
     assert ebnf.PLUS == '+'
-    assert ebnf.DASH == '-'
     assert ebnf.MULTIPLIER == '*'
-    assert ebnf.BSLASH == '/'
     assert ebnf.MODULUS == '%'
     assert ebnf.POWER == '^'
     assert ebnf.NOT == 'not'
     assert ebnf.AND == 'and'
     assert ebnf.OR == 'or'
-    assert ebnf.operator == ('plus, dash, multiplier, bslash, modulus, '
-                             'power, not, and, or')
-    assert ebnf.mutation == 'name arguments*'
-    assert ebnf.expression_fragment == 'operator entity'
-    assert ebnf.expression == ('entity (expression_fragment)+, '
-                               'values mutation')
+    assert ebnf.factor == '(dash, plus)? entity, op expression cp'
+    assert ebnf.exponential == 'factor (power exponential)?'
+    assert ebnf.multiplication == ('exponential (( multiplier, bslash, '
+                                   'modulus ) exponential)*')
+    assert ebnf.expression == ('multiplication ( ( plus, dash ) '
+                               'multiplication)*')
     assert ebnf.absolute_expression == 'expression'
+
+
+def test_grammar_raise_statement(grammar, ebnf):
+    grammar.raise_statement()
+    assert ebnf.RAISE == 'raise'
+    assert ebnf.raise_statement == 'raise entity?'
 
 
 def test_grammar_rules(grammar, ebnf):
@@ -129,9 +124,29 @@ def test_grammar_rules(grammar, ebnf):
     assert ebnf._RETURN == 'return'
     assert ebnf.entity == 'values, path'
     assert ebnf.return_statement == 'return entity'
-    rules = ('entity, absolute_expression, assignment, imports, '
-             'return_statement, block')
+    rules = ('absolute_expression, assignment, imports, return_statement, '
+             'raise_statement, block')
     assert ebnf.rules == rules
+
+
+def test_mutation_block(grammar, ebnf):
+    grammar.mutation_block()
+    assert ebnf._THEN == 'then'
+    assert ebnf.mutation_fragment == 'name arguments*'
+    assert ebnf.chained_mutation == 'then mutation_fragment'
+    assert ebnf.mutation == 'entity (mutation_fragment (chained_mutation)*)'
+    assert ebnf.mutation_block == 'mutation nl (nested_block)?'
+    assert ebnf.indented_chain == 'indent (chained_mutation nl)+ dedent'
+
+
+def test_grammar_service_block(grammar, ebnf):
+    grammar.service_block()
+    assert ebnf.command == 'name'
+    assert ebnf.arguments == 'name? colon entity'
+    assert ebnf.output == '(as name (comma name)*)'
+    assert ebnf.service_fragment == '(command arguments*|arguments+) output?'
+    assert ebnf.service == 'path service_fragment chained_mutation*'
+    assert ebnf.service_block == 'service nl (nested_block)?'
 
 
 def test_grammar_if_block(grammar, ebnf):
@@ -200,11 +215,11 @@ def test_grammar_try_block(grammar, ebnf):
 def test_grammar_block(grammar, ebnf):
     grammar.block()
     assert ebnf._WHEN == 'when'
-    assert ebnf.service_block == 'service nl (nested_block)?'
     ebnf.simple_block.assert_called_with('when (path output|service)')
     assert ebnf.when_block == ebnf.simple_block()
     assert ebnf.indented_arguments == 'indent (arguments nl)+ dedent'
     block = ('rules nl, if_block, foreach_block, function_block, arguments, '
+             'indented_chain, chained_mutation, mutation_block, '
              'service_block, when_block, try_block, indented_arguments, '
              'while_block')
     assert ebnf.block == block
@@ -213,8 +228,9 @@ def test_grammar_block(grammar, ebnf):
 
 def test_grammar_build(patch, call_count, grammar, ebnf):
     methods = ['macros', 'types', 'values', 'assignments', 'imports',
-               'service', 'expressions', 'rules', 'if_block', 'foreach_block',
-               'function_block', 'try_block', 'block', 'while_block']
+               'expressions', 'rules', 'mutation_block', 'service_block',
+               'if_block', 'foreach_block', 'function_block', 'try_block',
+               'block', 'while_block', 'raise_statement']
     patch.many(Grammar, methods)
     result = grammar.build()
     assert ebnf._WS == '(" ")+'
