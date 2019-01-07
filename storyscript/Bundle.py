@@ -39,10 +39,10 @@ class Bundle:
         return self.filter_paths(paths)
 
     def compare_paths(self, path, ignored_path):
-         """
-          Compare path and ignored_path
-         """
-         return path[:len(ignored_path)] == ignored_path
+        """
+        compare two paths
+        """
+        return path[:len(ignored_path)] == ignored_path
 
     def filter_paths(self, paths):
         """
@@ -50,7 +50,8 @@ class Bundle:
         """
         if self.ignored_path is None:
             return paths
-        paths = [path for path in paths if not self.compare_paths(path, self.ignored_path)]
+        paths = [path for path in paths
+                 if not self.compare_paths(path, self.ignored_path)]
         return paths
 
     def find_stories(self):

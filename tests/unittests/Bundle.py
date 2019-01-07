@@ -45,9 +45,11 @@ def test_bundle_parse_directory(patch, bundle):
 
 def test_bundle_parse_directory_with_ignored_path(patch, bundle):
     """
-    Ensures parse directory parse the specified directory and ignoring other stories in the directory
+    Ensures parse directory parse the specified directory
+    and ignoring other stories in the directory
     """
-    patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two.story'])])
+    patch.object(os, 'walk',
+                 return_value=[('root', [], ['one.story', 'two.story'])])
     patch.object(Bundle, 'gitignores')
     bundle.ignored_path = 'root/two.story'
     result = bundle.parse_directory('dir')
@@ -58,10 +60,13 @@ def test_bundle_parse_directory_with_ignored_path(patch, bundle):
 
 def test_bundle_parse_directory_with_ignored_subdirectory(patch, bundle):
     """
-    Ensures parse directory parse the specified directory and ignoring other stories in a subdirectory
+    Ensures parse directory parse the specified directory and
+    ignoring other stories in a subdirectory
     """
-    patch.object(os, 'walk', return_value=[('root', ['subdir'], ['one.story', 'two.story']),
-                                           ('root/subdir', [''], ['three.story'])])
+    patch.object(os, 'walk',
+                 return_value=[('root', ['subdir'],
+                               ['one.story', 'two.story']),
+                               ('root/subdir', [''], ['three.story'])])
     patch.object(Bundle, 'gitignores')
     bundle.ignored_path = 'root/subdir'
     result = bundle.parse_directory('dir')

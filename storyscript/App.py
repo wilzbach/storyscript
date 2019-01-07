@@ -15,14 +15,16 @@ class App:
         """
         Parses stories found in path, returning their trees
         """
-        return Bundle(path, ignored_path=ignored_path).bundle_trees(ebnf=ebnf, debug=debug)
+        return Bundle(path, ignored_path=ignored_path).\
+            bundle_trees(ebnf=ebnf, debug=debug)
 
     @staticmethod
     def compile(path, ignored_path=None, ebnf=None, debug=False):
         """
         Parses and compiles stories found in path, returning JSON
         """
-        bundle = Bundle(path, ignored_path=ignored_path).bundle(ebnf=ebnf, debug=debug)
+        bundle = Bundle(path, ignored_path=ignored_path).\
+            bundle(ebnf=ebnf, debug=debug)
         return json.dumps(bundle, indent=2)
 
     @staticmethod

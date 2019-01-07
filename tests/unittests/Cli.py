@@ -47,16 +47,20 @@ def test_cli_compile_with_ignore_option(runner, app):
     """
     Ensures that ignore option works when compiling
     """
-    runner.invoke(Cli.compile, ['path/fake.story', '--ignore', 'path/sub_dir/my_fake.story'])
-    App.compile.assert_called_with('path/fake.story', ebnf=None, debug=False, ignored_path='path/sub_dir/my_fake.story')
+    runner.invoke(Cli.compile, ['path/fake.story',
+                                '--ignore', 'path/sub_dir/my_fake.story'])
+    App.compile.assert_called_with('path/fake.story', ebnf=None, debug=False,
+                                   ignored_path='path/sub_dir/my_fake.story')
 
 
-def test_cli_compile_with_ignore_option(runner, app):
+def test_cli_parse_with_ignore_option(runner, app):
     """
     Ensures that ignore option works when parsing
     """
-    runner.invoke(Cli.parse, ['path/fake.story', '--ignore', 'path/sub_dir/my_fake.story'])
-    App.parse.assert_called_with('path/fake.story', ebnf=None, debug=False, ignored_path='path/sub_dir/my_fake.story')
+    runner.invoke(Cli.parse, ['path/fake.story', '--ignore',
+                              'path/sub_dir/my_fake.story'])
+    App.parse.assert_called_with('path/fake.story', ebnf=None, debug=False,
+                                 ignored_path='path/sub_dir/my_fake.story')
 
 
 def test_cli_parse(runner, echo, app, tree):
@@ -65,7 +69,8 @@ def test_cli_parse(runner, echo, app, tree):
     """
     App.parse.return_value = {'path': tree}
     runner.invoke(Cli.parse, [])
-    App.parse.assert_called_with(os.getcwd(), ebnf=None, debug=False, ignored_path=None)
+    App.parse.assert_called_with(os.getcwd(), ebnf=None,
+                                 debug=False, ignored_path=None)
     click.echo.assert_called_with(tree.pretty())
 
 
@@ -83,7 +88,8 @@ def test_cli_parse_path(runner, echo, app):
     Ensures the parse command supports specifying a path.
     """
     runner.invoke(Cli.parse, ['/path'])
-    App.parse.assert_called_with('/path', ebnf=None, debug=False, ignored_path=None)
+    App.parse.assert_called_with('/path', ebnf=None,
+                                 debug=False, ignored_path=None)
 
 
 def test_cli_parse_ebnf(runner, echo, app):
@@ -91,7 +97,8 @@ def test_cli_parse_ebnf(runner, echo, app):
     Ensures the parse command supports specifying an ebnf file.
     """
     runner.invoke(Cli.parse, ['--ebnf', 'test.ebnf'])
-    App.parse.assert_called_with(os.getcwd(), ebnf='test.ebnf', debug=False, ignored_path=None)
+    App.parse.assert_called_with(os.getcwd(), ebnf='test.ebnf',
+                                 debug=False, ignored_path=None)
 
 
 def test_cli_parse_debug(runner, echo, app):
@@ -99,7 +106,8 @@ def test_cli_parse_debug(runner, echo, app):
     Ensures the parse command supports a debug flag.
     """
     runner.invoke(Cli.parse, ['--debug'])
-    App.parse.assert_called_with(os.getcwd(), ebnf=None, debug=True, ignored_path=None)
+    App.parse.assert_called_with(os.getcwd(), ebnf=None,
+                                 debug=True, ignored_path=None)
 
 
 def test_cli_compile(patch, runner, echo, app):
@@ -108,7 +116,8 @@ def test_cli_compile(patch, runner, echo, app):
     """
     patch.object(click, 'style')
     runner.invoke(Cli.compile, [])
-    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False, ignored_path=None)
+    App.compile.assert_called_with(os.getcwd(), ebnf=None,
+                                   debug=False, ignored_path=None)
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
 
@@ -118,7 +127,8 @@ def test_cli_compile_path(patch, runner, app):
     Ensures the compile command supports specifying a path
     """
     runner.invoke(Cli.compile, ['/path'])
-    App.compile.assert_called_with('/path', ebnf=None, debug=False, ignored_path=None)
+    App.compile.assert_called_with('/path', ebnf=None,
+                                   debug=False, ignored_path=None)
 
 
 def test_cli_compile_output_file(patch, runner, app):
@@ -137,14 +147,16 @@ def test_cli_compile_silent(runner, echo, app, option):
     Ensures --silent makes everything quiet
     """
     result = runner.invoke(Cli.compile, [option])
-    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False, ignored_path=None)
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False,
+                                   ignored_path=None)
     assert result.output == ''
     assert click.echo.call_count == 0
 
 
 def test_cli_compile_debug(runner, echo, app):
     runner.invoke(Cli.compile, ['--debug'])
-    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=True, ignored_path=None)
+    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=True,
+                                   ignored_path=None)
 
 
 @mark.parametrize('option', ['--json', '-j'])
@@ -153,13 +165,15 @@ def test_cli_compile_json(runner, echo, app, option):
     Ensures --json outputs json
     """
     runner.invoke(Cli.compile, [option])
-    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False, ignored_path=None)
+    App.compile.assert_called_with(os.getcwd(), ebnf=None,
+                                   debug=False, ignored_path=None)
     click.echo.assert_called_with(App.compile())
 
 
 def test_cli_compile_ebnf(runner, echo, app):
     runner.invoke(Cli.compile, ['--ebnf', 'test.ebnf'])
-    App.compile.assert_called_with(os.getcwd(), ebnf='test.ebnf', debug=False, ignored_path=None)
+    App.compile.assert_called_with(os.getcwd(), ebnf='test.ebnf',
+                                   debug=False, ignored_path=None)
 
 
 def test_cli_lex(patch, magic, runner, app, echo):
