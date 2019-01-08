@@ -11,8 +11,7 @@ class Bundle:
     Bundles all stories that must be compiled together.
     """
 
-    def __init__(self, path, story_files={}, ignored_path=None):
-        self.path = path
+    def __init__(self, story_files={}, ignored_path=None):
         self.stories = {}
         self.story_files = story_files
         self.ignored_path = ignored_path

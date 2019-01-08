@@ -17,6 +17,7 @@ def bundle(patch):
 def test_bundle_init(bundle):
     assert bundle.stories == {}
     assert bundle.story_files == {}
+    assert bundle.ignored_path is None
 
 
 def test_bundle_init_files():
