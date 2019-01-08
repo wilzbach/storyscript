@@ -25,6 +25,11 @@ def test_bundle_init_files():
     assert bundle.story_files == {'one.story': 'hello'}
 
 
+def test_bundle_init_ignored_path():
+    bundle = Bundle(ignored_path='path')
+    assert bundle.ignored_path == 'path'
+
+
 def test_bundle_gitignores(patch, bundle):
     """
     Ensures gitignores uses can produce the list of ignored files.
