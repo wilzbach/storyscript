@@ -42,6 +42,16 @@ def test_bundle_gitignores(patch, bundle):
     assert result == delegator.run().out.split()
 
 
+def test_bundle_filter_path():
+    result = Bundle.filter_path('./root', 'one.story', [])
+    assert result == './root/one.story'
+
+
+def test_bundle_filter_path_ignores():
+    result = Bundle.filter_path('./root', 'one.story', ['root/one.story'])
+    assert result is None
+
+
 def test_bundle_parse_directory(patch, bundle):
     """
     Ensures parse_directory can parse a directory

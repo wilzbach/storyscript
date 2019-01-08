@@ -56,6 +56,14 @@ class Bundle:
                  if not self.compare_paths(path, self.ignored_path)]
         return paths
 
+    @staticmethod
+    def filter_path(root, filename, ignores):
+        if filename.endswith('.story'):
+            path = os.path.join(root, filename)
+            if path[2:] not in ignores:
+                return path
+        return None
+
     @classmethod
     def from_path(cls, path):
         """
