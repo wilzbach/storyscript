@@ -18,9 +18,14 @@ def test_app_parse(bundle):
     Ensures App.parse returns the parsed bundle
     """
     result = App.parse('path')
-    Bundle.__init__.assert_called_with('path', ignored_path=None)
-    Bundle.bundle_trees.assert_called_with(ebnf=None, debug=None)
-    assert result == Bundle.bundle_trees()
+    Bundle.from_path.assert_called_with('path', ignored_path=None)
+    Bundle.from_path().bundle_trees.assert_called_with(ebnf=None, debug=None)
+    assert result == Bundle.from_path().bundle_trees()
+
+
+def test_app_parse_ignored_path(bundle):
+    App.parse('path', ignored_path='ignored')
+    Bundle.from_path.assert_called_with('path', ignored_path='ignored')
 
 
 def test_app_parse_ebnf(bundle):
@@ -42,10 +47,16 @@ def test_app_parse_debug(bundle):
 def test_app_compile(patch, bundle):
     patch.object(json, 'dumps')
     result = App.compile('path')
-    Bundle.__init__.assert_called_with('path', ignored_path=None)
-    Bundle.bundle.assert_called_with(ebnf=None, debug=False)
-    json.dumps.assert_called_with(Bundle.bundle(), indent=2)
+    Bundle.from_path.assert_called_with('path', ignored_path=None)
+    Bundle.from_path().bundle.assert_called_with(ebnf=None, debug=False)
+    json.dumps.assert_called_with(Bundle.from_path().bundle(), indent=2)
     assert result == json.dumps()
+
+
+def test_app_compile_ignored_path(patch, bundle):
+    patch.object(json, 'dumps')
+    App.compile('path', ignored_path='ignored')
+    Bundle.from_path.assert_called_with('path', ignored_path='ignored')
 
 
 def test_app_compile_ebnf(patch, bundle):

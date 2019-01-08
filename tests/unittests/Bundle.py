@@ -24,7 +24,7 @@ def test_bundle_init_files():
     assert bundle.story_files == {'one.story': 'hello'}
 
 
-def test_bundle_gitignores(patch, bundle):
+def test_bundle_gitignores(patch):
     """
     Ensures gitignores uses can produce the list of ignored files.
     """
@@ -34,6 +34,34 @@ def test_bundle_gitignores(patch, bundle):
     delegator.run.assert_called_with(command)
     delegator.run().out.split.assert_called_with('\n')
     assert result == delegator.run().out.split()
+
+
+def test_bundle_ignores(patch):
+    patch.object(os.path, 'isdir')
+    patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
+    result = Bundle.ignores('path')
+    os.walk.assert_called_with('path')
+    assert result == ['root/one.story']
+
+
+def test_bundle_ignores_not_dir(patch):
+    patch.many(os.path, ['relpath', 'isdir'])
+    os.path.isdir.return_value = False
+    result = Bundle.ignores('path')
+    os.path.relpath.assert_called_with('path')
+    assert result == [os.path.relpath()]
+
+
+def test_bundle_filter_path(patch):
+    patch.object(os.path, 'relpath')
+    result = Bundle.filter_path('./root', 'one.story', [])
+    os.path.relpath.assert_called_with('./root/one.story')
+    assert result == os.path.relpath()
+
+
+def test_bundle_filter_path_ignores():
+    result = Bundle.filter_path('./root', 'one.story', ['root/one.story'])
+    assert result is None
 
 
 def test_bundle_parse_directory(patch, bundle):
@@ -48,46 +76,22 @@ def test_bundle_parse_directory(patch, bundle):
     assert result == ['root/one.story']
 
 
-def test_bundle_parse_directory_with_ignored_path(patch, bundle):
+def test_bundle_parse_directory_gitignored(patch, bundle):
     """
-    Ensures parse directory parse the specified directory
-    and ignoring other stories in the directory
-    """
-    patch.object(os, 'walk',
-                 return_value=[('root', [], ['one.story', 'two.story'])])
-    patch.object(Bundle, 'gitignores')
-    bundle.ignored_path = 'root/two.story'
-    result = bundle.parse_directory('dir')
-    assert Bundle.gitignores.call_count == 1
-    os.walk.assert_called_with('dir')
-    assert result == ['root/one.story']
-
-
-def test_bundle_parse_directory_with_ignored_subdirectory(patch, bundle):
-    """
-    Ensures parse directory parse the specified directory and
-    ignoring other stories in a subdirectory
-    """
-    patch.object(os, 'walk',
-                 return_value=[('root', ['subdir'],
-                               ['one.story', 'two.story']),
-                               ('root/subdir', [''], ['three.story'])])
-    patch.object(Bundle, 'gitignores')
-    bundle.ignored_path = 'root/subdir'
-    result = bundle.parse_directory('dir')
-    assert Bundle.gitignores.call_count == 1
-    os.walk.assert_called_with('dir')
-    assert result == ['root/one.story', 'root/two.story']
-
-
-def test_bundle_parse_directory_ignored(patch, bundle):
-    """
-    Ensures parse_directory does not return ignored files
+    Ensures parse_directory does not return gitignored files
     """
     patch.object(os, 'walk', return_value=[('./root', [], ['one.story'])])
-    patch.object(Bundle, 'gitignores', return_value=['root/one.story'])
-    result = Bundle.parse_directory('dir')
-    assert result == []
+    patch.object(Bundle, 'gitignores')
+    Bundle.gitignores.return_value = ['root/one.story']
+    assert Bundle.parse_directory('dir') == []
+
+
+def test_bundle_parse_directory_ignored_path(patch, bundle):
+    patch.object(os, 'walk', return_value=[('./root', [], ['one.story'])])
+    patch.many(Bundle, ['gitignores', 'ignores'])
+    Bundle.gitignores.return_value = []
+    Bundle.parse_directory('dir', ignored_path='ignored')
+    Bundle.ignores.assert_called_with('ignored')
 
 
 def test_bundle_from_path(patch):
@@ -111,8 +115,19 @@ def test_bundle_from_path_directory(patch):
     patch.many(Bundle, ['load_story', 'parse_directory'])
     Bundle.parse_directory.return_value = ['one.story']
     Bundle.from_path('path')
-    Bundle.parse_directory.assert_called_with('path')
+    Bundle.parse_directory.assert_called_with('path', ignored_path=None)
     Bundle.load_story.assert_called_with('one.story')
+
+
+def test_bundle_from_path_directory_ignored(patch):
+    """
+    Ensures Bundle.from_path accepts an ignored_path keyword argument
+    """
+    patch.object(os.path, 'isdir')
+    patch.init(Bundle)
+    patch.many(Bundle, ['load_story', 'parse_directory'])
+    Bundle.from_path('path', ignored_path='ignored')
+    Bundle.parse_directory.assert_called_with('path', ignored_path='ignored')
 
 
 def test_bundle_load_story(patch, bundle):

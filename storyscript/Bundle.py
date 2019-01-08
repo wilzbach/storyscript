@@ -11,11 +11,9 @@ class Bundle:
     Bundles all stories that must be compiled together.
     """
 
-    def __init__(self, path, story_files={}, ignored_path=None):
-        self.path = path
+    def __init__(self, story_files={}):
         self.stories = {}
         self.story_files = story_files
-        self.ignored_path = ignored_path
 
     @staticmethod
     def gitignores():
@@ -25,40 +23,44 @@ class Bundle:
         command = 'git ls-files --others --ignored --exclude-standard'
         return delegator.run(command).out.split('\n')
 
+    @staticmethod
+    def ignores(path):
+        ignores = []
+        if os.path.isdir(path):
+            for root, subdirs, files in os.walk(path):
+                for file in files:
+                    if file.endswith('.story'):
+                        story = os.path.relpath(os.path.join(root, file))
+                        ignores.append(story)
+            return ignores
+        return [os.path.relpath(path)]
+
+    @staticmethod
+    def filter_path(root, filename, ignores):
+        if filename.endswith('.story'):
+            path = os.path.relpath(os.path.join(root, filename))
+            if path not in ignores:
+                return path
+        return None
+
     @classmethod
-    def parse_directory(cls, directory):
+    def parse_directory(cls, directory, ignored_path=None):
         """
         Parse a directory to find stories.
         """
         paths = []
         ignores = cls.gitignores()
+        if ignored_path:
+            ignores = ignores + cls.ignores(ignored_path)
         for root, subdirs, files in os.walk(directory):
             for file in files:
-                if file.endswith('.story'):
-                    path = os.path.join(root, file)
-                    if path[2:] not in ignores:
-                        paths.append(path)
-
-        return self.filter_paths(paths)
-
-    def compare_paths(self, path, ignored_path):
-        """
-        compare two paths
-        """
-        return path[:len(ignored_path)] == ignored_path
-
-    def filter_paths(self, paths):
-        """
-         Filter paths from ignored_path
-        """
-        if self.ignored_path is None:
-            return paths
-        paths = [path for path in paths
-                 if not self.compare_paths(path, self.ignored_path)]
+                path = cls.filter_path(root, file, ignores)
+                if path:
+                    paths.append(path)
         return paths
 
     @classmethod
-    def from_path(cls, path):
+    def from_path(cls, path, ignored_path=None):
         """
         Load a bundle of stories from the filesystem.
         If a directory is given. all `.story` files in the directory will be
@@ -66,7 +68,7 @@ class Bundle:
         """
         bundle = Bundle()
         if os.path.isdir(path):
-            for story in cls.parse_directory(path):
+            for story in cls.parse_directory(path, ignored_path=ignored_path):
                 bundle.load_story(story)
             return bundle
         bundle.load_story(path)
