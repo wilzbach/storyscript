@@ -38,8 +38,8 @@ class Bundle:
     @staticmethod
     def filter_path(root, filename, ignores):
         if filename.endswith('.story'):
-            path = os.path.join(root, filename)
-            if path[2:] not in ignores:
+            path = os.path.relpath(os.path.join(root, filename))
+            if path not in ignores:
                 return path
         return None
 
@@ -51,7 +51,7 @@ class Bundle:
         paths = []
         ignores = cls.gitignores()
         if ignored_path:
-            ignores.append(ignored_path)
+            ignores = ignores + cls.ignores(ignored_path)
         for root, subdirs, files in os.walk(directory):
             for file in files:
                 path = cls.filter_path(root, file, ignores)

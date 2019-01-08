@@ -52,9 +52,11 @@ def test_bundle_ignores_not_dir(patch):
     assert result == [os.path.relpath()]
 
 
-def test_bundle_filter_path():
+def test_bundle_filter_path(patch):
+    patch.object(os.path, 'relpath')
     result = Bundle.filter_path('./root', 'one.story', [])
-    assert result == './root/one.story'
+    os.path.relpath.assert_called_with('./root/one.story')
+    assert result == os.path.relpath()
 
 
 def test_bundle_filter_path_ignores():
@@ -86,8 +88,10 @@ def test_bundle_parse_directory_gitignored(patch, bundle):
 
 def test_bundle_parse_directory_ignored_path(patch, bundle):
     patch.object(os, 'walk', return_value=[('./root', [], ['one.story'])])
-    patch.object(Bundle, 'gitignores', return_value=[])
-    assert Bundle.parse_directory('dir', ignored_path='root/one.story') == []
+    patch.many(Bundle, ['gitignores', 'ignores'])
+    Bundle.gitignores.return_value = []
+    Bundle.parse_directory('dir', ignored_path='ignored')
+    Bundle.ignores.assert_called_with('ignored')
 
 
 def test_bundle_from_path(patch):
