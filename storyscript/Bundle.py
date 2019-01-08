@@ -24,6 +24,18 @@ class Bundle:
         return delegator.run(command).out.split('\n')
 
     @staticmethod
+    def ignores(path):
+        ignores = []
+        if os.path.isdir(path):
+            for root, subdirs, files in os.walk(path):
+                for file in files:
+                    if file.endswith('.story'):
+                        story = os.path.relpath(os.path.join(root, file))
+                        ignores.append(story)
+            return ignores
+        return [os.path.relpath(path)]
+
+    @staticmethod
     def filter_path(root, filename, ignores):
         if filename.endswith('.story'):
             path = os.path.join(root, filename)

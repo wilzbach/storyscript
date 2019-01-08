@@ -24,7 +24,7 @@ def test_bundle_init_files():
     assert bundle.story_files == {'one.story': 'hello'}
 
 
-def test_bundle_gitignores(patch, bundle):
+def test_bundle_gitignores(patch):
     """
     Ensures gitignores uses can produce the list of ignored files.
     """
@@ -34,6 +34,22 @@ def test_bundle_gitignores(patch, bundle):
     delegator.run.assert_called_with(command)
     delegator.run().out.split.assert_called_with('\n')
     assert result == delegator.run().out.split()
+
+
+def test_bundle_ignores(patch):
+    patch.object(os.path, 'isdir')
+    patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
+    result = Bundle.ignores('path')
+    os.walk.assert_called_with('path')
+    assert result == ['root/one.story']
+
+
+def test_bundle_ignores_not_dir(patch):
+    patch.many(os.path, ['relpath', 'isdir'])
+    os.path.isdir.return_value = False
+    result = Bundle.ignores('path')
+    os.path.relpath.assert_called_with('path')
+    assert result == [os.path.relpath()]
 
 
 def test_bundle_filter_path():
