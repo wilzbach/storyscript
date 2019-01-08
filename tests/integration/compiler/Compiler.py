@@ -68,6 +68,26 @@ def test_compiler_expression_complex(parser):
     assert result['tree']['1']['args'] == args
 
 
+def test_compiler_expression_sum_to_parenthesis(parser):
+    tree = parser.parse('1 + (2 + 3)')
+    result = Compiler.compile(tree)
+    rhs = {'$OBJECT': 'expression', 'expression': 'sum', 'values': [2, 3]}
+    args = [{'$OBJECT': 'expression', 'expression': 'sum',
+             'values': [1, rhs]}]
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == args
+
+
+def test_compiler_expression_multiplication_to_parenthesis(parser):
+    tree = parser.parse('1 * (2 + 3)')
+    result = Compiler.compile(tree)
+    rhs = {'$OBJECT': 'expression', 'expression': 'sum', 'values': [2, 3]}
+    args = [{'$OBJECT': 'expression', 'expression': 'multiplication',
+             'values': [1, rhs]}]
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == args
+
+
 def test_compiler_mutation(parser):
     """
     Ensures that mutations are compiled correctly
