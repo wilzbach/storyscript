@@ -231,6 +231,8 @@ class Objects:
         elif tree.exponential:
             if (len(tree.exponential.children)) > 1:
                 return cls.expression(tree.exponential)
+            elif tree.exponential.factor.expression:
+                return cls.expression(tree.exponential.factor.expression)
             return cls.entity(tree.exponential.factor.entity)
         elif tree.entity:
             return cls.entity(tree.entity)

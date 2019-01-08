@@ -342,11 +342,22 @@ def test_objects_resolve_operand_number(patch, tree):
     assert result == Objects.number()
 
 
+def test_objects_resolve_operand_parenthesis(patch, tree):
+    """
+    Ensures resolve_operand can resolve a parenthesis operand
+    """
+    patch.object(Objects, 'expression')
+    result = Objects.resolve_operand(tree)
+    Objects.expression.assert_called_with(tree.exponential.factor.expression)
+    assert result == Objects.expression()
+
+
 def test_objects_resolve_operand_multiplication(patch, tree):
     """
     Ensures resolve_operand can resolve a multiplication tree.
     """
     patch.object(Objects, 'entity')
+    tree.exponential.factor.expression = None
     result = Objects.resolve_operand(tree)
     Objects.entity.assert_called_with(tree.exponential.factor.entity)
     assert result == Objects.entity()
