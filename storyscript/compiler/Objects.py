@@ -234,6 +234,9 @@ class Objects:
             elif tree.exponential.factor.expression:
                 return cls.expression(tree.exponential.factor.expression)
             return cls.entity(tree.exponential.factor.entity)
+        elif tree.factor:
+            if tree.factor.expression:
+                return cls.expression(tree.factor.expression)
         elif tree.entity:
             return cls.entity(tree.entity)
         return cls.entity(tree.factor.entity)

@@ -315,6 +315,7 @@ def test_objects_resolve_operand(patch, tree):
     patch.object(Objects, 'entity')
     tree.exponential = None
     tree.entity = None
+    tree.factor.expression = None
     result = Objects.resolve_operand(tree)
     Objects.entity.assert_called_with(tree.factor.entity)
     assert result == Objects.entity()
@@ -342,7 +343,7 @@ def test_objects_resolve_operand_number(patch, tree):
     assert result == Objects.number()
 
 
-def test_objects_resolve_operand_parenthesis(patch, tree):
+def test_objects_resolve_operand_sum_to_parenthesis(patch, tree):
     """
     Ensures resolve_operand can resolve a parenthesis operand
     """
@@ -363,6 +364,17 @@ def test_objects_resolve_operand_multiplication(patch, tree):
     assert result == Objects.entity()
 
 
+def test_objects_resolve_operand_multiplication_to_parenthesis(patch, tree):
+    """
+    Ensures resolve_operand can resolve a multiplication to a parenthesis.
+    """
+    patch.object(Objects, 'expression')
+    tree.exponential = None
+    result = Objects.resolve_operand(tree)
+    Objects.expression.assert_called_with(tree.factor.expression)
+    assert result == Objects.expression()
+
+
 def test_objects_resolve_operand_exponential(patch, magic, tree):
     """
     Ensures resolve_operand can resolve an exponential tree
@@ -380,6 +392,7 @@ def test_objects_resolve_operand_factor(patch, tree):
     """
     patch.object(Objects, 'entity')
     tree.exponential = None
+    tree.factor = None
     result = Objects.resolve_operand(tree)
     Objects.entity.assert_called_with(tree.entity)
     assert result == Objects.entity()
