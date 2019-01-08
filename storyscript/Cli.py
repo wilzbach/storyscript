@@ -4,6 +4,8 @@ import os
 
 import click
 
+from click_alias import ClickAliasedGroup
+
 from .App import App
 from .Project import Project
 from .Version import version as app_version
@@ -15,8 +17,8 @@ class Cli:
     silent_help = 'Silent mode. Return syntax errors only.'
     ebnf_help = 'Load the grammar from a file. Useful for development'
 
-    @click.group(invoke_without_command=True)
-    @click.option('--version', is_flag=True, help=version_help)
+    @click.group(invoke_without_command=True, cls=ClickAliasedGroup)
+    @click.option('--version', '-v', is_flag=True, help=version_help)
     @click.pass_context
     def main(context, version):  # noqa N805
         """
@@ -31,7 +33,7 @@ class Cli:
             click.echo(context.get_help())
 
     @staticmethod
-    @main.command()
+    @main.command(aliases=['p'])
     @click.argument('path', default=os.getcwd())
     @click.option('--debug', is_flag=True)
     @click.option('--ebnf', help=ebnf_help)
@@ -51,7 +53,7 @@ class Cli:
                 click.echo(tree.pretty())
 
     @staticmethod
-    @main.command()
+    @main.command(aliases=['c'])
     @click.argument('path', default=os.getcwd())
     @click.argument('output', required=False)
     @click.option('--json', '-j', is_flag=True)
@@ -77,7 +79,7 @@ class Cli:
                 click.echo(click.style('Script syntax passed!', fg='green'))
 
     @staticmethod
-    @main.command()
+    @main.command(aliases=['l'])
     @click.argument('path', default=os.getcwd())
     @click.option('--ebnf', help=ebnf_help)
     def lex(path, ebnf):
@@ -91,7 +93,7 @@ class Cli:
                 click.echo('{} {} {}'.format(n, token.type, token.value))
 
     @staticmethod
-    @main.command()
+    @main.command(aliases=['g'])
     def grammar():
         """
         Prints the grammar specification
@@ -99,7 +101,7 @@ class Cli:
         click.echo(App.grammar())
 
     @staticmethod
-    @main.command()
+    @main.command(aliases=['n'])
     @click.argument('name')
     def new(name):
         """
@@ -108,7 +110,7 @@ class Cli:
         Project.new(name)
 
     @staticmethod
-    @main.command()
+    @main.command(aliases=['h'])
     @click.pass_context
     def help(context):
         """
@@ -117,6 +119,6 @@ class Cli:
         click.echo(context.parent.get_help())
 
     @staticmethod
-    @main.command()
+    @main.command(aliases=['v'])
     def version():
         click.echo(app_version)
