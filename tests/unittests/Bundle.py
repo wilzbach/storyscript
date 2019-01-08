@@ -64,7 +64,7 @@ def test_bundle_parse_directory_gitignored(patch, bundle):
     """
     patch.object(os, 'walk', return_value=[('./root', [], ['one.story'])])
     patch.object(Bundle, 'gitignores')
-    Bundle.gitignores.return_value=['root/one.story']
+    Bundle.gitignores.return_value = ['root/one.story']
     assert Bundle.parse_directory('dir') == []
 
 
@@ -95,8 +95,19 @@ def test_bundle_from_path_directory(patch):
     patch.many(Bundle, ['load_story', 'parse_directory'])
     Bundle.parse_directory.return_value = ['one.story']
     Bundle.from_path('path')
-    Bundle.parse_directory.assert_called_with('path')
+    Bundle.parse_directory.assert_called_with('path', ignored_path=None)
     Bundle.load_story.assert_called_with('one.story')
+
+
+def test_bundle_from_path_directory_ignored(patch):
+    """
+    Ensures Bundle.from_path accepts an ignored_path keyword argument
+    """
+    patch.object(os.path, 'isdir')
+    patch.init(Bundle)
+    patch.many(Bundle, ['load_story', 'parse_directory'])
+    Bundle.from_path('path', ignored_path='ignored')
+    Bundle.parse_directory.assert_called_with('path', ignored_path='ignored')
 
 
 def test_bundle_load_story(patch, bundle):

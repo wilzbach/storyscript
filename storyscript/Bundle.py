@@ -48,7 +48,7 @@ class Bundle:
         return paths
 
     @classmethod
-    def from_path(cls, path):
+    def from_path(cls, path, ignored_path=None):
         """
         Load a bundle of stories from the filesystem.
         If a directory is given. all `.story` files in the directory will be
@@ -56,7 +56,7 @@ class Bundle:
         """
         bundle = Bundle()
         if os.path.isdir(path):
-            for story in cls.parse_directory(path):
+            for story in cls.parse_directory(path, ignored_path=ignored_path):
                 bundle.load_story(story)
             return bundle
         bundle.load_story(path)
