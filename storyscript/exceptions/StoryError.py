@@ -20,7 +20,7 @@ class StoryError(SyntaxError):
         self.error = error
         self.story = story
         self.path = path
-        self.error_code = None
+        self.error_tuple = None
 
     def name(self):
         """
@@ -70,7 +70,7 @@ class StoryError(SyntaxError):
         """
         Provides an hint for the current error.
         """
-        return self.error_code[1]
+        return self.error_tuple[1]
 
     def identify(self):
         """
@@ -94,7 +94,7 @@ class StoryError(SyntaxError):
         Process the error, assigning the error code and performing other
         operations when necessary.
         """
-        self.error_code = self.identify()
+        self.error_tuple = self.identify()
 
     def message(self):
         """

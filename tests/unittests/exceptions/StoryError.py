@@ -26,7 +26,7 @@ def test_storyerror_init(storyerror, error):
     assert storyerror.error == error
     assert storyerror.story == 'story'
     assert storyerror.path is None
-    assert storyerror.error_code is None
+    assert storyerror.error_tuple is None
     assert issubclass(StoryError, SyntaxError)
 
 
@@ -114,7 +114,7 @@ def test_storyerror_highlight(patch, storyerror, error):
 
 
 def test_storyerror_hint(storyerror):
-    storyerror.error_code = ('code', 'hint')
+    storyerror.error_tuple = ('code', 'hint')
     assert storyerror.hint() == 'hint'
 
 
@@ -152,7 +152,7 @@ def test_storyerror_identify_unexpected_characters(patch, storyerror):
 def test_storyerror_process(patch, storyerror):
     patch.object(StoryError, 'identify')
     storyerror.process()
-    assert storyerror.error_code == storyerror.identify()
+    assert storyerror.error_tuple == storyerror.identify()
 
 
 def test_storyerror_message(patch, storyerror):
