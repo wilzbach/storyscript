@@ -66,6 +66,12 @@ class StoryError(SyntaxError):
         line = self.error.line
         return '{}|    {}\n{}'.format(line, self.get_line(), highlight)
 
+    def error_code(self):
+        """
+        Provides the error code for the current error.
+        """
+        return self.error_tuple[0]
+
     def hint(self):
         """
         Provides an hint for the current error.
@@ -101,8 +107,9 @@ class StoryError(SyntaxError):
         Creates a friendly error message.
         """
         self.process()
-        args = (self.header(), self.highlight(), self.hint())
-        return '{}\n\n{}\n\n{}'.format(*args)
+        args = (self.header(), self.highlight(),
+                self.error_code(), self.hint())
+        return '{}\n\n{}\n\n{}: {}'.format(*args)
 
     def echo(self):
         """

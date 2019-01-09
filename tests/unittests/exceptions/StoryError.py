@@ -113,6 +113,11 @@ def test_storyerror_highlight(patch, storyerror, error):
     assert result == '{}|    {}\n{}'.format(*args)
 
 
+def test_storyerror_error_code(storyerror):
+    storyerror.error_tuple = ('code', 'hint')
+    assert storyerror.error_code() == 'code'
+
+
 def test_storyerror_hint(storyerror):
     storyerror.error_tuple = ('code', 'hint')
     assert storyerror.hint() == 'hint'
@@ -156,11 +161,13 @@ def test_storyerror_process(patch, storyerror):
 
 
 def test_storyerror_message(patch, storyerror):
-    patch.many(StoryError, ['process', 'header', 'highlight', 'hint'])
+    patch.many(StoryError,
+               ['process', 'header', 'highlight', 'error_code', 'hint'])
     result = storyerror.message()
     assert storyerror.process.call_count == 1
-    args = (storyerror.header(), storyerror.highlight(), storyerror.hint())
-    assert result == '{}\n\n{}\n\n{}'.format(*args)
+    args = (storyerror.header(), storyerror.highlight(),
+            storyerror.error_code(), storyerror.hint())
+    assert result == '{}\n\n{}\n\n{}: {}'.format(*args)
 
 
 def test_storyerror_echo(patch, storyerror):
