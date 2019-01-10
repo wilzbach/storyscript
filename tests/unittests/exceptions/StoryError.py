@@ -138,6 +138,13 @@ def test_storyerror_hint_unidentified_compiler_error(storyerror):
     assert storyerror.hint() == 'Custom.Compiler.Error'
 
 
+def test_storyerror_hint_invalid_token(patch, storyerror):
+    patch.object(storyerror, 'get_line', return_value='x = $')
+    storyerror.error = UnexpectedCharacters('seq', 0, line=1, column=5)
+    storyerror.error_tuple = ErrorCodes.invalid_token
+    assert storyerror.hint() == '`$` is not allowed here'
+
+
 def test_storyerror_identify(storyerror):
     storyerror.error.error = 'none'
     assert storyerror.identify() == ErrorCodes.unidentified_error
@@ -176,7 +183,7 @@ def test_storyerror_identify_unexpected_characters_unidentified(
     patch.object(Intention, 'is_function', return_value=False)
     patch.object(StoryError, 'get_line')
     storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
-    assert storyerror.identify() == ErrorCodes.unidentified_error
+    assert storyerror.identify() == ErrorCodes.invalid_token
 
 
 def test_storyerror_process(patch, storyerror):
