@@ -11,7 +11,7 @@ def test_exception_service_name(capsys):
     lines = output.splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 1'
     assert lines[2] == '1|    al.pine echo'
-    assert lines[5] == "A service name can't contain `.`"
+    assert lines[5] == "E0002: A service name can't contain `.`"
 
 
 def test_exception_arguments_noservice(capsys):
@@ -21,7 +21,7 @@ def test_exception_arguments_noservice(capsys):
     lines = output.splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 1'
     assert lines[2] == '1|    length:10'
-    assert lines[5] == 'You have defined an argument, but not a service'
+    assert lines[5] == 'E0003: You have defined an argument, but not a service'
 
 
 def test_exception_variables_backslash(capsys):
@@ -31,7 +31,7 @@ def test_exception_variables_backslash(capsys):
     lines = output.splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 1'
     assert lines[2] == '1|    a/b = 0'
-    assert lines[5] == "A variable name can't contain `/`"
+    assert lines[5] == "E0005: A variable name can't contain `/`"
 
 
 def test_exception_variables_dash(capsys):
@@ -41,7 +41,7 @@ def test_exception_variables_dash(capsys):
     lines = output.splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 1'
     assert lines[2] == '1|    a-b = 0'
-    assert lines[5] == "A variable name can't contain `-`"
+    assert lines[5] == "E0006: A variable name can't contain `-`"
 
 
 def test_exception_return_outside(capsys):
@@ -51,7 +51,7 @@ def test_exception_return_outside(capsys):
     lines = output.splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 8'
     assert lines[2] == '1|    return 0'
-    assert lines[5] == '`return` is allowed only inside functions'
+    assert lines[5] == 'E0004: `return` is allowed only inside functions'
 
 
 def test_exception_missing_value(capsys):
@@ -61,4 +61,4 @@ def test_exception_missing_value(capsys):
     lines = output.splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 5'
     assert lines[2] == '1|    a = '
-    assert lines[5] == 'Missing value after `=`'
+    assert lines[5] == 'E0007: Missing value after `=`'
