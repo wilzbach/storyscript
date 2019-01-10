@@ -4,7 +4,7 @@ import io
 from setuptools import find_packages, setup
 
 
-version = '0.8.4'
+version = '0.9.0'
 
 description = io.open('README.md', 'r', encoding='utf-8').read()
 short_description = ('StoryScript is an high-level language that can be used '
