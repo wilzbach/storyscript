@@ -20,23 +20,23 @@ def get_entity(obj):
 
 
 def test_values_true():
-    result = parse('true\n')
-    expression = result.block.rules.absolute_expression.expression
+    result = parse('a = true\n')
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     assert entity.values.boolean.child(0) == Token('TRUE', 'true')
 
 
 def test_values_false():
-    result = parse('false\n')
+    result = parse('a = false\n')
     token = Token('FALSE', 'false')
-    expression = result.block.rules.absolute_expression.expression
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     assert entity.values.boolean.child(0) == token
 
 
 def test_values_null():
-    result = parse('null\n')
-    expression = result.block.rules.absolute_expression.expression
+    result = parse('a = null\n')
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     assert entity.values.void.child(0) == Token('NULL', 'null')
 
@@ -45,8 +45,8 @@ def test_values_int():
     """
     Ensures that parsing an int produces the expected tree
     """
-    result = parse('3\n')
-    expression = result.block.rules.absolute_expression.expression
+    result = parse('a = 3\n')
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     assert entity.values.number.child(0) == Token('INT', 3)
 
@@ -55,8 +55,8 @@ def test_values_int_negative():
     """
     Ensures that parsing a negative int produces the expected tree
     """
-    result = parse('-3\n')
-    expression = result.block.rules.absolute_expression.expression
+    result = parse('a = -3\n')
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     assert entity.values.number.child(0) == Token('INT', '-3')
 
@@ -65,8 +65,8 @@ def test_values_float():
     """
     Ensures that parsing a float produces the expected tree
     """
-    result = parse('3.14\n')
-    expression = result.block.rules.absolute_expression.expression
+    result = parse('a = 3.14\n')
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     assert entity.values.number.child(0) == Token('FLOAT', 3.14)
 
@@ -75,23 +75,23 @@ def test_values_float_negative():
     """
     Ensures that parsing a negative float produces the expected tree
     """
-    result = parse('-3.14\n')
-    expression = result.block.rules.absolute_expression.expression
+    result = parse('a = -3.14\n')
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     assert entity.values.number.child(0) == Token('FLOAT', '-3.14')
 
 
 def test_values_double_quoted_string():
-    result = parse('"red"\n')
-    expression = result.block.rules.absolute_expression.expression
+    result = parse('a = "red"\n')
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     expected = entity.values.string.child(0)
     assert expected == Token('DOUBLE_QUOTED', '"red"')
 
 
 def test_values_list():
-    result = parse('[3,4]\n')
-    expression = result.block.rules.absolute_expression.expression
+    result = parse('a = [3,4]\n')
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     list = entity.values.list
     c1 = get_entity(list.child(1).expression)
@@ -101,16 +101,16 @@ def test_values_list():
 
 
 def test_values_list_empty():
-    result = parse('[]\n')
+    result = parse('a = []\n')
     expected = Tree('list', [Token('_OSB', '['), Token('_CSB', ']')])
-    expression = result.block.rules.absolute_expression.expression
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     assert entity.values.list == expected
 
 
 def test_values_object():
-    result = parse('{"color":"red","shape":1}\n')
-    expression = result.block.rules.absolute_expression.expression
+    result = parse('a = {"color":"red","shape":1}\n')
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     values = entity.values
     key_value = values.map.key_value
@@ -123,9 +123,9 @@ def test_values_regular_expression():
     """
     Ensures regular expressions are parsed correctly
     """
-    result = parse('/^foo/')
+    result = parse('a = /^foo/')
     token = Token('REGEXP', '/^foo/')
-    expression = result.block.rules.absolute_expression.expression
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     assert entity.values.regular_expression.child(0) == token
 
@@ -134,7 +134,7 @@ def test_values_regular_expression_flags():
     """
     Ensures regular expressions with flags are parsed correctly
     """
-    result = parse('/^foo/i')
-    expression = result.block.rules.absolute_expression.expression
+    result = parse('a = /^foo/i')
+    expression = result.block.rules.assignment.assignment_fragment.expression
     entity = get_entity(expression)
     assert entity.values.regular_expression.child(0).value == '/^foo/i'

@@ -194,7 +194,7 @@ class Grammar:
         self.ebnf.break_statement = 'break'
         self.ebnf.continue_statement = 'continue'
         self.ebnf.entity = 'values, path'
-        rules = ('absolute_expression, assignment, return_statement, '
+        rules = ('assignment, return_statement, '
                  'throw_statement, break_statement, continue_statement, '
                  'block')
         self.ebnf.rules = rules

@@ -50,7 +50,7 @@ return_statement: RETURN base_expression?
 break_statement: BREAK
 continue_statement: CONTINUE
 entity: values| path
-rules: absolute_expression| assignment| return_statement| throw_statement| break_statement| continue_statement| block
+rules: assignment| return_statement| throw_statement| break_statement| continue_statement| block
 command: NAME
 arguments: NAME? _COLON expression
 output: (_AS NAME (_COMMA NAME)*)

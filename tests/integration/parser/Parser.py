@@ -33,7 +33,7 @@ def arith_exp(exp):
 
 
 def test_parser_sum():
-    result = parse('3 + 4\n')
+    result = parse('a = 3 + 4\n')
     ar_exp = arith_exp(result.block.rules.absolute_expression)
     lhs = get_entity(ar_exp.child(0)).values.number
     assert lhs.child(0) == Token('INT', 3)
