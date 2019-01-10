@@ -59,6 +59,12 @@ class Cli:
             else:
                 e.echo()
                 exit(1)
+        except Exception as e:
+            if debug:
+                raise e
+            else:
+                StoryError.internal_error(e).echo()
+                exit(1)
 
     @staticmethod
     @main.command(aliases=['c'])
@@ -93,6 +99,12 @@ class Cli:
             else:
                 e.echo()
                 exit(1)
+        except Exception as e:
+            if debug:
+                raise e
+            else:
+                StoryError.internal_error(e).echo()
+                exit(1)
 
     @staticmethod
     @main.command(aliases=['l'])
@@ -114,6 +126,12 @@ class Cli:
                 raise e
             else:
                 e.echo()
+                exit(1)
+        except Exception as e:
+            if debug:
+                raise e
+            else:
+                StoryError.internal_error(e).echo()
                 exit(1)
 
     @staticmethod

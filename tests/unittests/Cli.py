@@ -161,6 +161,29 @@ def test_cli_parse_debug(runner, echo, app):
     assert e.exception.short_message() == 'E0001: unexpected error'
 
 
+def test_cli_parse_ice(runner, echo, app):
+    """
+    Ensures the parse command prints unknown errors
+    """
+    app.parse.side_effect = Exception('ICE')
+    e = runner.invoke(Cli.parse, ['/a/non/existent/file'])
+    assert e.exit_code == 1
+    click.echo.assert_called_with((
+        'Internal error occured: ICE\n'
+        'Please report at https://github.com/storyscript/storyscript/issues'))
+
+
+def test_cli_parse_debug_ice(runner, echo, app):
+    """
+    Ensures the parse command supports raises unknown errors with debug=True
+    """
+    app.parse.side_effect = Exception('ICE')
+    e = runner.invoke(Cli.parse, ['--debug', '/a/non/existent/file'])
+    assert e.exit_code == 1
+    assert isinstance(e.exception, Exception)
+    assert str(e.exception) == 'ICE'
+
+
 def test_cli_parse_not_found(runner, echo, app):
     """
     Ensures the parse command catches errors
@@ -238,6 +261,29 @@ def test_cli_compile_ebnf(runner, echo, app):
                                    ignored_path=None)
 
 
+def test_cli_compile_ice(runner, echo, app):
+    """
+    Ensures the compile command prints unknown errors
+    """
+    app.compile.side_effect = Exception('ICE')
+    e = runner.invoke(Cli.compile, ['/a/non/existent/file'])
+    assert e.exit_code == 1
+    click.echo.assert_called_with((
+        'Internal error occured: ICE\n'
+        'Please report at https://github.com/storyscript/storyscript/issues'))
+
+
+def test_cli_compile_debug_ice(runner, echo, app):
+    """
+    Ensures the compile command supports raises unknown errors with debug=True
+    """
+    app.compile.side_effect = Exception('ICE')
+    e = runner.invoke(Cli.compile, ['--debug', '/a/non/existent/file'])
+    assert e.exit_code == 1
+    assert isinstance(e.exception, Exception)
+    assert str(e.exception) == 'ICE'
+
+
 def test_cli_compile_not_found(runner, echo, app):
     """
     Ensures the compile command catches errors
@@ -291,9 +337,32 @@ def test_cli_lex_ebnf(patch, runner):
     App.lex.assert_called_with(os.getcwd(), ebnf='my.ebnf')
 
 
+def test_cli_lex_ice(patch, runner, echo, app):
+    """
+    Ensures the lex command prints unknown errors
+    """
+    patch.object(App, 'lex', side_effect=Exception('ICE'))
+    e = runner.invoke(Cli.lex, ['/a/non/existent/file'])
+    assert e.exit_code == 1
+    click.echo.assert_called_with((
+        'Internal error occured: ICE\n'
+        'Please report at https://github.com/storyscript/storyscript/issues'))
+
+
+def test_cli_lex_debug_ice(patch, runner, echo, app):
+    """
+    Ensures the lex command supports raises unknown errors with debug=True
+    """
+    patch.object(App, 'lex', side_effect=Exception('ICE'))
+    e = runner.invoke(Cli.lex, ['--debug', '/a/non/existent/file'])
+    assert e.exit_code == 1
+    assert isinstance(e.exception, Exception)
+    assert str(e.exception) == 'ICE'
+
+
 def test_cli_lex_not_found(patch, runner, echo, app):
     """
-    Ensures the compile command catches errors
+    Ensures the lex command catches errors
     """
     ce = CompilerError(None, message='error')
     patch.object(App, 'lex')
@@ -305,7 +374,7 @@ def test_cli_lex_not_found(patch, runner, echo, app):
 
 def test_cli_lex_not_found_debug(patch, runner, echo, app):
     """
-    Ensures the compile command raises errors with debug=True
+    Ensures the lex command raises errors with debug=True
     """
     ce = CompilerError(None, message='error')
     patch.object(App, 'lex')
