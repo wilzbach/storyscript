@@ -13,10 +13,10 @@ def test_api_load_map_compiling_try_block():
     """
     Ensures Api.load functions return errors
     """
-    files = {'asd': 'foo'}
+    files = {'asd': 'foo ='}
     with raises(StoryError) as e:
         Api.load_map(files)
-    assert e.value.short_message() == 'E0040: No operator provided'
+    assert e.value.short_message() == 'E0007: Missing value after `=`'
 
 
 def test_api_load_map_compiling_try_block_loads():
@@ -24,16 +24,16 @@ def test_api_load_map_compiling_try_block_loads():
     Ensures Api.load functions return errors
     """
     with raises(StoryError) as e:
-        Api.loads('foo')
-    assert e.value.short_message() == 'E0040: No operator provided'
+        Api.loads('foo =')
+    assert e.value.short_message() == 'E0007: Missing value after `=`'
     e.value.with_color = False
     assert e.value.message() == \
-        """Error: syntax error in story at line 1, column 1
+        """Error: syntax error in story at line 1, column 6
 
-1|    foo
-      ^^^
+1|    foo =
+           ^
 
-E0040: No operator provided"""
+E0007: Missing value after `=`"""
 
 
 def test_api_load_map_syntax_error():
