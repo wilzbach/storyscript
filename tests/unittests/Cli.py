@@ -35,6 +35,50 @@ def test_cli(runner, echo):
     assert click.echo.call_count == 1
 
 
+def test_cli_alais_parse(runner, app):
+    runner.invoke(Cli.main, ['p'])
+    assert app.parse.call_count == 1
+
+
+def test_cli_alais_compile(runner, app):
+    runner.invoke(Cli.main, ['c'])
+    assert app.compile.call_count == 1
+
+
+def test_cli_alais_lex(runner, app, patch):
+    patch.object(App, 'lex')
+    runner.invoke(Cli.main, 'l')
+    assert app.lex.call_count == 1
+
+
+def test_cli_alais_grammar(runner, app, patch):
+    patch.object(App, 'grammar')
+    runner.invoke(Cli.main, 'g')
+    assert app.grammar.call_count == 1
+
+
+def test_cli_alais_new(patch, runner):
+    patch.object(Project, 'new')
+    runner.invoke(Cli.main, ['n', 'project'])
+    Project.new.assert_called_with('project')
+
+
+def test_cli_alias_help(runner, echo):
+    runner.invoke(Cli.main, 'h')
+    click.echo.assert_called_once()
+
+
+def test_cli_alais_version(runner, echo):
+    runner.invoke(Cli.main, 'v')
+    click.echo.assert_called_with(version)
+
+
+def test_cli_alais_version_flag(runner, echo):
+    runner.invoke(Cli.main, '-v')
+    message = 'StoryScript {} - http://storyscript.org'.format(version)
+    click.echo.assert_called_with(message)
+
+
 def test_cli_version_flag(runner, echo):
     """
     Ensures --version outputs the version
