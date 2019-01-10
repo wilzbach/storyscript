@@ -84,7 +84,10 @@ class StoryError(SyntaxError):
         Provides an hint for the current error.
         """
         if self.error_tuple == ErrorCodes.unidentified_error:
-            return self.error.message()
+            if hasattr(self.error, 'message'):
+                return self.error.message()
+            else:
+                return str(self.error)
         else:
             return self.error_tuple[1]
 

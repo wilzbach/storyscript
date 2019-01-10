@@ -126,6 +126,18 @@ def test_storyerror_hint(storyerror):
     assert storyerror.hint() == 'hint'
 
 
+def test_storyerror_hint_unidentified_error(storyerror):
+    storyerror.error_tuple = ErrorCodes.unidentified_error
+    storyerror.error = Exception('Custom.Error')
+    assert storyerror.hint() == 'Custom.Error'
+
+
+def test_storyerror_hint_unidentified_compiler_error(storyerror):
+    storyerror.error_tuple = ErrorCodes.unidentified_error
+    storyerror.error = CompilerError(None, message='Custom.Compiler.Error')
+    assert storyerror.hint() == 'Custom.Compiler.Error'
+
+
 def test_storyerror_identify(storyerror):
     storyerror.error.error = 'none'
     assert storyerror.identify() == ErrorCodes.unidentified_error
@@ -155,6 +167,16 @@ def test_storyerror_identify_unexpected_characters(patch, storyerror):
     patch.object(StoryError, 'get_line')
     storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
     assert storyerror.identify() == ErrorCodes.function_misspell
+
+
+def test_storyerror_identify_unexpected_characters_unidentified(
+        patch, storyerror):
+    patch.init(UnexpectedCharacters)
+    patch.init(Intention)
+    patch.object(Intention, 'is_function', return_value=False)
+    patch.object(StoryError, 'get_line')
+    storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
+    assert storyerror.identify() == ErrorCodes.unidentified_error
 
 
 def test_storyerror_process(patch, storyerror):
