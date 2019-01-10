@@ -154,3 +154,31 @@ def test_transformer_rules(rule):
     assert isinstance(result, Tree)
     assert result.data == rule
     assert result.children == ['matches']
+
+
+def test_transformer_absolute_expression(patch, tree):
+    """
+    Ensures absolute_expression are untouched when they don't contain
+    just a path
+    """
+    patch.object(Tree, 'follow_node_chain')
+    tree.follow_node_chain.return_value = None
+    result = Transformer.absolute_expression([tree])
+    assert result == Tree('absolute_expression', [tree])
+    result = Transformer.absolute_expression([tree, tree])
+    assert result == Tree('absolute_expression', [tree, tree])
+
+
+def test_transformer_absolute_expression_zero(patch, tree, magic):
+    """
+    Ensures absolute_expression are untouched when they don't contain
+    just a path
+    """
+    patch.object(Tree, 'follow_node_chain')
+    m = magic()
+    tree.follow_node_chain.return_value = m
+    result = Transformer.absolute_expression([tree])
+    expected = Tree('service_block', [
+        Tree('service', [m, Tree('service_fragment', [])])
+    ])
+    assert result == expected

@@ -358,3 +358,13 @@ def test_compiler_try_nested_raise_error(parser):
     assert result['tree']['5']['method'] == 'raise'
     assert result['tree']['5']['parent'] == '4'
     assert result['tree']['5']['args'] == args
+
+
+def test_compiler_service_with_zero_args(parser):
+    source = 'foo'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['method'] == 'execute'
+    assert result['tree']['1']['service'] == 'foo'
+    assert result['tree']['1']['args'] == []
+    assert result['services'] == ['foo']

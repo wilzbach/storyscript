@@ -133,5 +133,29 @@ class Tree(LarkTree):
         if not cond:
             raise CompilerError(error, tree=self)
 
+    def follow_node_chain(self, expected_nodes):
+        """
+        Checks whether all expected nodes can seen in the tree
+        Returns the lowest expected node if all expected nodes and
+        no other nodes have been observed, `None` otherwise.
+        """
+        if len(self.children) != 1:
+            return None
+        it = self.iter_subtrees()
+        exp = reversed(expected_nodes)
+        # save path for efficiency
+        path = next(it)
+        if path.data != next(exp):
+            return None
+        while True:
+            p = next(it, None)
+            e = next(exp, None)
+            if p is None and e is None:
+                return path
+            if p is None or e is None:
+                return None
+            if p.data != e:
+                return None
+
     def __getattr__(self, attribute):
         return self.node(attribute)
