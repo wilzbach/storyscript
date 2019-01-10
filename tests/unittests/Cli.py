@@ -11,6 +11,8 @@ from storyscript.App import App
 from storyscript.Cli import Cli
 from storyscript.Project import Project
 from storyscript.Version import version
+from storyscript.exceptions.CompilerError import CompilerError
+from storyscript.exceptions.StoryError import StoryError
 
 
 @fixture
@@ -94,7 +96,7 @@ def test_cli_compile_with_ignore_option(runner, app):
     """
     runner.invoke(Cli.compile, ['path/fake.story',
                                 '--ignore', 'path/sub_dir/my_fake.story'])
-    App.compile.assert_called_with('path/fake.story', ebnf=None, debug=False,
+    App.compile.assert_called_with('path/fake.story', ebnf=None,
                                    ignored_path='path/sub_dir/my_fake.story')
 
 
@@ -104,7 +106,7 @@ def test_cli_parse_with_ignore_option(runner, app):
     """
     runner.invoke(Cli.parse, ['path/fake.story', '--ignore',
                               'path/sub_dir/my_fake.story'])
-    App.parse.assert_called_with('path/fake.story', ebnf=None, debug=False,
+    App.parse.assert_called_with('path/fake.story', ebnf=None,
                                  ignored_path='path/sub_dir/my_fake.story')
 
 
@@ -115,7 +117,7 @@ def test_cli_parse(runner, echo, app, tree):
     App.parse.return_value = {'path': tree}
     runner.invoke(Cli.parse, [])
     App.parse.assert_called_with(os.getcwd(), ebnf=None,
-                                 debug=False, ignored_path=None)
+                                 ignored_path=None)
     click.echo.assert_called_with(tree.pretty())
 
 
@@ -134,7 +136,7 @@ def test_cli_parse_path(runner, echo, app):
     """
     runner.invoke(Cli.parse, ['/path'])
     App.parse.assert_called_with('/path', ebnf=None,
-                                 debug=False, ignored_path=None)
+                                 ignored_path=None)
 
 
 def test_cli_parse_ebnf(runner, echo, app):
@@ -143,16 +145,31 @@ def test_cli_parse_ebnf(runner, echo, app):
     """
     runner.invoke(Cli.parse, ['--ebnf', 'test.ebnf'])
     App.parse.assert_called_with(os.getcwd(), ebnf='test.ebnf',
-                                 debug=False, ignored_path=None)
+                                 ignored_path=None)
 
 
 def test_cli_parse_debug(runner, echo, app):
     """
-    Ensures the parse command supports a debug flag.
+    Ensures the parse command supports raises errors with debug=True
     """
     runner.invoke(Cli.parse, ['--debug'])
-    App.parse.assert_called_with(os.getcwd(), ebnf=None,
-                                 debug=True, ignored_path=None)
+    ce = CompilerError(None, message='unexpected error')
+    app.parse.side_effect = StoryError(ce, None)
+    e = runner.invoke(Cli.parse, ['--debug', '/a/non/existent/file'])
+    assert e.exit_code == 1
+    assert isinstance(e.exception, StoryError)
+    assert e.exception.short_message() == 'E0001: unexpected error'
+
+
+def test_cli_parse_not_found(runner, echo, app):
+    """
+    Ensures the parse command catches errors
+    """
+    ce = CompilerError(None, message='error')
+    app.parse.side_effect = StoryError(ce, None)
+    e = runner.invoke(Cli.parse, ['/a/non/existent/file'])
+    assert e.exit_code == 1
+    click.echo.assert_called_with('error')
 
 
 def test_cli_compile(patch, runner, echo, app):
@@ -162,7 +179,7 @@ def test_cli_compile(patch, runner, echo, app):
     patch.object(click, 'style')
     runner.invoke(Cli.compile, [])
     App.compile.assert_called_with(os.getcwd(), ebnf=None,
-                                   debug=False, ignored_path=None)
+                                   ignored_path=None)
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
 
@@ -173,7 +190,7 @@ def test_cli_compile_path(patch, runner, app):
     """
     runner.invoke(Cli.compile, ['/path'])
     App.compile.assert_called_with('/path', ebnf=None,
-                                   debug=False, ignored_path=None)
+                                   ignored_path=None)
 
 
 def test_cli_compile_output_file(patch, runner, app):
@@ -192,7 +209,7 @@ def test_cli_compile_silent(runner, echo, app, option):
     Ensures --silent makes everything quiet
     """
     result = runner.invoke(Cli.compile, [option])
-    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=False,
+    App.compile.assert_called_with(os.getcwd(), ebnf=None,
                                    ignored_path=None)
     assert result.output == ''
     assert click.echo.call_count == 0
@@ -200,7 +217,7 @@ def test_cli_compile_silent(runner, echo, app, option):
 
 def test_cli_compile_debug(runner, echo, app):
     runner.invoke(Cli.compile, ['--debug'])
-    App.compile.assert_called_with(os.getcwd(), ebnf=None, debug=True,
+    App.compile.assert_called_with(os.getcwd(), ebnf=None,
                                    ignored_path=None)
 
 
@@ -211,14 +228,37 @@ def test_cli_compile_json(runner, echo, app, option):
     """
     runner.invoke(Cli.compile, [option])
     App.compile.assert_called_with(os.getcwd(), ebnf=None,
-                                   debug=False, ignored_path=None)
+                                   ignored_path=None)
     click.echo.assert_called_with(App.compile())
 
 
 def test_cli_compile_ebnf(runner, echo, app):
     runner.invoke(Cli.compile, ['--ebnf', 'test.ebnf'])
     App.compile.assert_called_with(os.getcwd(), ebnf='test.ebnf',
-                                   debug=False, ignored_path=None)
+                                   ignored_path=None)
+
+
+def test_cli_compile_not_found(runner, echo, app):
+    """
+    Ensures the compile command catches errors
+    """
+    ce = CompilerError(None, message='error')
+    app.compile.side_effect = StoryError(ce, None)
+    e = runner.invoke(Cli.compile, ['/a/non/existent/file'])
+    assert e.exit_code == 1
+    click.echo.assert_called_with('error')
+
+
+def test_cli_compile_not_found_debug(runner, echo, app):
+    """
+    Ensures the compile command raises errors with debug=True
+    """
+    ce = CompilerError(None, message='error')
+    app.compile.side_effect = StoryError(ce, None)
+    e = runner.invoke(Cli.compile, ['--debug', '/a/non/existent/file'])
+    assert e.exit_code == 1
+    assert isinstance(e.exception, StoryError)
+    assert e.exception.short_message() == 'E0001: error'
 
 
 def test_cli_lex(patch, magic, runner, app, echo):
@@ -249,6 +289,31 @@ def test_cli_lex_ebnf(patch, runner):
     patch.object(App, 'lex')
     runner.invoke(Cli.lex, ['--ebnf', 'my.ebnf'])
     App.lex.assert_called_with(os.getcwd(), ebnf='my.ebnf')
+
+
+def test_cli_lex_not_found(patch, runner, echo, app):
+    """
+    Ensures the compile command catches errors
+    """
+    ce = CompilerError(None, message='error')
+    patch.object(App, 'lex')
+    App.lex.side_effect = StoryError(ce, None)
+    e = runner.invoke(Cli.lex, ['/a/non/existent/file'])
+    assert e.exit_code == 1
+    click.echo.assert_called_with('error')
+
+
+def test_cli_lex_not_found_debug(patch, runner, echo, app):
+    """
+    Ensures the compile command raises errors with debug=True
+    """
+    ce = CompilerError(None, message='error')
+    patch.object(App, 'lex')
+    App.lex.side_effect = StoryError(ce, None)
+    e = runner.invoke(Cli.lex, ['--debug', '/a/non/existent/file'])
+    assert e.exit_code == 1
+    assert isinstance(e.exception, StoryError)
+    assert e.exception.short_message() == 'E0001: error'
 
 
 def test_cli_grammar(patch, runner, app, echo):

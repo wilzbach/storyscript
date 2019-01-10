@@ -66,4 +66,10 @@ from storyscript.ErrorCodes import ErrorCodes
         'You have defined a chained mutation, but not a mutation'))
 ])
 def test_errorcodes(name, definition):
-    assert getattr(ErrorCodes, name) == definition
+    assert ErrorCodes.get_error(name) == definition
+
+
+def test_is_error():
+    assert not ErrorCodes.is_error(None)
+    assert not ErrorCodes.is_error('foo')
+    assert ErrorCodes.is_error('service_name')

@@ -19,7 +19,7 @@ def test_app_parse(bundle):
     """
     result = App.parse('path')
     Bundle.from_path.assert_called_with('path', ignored_path=None)
-    Bundle.from_path().bundle_trees.assert_called_with(ebnf=None, debug=None)
+    Bundle.from_path().bundle_trees.assert_called_with(ebnf=None)
     assert result == Bundle.from_path().bundle_trees()
 
 
@@ -33,22 +33,14 @@ def test_app_parse_ebnf(bundle):
     Ensures App.parse supports specifying an ebnf
     """
     App.parse('path', ebnf='ebnf')
-    Bundle.from_path().bundle_trees.assert_called_with(ebnf='ebnf', debug=None)
-
-
-def test_app_parse_debug(bundle):
-    """
-    Ensures App.parse can run in debug mode
-    """
-    App.parse('path', debug=True)
-    Bundle.from_path().bundle_trees.assert_called_with(ebnf=None, debug=True)
+    Bundle.from_path().bundle_trees.assert_called_with(ebnf='ebnf')
 
 
 def test_app_compile(patch, bundle):
     patch.object(json, 'dumps')
     result = App.compile('path')
     Bundle.from_path.assert_called_with('path', ignored_path=None)
-    Bundle.from_path().bundle.assert_called_with(ebnf=None, debug=False)
+    Bundle.from_path().bundle.assert_called_with(ebnf=None)
     json.dumps.assert_called_with(Bundle.from_path().bundle(), indent=2)
     assert result == json.dumps()
 
@@ -65,13 +57,7 @@ def test_app_compile_ebnf(patch, bundle):
     """
     patch.object(json, 'dumps')
     App.compile('path', ebnf='ebnf')
-    Bundle.from_path().bundle.assert_called_with(ebnf='ebnf', debug=False)
-
-
-def test_app_compile_debug(patch, bundle):
-    patch.object(json, 'dumps')
-    App.compile('path', debug='debug')
-    Bundle.from_path().bundle.assert_called_with(ebnf=None, debug='debug')
+    Bundle.from_path().bundle.assert_called_with(ebnf='ebnf')
 
 
 def test_app_lex(bundle):

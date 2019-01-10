@@ -210,12 +210,13 @@ class Objects:
         return arguments
 
     @staticmethod
-    def expression_type(operator):
+    def expression_type(operator, tree):
         types = {'+': 'sum', '-': 'subtraction', '^': 'exponential',
                  '*': 'multiplication', '/': 'division', '%': 'modulus',
                  'and': 'and', 'or': 'or', 'not': 'not', '==': 'equals',
                  '>': 'greater', '<': 'less', '!=': 'not_equal',
                  '>=': 'greater_equal', '<=': 'less_equal'}
+        tree.expect(operator in types, 'compiler_error_no_operator')
         return types[operator]
 
     @classmethod
@@ -258,7 +259,7 @@ class Objects:
             values = cls.expression_values(tree.child(0).children)
         else:
             values = cls.expression_values(tree.children)
-        expression_type = Objects.expression_type(tree.find_operator())
+        expression_type = Objects.expression_type(tree.find_operator(), tree)
         return {'$OBJECT': 'expression', 'expression': expression_type,
                 'values': values}
 
@@ -272,6 +273,6 @@ class Objects:
         if operator is None:
             return [lhs]
         rhs = cls.values(tree.child(2).child(0))
-        assertion = Objects.expression_type(operator.child(0))
+        assertion = Objects.expression_type(operator.child(0), tree)
         return [{'$OBJECT': 'assertion', 'assertion': assertion,
                  'values': [lhs, rhs]}]

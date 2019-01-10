@@ -5,6 +5,7 @@ import click
 
 from lark.exceptions import UnexpectedCharacters, UnexpectedToken
 
+from .CompilerError import CompilerError
 from ..ErrorCodes import ErrorCodes
 from ..Intention import Intention
 
@@ -21,6 +22,7 @@ class StoryError(SyntaxError):
         self.story = story
         self.path = path
         self.error_tuple = None
+        self.with_color = True
 
     def name(self):
         """
@@ -44,7 +46,9 @@ class StoryError(SyntaxError):
         Creates the header of the message
         """
         template = 'Error: syntax error in {} at line {}, column {}'
-        name = click.style(self.name(), bold=True)
+        name = self.name()
+        if self.with_color:
+            name = click.style(self.name(), bold=True)
         return template.format(name, self.error.line, self.error.column)
 
     def symbols(self):
@@ -55,7 +59,10 @@ class StoryError(SyntaxError):
         if hasattr(self.error, 'end_column'):
             end_column = int(self.error.end_column)
         symbols = '^' * (end_column - int(self.error.column))
-        return click.style(symbols, fg='red')
+        if self.with_color:
+            return click.style(symbols, fg='red')
+        else:
+            return symbols
 
     def highlight(self):
         """
@@ -76,15 +83,20 @@ class StoryError(SyntaxError):
         """
         Provides an hint for the current error.
         """
-        return self.error_tuple[1]
+        if self.error_tuple == ErrorCodes.unidentified_error:
+            return self.error.message()
+        else:
+            return self.error_tuple[1]
 
     def identify(self):
         """
         Identifies the error.
         """
         if hasattr(self.error, 'error'):
-            if hasattr(ErrorCodes, self.error.error):
-                return getattr(ErrorCodes, self.error.error)
+            if not isinstance(self.error.error, str):
+                return ErrorCodes.unidentified_error
+            if ErrorCodes.is_error(self.error.error):
+                return ErrorCodes.get_error(self.error.error)
 
         intention = Intention(self.get_line())
         if isinstance(self.error, UnexpectedToken):
@@ -107,12 +119,34 @@ class StoryError(SyntaxError):
         Creates a friendly error message.
         """
         self.process()
-        args = (self.header(), self.highlight(),
-                self.error_code(), self.hint())
-        return '{}\n\n{}\n\n{}: {}'.format(*args)
+        # Check whether the error comes with source information
+        if hasattr(self.error, 'line'):
+            args = (self.header(), self.highlight(),
+                    self.error_code(), self.hint())
+            return '{}\n\n{}\n\n{}: {}'.format(*args)
+        else:
+            return self.error.message()
 
     def echo(self):
         """
         Prints the message
         """
         click.echo(self.message())
+
+    def short_message(self):
+        """
+        A short version of the error message
+        """
+        self.process()
+        return f'{self.error_code()}: {self.hint()}'
+
+    @staticmethod
+    def unnamed_error(message):
+        return StoryError(CompilerError(None, message=message), None)
+
+    @staticmethod
+    def internal_error(e):
+        url = 'https://github.com/storyscript/storyscript/issues'
+        return StoryError.unnamed_error((
+            f'Internal error occured: {str(e)}\n'
+            f'Please report at {url}'))

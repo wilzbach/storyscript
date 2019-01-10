@@ -304,8 +304,8 @@ def test_objects_function_arguments(patch, tree):
     ('<', 'less'), ('!=', 'not_equal'), ('>=', 'greater_equal'),
     ('<=', 'less_equal')
 ])
-def test_objects_expression_type(operator, expression):
-    assert Objects.expression_type(operator) == expression
+def test_objects_expression_type(operator, expression, tree):
+    assert Objects.expression_type(operator, tree) == expression
 
 
 def test_objects_resolve_operand(patch, tree):
@@ -414,7 +414,7 @@ def test_objects_expression(patch, tree):
     tree.number = None
     result = Objects.expression(tree)
     Objects.expression_values.assert_called_with(tree.children)
-    Objects.expression_type.assert_called_with(tree.find_operator())
+    Objects.expression_type.assert_called_with(tree.find_operator(), tree)
     expected = {'$OBJECT': 'expression',
                 'values': Objects.expression_values(),
                 'expression': Objects.expression_type()}
@@ -430,7 +430,7 @@ def test_objects_expression_one_child(patch, tree):
     tree.children = [1]
     Objects.expression(tree)
     Objects.expression_values.assert_called_with(tree.child().children)
-    Objects.expression_type.assert_called_with(tree.find_operator())
+    Objects.expression_type.assert_called_with(tree.find_operator(), tree)
 
 
 def test_objects_assertion(patch, tree):
@@ -438,7 +438,7 @@ def test_objects_assertion(patch, tree):
     result = Objects.assertion(tree)
     Objects.entity.assert_called_with(tree.entity)
     Objects.values.assert_called_with(tree.child().child())
-    Objects.expression_type.assert_called_with(tree.child().child())
+    Objects.expression_type.assert_called_with(tree.child().child(), tree)
     expected = [
         {'$OBJECT': 'assertion', 'assertion': Objects.expression_type(),
          'values': [Objects.entity(), Objects.values()]}

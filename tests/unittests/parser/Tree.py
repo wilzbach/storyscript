@@ -2,8 +2,9 @@
 from lark.lexer import Token
 from lark.tree import Tree as LarkTree
 
-from pytest import fixture, mark
+from pytest import fixture, mark, raises
 
+from storyscript.exceptions.CompilerError import CompilerError
 from storyscript.parser import Tree
 
 
@@ -171,3 +172,13 @@ def test_tree_find_operator_depths(tree):
     Ensures find_operator can find operators at various depths
     """
     assert tree.find_operator() == Token('t', 't')
+
+
+def test_tree_expect(tree):
+    """
+    Ensures expect throws an error
+    """
+    with raises(CompilerError) as e:
+        tree.expect(0, 'error')
+
+    assert e.value.message() == 'Unknown compiler error'

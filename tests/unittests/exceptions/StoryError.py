@@ -9,7 +9,7 @@ from pytest import fixture, mark
 
 from storyscript.ErrorCodes import ErrorCodes
 from storyscript.Intention import Intention
-from storyscript.exceptions import StoryError
+from storyscript.exceptions import CompilerError, StoryError
 
 
 @fixture
@@ -99,6 +99,9 @@ def test_story_error_symbols_end_column(patch, storyerror, error):
     result = storyerror.symbols()
     click.style.assert_called_with('^^^', fg='red')
     assert result == click.style()
+    storyerror.with_color = False
+    result = storyerror.symbols()
+    assert result == '^^^'
 
 
 def test_storyerror_highlight(patch, storyerror, error):
@@ -178,3 +181,26 @@ def test_storyerror_echo(patch, storyerror):
     patch.object(StoryError, 'message')
     storyerror.echo()
     click.echo.assert_called_with(StoryError.message())
+
+
+def test_storyerror_internal(patch):
+    """
+    Ensures that an internal error gets properly constructed
+    """
+    patch.object(StoryError, 'unnamed_error')
+    e = StoryError.internal_error(Exception('ICE happened'))
+    msg = (
+        'Internal error occured: ICE happened\n'
+        'Please report at https://github.com/storyscript/storyscript/issues')
+    StoryError.unnamed_error.assert_called_with(msg)
+    assert e == StoryError.internal_error(msg)
+
+
+def test_storyerror_unnamed_error(patch):
+    patch.init(StoryError)
+    patch.init(CompilerError)
+    e = StoryError.unnamed_error('Unknown error happened')
+    assert isinstance(e, StoryError)
+    assert CompilerError.__init__.call_count == 1
+    assert isinstance(StoryError.__init__.call_args[0][0], CompilerError)
+    assert StoryError.__init__.call_args[0][1] is None

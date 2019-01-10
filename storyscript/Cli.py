@@ -9,6 +9,7 @@ from click_alias import ClickAliasedGroup
 from .App import App
 from .Project import Project
 from .Version import version as app_version
+from .exceptions import StoryError
 
 
 class Cli:
@@ -44,13 +45,20 @@ class Cli:
         """
         Parses stories, producing the abstract syntax tree.
         """
-        trees = App.parse(path, ignored_path=ignore, ebnf=ebnf, debug=debug)
-        for story, tree in trees.items():
-            click.echo('File: {}'.format(story))
-            if raw:
-                click.echo(tree)
+        try:
+            trees = App.parse(path, ignored_path=ignore, ebnf=ebnf)
+            for story, tree in trees.items():
+                click.echo('File: {}'.format(story))
+                if raw:
+                    click.echo(tree)
+                else:
+                    click.echo(tree.pretty())
+        except StoryError as e:
+            if debug:
+                raise e
             else:
-                click.echo(tree.pretty())
+                e.echo()
+                exit(1)
 
     @staticmethod
     @main.command(aliases=['c'])
@@ -66,31 +74,47 @@ class Cli:
         """
         Compiles stories and prints the resulting json
         """
-        results = App.compile(path, ignored_path=ignore,
-                              ebnf=ebnf, debug=debug)
-        if not silent:
-            if json:
-                if output:
-                    with io.open(output, 'w') as f:
-                        f.write(results)
-                    exit()
-                click.echo(results)
+        try:
+            results = App.compile(path, ignored_path=ignore,
+                                  ebnf=ebnf)
+            if not silent:
+                if json:
+                    if output:
+                        with io.open(output, 'w') as f:
+                            f.write(results)
+                        exit()
+                    click.echo(results)
+                else:
+                    msg = 'Script syntax passed!'
+                    click.echo(click.style(msg, fg='green'))
+        except StoryError as e:
+            if debug:
+                raise e
             else:
-                click.echo(click.style('Script syntax passed!', fg='green'))
+                e.echo()
+                exit(1)
 
     @staticmethod
     @main.command(aliases=['l'])
     @click.argument('path', default=os.getcwd())
     @click.option('--ebnf', help=ebnf_help)
-    def lex(path, ebnf):
+    @click.option('--debug', is_flag=True)
+    def lex(path, ebnf, debug):
         """
         Shows lexer tokens for given stories
         """
-        results = App.lex(path, ebnf=ebnf)
-        for file, tokens in results.items():
-            click.echo('File: {}'.format(file))
-            for n, token in enumerate(tokens):
-                click.echo('{} {} {}'.format(n, token.type, token.value))
+        try:
+            results = App.lex(path, ebnf=ebnf)
+            for file, tokens in results.items():
+                click.echo('File: {}'.format(file))
+                for n, token in enumerate(tokens):
+                    click.echo('{} {} {}'.format(n, token.type, token.value))
+        except StoryError as e:
+            if debug:
+                raise e
+            else:
+                e.echo()
+                exit(1)
 
     @staticmethod
     @main.command(aliases=['g'])

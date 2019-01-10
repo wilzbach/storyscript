@@ -2,6 +2,8 @@
 from lark.lexer import Token
 from lark.tree import Tree as LarkTree
 
+from ..exceptions import CompilerError
+
 
 class Tree(LarkTree):
     """
@@ -123,6 +125,13 @@ class Tree(LarkTree):
                 if isinstance(self.multiplication.exponential.child(1), Token):
                     return self.multiplication.exponential.child(1)
         return self.multiplication.exponential.factor.child(0)
+
+    def expect(self, cond, error):
+        """
+        Throws a compiler error with message if the condition is falsy.
+        """
+        if not cond:
+            raise CompilerError(error, tree=self)
 
     def __getattr__(self, attribute):
         return self.node(attribute)

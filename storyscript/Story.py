@@ -48,13 +48,16 @@ class Story:
         """
         Reads a story
         """
+        msg = None
         try:
             with io.open(path, 'r') as file:
                 return cls.clean_source(file.read())
         except FileNotFoundError:
             abspath = os.path.abspath(path)
-            print('File "{}" not found at {}'.format(path, abspath))
-            exit()
+            msg = 'File "{}" not found at {}'.format(path, abspath)
+
+        if msg is not None:
+            raise StoryError.unnamed_error(msg)
 
     @classmethod
     def from_file(cls, path):
@@ -70,28 +73,28 @@ class Story:
         """
         return Story(cls.clean_source(stream.read()))
 
-    def error(self, error, debug=False):
+    def error(self, error):
         """
-        Handles errors by printing a nice message or raising the real error.
+        Handles errors by wrapping the real error in a smart StoryError
         """
-        if debug:
-            raise error
-        StoryError(error, self.story, path=self.path).echo()
-        exit()
+        return StoryError(error, self.story, path=self.path)
 
-    def parse(self, ebnf=None, debug=False):
+    def parse(self, ebnf=None):
         """
         Parses the story, storing the tree
         """
         parser = Parser(ebnf=ebnf)
+        e = None
         try:
-            self.tree = parser.parse(self.story, debug=debug)
+            self.tree = parser.parse(self.story)
         except StorySyntaxError as error:
-            self.error(error, debug=debug)
+            e = self.error(error)
         except UnexpectedToken as error:
-            self.error(error, debug=debug)
+            e = self.error(error)
         except UnexpectedInput as error:
-            self.error(error, debug=debug)
+            e = self.error(error)
+        if e is not None:
+            raise e
 
     def modules(self):
         """
@@ -105,14 +108,17 @@ class Story:
             modules.append(path)
         return modules
 
-    def compile(self, debug=False):
+    def compile(self):
         """
         Compiles the story and stores the result.
         """
+        e = None
         try:
-            self.compiled = Compiler.compile(self.tree, debug=debug)
+            self.compiled = Compiler.compile(self.tree)
         except (CompilerError, StorySyntaxError) as error:
-            self.error(error, debug=debug)
+            e = self.error(error)
+        if e is not None:
+            raise e
 
     def lex(self, ebnf=None):
         """
@@ -120,10 +126,10 @@ class Story:
         """
         return Parser(ebnf=ebnf).lex(self.story)
 
-    def process(self, ebnf=None, debug=False):
+    def process(self, ebnf=None):
         """
         Parse and compile a story, returning the compiled JSON
         """
-        self.parse(ebnf=ebnf, debug=debug)
-        self.compile(debug=debug)
+        self.parse(ebnf=ebnf)
+        self.compile()
         return self.compiled
