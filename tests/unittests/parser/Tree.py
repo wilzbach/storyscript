@@ -182,3 +182,35 @@ def test_tree_expect(tree):
         tree.expect(0, 'error')
 
     assert e.value.message() == 'Unknown compiler error'
+
+
+def test_follow_node_chain_no_children(tree):
+    """
+    Ensures we don't follow a node chain if there are no children
+    """
+    assert tree.follow_node_chain(['foo', 'bar']) is None
+    tree.children = [1, 2]
+    assert tree.follow_node_chain(['foo', 'bar']) is None
+
+
+def test_follow_node_chain_children(patch, tree):
+    """
+    Ensures we follow a node chain if there are children
+    """
+    m = Tree('mock', [])
+    tree.children = [0]
+    patch.object(Tree, 'iter_subtrees')
+    Tree.iter_subtrees.return_value = iter([m])
+    assert tree.follow_node_chain(['foo', 'bar']) is None
+
+    Tree.iter_subtrees.return_value = iter([m])
+    assert tree.follow_node_chain(['mock']) is m
+
+    arr = [m, Tree('m2', []), Tree('m3', [])]
+    Tree.iter_subtrees.side_effect = lambda: iter(arr)
+    assert tree.follow_node_chain(['mock']) is None
+    assert tree.follow_node_chain(['mock', 'm2']) is None
+    assert tree.follow_node_chain(['m2', 'mock']) is None
+    assert tree.follow_node_chain(['m4', 'm2', 'mock']) is None
+    assert tree.follow_node_chain(['m4', 'm3', 'm2', 'mock']) is None
+    assert tree.follow_node_chain(['m3', 'm2', 'mock']) == m

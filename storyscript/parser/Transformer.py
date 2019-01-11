@@ -93,5 +93,25 @@ class Transformer(LarkTransformer):
         cls.implicit_output(matches[0])
         return Tree('when_block', matches)
 
+    expected_nodes_abs_exp_zero_args = [
+        'entity', 'factor', 'exponential', 'multiplication', 'expression'
+    ]
+
+    @classmethod
+    def absolute_expression(cls, matches):
+        """
+        Transform zero-argument expression into service blocks
+        """
+        if len(matches) == 1:
+            path = matches[0].follow_node_chain([
+                'expression', 'multiplication', 'exponential', 'factor',
+                'entity', 'path'
+            ])
+            if path is not None:
+                service_fragment = Tree('service_fragment', [])
+                service = Tree('service', [path, service_fragment])
+                return Tree('service_block', [service])
+        return Tree('absolute_expression', matches)
+
     def __getattr__(self, attribute, *args):
         return lambda matches: Tree(attribute, matches)
