@@ -76,3 +76,13 @@ def test_exception_file_not_found(capsys):
         Story.from_file('this-file-does-not-exist')
     message = e.value.message()
     assert 'File "this-file-does-not-exist" not found at' in message
+
+
+def test_exception_dollar(capsys):
+    with raises(StoryError) as e:
+        Story('x = $').process()
+    e.value.with_color = False
+    lines = e.value.message().splitlines()
+    assert lines[0] == 'Error: syntax error in story at line 1, column 5'
+    assert lines[2] == '1|    x = $'
+    assert lines[5] == 'E0041: `$` is not allowed here'
