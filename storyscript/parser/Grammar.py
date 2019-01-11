@@ -108,9 +108,6 @@ class Grammar:
         self.ebnf.absolute_expression = 'expression'
 
     def raise_statement(self):
-        # NOTE(@wilzbach): raise can't be ignored as it is required to infer
-        # the line without children
-        # raise is a statement or a block?????
         self.ebnf.RAISE = 'raise'
         self.ebnf.raise_statement = ('raise entity?')
 
