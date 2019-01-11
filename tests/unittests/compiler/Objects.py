@@ -143,15 +143,16 @@ def test_objects_string(patch, tree):
     patch.object(re, 'findall', return_value=[])
     result = Objects.string(tree)
     Objects.unescape_string.assert_called_with(tree)
-    re.findall.assert_called_with(r'{([^}]*)}', Objects.unescape_string())
+    re.findall.assert_called_with(r'(?<!\\){(.*?)(?<!\\)}',
+                                  Objects.unescape_string())
     assert result == {'$OBJECT': 'string', 'string': Objects.unescape_string()}
 
 
 def test_objects_string_templating(patch):
     patch.many(Objects, ['unescape_string', 'fillers_values',
                          'replace_fillers'])
-    patch.object(re, 'findall', return_value=['color'])
-    tree = Tree('string', [Token('DOUBLE_QUOTED', '"{color}"')])
+    patch.object(re, 'findall', return_value=['var'])
+    tree = Tree('string', [Token('DOUBLE_QUOTED', '"{var} is \\{notvar\\}"')])
     result = Objects.string(tree)
     Objects.fillers_values.assert_called_with(re.findall())
     Objects.replace_fillers.assert_called_with(Objects.unescape_string(),
