@@ -177,7 +177,7 @@ class Compiler:
         for block in [tree.elseif_block, tree.else_block]:
             if block:
                 trees.append(block)
-        self.subtrees(*trees)
+        self.subtrees(*trees, parent=parent)
 
     def elseif_block(self, tree, parent):
         """
@@ -333,12 +333,12 @@ class Compiler:
                           parent=parent)
         self.subtree(nested_block, parent=line)
 
-    def subtrees(self, *trees):
+    def subtrees(self, *trees, parent=None):
         """
         Parses many subtrees
         """
         for tree in trees:
-            self.subtree(tree)
+            self.subtree(tree, parent=parent)
 
     def subtree(self, tree, parent=None):
         """
