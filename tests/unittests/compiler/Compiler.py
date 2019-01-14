@@ -334,7 +334,7 @@ def test_compiler_if_block_with_elseif(patch, compiler, tree):
     patch.many(Compiler, ['subtree', 'subtrees'])
     tree.else_block = None
     compiler.if_block(tree, '1')
-    compiler.subtrees.assert_called_with(tree.elseif_block)
+    compiler.subtrees.assert_called_with(tree.elseif_block, parent='1')
 
 
 def test_compiler_if_block_with_else(patch, compiler, tree):
@@ -342,7 +342,7 @@ def test_compiler_if_block_with_else(patch, compiler, tree):
     patch.many(Compiler, ['subtree', 'subtrees'])
     tree.elseif_block = None
     compiler.if_block(tree, '1')
-    compiler.subtrees.assert_called_with(tree.else_block)
+    compiler.subtrees.assert_called_with(tree.else_block, parent='1')
 
 
 def test_compiler_elseif_block(patch, compiler, lines, tree):
@@ -608,7 +608,13 @@ def test_compiler_subtree_parent(patch, compiler):
 def test_compiler_subtrees(patch, compiler, tree):
     patch.object(Compiler, 'subtree', return_value={'tree': 'sub'})
     compiler.subtrees(tree, tree)
-    compiler.subtree.assert_called_with(tree)
+    compiler.subtree.assert_called_with(tree, parent=None)
+
+
+def test_compiler_subtrees_parent(patch, compiler, tree):
+    patch.object(Compiler, 'subtree', return_value={'tree': 'sub'})
+    compiler.subtrees(tree, tree, parent='1')
+    compiler.subtree.assert_called_with(tree, parent='1')
 
 
 def test_compiler_parse_tree(compiler, patch):
