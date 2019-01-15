@@ -100,7 +100,7 @@ class Objects:
         are processed and compiled.
         """
         item = {'$OBJECT': 'string', 'string': cls.unescape_string(tree)}
-        matches = re.findall(r'{([^}]*)}', item['string'])
+        matches = re.findall(r'(?<!\\){(.*?)(?<!\\)}', item['string'])
         if matches == []:
             return item
         item['values'] = cls.fillers_values(matches)
