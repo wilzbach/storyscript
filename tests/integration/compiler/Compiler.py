@@ -284,7 +284,7 @@ def test_compiler_service_inline_expression_nested(parser):
 
 def test_compiler_inline_expression_access(parser):
     """
-    Ensures that inline expressions followed a bracket accesso are compiled
+    Ensures that inline expressions followed a bracket accessor are compiled
     correctly.
     """
     tree = parser.parse('x = (random array)[0]')
