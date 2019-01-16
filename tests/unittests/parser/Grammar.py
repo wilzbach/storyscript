@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from unittest.mock import call
+
 from pytest import fixture
 
 from storyscript.parser import Ebnf, Grammar
@@ -95,21 +97,43 @@ def test_grammar_imports(grammar, ebnf):
     assert ebnf.imports == 'import string as name'
 
 
-def test_grammar_expressions(grammar, ebnf):
+def test_grammar_expressions(grammar, ebnf, magic):
+    ebnf.set_token = magic()
     grammar.expressions()
-    assert ebnf.PLUS == '+'
-    assert ebnf.MULTIPLIER == '*'
-    assert ebnf.MODULUS == '%'
-    assert ebnf.POWER == '^'
-    assert ebnf.NOT == 'not'
-    assert ebnf.AND == 'and'
-    assert ebnf.OR == 'or'
-    assert ebnf.factor == 'entity, op expression cp'
-    assert ebnf.exponential == 'factor (power exponential)?'
-    assert ebnf.multiplication == ('exponential (( multiplier, bslash, '
-                                   'modulus ) exponential)*')
-    assert ebnf.expression == ('multiplication ( ( plus, dash ) '
-                               'multiplication)*')
+    assert ebnf.set_token.call_args_list == [
+        call('NOT.10', 'not'),
+        call('OR.40', 'or'),
+        call('AND.30', 'and'),
+        call('GREATER.20', '>'),
+        call('GREATER_EQUAL.20', '>='),
+        call('LESSER.20', '<'),
+        call('LESSER_EQUAL.20', '<='),
+        call('NOT_EQUAL.20', '!='),
+        call('EQUAL.20', '=='),
+        call('BSLASH.10', '/'),
+        call('MULTIPLIER.10', '*'),
+        call('MODULUS.10', '%'),
+        call('PLUS.5', '+'),
+        call('DASH.5', '-'),
+    ]
+
+    assert ebnf._comparison_operator == ('greater, greater_equal, lesser, '
+                                         'lesser_equal, not_equal, equal')
+    assert ebnf.binary_operator == ('_comparison_operator, OR, AND, '
+                                    'MULTIPLIER, BSLASH, MODULUS, '
+                                    'PLUS, DASH')
+    assert ebnf.unary_operator == 'NOT'
+
+    assert ebnf.primary_expression == 'entity , op binary_expression cp'
+    assert ebnf.pow_expression == (
+        'primary_expression (POWER unary_expression)?'
+    )
+    assert ebnf.unary_expression == ('unary_operator unary_expression , '
+                                     'pow_expression')
+    assert ebnf.binary_expression == (
+        'binary_expression binary_operator unary_expression , '
+        'unary_expression')
+    assert ebnf.expression == 'binary_expression'
     assert ebnf.absolute_expression == 'expression'
 
 
@@ -152,16 +176,7 @@ def test_grammar_service_block(grammar, ebnf):
 
 def test_grammar_if_block(grammar, ebnf):
     grammar.if_block()
-    assert ebnf.GREATER == '>'
-    assert ebnf.GREATER_EQUAL == '>='
-    assert ebnf.LESSER == '<'
-    assert ebnf.LESSER_EQUAL == '<='
-    assert ebnf.NOT == '!='
-    assert ebnf.EQUAL == '=='
-    assert ebnf._IF == 'if'
-    assert ebnf._ELSE == 'else'
-    comparisons = 'greater, greater_equal, lesser, lesser_equal, not, equal'
-    assert ebnf.comparisons == comparisons
+    assert ebnf.comparisons == '_comparison_operator'
     assert ebnf.if_statement == 'if entity (comparisons entity)?'
     elseif_statement = 'else if entity (comparisons entity)?'
     assert ebnf.elseif_statement == elseif_statement

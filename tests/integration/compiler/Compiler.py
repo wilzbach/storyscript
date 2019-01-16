@@ -23,8 +23,10 @@ def test_compiler_expression_sum_many(parser):
     """
     tree = parser.parse('3 + 2 + 1')
     result = Compiler.compile(tree)
+    first_sum = {'$OBJECT': 'expression', 'expression': 'sum',
+                 'values': [3, 2]}
     args = [{'$OBJECT': 'expression', 'expression': 'sum',
-            'values': [3, 2, 1]}]
+            'values': [first_sum, 1]}]
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == args
 
@@ -49,8 +51,10 @@ def test_compiler_expression_multiplication_many(parser):
     """
     tree = parser.parse('3 * 2 * 1')
     result = Compiler.compile(tree)
+    first_node = {'$OBJECT': 'expression', 'expression': 'multiplication',
+                  'values': [3, 2]}
     args = [{'$OBJECT': 'expression', 'expression': 'multiplication',
-            'values': [3, 2, 1]}]
+            'values': [first_node, 1]}]
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == args
 

@@ -307,9 +307,14 @@ def test_objects_function_arguments(patch, tree):
 
 
 @mark.parametrize('operator, expression', [
-    ('+', 'sum'), ('*', 'multiplication'), ('/', 'division'), ('%', 'modulus'),
-    ('^', 'exponential'), ('-', 'subtraction'), ('and', 'and'),
-    ('or', 'or'), ('not', 'not'), ('==', 'equals'), ('>', 'greater'),
+    ('PLUS', 'sum'), ('MULTIPLIER', 'multiplication'),
+    ('BSLASH', 'division'), ('MODULUS', 'modulus'),
+    ('POWER', 'exponential'), ('DASH', 'subtraction'), ('AND', 'and'),
+    ('OR', 'or'), ('NOT', 'not'),
+    ('EQUAL', 'equals'), ('GREATER', 'greater'),
+    ('LESSER', 'less'), ('NOT_EQUAL', 'not_equal'),
+    ('GREATER_EQUAL', 'greater_equal'), ('LESSER_EQUAL', 'less_equal'),
+    ('==', 'equals'), ('>', 'greater'),
     ('<', 'less'), ('!=', 'not_equal'), ('>=', 'greater_equal'),
     ('<=', 'less_equal')
 ])
@@ -317,129 +322,14 @@ def test_objects_expression_type(operator, expression, tree):
     assert Objects.expression_type(operator, tree) == expression
 
 
-def test_objects_resolve_operand(patch, tree):
-    """
-    Ensures resolve_operand can resolve a simple operand.
-    """
-    patch.object(Objects, 'entity')
-    tree.exponential = None
-    tree.entity = None
-    tree.factor.expression = None
-    result = Objects.resolve_operand(tree)
-    Objects.entity.assert_called_with(tree.factor.entity)
-    assert result == Objects.entity()
-
-
-def test_objects_resolve_operand_children(patch, tree):
-    """
-    Ensures resolve_operand can resolve nested operands.
-    """
-    patch.object(Objects, 'expression')
-    tree.children = [1, 2]
-    result = Objects.resolve_operand(tree)
-    Objects.expression.assert_called_with(tree)
-    assert result == Objects.expression()
-
-
-def test_objects_resolve_operand_number(patch, tree):
-    """
-    Ensures resolve_operand can resolve a number.
-    """
-    patch.object(Objects, 'number')
-    tree.data = 'number'
-    result = Objects.resolve_operand(tree)
-    Objects.number.assert_called_with(tree)
-    assert result == Objects.number()
-
-
-def test_objects_resolve_operand_sum_to_parenthesis(patch, tree):
-    """
-    Ensures resolve_operand can resolve a parenthesis operand
-    """
-    patch.object(Objects, 'expression')
-    result = Objects.resolve_operand(tree)
-    Objects.expression.assert_called_with(tree.exponential.factor.expression)
-    assert result == Objects.expression()
-
-
-def test_objects_resolve_operand_multiplication(patch, tree):
-    """
-    Ensures resolve_operand can resolve a multiplication tree.
-    """
-    patch.object(Objects, 'entity')
-    tree.exponential.factor.expression = None
-    result = Objects.resolve_operand(tree)
-    Objects.entity.assert_called_with(tree.exponential.factor.entity)
-    assert result == Objects.entity()
-
-
-def test_objects_resolve_operand_multiplication_to_parenthesis(patch, tree):
-    """
-    Ensures resolve_operand can resolve a multiplication to a parenthesis.
-    """
-    patch.object(Objects, 'expression')
-    tree.exponential = None
-    result = Objects.resolve_operand(tree)
-    Objects.expression.assert_called_with(tree.factor.expression)
-    assert result == Objects.expression()
-
-
-def test_objects_resolve_operand_exponential(patch, magic, tree):
-    """
-    Ensures resolve_operand can resolve an exponential tree
-    """
-    patch.object(Objects, 'expression')
-    tree.exponential.children = [1, 2]
-    result = Objects.resolve_operand(tree)
-    Objects.expression.assert_called_with(tree.exponential)
-    assert result == Objects.expression()
-
-
-def test_objects_resolve_operand_factor(patch, tree):
-    """
-    Ensures resolve_operand can resolve a factor tree.
-    """
-    patch.object(Objects, 'entity')
-    tree.exponential = None
-    tree.factor = None
-    result = Objects.resolve_operand(tree)
-    Objects.entity.assert_called_with(tree.entity)
-    assert result == Objects.entity()
-
-
-def test_objects_expression_values(patch):
-    patch.object(Objects, 'resolve_operand')
-    tree = Tree('test', [])
-    result = Objects.expression_values([tree, 'not_a_tree'])
-    Objects.resolve_operand.assert_called_with(tree)
-    assert result == [Objects.resolve_operand()]
-
-
 def test_objects_expression(patch, tree):
     """
-    Ensures Objects.expression can compile expressions
+    Ensures Objects.expression calls binary_expression
     """
-    patch.many(Objects, ['expression_type', 'expression_values'])
-    tree.number = None
-    result = Objects.expression(tree)
-    Objects.expression_values.assert_called_with(tree.children)
-    Objects.expression_type.assert_called_with(tree.find_operator(), tree)
-    expected = {'$OBJECT': 'expression',
-                'values': Objects.expression_values(),
-                'expression': Objects.expression_type()}
-    assert result == expected
-
-
-def test_objects_expression_one_child(patch, tree):
-    """
-    Ensures Objects.expression can compile expressions with one child tree
-    """
-    patch.many(Objects, ['expression_type', 'expression_values'])
-    tree.number = None
-    tree.children = [1]
+    patch.many(Objects, ['binary_expression'])
+    tree.child(0).data = 'binary_expression'
     Objects.expression(tree)
-    Objects.expression_values.assert_called_with(tree.child().children)
-    Objects.expression_type.assert_called_with(tree.find_operator(), tree)
+    Objects.binary_expression.assert_called_with(tree.child(0))
 
 
 def test_objects_assertion(patch, tree):
@@ -453,3 +343,151 @@ def test_objects_assertion(patch, tree):
          'values': [Objects.entity(), Objects.values()]}
     ]
     assert result == expected
+
+
+def test_objects_absolute_expression(patch, tree):
+    """
+    Ensures Objects.absolute_expression calls expression
+    """
+    patch.many(Objects, ['expression'])
+    tree.child(0).data = 'expression'
+    Objects.absolute_expression(tree)
+    Objects.expression.assert_called_with(tree.child(0))
+
+
+def test_objects_build_unary_expression(patch, tree, magic):
+    """
+    Ensures Objects.build_unary_expression builds an expression properly
+    """
+    patch.many(Objects, ['expression_type'])
+    op = '.my.op.'
+    left = magic()
+    result = Objects.build_unary_expression(tree, op, left)
+    Objects.expression_type.assert_called_with(op, tree)
+    assert result == {
+        '$OBJECT': 'expression',
+        'expression': Objects.expression_type(),
+        'values':  [left],
+    }
+
+
+def test_objects_build_binary_expression(patch, tree, magic):
+    """
+    Ensures Objects.build_binary_expression builds an expression properly
+    """
+    patch.many(Objects, ['expression_type'])
+    op = magic()
+    left = magic()
+    right = magic()
+    result = Objects.build_binary_expression(tree, op, left, right)
+    Objects.expression_type.assert_called_with(op.type, tree)
+    assert result == {
+        '$OBJECT': 'expression',
+        'expression': Objects.expression_type(),
+        'values':  [left, right],
+    }
+
+
+def test_objects_primary_expression_entity(patch, tree):
+    """
+    Ensures Objects.primary_expression works with an entity node
+    """
+    patch.many(Objects, ['entity'])
+    tree.child(0).data = 'entity'
+    r = Objects.primary_expression(tree)
+    Objects.entity.assert_called_with(tree.entity)
+    assert r == Objects.entity()
+
+
+def test_objects_primary_expression_two(patch, tree):
+    """
+    Ensures Objects.primary_expression works with a binary_expression node
+    """
+    patch.many(Objects, ['entity', 'binary_expression'])
+    tree.child(0).data = 'binary_expression'
+    r = Objects.primary_expression(tree)
+    Objects.binary_expression.assert_called_with(tree.child(0))
+    assert r == Objects.binary_expression()
+
+
+def test_objects_pow_expression_one(patch, tree):
+    """
+    Ensures Objects.pow_expression works with one node
+    """
+    patch.many(Objects, ['primary_expression'])
+    tree.child(0).data = 'primary_expression'
+    tree.children = [1]
+    r = Objects.pow_expression(tree)
+    Objects.primary_expression.assert_called_with(tree.child(0))
+    assert r == Objects.primary_expression()
+
+
+def test_objects_pow_expression_two(patch, tree):
+    """
+    Ensures Objects.pow_expression works with two nodes
+    """
+    patch.many(Objects, ['build_binary_expression', 'primary_expression',
+                         'unary_expression'])
+    tree.child(1).type = 'POWER'
+    tree.children = [1, '+', 2]
+    r = Objects.pow_expression(tree)
+    Objects.build_binary_expression.assert_called_with(
+        tree, tree.child(1),
+        Objects.primary_expression(tree.child(0)),
+        Objects.unary_expression(tree.child(2)))
+    assert r == Objects.build_binary_expression()
+
+
+def test_objects_unary_expression_one(patch, tree):
+    """
+    Ensures Objects.unary_expression works with one node
+    """
+    patch.many(Objects, ['pow_expression'])
+    tree.child(0).data = 'pow_expression'
+    tree.children = [1]
+    r = Objects.unary_expression(tree)
+    Objects.pow_expression.assert_called_with(tree.child(0))
+    assert r == Objects.pow_expression()
+
+
+def test_objects_unary_expression_two(patch, tree):
+    """
+    Ensures Objects.unary_expression works with two nodes
+    """
+    patch.many(Objects, ['build_unary_expression'])
+    tree.child(1).data = 'unary_operator'
+    unary_expression = Objects.unary_expression
+    patch.object(Objects, 'unary_expression')
+    r = unary_expression(tree)
+    Objects.build_unary_expression.assert_called_with(
+        tree, tree.child(1), Objects.unary_expression(tree.child(0)))
+    assert r == Objects.build_unary_expression()
+
+
+def test_objects_binary_expression_one(patch, tree):
+    """
+    Ensures Objects.binary_expression works with one node
+    """
+    patch.many(Objects, ['unary_expression'])
+    tree.child(0).data = 'unary_expression'
+    tree.children = [1]
+    r = Objects.binary_expression(tree)
+    Objects.unary_expression.assert_called_with(tree.child(0))
+    assert r == Objects.unary_expression()
+
+
+def test_objects_binary_expression_two(patch, tree):
+    """
+    Ensures Objects.binary_expression works with two nodes
+    """
+    patch.many(Objects, ['build_binary_expression', 'unary_expression'])
+    tree.child(1).data = 'binary_operator'
+    tree.children = [1, '+', 2]
+    binary_expression = Objects.binary_expression
+    patch.object(Objects, 'binary_expression')
+    r = binary_expression(tree)
+    Objects.build_binary_expression.assert_called_with(
+        tree, tree.child(1).child(0),
+        Objects.binary_expression(tree.child(0)),
+        Objects.unary_expression(tree.child(2)))
+    assert r == Objects.build_binary_expression()
