@@ -4,6 +4,7 @@ from .Objects import Objects
 from .Preprocessor import Preprocessor
 from ..Version import version
 from ..exceptions import CompilerError, StorySyntaxError
+from ..exceptions import internal_assert
 from ..parser import Tree
 
 
@@ -64,25 +65,34 @@ class Compiler:
         args = [Objects.expression(tree.expression)]
         self.lines.append('expression', tree.line(), args=args, parent=parent)
 
-    def expression_assignment(self, tree, name, parent):
+    def unary_expression(self, tree, parent, method, name=None, line=None):
         """
-        Compiles an assignment to an expression.
+        Simplifies an expression with only one leaf to its respective value
         """
-        self.expression(tree, parent)
-        self.lines.set_name(name)
+        args = [Objects.entity(tree.expression.multiplication.exponential.
+                factor.entity)]
+        kwargs = {}
+        # name is required for 'set' only
+        if name is not None:
+            kwargs['name'] = name
+        if line is None:
+            line = tree.line()
+        self.lines.append(method, line, args=args, parent=parent, **kwargs)
 
     def absolute_expression(self, tree, parent):
         """
         Compiles an absolute expression using Compiler.expression
         """
-        self.expression(tree, parent)
+        if tree.expression.is_unary():
+            self.unary_expression(tree, parent, method='expression')
+        else:
+            self.expression(tree, parent)
 
     def assignment(self, tree, parent):
         """
         Compiles an assignment tree
         """
         name = Objects.names(tree.path)
-        line = tree.line()
         fragment = tree.assignment_fragment
         service = fragment.service
         if service:
@@ -96,11 +106,14 @@ class Compiler:
             self.lines.set_name(name)
             return
         elif fragment.expression:
-            if fragment.expression.is_unary() is False:
-                return self.expression_assignment(fragment, name, parent)
-        entity = fragment.expression.multiplication.exponential.factor.entity
-        args = [Objects.entity(entity)]
-        self.lines.append('set', line, name=name, args=args, parent=parent)
+            if fragment.expression.is_unary():
+                self.unary_expression(fragment, parent, method='set',
+                                      name=name, line=tree.line())
+            else:
+                self.expression(fragment, parent)
+                self.lines.set_name(name)
+            return
+        internal_assert(0)
 
     def arguments(self, tree, parent):
         """
