@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import random
-import uuid
 
 from lark.lexer import Token
 
@@ -62,15 +61,16 @@ def test_faketree_get_line_existing(tree, fake_tree):
 
 
 def test_faketree_path(patch, fake_tree):
-    patch.object(uuid, 'uuid4')
     patch.object(FakeTree, 'line')
+    FakeTree.line.return_value = 'fake.line'
     result = fake_tree.path()
-    name = '${}'.format(uuid.uuid4().hex[:8])
+    name = 'p-fake.line'
     assert result == Tree('path', [Token('NAME', name, line=FakeTree.line())])
 
 
 def test_faketree_path_name(patch, fake_tree):
     patch.object(FakeTree, 'line')
+    FakeTree.line.return_value = 'fake.line'
     result = fake_tree.path(name='x')
     assert result.child(0).value == 'x'
 

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import random
-import uuid
 
 from lark.lexer import Token
 
@@ -41,10 +40,10 @@ class FakeTree:
         """
         Creates a fake tree path.
         """
-        if name is None:
-            name = '${}'.format(uuid.uuid4().hex[:8])
         if line is None:
             line = self.line()
+        if name is None:
+            name = f'p-{line}'
         return Tree('path', [Token('NAME', name, line=line)])
 
     def assignment(self, value):
