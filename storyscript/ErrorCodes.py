@@ -57,10 +57,11 @@ class ErrorCodes:
         'E0039',
         'You have defined a chained mutation, but not a mutation')
     compiler_error_no_operator = ('E0040', 'No operator provided')
-    invalid_token = ('E0041', '`{}` is not allowed here')
+    invalid_character = ('E0041', '`{}` is not allowed here')
     function_already_declared = (
         'E0042',
         '`{}` has already been declared at line {}')
+    unexpected_token = ('E0042', '`{}` is not allowed here. Allowed: {}')
 
     @staticmethod
     def is_error(error_name):
