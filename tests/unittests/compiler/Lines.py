@@ -21,7 +21,41 @@ def test_lines_init(lines):
 
 def test_lines_sort(lines):
     lines.lines = {'1': '1', '2': '2', '2.1': '2'}
-    assert lines.sort() == ['1', '2', '2.1']
+    assert lines.sort() == ['1', '2.1', '2']
+
+
+def test_lines_sort_complex(lines):
+    lines.lines = {'1': '.', '1.0': '.', '1.1': '.'}
+    assert lines.sort() == ['1.0', '1.1', '1']
+
+
+def test_lines_sort_more_complex(lines):
+    lines.lines = {
+        '1': '.', '1.0': '.', '1.1': '.',
+        '0': '.', '2': '.', '2.1': '.',
+        '1.9.0': '.', '1.6': '.', '1.4.1': '.',
+        '1.1.0': '.', '1.0.0': '.', '1.0.1': '.',
+        '1.1.26': '.', '1.1.3': '.',
+        '1.0.9': '.', '1.0.22': '.',
+    }
+    assert lines.sort() == [
+        '0',
+        '1.0.0',
+        '1.0.1',
+        '1.0.9',
+        '1.0.22',
+        '1.0',
+        '1.1.0',
+        '1.1.3',
+        '1.1.26',
+        '1.1',
+        '1.4.1',
+        '1.6',
+        '1.9.0',
+        '1',
+        '2.1',
+        '2',
+    ]
 
 
 def test_lines_first(patch, lines):
