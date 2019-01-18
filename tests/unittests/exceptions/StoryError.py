@@ -145,6 +145,17 @@ def test_storyerror_hint_invalid_token(patch, storyerror):
     assert storyerror.hint() == '`$` is not allowed here'
 
 
+def test_storyerror_hint_redeclared(patch, storyerror, magic):
+    patch.object(storyerror, 'get_line', return_value='foo')
+    storyerror.error = UnexpectedCharacters('seq', 0, line=1, column=5)
+    storyerror.error = magic()
+    storyerror.error.extra.function_name = '.function_name.'
+    storyerror.error.extra.previous_line = '.previous.line.'
+    storyerror.error_tuple = ErrorCodes.function_already_declared
+    assert storyerror.hint() == \
+        '`.function_name.` has already been declared at line .previous.line.'
+
+
 def test_storyerror_identify(storyerror):
     storyerror.error.error = 'none'
     assert storyerror.identify() == ErrorCodes.unidentified_error

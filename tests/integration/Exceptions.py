@@ -86,3 +86,13 @@ def test_exception_dollar(capsys):
     assert lines[0] == 'Error: syntax error in story at line 1, column 5'
     assert lines[2] == '1|    x = $'
     assert lines[5] == 'E0041: `$` is not allowed here'
+
+
+def test_exception_function_redeclared(capsys):
+    with raises(StoryError) as e:
+        Story('function f1\n\treturn 42\nfunction f1\n\treturn 42\n').process()
+    e.value.with_color = False
+    lines = e.value.message().splitlines()
+    assert lines[0] == 'Error: syntax error in story at line 3, column 10'
+    assert lines[2] == '3|    function f1'
+    assert lines[5] == 'E0042: `f1` has already been declared at line 1'

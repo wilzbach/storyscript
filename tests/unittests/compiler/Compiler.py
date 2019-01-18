@@ -413,6 +413,20 @@ def test_compiler_function_block(patch, compiler, lines, tree):
     compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
+def test_compiler_function_block_redeclared(patch, compiler, lines, tree):
+    patch.object(Objects, 'function_arguments')
+    patch.many(Compiler, ['subtree', 'function_output'])
+    compiler.lines.functions = {'.function.': '0'}
+    statement = tree.function_statement
+    statement.child(1).value = '.function.'
+    with raises(CompilerError) as e:
+        compiler.function_block(tree, '1')
+
+    e.value.extra.function_name = '.function.'
+    e.value.extra.previous_line = '0'
+    e.value.extra.error = 'function_already_declared'
+
+
 def test_compiler_raise_statement(patch, compiler, lines, tree):
     tree.children = [Token('RAISE', 'raise')]
     compiler.raise_statement(tree, '1')

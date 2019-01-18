@@ -232,7 +232,13 @@ class Compiler:
         args = Objects.function_arguments(function)
         output = self.function_output(function)
         nested_block = tree.nested_block
-        self.lines.append('function', line, function=function.child(1).value,
+        function_name = function.child(1).value
+        if function_name in self.lines.functions:
+            raise CompilerError(
+                'function_already_declared', token=function.child(1),
+                function_name=function_name,
+                previous_line=self.lines.functions[function_name])
+        self.lines.append('function', line, function=function_name,
                           output=output, args=args, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)

@@ -91,6 +91,10 @@ class StoryError(SyntaxError):
         if self.error_tuple == ErrorCodes.invalid_token:
             return self.error_tuple[1].format(
                     self.get_line()[self.error.column - 1])
+        elif self.error_tuple == ErrorCodes.function_already_declared:
+            extra = self.error.extra
+            return self.error_tuple[1].format(extra.function_name,
+                                              extra.previous_line)
         return self.error_tuple[1]
 
     def identify(self):
