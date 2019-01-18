@@ -5,6 +5,7 @@ from pytest import fixture
 
 from storyscript.App import App
 from storyscript.Bundle import Bundle
+from storyscript.compiler.Preprocessor import Preprocessor
 from storyscript.parser import Grammar
 
 
@@ -34,6 +35,20 @@ def test_app_parse_ebnf(bundle):
     """
     App.parse('path', ebnf='ebnf')
     Bundle.from_path().bundle_trees.assert_called_with(ebnf='ebnf')
+
+
+def test_app_parse_preprocess(patch, bundle, magic):
+    """
+    Ensures App.parse applies the preprocessor
+    """
+    patch.object(Preprocessor, 'process')
+    story = magic()
+    Bundle.from_path().bundle_trees.return_value = {'foo.story': story}
+    result = App.parse('path', preprocess=True)
+    assert Preprocessor.process.call_count == 1
+    Bundle.from_path.assert_called_with('path', ignored_path=None)
+    Bundle.from_path().bundle_trees.assert_called_with(ebnf=None)
+    assert result == {'foo.story': Preprocessor.process(story)}
 
 
 def test_app_compile(patch, bundle):

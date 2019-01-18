@@ -2,6 +2,7 @@
 import json
 
 from .Bundle import Bundle
+from .compiler.Preprocessor import Preprocessor
 from .parser import Grammar
 
 
@@ -11,12 +12,16 @@ class App:
     """
 
     @staticmethod
-    def parse(path, ignored_path=None, ebnf=None):
+    def parse(path, ignored_path=None, ebnf=None, preprocess=False):
         """
         Parses stories found in path, returning their trees
         """
         bundle = Bundle.from_path(path, ignored_path=ignored_path)
-        return bundle.bundle_trees(ebnf=ebnf)
+        stories = bundle.bundle_trees(ebnf=ebnf)
+        if preprocess:
+            for story, tree in stories.items():
+                stories[story] = Preprocessor.process(tree)
+        return stories
 
     @staticmethod
     def compile(path, ignored_path=None, ebnf=None):
