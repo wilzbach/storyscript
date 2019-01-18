@@ -107,7 +107,8 @@ def test_cli_parse_with_ignore_option(runner, app):
     runner.invoke(Cli.parse, ['path/fake.story', '--ignore',
                               'path/sub_dir/my_fake.story'])
     App.parse.assert_called_with('path/fake.story', ebnf=None,
-                                 ignored_path='path/sub_dir/my_fake.story')
+                                 ignored_path='path/sub_dir/my_fake.story',
+                                 preprocess=False)
 
 
 def test_cli_parse(runner, echo, app, tree):
@@ -117,7 +118,7 @@ def test_cli_parse(runner, echo, app, tree):
     App.parse.return_value = {'path': tree}
     runner.invoke(Cli.parse, [])
     App.parse.assert_called_with(os.getcwd(), ebnf=None,
-                                 ignored_path=None)
+                                 ignored_path=None, preprocess=False)
     click.echo.assert_called_with(tree.pretty())
 
 
@@ -136,7 +137,7 @@ def test_cli_parse_path(runner, echo, app):
     """
     runner.invoke(Cli.parse, ['/path'])
     App.parse.assert_called_with('/path', ebnf=None,
-                                 ignored_path=None)
+                                 ignored_path=None, preprocess=False)
 
 
 def test_cli_parse_ebnf(runner, echo, app):
@@ -145,7 +146,16 @@ def test_cli_parse_ebnf(runner, echo, app):
     """
     runner.invoke(Cli.parse, ['--ebnf', 'test.ebnf'])
     App.parse.assert_called_with(os.getcwd(), ebnf='test.ebnf',
-                                 ignored_path=None)
+                                 ignored_path=None, preprocess=False)
+
+
+def test_cli_parse_preprocess(runner, echo, app):
+    """
+    Ensures the parse command supports preprocessing
+    """
+    runner.invoke(Cli.parse, ['--preprocess'])
+    App.parse.assert_called_with(os.getcwd(), ebnf=None,
+                                 ignored_path=None, preprocess=True)
 
 
 def test_cli_parse_debug(runner, echo, app):
