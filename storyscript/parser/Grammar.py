@@ -113,10 +113,12 @@ class Grammar:
 
     def rules(self):
         self.ebnf._RETURN = 'return'
+        self.ebnf.BREAK = 'break'
         self.ebnf.return_statement = 'return entity'
+        self.ebnf.break_statement = 'break'
         self.ebnf.entity = 'values, path'
         rules = ('absolute_expression, assignment, imports, return_statement, '
-                 'raise_statement, block')
+                 'raise_statement, break_statement, block')
         self.ebnf.rules = rules
 
     def mutation_block(self):
