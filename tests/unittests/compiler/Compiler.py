@@ -598,9 +598,16 @@ def test_compiler_finally_block(patch, compiler, lines, tree):
     Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
 
-def test_compiler_break_statement(patch, compiler, lines, tree):
+def test_compiler_break_statement(compiler, lines, tree):
     compiler.break_statement(tree, '1')
     lines.append.assert_called_with('break', tree.line(), parent='1')
+
+
+def test_compiler_break_statement_outside(patch, compiler, lines, tree):
+    patch.init(CompilerError)
+    with raises(CompilerError):
+        compiler.break_statement(tree, None)
+    CompilerError.__init__.assert_called_with('break_outside', tree=tree)
 
 
 @mark.parametrize('method_name', [

@@ -340,6 +340,8 @@ class Compiler:
         self.subtree(nested_block, parent=line)
 
     def break_statement(self, tree, parent):
+        if parent is None:
+            raise CompilerError('break_outside', tree=tree)
         self.lines.append('break', tree.line(), parent=parent)
 
     def subtrees(self, *trees, parent=None):
