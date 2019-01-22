@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-import random
-import uuid
-
 from lark.lexer import Token
 
 from ..parser import Tree
@@ -13,27 +10,30 @@ class FakeTree:
     """
     def __init__(self, block):
         self.block = block
-        self.original_line = block.line()
-        self.new_lines = []
+        self.original_line = str(block.line())
+        self.new_lines = {}
 
     def line(self):
         """
-        Creates fake line numbers. The numbers are decreasing, so that the
-        resulting tree is compiled correctly.
+        Creates fake line numbers. The strings are decreasingly sorted,
+        so that the resulting tree is compiled correctly.
         """
-        lower_bound = float(self.original_line) - 1.0
-        upper_bound = float(self.original_line)
-        if len(self.new_lines) > 0:
-            lower_bound = self.new_lines[-1]
-        fake_line = random.uniform(lower_bound, upper_bound)
-        self.new_lines.append(fake_line)
-        return str(fake_line)
+        line = self.original_line
+        parts = line.split('.')
+        if len(parts) > 1:
+            line = '.'.join(parts[:-1])
+        # We start at .1, s.t. lines from L1 are called L1.1 and not L1.0
+        # to avoid any potential confusion
+        new_suffix = len(self.new_lines) + 1
+        fake_line = f'{line}.{new_suffix}'
+        self.new_lines[fake_line] = None
+        return fake_line
 
     def get_line(self, tree):
         """
         Gets the tree line if it's a new one, otherwise creates it.
         """
-        if float(tree.line()) in self.new_lines:
+        if tree.line() in self.new_lines:
             return tree.line()
         return self.line()
 
@@ -41,10 +41,10 @@ class FakeTree:
         """
         Creates a fake tree path.
         """
-        if name is None:
-            name = '${}'.format(uuid.uuid4().hex[:8])
         if line is None:
             line = self.line()
+        if name is None:
+            name = f'p-{line}'
         return Tree('path', [Token('NAME', name, line=line)])
 
     def assignment(self, value):

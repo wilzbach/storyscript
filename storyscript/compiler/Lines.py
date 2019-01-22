@@ -17,8 +17,13 @@ class Lines:
     def sort(self):
         """
         Returns ordered line numbers
+        Inserted fake lines ('.' suffix) must appear before their inserted
+        line, but after their original's line previous line.
         """
-        return sorted(self.lines.keys(), key=lambda x: float(x))
+        # Generates this sorting: 0, 1.0.9, 1.0, 1.1, 1, 2
+        return sorted(self.lines.keys(), reverse=True,
+                      key=lambda x: list(map(
+                          lambda i: -int(i), x.split('.'))))
 
     def first(self):
         """

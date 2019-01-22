@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-import random
-import uuid
-
 from lark.lexer import Token
 
 from pytest import fixture
@@ -17,30 +14,27 @@ def fake_tree(block):
 
 def test_faketree_init(block, fake_tree):
     assert fake_tree.block == block
-    assert fake_tree.original_line == block.line()
-    assert fake_tree.new_lines == []
+    assert fake_tree.original_line == str(block.line())
+    assert fake_tree.new_lines == {}
 
 
 def test_faketree_line(patch, fake_tree):
     """
     Ensures FakeTree.line can create a fake line number
     """
-    patch.object(random, 'uniform')
-    fake_tree.original_line = '1.2'
+    fake_tree.original_line = '1'
     result = fake_tree.line()
-    random.uniform.assert_called_with(1.2 - 1, 1.2)
-    assert fake_tree.new_lines == [random.uniform()]
-    assert result == str(random.uniform())
+    assert fake_tree.new_lines == {'1.1': None}
+    assert result == '1.1'
 
 
 def test_faketree_line_successive(patch, fake_tree):
     """
     Ensures FakeTree.line takes into account FakeTree.new_lines
     """
-    patch.object(random, 'uniform')
-    fake_tree.new_lines = [0.2]
-    fake_tree.line()
-    random.uniform.assert_called_with(0.2, 1)
+    fake_tree.original_line = '1.1'
+    fake_tree.new_lines = {'1.1': None}
+    assert fake_tree.line() == '1.2'
 
 
 def test_faketree_get_line(patch, tree, fake_tree):
@@ -56,21 +50,22 @@ def test_faketree_get_line_existing(tree, fake_tree):
     """
     Ensures FakeTree.get_line gets the existing line when appropriate.
     """
-    fake_tree.new_lines = [0.1]
+    fake_tree.new_lines = {'0.1': None}
     tree.line.return_value = '0.1'
     assert fake_tree.get_line(tree) == tree.line()
 
 
 def test_faketree_path(patch, fake_tree):
-    patch.object(uuid, 'uuid4')
     patch.object(FakeTree, 'line')
+    FakeTree.line.return_value = 'fake.line'
     result = fake_tree.path()
-    name = '${}'.format(uuid.uuid4().hex[:8])
+    name = 'p-fake.line'
     assert result == Tree('path', [Token('NAME', name, line=FakeTree.line())])
 
 
 def test_faketree_path_name(patch, fake_tree):
     patch.object(FakeTree, 'line')
+    FakeTree.line.return_value = 'fake.line'
     result = fake_tree.path(name='x')
     assert result.child(0).value == 'x'
 
