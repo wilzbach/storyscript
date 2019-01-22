@@ -88,13 +88,17 @@ class StoryError(SyntaxError):
                 return self.error.message()
             else:
                 return str(self.error)
-        if self.error_tuple == ErrorCodes.invalid_token:
+        if self.error_tuple == ErrorCodes.invalid_character:
             return self.error_tuple[1].format(
                     self.get_line()[self.error.column - 1])
         elif self.error_tuple == ErrorCodes.function_already_declared:
             extra = self.error.extra
             return self.error_tuple[1].format(extra.function_name,
                                               extra.previous_line)
+        elif self.error_tuple == ErrorCodes.unexpected_token:
+            token = self.error.token
+            expected = str(self.error.expected)
+            return self.error_tuple[1].format(token, expected)
         return self.error_tuple[1]
 
     def identify(self):
@@ -111,10 +115,11 @@ class StoryError(SyntaxError):
         if isinstance(self.error, UnexpectedToken):
             if intention.assignment():
                 return ErrorCodes.assignment_incomplete
+            return ErrorCodes.unexpected_token
         elif isinstance(self.error, UnexpectedCharacters):
             if intention.is_function():
                 return ErrorCodes.function_misspell
-            return ErrorCodes.invalid_token
+            return ErrorCodes.invalid_character
         return ErrorCodes.unidentified_error
 
     def process(self):
