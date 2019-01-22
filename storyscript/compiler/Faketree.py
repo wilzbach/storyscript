@@ -22,7 +22,10 @@ class FakeTree:
         parts = line.split('.')
         if len(parts) > 1:
             line = '.'.join(parts[:-1])
-        fake_line = f'{line}.{len(self.new_lines)}'
+        # We start at .1, s.t. lines from L1 are called L1.1 and not L1.0
+        # to avoid any potential confusion
+        new_suffix = len(self.new_lines) + 1
+        fake_line = f'{line}.{new_suffix}'
         self.new_lines[fake_line] = None
         return fake_line
 

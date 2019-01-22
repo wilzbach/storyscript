@@ -24,17 +24,17 @@ def test_faketree_line(patch, fake_tree):
     """
     fake_tree.original_line = '1'
     result = fake_tree.line()
-    assert fake_tree.new_lines == {'1.0': None}
-    assert result == '1.0'
+    assert fake_tree.new_lines == {'1.1': None}
+    assert result == '1.1'
 
 
 def test_faketree_line_successive(patch, fake_tree):
     """
     Ensures FakeTree.line takes into account FakeTree.new_lines
     """
-    fake_tree.original_line = '1.0'
-    fake_tree.new_lines = {'1.0': None}
-    assert fake_tree.line() == '1.1'
+    fake_tree.original_line = '1.1'
+    fake_tree.new_lines = {'1.1': None}
+    assert fake_tree.line() == '1.2'
 
 
 def test_faketree_get_line(patch, tree, fake_tree):
