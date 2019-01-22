@@ -339,6 +339,9 @@ class Compiler:
                           parent=parent)
         self.subtree(nested_block, parent=line)
 
+    def break_statement(self, tree, parent):
+        self.lines.append('break', tree.line(), parent=parent)
+
     def subtrees(self, *trees, parent=None):
         """
         Parses many subtrees
@@ -356,7 +359,7 @@ class Compiler:
                          'foreach_block', 'function_block', 'when_block',
                          'try_block', 'return_statement', 'arguments',
                          'imports', 'while_block', 'raise_statement',
-                         'mutation_block', 'indented_chain']
+                         'break_statement', 'mutation_block', 'indented_chain']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
             return
