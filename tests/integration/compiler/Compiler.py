@@ -368,3 +368,11 @@ def test_compiler_service_with_zero_args(parser):
     assert result['tree']['1']['service'] == 'foo'
     assert result['tree']['1']['args'] == []
     assert result['services'] == ['foo']
+
+
+def test_compiler_break(parser):
+    source = 'while true\n\tbreak'
+    tree = parser.parse(source)
+    result = Compiler.compile(tree)
+    assert result['tree']['2']['method'] == 'break'
+    assert result['tree']['2']['parent'] == '1'

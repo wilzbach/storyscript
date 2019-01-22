@@ -63,7 +63,8 @@ from storyscript.ErrorCodes import ErrorCodes
         '`mock` is reserved for future use')),
     ('arguments_nomutation', (
         'E0039',
-        'You have defined a chained mutation, but not a mutation'))
+        'You have defined a chained mutation, but not a mutation')),
+    ('break_outside', ('E00043', '`break` is allowed only inside loops'))
 ])
 def test_errorcodes(name, definition):
     assert ErrorCodes.get_error(name) == definition

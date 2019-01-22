@@ -122,10 +122,11 @@ def test_grammar_raise_statement(grammar, ebnf):
 def test_grammar_rules(grammar, ebnf):
     grammar.rules()
     assert ebnf._RETURN == 'return'
+    assert ebnf.BREAK == 'break'
     assert ebnf.entity == 'values, path'
     assert ebnf.return_statement == 'return entity'
     rules = ('absolute_expression, assignment, imports, return_statement, '
-             'raise_statement, block')
+             'raise_statement, break_statement, block')
     assert ebnf.rules == rules
 
 
