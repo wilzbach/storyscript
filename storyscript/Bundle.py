@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-
-import delegator
+import subprocess
 
 from .Story import Story
 
@@ -20,8 +19,12 @@ class Bundle:
         """
         Get the list of files ignored by git
         """
-        command = 'git ls-files --others --ignored --exclude-standard'
-        return delegator.run(command).out.split('\n')
+        command = ['git', 'ls-files', '--others', '--ignored',
+                   '--exclude-standard']
+        p = subprocess.run(command, stdout=subprocess.PIPE, encoding='utf8')
+        if p.returncode != 0:
+            return []
+        return p.stdout.split('\n')
 
     @staticmethod
     def ignores(path):
