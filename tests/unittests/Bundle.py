@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-
-import delegator
+import subprocess
 
 from pytest import fixture
 
@@ -28,12 +27,26 @@ def test_bundle_gitignores(patch):
     """
     Ensures gitignores uses can produce the list of ignored files.
     """
-    patch.object(delegator, 'run')
+    patch.object(subprocess, 'run')
+    subprocess.run().returncode = 0
     result = Bundle.gitignores()
-    command = 'git ls-files --others --ignored --exclude-standard'
-    delegator.run.assert_called_with(command)
-    delegator.run().out.split.assert_called_with('\n')
-    assert result == delegator.run().out.split()
+    command = ['git', 'ls-files', '--others', '--ignored',
+               '--exclude-standard']
+    subprocess.run.assert_called_with(command, encoding='utf8',
+                                      stdout=subprocess.PIPE)
+    subprocess.run().stdout.split.assert_called_with('\n')
+    assert result == subprocess.run().stdout.split()
+
+
+def test_bundle_gitignores_failed(patch):
+    """
+    Test what happens when the gitignore command fails
+    """
+    patch.object(subprocess, 'run')
+    subprocess.run().returncode = 1
+    result = Bundle.gitignores()
+    subprocess.run().stdout.split.assert_not_called()
+    assert result == []
 
 
 def test_bundle_ignores(patch):
