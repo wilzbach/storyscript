@@ -97,6 +97,10 @@ def test_objects_number():
     """
     tree = Tree('number', [Token('INT', '1')])
     assert Objects.number(tree) == 1
+    tree = Tree('number', [Token('INT', '+1')])
+    assert Objects.number(tree) == 1
+    tree = Tree('number', [Token('INT', '-1')])
+    assert Objects.number(tree) == -1
 
 
 def test_objects_number_float():
@@ -105,6 +109,10 @@ def test_objects_number_float():
     """
     tree = Tree('number', [Token('FLOAT', '1.2')])
     assert Objects.number(tree) == 1.2
+    tree = Tree('number', [Token('FLOAT', '+1.2')])
+    assert Objects.number(tree) == 1.2
+    tree = Tree('number', [Token('FLOAT', '-1.2')])
+    assert Objects.number(tree) == -1.2
 
 
 def test_objects_replace_fillers():

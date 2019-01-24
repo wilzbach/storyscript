@@ -98,17 +98,45 @@ def test_compiler_expression(patch, compiler, lines, tree):
                                     parent='1')
 
 
-def test_compiler_expression_assignment(patch, compiler, lines, tree):
-    patch.object(Compiler, 'expression')
-    compiler.expression_assignment(tree, 'name', '1')
-    Compiler.expression.assert_called_with(tree, '1')
-    lines.set_name.assert_called_with('name')
+def test_compiler_unary_expression(patch, compiler, lines, tree):
+    patch.object(Lines, 'append')
+    patch.object(Objects, 'entity')
+    method = 'set.method'
+    parent = '.parent.'
+    compiler.unary_expression(tree, parent, method)
+    args = [Objects.entity(tree.expression.multiplication.exponential.
+                           factor.entity)]
+    lines.append.assert_called_with(method, tree.line(), args=args,
+                                    parent=parent)
+
+
+def test_compiler_unary_expression_name(patch, compiler, lines, tree):
+    patch.object(Lines, 'append')
+    patch.object(Objects, 'entity')
+    method = 'set.method'
+    parent = '.parent.'
+    name = '.name.'
+    line = '.line.'
+    compiler.unary_expression(tree, parent, method, name=name, line=line)
+    args = [Objects.entity(tree.expression.multiplication.exponential.
+                           factor.entity)]
+    lines.append.assert_called_with(method, line, args=args, parent=parent,
+                                    name=name)
 
 
 def test_compiler_absolute_expression(patch, compiler, lines, tree):
     patch.object(Compiler, 'expression')
+    tree.expression.is_unary.return_value = False
     compiler.absolute_expression(tree, '1')
     Compiler.expression.assert_called_with(tree, '1')
+
+
+def test_compiler_absolute_expression_unary(patch, compiler, lines, tree):
+    patch.object(Compiler, 'unary_expression')
+    tree.expression.is_unary.return_value = True
+    compiler.absolute_expression(tree, '1')
+    Compiler.unary_expression.assert_called_with(tree, '1',
+                                                 method='expression')
 
 
 def test_compiler_assignment(patch, compiler, lines, tree):
@@ -151,13 +179,14 @@ def test_compiler_assignment_mutation(patch, compiler, lines, tree):
 
 def test_compiler_assignment_expression(patch, compiler, lines, tree):
     patch.object(Objects, 'names', return_value='name')
-    patch.object(Compiler, 'expression_assignment')
+    patch.object(Compiler, 'expression')
     tree.assignment_fragment.service = None
     tree.assignment_fragment.mutation = None
     tree.assignment_fragment.expression.is_unary.return_value = False
     compiler.assignment(tree, '1')
     fragment = tree.assignment_fragment
-    Compiler.expression_assignment.assert_called_with(fragment, 'name', '1')
+    Compiler.expression.assert_called_with(fragment, '1')
+    lines.set_name.assert_called_with('name')
 
 
 def test_compiler_arguments(patch, compiler, lines, tree):

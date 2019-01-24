@@ -196,3 +196,19 @@ def test_parser_try_raise_error_message(parser):
     assert raise_statement.child(0) == 'raise'
     token = Token('DOUBLE_QUOTED', '"error"')
     assert raise_statement.entity.values.string.child(0) == token
+
+
+@mark.parametrize('number', ['+10', '-10'])
+def test_parser_number_int(parser, number):
+    result = parser.parse(number)
+    f = result.block.rules.absolute_expression.expression.multiplication. \
+        exponential.factor.entity.values.number
+    assert f.child(0) == Token('INT', number)
+
+
+@mark.parametrize('number', ['+10.0', '-10.0'])
+def test_parser_number_float(parser, number):
+    result = parser.parse(number)
+    f = result.block.rules.absolute_expression.expression.multiplication. \
+        exponential.factor.entity.values.number
+    assert f.child(0) == Token('FLOAT', number)

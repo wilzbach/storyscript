@@ -383,3 +383,85 @@ def test_compiler_empty_files(parser):
     result = Compiler.compile(tree)
     assert result['tree'] == {}
     assert result['entrypoint'] is None
+
+
+def test_compiler_expression_signed_number(parser):
+    """
+    Ensures that signed numbers are compiled correctly
+    """
+    result = Compiler.compile(parser.parse('a = -2'))
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == [-2]
+
+    result = Compiler.compile(parser.parse('a = +2'))
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == [2]
+
+
+def test_compiler_expression_signed_number_complex(parser):
+    """
+    Ensures that signed numbers are compiled correctly
+    """
+    result = Compiler.compile(parser.parse('a = 2 + -3'))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'][0]['expression'] == 'sum'
+    assert result['tree']['1']['args'][0]['values'] == [2, -3]
+
+    result = Compiler.compile(parser.parse('a = -2 + 3'))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'][0]['expression'] == 'sum'
+    assert result['tree']['1']['args'][0]['values'] == [-2, 3]
+
+
+def test_compiler_expression_signed_number_absolute(parser):
+    """
+    Ensures that absolute signed numbers are compiled correctly
+    """
+    result = Compiler.compile(parser.parse('-2'))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [-2]
+
+    result = Compiler.compile(parser.parse('+2'))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [2]
+
+
+def test_compiler_expression_signed_float(parser):
+    """
+    Ensures that signed numbers are compiled correctly
+    """
+    result = Compiler.compile(parser.parse('a = -5.5'))
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == [-5.5]
+
+    result = Compiler.compile(parser.parse('a = +5.5'))
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == [5.5]
+
+
+def test_compiler_expression_signed_float_absolute(parser):
+    """
+    Ensures that absolute signed numbers are compiled correctly
+    """
+    result = Compiler.compile(parser.parse('-5.5'))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [-5.5]
+
+    result = Compiler.compile(parser.parse('+5.5'))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [5.5]
+
+
+def test_compiler_expression_signed_float_complex(parser):
+    """
+    Ensures that signed numbers are compiled correctly
+    """
+    result = Compiler.compile(parser.parse('a = 2.5 + -3.5'))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'][0]['expression'] == 'sum'
+    assert result['tree']['1']['args'][0]['values'] == [2.5, -3.5]
+
+    result = Compiler.compile(parser.parse('a = -2.5 + 3.5'))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'][0]['expression'] == 'sum'
+    assert result['tree']['1']['args'][0]['values'] == [-2.5, 3.5]

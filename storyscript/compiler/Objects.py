@@ -51,6 +51,8 @@ class Objects:
         Compiles a number tree
         """
         token = tree.child(0)
+        if token.value[0] == '+':
+            token.value = token.value[1:]
         if token.type == 'FLOAT':
             return float(token.value)
         return int(token.value)

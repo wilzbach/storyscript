@@ -44,8 +44,10 @@ class Grammar:
         self.ebnf.TRUE = 'true'
         self.ebnf.FALSE = 'false'
         self.ebnf.NULL = 'null'
-        self.ebnf.set_token('INT.2', r'/[0-9]+/')
-        self.ebnf.set_token('FLOAT.2', 'INT "." INT? | "." INT')
+        self.ebnf.set_token('RAW_INT.2', r'/[0-9]+/')
+        self.ebnf.set_token('INT.2', '("+"|"-")? RAW_INT')
+        self.ebnf.set_token('FLOAT.2', '("+"|"-")? INT "." RAW_INT? | '
+                            '"." RAW_INT')
         self.ebnf.SINGLE_QUOTED = "/'([^']*)'/"
         self.ebnf.DOUBLE_QUOTED = '/"([^"]*)"/'
         self.ebnf.set_token('REGEXP.2', r'/\/([^\/]*)\//')
@@ -99,7 +101,7 @@ class Grammar:
         self.ebnf.NOT = 'not'
         self.ebnf.AND = 'and'
         self.ebnf.OR = 'or'
-        self.ebnf.factor = '(dash, plus)? entity, op expression cp'
+        self.ebnf.factor = 'entity, op expression cp'
         self.ebnf.exponential = 'factor (power exponential)?'
         self.ebnf.multiplication = ('exponential (( multiplier, bslash, '
                                     'modulus ) exponential)*')
