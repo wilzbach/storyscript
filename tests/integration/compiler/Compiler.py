@@ -376,3 +376,10 @@ def test_compiler_break(parser):
     result = Compiler.compile(tree)
     assert result['tree']['2']['method'] == 'break'
     assert result['tree']['2']['parent'] == '1'
+
+
+def test_compiler_empty_files(parser):
+    tree = parser.parse('\n\n')
+    result = Compiler.compile(tree)
+    assert result['tree'] == {}
+    assert result['entrypoint'] is None

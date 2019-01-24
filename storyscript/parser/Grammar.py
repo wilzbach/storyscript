@@ -220,6 +220,6 @@ class Grammar:
         self.try_block()
         self.raise_statement()
         self.block()
-        self.ebnf.start = 'nl? block+'
+        self.ebnf.start = 'nl? block*'
         self.ebnf.ignore('_WS')
         return self.ebnf.build()
