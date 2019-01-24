@@ -83,8 +83,18 @@ def test_story_read(patch):
     patch.object(Story, 'clean_source')
     result = Story.read('hello.story')
     io.open.assert_called_with('hello.story', 'r')
-    Story.clean_source.assert_called_with(io.open().__enter__().read())
-    assert result == Story.clean_source()
+    assert result == io.open().__enter__().read()
+
+
+def test_story_init_clean_source(patch):
+    """
+    Ensures Story.clean_source is called for new stories
+    """
+    patch.object(Story, 'clean_source')
+    source = 'my story'
+    story = Story(source)
+    Story.clean_source.assert_called_with(source)
+    assert story.story == Story.clean_source(source)
 
 
 def test_story_read_not_found(patch, capsys):
@@ -109,8 +119,7 @@ def test_story_from_stream(patch, magic):
     patch.object(Story, 'clean_source')
     stream = magic()
     result = Story.from_stream(stream)
-    Story.clean_source.assert_called_with(stream.read())
-    Story.__init__.assert_called_with(Story.clean_source())
+    Story.__init__.assert_called_with(stream.read())
     assert isinstance(result, Story)
 
 

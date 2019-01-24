@@ -17,7 +17,7 @@ class Story:
     """
 
     def __init__(self, story, path=None):
-        self.story = story
+        self.story = self.clean_source(story)
         self.path = path
 
     @staticmethod
@@ -51,7 +51,7 @@ class Story:
         msg = None
         try:
             with io.open(path, 'r') as file:
-                return cls.clean_source(file.read())
+                return file.read()
         except FileNotFoundError:
             abspath = os.path.abspath(path)
             msg = 'File "{}" not found at {}'.format(path, abspath)
@@ -71,7 +71,7 @@ class Story:
         """
         Creates a story from a stream source
         """
-        return Story(cls.clean_source(stream.read()))
+        return Story(stream.read())
 
     def error(self, error):
         """
