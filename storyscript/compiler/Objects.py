@@ -3,6 +3,7 @@ import re
 
 from lark.lexer import Token
 
+from ..exceptions import internal_assert
 from ..parser import Tree
 
 
@@ -174,8 +175,11 @@ class Objects:
                 return cls.regular_expression(subtree)
             elif subtree.data == 'types':
                 return cls.types(subtree)
+            elif subtree.data == 'void':
+                return None
         if subtree.type == 'NAME':
             return cls.path(tree)
+        internal_assert(0)
 
     @classmethod
     def argument(cls, tree):

@@ -8,3 +8,5 @@ omit =
   setup.py
   venv/*
   .tox/*
+exclude_lines =
+    internal_assert(0)
