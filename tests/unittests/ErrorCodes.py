@@ -64,7 +64,12 @@ from storyscript.ErrorCodes import ErrorCodes
     ('arguments_nomutation', (
         'E0039',
         'You have defined a chained mutation, but not a mutation')),
-    ('break_outside', ('E00043', '`break` is allowed only inside loops'))
+    ('compiler_error_no_operator', ('E0040', 'No operator provided')),
+    ('invalid_character', (('E0041', '`{}` is not allowed here'))),
+    ('function_already_declared',
+        ('E0042', '`{}` has already been declared at line {}')),
+    ('unexpected_token', ('E0043', '`{}` is not allowed here. Allowed: {}')),
+    ('break_outside', ('E00044', '`break` is allowed only inside loops'))
 ])
 def test_errorcodes(name, definition):
     assert ErrorCodes.get_error(name) == definition
