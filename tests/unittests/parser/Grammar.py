@@ -218,8 +218,11 @@ def test_grammar_function_block(grammar, ebnf):
     assert ebnf.function_output == 'returns types'
     function_statement = 'function_type name typed_argument* function_output?'
     assert ebnf.function_statement == function_statement
-    ebnf.simple_block.assert_called_with('function_statement')
-    assert ebnf.function_block == ebnf.simple_block()
+    assert ebnf.function_block == (
+        'function_statement nl '
+        '(indented_typed_arguments? block+ _DEDENT | '
+        'nested_block)'
+    )
 
 
 def test_grammar_try_block(grammar, ebnf):

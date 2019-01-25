@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-from lark.indenter import Indenter
-
-from storyscript.parser import CustomIndenter
+from storyscript.parser.Indenter import CustomIndenter, Indenter
 
 
 def test_indenter():

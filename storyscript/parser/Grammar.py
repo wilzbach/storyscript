@@ -195,7 +195,14 @@ class Grammar:
         function_statement = ('function_type name typed_argument* '
                               'function_output?')
         self.ebnf.function_statement = function_statement
-        self.ebnf.function_block = self.ebnf.simple_block('function_statement')
+        self.ebnf._DOUBLE_DEDENT = '<DOUBLE_DEDENT>'
+        self.ebnf.indented_typed_arguments = \
+            'indent (typed_argument+ nl)+ dedent _DOUBLE_DEDENT'
+        self.ebnf.function_block = (
+            'function_statement nl '
+            '(indented_typed_arguments? block+ _DEDENT | '
+            'nested_block)'
+        )
 
     def try_block(self):
         self.ebnf.TRY = 'try'

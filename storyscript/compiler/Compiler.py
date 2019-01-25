@@ -255,7 +255,7 @@ class Compiler:
         function = tree.function_statement
         args = Objects.function_arguments(function)
         output = self.function_output(function)
-        nested_block = tree.nested_block
+        nested_block = tree.nested_block or tree.block
         function_name = function.child(1).value
         if function_name in self.lines.functions:
             raise CompilerError(
