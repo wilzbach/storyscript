@@ -69,7 +69,7 @@ from storyscript.ErrorCodes import ErrorCodes
     ('function_already_declared',
         ('E0042', '`{}` has already been declared at line {}')),
     ('unexpected_token', ('E0043', '`{}` is not allowed here. Allowed: {}')),
-    ('break_outside', ('E00044', '`break` is allowed only inside loops'))
+    ('break_outside', ('E0044', '`break` is allowed only inside loops'))
 ])
 def test_errorcodes(name, definition):
     assert ErrorCodes.get_error(name) == definition
