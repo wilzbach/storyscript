@@ -92,21 +92,43 @@ class Grammar:
         self.ebnf.imports = 'import string as name'
 
     def expressions(self):
-        self.ebnf.PLUS = '+'
-        self.ebnf.set_token('DASH.4', '-')
-        self.ebnf.MULTIPLIER = '*'
-        self.ebnf.set_token('BSLASH.3', '/')
-        self.ebnf.MODULUS = '%'
+
         self.ebnf.POWER = '^'
-        self.ebnf.NOT = 'not'
-        self.ebnf.AND = 'and'
-        self.ebnf.OR = 'or'
-        self.ebnf.factor = 'entity, op expression cp'
-        self.ebnf.exponential = 'factor (power exponential)?'
-        self.ebnf.multiplication = ('exponential (( multiplier, bslash, '
-                                    'modulus ) exponential)*')
-        self.ebnf.expression = ('multiplication ( ( plus, dash ) '
-                                'multiplication)*')
+        self.ebnf.set_token('NOT.10', 'not')
+
+        self.ebnf.set_token('OR.40', 'or')
+        self.ebnf.set_token('AND.30', 'and')
+
+        self.ebnf.set_token('GREATER.20', '>')
+        self.ebnf.set_token('GREATER_EQUAL.20', '>=')
+        self.ebnf.set_token('LESSER.20', '<')
+        self.ebnf.set_token('LESSER_EQUAL.20', '<=')
+        self.ebnf.set_token('NOT_EQUAL.20', '!=')
+        self.ebnf.set_token('EQUAL.20', '==')
+
+        self.ebnf.set_token('BSLASH.10', '/')
+        self.ebnf.set_token('MULTIPLIER.10', '*')
+        self.ebnf.set_token('MODULUS.10', '%')
+
+        self.ebnf.set_token('PLUS.5', '+')
+        self.ebnf.set_token('DASH.5', '-')
+
+        self.ebnf._comparison_operator = ('greater, greater_equal, lesser, '
+                                          'lesser_equal, not_equal, equal')
+        self.ebnf.binary_operator = ('_comparison_operator, OR, AND, '
+                                     'MULTIPLIER, BSLASH, MODULUS, '
+                                     'PLUS, DASH')
+        self.ebnf.unary_operator = 'NOT'
+
+        self.ebnf.primary_expression = 'entity , op binary_expression cp'
+        self.ebnf.pow_expression = ('primary_expression (POWER '
+                                    'unary_expression)?')
+        self.ebnf.unary_expression = ('unary_operator unary_expression , '
+                                      'pow_expression')
+        self.ebnf.binary_expression = (
+            'binary_expression binary_operator unary_expression , '
+            'unary_expression')
+        self.ebnf.expression = 'binary_expression'
         self.ebnf.absolute_expression = 'expression'
 
     def raise_statement(self):
@@ -140,17 +162,11 @@ class Grammar:
         self.ebnf.service_block = 'service nl (nested_block)?'
 
     def if_block(self):
-        self.ebnf.GREATER = '>'
-        self.ebnf.GREATER_EQUAL = '>='
-        self.ebnf.LESSER = '<'
-        self.ebnf.LESSER_EQUAL = '<='
-        self.ebnf.NOT = '!='
-        self.ebnf.EQUAL = '=='
         self.ebnf._IF = 'if'
         self.ebnf._ELSE = 'else'
-        comparisons = ('greater, greater_equal, lesser, lesser_equal, not, '
-                       'equal')
-        self.ebnf.comparisons = comparisons
+        # self.ebnf.if_statement = 'if expression'
+        # elseif_statement = 'else if expression'
+        self.ebnf.comparisons = '_comparison_operator'
         self.ebnf.if_statement = 'if entity (comparisons entity)?'
         elseif_statement = 'else if entity (comparisons entity)?'
         self.ebnf.elseif_statement = elseif_statement

@@ -217,57 +217,113 @@ class Objects:
 
     @staticmethod
     def expression_type(operator, tree):
-        types = {'+': 'sum', '-': 'subtraction', '^': 'exponential',
-                 '*': 'multiplication', '/': 'division', '%': 'modulus',
-                 'and': 'and', 'or': 'or', 'not': 'not', '==': 'equals',
-                 '>': 'greater', '<': 'less', '!=': 'not_equal',
-                 '>=': 'greater_equal', '<=': 'less_equal'}
+        types = {'PLUS': 'sum', 'DASH': 'subtraction', 'POWER': 'exponential',
+                 'MULTIPLIER': 'multiplication', 'BSLASH': 'division',
+                 'MODULUS': 'modulus',
+                 'AND': 'and', 'OR': 'or', 'NOT': 'not', 'EQUAL': 'equals',
+                 'GREATER': 'greater', 'LESSER': 'less',
+                 'NOT_EQUAL': 'not_equal',
+                 'GREATER_EQUAL': 'greater_equal',
+                 'LESSER_EQUAL': 'less_equal'}
+        # FUTURE: Remove me when if_statement uses 'expression'
+        types['>'] = 'greater'
+        types['>='] = 'greater_equal'
+        types['<'] = 'less'
+        types['<='] = 'less_equal'
+        types['=='] = 'equals'
+        types['!='] = 'not_equal'
         tree.expect(operator in types, 'compiler_error_no_operator')
         return types[operator]
-
-    @classmethod
-    def resolve_operand(cls, tree):
-        """
-        Resolves an operand to its value or to the corresponding expression,
-        in case of nested operands.
-        """
-        if (len(tree.children) > 1):
-            return cls.expression(tree)
-        if tree.data == 'number':
-            return cls.number(tree)
-        elif tree.exponential:
-            if (len(tree.exponential.children)) > 1:
-                return cls.expression(tree.exponential)
-            elif tree.exponential.factor.expression:
-                return cls.expression(tree.exponential.factor.expression)
-            return cls.entity(tree.exponential.factor.entity)
-        elif tree.factor:
-            if tree.factor.expression:
-                return cls.expression(tree.factor.expression)
-        elif tree.entity:
-            return cls.entity(tree.entity)
-        return cls.entity(tree.factor.entity)
-
-    @classmethod
-    def expression_values(cls, children):
-        values = []
-        for child in children:
-            if isinstance(child, Tree):
-                values.append(cls.resolve_operand(child))
-        return values
 
     @classmethod
     def expression(cls, tree):
         """
         Compiles an expression object with the given tree.
         """
-        if len(tree.children) == 1:
-            values = cls.expression_values(tree.child(0).children)
+        assert tree.child(0).data == 'binary_expression'
+        return cls.binary_expression(tree.child(0))
+
+    @classmethod
+    def absolute_expression(cls, tree):
+        """
+        Compiles an expression object with the given tree.
+        """
+        assert tree.child(0).data == 'expression'
+        return cls.expression(tree.child(0))
+
+    @classmethod
+    def build_unary_expression(cls, tree, op, left):
+        expression_type = Objects.expression_type(op, tree)
+        return {
+            '$OBJECT': 'expression',
+            'expression': expression_type,
+            'values':  [left],
+        }
+
+    @classmethod
+    def build_binary_expression(cls, tree, op, left, right):
+        expression = Objects.expression_type(op.type, tree)
+        return {
+            '$OBJECT': 'expression',
+            'expression': expression,
+            'values': [left, right],
+        }
+
+    @classmethod
+    def primary_expression(cls, tree):
+        """
+        Compiles a primary expression object with the given tree.
+        """
+        if tree.child(0).data == 'entity':
+            return cls.entity(tree.entity)
         else:
-            values = cls.expression_values(tree.children)
-        expression_type = Objects.expression_type(tree.find_operator(), tree)
-        return {'$OBJECT': 'expression', 'expression': expression_type,
-                'values': values}
+            assert tree.child(0).data == 'binary_expression'
+            return cls.binary_expression(tree.child(0))
+
+    @classmethod
+    def pow_expression(cls, tree):
+        """
+        Compiles a pow expression object with the given tree.
+        """
+        if len(tree.children) == 1:
+            assert tree.child(0).data == 'primary_expression'
+            return cls.primary_expression(tree.child(0))
+
+        assert tree.child(1).type == 'POWER'
+        return cls.build_binary_expression(
+                    tree, tree.child(1),
+                    cls.primary_expression(tree.child(0)),
+                    cls.unary_expression(tree.child(2)))
+
+    @classmethod
+    def unary_expression(cls, tree):
+        """
+        Compiles an unary expression object with the given tree.
+        """
+        if len(tree.children) == 1:
+            assert tree.child(0).data == 'pow_expression'
+            return cls.pow_expression(tree.child(0))
+
+        assert tree.child(0).data == 'unary_operator'
+        return cls.build_unary_expression(
+                    tree, tree.child(1),
+                    cls.unary_expression(tree.child(0)))
+
+    @classmethod
+    def binary_expression(cls, tree):
+        """
+        Compiles a binary expression object with the given tree.
+        """
+        if len(tree.children) == 1:
+            assert tree.child(0).data == 'unary_expression'
+            return cls.unary_expression(tree.child(0))
+
+        assert tree.child(1).data == 'binary_operator'
+        op = tree.child(1).child(0)
+        return cls.build_binary_expression(
+                    tree, op,
+                    cls.binary_expression(tree.child(0)),
+                    cls.unary_expression(tree.child(2)))
 
     @classmethod
     def assertion(cls, tree):

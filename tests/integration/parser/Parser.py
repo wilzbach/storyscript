@@ -4,13 +4,24 @@ from lark.lexer import Token
 from pytest import mark
 
 
+def get_entity(obj):
+    """
+    Returns the entity for an expression
+    """
+    if obj.unary_expression is not None:
+        obj = obj.unary_expression
+    return obj.pow_expression.primary_expression.entity
+
+
 def test_parser_sum(parser):
     result = parser.parse('3 + 4\n')
-    expression = result.block.rules.absolute_expression.expression
-    lhs = expression.multiplication.exponential.factor.entity.values.number
+    exp = result.block.rules.absolute_expression.expression.binary_expression
+    lhs = get_entity(exp.child(0)).values.number
     assert lhs.child(0) == Token('INT', 3)
-    assert expression.child(1) == Token('PLUS', '+')
-    rhs = expression.child(2).exponential.factor.entity.values.number
+    op = exp.child(1)
+    assert op.data == 'binary_operator'
+    assert op.child(0) == Token('PLUS', '+')
+    rhs = get_entity(exp.child(2)).values.number
     assert rhs.child(0) == Token('INT', 4)
 
 
@@ -20,7 +31,8 @@ def test_parser_list_path(parser):
     """
     result = parser.parse('x = 0\n[3, x]\n')
     expression = result.child(1).rules.absolute_expression.expression
-    list = expression.multiplication.exponential.factor.entity.values.list
+    entity = get_entity(expression.binary_expression)
+    list = entity.values.list
     assert list.child(3).path.child(0) == Token('NAME', 'x')
 
 
@@ -36,7 +48,7 @@ def test_parser_assignment(parser, code, token):
     assert assignment.path.child(0) == Token('NAME', 'var')
     assert assignment.assignment_fragment.child(0) == Token('EQUALS', '=')
     expression = assignment.assignment_fragment.expression
-    entity = expression.multiplication.exponential.factor.entity
+    entity = get_entity(expression.binary_expression)
     assert entity.values.child(0).child(0) == token
 
 
@@ -201,14 +213,16 @@ def test_parser_try_raise_error_message(parser):
 @mark.parametrize('number', ['+10', '-10'])
 def test_parser_number_int(parser, number):
     result = parser.parse(number)
-    f = result.block.rules.absolute_expression.expression.multiplication. \
-        exponential.factor.entity.values.number
+    entity = get_entity(result.block.rules.absolute_expression.expression.
+                        binary_expression)
+    f = entity.values.number
     assert f.child(0) == Token('INT', number)
 
 
 @mark.parametrize('number', ['+10.0', '-10.0'])
 def test_parser_number_float(parser, number):
     result = parser.parse(number)
-    f = result.block.rules.absolute_expression.expression.multiplication. \
-        exponential.factor.entity.values.number
+    entity = get_entity(result.block.rules.absolute_expression.expression.
+                        binary_expression)
+    f = entity.values.number
     assert f.child(0) == Token('FLOAT', number)
