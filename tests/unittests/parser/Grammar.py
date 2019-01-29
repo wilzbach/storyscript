@@ -176,9 +176,8 @@ def test_grammar_service_block(grammar, ebnf):
 
 def test_grammar_if_block(grammar, ebnf):
     grammar.if_block()
-    assert ebnf.comparisons == '_comparison_operator'
-    assert ebnf.if_statement == 'if entity (comparisons entity)?'
-    elseif_statement = 'else if entity (comparisons entity)?'
+    assert ebnf.if_statement == 'if expression'
+    elseif_statement = 'else if expression'
     assert ebnf.elseif_statement == elseif_statement
     assert ebnf.elseif_block == ebnf.simple_block()
     ebnf.set_rule.assert_called_with('!else_statement', 'else')

@@ -113,7 +113,8 @@ def test_parser_service_output(parser):
 def test_parser_if_block(parser):
     result = parser.parse('if expr\n\tvar=3\n')
     if_block = result.block.if_block
-    path = if_block.if_statement.entity.path
+    entity = get_entity(if_block.if_statement.expression.binary_expression)
+    path = entity.path
     assignment = if_block.nested_block.block.rules.assignment
     assert path.child(0) == Token('NAME', 'expr')
     assert assignment.path.child(0) == Token('NAME', 'var')
@@ -122,7 +123,8 @@ def test_parser_if_block(parser):
 def test_parser_if_block_nested(parser):
     result = parser.parse('if expr\n\tif things\n\t\tvar=3\n')
     if_block = result.block.if_block.nested_block.block.if_block
-    path = if_block.if_statement.entity.path
+    entity = get_entity(if_block.if_statement.expression.binary_expression)
+    path = entity.path
     assignment = if_block.nested_block.block.rules.assignment
     assert path.child(0) == Token('NAME', 'things')
     assert assignment.path.child(0) == Token('NAME', 'var')

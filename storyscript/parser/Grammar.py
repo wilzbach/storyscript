@@ -164,11 +164,8 @@ class Grammar:
     def if_block(self):
         self.ebnf._IF = 'if'
         self.ebnf._ELSE = 'else'
-        # self.ebnf.if_statement = 'if expression'
-        # elseif_statement = 'else if expression'
-        self.ebnf.comparisons = '_comparison_operator'
-        self.ebnf.if_statement = 'if entity (comparisons entity)?'
-        elseif_statement = 'else if entity (comparisons entity)?'
+        self.ebnf.if_statement = 'if expression'
+        elseif_statement = 'else if expression'
         self.ebnf.elseif_statement = elseif_statement
         self.ebnf.elseif_block = self.ebnf.simple_block('elseif_statement')
         self.ebnf.set_rule('!else_statement', 'else')

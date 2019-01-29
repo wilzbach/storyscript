@@ -480,3 +480,56 @@ def test_compiler_expression_exponential_flat(parser):
     assert result['tree']['1']['args'][0]['$OBJECT'] == 'expression'
     assert result['tree']['1']['args'][0]['expression'] == 'exponential'
     assert result['tree']['1']['args'][0]['values'] == [2, 3]
+
+
+def test_compiler_complex_assert(parser):
+    """
+    Ensures that complex assertions are compiled correctly
+    """
+    source = """foo = true
+if (foo == true) and foo == (1 + 2)
+  log info msg: "true"
+else
+  log info msg: "false"
+log info msg: "completed" """
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['2']['method'] == 'if'
+    assert result['tree']['2']['args'] == [{
+      '$OBJECT': 'assertion',
+      'assertion': 'and',
+      'values': [
+        {
+          '$OBJECT': 'expression',
+          'expression': 'equals',
+          'values': [
+            {
+              '$OBJECT': 'path',
+              'paths': [
+                'foo'
+              ]
+            },
+            True
+          ]
+        },
+        {
+          '$OBJECT': 'expression',
+          'expression': 'equals',
+          'values': [
+            {
+              '$OBJECT': 'path',
+              'paths': [
+                'foo'
+              ]
+            },
+            {
+              '$OBJECT': 'expression',
+              'expression': 'sum',
+              'values': [
+                1,
+                2
+              ]
+            }
+          ]
+        }
+      ]
+    }]

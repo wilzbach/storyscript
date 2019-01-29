@@ -225,13 +225,6 @@ class Objects:
                  'NOT_EQUAL': 'not_equal',
                  'GREATER_EQUAL': 'greater_equal',
                  'LESSER_EQUAL': 'less_equal'}
-        # FUTURE: Remove me when if_statement uses 'expression'
-        types['>'] = 'greater'
-        types['>='] = 'greater_equal'
-        types['<'] = 'less'
-        types['<='] = 'less_equal'
-        types['=='] = 'equals'
-        types['!='] = 'not_equal'
         tree.expect(operator in types, 'compiler_error_no_operator')
         return types[operator]
 
@@ -330,11 +323,12 @@ class Objects:
         """
         Compiles an assertion object.
         """
-        lhs = cls.entity(tree.entity)
-        operator = tree.child(1)
-        if operator is None:
-            return [lhs]
-        rhs = cls.values(tree.child(2).child(0))
-        assertion = Objects.expression_type(operator.child(0), tree)
-        return [{'$OBJECT': 'assertion', 'assertion': assertion,
-                 'values': [lhs, rhs]}]
+        e = Objects.expression(tree.expression)
+        if not hasattr(e, 'get') or e.get('expression', None) is None:
+            return [e]
+        # Do we really need this special case here?
+        return [{
+            '$OBJECT': 'assertion',
+            'assertion': e['expression'],
+            'values': e['values'],
+        }]
