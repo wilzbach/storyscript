@@ -165,14 +165,13 @@ def test_storyerror_hint_unexpected_token(patch, storyerror, ):
                                  f'Allowed: {str(expected)}')
 
 
-def test_storyerror_unexpected_token_code(patch, storyerror):
+def test_storyerror_unexpected_token_code(patch, call_count, storyerror):
     patch.init(Intention)
     patch.object(Intention, 'assignment', return_value=False)
     patch.object(Intention, 'unnecessary_colon', return_value=False)
     result = storyerror.unexpected_token_code()
     Intention.__init__.assert_called_with(storyerror.get_line())
-    assert Intention.assignment.call_count == 1
-    assert Intention.unnecessary_colon.call_count == 1
+    call_count(Intention, ['assignment', 'unnecessary_colon'])
     assert result == ErrorCodes.unexpected_token
 
 
@@ -188,6 +187,32 @@ def test_storyerror_unexpected_token_code_colon(patch, storyerror):
     patch.object(Intention, 'assignment', return_value=False)
     patch.object(Intention, 'unnecessary_colon')
     assert storyerror.unexpected_token_code() == ErrorCodes.unnecessary_colon
+
+
+def test_storyerror_unexpected_characters_code(patch, call_count, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'is_function', return_value=False)
+    patch.object(Intention, 'unnecessary_colon', return_value=False)
+    result = storyerror.unexpected_characters_code()
+    Intention.__init__.assert_called_with(storyerror.get_line())
+    call_count(Intention, ['is_function', 'unnecessary_colon'])
+    assert result == ErrorCodes.invalid_character
+
+
+def test_storyerror_unexpected_characters_code_function(patch, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'is_function')
+    result = storyerror.unexpected_characters_code()
+    assert result == ErrorCodes.function_misspell
+
+
+def test_storyerror_unexpected_characters_code_colon(patch, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'is_function', return_value=False)
+    patch.object(Intention, 'unnecessary_colon')
+    result = storyerror.unexpected_characters_code()
+    assert result == ErrorCodes.unnecessary_colon
+
 
 def test_storyerror_identify(storyerror):
     storyerror.error.error = 'none'

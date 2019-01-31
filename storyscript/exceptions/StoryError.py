@@ -111,7 +111,18 @@ class StoryError(SyntaxError):
         elif intention.unnecessary_colon():
             return ErrorCodes.unnecessary_colon
         return ErrorCodes.unexpected_token
- 
+
+    def unexpected_characters_code(self):
+        """
+        Finds the error code when the error is UnexpectedCharacters
+        """
+        intention = Intention(self.get_line())
+        if intention.is_function():
+            return ErrorCodes.function_misspell
+        elif intention.unnecessary_colon():
+            return ErrorCodes.unnecessary_colon
+        return ErrorCodes.invalid_character
+
     def identify(self):
         """
         Identifies the error.
