@@ -278,24 +278,24 @@ def test_storyerror_echo(patch, storyerror):
     click.echo.assert_called_with(StoryError.message())
 
 
+def test_storyerror_unnamed_error(patch):
+    patch.init(StoryError)
+    patch.init(CompilerError)
+    error = StoryError.unnamed_error('message')
+    assert isinstance(error, StoryError)
+    CompilerError.__init__.assert_called_with(None, message='message')
+    assert isinstance(StoryError.__init__.call_args[0][0], CompilerError)
+    assert StoryError.__init__.call_args[0][1] is None
+
+
 def test_storyerror_internal(patch):
     """
     Ensures that an internal error gets properly constructed
     """
     patch.object(StoryError, 'unnamed_error')
-    e = StoryError.internal_error(Exception('ICE happened'))
+    error = StoryError.internal_error(Exception('ICE happened'))
     msg = (
         'Internal error occured: ICE happened\n'
         'Please report at https://github.com/storyscript/storyscript/issues')
     StoryError.unnamed_error.assert_called_with(msg)
-    assert e == StoryError.internal_error(msg)
-
-
-def test_storyerror_unnamed_error(patch):
-    patch.init(StoryError)
-    patch.init(CompilerError)
-    e = StoryError.unnamed_error('Unknown error happened')
-    assert isinstance(e, StoryError)
-    assert CompilerError.__init__.call_count == 1
-    assert isinstance(StoryError.__init__.call_args[0][0], CompilerError)
-    assert StoryError.__init__.call_args[0][1] is None
+    assert error == StoryError.unnamed_error()

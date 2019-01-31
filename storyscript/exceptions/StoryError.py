@@ -177,8 +177,7 @@ class StoryError(SyntaxError):
         return StoryError(CompilerError(None, message=message), None)
 
     @staticmethod
-    def internal_error(e):
+    def internal_error(error):
         url = 'https://github.com/storyscript/storyscript/issues'
-        return StoryError.unnamed_error((
-            f'Internal error occured: {str(e)}\n'
-            f'Please report at {url}'))
+        message = 'Internal error occured: {}\nPlease report at {}'
+        return StoryError.unnamed_error(message.format(error, url))
