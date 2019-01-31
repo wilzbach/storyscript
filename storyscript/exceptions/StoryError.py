@@ -101,6 +101,17 @@ class StoryError(SyntaxError):
             return self.error_tuple[1].format(token, expected)
         return self.error_tuple[1]
 
+    def unexpected_token_code(self):
+        """
+        Finds the error code when the error is UnexpectedToken
+        """
+        intention = Intention(self.get_line())
+        if intention.assignment():
+            return ErrorCodes.assignment_incomplete
+        elif intention.unnecessary_colon():
+            return ErrorCodes.unnecessary_colon
+        return ErrorCodes.unexpected_token
+ 
     def identify(self):
         """
         Identifies the error.

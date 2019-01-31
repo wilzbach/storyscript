@@ -165,6 +165,30 @@ def test_storyerror_hint_unexpected_token(patch, storyerror, ):
                                  f'Allowed: {str(expected)}')
 
 
+def test_storyerror_unexpected_token_code(patch, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'assignment', return_value=False)
+    patch.object(Intention, 'unnecessary_colon', return_value=False)
+    result = storyerror.unexpected_token_code()
+    Intention.__init__.assert_called_with(storyerror.get_line())
+    assert Intention.assignment.call_count == 1
+    assert Intention.unnecessary_colon.call_count == 1
+    assert result == ErrorCodes.unexpected_token
+
+
+def test_storyerror_unexpected_token_code_assignment(patch, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'assignment')
+    result = storyerror.unexpected_token_code()
+    assert result == ErrorCodes.assignment_incomplete
+
+
+def test_storyerror_unexpected_token_code_colon(patch, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'assignment', return_value=False)
+    patch.object(Intention, 'unnecessary_colon')
+    assert storyerror.unexpected_token_code() == ErrorCodes.unnecessary_colon
+
 def test_storyerror_identify(storyerror):
     storyerror.error.error = 'none'
     assert storyerror.identify() == ErrorCodes.unidentified_error
