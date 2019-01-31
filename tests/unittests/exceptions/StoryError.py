@@ -234,64 +234,16 @@ def test_storyerror_identify_unexpected_token(patch, storyerror):
     token errors
     """
     patch.init(UnexpectedToken)
-    patch.init(Intention)
-    patch.object(Intention, 'assignment', return_value=False)
-    patch.object(Intention, 'unnecessary_colon', return_value=False)
-    patch.object(StoryError, 'get_line')
+    patch.object(StoryError, 'unexpected_token_code')
     storyerror.error = UnexpectedToken('seq', 'lex', 0, 0)
-    assert storyerror.identify() == ErrorCodes.unexpected_token
-
-
-def test_storyerror_identify_unexpected_token_assignment(patch, storyerror):
-    """
-    Ensures that StoryError.intention can find the error code for incomplete
-    assignments
-    """
-    patch.init(Intention)
-    patch.object(Intention, 'assignment', return_value=True)
-    patch.object(StoryError, 'get_line')
-    storyerror.error = UnexpectedToken('token', 'expected')
-    assert storyerror.identify() == ErrorCodes.assignment_incomplete
-
-
-def test_storyerror_indentify_unexpected_token_colon(patch, storyerror):
-    patch.init(UnexpectedToken)
-    patch.init(Intention)
-    patch.object(Intention, 'assignment', return_value=False)
-    patch.object(Intention, 'unnecessary_colon', return_value=True)
-    patch.object(StoryError, 'get_line')
-    storyerror.error = UnexpectedToken('seq', 'lex', 0, 0)
-    assert storyerror.identify() == ErrorCodes.unnecessary_colon
+    assert storyerror.identify() == storyerror.unexpected_token_code()
 
 
 def test_storyerror_identify_unexpected_characters(patch, storyerror):
     patch.init(UnexpectedCharacters)
-    patch.init(Intention)
-    patch.object(Intention, 'is_function', return_value=True)
-    patch.object(StoryError, 'get_line')
+    patch.object(StoryError, 'unexpected_characters_code')
     storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
-    assert storyerror.identify() == ErrorCodes.function_misspell
-
-
-def test_storyerror_identify_unexpected_characters_unidentified(
-        patch, storyerror):
-    patch.init(UnexpectedCharacters)
-    patch.init(Intention)
-    patch.object(Intention, 'is_function', return_value=False)
-    patch.object(Intention, 'unnecessary_colon', return_value=False)
-    patch.object(StoryError, 'get_line')
-    storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
-    assert storyerror.identify() == ErrorCodes.invalid_character
-
-
-def test_storyerror_identify_unexpected_characters_colon(patch, storyerror):
-    patch.init(UnexpectedCharacters)
-    patch.init(Intention)
-    patch.object(Intention, 'is_function', return_value=False)
-    patch.object(Intention, 'unnecessary_colon', return_value=True)
-    patch.object(StoryError, 'get_line')
-    storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
-    assert storyerror.identify() == ErrorCodes.unnecessary_colon
+    assert storyerror.identify() == storyerror.unexpected_characters_code()
 
 
 def test_storyerror_process(patch, storyerror):
