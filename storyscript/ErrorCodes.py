@@ -63,13 +63,18 @@ class ErrorCodes:
         '`{}` has already been declared at line {}')
     unexpected_token = ('E0043', '`{}` is not allowed here. Allowed: {}')
     break_outside = ('E0044', '`break` is allowed only inside loops')
+    unnecessary_colon = (
+        'E0045',
+        'There is an unnecessary colon at the end of the line')
 
     @staticmethod
     def is_error(error_name):
         """
         Checks whether a given error name is a valid error.
         """
-        return isinstance(error_name, str) and hasattr(ErrorCodes, error_name)
+        if isinstance(error_name, str):
+            if hasattr(ErrorCodes, error_name):
+                return True
 
     @staticmethod
     def get_error(error_name):

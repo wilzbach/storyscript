@@ -101,6 +101,28 @@ class StoryError(SyntaxError):
             return self.error_tuple[1].format(token, expected)
         return self.error_tuple[1]
 
+    def unexpected_token_code(self):
+        """
+        Finds the error code when the error is UnexpectedToken
+        """
+        intention = Intention(self.get_line())
+        if intention.assignment():
+            return ErrorCodes.assignment_incomplete
+        elif intention.unnecessary_colon():
+            return ErrorCodes.unnecessary_colon
+        return ErrorCodes.unexpected_token
+
+    def unexpected_characters_code(self):
+        """
+        Finds the error code when the error is UnexpectedCharacters
+        """
+        intention = Intention(self.get_line())
+        if intention.is_function():
+            return ErrorCodes.function_misspell
+        elif intention.unnecessary_colon():
+            return ErrorCodes.unnecessary_colon
+        return ErrorCodes.invalid_character
+
     def identify(self):
         """
         Identifies the error.
@@ -111,15 +133,10 @@ class StoryError(SyntaxError):
             if ErrorCodes.is_error(self.error.error):
                 return ErrorCodes.get_error(self.error.error)
 
-        intention = Intention(self.get_line())
         if isinstance(self.error, UnexpectedToken):
-            if intention.assignment():
-                return ErrorCodes.assignment_incomplete
-            return ErrorCodes.unexpected_token
+            return self.unexpected_token_code()
         elif isinstance(self.error, UnexpectedCharacters):
-            if intention.is_function():
-                return ErrorCodes.function_misspell
-            return ErrorCodes.invalid_character
+            return self.unexpected_characters_code()
         return ErrorCodes.unidentified_error
 
     def process(self):
@@ -142,12 +159,6 @@ class StoryError(SyntaxError):
         else:
             return self.error.message()
 
-    def echo(self):
-        """
-        Prints the message
-        """
-        click.echo(self.message())
-
     def short_message(self):
         """
         A short version of the error message
@@ -155,13 +166,18 @@ class StoryError(SyntaxError):
         self.process()
         return f'{self.error_code()}: {self.hint()}'
 
+    def echo(self):
+        """
+        Prints the message
+        """
+        click.echo(self.message())
+
     @staticmethod
     def unnamed_error(message):
         return StoryError(CompilerError(None, message=message), None)
 
     @staticmethod
-    def internal_error(e):
+    def internal_error(error):
         url = 'https://github.com/storyscript/storyscript/issues'
-        return StoryError.unnamed_error((
-            f'Internal error occured: {str(e)}\n'
-            f'Please report at {url}'))
+        message = 'Internal error occured: {}\nPlease report at {}'
+        return StoryError.unnamed_error(message.format(error, url))

@@ -165,6 +165,55 @@ def test_storyerror_hint_unexpected_token(patch, storyerror, ):
                                  f'Allowed: {str(expected)}')
 
 
+def test_storyerror_unexpected_token_code(patch, call_count, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'assignment', return_value=False)
+    patch.object(Intention, 'unnecessary_colon', return_value=False)
+    result = storyerror.unexpected_token_code()
+    Intention.__init__.assert_called_with(storyerror.get_line())
+    call_count(Intention, ['assignment', 'unnecessary_colon'])
+    assert result == ErrorCodes.unexpected_token
+
+
+def test_storyerror_unexpected_token_code_assignment(patch, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'assignment')
+    result = storyerror.unexpected_token_code()
+    assert result == ErrorCodes.assignment_incomplete
+
+
+def test_storyerror_unexpected_token_code_colon(patch, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'assignment', return_value=False)
+    patch.object(Intention, 'unnecessary_colon')
+    assert storyerror.unexpected_token_code() == ErrorCodes.unnecessary_colon
+
+
+def test_storyerror_unexpected_characters_code(patch, call_count, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'is_function', return_value=False)
+    patch.object(Intention, 'unnecessary_colon', return_value=False)
+    result = storyerror.unexpected_characters_code()
+    Intention.__init__.assert_called_with(storyerror.get_line())
+    call_count(Intention, ['is_function', 'unnecessary_colon'])
+    assert result == ErrorCodes.invalid_character
+
+
+def test_storyerror_unexpected_characters_code_function(patch, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'is_function')
+    result = storyerror.unexpected_characters_code()
+    assert result == ErrorCodes.function_misspell
+
+
+def test_storyerror_unexpected_characters_code_colon(patch, storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'is_function', return_value=False)
+    patch.object(Intention, 'unnecessary_colon')
+    result = storyerror.unexpected_characters_code()
+    assert result == ErrorCodes.unnecessary_colon
+
+
 def test_storyerror_identify(storyerror):
     storyerror.error.error = 'none'
     assert storyerror.identify() == ErrorCodes.unidentified_error
@@ -180,40 +229,21 @@ def test_storyerror_identify_codes(storyerror, error, name):
 
 
 def test_storyerror_identify_unexpected_token(patch, storyerror):
-    patch.init(Intention)
-    patch.object(Intention, 'assignment', return_value=True)
-    patch.object(StoryError, 'get_line')
-    storyerror.error = UnexpectedToken('token', 'expected')
-    assert storyerror.identify() == ErrorCodes.assignment_incomplete
+    """
+    Ensures that StoryError.identify can find the error code for unidentified
+    token errors
+    """
+    patch.init(UnexpectedToken)
+    patch.object(StoryError, 'unexpected_token_code')
+    storyerror.error = UnexpectedToken('seq', 'lex', 0, 0)
+    assert storyerror.identify() == storyerror.unexpected_token_code()
 
 
 def test_storyerror_identify_unexpected_characters(patch, storyerror):
     patch.init(UnexpectedCharacters)
-    patch.init(Intention)
-    patch.object(Intention, 'is_function', return_value=True)
-    patch.object(StoryError, 'get_line')
+    patch.object(StoryError, 'unexpected_characters_code')
     storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
-    assert storyerror.identify() == ErrorCodes.function_misspell
-
-
-def test_storyerror_identify_unexpected_characters_unidentified(
-        patch, storyerror):
-    patch.init(UnexpectedCharacters)
-    patch.init(Intention)
-    patch.object(Intention, 'is_function', return_value=False)
-    patch.object(StoryError, 'get_line')
-    storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
-    assert storyerror.identify() == ErrorCodes.invalid_character
-
-
-def test_storyerror_identify_unexpected_token_unidentified(
-        patch, storyerror):
-    patch.init(UnexpectedToken)
-    patch.init(Intention)
-    patch.object(Intention, 'assignment', return_value=False)
-    patch.object(StoryError, 'get_line')
-    storyerror.error = UnexpectedToken('seq', 'lex', 0, 0)
-    assert storyerror.identify() == ErrorCodes.unexpected_token
+    assert storyerror.identify() == storyerror.unexpected_characters_code()
 
 
 def test_storyerror_process(patch, storyerror):
@@ -232,6 +262,12 @@ def test_storyerror_message(patch, storyerror):
     assert result == '{}\n\n{}\n\n{}: {}'.format(*args)
 
 
+def test_story_storyerror_short_message(patch, storyerror):
+    patch.many(StoryError, ['process', 'error_code', 'hint'])
+    result = storyerror.short_message()
+    assert result == f'{storyerror.error_code()}: {storyerror.hint()}'
+
+
 def test_storyerror_echo(patch, storyerror):
     """
     Ensures StoryError.echo prints StoryError.message
@@ -242,24 +278,24 @@ def test_storyerror_echo(patch, storyerror):
     click.echo.assert_called_with(StoryError.message())
 
 
+def test_storyerror_unnamed_error(patch):
+    patch.init(StoryError)
+    patch.init(CompilerError)
+    error = StoryError.unnamed_error('message')
+    assert isinstance(error, StoryError)
+    CompilerError.__init__.assert_called_with(None, message='message')
+    assert isinstance(StoryError.__init__.call_args[0][0], CompilerError)
+    assert StoryError.__init__.call_args[0][1] is None
+
+
 def test_storyerror_internal(patch):
     """
     Ensures that an internal error gets properly constructed
     """
     patch.object(StoryError, 'unnamed_error')
-    e = StoryError.internal_error(Exception('ICE happened'))
+    error = StoryError.internal_error(Exception('ICE happened'))
     msg = (
         'Internal error occured: ICE happened\n'
         'Please report at https://github.com/storyscript/storyscript/issues')
     StoryError.unnamed_error.assert_called_with(msg)
-    assert e == StoryError.internal_error(msg)
-
-
-def test_storyerror_unnamed_error(patch):
-    patch.init(StoryError)
-    patch.init(CompilerError)
-    e = StoryError.unnamed_error('Unknown error happened')
-    assert isinstance(e, StoryError)
-    assert CompilerError.__init__.call_count == 1
-    assert isinstance(StoryError.__init__.call_args[0][0], CompilerError)
-    assert StoryError.__init__.call_args[0][1] is None
+    assert error == StoryError.unnamed_error()

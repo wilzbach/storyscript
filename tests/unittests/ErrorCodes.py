@@ -69,13 +69,30 @@ from storyscript.ErrorCodes import ErrorCodes
     ('function_already_declared',
         ('E0042', '`{}` has already been declared at line {}')),
     ('unexpected_token', ('E0043', '`{}` is not allowed here. Allowed: {}')),
-    ('break_outside', ('E0044', '`break` is allowed only inside loops'))
+    ('break_outside', ('E0044', '`break` is allowed only inside loops')),
+    ('unnecessary_colon', (
+        'E0045',
+        'There is an unnecessary colon at the end of the line'))
 ])
-def test_errorcodes(name, definition):
-    assert ErrorCodes.get_error(name) == definition
+def test_errorcodes_errors(name, definition):
+    assert getattr(ErrorCodes, name) == definition
 
 
-def test_is_error():
-    assert not ErrorCodes.is_error(None)
-    assert not ErrorCodes.is_error('foo')
-    assert ErrorCodes.is_error('service_name')
+def test_errorcodes_is_error():
+    """
+    Ensures that is_errror can find out whether an error name is valid.
+    """
+    assert ErrorCodes.is_error('service_name') is True
+
+
+def test_errorcodes_is_error_none():
+    assert ErrorCodes.is_error(None) is None
+
+
+def test_errorcodes_is_error_string():
+    assert ErrorCodes.is_error('foo') is None
+
+
+def test_errorcodes_get_error():
+    ErrorCodes.mock = 'value'
+    assert ErrorCodes.get_error('mock') == 'value'
