@@ -74,8 +74,8 @@ from storyscript.ErrorCodes import ErrorCodes
         'E0045',
         'There is an unnecessary colon at the end of the line'))
 ])
-def test_errorcodes(name, definition):
-    assert ErrorCodes.get_error(name) == definition
+def test_errorcodes_errors(name, definition):
+    assert getattr(ErrorCodes, name) == definition
 
 
 def test_errorcodes_is_error():
@@ -91,3 +91,8 @@ def test_errorcodes_is_error_none():
 
 def test_errorcodes_is_error_string():
     assert ErrorCodes.is_error('foo') is None
+
+
+def test_errorcodes_get_error():
+    ErrorCodes.mock = 'value'
+    assert ErrorCodes.get_error('mock') == 'value'
