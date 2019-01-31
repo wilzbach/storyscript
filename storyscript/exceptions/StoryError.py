@@ -121,6 +121,8 @@ class StoryError(SyntaxError):
         elif isinstance(self.error, UnexpectedCharacters):
             if intention.is_function():
                 return ErrorCodes.function_misspell
+            if intention.unnecessary_colon():
+                return ErrorCodes.unnecessary_colon
             return ErrorCodes.invalid_character
         return ErrorCodes.unidentified_error
 

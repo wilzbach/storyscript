@@ -229,9 +229,20 @@ def test_storyerror_identify_unexpected_characters_unidentified(
     patch.init(UnexpectedCharacters)
     patch.init(Intention)
     patch.object(Intention, 'is_function', return_value=False)
+    patch.object(Intention, 'unnecessary_colon', return_value=False)
     patch.object(StoryError, 'get_line')
     storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
     assert storyerror.identify() == ErrorCodes.invalid_character
+
+
+def test_storyerror_identify_unexpected_characters_colon(patch, storyerror):
+    patch.init(UnexpectedCharacters)
+    patch.init(Intention)
+    patch.object(Intention, 'is_function', return_value=False)
+    patch.object(Intention, 'unnecessary_colon', return_value=True)
+    patch.object(StoryError, 'get_line')
+    storyerror.error = UnexpectedCharacters('seq', 'lex', 0, 0)
+    assert storyerror.identify() == ErrorCodes.unnecessary_colon
 
 
 def test_storyerror_process(patch, storyerror):
