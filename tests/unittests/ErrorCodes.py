@@ -78,7 +78,16 @@ def test_errorcodes(name, definition):
     assert ErrorCodes.get_error(name) == definition
 
 
-def test_is_error():
-    assert not ErrorCodes.is_error(None)
-    assert not ErrorCodes.is_error('foo')
-    assert ErrorCodes.is_error('service_name')
+def test_errorcodes_is_error():
+    """
+    Ensures that is_errror can find out whether an error name is valid.
+    """
+    assert ErrorCodes.is_error('service_name') is True
+
+
+def test_errorcodes_is_error_none():
+    assert ErrorCodes.is_error(None) is None
+
+
+def test_errorcodes_is_error_string():
+    assert ErrorCodes.is_error('foo') is None

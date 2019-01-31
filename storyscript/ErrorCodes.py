@@ -72,7 +72,9 @@ class ErrorCodes:
         """
         Checks whether a given error name is a valid error.
         """
-        return isinstance(error_name, str) and hasattr(ErrorCodes, error_name)
+        if isinstance(error_name, str):
+            if hasattr(ErrorCodes, error_name):
+                return True
 
     @staticmethod
     def get_error(error_name):
