@@ -159,18 +159,18 @@ class StoryError(SyntaxError):
         else:
             return self.error.message()
 
-    def echo(self):
-        """
-        Prints the message
-        """
-        click.echo(self.message())
-
     def short_message(self):
         """
         A short version of the error message
         """
         self.process()
         return f'{self.error_code()}: {self.hint()}'
+
+    def echo(self):
+        """
+        Prints the message
+        """
+        click.echo(self.message())
 
     @staticmethod
     def unnamed_error(message):

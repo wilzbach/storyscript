@@ -262,6 +262,12 @@ def test_storyerror_message(patch, storyerror):
     assert result == '{}\n\n{}\n\n{}: {}'.format(*args)
 
 
+def test_story_storyerror_short_message(patch, storyerror):
+    patch.many(StoryError, ['process', 'error_code', 'hint'])
+    result = storyerror.short_message()
+    assert result == f'{storyerror.error_code()}: {storyerror.hint()}'
+
+
 def test_storyerror_echo(patch, storyerror):
     """
     Ensures StoryError.echo prints StoryError.message
