@@ -115,6 +115,8 @@ class StoryError(SyntaxError):
         if isinstance(self.error, UnexpectedToken):
             if intention.assignment():
                 return ErrorCodes.assignment_incomplete
+            elif intention.unnecessary_colon():
+                return ErrorCodes.unnecessary_colon
             return ErrorCodes.unexpected_token
         elif isinstance(self.error, UnexpectedCharacters):
             if intention.is_function():
