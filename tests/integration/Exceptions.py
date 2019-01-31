@@ -9,7 +9,7 @@ from storyscript.exceptions.StoryError import StoryError
 ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
 
 
-def test_exception_service_name(capsys):
+def test_exceptions_service_name(capsys):
     with raises(StoryError) as e:
         Story('al.pine echo').process()
 
@@ -21,7 +21,7 @@ def test_exception_service_name(capsys):
     assert lines[5] == "E0002: A service name can't contain `.`"
 
 
-def test_exception_arguments_noservice(capsys):
+def test_exceptions_arguments_noservice(capsys):
     with raises(StoryError) as e:
         Story('length:10').process()
     e.value.with_color = False
@@ -31,7 +31,7 @@ def test_exception_arguments_noservice(capsys):
     assert lines[5] == 'E0003: You have defined an argument, but not a service'
 
 
-def test_exception_variables_backslash(capsys):
+def test_exceptions_variables_backslash(capsys):
     with raises(StoryError) as e:
         Story('a/b = 0').process()
     e.value.with_color = False
@@ -41,7 +41,7 @@ def test_exception_variables_backslash(capsys):
     assert lines[5] == "E0005: A variable name can't contain `/`"
 
 
-def test_exception_variables_dash(capsys):
+def test_exceptions_variables_dash(capsys):
     with raises(StoryError) as e:
         Story('a-b = 0').process()
     e.value.with_color = False
@@ -51,17 +51,17 @@ def test_exception_variables_dash(capsys):
     assert lines[5] == "E0006: A variable name can't contain `-`"
 
 
-def test_exception_return_outside(capsys):
+def test_exceptions_return_outside(capsys):
     with raises(StoryError) as e:
         Story('return 0').process()
     e.value.with_color = False
     lines = e.value.message().splitlines()
-    assert lines[0] == 'Error: syntax error in story at line 1, column 8'
+    assert lines[0] == 'Error: syntax error in story at line 1, column 1'
     assert lines[2] == '1|    return 0'
     assert lines[5] == 'E0004: `return` is allowed only inside functions'
 
 
-def test_exception_missing_value(capsys):
+def test_exceptions_missing_value(capsys):
     with raises(StoryError) as e:
         Story('a = ').process()
     e.value.with_color = False
@@ -71,14 +71,14 @@ def test_exception_missing_value(capsys):
     assert lines[5] == 'E0007: Missing value after `=`'
 
 
-def test_exception_file_not_found(capsys):
+def test_exceptions_file_not_found(capsys):
     with raises(StoryError) as e:
         Story.from_file('this-file-does-not-exist')
     message = e.value.message()
     assert 'File "this-file-does-not-exist" not found at' in message
 
 
-def test_exception_dollar(capsys):
+def test_exceptions_dollar(capsys):
     with raises(StoryError) as e:
         Story('x = $').process()
     e.value.with_color = False
@@ -88,7 +88,7 @@ def test_exception_dollar(capsys):
     assert lines[5] == 'E0041: `$` is not allowed here'
 
 
-def test_exception_function_redeclared(capsys):
+def test_exceptions_function_redeclared(capsys):
     with raises(StoryError) as e:
         Story('function f1\n\treturn 42\nfunction f1\n\treturn 42\n').process()
     e.value.with_color = False
