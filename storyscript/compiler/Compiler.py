@@ -178,7 +178,9 @@ class Compiler:
         if parent is None:
             raise CompilerError('return_outside', tree=tree)
         line = tree.line()
-        args = [Objects.entity(tree.child(0))]
+        args = None
+        if tree.entity:
+            args = [Objects.entity(tree.entity)]
         self.lines.append('return', line, args=args, parent=parent)
 
     def if_block(self, tree, parent):
