@@ -85,3 +85,11 @@ class Intention:
         if self.line.startswith('wh'):
             if self.line.endswith('while') is False:
                 return True
+
+    def unnecessary_colon(self):
+        """
+        Whether the intention is to write an if statement, but there is an
+        unecessary colon
+        """
+        if self.line.endswith(':'):
+            return True

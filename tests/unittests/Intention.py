@@ -112,3 +112,8 @@ def test_intention_while(line):
 def test_intention_while_not(line):
     intention = Intention(line)
     assert intention.while_() is None
+
+
+def test_intention_unnecessary_colon():
+    intention = Intention('line:')
+    assert intention.unnecessary_colon() is True
