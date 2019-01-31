@@ -469,3 +469,14 @@ def test_compiler_expression_signed_float_complex(parser):
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'][0]['expression'] == 'sum'
     assert result['tree']['1']['args'][0]['values'] == [-2.5, 3.5]
+
+
+def test_compiler_expression_exponential_flat(parser):
+    """
+    Ensures that exponential expressions are not nested
+    """
+    result = Compiler.compile(parser.parse('2 ^ 3'))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'][0]['$OBJECT'] == 'expression'
+    assert result['tree']['1']['args'][0]['expression'] == 'exponential'
+    assert result['tree']['1']['args'][0]['values'] == [2, 3]
