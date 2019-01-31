@@ -533,3 +533,707 @@ log info msg: "completed" """
         }
       ]
     }]
+
+
+def test_compiler_complex_nested_expression(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = '2 + 3 / 4'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'sum',
+        'values': [
+          2,
+          {
+            '$OBJECT': 'expression',
+            'expression': 'division',
+            'values': [
+              3,
+              4
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_2(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = 'true and 1 + 1 == 2 or 3'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'or',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'and',
+            'values': [
+              True,
+              {
+                '$OBJECT': 'expression',
+                'expression': 'equals',
+                'values': [
+                  {
+                    '$OBJECT': 'expression',
+                    'expression': 'sum',
+                    'values': [
+                      1,
+                      1
+                    ]
+                  },
+                  2
+                ]
+              }
+            ]
+          },
+          3
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_3(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = '0 + 1 * 2 - 3 / 4 % 5 == 6 ^ 2 > 7 or 8'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'or',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'greater',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'equals',
+                'values': [
+                  {
+                    '$OBJECT': 'expression',
+                    'expression': 'subtraction',
+                    'values': [
+                      {
+                        '$OBJECT': 'expression',
+                        'expression': 'sum',
+                        'values': [
+                          0,
+                          {
+                            '$OBJECT': 'expression',
+                            'expression': 'multiplication',
+                            'values': [
+                              1,
+                              2
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        '$OBJECT': 'expression',
+                        'expression': 'modulus',
+                        'values': [
+                          {
+                            '$OBJECT': 'expression',
+                            'expression': 'division',
+                            'values': [
+                              3,
+                              4
+                            ]
+                          },
+                          5
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    '$OBJECT': 'expression',
+                    'expression': 'exponential',
+                    'values': [
+                      6,
+                      2
+                    ]
+                  }
+                ]
+              },
+              7
+            ]
+          },
+          8
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_4(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = '1 % 2 + 3 - -4'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'subtraction',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'sum',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'modulus',
+                'values': [
+                  1,
+                  2
+                ]
+              },
+              3
+            ]
+          },
+          -4
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_5(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = ('1 + 0.1 < 2 - 0.2 <= 3 / 0.3 '
+              '== 4 * 0.4 != 5 * 0.5 > 6 * 0.6 >= 7 * 0.7')
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'greater_equal',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'greater',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'not_equal',
+                'values': [
+                  {
+                    '$OBJECT': 'expression',
+                    'expression': 'equals',
+                    'values': [
+                      {
+                        '$OBJECT': 'expression',
+                        'expression': 'less_equal',
+                        'values': [
+                          {
+                            '$OBJECT': 'expression',
+                            'expression': 'less',
+                            'values': [
+                              {
+                                '$OBJECT': 'expression',
+                                'expression': 'sum',
+                                'values': [
+                                  1,
+                                  0.1
+                                ]
+                              },
+                              {
+                                '$OBJECT': 'expression',
+                                'expression': 'subtraction',
+                                'values': [
+                                  2,
+                                  0.2
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            '$OBJECT': 'expression',
+                            'expression': 'division',
+                            'values': [
+                              3,
+                              0.3
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        '$OBJECT': 'expression',
+                        'expression': 'multiplication',
+                        'values': [
+                          4,
+                          0.4
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    '$OBJECT': 'expression',
+                    'expression': 'multiplication',
+                    'values': [
+                      5,
+                      0.5
+                    ]
+                  }
+                ]
+              },
+              {
+                '$OBJECT': 'expression',
+                'expression': 'multiplication',
+                'values': [
+                  6,
+                  0.6
+                ]
+              }
+            ]
+          },
+          {
+            '$OBJECT': 'expression',
+            'expression': 'multiplication',
+            'values': [
+              7,
+              0.7
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_6(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = '1 and 2 or 3 and 4 or 5'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'or',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'or',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'and',
+                'values': [
+                  1,
+                  2
+                ]
+              },
+              {
+                '$OBJECT': 'expression',
+                'expression': 'and',
+                'values': [
+                  3,
+                  4
+                ]
+              }
+            ]
+          },
+          5
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_7(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = '1 and (2 or 3) and (4 or 5)'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'and',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'and',
+            'values': [
+              1,
+              {
+                '$OBJECT': 'expression',
+                'expression': 'or',
+                'values': [
+                  2,
+                  3
+                ]
+              }
+            ]
+          },
+          {
+            '$OBJECT': 'expression',
+            'expression': 'or',
+            'values': [
+              4,
+              5
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_8(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = '(1 + 2) == (0 - -3) and -4 - (-5 + -6)'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'and',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'equals',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'sum',
+                'values': [
+                  1,
+                  2
+                ]
+              },
+              {
+                '$OBJECT': 'expression',
+                'expression': 'subtraction',
+                'values': [
+                  0,
+                  -3
+                ]
+              }
+            ]
+          },
+          {
+            '$OBJECT': 'expression',
+            'expression': 'subtraction',
+            'values': [
+              -4,
+              {
+                '$OBJECT': 'expression',
+                'expression': 'sum',
+                'values': [
+                  -5,
+                  -6
+                ]
+              }
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_9(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = 'foo[0] > 5 + foo[1] and foo[1]'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'and',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'greater',
+            'values': [
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'foo',
+                  '0'
+                ]
+              },
+              {
+                '$OBJECT': 'expression',
+                'expression': 'sum',
+                'values': [
+                  5,
+                  {
+                    '$OBJECT': 'path',
+                    'paths': [
+                      'foo',
+                      '1'
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            '$OBJECT': 'path',
+            'paths': [
+              'foo',
+              '1'
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_10(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = """d['a'] + list[0] / list[1] * d['a'] % d['b']"""
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'sum',
+        'values': [
+          {
+            '$OBJECT': 'path',
+            'paths': [
+              'd',
+              {
+                '$OBJECT': 'string',
+                'string': 'a'
+              }
+            ]
+          },
+          {
+            '$OBJECT': 'expression',
+            'expression': 'modulus',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'multiplication',
+                'values': [
+                  {
+                    '$OBJECT': 'expression',
+                    'expression': 'division',
+                    'values': [
+                      {
+                        '$OBJECT': 'path',
+                        'paths': [
+                          'list',
+                          '0'
+                        ]
+                      },
+                      {
+                        '$OBJECT': 'path',
+                        'paths': [
+                          'list',
+                          '1'
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    '$OBJECT': 'path',
+                    'paths': [
+                      'd',
+                      {
+                        '$OBJECT': 'string',
+                        'string': 'a'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'd',
+                  {
+                    '$OBJECT': 'string',
+                    'string': 'b'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_11(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = '1 == 2 != 3 < 4 == 5 + 6 - 7 * 8 > 9 <= 10'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'less_equal',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'greater',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'equals',
+                'values': [
+                  {
+                    '$OBJECT': 'expression',
+                    'expression': 'less',
+                    'values': [
+                      {
+                        '$OBJECT': 'expression',
+                        'expression': 'not_equal',
+                        'values': [
+                          {
+                            '$OBJECT': 'expression',
+                            'expression': 'equals',
+                            'values': [
+                              1,
+                              2
+                            ]
+                          },
+                          3
+                        ]
+                      },
+                      4
+                    ]
+                  },
+                  {
+                    '$OBJECT': 'expression',
+                    'expression': 'subtraction',
+                    'values': [
+                      {
+                        '$OBJECT': 'expression',
+                        'expression': 'sum',
+                        'values': [
+                          5,
+                          6
+                        ]
+                      },
+                      {
+                        '$OBJECT': 'expression',
+                        'expression': 'multiplication',
+                        'values': [
+                          7,
+                          8
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              9
+            ]
+          },
+          10
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_12(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = '1 == (foo contains)'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1.1']['service'] == 'foo'
+    assert result['tree']['1.1']['name'] == ['p-1.1']
+    assert result['tree']['1.1']['command'] == 'contains'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'equals',
+        'values': [
+          1,
+          {
+            '$OBJECT': 'path',
+            'paths': [
+              'p-1.1'
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_13(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = 'a + b -c / d'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'subtraction',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'sum',
+            'values': [
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'a'
+                ]
+              },
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'b'
+                ]
+              }
+            ]
+          },
+          {
+            '$OBJECT': 'expression',
+            'expression': 'division',
+            'values': [
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'c'
+                ]
+              },
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'd'
+                ]
+              }
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_complex_nested_expression_14(parser):
+    """
+    Ensures that complex nested expressions are compiled correctly
+    """
+    source = '((0 == 1)) + (d[\'a\'])'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'sum',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'equals',
+            'values': [
+              0,
+              1
+            ]
+          },
+          {
+            '$OBJECT': 'path',
+            'paths': [
+              'd',
+              {
+                '$OBJECT': 'string',
+                'string': 'a'
+              }
+            ]
+          }
+        ]
+    }]

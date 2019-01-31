@@ -105,8 +105,10 @@ class Tree(LarkTree):
         Whether the current expression tree is an unary expression leaf
         """
         e = self
-        nodes = ['binary_expression', 'unary_expression', 'pow_expression',
-                 'primary_expression', 'entity']
+        nodes = ['expression',
+                 'or_expression', 'and_expression', 'cmp_expression',
+                 'arith_expression', 'mul_expression', 'unary_expression',
+                 'pow_expression', 'primary_expression', 'entity']
         for n in nodes:
             if e.data != n:
                 return False

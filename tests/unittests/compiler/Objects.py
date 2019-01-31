@@ -321,12 +321,12 @@ def test_objects_expression_type(operator, expression, tree):
 
 def test_objects_expression(patch, tree):
     """
-    Ensures Objects.expression calls binary_expression
+    Ensures Objects.expression calls or_expression
     """
-    patch.many(Objects, ['binary_expression'])
-    tree.child(0).data = 'binary_expression'
+    patch.many(Objects, ['or_expression'])
+    tree.child(0).data = 'or_expression'
     Objects.expression(tree)
-    Objects.binary_expression.assert_called_with(tree.child(0))
+    Objects.or_expression.assert_called_with(tree.child(0))
 
 
 def test_objects_assertion_single_entity(patch, tree):
@@ -408,13 +408,13 @@ def test_objects_primary_expression_entity(patch, tree):
 
 def test_objects_primary_expression_two(patch, tree):
     """
-    Ensures Objects.primary_expression works with a binary_expression node
+    Ensures Objects.primary_expression works with a or_expression node
     """
-    patch.many(Objects, ['entity', 'binary_expression'])
-    tree.child(0).data = 'binary_expression'
+    patch.many(Objects, ['entity', 'or_expression'])
+    tree.child(0).data = 'or_expression'
     r = Objects.primary_expression(tree)
-    Objects.binary_expression.assert_called_with(tree.child(0))
-    assert r == Objects.binary_expression()
+    Objects.or_expression.assert_called_with(tree.child(0))
+    assert r == Objects.or_expression()
 
 
 def test_objects_pow_expression_one(patch, tree):
@@ -471,30 +471,146 @@ def test_objects_unary_expression_two(patch, tree):
     assert r == Objects.build_unary_expression()
 
 
-def test_objects_binary_expression_one(patch, tree):
+def test_objects_mul_expression_one(patch, tree):
     """
-    Ensures Objects.binary_expression works with one node
+    Ensures Objects.mul_expression works with one node
     """
     patch.many(Objects, ['unary_expression'])
     tree.child(0).data = 'unary_expression'
     tree.children = [1]
-    r = Objects.binary_expression(tree)
+    r = Objects.mul_expression(tree)
     Objects.unary_expression.assert_called_with(tree.child(0))
     assert r == Objects.unary_expression()
 
 
-def test_objects_binary_expression_two(patch, tree):
+def test_objects_mul_expression_two(patch, tree):
     """
-    Ensures Objects.binary_expression works with two nodes
+    Ensures Objects.mul_expression works with two nodes
     """
     patch.many(Objects, ['build_binary_expression', 'unary_expression'])
-    tree.child(1).data = 'binary_operator'
-    tree.children = [1, '+', 2]
-    binary_expression = Objects.binary_expression
-    patch.object(Objects, 'binary_expression')
-    r = binary_expression(tree)
+    tree.child(1).data = 'mul_operator'
+    tree.children = [1, '*', 2]
+    mul_expression = Objects.mul_expression
+    patch.object(Objects, 'mul_expression')
+    r = mul_expression(tree)
     Objects.build_binary_expression.assert_called_with(
         tree, tree.child(1).child(0),
-        Objects.binary_expression(tree.child(0)),
+        Objects.mul_expression(tree.child(0)),
         Objects.unary_expression(tree.child(2)))
+    assert r == Objects.build_binary_expression()
+
+
+def test_objects_arith_expression_one(patch, tree):
+    """
+    Ensures Objects.arith_expression works with one node
+    """
+    patch.many(Objects, ['mul_expression'])
+    tree.child(0).data = 'mul_expression'
+    tree.children = [1]
+    r = Objects.arith_expression(tree)
+    Objects.mul_expression.assert_called_with(tree.child(0))
+    assert r == Objects.mul_expression()
+
+
+def test_objects_arith_expression_two(patch, tree):
+    """
+    Ensures Objects.arith_expression works with two nodes
+    """
+    patch.many(Objects, ['build_binary_expression', 'mul_expression'])
+    tree.child(1).data = 'arith_operator'
+    tree.children = [1, '+', 2]
+    arith_expression = Objects.arith_expression
+    patch.object(Objects, 'arith_expression')
+    r = arith_expression(tree)
+    Objects.build_binary_expression.assert_called_with(
+        tree, tree.child(1).child(0),
+        Objects.arith_expression(tree.child(0)),
+        Objects.mul_expression(tree.child(2)))
+    assert r == Objects.build_binary_expression()
+
+
+def test_objects_or_expression_one(patch, tree):
+    """
+    Ensures Objects.or_expression works with one node
+    """
+    patch.many(Objects, ['and_expression'])
+    tree.child(0).data = 'and_expression'
+    tree.children = [1]
+    r = Objects.or_expression(tree)
+    Objects.and_expression.assert_called_with(tree.child(0))
+    assert r == Objects.and_expression()
+
+
+def test_objects_or_expression_two(patch, tree):
+    """
+    Ensures Objects.or_expression works with two nodes
+    """
+    patch.many(Objects, ['build_binary_expression', 'and_expression'])
+    tree.child(1).type = 'OR'
+    tree.children = [1, 'or', 2]
+    or_expression = Objects.or_expression
+    patch.object(Objects, 'or_expression')
+    r = or_expression(tree)
+    Objects.build_binary_expression.assert_called_with(
+        tree, tree.child(1),
+        Objects.or_expression(tree.child(0)),
+        Objects.and_expression(tree.child(2)))
+    assert r == Objects.build_binary_expression()
+
+
+def test_objects_and_expression_one(patch, tree):
+    """
+    Ensures Objects.and_expression works with one node
+    """
+    patch.many(Objects, ['cmp_expression'])
+    tree.child(0).data = 'cmp_expression'
+    tree.children = [1]
+    r = Objects.and_expression(tree)
+    Objects.cmp_expression.assert_called_with(tree.child(0))
+    assert r == Objects.cmp_expression()
+
+
+def test_objects_and_expression_two(patch, tree):
+    """
+    Ensures Objects.and_expression works with two nodes
+    """
+    patch.many(Objects, ['build_binary_expression', 'cmp_expression'])
+    tree.child(1).type = 'AND'
+    tree.children = [1, 'and', 2]
+    and_expression = Objects.and_expression
+    patch.object(Objects, 'and_expression')
+    r = and_expression(tree)
+    Objects.build_binary_expression.assert_called_with(
+        tree, tree.child(1),
+        Objects.and_expression(tree.child(0)),
+        Objects.cmp_expression(tree.child(2)))
+    assert r == Objects.build_binary_expression()
+
+
+def test_objects_cmp_expression_one(patch, tree):
+    """
+    Ensures Objects.and_expression works with one node
+    """
+    patch.many(Objects, ['arith_expression'])
+    tree.child(0).data = 'arith_expression'
+    tree.children = [1]
+    r = Objects.cmp_expression(tree)
+    Objects.arith_expression.assert_called_with(tree.child(0))
+    assert r == Objects.arith_expression()
+
+
+def test_objects_cmp_expression_two(patch, tree):
+    """
+    Ensures Objects.and_expression works with two nodes
+    """
+    patch.many(Objects, ['build_binary_expression', 'arith_expression'])
+    tree.child(1).data = 'cmp_operator'
+    tree.children = [1, '==', 2]
+    cmp_expression = Objects.cmp_expression
+    patch.object(Objects, 'cmp_expression')
+    r = cmp_expression(tree)
+    Objects.build_binary_expression.assert_called_with(
+        tree, tree.child(1).child(0),
+        Objects.cmp_expression(tree.child(0)),
+        Objects.arith_expression(tree.child(2)))
     assert r == Objects.build_binary_expression()

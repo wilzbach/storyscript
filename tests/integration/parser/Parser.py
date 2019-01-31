@@ -8,20 +8,28 @@ def get_entity(obj):
     """
     Returns the entity for an expression
     """
-    if obj.unary_expression is not None:
-        obj = obj.unary_expression
-    return obj.pow_expression.primary_expression.entity
+    if obj.mul_expression is not None:
+        obj = obj.mul_expression
+    return obj.unary_expression.pow_expression.primary_expression.entity
+
+
+def arith_exp(exp):
+    """
+    Returns the binary expression for an expression
+    """
+    return exp.expression.or_expression.and_expression.cmp_expression. \
+        arith_expression
 
 
 def test_parser_sum(parser):
     result = parser.parse('3 + 4\n')
-    exp = result.block.rules.absolute_expression.expression.binary_expression
-    lhs = get_entity(exp.child(0)).values.number
+    ar_exp = arith_exp(result.block.rules.absolute_expression)
+    lhs = get_entity(ar_exp.child(0)).values.number
     assert lhs.child(0) == Token('INT', 3)
-    op = exp.child(1)
-    assert op.data == 'binary_operator'
+    op = ar_exp.child(1)
+    assert op.data == 'arith_operator'
     assert op.child(0) == Token('PLUS', '+')
-    rhs = get_entity(exp.child(2)).values.number
+    rhs = get_entity(ar_exp.child(2)).values.number
     assert rhs.child(0) == Token('INT', 4)
 
 
@@ -30,8 +38,8 @@ def test_parser_list_path(parser):
     Ensures that paths in lists can be parsed.
     """
     result = parser.parse('x = 0\n[3, x]\n')
-    expression = result.child(1).rules.absolute_expression.expression
-    entity = get_entity(expression.binary_expression)
+    expression = result.child(1).rules.absolute_expression
+    entity = get_entity(arith_exp(expression))
     list = entity.values.list
     assert list.child(3).path.child(0) == Token('NAME', 'x')
 
@@ -47,8 +55,8 @@ def test_parser_assignment(parser, code, token):
     assignment = result.block.rules.assignment
     assert assignment.path.child(0) == Token('NAME', 'var')
     assert assignment.assignment_fragment.child(0) == Token('EQUALS', '=')
-    expression = assignment.assignment_fragment.expression
-    entity = get_entity(expression.binary_expression)
+    expression = assignment.assignment_fragment
+    entity = get_entity(arith_exp(expression))
     assert entity.values.child(0).child(0) == token
 
 
@@ -113,7 +121,8 @@ def test_parser_service_output(parser):
 def test_parser_if_block(parser):
     result = parser.parse('if expr\n\tvar=3\n')
     if_block = result.block.if_block
-    entity = get_entity(if_block.if_statement.expression.binary_expression)
+    ar_exp = arith_exp(if_block.if_statement)
+    entity = get_entity(ar_exp)
     path = entity.path
     assignment = if_block.nested_block.block.rules.assignment
     assert path.child(0) == Token('NAME', 'expr')
@@ -123,7 +132,8 @@ def test_parser_if_block(parser):
 def test_parser_if_block_nested(parser):
     result = parser.parse('if expr\n\tif things\n\t\tvar=3\n')
     if_block = result.block.if_block.nested_block.block.if_block
-    entity = get_entity(if_block.if_statement.expression.binary_expression)
+    ar_exp = arith_exp(if_block.if_statement)
+    entity = get_entity(ar_exp)
     path = entity.path
     assignment = if_block.nested_block.block.rules.assignment
     assert path.child(0) == Token('NAME', 'things')
@@ -215,8 +225,8 @@ def test_parser_try_raise_error_message(parser):
 @mark.parametrize('number', ['+10', '-10'])
 def test_parser_number_int(parser, number):
     result = parser.parse(number)
-    entity = get_entity(result.block.rules.absolute_expression.expression.
-                        binary_expression)
+    ar_exp = arith_exp(result.block.rules.absolute_expression)
+    entity = get_entity(ar_exp)
     f = entity.values.number
     assert f.child(0) == Token('INT', number)
 
@@ -224,7 +234,7 @@ def test_parser_number_int(parser, number):
 @mark.parametrize('number', ['+10.0', '-10.0'])
 def test_parser_number_float(parser, number):
     result = parser.parse(number)
-    entity = get_entity(result.block.rules.absolute_expression.expression.
-                        binary_expression)
+    ar_exp = arith_exp(result.block.rules.absolute_expression)
+    entity = get_entity(ar_exp)
     f = entity.values.number
     assert f.child(0) == Token('FLOAT', number)

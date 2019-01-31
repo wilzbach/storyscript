@@ -7,8 +7,9 @@ def get_entity(obj):
     """
     Returns the entity for an expression
     """
-    return obj.binary_expression.unary_expression.pow_expression. \
-        primary_expression.entity
+    return obj.or_expression.and_expression.cmp_expression.arith_expression. \
+        mul_expression.unary_expression.pow_expression.primary_expression. \
+        entity
 
 
 def test_values_true(parser):

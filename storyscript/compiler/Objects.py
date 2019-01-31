@@ -233,8 +233,8 @@ class Objects:
         """
         Compiles an expression object with the given tree.
         """
-        assert tree.child(0).data == 'binary_expression'
-        return cls.binary_expression(tree.child(0))
+        assert tree.child(0).data == 'or_expression'
+        return cls.or_expression(tree.child(0))
 
     @classmethod
     def absolute_expression(cls, tree):
@@ -270,8 +270,8 @@ class Objects:
         if tree.child(0).data == 'entity':
             return cls.entity(tree.entity)
         else:
-            assert tree.child(0).data == 'binary_expression'
-            return cls.binary_expression(tree.child(0))
+            assert tree.child(0).data == 'or_expression'
+            return cls.or_expression(tree.child(0))
 
     @classmethod
     def pow_expression(cls, tree):
@@ -303,20 +303,84 @@ class Objects:
                     cls.unary_expression(tree.child(0)))
 
     @classmethod
-    def binary_expression(cls, tree):
+    def mul_expression(cls, tree):
         """
-        Compiles a binary expression object with the given tree.
+        Compiles a mul_expression object with the given tree.
         """
         if len(tree.children) == 1:
             assert tree.child(0).data == 'unary_expression'
             return cls.unary_expression(tree.child(0))
 
-        assert tree.child(1).data == 'binary_operator'
+        assert tree.child(1).data == 'mul_operator'
         op = tree.child(1).child(0)
         return cls.build_binary_expression(
                     tree, op,
-                    cls.binary_expression(tree.child(0)),
+                    cls.mul_expression(tree.child(0)),
                     cls.unary_expression(tree.child(2)))
+
+    @classmethod
+    def arith_expression(cls, tree):
+        """
+        Compiles a binary expression object with the given tree.
+        """
+        if len(tree.children) == 1:
+            assert tree.child(0).data == 'mul_expression'
+            return cls.mul_expression(tree.child(0))
+
+        assert tree.child(1).data == 'arith_operator'
+        op = tree.child(1).child(0)
+        return cls.build_binary_expression(
+                    tree, op,
+                    cls.arith_expression(tree.child(0)),
+                    cls.mul_expression(tree.child(2)))
+
+    @classmethod
+    def cmp_expression(cls, tree):
+        """
+        Compiles a comparison expression object with the given tree.
+        """
+        if len(tree.children) == 1:
+            assert tree.child(0).data == 'arith_expression'
+            return cls.arith_expression(tree.child(0))
+
+        assert tree.child(1).data == 'cmp_operator'
+        op = tree.child(1).child(0)
+        return cls.build_binary_expression(
+                    tree, op,
+                    cls.cmp_expression(tree.child(0)),
+                    cls.arith_expression(tree.child(2)))
+
+    @classmethod
+    def and_expression(cls, tree):
+        """
+        Compiles an AND expression object with the given tree.
+        """
+        if len(tree.children) == 1:
+            assert tree.child(0).data == 'cmp_expression'
+            return cls.cmp_expression(tree.child(0))
+
+        assert tree.child(1).type == 'AND'
+        op = tree.child(1)
+        return cls.build_binary_expression(
+                    tree, op,
+                    cls.and_expression(tree.child(0)),
+                    cls.cmp_expression(tree.child(2)))
+
+    @classmethod
+    def or_expression(cls, tree):
+        """
+        Compiles an OR expression object with the given tree.
+        """
+        if len(tree.children) == 1:
+            assert tree.child(0).data == 'and_expression'
+            return cls.and_expression(tree.child(0))
+
+        assert tree.child(1).type == 'OR'
+        op = tree.child(1)
+        return cls.build_binary_expression(
+                    tree, op,
+                    cls.or_expression(tree.child(0)),
+                    cls.and_expression(tree.child(2)))
 
     @classmethod
     def assertion(cls, tree):
