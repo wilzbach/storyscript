@@ -1367,3 +1367,72 @@ def test_compiler_mutation_assignment(parser):
           'arguments': []
         }
     ]
+
+
+def test_compiler_complex_while(parser):
+    """
+    Ensures that while statements with an expression are compiled correctly
+    """
+    result = Compiler.compile(parser.parse('while i < 10\n\ti = i + 1'))
+    assert result['tree']['1']['method'] == 'while'
+    assert result['tree']['1']['args'][0]['$OBJECT'] == 'expression'
+    assert result['tree']['1']['args'][0]['expression'] == 'less'
+    assert result['tree']['1']['args'][0]['values'] == [
+        {
+          '$OBJECT': 'path',
+          'paths': [
+            'i'
+          ]
+        }, 10
+    ]
+
+
+def test_compiler_complex_while_2(parser):
+    """
+    Ensures that while statements with an expression are compiled correctly
+    """
+    source = 'while a + b == c or d\n\ti = i + 1'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'while'
+    assert result['tree']['1']['args'] == [{
+          '$OBJECT': 'expression',
+          'expression': 'or',
+          'values': [
+            {
+              '$OBJECT': 'expression',
+              'expression': 'equals',
+              'values': [
+                {
+                  '$OBJECT': 'expression',
+                  'expression': 'sum',
+                  'values': [
+                    {
+                      '$OBJECT': 'path',
+                      'paths': [
+                        'a'
+                      ]
+                    },
+                    {
+                      '$OBJECT': 'path',
+                      'paths': [
+                        'b'
+                      ]
+                    }
+                  ]
+                },
+                {
+                  '$OBJECT': 'path',
+                  'paths': [
+                    'c'
+                  ]
+                }
+              ]
+            },
+            {
+              '$OBJECT': 'path',
+              'paths': [
+                'd'
+              ]
+            }
+          ]
+    }]
