@@ -3,6 +3,8 @@ from lark.lexer import Token
 
 from pytest import mark
 
+from storyscript.parser import Tree
+
 
 def get_entity(obj):
     """
@@ -40,8 +42,10 @@ def test_parser_list_path(parser):
     result = parser.parse('x = 0\n[3, x]\n')
     expression = result.child(1).rules.absolute_expression
     entity = get_entity(arith_exp(expression))
-    list = entity.values.list
-    assert list.child(3).path.child(0) == Token('NAME', 'x')
+    list = arith_exp(Tree('absolute_expression',
+                          [entity.values.list.child(3)]))
+    x = get_entity(list)
+    assert x.path.child(0) == Token('NAME', 'x')
 
 
 @mark.parametrize('code, token', [

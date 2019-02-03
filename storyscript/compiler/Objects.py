@@ -121,7 +121,7 @@ class Objects:
         items = []
         for value in tree.children:
             if isinstance(value, Tree):
-                items.append(cls.entity(value))
+                items.append(cls.expression(value))
         return {'$OBJECT': 'list', 'items': items}
 
     @classmethod
@@ -133,7 +133,7 @@ class Objects:
                 key = cls.string(child)
             elif child.data == 'path':
                 key = cls.path(child)
-            value = cls.entity(item.child(1))
+            value = cls.expression(item.child(1))
             items.append([key, value])
         return {'$OBJECT': 'dict', 'items': items}
 

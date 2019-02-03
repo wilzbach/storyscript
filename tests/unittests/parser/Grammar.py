@@ -68,7 +68,7 @@ def test_grammar_values(grammar, ebnf):
     assert ebnf.void == 'null'
     assert ebnf.number == 'int, float'
     assert ebnf.string == 'single_quoted, double_quoted'
-    assert ebnf.key_value == '(string, path) colon entity'
+    assert ebnf.key_value == '(string, path) colon expression'
     assert ebnf.objects == ebnf.collection()
     assert ebnf.regular_expression == 'regexp name?'
     assert ebnf.inline_expression == 'op service cp'
