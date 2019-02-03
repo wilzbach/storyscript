@@ -66,6 +66,7 @@ class ErrorCodes:
     unnecessary_colon = (
         'E0045',
         'There is an unnecessary colon at the end of the line')
+    block_expected = ('E0045', 'An indented block is required to follow here')
 
     @staticmethod
     def is_error(error_name):

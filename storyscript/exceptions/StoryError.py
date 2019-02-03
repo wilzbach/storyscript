@@ -110,6 +110,8 @@ class StoryError(SyntaxError):
             return ErrorCodes.assignment_incomplete
         elif intention.unnecessary_colon():
             return ErrorCodes.unnecessary_colon
+        elif self.error.expected == ['_INDENT']:
+            return ErrorCodes.block_expected
         return ErrorCodes.unexpected_token
 
     def unexpected_characters_code(self):

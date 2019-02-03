@@ -189,6 +189,15 @@ def test_storyerror_unexpected_token_code_colon(patch, storyerror):
     assert storyerror.unexpected_token_code() == ErrorCodes.unnecessary_colon
 
 
+def test_storyerror_unexpected_token_expected_block(patch, storyerror):
+    patch.init(Intention)
+    patch.object(storyerror, 'get_line')
+    patch.object(Intention, 'assignment', return_value=False)
+    patch.object(Intention, 'unnecessary_colon', return_value=False)
+    storyerror.error = UnexpectedToken(token='and', expected=['_INDENT'])
+    assert storyerror.unexpected_token_code() == ErrorCodes.block_expected
+
+
 def test_storyerror_unexpected_characters_code(patch, call_count, storyerror):
     patch.init(Intention)
     patch.object(Intention, 'is_function', return_value=False)
