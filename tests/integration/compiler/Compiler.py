@@ -1343,7 +1343,7 @@ def test_compiler_object_expression(parser):
         ]
     }]
 
-    
+
 def test_compiler_mutation_assignment(parser):
     """
     Ensures that mutation assignments compile correctly
