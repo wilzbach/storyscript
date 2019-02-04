@@ -189,7 +189,7 @@ class Objects:
         Compiles an argument tree to the corresponding object.
         """
         name = tree.child(0).value
-        value = cls.entity(tree.child(1))
+        value = cls.expression(tree.child(1))
         return {'$OBJECT': 'argument', 'name': name, 'argument': value}
 
     @classmethod
