@@ -1237,3 +1237,28 @@ def test_compiler_complex_nested_expression_14(parser):
           }
         ]
     }]
+
+
+def test_compiler_mutation_assignment(parser):
+    """
+    Ensures that mutation assignments compile correctly
+    """
+    source = 'a = "hello world"\nb = a uppercase'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['name'] == ['a']
+    assert result['tree']['2']['method'] == 'mutation'
+    assert result['tree']['2']['name'] == ['b']
+    assert result['tree']['2']['args'] == [
+        {
+          '$OBJECT': 'path',
+          'paths': [
+            'a'
+          ]
+        },
+        {
+          '$OBJECT': 'mutation',
+          'mutation': 'uppercase',
+          'arguments': []
+        }
+    ]
