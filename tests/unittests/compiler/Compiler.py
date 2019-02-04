@@ -26,8 +26,9 @@ def get_entity(obj):
     """
     returns the entity for an expression
     """
-    return obj.binary_expression.unary_expression.pow_expression. \
-        primary_expression.entity
+    return obj.or_expression.and_expression.cmp_expression.arith_expression. \
+        mul_expression.unary_expression.pow_expression.primary_expression. \
+        entity
 
 
 def test_compiler_init(patch):
@@ -134,14 +135,14 @@ def test_compiler_unary_expression_name(patch, compiler, lines, tree):
 
 def test_compiler_absolute_expression(patch, compiler, lines, tree):
     patch.object(Compiler, 'expression')
-    tree.expression.binary_expression.is_unary_leaf.return_value = False
+    tree.expression.is_unary_leaf.return_value = False
     compiler.absolute_expression(tree, '1')
     Compiler.expression.assert_called_with(tree, '1')
 
 
 def test_compiler_absolute_expression_unary(patch, compiler, lines, tree):
     patch.object(Compiler, 'unary_expression')
-    tree.expression.binary_expression.is_unary_leaf.return_value = True
+    tree.expression.is_unary_leaf.return_value = True
     compiler.absolute_expression(tree, '1')
     Compiler.unary_expression.assert_called_with(tree.expression, '1',
                                                  method='expression')
@@ -190,8 +191,7 @@ def test_compiler_assignment_expression(patch, compiler, lines, tree):
     patch.object(Compiler, 'expression')
     tree.assignment_fragment.service = None
     tree.assignment_fragment.mutation = None
-    tree.assignment_fragment.expression.binary_expression.is_unary_leaf. \
-        return_value = False
+    tree.assignment_fragment.expression.is_unary_leaf.return_value = False
     compiler.assignment(tree, '1')
     fragment = tree.assignment_fragment
     Compiler.expression.assert_called_with(fragment, '1')
