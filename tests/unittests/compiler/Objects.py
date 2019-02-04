@@ -54,33 +54,44 @@ def test_objects_path(patch):
     assert result == {'$OBJECT': 'path', 'paths': Objects.names()}
 
 
-def test_objects_mutation(token):
+def test_objects_mutation(patch, tree):
     """
     Ensures that mutations objects are compiled correctly.
+    """
+    patch.object(Objects, 'entity')
+    patch.object(Objects, 'mutation_fragment')
+    expected = {'method': 'mutation', 'name': [Objects.entity(tree.entity)],
+                'args': [Objects.mutation_fragment(tree.mutation_fragment)]}
+    assert Objects.mutation(tree) == expected
+
+
+def test_objects_mutation_fragment(token):
+    """
+    Ensures that mutations fragments are compiled correctly.
     """
     tree = Tree('mutation', [token])
     expected = {'$OBJECT': 'mutation', 'mutation': token.value,
                 'arguments': []}
-    assert Objects.mutation(tree) == expected
+    assert Objects.mutation_fragment(tree) == expected
 
 
-def test_objects_mutation_from_service(token):
+def test_objects_mutation_fragment_from_service(token):
     """
-    Ensures that mutations objects from service trees are compiled correctly.
+    Ensures that mutations fragments from service trees are compiled correctly.
     """
     tree = Tree('service_fragment', [Tree('command', [token])])
     expected = {'$OBJECT': 'mutation', 'mutation': token.value,
                 'arguments': []}
-    assert Objects.mutation(tree) == expected
+    assert Objects.mutation_fragment(tree) == expected
 
 
-def test_objects_mutation_arguments(patch, magic):
+def test_objects_mutation_fragment_arguments(patch, magic):
     """
-    Ensures that mutations objects with arguments are compiled correctly.
+    Ensures that mutations fragments with arguments are compiled correctly.
     """
     patch.object(Objects, 'arguments')
     tree = magic()
-    result = Objects.mutation(tree)
+    result = Objects.mutation_fragment(tree)
     Objects.arguments.assert_called_with(tree)
     assert result['arguments'] == Objects.arguments()
 
@@ -306,6 +317,30 @@ def test_objects_function_arguments(patch, tree):
     assert result == [Objects.typed_argument()]
 
 
+def test_objects_expression_mutation_exp(patch, tree):
+    """
+    Ensures Objects.expression calls expression when given
+    """
+    patch.many(Objects, ['expression', 'mutation'])
+    tree.child(0).data = 'expression'
+    tree.children = ['1']
+    result = Objects.expression_mutation(tree)
+    Objects.expression.assert_called_with(tree.child(0))
+    assert result == Objects.expression()
+
+
+def test_objects_expression_mutation_mut(patch, tree):
+    """
+    Ensures Objects.expression calls mutation when given
+    """
+    patch.many(Objects, ['expression', 'mutation'])
+    tree.child(0).data = 'mutation'
+    tree.children = ['1']
+    result = Objects.expression_mutation(tree)
+    Objects.mutation.assert_called_with(tree.child(0))
+    assert result == Objects.mutation()
+
+
 @mark.parametrize('operator, expression', [
     ('PLUS', 'sum'), ('MULTIPLIER', 'multiplication'),
     ('BSLASH', 'division'), ('MODULUS', 'modulus'),
@@ -333,21 +368,21 @@ def test_objects_assertion_single_entity(patch, tree):
     """
     Ensures that Objects.assertion handles single entities
     """
-    patch.many(Objects, ['expression'])
-    Objects.expression.return_value = True
+    patch.many(Objects, ['expression_mutation'])
+    Objects.expression_mutation.return_value = True
     result = Objects.assertion(tree)
-    Objects.expression.assert_called_with(tree.expression)
-    assert result == [Objects.expression()]
+    Objects.expression_mutation.assert_called_with(tree.expression_mutation)
+    assert result == [Objects.expression_mutation()]
 
 
 def test_objects_assertion(patch, tree):
-    patch.many(Objects, ['expression'])
+    patch.many(Objects, ['expression_mutation'])
     result = Objects.assertion(tree)
-    Objects.expression.assert_called_with(tree.expression)
+    Objects.expression_mutation.assert_called_with(tree.expression_mutation)
     expected = [{
         '$OBJECT': 'assertion',
-        'assertion': Objects.expression()['expression'],
-        'values': Objects.expression()['values']
+        'assertion': Objects.expression_mutation()['expression'],
+        'values': Objects.expression_mutation()['values']
     }]
     assert result == expected
 
@@ -404,6 +439,17 @@ def test_objects_primary_expression_entity(patch, tree):
     r = Objects.primary_expression(tree)
     Objects.entity.assert_called_with(tree.entity)
     assert r == Objects.entity()
+
+
+def test_objects_primary_expression_mutation(patch, tree):
+    """
+    Ensures Objects.primary_expression works with a mutation node
+    """
+    patch.many(Objects, ['mutation'])
+    tree.child(0).data = 'mutation'
+    r = Objects.primary_expression(tree)
+    Objects.mutation.assert_called_with(tree.mutation)
+    assert r == Objects.mutation()
 
 
 def test_objects_primary_expression_two(patch, tree):

@@ -1,0 +1,71 @@
+{
+  "stories": {
+    "tests/e2e/expression_mutation_while.story": {
+      "tree": {
+        "1": {
+          "method": "while",
+          "ln": "1",
+          "output": null,
+          "name": null,
+          "service": null,
+          "command": null,
+          "function": null,
+          "args": [
+            {
+              "method": "mutation",
+              "name": [
+                {
+                  "$OBJECT": "list",
+                  "items": [
+                    1,
+                    2,
+                    3
+                  ]
+                }
+              ],
+              "args": [
+                {
+                  "$OBJECT": "mutation",
+                  "mutation": "contains",
+                  "arguments": [
+                    {
+                      "$OBJECT": "argument",
+                      "name": "item",
+                      "argument": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "enter": "2",
+          "exit": null,
+          "parent": null,
+          "next": "2"
+        },
+        "2": {
+          "method": "return",
+          "ln": "2",
+          "output": null,
+          "name": null,
+          "service": null,
+          "command": null,
+          "function": null,
+          "args": null,
+          "enter": null,
+          "exit": null,
+          "parent": "1"
+        }
+      },
+      "services": [],
+      "entrypoint": "1",
+      "modules": {},
+      "functions": {},
+      "version": "0.9.7-5-gbbd6c76-dirty"
+    }
+  },
+  "services": [],
+  "entrypoint": [
+    "tests/e2e/expression_mutation_while.story"
+  ]
+}

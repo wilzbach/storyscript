@@ -128,7 +128,8 @@ def test_grammar_expressions(grammar, ebnf, magic):
     assert ebnf.unary_operator == 'NOT'
     assert ebnf.mul_operator == 'MULTIPLIER, BSLASH, MODULUS'
 
-    assert ebnf.primary_expression == 'entity , op or_expression cp'
+    assert ebnf.primary_expression == 'entity , op or_expression cp, ' \
+                                      'op mutation cp'
     assert ebnf.pow_expression == ('primary_expression (POWER '
                                    'unary_expression)?')
     assert ebnf.unary_expression == ('unary_operator unary_expression , '
@@ -143,6 +144,7 @@ def test_grammar_expressions(grammar, ebnf, magic):
     assert ebnf.or_expression == '(or_expression OR)? and_expression'
 
     assert ebnf.expression == 'or_expression'
+    assert ebnf.expression_mutation == 'expression, mutation'
     assert ebnf.absolute_expression == 'expression'
 
 
@@ -185,8 +187,8 @@ def test_grammar_service_block(grammar, ebnf):
 
 def test_grammar_if_block(grammar, ebnf):
     grammar.if_block()
-    assert ebnf.if_statement == 'if expression'
-    elseif_statement = 'else if expression'
+    assert ebnf.if_statement == 'if expression_mutation'
+    elseif_statement = 'else if expression_mutation'
     assert ebnf.elseif_statement == elseif_statement
     assert ebnf.elseif_block == ebnf.simple_block()
     ebnf.set_rule.assert_called_with('!else_statement', 'else')
@@ -206,7 +208,7 @@ def test_grammar_foreach_block(grammar, ebnf):
 def test_grammar_while_block(grammar, ebnf):
     grammar.while_block()
     assert ebnf._WHILE == 'while'
-    assert ebnf.while_statement == 'while expression'
+    assert ebnf.while_statement == 'while expression_mutation'
     ebnf.simple_block.assert_called_with('while_statement')
     assert ebnf.while_block == ebnf.simple_block()
 

@@ -119,7 +119,8 @@ class Grammar:
         self.ebnf.unary_operator = 'NOT'
         self.ebnf.mul_operator = 'MULTIPLIER, BSLASH, MODULUS'
 
-        self.ebnf.primary_expression = 'entity , op or_expression cp'
+        self.ebnf.primary_expression = 'entity , op or_expression cp, ' \
+                                       'op mutation cp'
         self.ebnf.pow_expression = ('primary_expression (POWER '
                                     'unary_expression)?')
         self.ebnf.unary_expression = ('unary_operator unary_expression , '
@@ -134,6 +135,7 @@ class Grammar:
         self.ebnf.or_expression = '(or_expression OR)? and_expression'
 
         self.ebnf.expression = 'or_expression'
+        self.ebnf.expression_mutation = 'expression, mutation'
         self.ebnf.absolute_expression = 'expression'
 
     def raise_statement(self):
@@ -169,8 +171,8 @@ class Grammar:
     def if_block(self):
         self.ebnf._IF = 'if'
         self.ebnf._ELSE = 'else'
-        self.ebnf.if_statement = 'if expression'
-        elseif_statement = 'else if expression'
+        self.ebnf.if_statement = 'if expression_mutation'
+        elseif_statement = 'else if expression_mutation'
         self.ebnf.elseif_statement = elseif_statement
         self.ebnf.elseif_block = self.ebnf.simple_block('elseif_statement')
         self.ebnf.set_rule('!else_statement', 'else')
@@ -180,7 +182,7 @@ class Grammar:
 
     def while_block(self):
         self.ebnf._WHILE = 'while'
-        self.ebnf.while_statement = 'while expression'
+        self.ebnf.while_statement = 'while expression_mutation'
         self.ebnf.while_block = self.ebnf.simple_block('while_statement')
 
     def foreach_block(self):

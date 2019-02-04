@@ -1,0 +1,74 @@
+{
+  "stories": {
+    "tests/e2e/expression_mutation_nested.story": {
+      "tree": {
+        "1": {
+          "method": "expression",
+          "ln": "1",
+          "output": null,
+          "name": [
+            "b"
+          ],
+          "service": null,
+          "command": null,
+          "function": null,
+          "args": [
+            {
+              "$OBJECT": "expression",
+              "expression": "and",
+              "values": [
+                1,
+                {
+                  "method": "mutation",
+                  "name": [
+                    {
+                      "$OBJECT": "list",
+                      "items": [
+                        {
+                          "$OBJECT": "string",
+                          "string": "opened"
+                        },
+                        {
+                          "$OBJECT": "string",
+                          "string": "labeled"
+                        }
+                      ]
+                    }
+                  ],
+                  "args": [
+                    {
+                      "$OBJECT": "mutation",
+                      "mutation": "contains",
+                      "arguments": [
+                        {
+                          "$OBJECT": "argument",
+                          "name": "item",
+                          "argument": {
+                            "$OBJECT": "string",
+                            "string": "a"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "enter": null,
+          "exit": null,
+          "parent": null
+        }
+      },
+      "services": [],
+      "entrypoint": "1",
+      "modules": {},
+      "functions": {},
+      "version": "0.9.7-1-g2d7e27e"
+    }
+  },
+  "services": [],
+  "entrypoint": [
+    "tests/e2e/expression_mutation_nested.story"
+  ]
+}

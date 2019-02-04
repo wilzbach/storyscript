@@ -32,8 +32,8 @@ class Compiler:
         """
         if fragment.expression:
             if fragment.expression.mutation:
-                return [Objects.values(fragment.expression.values),
-                        Objects.mutation(fragment.expression.mutation)]
+                m = Objects.mutation_fragment(fragment.expression.mutation)
+                return [Objects.values(fragment.expression.values), m]
             return [Objects.expression(fragment.expression)]
         return [Objects.entity(fragment.child(1))]
 
@@ -44,7 +44,8 @@ class Compiler:
         """
         mutations = []
         for mutation in tree.find_data('chained_mutation'):
-            mutations.append(Objects.mutation(mutation.mutation_fragment))
+            m = Objects.mutation_fragment(mutation.mutation_fragment)
+            mutations.append(m)
         return mutations
 
     @classmethod
@@ -234,7 +235,8 @@ class Compiler:
 
     def while_block(self, tree, parent):
         line = tree.line()
-        args = [Objects.expression(tree.while_statement.expression)]
+        exp = tree.while_statement.expression_mutation
+        args = [Objects.expression_mutation(exp)]
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent)
         self.lines.append('while', line, args=args, enter=nested_block.line(),
@@ -268,13 +270,13 @@ class Compiler:
         if tree.path:
             args = [
                 Objects.path(tree.path),
-                Objects.mutation(tree.service_fragment)
+                Objects.mutation_fragment(tree.service_fragment)
             ]
             args = args + self.chained_mutations(tree)
         else:
             args = [
                 Objects.entity(tree.mutation.entity),
-                Objects.mutation(tree.mutation.mutation_fragment)
+                Objects.mutation_fragment(tree.mutation.mutation_fragment)
             ]
             args = args + self.chained_mutations(tree.mutation)
         if tree.nested_block:

@@ -65,20 +65,20 @@ def test_compiler_extract_values_expression(patch, tree):
 
 
 def test_compiler_extract_values_mutation(patch, tree):
-    patch.many(Objects, ['values', 'mutation'])
+    patch.many(Objects, ['values', 'mutation_fragment'])
     result = Compiler.extract_values(tree)
     Objects.values.assert_called_with(tree.expression.values)
-    Objects.mutation.assert_called_with(tree.expression.mutation)
-    assert result == [Objects.values(), Objects.mutation()]
+    Objects.mutation_fragment.assert_called_with(tree.expression.mutation)
+    assert result == [Objects.values(), Objects.mutation_fragment()]
 
 
 def test_compiler_chained_mutations(patch, magic, tree):
-    patch.object(Objects, 'mutation')
+    patch.object(Objects, 'mutation_fragment')
     mutation = magic()
     tree.find_data.return_value = [mutation]
     result = Compiler.chained_mutations(tree)
-    Objects.mutation.assert_called_with(mutation.mutation_fragment)
-    assert result == [Objects.mutation()]
+    Objects.mutation_fragment.assert_called_with(mutation.mutation_fragment)
+    assert result == [Objects.mutation_fragment()]
 
 
 def test_compiler_function_output(patch, tree):
@@ -439,10 +439,10 @@ def test_compiler_foreach_block(patch, compiler, lines, tree):
 
 def test_compiler_while_block(patch, compiler, lines, tree):
     patch.init(Tree)
-    patch.object(Objects, 'expression')
+    patch.object(Objects, 'expression_mutation')
     patch.many(Compiler, ['subtree'])
     compiler.while_block(tree, '1')
-    args = [Objects.expression()]
+    args = [Objects.expression_mutation()]
     lines.set_scope.assert_called_with(tree.line(), '1')
     lines.append.assert_called_with('while', tree.line(), args=args,
                                     enter=tree.nested_block.line(),
@@ -497,39 +497,41 @@ def test_compiler_raise_name_statement(patch, compiler, lines, tree):
 
 
 def test_compiler_mutation_block(patch, compiler, lines, tree):
-    patch.many(Objects, ['entity', 'mutation'])
+    patch.many(Objects, ['entity', 'mutation_fragment'])
     patch.object(Compiler, 'chained_mutations', return_value=['chained'])
     tree.path = None
     tree.nested_block = None
     compiler.mutation_block(tree, None)
     Objects.entity.assert_called_with(tree.mutation.entity)
-    Objects.mutation.assert_called_with(tree.mutation.mutation_fragment)
+    Objects.mutation_fragment.assert_called_with(
+        tree.mutation.mutation_fragment)
     Compiler.chained_mutations.assert_called_with(tree.mutation)
-    args = [Objects.entity(), Objects.mutation(), 'chained']
+    args = [Objects.entity(), Objects.mutation_fragment(), 'chained']
     kwargs = {'args': args, 'parent': None}
     lines.append.assert_called_with('mutation', tree.line(), **kwargs)
 
 
 def test_compiler_mutation_block_nested(patch, compiler, lines, tree):
-    patch.many(Objects, ['entity', 'mutation'])
+    patch.many(Objects, ['entity', 'mutation_fragment'])
     patch.object(Compiler, 'chained_mutations', return_value=['chained'])
     tree.path = None
     compiler.mutation_block(tree, None)
     Compiler.chained_mutations.assert_called_with(tree.nested_block)
-    args = [Objects.entity(), Objects.mutation(), 'chained', 'chained']
+    args = [Objects.entity(), Objects.mutation_fragment(), 'chained',
+            'chained']
     kwargs = {'args': args, 'parent': None}
     lines.append.assert_called_with('mutation', tree.line(), **kwargs)
 
 
 def test_compiler_mutation_block_from_service(patch, compiler, lines, tree):
-    patch.many(Objects, ['path', 'mutation'])
+    patch.many(Objects, ['path', 'mutation_fragment'])
     patch.object(Compiler, 'chained_mutations', return_value=['chained'])
     tree.nested_block = None
     compiler.mutation_block(tree, None)
     Objects.path.assert_called_with(tree.path)
-    Objects.mutation.assert_called_with(tree.service_fragment)
+    Objects.mutation_fragment.assert_called_with(tree.service_fragment)
     Compiler.chained_mutations.assert_called_with(tree)
-    args = [Objects.path(), Objects.mutation(), 'chained']
+    args = [Objects.path(), Objects.mutation_fragment(), 'chained']
     kwargs = {'args': args, 'parent': None}
     lines.append.assert_called_with('mutation', tree.line(), **kwargs)
 

@@ -96,7 +96,7 @@ def test_parser_foreach_block(parser):
 def test_parser_while_block(parser):
     result = parser.parse('while cond\n\tvar=3\n')
     block = result.block.while_block
-    exp = arith_exp(block.while_statement)
+    exp = arith_exp(block.while_statement.expression_mutation)
     entity = get_entity(exp)
     assert entity.path.child(0) == Token('NAME', 'cond')
     assert block.nested_block.data == 'nested_block'
@@ -127,7 +127,7 @@ def test_parser_service_output(parser):
 def test_parser_if_block(parser):
     result = parser.parse('if expr\n\tvar=3\n')
     if_block = result.block.if_block
-    ar_exp = arith_exp(if_block.if_statement)
+    ar_exp = arith_exp(if_block.if_statement.expression_mutation)
     entity = get_entity(ar_exp)
     path = entity.path
     assignment = if_block.nested_block.block.rules.assignment
@@ -138,7 +138,7 @@ def test_parser_if_block(parser):
 def test_parser_if_block_nested(parser):
     result = parser.parse('if expr\n\tif things\n\t\tvar=3\n')
     if_block = result.block.if_block.nested_block.block.if_block
-    ar_exp = arith_exp(if_block.if_statement)
+    ar_exp = arith_exp(if_block.if_statement.expression_mutation)
     entity = get_entity(ar_exp)
     path = entity.path
     assignment = if_block.nested_block.block.rules.assignment

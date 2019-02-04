@@ -32,6 +32,12 @@ class Objects:
 
     @classmethod
     def mutation(cls, tree):
+        entity = Objects.entity(tree.entity)
+        args = Objects.mutation_fragment(tree.mutation_fragment)
+        return {'method': 'mutation', 'name': [entity], 'args': [args]}
+
+    @classmethod
+    def mutation_fragment(cls, tree):
         """
         Compiles a mutation object, either from a mutation or a
         service_fragment tree.
@@ -215,6 +221,19 @@ class Objects:
             arguments.append(cls.typed_argument(argument))
         return arguments
 
+    @classmethod
+    def expression_mutation(cls, tree):
+        """
+        Compiles an expression or mutation object with the given tree.
+        """
+        assert len(tree.children) > 0
+        child = tree.child(0)
+        if child.data == 'expression':
+            return cls.expression(child)
+        elif child.data == 'mutation':
+            return cls.mutation(child)
+        internal_assert(0)
+
     @staticmethod
     def expression_type(operator, tree):
         types = {'PLUS': 'sum', 'DASH': 'subtraction', 'POWER': 'exponential',
@@ -269,6 +288,8 @@ class Objects:
         """
         if tree.child(0).data == 'entity':
             return cls.entity(tree.entity)
+        elif tree.child(0).data == 'mutation':
+            return cls.mutation(tree.mutation)
         else:
             assert tree.child(0).data == 'or_expression'
             return cls.or_expression(tree.child(0))
@@ -388,7 +409,7 @@ class Objects:
         """
         Compiles an assertion object.
         """
-        e = Objects.expression(tree.expression)
+        e = Objects.expression_mutation(tree.expression_mutation)
         if not hasattr(e, 'get') or e.get('expression', None) is None:
             return [e]
         # Do we really need this special case here?
