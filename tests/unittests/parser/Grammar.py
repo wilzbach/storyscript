@@ -177,7 +177,7 @@ def test_mutation_block(grammar, ebnf):
 def test_grammar_service_block(grammar, ebnf):
     grammar.service_block()
     assert ebnf.command == 'name'
-    assert ebnf.arguments == 'name? colon entity'
+    assert ebnf.arguments == 'name? colon expression'
     assert ebnf.output == '(as name (comma name)*)'
     assert ebnf.service_fragment == '(command arguments*|arguments+) output?'
     assert ebnf.service == 'path service_fragment chained_mutation*'

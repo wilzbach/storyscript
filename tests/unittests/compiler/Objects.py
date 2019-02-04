@@ -270,12 +270,12 @@ def test_objects_values_path(patch, magic):
 
 
 def test_objects_argument(patch, tree):
-    patch.object(Objects, 'entity')
+    patch.object(Objects, 'expression')
     result = Objects.argument(tree)
     assert tree.child.call_count == 2
-    Objects.entity.assert_called_with(tree.child())
+    Objects.expression.assert_called_with(tree.child())
     expected = {'$OBJECT': 'argument', 'name': tree.child().value,
-                'argument': Objects.entity()}
+                'argument': Objects.expression()}
     assert result == expected
 
 
