@@ -235,7 +235,7 @@ class Compiler:
 
     def while_block(self, tree, parent):
         line = tree.line()
-        args = [Objects.entity(tree.while_statement.child(0))]
+        args = [Objects.expression(tree.while_statement.expression)]
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent)
         self.lines.append('while', line, args=args, enter=nested_block.line(),
