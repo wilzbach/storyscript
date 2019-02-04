@@ -106,12 +106,12 @@ class Grammar:
         self.ebnf.NOT_EQUAL = '!='
         self.ebnf.EQUAL = '=='
 
-        self.ebnf.BSLASH = '/'
+        self.ebnf.set_token('BSLASH.5', '/')
         self.ebnf.MULTIPLIER = '*'
-        self.ebnf.MODULUS = '%'
+        self.ebnf.set_token('MODULUS.5', '%')
 
-        self.ebnf.PLUS = '+'
-        self.ebnf.set_token('DASH.4', '-')
+        self.ebnf.set_token('PLUS.5', '+')
+        self.ebnf.set_token('DASH.5', '-')
 
         self.ebnf.cmp_operator = ('GREATER, GREATER_EQUAL, LESSER, '
                                   'LESSER_EQUAL, NOT_EQUAL, EQUAL')
