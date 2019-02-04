@@ -2,6 +2,7 @@
 from .Lines import Lines
 from .Objects import Objects
 from .Preprocessor import Preprocessor
+from .Postprocessor import Postprocessor
 from ..Version import version
 from ..exceptions import CompilerError, StorySyntaxError
 from ..exceptions import internal_assert
@@ -439,6 +440,7 @@ class Compiler:
         tree = Preprocessor(parser=tree.parser).process(tree)
         compiler = cls.compiler()
         compiler.parse_tree(tree)
+        tree = Postprocessor.process(tree)
         lines = compiler.lines
         return {'tree': lines.lines, 'services': lines.get_services(),
                 'entrypoint': lines.entrypoint(), 'modules': lines.modules,

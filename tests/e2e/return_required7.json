@@ -1,0 +1,60 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [
+        "int"
+      ],
+      "function": "sum",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "a",
+          "argument": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        }
+      ],
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            }
+          ]
+        }
+      ],
+      "parent": "1",
+      "next": "3"
+    },
+    "3": {
+      "method": "return",
+      "ln": "3",
+      "parent": "1"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "sum": "1"
+  },
+  "version": null
+}
