@@ -1239,6 +1239,111 @@ def test_compiler_complex_nested_expression_14(parser):
     }]
 
 
+def test_compiler_list_expression(parser):
+    """
+    Ensures that list accept arbitrary expressions
+    """
+    result = Compiler.compile(parser.parse('a = [b + c, 1 / 2 + 3]'))
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'list',
+        'items': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'sum',
+            'values': [
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'b'
+                ]
+              },
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'c'
+                ]
+              }
+            ]
+          },
+          {
+            '$OBJECT': 'expression',
+            'expression': 'sum',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'division',
+                'values': [
+                  1,
+                  2
+                ]
+              },
+              3
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_object_expression(parser):
+    """
+    Ensures that objects accept arbitrary expressions
+    """
+    source = 'a = {"1": b - c, "2": 1 % 2 - 3}'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'dict',
+        'items': [
+          [
+            {
+              '$OBJECT': 'string',
+              'string': '1'
+            },
+            {
+              '$OBJECT': 'expression',
+              'expression': 'subtraction',
+              'values': [
+                {
+                  '$OBJECT': 'path',
+                  'paths': [
+                    'b'
+                  ]
+                },
+                {
+                  '$OBJECT': 'path',
+                  'paths': [
+                    'c'
+                  ]
+                }
+              ]
+            }
+          ],
+          [
+            {
+              '$OBJECT': 'string',
+              'string': '2'
+            },
+            {
+              '$OBJECT': 'expression',
+              'expression': 'subtraction',
+              'values': [
+                {
+                  '$OBJECT': 'expression',
+                  'expression': 'modulus',
+                  'values': [
+                    1,
+                    2
+                  ]
+                },
+                3
+              ]
+            }
+          ]
+        ]
+    }]
+
+
 def test_compiler_mutation_assignment(parser):
     """
     Ensures that mutation assignments compile correctly

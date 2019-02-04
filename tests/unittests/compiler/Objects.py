@@ -180,22 +180,22 @@ def test_objects_boolean_false():
 
 
 def test_objects_list(patch, tree):
-    patch.object(Objects, 'entity')
+    patch.object(Objects, 'expression')
     tree.children = [Tree('value', 'value'), 'token']
     result = Objects.list(tree)
-    Objects.entity.assert_called_with(Tree('value', 'value'))
-    assert result == {'$OBJECT': 'list', 'items': [Objects.entity()]}
+    Objects.expression.assert_called_with(Tree('value', 'value'))
+    assert result == {'$OBJECT': 'list', 'items': [Objects.expression()]}
 
 
 def test_objects_objects(patch, tree):
-    patch.many(Objects, ['string', 'entity'])
+    patch.many(Objects, ['string', 'expression'])
     subtree = Tree('key_value', [Tree('string', ['key']), 'value'])
     tree.children = [subtree]
     result = Objects.objects(tree)
     Objects.string.assert_called_with(subtree.string)
-    Objects.entity.assert_called_with('value')
+    Objects.expression.assert_called_with('value')
     expected = {'$OBJECT': 'dict', 'items': [[Objects.string(),
-                                              Objects.entity()]]}
+                                              Objects.expression()]]}
     assert result == expected
 
 
@@ -203,7 +203,7 @@ def test_objects_objects_key_path(patch, tree):
     """
     Ensures that objects like {x: 0} are compiled
     """
-    patch.many(Objects, ['path', 'entity'])
+    patch.many(Objects, ['path', 'expression'])
     subtree = Tree('key_value', [Tree('path', ['path'])])
     tree.children = [subtree]
     result = Objects.objects(tree)

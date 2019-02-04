@@ -64,9 +64,9 @@ class Grammar:
         self.ebnf.void = 'null'
         self.ebnf.number = 'int, float'
         self.ebnf.string = 'single_quoted, double_quoted'
-        list = self.ebnf.collection('osb', 'entity', 'entity', 'csb')
+        list = self.ebnf.collection('osb', 'expression', 'expression', 'csb')
         self.ebnf.set_rule('!list', list)
-        self.ebnf.key_value = '(string, path) colon entity'
+        self.ebnf.key_value = '(string, path) colon expression'
         objects = ('ocb', 'key_value', 'key_value', 'ccb')
         self.ebnf.objects = self.ebnf.collection(*objects)
         self.ebnf.regular_expression = 'regexp name?'
