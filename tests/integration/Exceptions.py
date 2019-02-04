@@ -96,3 +96,23 @@ def test_exceptions_function_redeclared(capsys):
     assert lines[0] == 'Error: syntax error in story at line 3, column 10'
     assert lines[2] == '3|    function f1'
     assert lines[5] == 'E0042: `f1` has already been declared at line 1'
+
+
+def test_exceptions_block_expected_before(capsys):
+    with raises(StoryError) as e:
+        Story('while true').process()
+    e.value.with_color = False
+    lines = e.value.message().splitlines()
+    assert lines[0] == 'Error: syntax error in story at line 1, column 11'
+    assert lines[2] == '1|    while true'
+    assert lines[5] == 'E0045: An indented block is required to follow here'
+
+
+def test_exceptions_block_expected_after(capsys):
+    with raises(StoryError) as e:
+        Story('while true\na = 2').process()
+    e.value.with_color = False
+    lines = e.value.message().splitlines()
+    assert lines[0] == 'Error: syntax error in story at line 2, column 1'
+    assert lines[2] == '2|    a = 2'
+    assert lines[5] == 'E0046: An indented block is required to be before here'
