@@ -189,13 +189,14 @@ def test_storyerror_unexpected_token_code_colon(patch, storyerror):
     assert storyerror.unexpected_token_code() == ErrorCodes.unnecessary_colon
 
 
-def test_storyerror_unexpected_token_expected_block(patch, storyerror):
+def test_storyerror_unexpected_token_expected_block_after(patch, storyerror):
     patch.init(Intention)
     patch.object(storyerror, 'get_line')
     patch.object(Intention, 'assignment', return_value=False)
     patch.object(Intention, 'unnecessary_colon', return_value=False)
     storyerror.error = UnexpectedToken(token='and', expected=['_INDENT'])
-    assert storyerror.unexpected_token_code() == ErrorCodes.block_expected
+    assert storyerror.unexpected_token_code() == \
+        ErrorCodes.block_expected_after
 
 
 def test_storyerror_unexpected_characters_code(patch, call_count, storyerror):
@@ -221,6 +222,32 @@ def test_storyerror_unexpected_characters_code_colon(patch, storyerror):
     patch.object(Intention, 'unnecessary_colon')
     result = storyerror.unexpected_characters_code()
     assert result == ErrorCodes.unnecessary_colon
+
+
+def test_storyerror_unexpected_characters_expected_block_before(patch,
+                                                                storyerror):
+    patch.init(Intention)
+    patch.object(Intention, 'is_function', return_value=False)
+    patch.object(StoryError, 'is_valid_name_start', return_value=True)
+    patch.object(Intention, 'unnecessary_colon', return_value=False)
+    storyerror.error = UnexpectedCharacters(seq='abc', lex_pos=0, line=0,
+                                            column=0, allowed=None)
+    result = storyerror.unexpected_characters_code()
+    assert result == ErrorCodes.block_expected_before
+
+
+@mark.parametrize('name_char', [
+    'a', 'c', 'z', 'A', 'G', 'Z', '_',
+])
+def test_storyerror_is_valid_name_start(storyerror, name_char):
+    assert storyerror.is_valid_name_start(name_char)
+
+
+@mark.parametrize('name_char', [
+    '.', '$', ':', '+', '/', '%', '-', '0', '5', '9'
+])
+def test_storyerror_is_invalid_name_start(storyerror, name_char):
+    assert not storyerror.is_valid_name_start(name_char)
 
 
 def test_storyerror_identify(storyerror):

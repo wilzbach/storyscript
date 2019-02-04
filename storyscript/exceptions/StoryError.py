@@ -111,18 +111,28 @@ class StoryError(SyntaxError):
         elif intention.unnecessary_colon():
             return ErrorCodes.unnecessary_colon
         elif self.error.expected == ['_INDENT']:
-            return ErrorCodes.block_expected
+            return ErrorCodes.block_expected_after
         return ErrorCodes.unexpected_token
+
+    @staticmethod
+    def is_valid_name_start(token):
+        return token.isalpha() or token == '_'
 
     def unexpected_characters_code(self):
         """
         Finds the error code when the error is UnexpectedCharacters
         """
-        intention = Intention(self.get_line())
+        line = self.get_line()
+        error_column = line[self.error.column - 1]
+        intention = Intention(line)
         if intention.is_function():
             return ErrorCodes.function_misspell
         elif intention.unnecessary_colon():
             return ErrorCodes.unnecessary_colon
+        elif self.error.allowed is None and \
+                self.is_valid_name_start(error_column):
+            return ErrorCodes.block_expected_before
+
         return ErrorCodes.invalid_character
 
     def identify(self):
