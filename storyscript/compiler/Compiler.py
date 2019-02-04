@@ -69,7 +69,8 @@ class Compiler:
         """
         Simplifies an expression with only one leaf to its respective value
         """
-        entity = tree.binary_expression.unary_expression.pow_expression. \
+        entity = tree.or_expression.and_expression.cmp_expression. \
+            arith_expression.mul_expression.unary_expression.pow_expression. \
             primary_expression.entity
         args = [Objects.entity(entity)]
         kwargs = {}
@@ -84,8 +85,8 @@ class Compiler:
         """
         Compiles an absolute expression using Compiler.expression
         """
-        bin_exp = tree.expression.binary_expression
-        if bin_exp is not None and bin_exp.is_unary_leaf():
+        exp = tree.expression
+        if exp is not None and exp.is_unary_leaf():
             self.unary_expression(tree.expression, parent, method='expression')
         else:
             self.expression(tree, parent)
@@ -109,7 +110,7 @@ class Compiler:
             return
         elif fragment.expression:
             exp = fragment.expression
-            if exp.binary_expression.is_unary_leaf():
+            if exp.is_unary_leaf():
                 self.unary_expression(exp, parent, method='set',
                                       name=name, line=tree.line())
             else:

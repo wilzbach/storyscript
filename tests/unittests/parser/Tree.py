@@ -133,13 +133,23 @@ def test_tree_is_unary_leaf():
     """
     Ensures is_unary_leaf can find out whether an expression is unary leaf
     """
-    tree = Tree('binary_expression', [
-        Tree('unary_expression', [
-            Tree('pow_expression', [
-                Tree('primary_expression', [
-                    Tree('entity', [
-                        Tree('values', [
-                            0
+    tree = Tree('expression', [
+        Tree('or_expression', [
+            Tree('and_expression', [
+                Tree('cmp_expression', [
+                    Tree('arith_expression', [
+                        Tree('mul_expression', [
+                            Tree('unary_expression', [
+                                Tree('pow_expression', [
+                                    Tree('primary_expression', [
+                                        Tree('entity', [
+                                            Tree('values', [
+                                                0
+                                            ])
+                                        ])
+                                    ])
+                                ])
+                            ])
                         ])
                     ])
                 ])
@@ -151,11 +161,11 @@ def test_tree_is_unary_leaf():
 
 @mark.parametrize('tree', [
     Tree('any', []),
-    Tree('binary_expression', [1, 2]),
-    Tree('binary_expression', [Tree('unary_expression', [1, 2])]),
-    Tree('binary_expression',
+    Tree('arith_expression', [1, 2]),
+    Tree('arith_expression', [Tree('unary_expression', [1, 2])]),
+    Tree('arith_expression',
          [Tree('unary_expression', [Tree('pow_expression', [1, 2])])]),
-    Tree('binary_expression',
+    Tree('arith_expression',
          [Tree('unary_expression',
                [Tree('pow_expression',
                      [Tree('primary_expression', [1, 2])])])]),

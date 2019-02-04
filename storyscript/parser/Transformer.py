@@ -100,8 +100,10 @@ class Transformer(LarkTransformer):
         """
         if len(matches) == 1:
             path = matches[0].follow_node_chain([
-                'expression', 'binary_expression', 'unary_expression',
-                'pow_expression', 'primary_expression', 'entity', 'path'
+                'expression', 'or_expression', 'and_expression',
+                'cmp_expression', 'arith_expression', 'mul_expression',
+                'unary_expression', 'pow_expression', 'primary_expression',
+                'entity', 'path'
             ])
             if path is not None:
                 service_fragment = Tree('service_fragment', [])

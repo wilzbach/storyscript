@@ -101,39 +101,49 @@ def test_grammar_expressions(grammar, ebnf, magic):
     ebnf.set_token = magic()
     grammar.expressions()
     assert ebnf.set_token.call_args_list == [
-        call('NOT.10', 'not'),
-        call('OR.40', 'or'),
-        call('AND.30', 'and'),
-        call('GREATER.20', '>'),
-        call('GREATER_EQUAL.20', '>='),
-        call('LESSER.20', '<'),
-        call('LESSER_EQUAL.20', '<='),
-        call('NOT_EQUAL.20', '!='),
-        call('EQUAL.20', '=='),
-        call('BSLASH.10', '/'),
-        call('MULTIPLIER.10', '*'),
-        call('MODULUS.10', '%'),
-        call('PLUS.5', '+'),
-        call('DASH.5', '-'),
+        call('DASH.4', '-'),
     ]
 
-    assert ebnf._comparison_operator == ('greater, greater_equal, lesser, '
-                                         'lesser_equal, not_equal, equal')
-    assert ebnf.binary_operator == ('_comparison_operator, OR, AND, '
-                                    'MULTIPLIER, BSLASH, MODULUS, '
-                                    'PLUS, DASH')
-    assert ebnf.unary_operator == 'NOT'
+    assert ebnf.POWER == '^'
+    assert ebnf.NOT == 'not'
 
-    assert ebnf.primary_expression == 'entity , op binary_expression cp'
-    assert ebnf.pow_expression == (
-        'primary_expression (POWER unary_expression)?'
-    )
+    assert ebnf.OR == 'or'
+    assert ebnf.AND == 'and'
+
+    assert ebnf.GREATER == '>'
+    assert ebnf.GREATER_EQUAL == '>='
+    assert ebnf.LESSER == '<'
+    assert ebnf.LESSER_EQUAL == '<='
+    assert ebnf.NOT_EQUAL == '!='
+    assert ebnf.EQUAL == '=='
+
+    assert ebnf.BSLASH == '/'
+    assert ebnf.MULTIPLIER == '*'
+    assert ebnf.MODULUS == '%'
+
+    assert ebnf.PLUS == '+'
+
+    assert ebnf.cmp_operator == ('GREATER, GREATER_EQUAL, LESSER, '
+                                 'LESSER_EQUAL, NOT_EQUAL, EQUAL')
+    assert ebnf.arith_operator == 'PLUS, DASH'
+    assert ebnf.unary_operator == 'NOT'
+    assert ebnf.mul_operator == 'MULTIPLIER, BSLASH, MODULUS'
+
+    assert ebnf.primary_expression == 'entity , op or_expression cp'
+    assert ebnf.pow_expression == ('primary_expression (POWER '
+                                   'unary_expression)?')
     assert ebnf.unary_expression == ('unary_operator unary_expression , '
                                      'pow_expression')
-    assert ebnf.binary_expression == (
-        'binary_expression binary_operator unary_expression , '
-        'unary_expression')
-    assert ebnf.expression == 'binary_expression'
+    assert ebnf.mul_expression == '(mul_expression mul_operator)? ' \
+                                  'unary_expression'
+    assert ebnf.arith_expression == '(arith_expression arith_operator)? ' \
+                                    'mul_expression'
+    assert ebnf.cmp_expression == '(cmp_expression cmp_operator)? ' \
+                                  'arith_expression'
+    assert ebnf.and_expression == '(and_expression AND)? cmp_expression'
+    assert ebnf.or_expression == '(or_expression OR)? and_expression'
+
+    assert ebnf.expression == 'or_expression'
     assert ebnf.absolute_expression == 'expression'
 
 
@@ -176,9 +186,8 @@ def test_grammar_service_block(grammar, ebnf):
 
 def test_grammar_if_block(grammar, ebnf):
     grammar.if_block()
-    assert ebnf.comparisons == '_comparison_operator'
-    assert ebnf.if_statement == 'if entity (comparisons entity)?'
-    elseif_statement = 'else if entity (comparisons entity)?'
+    assert ebnf.if_statement == 'if expression'
+    elseif_statement = 'else if expression'
     assert ebnf.elseif_statement == elseif_statement
     assert ebnf.elseif_block == ebnf.simple_block()
     ebnf.set_rule.assert_called_with('!else_statement', 'else')

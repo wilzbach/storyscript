@@ -94,41 +94,46 @@ class Grammar:
     def expressions(self):
 
         self.ebnf.POWER = '^'
-        self.ebnf.set_token('NOT.10', 'not')
+        self.ebnf.NOT = 'not'
 
-        self.ebnf.set_token('OR.40', 'or')
-        self.ebnf.set_token('AND.30', 'and')
+        self.ebnf.OR = 'or'
+        self.ebnf.AND = 'and'
 
-        self.ebnf.set_token('GREATER.20', '>')
-        self.ebnf.set_token('GREATER_EQUAL.20', '>=')
-        self.ebnf.set_token('LESSER.20', '<')
-        self.ebnf.set_token('LESSER_EQUAL.20', '<=')
-        self.ebnf.set_token('NOT_EQUAL.20', '!=')
-        self.ebnf.set_token('EQUAL.20', '==')
+        self.ebnf.GREATER = '>'
+        self.ebnf.GREATER_EQUAL = '>='
+        self.ebnf.LESSER = '<'
+        self.ebnf.LESSER_EQUAL = '<='
+        self.ebnf.NOT_EQUAL = '!='
+        self.ebnf.EQUAL = '=='
 
-        self.ebnf.set_token('BSLASH.10', '/')
-        self.ebnf.set_token('MULTIPLIER.10', '*')
-        self.ebnf.set_token('MODULUS.10', '%')
+        self.ebnf.BSLASH = '/'
+        self.ebnf.MULTIPLIER = '*'
+        self.ebnf.MODULUS = '%'
 
-        self.ebnf.set_token('PLUS.5', '+')
-        self.ebnf.set_token('DASH.5', '-')
+        self.ebnf.PLUS = '+'
+        self.ebnf.set_token('DASH.4', '-')
 
-        self.ebnf._comparison_operator = ('greater, greater_equal, lesser, '
-                                          'lesser_equal, not_equal, equal')
-        self.ebnf.binary_operator = ('_comparison_operator, OR, AND, '
-                                     'MULTIPLIER, BSLASH, MODULUS, '
-                                     'PLUS, DASH')
+        self.ebnf.cmp_operator = ('GREATER, GREATER_EQUAL, LESSER, '
+                                  'LESSER_EQUAL, NOT_EQUAL, EQUAL')
+        self.ebnf.arith_operator = 'PLUS, DASH'
         self.ebnf.unary_operator = 'NOT'
+        self.ebnf.mul_operator = 'MULTIPLIER, BSLASH, MODULUS'
 
-        self.ebnf.primary_expression = 'entity , op binary_expression cp'
+        self.ebnf.primary_expression = 'entity , op or_expression cp'
         self.ebnf.pow_expression = ('primary_expression (POWER '
                                     'unary_expression)?')
         self.ebnf.unary_expression = ('unary_operator unary_expression , '
                                       'pow_expression')
-        self.ebnf.binary_expression = (
-            'binary_expression binary_operator unary_expression , '
-            'unary_expression')
-        self.ebnf.expression = 'binary_expression'
+        self.ebnf.mul_expression = '(mul_expression mul_operator)? ' \
+                                   'unary_expression'
+        self.ebnf.arith_expression = '(arith_expression arith_operator)? ' \
+                                     'mul_expression'
+        self.ebnf.cmp_expression = '(cmp_expression cmp_operator)? ' \
+                                   'arith_expression'
+        self.ebnf.and_expression = '(and_expression AND)? cmp_expression'
+        self.ebnf.or_expression = '(or_expression OR)? and_expression'
+
+        self.ebnf.expression = 'or_expression'
         self.ebnf.absolute_expression = 'expression'
 
     def raise_statement(self):
@@ -164,11 +169,8 @@ class Grammar:
     def if_block(self):
         self.ebnf._IF = 'if'
         self.ebnf._ELSE = 'else'
-        # self.ebnf.if_statement = 'if expression'
-        # elseif_statement = 'else if expression'
-        self.ebnf.comparisons = '_comparison_operator'
-        self.ebnf.if_statement = 'if entity (comparisons entity)?'
-        elseif_statement = 'else if entity (comparisons entity)?'
+        self.ebnf.if_statement = 'if expression'
+        elseif_statement = 'else if expression'
         self.ebnf.elseif_statement = elseif_statement
         self.ebnf.elseif_block = self.ebnf.simple_block('elseif_statement')
         self.ebnf.set_rule('!else_statement', 'else')
