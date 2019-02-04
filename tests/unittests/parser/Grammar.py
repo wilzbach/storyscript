@@ -101,7 +101,10 @@ def test_grammar_expressions(grammar, ebnf, magic):
     ebnf.set_token = magic()
     grammar.expressions()
     assert ebnf.set_token.call_args_list == [
-        call('DASH.4', '-'),
+        call('BSLASH.5', '/'),
+        call('MODULUS.5', '%'),
+        call('PLUS.5', '+'),
+        call('DASH.5', '-'),
     ]
 
     assert ebnf.POWER == '^'
@@ -117,11 +120,7 @@ def test_grammar_expressions(grammar, ebnf, magic):
     assert ebnf.NOT_EQUAL == '!='
     assert ebnf.EQUAL == '=='
 
-    assert ebnf.BSLASH == '/'
     assert ebnf.MULTIPLIER == '*'
-    assert ebnf.MODULUS == '%'
-
-    assert ebnf.PLUS == '+'
 
     assert ebnf.cmp_operator == ('GREATER, GREATER_EQUAL, LESSER, '
                                  'LESSER_EQUAL, NOT_EQUAL, EQUAL')
