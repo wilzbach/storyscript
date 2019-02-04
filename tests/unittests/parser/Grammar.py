@@ -176,7 +176,7 @@ def test_mutation_block(grammar, ebnf):
 def test_grammar_service_block(grammar, ebnf):
     grammar.service_block()
     assert ebnf.command == 'name'
-    assert ebnf.arguments == 'name? colon entity'
+    assert ebnf.arguments == 'name? colon expression'
     assert ebnf.output == '(as name (comma name)*)'
     assert ebnf.service_fragment == '(command arguments*|arguments+) output?'
     assert ebnf.service == 'path service_fragment chained_mutation*'
@@ -206,7 +206,7 @@ def test_grammar_foreach_block(grammar, ebnf):
 def test_grammar_while_block(grammar, ebnf):
     grammar.while_block()
     assert ebnf._WHILE == 'while'
-    assert ebnf.while_statement == 'while entity'
+    assert ebnf.while_statement == 'while expression'
     ebnf.simple_block.assert_called_with('while_statement')
     assert ebnf.while_block == ebnf.simple_block()
 

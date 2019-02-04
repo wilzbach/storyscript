@@ -78,7 +78,8 @@ def test_parser_assignment_indented_arguments(parser):
     correctly
     """
     result = parser.parse('x = alpine echo\n\tmessage:"hello"')
-    values = result.child(1).indented_arguments.arguments.entity.values
+    exp = result.child(1).indented_arguments.arguments.expression
+    values = get_entity(arith_exp(Tree('an_exp', [exp]))).values
     assert values.string.child(0) == Token('DOUBLE_QUOTED', '"hello"')
 
 
@@ -95,8 +96,9 @@ def test_parser_foreach_block(parser):
 def test_parser_while_block(parser):
     result = parser.parse('while cond\n\tvar=3\n')
     block = result.block.while_block
-    while_ = block.while_statement
-    assert while_.entity.path.child(0) == Token('NAME', 'cond')
+    exp = arith_exp(block.while_statement)
+    entity = get_entity(exp)
+    assert entity.path.child(0) == Token('NAME', 'cond')
     assert block.nested_block.data == 'nested_block'
 
 
@@ -111,7 +113,7 @@ def test_parser_service_arguments(parser):
     result = parser.parse('container key:"value"\n')
     args = result.block.service_block.service.service_fragment.arguments
     assert args.child(0) == Token('NAME', 'key')
-    entity = args.entity
+    entity = get_entity(arith_exp(Tree('an_exp', [args.expression])))
     assert entity.values.string.child(0) == Token('DOUBLE_QUOTED', '"value"')
 
 
