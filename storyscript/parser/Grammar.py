@@ -160,7 +160,7 @@ class Grammar:
 
     def service_block(self):
         self.ebnf.command = 'name'
-        self.ebnf.arguments = 'name? colon entity'
+        self.ebnf.arguments = 'name? colon expression'
         self.ebnf.output = '(as name (comma name)*)'
         self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
         self.ebnf.service = 'path service_fragment chained_mutation*'

@@ -1436,3 +1436,163 @@ def test_compiler_complex_while_2(parser):
             }
           ]
     }]
+
+
+def test_compiler_mutation_expression(parser):
+    """
+    Ensures that mutations with expressions are compiled correctly
+    """
+    source = ('a = ["opened", "labeled"]\n'
+              'a contains item: req.body["action"] == false')
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['name'] == ['a']
+    assert result['tree']['2']['method'] == 'mutation'
+    assert result['tree']['2']['args'] == [
+        {
+          '$OBJECT': 'path',
+          'paths': [
+            'a'
+          ]
+        },
+        {
+          '$OBJECT': 'mutation',
+          'mutation': 'contains',
+          'arguments': [
+            {
+              '$OBJECT': 'argument',
+              'name': 'item',
+              'argument': {
+                '$OBJECT': 'expression',
+                'expression': 'equals',
+                'values': [
+                  {
+                    '$OBJECT': 'path',
+                    'paths': [
+                      'req',
+                      'body',
+                      {
+                        '$OBJECT': 'string',
+                        'string': 'action'
+                      }
+                    ]
+                  },
+                  False
+                ]
+              }
+            }
+          ]
+        }
+    ]
+
+
+def test_compiler_service_expression(parser):
+    """
+    Ensures that mutations with expressions are compiled correctly
+    """
+    source = 'my_service my_command k1: 2 + 2 k2: a == b'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'execute'
+    assert result['tree']['1']['command'] == 'my_command'
+    assert result['tree']['1']['service'] == 'my_service'
+    assert result['tree']['1']['args'] == [
+        {
+          '$OBJECT': 'argument',
+          'name': 'k1',
+          'argument': {
+            '$OBJECT': 'expression',
+            'expression': 'sum',
+            'values': [
+              2,
+              2
+            ]
+          }
+        },
+        {
+          '$OBJECT': 'argument',
+          'name': 'k2',
+          'argument': {
+            '$OBJECT': 'expression',
+            'expression': 'equals',
+            'values': [
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'a'
+                ]
+              },
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'b'
+                ]
+              }
+            ]
+          }
+        }
+    ]
+
+
+def test_compiler_function_expression(parser):
+    """
+    Ensures that function calls with expressions are compiled correctly
+    """
+    source = 'my_function k1: 2 + 2 % 4 k2: a / b - c'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'execute'
+    assert result['tree']['1']['service'] == 'my_function'
+    assert result['tree']['1']['args'] == [
+        {
+          '$OBJECT': 'argument',
+          'name': 'k1',
+          'argument': {
+            '$OBJECT': 'expression',
+            'expression': 'sum',
+            'values': [
+              2,
+              {
+                '$OBJECT': 'expression',
+                'expression': 'modulus',
+                'values': [
+                  2,
+                  4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          '$OBJECT': 'argument',
+          'name': 'k2',
+          'argument': {
+            '$OBJECT': 'expression',
+            'expression': 'subtraction',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'division',
+                'values': [
+                  {
+                    '$OBJECT': 'path',
+                    'paths': [
+                      'a'
+                    ]
+                  },
+                  {
+                    '$OBJECT': 'path',
+                    'paths': [
+                      'b'
+                    ]
+                  }
+                ]
+              },
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'c'
+                ]
+              }
+            ]
+          }
+        }
+    ]
