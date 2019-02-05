@@ -1656,3 +1656,85 @@ def test_compiler_function_expression(parser):
           }
         }
     ]
+
+
+def test_compiler_mutation_expression_list(parser):
+    """
+    Ensures that mutations on lists work
+    """
+    source = '["opened", "labeled"] contains item: "opened"'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'mutation'
+    assert result['tree']['1']['args'] == [
+        {
+          '$OBJECT': 'list',
+          'items': [
+            {
+              '$OBJECT': 'string',
+              'string': 'opened'
+            },
+            {
+              '$OBJECT': 'string',
+              'string': 'labeled'
+            }
+          ]
+        },
+        {
+          '$OBJECT': 'mutation',
+          'mutation': 'contains',
+          'arguments': [
+            {
+              '$OBJECT': 'argument',
+              'name': 'item',
+              'argument': {
+                '$OBJECT': 'string',
+                'string': 'opened'
+              }
+            }
+          ]
+        }
+    ]
+
+
+def test_compiler_mutation_expression_object(parser):
+    """
+    Ensures that mutations on objects work
+    """
+    source = '{"opened":1, "labeled":1} has key: "opened"'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'mutation'
+    assert result['tree']['1']['args'] == [
+        {
+          '$OBJECT': 'dict',
+          'items': [
+            [
+              {
+                '$OBJECT': 'string',
+                'string': 'opened'
+              },
+              1
+            ],
+            [
+              {
+                '$OBJECT': 'string',
+                'string': 'labeled'
+              },
+              1
+            ]
+          ]
+        },
+        {
+          '$OBJECT': 'mutation',
+          'mutation': 'has',
+          'arguments': [
+            {
+              '$OBJECT': 'argument',
+              'name': 'key',
+              'argument': {
+                '$OBJECT': 'string',
+                'string': 'opened'
+              }
+            }
+          ]
+        }
+    ]
