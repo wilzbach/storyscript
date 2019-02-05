@@ -1,0 +1,141 @@
+types: INT_TYPE| FLOAT_TYPE| NUMBER_TYPE| STRING_TYPE| LIST_TYPE| OBJECT_TYPE| REGEXP_TYPE| FUNCTION_TYPE| ANY_TYPE
+boolean: TRUE| FALSE
+void: NULL
+number: INT| FLOAT
+string: SINGLE_QUOTED| DOUBLE_QUOTED
+!list: _OSB (_NL _INDENT)? (expression (_COMMA _NL? expression)*)? (_NL _DEDENT)? _CSB
+key_value: (string| path) _COLON expression
+objects: _OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)? (_NL _DEDENT)? _CCB
+regular_expression: REGEXP NAME?
+inline_expression: _OP service _CP
+values: number| string| boolean| void| list| objects| regular_expression
+path_fragment: _DOT NAME| _OSB INT _CSB| _OSB string _CSB| _OSB path _CSB
+path: NAME (path_fragment)* | inline_expression (path_fragment)*
+assignment_fragment: EQUALS (expression| service| mutation)
+assignment: path assignment_fragment
+imports: _IMPORT string _AS NAME
+cmp_operator: GREATER| GREATER_EQUAL| LESSER| LESSER_EQUAL| NOT_EQUAL| EQUAL
+arith_operator: PLUS| DASH
+unary_operator: NOT
+mul_operator: MULTIPLIER| BSLASH| MODULUS
+primary_expression: entity | _OP or_expression _CP
+pow_expression: primary_expression (POWER unary_expression)?
+unary_expression: unary_operator unary_expression | pow_expression
+mul_expression: (mul_expression mul_operator)? unary_expression
+arith_expression: (arith_expression arith_operator)? mul_expression
+cmp_expression: (cmp_expression cmp_operator)? arith_expression
+and_expression: (and_expression AND)? cmp_expression
+or_expression: (or_expression OR)? and_expression
+expression: or_expression
+absolute_expression: expression
+return_statement: RETURN expression?
+break_statement: BREAK
+entity: values| path
+rules: absolute_expression| assignment| imports| return_statement| throw_statement| break_statement| block
+mutation_fragment: NAME arguments*
+chained_mutation: _THEN mutation_fragment
+mutation: entity (mutation_fragment (chained_mutation)*)
+mutation_block: mutation _NL (nested_block)?
+indented_chain: _INDENT (chained_mutation _NL)+ _DEDENT
+command: NAME
+arguments: NAME? _COLON expression
+output: (_AS NAME (_COMMA NAME)*)
+service_fragment: (command arguments*|arguments+) output?
+service: path service_fragment chained_mutation*
+service_block: service _NL (nested_block)?
+if_statement: _IF expression
+elseif_statement: _ELSE _IF expression
+elseif_block: elseif_statement _NL nested_block
+!else_statement: _ELSE
+else_block: else_statement _NL nested_block
+if_block: if_statement _NL nested_block elseif_block* else_block?
+foreach_statement: _FOREACH entity output
+foreach_block: foreach_statement _NL nested_block
+while_statement: _WHILE expression
+while_block: while_statement _NL nested_block
+typed_argument: NAME _COLON types
+function_output: _RETURNS types
+function_statement: FUNCTION_TYPE NAME typed_argument* function_output?
+indented_typed_arguments: _INDENT (typed_argument+ _NL)+ _DEDENT _DOUBLE_DEDENT
+function_block: function_statement _NL (indented_typed_arguments? block+ _DEDENT | nested_block)
+catch_statement: _CATCH _AS NAME
+catch_block: catch_statement _NL nested_block
+finally_statement: FINALLY
+finally_block: finally_statement _NL nested_block
+try_statement: TRY
+try_block: try_statement _NL nested_block catch_block? finally_block?
+throw_statement: THROW entity?
+when_block: _WHEN (path output|service) _NL nested_block
+indented_arguments: _INDENT (arguments _NL)+ _DEDENT
+block: rules _NL| if_block| foreach_block| function_block| arguments| indented_chain| chained_mutation| mutation_block| service_block| when_block| try_block| indented_arguments| while_block
+nested_block: _INDENT block+ _DEDENT
+start: _NL? block*
+
+_WS: (" ")+
+INT_TYPE: "int"
+FLOAT_TYPE: "float"
+NUMBER_TYPE: "number"
+STRING_TYPE: "string"
+LIST_TYPE: "list"
+OBJECT_TYPE: "object"
+REGEXP_TYPE: "regex"
+FUNCTION_TYPE: "function"
+ANY_TYPE: "any"
+_NL: /(\r?\n[\t ]*)+/
+_INDENT: "<INDENT>"
+_DEDENT: "<DEDENT>"
+TRUE: "true"
+FALSE: "false"
+NULL: "null"
+RAW_INT.2: /[0-9]+/
+INT.2: ("+"|"-")? RAW_INT
+FLOAT.2: ("+"|"-")? INT "." RAW_INT? | "." RAW_INT
+SINGLE_QUOTED: /'([^'\\]*(?:\\.[^'\\]*)*)'/
+DOUBLE_QUOTED: /"([^"\\]*(?:\\.[^"\\]*)*)"/
+REGEXP.2: /\/([^\/]*)\//
+NAME.1: /[a-zA-Z-\/_0-9]+/
+_OSB: "["
+_CSB: "]"
+_OCB: "{"
+_CCB: "}"
+_COLON: ":"
+_COMMA: ","
+_OP: "("
+_CP: ")"
+EQUALS: "="
+_DOT: "."
+_AS: "as"
+_IMPORT: "import"
+POWER: "^"
+NOT: "!"
+OR: "or"
+AND: "and"
+GREATER: ">"
+GREATER_EQUAL: ">="
+LESSER: "<"
+LESSER_EQUAL: "<="
+NOT_EQUAL: "!="
+EQUAL: "=="
+BSLASH.5: "/"
+MULTIPLIER: "*"
+MODULUS.5: "%"
+PLUS.5: "+"
+DASH.5: "-"
+RETURN: "return"
+BREAK: "break"
+_THEN: "then"
+_IF: "if"
+_ELSE: "else"
+_FOREACH: "foreach"
+_WHILE: "while"
+_RETURNS: "returns"
+_DOUBLE_DEDENT: "<DOUBLE_DEDENT>"
+TRY: "try"
+_CATCH: "catch"
+FINALLY: "finally"
+THROW: "throw"
+_WHEN: "when"
+
+%ignore _WS
+
+
