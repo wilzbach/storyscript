@@ -367,10 +367,10 @@ def test_objects_build_unary_expression(patch, tree, magic):
     Ensures Objects.build_unary_expression builds an expression properly
     """
     patch.many(Objects, ['expression_type'])
-    op = '.my.op.'
+    op = magic()
     left = magic()
     result = Objects.build_unary_expression(tree, op, left)
-    Objects.expression_type.assert_called_with(op, tree)
+    Objects.expression_type.assert_called_with(op.type, tree)
     assert result == {
         '$OBJECT': 'expression',
         'expression': Objects.expression_type(),
@@ -466,8 +466,9 @@ def test_objects_unary_expression_two(patch, tree):
     unary_expression = Objects.unary_expression
     patch.object(Objects, 'unary_expression')
     r = unary_expression(tree)
+    op = tree.unary_operator.child(0)
     Objects.build_unary_expression.assert_called_with(
-        tree, tree.child(1), Objects.unary_expression(tree.child(0)))
+        tree, op, Objects.unary_expression(tree.child(1)))
     assert r == Objects.build_unary_expression()
 
 

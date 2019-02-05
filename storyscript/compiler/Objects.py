@@ -246,7 +246,7 @@ class Objects:
 
     @classmethod
     def build_unary_expression(cls, tree, op, left):
-        expression_type = Objects.expression_type(op, tree)
+        expression_type = Objects.expression_type(op.type, tree)
         return {
             '$OBJECT': 'expression',
             'expression': expression_type,
@@ -298,9 +298,10 @@ class Objects:
             return cls.pow_expression(tree.child(0))
 
         assert tree.child(0).data == 'unary_operator'
+        op = tree.unary_operator.child(0)
         return cls.build_unary_expression(
-                    tree, tree.child(1),
-                    cls.unary_expression(tree.child(0)))
+                    tree, op,
+                    cls.unary_expression(tree.child(1)))
 
     @classmethod
     def mul_expression(cls, tree):
