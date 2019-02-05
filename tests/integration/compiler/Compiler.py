@@ -1810,3 +1810,192 @@ def test_compiler_return_complex_expression_2(parser):
           }
         ]
     }]
+
+
+def test_compiler_expression_is(parser):
+    """
+    Ensures that 'is' expressions compile correctly
+    """
+    source = 'a = 1 is 2'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'equals',
+        'values': [
+          1,
+          2
+        ]
+    }]
+
+
+def test_compiler_expression_is_nested(parser):
+    """
+    Ensures that nested 'is' expressions compile correctly
+    """
+    source = 'a = 1 + 2 is 3/4 is 5*6 is 7%8 or 9'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'or',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'equals',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'equals',
+                'values': [
+                  {
+                    '$OBJECT': 'expression',
+                    'expression': 'equals',
+                    'values': [
+                      {
+                        '$OBJECT': 'expression',
+                        'expression': 'sum',
+                        'values': [
+                          1,
+                          2
+                        ]
+                      },
+                      {
+                        '$OBJECT': 'expression',
+                        'expression': 'division',
+                        'values': [
+                          3,
+                          4
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    '$OBJECT': 'expression',
+                    'expression': 'multiplication',
+                    'values': [
+                      5,
+                      6
+                    ]
+                  }
+                ]
+              },
+              {
+                '$OBJECT': 'expression',
+                'expression': 'modulus',
+                'values': [
+                  7,
+                  8
+                ]
+              }
+            ]
+          },
+          9
+        ]
+    }]
+
+
+def test_compiler_expression_is_nested_2(parser):
+    """
+    Ensures that nested 'is' expressions compile correctly
+    """
+    source = 'a = 1 is 2 < 3 or 4 > 0.5+5 is -6 and 7 is 8'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'or',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'less',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'equals',
+                'values': [
+                  1,
+                  2
+                ]
+              },
+              3
+            ]
+          },
+          {
+            '$OBJECT': 'expression',
+            'expression': 'and',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'equals',
+                'values': [
+                  {
+                    '$OBJECT': 'expression',
+                    'expression': 'greater',
+                    'values': [
+                      4,
+                      {
+                        '$OBJECT': 'expression',
+                        'expression': 'sum',
+                        'values': [
+                          0.5,
+                          5
+                        ]
+                      }
+                    ]
+                  },
+                  -6
+                ]
+              },
+              {
+                '$OBJECT': 'expression',
+                'expression': 'equals',
+                'values': [
+                  7,
+                  8
+                ]
+              }
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_expression_is_if_statement(parser):
+    """
+    Ensures that 'is' expressions can be used in if statements
+    """
+    source = """if (weather tommorow where:'Amsterdam') is 'horrible'
+    echo message:'oh no!'
+"""
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'if'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'assertion',
+        'assertion': 'equals',
+        'values': [
+          {
+            '$OBJECT': 'path',
+            'paths': [
+              'p-1.1'
+            ]
+          },
+          {
+            '$OBJECT': 'string',
+            'string': 'horrible'
+          }
+        ]
+    }]
+    assert result['tree']['1.1']['method'] == 'execute'
+    assert result['tree']['1.1']['service'] == 'weather'
+    assert result['tree']['1.1']['args'] == [{
+        '$OBJECT': 'argument',
+        'name': 'where',
+        'argument': {
+          '$OBJECT': 'string',
+          'string': 'Amsterdam'
+        }
+    }]
+    assert result['tree']['2']['method'] == 'execute'
+    assert result['tree']['2']['service'] == 'echo'
+    assert result['tree']['2']['args'][0]['argument']['string'] == 'oh no!'

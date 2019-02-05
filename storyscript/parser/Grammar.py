@@ -105,6 +105,7 @@ class Grammar:
         self.ebnf.LESSER_EQUAL = '<='
         self.ebnf.NOT_EQUAL = '!='
         self.ebnf.EQUAL = '=='
+        self.ebnf.IS = 'is'
 
         self.ebnf.set_token('BSLASH.5', '/')
         self.ebnf.MULTIPLIER = '*'
@@ -114,7 +115,7 @@ class Grammar:
         self.ebnf.set_token('DASH.5', '-')
 
         self.ebnf.cmp_operator = ('GREATER, GREATER_EQUAL, LESSER, '
-                                  'LESSER_EQUAL, NOT_EQUAL, EQUAL')
+                                  'LESSER_EQUAL, NOT_EQUAL, EQUAL, IS')
         self.ebnf.arith_operator = 'PLUS, DASH'
         self.ebnf.unary_operator = 'NOT'
         self.ebnf.mul_operator = 'MULTIPLIER, BSLASH, MODULUS'

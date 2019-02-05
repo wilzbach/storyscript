@@ -119,11 +119,12 @@ def test_grammar_expressions(grammar, ebnf, magic):
     assert ebnf.LESSER_EQUAL == '<='
     assert ebnf.NOT_EQUAL == '!='
     assert ebnf.EQUAL == '=='
+    assert ebnf.IS == 'is'
 
     assert ebnf.MULTIPLIER == '*'
 
     assert ebnf.cmp_operator == ('GREATER, GREATER_EQUAL, LESSER, '
-                                 'LESSER_EQUAL, NOT_EQUAL, EQUAL')
+                                 'LESSER_EQUAL, NOT_EQUAL, EQUAL, IS')
     assert ebnf.arith_operator == 'PLUS, DASH'
     assert ebnf.unary_operator == 'NOT'
     assert ebnf.mul_operator == 'MULTIPLIER, BSLASH, MODULUS'

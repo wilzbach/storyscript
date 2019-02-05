@@ -311,7 +311,7 @@ def test_objects_function_arguments(patch, tree):
     ('BSLASH', 'division'), ('MODULUS', 'modulus'),
     ('POWER', 'exponential'), ('DASH', 'subtraction'), ('AND', 'and'),
     ('OR', 'or'), ('NOT', 'not'),
-    ('EQUAL', 'equals'), ('GREATER', 'greater'),
+    ('EQUAL', 'equals'), ('GREATER', 'greater'), ('IS', 'equals'),
     ('LESSER', 'less'), ('NOT_EQUAL', 'not_equal'),
     ('GREATER_EQUAL', 'greater_equal'), ('LESSER_EQUAL', 'less_equal'),
 ])
