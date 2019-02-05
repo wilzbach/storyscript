@@ -1738,3 +1738,75 @@ def test_compiler_mutation_expression_object(parser):
           ]
         }
     ]
+
+
+def test_compiler_return_complex_expression(parser):
+    """
+    Ensures that return accepts arbitrary expressions
+    """
+    source = 'function name key:int\n\treturn 2 + 2'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'function'
+    assert result['tree']['1']['function'] == 'name'
+    assert result['tree']['2']['method'] == 'return'
+    assert result['tree']['2']['args'] == [{
+      '$OBJECT': 'expression',
+      'expression': 'sum',
+      'values': [
+        2,
+        2
+      ]
+    }]
+
+
+def test_compiler_return_complex_expression_2(parser):
+    """
+    Ensures that return accepts arbitrary expressions
+    """
+    source = 'function name key:int\n\treturn a / b + c or d'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'function'
+    assert result['tree']['1']['function'] == 'name'
+    assert result['tree']['2']['method'] == 'return'
+    assert result['tree']['2']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'or',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'sum',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'division',
+                'values': [
+                  {
+                    '$OBJECT': 'path',
+                    'paths': [
+                      'a'
+                    ]
+                  },
+                  {
+                    '$OBJECT': 'path',
+                    'paths': [
+                      'b'
+                    ]
+                  }
+                ]
+              },
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'c'
+                ]
+              }
+            ]
+          },
+          {
+            '$OBJECT': 'path',
+            'paths': [
+              'd'
+            ]
+          }
+        ]
+    }]

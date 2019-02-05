@@ -180,8 +180,8 @@ class Compiler:
             raise CompilerError('return_outside', tree=tree)
         line = tree.line()
         args = None
-        if tree.entity:
-            args = [Objects.entity(tree.entity)]
+        if tree.expression:
+            args = [Objects.expression(tree.expression)]
         self.lines.append('return', line, args=args, parent=parent)
 
     def if_block(self, tree, parent):

@@ -143,7 +143,7 @@ class Grammar:
     def rules(self):
         self.ebnf.RETURN = 'return'
         self.ebnf.BREAK = 'break'
-        self.ebnf.return_statement = 'return entity?'
+        self.ebnf.return_statement = 'return expression?'
         self.ebnf.break_statement = 'break'
         self.ebnf.entity = 'values, path'
         rules = ('absolute_expression, assignment, imports, return_statement, '

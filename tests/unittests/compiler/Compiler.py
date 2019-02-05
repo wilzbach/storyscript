@@ -333,7 +333,7 @@ def test_compiler_return_statement(patch, compiler, lines, tree):
     """
     Ensures Compiler.return_statement can compile return statements.
     """
-    tree.entity = None
+    tree.expression = None
     compiler.return_statement(tree, '1')
     line = tree.line()
     kwargs = {'args': None, 'parent': '1'}
@@ -345,11 +345,11 @@ def test_compiler_return_statement_entity(patch, compiler, lines, tree):
     Ensures Compiler.return_statement can compile return statements that return
     entities.
     """
-    patch.object(Objects, 'entity')
+    patch.object(Objects, 'expression')
     compiler.return_statement(tree, '1')
     line = tree.line()
-    Objects.entity.assert_called_with(tree.entity)
-    kwargs = {'args': [Objects.entity()], 'parent': '1'}
+    Objects.expression.assert_called_with(tree.expression)
+    kwargs = {'args': [Objects.expression()], 'parent': '1'}
     lines.append.assert_called_with('return', line, **kwargs)
 
 
