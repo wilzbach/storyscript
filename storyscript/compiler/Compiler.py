@@ -192,10 +192,9 @@ class Compiler:
         self.lines.append('if', line, args=args, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
-        trees = []
-        for block in [tree.elseif_block, tree.else_block]:
-            if block:
-                trees.append(block)
+        trees = tree.extract('elseif_block')
+        if tree.else_block:
+            trees.append(tree.else_block)
         self.subtrees(*trees, parent=parent)
 
     def elseif_block(self, tree, parent):
