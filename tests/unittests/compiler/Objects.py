@@ -81,7 +81,7 @@ def test_objects_mutation_arguments(patch, magic):
     patch.object(Objects, 'arguments')
     tree = magic()
     result = Objects.mutation(tree)
-    Objects.arguments.assert_called_with(tree.arguments)
+    Objects.arguments.assert_called_with(tree)
     assert result['arguments'] == Objects.arguments()
 
 

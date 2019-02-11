@@ -39,7 +39,7 @@ class Objects:
         mutation = tree.child(0).value
         arguments = []
         if tree.arguments:
-            arguments = cls.arguments(tree.arguments)
+            arguments = cls.arguments(tree)
         if tree.command:
             mutation = tree.command.child(0).value
         return {'$OBJECT': 'mutation', 'mutation': mutation,
