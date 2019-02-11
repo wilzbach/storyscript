@@ -129,6 +129,12 @@ def test_tree_find():
     assert tree.find('assignment') == [expected]
 
 
+def test_tree_extract():
+    target = Tree('target', [])
+    tree = Tree('tree', [target, Tree('more', [target])])
+    assert tree.extract('target') == [target]
+
+
 def test_tree_is_unary_leaf():
     """
     Ensures is_unary_leaf can find out whether an expression is unary leaf
