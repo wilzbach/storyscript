@@ -41,6 +41,16 @@ class Tree(LarkTree):
         """
         return list(self.find_data(path))
 
+    def extract(self, node_name):
+        """
+        Extracts only direct children of a tree with the requested name
+        """
+        children = []
+        for child in self.children:
+            if child.data == node_name:
+                children.append(child)
+        return children
+
     def _find_position(self, position):
         """
         Finds the request positional attribute of a tree, by finding the

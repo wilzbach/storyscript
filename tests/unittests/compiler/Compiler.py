@@ -383,14 +383,16 @@ def test_compiler_if_block_with_elseif(patch, compiler, tree):
     patch.object(Objects, 'assertion')
     patch.many(Compiler, ['subtree', 'subtrees'])
     tree.else_block = None
+    tree.extract.return_value = ['one']
     compiler.if_block(tree, '1')
-    compiler.subtrees.assert_called_with(tree.elseif_block, parent='1')
+    tree.extract.assert_called_with('elseif_block')
+    compiler.subtrees.assert_called_with('one', parent='1')
 
 
 def test_compiler_if_block_with_else(patch, compiler, tree):
     patch.object(Objects, 'assertion')
     patch.many(Compiler, ['subtree', 'subtrees'])
-    tree.elseif_block = None
+    tree.extract.return_value = []
     compiler.if_block(tree, '1')
     compiler.subtrees.assert_called_with(tree.else_block, parent='1')
 
