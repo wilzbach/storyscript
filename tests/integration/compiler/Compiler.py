@@ -1810,3 +1810,356 @@ def test_compiler_return_complex_expression_2(parser):
           }
         ]
     }]
+
+
+def test_compiler_unary_not(parser):
+    """
+    Ensures that unary expressions are compiled correctly
+    """
+    source = 'a = !b'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'not',
+        'values': [
+          {
+            '$OBJECT': 'path',
+            'paths': [
+              'b'
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_unary_not_if(parser):
+    """
+    Ensures that unary expression in if statements are compiled correctly
+    """
+    source = 'if !b\n\treturn'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'if'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'assertion',
+        'assertion': 'not',
+        'values': [
+          {
+            '$OBJECT': 'path',
+            'paths': [
+              'b'
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_unary_double(parser):
+    """
+    Ensures that double unary expressions are compiled correctly
+    """
+    source = 'a = !!b'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'not',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'not',
+            'values': [
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'b'
+                ]
+              }
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_unary_complex(parser):
+    """
+    Ensures that complex unary expressions are compiled correctly
+    """
+    source = 'a = b and !c'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'and',
+        'values': [
+          {
+            '$OBJECT': 'path',
+            'paths': [
+              'b'
+            ]
+          },
+          {
+            '$OBJECT': 'expression',
+            'expression': 'not',
+            'values': [
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'c'
+                ]
+              }
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_unary_complex_2(parser):
+    """
+    Ensures that complex unary expressions are compiled correctly
+    """
+    source = 'a = ! 2 == !3 or ! 4'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'or',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'equals',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'not',
+                'values': [
+                  2
+                ]
+              },
+              {
+                '$OBJECT': 'expression',
+                'expression': 'not',
+                'values': [
+                  3
+                ]
+              }
+            ]
+          },
+          {
+            '$OBJECT': 'expression',
+            'expression': 'not',
+            'values': [
+              4
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_unary_complex_3(parser):
+    """
+    Ensures that complex unary expressions are compiled correctly
+    """
+    source = 'a = [! b, !2] <= ! t + t'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'less_equal',
+        'values': [
+          {
+            '$OBJECT': 'list',
+            'items': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'not',
+                'values': [
+                  {
+                    '$OBJECT': 'path',
+                    'paths': [
+                      'b'
+                    ]
+                  }
+                ]
+              },
+              {
+                '$OBJECT': 'expression',
+                'expression': 'not',
+                'values': [
+                  2
+                ]
+              }
+            ]
+          },
+          {
+            '$OBJECT': 'expression',
+            'expression': 'sum',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'not',
+                'values': [
+                  {
+                    '$OBJECT': 'path',
+                    'paths': [
+                      't'
+                    ]
+                  }
+                ]
+              },
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  't'
+                ]
+              }
+            ]
+          }
+        ]
+    }]
+
+
+def test_compiler_unary_complex_4(parser):
+    """
+    Ensures that complex unary expressions are compiled correctly
+    """
+    source = 'a = my_function k1: !b or 2'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'execute'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'argument',
+        'name': 'k1',
+        'argument': {
+          '$OBJECT': 'expression',
+          'expression': 'or',
+          'values': [
+            {
+              '$OBJECT': 'expression',
+              'expression': 'not',
+              'values': [
+                {
+                  '$OBJECT': 'path',
+                  'paths': [
+                    'b'
+                  ]
+                }
+              ]
+            },
+            2
+          ]
+        }
+    }]
+
+
+def test_compiler_unary_complex_5(parser):
+    """
+    Ensures that complex unary expressions are compiled correctly
+    """
+    source = ('a = ! (my_service command k1: !b) or '
+              '!(my_service2 command k2: ! !c)')
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'or',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'not',
+            'values': [
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'p-1.1'
+                ]
+              }
+            ]
+          },
+          {
+            '$OBJECT': 'expression',
+            'expression': 'not',
+            'values': [
+              {
+                '$OBJECT': 'path',
+                'paths': [
+                  'p-1.2'
+                ]
+              }
+            ]
+          }
+        ]
+    }]
+    assert result['tree']['1.1']['args'] == [{
+        '$OBJECT': 'argument',
+        'name': 'k1',
+        'argument': {
+          '$OBJECT': 'expression',
+          'expression': 'not',
+          'values': [
+            {
+              '$OBJECT': 'path',
+              'paths': [
+                'b'
+              ]
+            }
+          ]
+        }
+    }]
+    assert result['tree']['1.2']['args'] == [{
+        '$OBJECT': 'argument',
+        'name': 'k2',
+        'argument': {
+          '$OBJECT': 'expression',
+          'expression': 'not',
+          'values': [
+            {
+              '$OBJECT': 'expression',
+              'expression': 'not',
+              'values': [
+                {
+                  '$OBJECT': 'path',
+                  'paths': [
+                    'c'
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+    }]
+
+
+def test_compiler_unary_complex_6(parser):
+    """
+    Ensures that complex unary expressions are compiled correctly
+    """
+    source = 'a = !-2 or ! -3 - -4'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'expression'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'expression',
+        'expression': 'or',
+        'values': [
+          {
+            '$OBJECT': 'expression',
+            'expression': 'not',
+            'values': [
+              -2
+            ]
+          },
+          {
+            '$OBJECT': 'expression',
+            'expression': 'subtraction',
+            'values': [
+              {
+                '$OBJECT': 'expression',
+                'expression': 'not',
+                'values': [
+                  -3
+                ]
+              },
+              -4
+            ]
+          }
+        ]
+    }]
