@@ -108,7 +108,7 @@ def test_grammar_expressions(grammar, ebnf, magic):
     ]
 
     assert ebnf.POWER == '^'
-    assert ebnf.NOT == 'not'
+    assert ebnf.NOT == '!'
 
     assert ebnf.OR == 'or'
     assert ebnf.AND == 'and'
