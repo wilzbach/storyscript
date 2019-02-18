@@ -100,7 +100,7 @@ class Compiler:
         service = fragment.service
         if service:
             path = Objects.names(service.path)
-            if [path] not in self.lines.variables:
+            if not self.lines.is_variable_defined(path):
                 self.service(service, None, parent)
                 self.lines.set_name(name)
                 return

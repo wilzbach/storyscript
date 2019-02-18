@@ -47,6 +47,8 @@ class Lines:
         if previous_line:
             self.lines[previous_line]['name'] = name
 
+        self.variables.append(name)
+
     def set_next(self, line_number):
         """
         Finds the previous line, and set the current as its next line
@@ -146,3 +148,12 @@ class Lines:
         Get the services and remove duplicates.
         """
         return list(set(self.services))
+
+    def is_variable_defined(self, variable_name):
+        """
+        Checks whether a variable has been defined so far
+        """
+        for vs in self.variables:
+            if variable_name in vs:
+                return True
+        return False
