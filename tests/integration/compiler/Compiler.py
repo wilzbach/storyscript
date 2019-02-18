@@ -2234,3 +2234,77 @@ def test_compiler_service_mutation(parser):
         'exit': None,
         'parent': None
     }
+
+
+def test_compiler_service_mutation_2(parser):
+    """
+    Ensures that a service with a mutation is compiled correctly
+    """
+    source = """diff = http get url: diff_url
+lines = diff split by: "\n"
+"""
+    result = Compiler.compile(parser.parse(source))
+    assert result['services'] == ['http']
+    assert result['tree']['1'] == {
+        'method': 'execute',
+        'ln': '1',
+        'output': [],
+        'name': [
+          'diff'
+        ],
+        'service': 'http',
+        'command': 'get',
+        'function': None,
+        'args': [
+          {
+            '$OBJECT': 'argument',
+            'name': 'url',
+            'argument': {
+              '$OBJECT': 'path',
+              'paths': [
+                'diff_url'
+              ]
+            }
+          }
+        ],
+        'enter': None,
+        'exit': None,
+        'parent': None,
+        'next': '2'
+    }
+    assert result['tree']['2'] == {
+        'method': 'mutation',
+        'ln': '2',
+        'output': None,
+        'name': [
+          'lines'
+        ],
+        'service': None,
+        'command': None,
+        'function': None,
+        'args': [
+          {
+            '$OBJECT': 'path',
+            'paths': [
+              'diff'
+            ]
+          },
+          {
+            '$OBJECT': 'mutation',
+            'mutation': 'split',
+            'arguments': [
+              {
+                '$OBJECT': 'argument',
+                'name': 'by',
+                'argument': {
+                  '$OBJECT': 'string',
+                  'string': '\n'
+                }
+              }
+            ]
+          }
+        ],
+        'enter': None,
+        'exit': None,
+        'parent': None
+    }
