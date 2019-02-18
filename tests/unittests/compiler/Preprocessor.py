@@ -4,6 +4,7 @@ from unittest import mock
 from pytest import fixture
 
 from storyscript.compiler import FakeTree, Preprocessor
+from storyscript.parser import Tree
 
 
 @fixture
@@ -13,6 +14,13 @@ def preprocessor(patch):
     return Preprocessor()
 
 
+@fixture
+def entity(magic):
+    obj = magic()
+    obj.data = 'entity'
+    return obj
+
+
 def test_preprocessor_fake_tree(patch):
     patch.init(FakeTree)
     result = Preprocessor.fake_tree('block')
@@ -20,12 +28,11 @@ def test_preprocessor_fake_tree(patch):
     assert isinstance(result, FakeTree)
 
 
-def test_preprocessor_replace_expression(magic, preprocessor):
+def test_preprocessor_replace_expression(magic, preprocessor, entity):
     """
     Check that the new assignment is inserted above the tree
     """
     node = magic()
-    entity = magic()
     entity.line = lambda: 42
     entity.path.line = lambda: 123
     fake_tree = magic()
@@ -83,7 +90,7 @@ def test_preprocessor_visit_no_children(patch, magic, preprocessor):
     assert not preprocessor.replace_expression.called
 
 
-def test_preprocessor_visit_one_children(patch, magic, preprocessor):
+def test_preprocessor_visit_one_children(patch, magic, preprocessor, entity):
     """
     Check that a single inline_expression is found
     """
@@ -95,13 +102,13 @@ def test_preprocessor_visit_one_children(patch, magic, preprocessor):
 
     def is_inline(n):
         return n == c1
-    preprocessor.visit(tree, '.block.', '.entity.', is_inline, replace)
+    preprocessor.visit(tree, '.block.', entity, is_inline, replace)
     preprocessor.fake_tree.assert_called_with('.block.')
-    replace.assert_called_with(c1, preprocessor.fake_tree(), '.entity.')
+    replace.assert_called_with(c1, preprocessor.fake_tree(), entity)
     assert replace.call_count == 1
 
 
-def test_preprocessor_visit_two_children(patch, magic, preprocessor):
+def test_preprocessor_visit_two_children(patch, magic, preprocessor, entity):
     """
     Check that all inline_expressions are found
     """
@@ -114,14 +121,15 @@ def test_preprocessor_visit_two_children(patch, magic, preprocessor):
     def is_inline(n):
         return n == cs[0] or n == cs[1]
 
-    preprocessor.visit(tree, '.block.', '.entity.', is_inline, replace)
+    preprocessor.visit(tree, '.block.', entity, is_inline, replace)
     replace.mock_calls = [
-        mock.call(cs[0], preprocessor.fake_tree(), '.entity.'),
-        mock.call(cs[1], preprocessor.fake_tree(), '.entity.'),
+        mock.call(cs[0], preprocessor.fake_tree(), entity),
+        mock.call(cs[1], preprocessor.fake_tree(), entity),
     ]
 
 
-def test_preprocessor_visit_nested_multiple(patch, magic, preprocessor):
+def test_preprocessor_visit_nested_multiple(patch, magic, preprocessor,
+                                            entity):
     """
     Check that all inline_expressions are found (even if they are nested)
     """
@@ -137,14 +145,14 @@ def test_preprocessor_visit_nested_multiple(patch, magic, preprocessor):
     def is_inline(n):
         return n == cs[0] or n == cs[1]
 
-    preprocessor.visit(tree, '.block.', '.entity.', is_inline, replace)
+    preprocessor.visit(tree, '.block.', entity, is_inline, replace)
     replace.mock_calls = [
-        mock.call(cs[1], preprocessor.fake_tree(), '.entity.'),
-        mock.call(cs[0], preprocessor.fake_tree(), '.entity.'),
+        mock.call(cs[1], preprocessor.fake_tree(), entity),
+        mock.call(cs[0], preprocessor.fake_tree(), entity),
     ]
 
 
-def test_preprocessor_visit_nested_inner(patch, magic, preprocessor):
+def test_preprocessor_visit_nested_inner(patch, magic, preprocessor, entity):
     """
     Check that a nested inline_expression is called if it's deeper in the tree
     """
@@ -160,13 +168,14 @@ def test_preprocessor_visit_nested_inner(patch, magic, preprocessor):
     def is_inline(n):
         return n == cs[1]
 
-    preprocessor.visit(tree, '.block.', '.entity.', is_inline, replace)
+    preprocessor.visit(tree, '.block.', entity, is_inline, replace)
     replace.mock_calls = [
-        mock.call(cs[1], preprocessor.fake_tree(), '.entity.'),
+        mock.call(cs[1], preprocessor.fake_tree(), entity),
     ]
 
 
-def test_preprocessor_visit_nested_multiple_block(patch, magic, preprocessor):
+def test_preprocessor_visit_nested_multiple_block(patch, magic, preprocessor,
+                                                  entity):
     """
     Check that the fake tree is always generated from the nearest block
     """
@@ -183,19 +192,20 @@ def test_preprocessor_visit_nested_multiple_block(patch, magic, preprocessor):
     def is_inline(n):
         return n == cs[0] or n == cs[1]
 
-    preprocessor.visit(tree, '.block.', '.entity.', is_inline, replace)
+    preprocessor.visit(tree, '.block.', entity, is_inline, replace)
     preprocessor.fake_tree.mock_calls = [
         mock.call(tree),
         mock.call(tree),
     ]
     replace.mock_calls = [
-        mock.call(cs[1], preprocessor.fake_tree(), '.entity.'),
-        mock.call(cs[0], preprocessor.fake_tree(), '.entity.'),
+        mock.call(cs[1], preprocessor.fake_tree(), entity),
+        mock.call(cs[0], preprocessor.fake_tree(), entity),
     ]
 
 
 def test_preprocessor_visit_nested_multiple_block_nearest(patch,
-                                                          magic, preprocessor):
+                                                          magic, preprocessor,
+                                                          entity):
     """
     Check that the fake tree is always generated from the nearest block
     """
@@ -214,14 +224,14 @@ def test_preprocessor_visit_nested_multiple_block_nearest(patch,
     def is_inline(n):
         return n == cs[0] or n == cs[1]
 
-    preprocessor.visit(tree, '.block.', '.entity.', is_inline, replace)
+    preprocessor.visit(tree, '.block.', entity, is_inline, replace)
     replace.mock_calls = [
-        mock.call(cs[1], preprocessor.fake_tree(cs[0]), '.entity.'),
-        mock.call(cs[0], preprocessor.fake_tree(cs[1]), '.entity.'),
+        mock.call(cs[1], preprocessor.fake_tree(cs[0]), entity),
+        mock.call(cs[0], preprocessor.fake_tree(cs[1]), entity),
     ]
 
 
-def test_preprocessor_visit_nested_parent(patch, magic, preprocessor):
+def test_preprocessor_visit_nested_parent(patch, magic, preprocessor, entity):
     """
     Check that the parent is always from the taken from the parent entity
     """
@@ -234,12 +244,12 @@ def test_preprocessor_visit_nested_parent(patch, magic, preprocessor):
 
     tree.children = [cs[0]]
     cs[0].children = [cs[1]]
-    cs[0].children = 'entity'
+    cs[0].data = 'entity'
 
     def is_inline(n):
         return n == cs[0] or n == cs[1]
 
-    preprocessor.visit(tree, '.block.', '.entity.', is_inline, replace)
+    preprocessor.visit(tree, '.block.', entity, is_inline, replace)
     preprocessor.fake_tree.mock_calls = [
         mock.call(tree),
         mock.call(tree),
@@ -250,13 +260,12 @@ def test_preprocessor_visit_nested_parent(patch, magic, preprocessor):
     ]
 
 
-def test_preprocessor_visit_nested_same_fake_tree(patch, magic, preprocessor):
+def test_preprocessor_service_mut(patch, magic, preprocessor, entity):
     """
-    Check that multiple nested statements are inserted in the same fake_tree
+    Check that services are correctly converted into mutations
     """
-    patch.object(Preprocessor, 'fake_tree')
     tree = magic()
-    tree.data = 'service_block'
+    tree.data = 'service'
     replace = magic()
     cs = [magic(), magic()]
     for c in cs:
@@ -264,17 +273,19 @@ def test_preprocessor_visit_nested_same_fake_tree(patch, magic, preprocessor):
 
     tree.children = [cs[0]]
     cs[0].children = [cs[1]]
-    cs[0].children = 'entity'
+    cs[0].data = 'path'
+    tree.child(0).data = 'path'
 
     def is_inline(n):
-        return n == cs[0] or n == cs[1]
+        return n == cs[0]
 
-    preprocessor.visit(tree, '.block.', '.entity.', is_inline, replace)
-    # fake_tree is only called once
+    preprocessor.visit(tree, '.block.', entity, is_inline, replace)
     preprocessor.fake_tree.mock_calls = [
         mock.call(tree),
     ]
     replace.mock_calls = [
-        mock.call(cs[1], preprocessor.fake_tree(tree), cs[0]),
-        mock.call(cs[0], preprocessor.fake_tree(tree), tree),
+        mock.call(cs[0], preprocessor.fake_tree(), tree),
     ]
+    assert tree.data == "mutation"
+    assert tree.entity == Tree('entity', [tree.path])
+    assert tree.service_fragment.data == "mutation_fragment"
