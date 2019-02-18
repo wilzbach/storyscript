@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from .Faketree import FakeTree
+from ..parser.Tree import Tree
 
 
 class Preprocessor:
@@ -34,13 +35,14 @@ class Preprocessor:
             return
 
         if node.data == 'block':
-            # the block in which the fake assignments should be inserted
-            block = node
             # only generate a fake_block once for every line
-            block = cls.fake_tree(block)
+            # node: block in which the fake assignments should be inserted
+            block = cls.fake_tree(node)
         elif node.data == 'entity':
             # set the parent where the inline_expression path should be
             # inserted
+            entity = node
+        elif node.data == 'service' and node.child(0).data == 'path':
             entity = node
 
         for c in node.children:
@@ -55,6 +57,12 @@ class Preprocessor:
 
             # Evaluate from leaf to the top
             fun(node, fake_tree, entity)
+
+            # split services into service calls and mutations
+            if entity.data == 'service':
+                entity.data = 'mutation'
+                entity.entity = Tree('entity', [entity.path])
+                entity.service_fragment.data = 'mutation_fragment'
 
     @staticmethod
     def is_inline_expression(n):
