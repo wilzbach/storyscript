@@ -4,7 +4,7 @@ import re
 from lark.lexer import Token
 
 from ..exceptions import internal_assert
-from ..parser import Tree
+from ..parser import Parser, Tree
 
 
 class Objects:
@@ -82,9 +82,17 @@ class Objects:
 
     @classmethod
     def fillers_values(cls, matches):
+        from .Compiler import Compiler
         values = []
         for match in matches:
-            values.append(cls.path(cls.name_to_path(match)))
+            tree = Parser().parse(match)
+            args = Compiler().compile(tree)['tree']['1']['args']
+            if len(args) == 0:
+                args = cls.path(cls.name_to_path(match))
+            else:
+                args = args[0]
+
+            values.append(args)
         return values
 
     @staticmethod

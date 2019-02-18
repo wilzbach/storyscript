@@ -2163,3 +2163,35 @@ def test_compiler_unary_complex_6(parser):
           }
         ]
     }]
+
+
+def test_compiler_string_evaluation(parser):
+    """
+    Ensures that expressions in strings are evaluated
+    """
+    source = 'diff = "https://github.com/{repo_full_name}'
+    source += '/pull/{pull_request[\'number\']}.diff"'
+    result = Compiler.compile(parser.parse(source))
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['args'] == [{
+        '$OBJECT': 'string',
+        'string': 'https://github.com/{}/pull/{}.diff',
+        'values': [
+          {
+            '$OBJECT': 'path',
+            'paths': [
+              'repo_full_name'
+            ]
+          },
+          {
+            '$OBJECT': 'path',
+            'paths': [
+              'pull_request',
+              {
+                '$OBJECT': 'string',
+                'string': 'number'
+              }
+            ]
+          }
+        ]
+    }]
