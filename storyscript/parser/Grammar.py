@@ -48,8 +48,8 @@ class Grammar:
         self.ebnf.set_token('INT.2', '("+"|"-")? RAW_INT')
         self.ebnf.set_token('FLOAT.2', '("+"|"-")? INT "." RAW_INT? | '
                             '"." RAW_INT')
-        self.ebnf.SINGLE_QUOTED = "/'([^']*)'/"
-        self.ebnf.DOUBLE_QUOTED = '/"([^"]*)"/'
+        self.ebnf.SINGLE_QUOTED = r"/'([^'\\]*(?:\\.[^'\\]*)*)'/"
+        self.ebnf.DOUBLE_QUOTED = r'/"([^"\\]*(?:\\.[^"\\]*)*)"/'
         self.ebnf.set_token('REGEXP.2', r'/\/([^\/]*)\//')
         self.ebnf.set_token('NAME.1', r'/[a-zA-Z-\/_0-9]+/')
         self.ebnf._OSB = '['
