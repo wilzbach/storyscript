@@ -204,28 +204,28 @@ def test_parser_try_finally(parser):
     assert path.child(0) == Token('NAME', 'x')
 
 
-def test_parser_try_raise(parser):
-    result = parser.parse('try\n\tx=0\ncatch as error\n\traise')
+def test_parser_try_throw(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\tthrow')
     nested_block = result.block.try_block.catch_block.nested_block
-    assert nested_block.block.rules.raise_statement.child(0) == 'raise'
+    assert nested_block.block.rules.throw_statement.child(0) == 'throw'
 
 
-def test_parser_try_raise_error(parser):
-    result = parser.parse('try\n\tx=0\ncatch as error\n\traise error')
+def test_parser_try_throw_error(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\tthrow error')
     nested_block = result.block.try_block.catch_block.nested_block
-    raise_statement = nested_block.block.rules.raise_statement
-    assert raise_statement.child(0) == 'raise'
-    assert raise_statement.entity.path.child(0) == Token('NAME', 'error')
+    throw_statement = nested_block.block.rules.throw_statement
+    assert throw_statement.child(0) == 'throw'
+    assert throw_statement.entity.path.child(0) == Token('NAME', 'error')
 
 
-def test_parser_try_raise_error_message(parser):
-    result = parser.parse('try\n\tx=0\ncatch as error\n\traise "error"')
+def test_parser_try_throw_error_message(parser):
+    result = parser.parse('try\n\tx=0\ncatch as error\n\tthrow "error"')
     nested_block = result.block.try_block.catch_block.nested_block
-    raise_statement = nested_block.block.rules.raise_statement
-    print(raise_statement.pretty())
-    assert raise_statement.child(0) == 'raise'
+    throw_statement = nested_block.block.rules.throw_statement
+    print(throw_statement.pretty())
+    assert throw_statement.child(0) == 'throw'
     token = Token('DOUBLE_QUOTED', '"error"')
-    assert raise_statement.entity.values.string.child(0) == token
+    assert throw_statement.entity.values.string.child(0) == token
 
 
 @mark.parametrize('number', ['+10', '-10'])

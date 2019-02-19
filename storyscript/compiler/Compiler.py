@@ -322,15 +322,15 @@ class Compiler:
         if tree.finally_block:
             self.finally_block(tree.finally_block, parent=parent)
 
-    def raise_statement(self, tree, parent):
+    def throw_statement(self, tree, parent):
         """
-        Compiles a raise statement
+        Compiles a throw statement
         """
         line = tree.line()
         args = []
         if len(tree.children) > 1:
             args = [Objects.entity(tree.child(1))]
-        self.lines.append('raise', line, args=args, parent=parent)
+        self.lines.append('throw', line, args=args, parent=parent)
 
     def catch_block(self, tree, parent):
         """
@@ -378,7 +378,7 @@ class Compiler:
                          'if_block', 'elseif_block', 'else_block',
                          'foreach_block', 'function_block', 'when_block',
                          'try_block', 'return_statement', 'arguments',
-                         'imports', 'while_block', 'raise_statement',
+                         'imports', 'while_block', 'throw_statement',
                          'break_statement', 'mutation_block', 'indented_chain']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
