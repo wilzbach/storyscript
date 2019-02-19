@@ -239,3 +239,14 @@ def test_lines_execute(patch, lines):
 def test_compiler_get_services(lines):
     lines.services = ['one', 'one']
     assert lines.get_services() == ['one']
+
+
+def test_lines_is_variable_defined(patch, lines):
+    """
+    Ensures that the check for previously seen variables works
+    """
+    lines.variables = [['one', 'two'], ['three']]
+    assert lines.is_variable_defined('one')
+    assert lines.is_variable_defined('two')
+    assert lines.is_variable_defined('three')
+    assert not lines.is_variable_defined('four')

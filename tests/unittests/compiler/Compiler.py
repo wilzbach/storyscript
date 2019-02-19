@@ -168,6 +168,7 @@ def test_compiler_assignment(patch, compiler, lines, tree):
 def test_compiler_assignment_service(patch, compiler, lines, tree):
     patch.object(Objects, 'names')
     patch.object(Compiler, 'service')
+    lines.is_variable_defined.return_value = False
     compiler.assignment(tree, '1')
     service = tree.assignment_fragment.service
     Compiler.service.assert_called_with(service, None, '1')
