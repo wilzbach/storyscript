@@ -244,3 +244,19 @@ def test_parser_number_float(parser, number):
     entity = get_entity(ar_exp)
     f = entity.values.number
     assert f.child(0) == Token('FLOAT', number)
+
+
+def test_parser_string_double_quoted(parser):
+    result = parser.parse(r'a = "b\n.\\.\".c"')
+    result = result.block.rules.assignment.assignment_fragment
+    ar_exp = arith_exp(result)
+    lhs = get_entity(ar_exp.child(0)).values.string.child(0)
+    assert lhs == r'"b\n.\\.\".c"'
+
+
+def test_parser_string_single_quoted(parser):
+    result = parser.parse(r"""a = 'b.\n.\\.\'.c'""")
+    result = result.block.rules.assignment.assignment_fragment
+    ar_exp = arith_exp(result)
+    lhs = get_entity(ar_exp.child(0)).values.string.child(0)
+    assert lhs == r"""'b.\n.\\.\'.c'"""

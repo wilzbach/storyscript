@@ -248,3 +248,27 @@ def test_assignments_mutation_variable(parser):
     assert result['services'] == []
     assert result['tree']['2']['method'] == 'mutation'
     assert result['tree']['2']['args'][1]['$OBJECT'] == 'mutation'
+
+
+def test_assignments_string_escape_single(parser):
+    """
+    Ensures that assignments to strings with escaping are compiled correctly
+    """
+    tree = parser.parse('a = \'b.\\n.\\\\.\\\'.c\'')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['name'] == ['a']
+    expected = [{'$OBJECT': 'string', 'string': 'b.\n.\\.\'.c'}]
+    assert result['tree']['1']['args'] == expected
+
+
+def test_assignments_string_escape_double(parser):
+    """
+    Ensures that assignments to strings with escaping are compiled correctly
+    """
+    tree = parser.parse(r'a = "b.\n.\\.\".c"')
+    result = Compiler.compile(tree)
+    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['name'] == ['a']
+    expected = [{'$OBJECT': 'string', 'string': 'b.\n.\\.".c'}]
+    assert result['tree']['1']['args'] == expected

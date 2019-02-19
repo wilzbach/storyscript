@@ -54,8 +54,8 @@ def test_grammar_values(grammar, ebnf):
     assert ebnf.TRUE == 'true'
     assert ebnf.FALSE == 'false'
     assert ebnf.NULL == 'null'
-    assert ebnf.SINGLE_QUOTED == "/'([^']*)'/"
-    assert ebnf.DOUBLE_QUOTED == '/"([^"]*)"/'
+    assert ebnf.SINGLE_QUOTED == r"/'([^'\\]*(?:\\.[^'\\]*)*)'/"
+    assert ebnf.DOUBLE_QUOTED == r'/"([^"\\]*(?:\\.[^"\\]*)*)"/'
     assert ebnf._OSB == '['
     assert ebnf._CSB == ']'
     assert ebnf._OCB == '{'
