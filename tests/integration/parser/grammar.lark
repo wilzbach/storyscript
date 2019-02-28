@@ -137,7 +137,9 @@ _CATCH: "catch"
 FINALLY: "finally"
 THROW: "throw"
 _WHEN: "when"
+COMMENT: /###[^#]+###/|/#(.)*/
 
 %ignore _WS
+%ignore COMMENT
 
 

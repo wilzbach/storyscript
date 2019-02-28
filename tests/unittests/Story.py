@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import io
 import os
-import re
 
 from lark.exceptions import UnexpectedInput, UnexpectedToken
 
@@ -40,61 +39,14 @@ def test_story_init_path():
     assert story.path == 'path'
 
 
-def test_story_remove_comments(patch):
-    """
-    Ensures that remove_comments can remove inline comments.
-    """
-    patch.object(re, 'sub')
-    result = Story.remove_comments('source')
-    re.sub.assert_called_with(r'#[^#\n]+', '', 'source')
-    assert result == re.sub()
-
-
-def test_story_delete_line(patch):
-    """
-    Ensures that delete_line can delete lines.
-    """
-    patch.object(re, 'sub')
-    patch.object(re, 'match')
-    result = Story.delete_line(re.match())
-    re.sub.assert_called_with(r'.*', '', re.match().group())
-    assert result == re.sub()
-
-
-def test_story_clean_source(patch):
-    """
-    Ensures that a story is cleaned correctly
-    """
-    patch.object(re, 'sub')
-    patch.object(Story, 'remove_comments')
-    patch.object(Story, 'delete_line')
-    result = Story.clean_source('source')
-    re.sub.assert_called_with(
-        r'###[^#]+###', Story.delete_line, Story.remove_comments()
-    )
-    assert result == re.sub()
-
-
 def test_story_read(patch):
     """
     Ensures Story.read can read a story
     """
     patch.object(io, 'open')
-    patch.object(Story, 'clean_source')
     result = Story.read('hello.story')
     io.open.assert_called_with('hello.story', 'r')
     assert result == io.open().__enter__().read()
-
-
-def test_story_init_clean_source(patch):
-    """
-    Ensures Story.clean_source is called for new stories
-    """
-    patch.object(Story, 'clean_source')
-    source = 'my story'
-    story = Story(source)
-    Story.clean_source.assert_called_with(source)
-    assert story.story == Story.clean_source(source)
 
 
 def test_story_read_not_found(patch, capsys):
@@ -116,7 +68,6 @@ def test_story_from_file(patch):
 
 def test_story_from_stream(patch, magic):
     patch.init(Story)
-    patch.object(Story, 'clean_source')
     stream = magic()
     result = Story.from_stream(stream)
     Story.__init__.assert_called_with(stream.read())
