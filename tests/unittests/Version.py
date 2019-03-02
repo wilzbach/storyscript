@@ -48,24 +48,24 @@ def test_read_version(patch):
 
 
 def test_get_version(patch):
-    patch.object(Version, 'git_describe')
-    assert Version.get_version() == Version.git_describe()
-
     patch.object(Version, 'read_version')
-    Version.git_describe.side_effect = Exception('.no.file.found.')
     assert Version.get_version() == Version.read_version()
 
+    patch.object(Version, 'git_describe')
     Version.read_version.side_effect = Exception('.no.file.found.')
+    assert Version.get_version() == Version.git_describe()
+
+    Version.git_describe.side_effect = Exception('.no.file.found.')
     assert Version.get_version() == '0.0.0'
 
 
 def test_get_release_version(patch):
-    patch.object(Version, 'git_version')
-    assert Version.get_release_version() == Version.git_version()
-
     patch.object(Version, 'read_version')
-    Version.git_version.side_effect = Exception('.no.file.found.')
     assert Version.get_release_version() == Version.read_version()
 
+    patch.object(Version, 'git_version')
     Version.read_version.side_effect = Exception('.no.file.found.')
+    assert Version.get_release_version() == Version.git_version()
+
+    Version.git_version.side_effect = Exception('.no.file.found.')
     assert Version.get_release_version() == '0.0.0'

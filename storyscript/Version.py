@@ -39,15 +39,15 @@ def read_version():
 
 
 def get_version():
-    # try detecting the git version first
+    # try to read a VERSION file (e.g. for a released storyscript)
     try:
-        return git_describe()
+        return read_version()
     except Exception:
         pass
 
-    # fallback to a VERSION file (e.g. for a released storyscript)
+    # detect a git version (for development builds)
     try:
-        return read_version()
+        return git_describe()
     except Exception:
         pass
 
@@ -56,15 +56,15 @@ def get_version():
 
 
 def get_release_version():
-    # try detecting the git version first
+    # try to read a VERSION file (e.g. for a released storyscript)
     try:
-        return git_version()
+        return read_version()
     except Exception:
         pass
 
-    # fallback to a VERSION file (e.g. for a released storyscript)
+    # detect a git version (for development builds)
     try:
-        return read_version()
+        return git_version()
     except Exception:
         pass
 
