@@ -36,6 +36,7 @@ def test_git_describe(patch):
 
 def test_read_version(patch):
     patch.object(io, 'open')
+    Version.read_version.cache_clear()
     r = Version.read_version()
     io.open.assert_called_with(
         mock.ANY,

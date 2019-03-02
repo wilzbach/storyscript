@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import io
 import subprocess
+from functools import lru_cache
 from os import path
 
 root_dir = path.abspath(path.dirname(path.dirname(__file__)))
@@ -29,6 +30,9 @@ def git_describe():
     ).stdout.strip()
 
 
+# The version is a constant which isn't going to change over the program
+# lifetime
+@lru_cache(maxsize=1)
 def read_version():
     return io.open(path.join(root_dir, 'storyscript', 'VERSION'), 'r',
                    encoding='utf8').read().strip()
