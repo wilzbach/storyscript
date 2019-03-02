@@ -12,6 +12,7 @@ def test_git_version(patch):
     subprocess.run.assert_called_with(
         ['git', 'describe', '--abbrev=0', '--tags'],
         stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
         text=True,
         check=True,
         cwd=mock.ANY,
@@ -25,6 +26,7 @@ def test_git_describe(patch):
     subprocess.run.assert_called_with(
         ['git', 'describe', '--dirty'],
         stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
         text=True,
         check=True,
         cwd=mock.ANY,

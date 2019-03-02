@@ -11,6 +11,7 @@ def git_version():
     return subprocess.run(
         ['git', 'describe', '--abbrev=0', '--tags'],
         stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
         text=True,
         check=True,
         cwd=root_dir,
@@ -21,6 +22,7 @@ def git_describe():
     return subprocess.run(
         ['git', 'describe', '--dirty'],
         stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
         text=True,
         check=True,
         cwd=root_dir,
