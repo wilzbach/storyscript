@@ -13,7 +13,7 @@ def git_version():
         ['git', 'describe', '--abbrev=0', '--tags'],
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
-        text=True,
+        universal_newlines=True,
         check=True,
         cwd=root_dir,
     ).stdout.strip()
@@ -24,7 +24,7 @@ def git_describe():
         ['git', 'describe', '--dirty'],
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
-        text=True,
+        universal_newlines=True,
         check=True,
         cwd=root_dir,
     ).stdout.strip()

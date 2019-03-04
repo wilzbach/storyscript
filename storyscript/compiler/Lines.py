@@ -147,7 +147,7 @@ class Lines:
         """
         Get the services and remove duplicates.
         """
-        return list(set(self.services))
+        return list(sorted(set(self.services)))
 
     def is_variable_defined(self, variable_name):
         """

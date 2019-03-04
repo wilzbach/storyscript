@@ -13,7 +13,7 @@ def test_git_version(patch):
         ['git', 'describe', '--abbrev=0', '--tags'],
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
-        text=True,
+        universal_newlines=True,
         check=True,
         cwd=mock.ANY,
     )
@@ -27,7 +27,7 @@ def test_git_describe(patch):
         ['git', 'describe', '--dirty'],
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
-        text=True,
+        universal_newlines=True,
         check=True,
         cwd=mock.ANY,
     )

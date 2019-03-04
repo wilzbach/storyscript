@@ -101,13 +101,13 @@
         }
       },
       "services": [
-        "http",
-        "fullcontact"
+        "fullcontact",
+        "http"
       ],
       "entrypoint": "1",
       "modules": {},
       "functions": {},
-      "version": "0.9.7-1-g7b209ee"
+      "version": "0.9.7-11-g7cc2be8-dirty"
     }
   },
   "services": [
