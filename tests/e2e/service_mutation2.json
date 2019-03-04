@@ -1,0 +1,84 @@
+{
+  "stories": {
+    "tests/e2e/mutation2.story": {
+      "tree": {
+        "1": {
+          "method": "execute",
+          "ln": "1",
+          "output": [],
+          "name": [
+            "diff"
+          ],
+          "service": "http",
+          "command": "get",
+          "function": null,
+          "args": [
+            {
+              "$OBJECT": "argument",
+              "name": "url",
+              "argument": {
+                "$OBJECT": "path",
+                "paths": [
+                  "diff_url"
+                ]
+              }
+            }
+          ],
+          "enter": null,
+          "exit": null,
+          "parent": null,
+          "next": "2"
+        },
+        "2": {
+          "method": "mutation",
+          "ln": "2",
+          "output": null,
+          "name": [
+            "lines"
+          ],
+          "service": null,
+          "command": null,
+          "function": null,
+          "args": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "diff"
+              ]
+            },
+            {
+              "$OBJECT": "mutation",
+              "mutation": "split",
+              "arguments": [
+                {
+                  "$OBJECT": "argument",
+                  "name": "by",
+                  "argument": {
+                    "$OBJECT": "string",
+                    "string": "\n"
+                  }
+                }
+              ]
+            }
+          ],
+          "enter": null,
+          "exit": null,
+          "parent": null
+        }
+      },
+      "services": [
+        "http"
+      ],
+      "entrypoint": "1",
+      "modules": {},
+      "functions": {},
+      "version": "0.9.7"
+    }
+  },
+  "services": [
+    "http"
+  ],
+  "entrypoint": [
+    "tests/e2e/mutation2.story"
+  ]
+}
