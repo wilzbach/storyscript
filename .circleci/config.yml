@@ -105,4 +105,5 @@ jobs:
                   name: upload to pypi
                   command: |
                     . venv/bin/activate
+                    pip install twine==1.13.0
                     twine upload dist/*
