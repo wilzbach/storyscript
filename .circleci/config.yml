@@ -18,7 +18,7 @@ jobs:
     build:
         working_directory: ~/repo
         docker:
-            - image: circleci/python:3.6.1
+            - image: circleci/python:3.6.8
         steps:
             - checkout
             #- restore_cache:
@@ -75,7 +75,7 @@ jobs:
                 destination: test-reports
     deploy:
         docker:
-            - image: circleci/python:3.6.1
+            - image: circleci/python:3.6.8
         steps:
             - checkout
             - run:
