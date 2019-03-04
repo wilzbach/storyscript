@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import io
-from os import path
+import sys
+from os import getenv, path
 
 from setuptools import find_packages, setup
 from setuptools.command.install import install as _install
@@ -86,6 +87,19 @@ class Sdist(_sdist):
                      msg='Building the release')
 
 
+class VerifyVersionCommand(_install):
+    """Custom command to verify that the git tag matches our version"""
+    description = 'verify that the git tag matches our version'
+
+    def run(self):
+        tag = getenv('CIRCLE_TAG')
+
+        if tag != release_version:
+            info = ('Git tag: {0} does not match the '
+                    'version of this app: {1}').format(tag, release_version)
+            sys.exit(info)
+
+
 setup(name=name,
       version=release_version,
       description=short_description,
@@ -112,4 +126,5 @@ setup(name=name,
       cmdclass={
         'install': Install,
         'sdist': Sdist,
+        'verify': VerifyVersionCommand,
       })
