@@ -58,9 +58,10 @@ class FakeTree:
         fragment = Tree('assignment_fragment', [equals, value])
         return Tree('assignment', [path, fragment])
 
-    def add_assignment(self, value):
+    def add_assignment(self, value, original_line):
         """
         Creates an assignments and adds it to the current block
+        Returns a fake path reference to this assignment
         """
         assignment = self.assignment(value)
         if self.block.child(1):
@@ -68,4 +69,8 @@ class FakeTree:
             self.block.children = children
         else:
             self.block.children = [assignment, self.block.child(0)]
-        return assignment
+        # we need a new node, s.t. already inserted fake node doesn't get
+        # changed
+        name = Token('NAME', assignment.path.child(0), line=original_line)
+        fake_path = Tree('path', [name])
+        return fake_path

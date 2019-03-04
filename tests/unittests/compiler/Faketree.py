@@ -90,14 +90,16 @@ def test_faketree_assignment(patch, tree, fake_tree):
 def test_faketree_add_assignment(patch, fake_tree, block):
     patch.object(FakeTree, 'assignment')
     block.child.return_value = None
-    result = fake_tree.add_assignment('value')
+    result = fake_tree.add_assignment('value', original_line=10)
     FakeTree.assignment.assert_called_with('value')
     assert block.children == [FakeTree.assignment(), block.child()]
-    assert result == FakeTree.assignment()
+    name = Token('NAME', FakeTree.assignment().path.child(0), line=10)
+    assert result.data == 'path'
+    assert result.children == [name]
 
 
 def test_faketree_add_assignment_more_children(patch, fake_tree, block):
     patch.object(FakeTree, 'assignment')
-    fake_tree.add_assignment('value')
+    fake_tree.add_assignment('value', original_line=42)
     expected = [block.child(), FakeTree.assignment(), block.child()]
     assert block.children == expected

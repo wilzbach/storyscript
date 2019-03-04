@@ -22,12 +22,13 @@ class Preprocessor:
         Replaces an inline expression with a fake assignment
         """
         line = entity.line()
-        assignment = fake_tree.add_assignment(node.service)
+        # generate a new assignment line
+        # insert it above this statement in the current block
+        # return a path reference
+        fake_path = fake_tree.add_assignment(node.service, original_line=line)
 
-        # find parent node to replace
-        entity.path.replace(0, assignment.path.child(0))
-        # fix-up the line
-        entity.path.children[0].line = line
+        # Replace the inline expression with a fake_path reference
+        entity.path.replace(0, fake_path.child(0))
 
     @classmethod
     def visit(cls, node, block, entity, pred, fun):
