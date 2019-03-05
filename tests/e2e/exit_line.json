@@ -54,12 +54,14 @@
       "service": null,
       "command": null,
       "function": null,
-      "args": {
-        "$OBJECT": "path",
-        "paths": [
-          "a"
-        ]
-      },
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
       "enter": "5",
       "exit": "9",
       "parent": null,

@@ -8,18 +8,20 @@
       "service": null,
       "command": null,
       "function": null,
-      "args": {
-        "$OBJECT": "expression",
-        "expression": "not",
-        "values": [
-          {
-            "$OBJECT": "path",
-            "paths": [
-              "b"
-            ]
-          }
-        ]
-      },
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "not",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            }
+          ]
+        }
+      ],
       "enter": "2",
       "exit": null,
       "parent": null,

@@ -373,7 +373,7 @@ def test_compiler_if_block(patch, compiler, lines, tree):
     compiler.if_block(tree, '1')
     Objects.expression.assert_called_with(tree.if_statement.expression)
     nested_block = tree.nested_block
-    args = Objects.expression()
+    args = [Objects.expression()]
     lines.set_scope.assert_called_with(tree.line(), '1')
     lines.append.assert_called_with('if', tree.line(), args=args,
                                     enter=nested_block.line(), parent='1')
@@ -403,7 +403,7 @@ def test_compiler_elseif_block(patch, compiler, lines, tree):
     patch.object(Compiler, 'subtree')
     compiler.elseif_block(tree, '1')
     Objects.expression.assert_called_with(tree.elseif_statement.expression)
-    args = Objects.expression()
+    args = [Objects.expression()]
     lines.set_scope.assert_called_with(tree.line(), '1')
     lines.append.assert_called_with('elif', tree.line(), args=args,
                                     enter=tree.nested_block.line(),
