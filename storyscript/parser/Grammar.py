@@ -136,9 +136,9 @@ class Grammar:
         self.ebnf.expression = 'or_expression'
         self.ebnf.absolute_expression = 'expression'
 
-    def raise_statement(self):
-        self.ebnf.RAISE = 'raise'
-        self.ebnf.raise_statement = ('raise entity?')
+    def throw_statement(self):
+        self.ebnf.THROW = 'throw'
+        self.ebnf.throw_statement = ('throw entity?')
 
     def rules(self):
         self.ebnf.RETURN = 'return'
@@ -147,7 +147,7 @@ class Grammar:
         self.ebnf.break_statement = 'break'
         self.ebnf.entity = 'values, path'
         rules = ('absolute_expression, assignment, imports, return_statement, '
-                 'raise_statement, break_statement, block')
+                 'throw_statement, break_statement, block')
         self.ebnf.rules = rules
 
     def mutation_block(self):
@@ -238,7 +238,7 @@ class Grammar:
         self.while_block()
         self.function_block()
         self.try_block()
-        self.raise_statement()
+        self.throw_statement()
         self.block()
         self.ebnf.start = 'nl? block*'
         self.ebnf.ignore('_WS')

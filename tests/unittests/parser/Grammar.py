@@ -146,10 +146,10 @@ def test_grammar_expressions(grammar, ebnf, magic):
     assert ebnf.absolute_expression == 'expression'
 
 
-def test_grammar_raise_statement(grammar, ebnf):
-    grammar.raise_statement()
-    assert ebnf.RAISE == 'raise'
-    assert ebnf.raise_statement == 'raise entity?'
+def test_grammar_throw_statement(grammar, ebnf):
+    grammar.throw_statement()
+    assert ebnf.THROW == 'throw'
+    assert ebnf.throw_statement == 'throw entity?'
 
 
 def test_grammar_rules(grammar, ebnf):
@@ -159,7 +159,7 @@ def test_grammar_rules(grammar, ebnf):
     assert ebnf.entity == 'values, path'
     assert ebnf.return_statement == 'return expression?'
     rules = ('absolute_expression, assignment, imports, return_statement, '
-             'raise_statement, break_statement, block')
+             'throw_statement, break_statement, block')
     assert ebnf.rules == rules
 
 
@@ -254,7 +254,7 @@ def test_grammar_build(patch, call_count, grammar, ebnf):
     methods = ['macros', 'types', 'values', 'assignments', 'imports',
                'expressions', 'rules', 'mutation_block', 'service_block',
                'if_block', 'foreach_block', 'function_block', 'try_block',
-               'block', 'while_block', 'raise_statement']
+               'block', 'while_block', 'throw_statement']
     patch.many(Grammar, methods)
     result = grammar.build()
     assert ebnf._WS == '(" ")+'

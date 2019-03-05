@@ -480,19 +480,19 @@ def test_compiler_function_block_redeclared(patch, compiler, lines, tree):
     e.value.extra.error = 'function_already_declared'
 
 
-def test_compiler_raise_statement(patch, compiler, lines, tree):
-    tree.children = [Token('RAISE', 'raise')]
-    compiler.raise_statement(tree, '1')
-    lines.append.assert_called_with('raise', tree.line(), args=[],
+def test_compiler_throw_statement(patch, compiler, lines, tree):
+    tree.children = [Token('RAISE', 'throw')]
+    compiler.throw_statement(tree, '1')
+    lines.append.assert_called_with('throw', tree.line(), args=[],
                                     parent='1')
 
 
-def test_compiler_raise_name_statement(patch, compiler, lines, tree):
+def test_compiler_throw_name_statement(patch, compiler, lines, tree):
     patch.object(Objects, 'entity')
-    tree.children = [Token('RAISE', 'raise'), Token('NAME', 'error')]
-    compiler.raise_statement(tree, '1')
+    tree.children = [Token('RAISE', 'throw'), Token('NAME', 'error')]
+    compiler.throw_statement(tree, '1')
     args = [Objects.entity()]
-    lines.append.assert_called_with('raise', tree.line(), args=args,
+    lines.append.assert_called_with('throw', tree.line(), args=args,
                                     parent='1')
 
 
