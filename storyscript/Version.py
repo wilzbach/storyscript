@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import io
 import subprocess
 from functools import lru_cache
 from os import path
+
+import pkg_resources
 
 root_dir = path.abspath(path.dirname(path.dirname(__file__)))
 
@@ -34,8 +35,9 @@ def git_describe():
 # lifetime
 @lru_cache(maxsize=1)
 def read_version():
-    return io.open(path.join(root_dir, 'storyscript', 'VERSION'), 'r',
-                   encoding='utf8').read().strip()
+    resource_package = 'storyscript.Version'
+    ver = pkg_resources.resource_string(resource_package, 'VERSION')
+    return ver.decode('utf8').strip()
 
 
 def get_version():
