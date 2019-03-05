@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import io
 import subprocess
-from functools import lru_cache
 from os import path
 
 import pkg_resources
@@ -31,21 +31,36 @@ def git_describe():
     ).stdout.strip()
 
 
-# The version is a constant which isn't going to change over the program
-# lifetime
-@lru_cache(maxsize=1)
-def read_version():
-    resource_package = 'storyscript.Version'
+def read_version_file():
+    return io.open(path.join(root_dir, 'storyscript', 'VERSION'), 'r',
+                   encoding='utf8').read().strip()
+
+
+def read_version_package():
+    resource_package = 'storyscript'
     ver = pkg_resources.resource_string(resource_package, 'VERSION')
     return ver.decode('utf8').strip()
 
 
+def read_version():
+    try:
+        return read_version_file()
+    except Exception:
+        try:
+            return read_version_package()
+        except Exception:
+            return None
+
+
+# The version is a constant which isn't going to change over the program
+# lifetime
+_version = read_version()
+
+
 def get_version():
     # try to read a VERSION file (e.g. for a released storyscript)
-    try:
-        return read_version()
-    except Exception:
-        pass
+    if _version is not None:
+        return _version
 
     # detect a git version (for development builds)
     try:
@@ -59,10 +74,8 @@ def get_version():
 
 def get_release_version():
     # try to read a VERSION file (e.g. for a released storyscript)
-    try:
-        return read_version()
-    except Exception:
-        pass
+    if _version is not None:
+        return _version
 
     # detect a git version (for development builds)
     try:
