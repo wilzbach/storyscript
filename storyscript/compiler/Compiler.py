@@ -196,29 +196,35 @@ class Compiler:
         if tree.else_block:
             trees.append(tree.else_block)
         self.subtrees(*trees, parent=parent)
+        if len(trees) == 0 and not tree.else_block:
+            self.lines.finish_scope(line)
 
     def elseif_block(self, tree, parent):
         """
         Compiles elseif_block trees
         """
         line = tree.line()
+        self.lines.set_exit(line)
         args = [Objects.expression(tree.elseif_statement.expression)]
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent)
         self.lines.append('elif', line, args=args, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
+        self.lines.finish_scope(line)
 
     def else_block(self, tree, parent):
         """
         Compiles else_block trees
         """
         line = tree.line()
+        self.lines.set_exit(line)
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent)
         self.lines.append('else', line, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
+        self.lines.finish_scope(line)
 
     def foreach_block(self, tree, parent):
         line = tree.line()
@@ -229,6 +235,7 @@ class Compiler:
         self.lines.append('for', line, args=args, enter=nested_block.line(),
                           parent=parent, output=output)
         self.subtree(nested_block, parent=line)
+        self.lines.finish_scope(line)
 
     def while_block(self, tree, parent):
         line = tree.line()
@@ -238,6 +245,7 @@ class Compiler:
         self.lines.append('while', line, args=args, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
+        self.lines.finish_scope(line)
 
     def function_block(self, tree, parent):
         """
@@ -319,6 +327,8 @@ class Compiler:
             self.catch_block(tree.catch_block, parent=parent)
         if tree.finally_block:
             self.finally_block(tree.finally_block, parent=parent)
+        if not (tree.catch_block or tree.finally_block):
+            self.lines.finish_scope(line)
 
     def throw_statement(self, tree, parent):
         """
@@ -335,23 +345,27 @@ class Compiler:
         Compiles a catch block
         """
         line = tree.line()
+        self.lines.set_exit(line)
         nested_block = tree.nested_block
         output = Objects.names(tree.catch_statement)
         self.lines.set_scope(line, parent, output)
         self.lines.append('catch', line, enter=nested_block.line(),
                           output=output, parent=parent)
         self.subtree(nested_block, parent=line)
+        self.lines.finish_scope(line)
 
     def finally_block(self, tree, parent):
         """
         Compiles a finally block
         """
         line = tree.line()
+        self.lines.set_exit(line)
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent)
         self.lines.append('finally', line, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
+        self.lines.finish_scope(line)
 
     def break_statement(self, tree, parent):
         if parent is None:
@@ -378,8 +392,8 @@ class Compiler:
                          'break_statement', 'mutation_block', 'indented_chain']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
-            return
-        self.parse_tree(tree, parent=parent)
+        else:
+            self.parse_tree(tree, parent=parent)
 
     def parse_tree(self, tree, parent=None):
         """

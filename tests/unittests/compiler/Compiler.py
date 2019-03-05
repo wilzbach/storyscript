@@ -370,11 +370,13 @@ def test_compiler_if_block(patch, compiler, lines, tree):
     patch.object(Compiler, 'subtree')
     tree.elseif_block = None
     tree.else_block = None
+    tree.extract.return_value = []
     compiler.if_block(tree, '1')
     Objects.expression.assert_called_with(tree.if_statement.expression)
     nested_block = tree.nested_block
     args = [Objects.expression()]
     lines.set_scope.assert_called_with(tree.line(), '1')
+    lines.finish_scope.assert_called_with(tree.line())
     lines.append.assert_called_with('if', tree.line(), args=args,
                                     enter=nested_block.line(), parent='1')
     compiler.subtree.assert_called_with(nested_block, parent=tree.line())
@@ -402,9 +404,11 @@ def test_compiler_elseif_block(patch, compiler, lines, tree):
     patch.object(Objects, 'expression')
     patch.object(Compiler, 'subtree')
     compiler.elseif_block(tree, '1')
+    lines.set_exit.assert_called_with(tree.line())
     Objects.expression.assert_called_with(tree.elseif_statement.expression)
     args = [Objects.expression()]
     lines.set_scope.assert_called_with(tree.line(), '1')
+    lines.finish_scope.assert_called_with(tree.line())
     lines.append.assert_called_with('elif', tree.line(), args=args,
                                     enter=tree.nested_block.line(),
                                     parent='1')
@@ -414,7 +418,9 @@ def test_compiler_elseif_block(patch, compiler, lines, tree):
 def test_compiler_else_block(patch, compiler, lines, tree):
     patch.object(Compiler, 'subtree')
     compiler.else_block(tree, '1')
+    lines.set_exit.assert_called_with(tree.line())
     lines.set_scope.assert_called_with(tree.line(), '1')
+    lines.finish_scope.assert_called_with(tree.line())
     lines.append.assert_called_with('else', tree.line(), parent='1',
                                     enter=tree.nested_block.line())
     compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
@@ -429,6 +435,7 @@ def test_compiler_foreach_block(patch, compiler, lines, tree):
     compiler.output.assert_called_with(tree.foreach_statement.output)
     args = [Objects.entity()]
     lines.set_scope.assert_called_with(tree.line(), '1', Compiler.output())
+    lines.finish_scope.assert_called_with(tree.line())
     lines.append.assert_called_with('for', tree.line(), args=args,
                                     enter=tree.nested_block.line(),
                                     output=Compiler.output(), parent='1')
@@ -442,6 +449,7 @@ def test_compiler_while_block(patch, compiler, lines, tree):
     compiler.while_block(tree, '1')
     args = [Objects.expression()]
     lines.set_scope.assert_called_with(tree.line(), '1')
+    lines.finish_scope.assert_called_with(tree.line())
     lines.append.assert_called_with('while', tree.line(), args=args,
                                     enter=tree.nested_block.line(),
                                     parent='1')
@@ -602,6 +610,7 @@ def test_compiler_try_block(patch, compiler, lines, tree):
     compiler.try_block(tree, '1')
     kwargs = {'enter': tree.nested_block.line(), 'parent': '1'}
     lines.set_scope.assert_called_with(tree.line(), '1')
+    lines.finish_scope.assert_called_with(tree.line())
     lines.append.assert_called_with('try', tree.line(), **kwargs)
     Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
 
@@ -627,8 +636,10 @@ def test_compiler_catch_block(patch, compiler, lines, tree):
     patch.object(Objects, 'names')
     patch.object(Compiler, 'subtree')
     compiler.catch_block(tree, '1')
+    lines.set_exit.assert_called_with(tree.line())
     Objects.names.assert_called_with(tree.catch_statement)
     lines.set_scope.assert_called_with(tree.line(), '1', Objects.names())
+    lines.finish_scope.assert_called_with(tree.line())
     kwargs = {'enter': tree.nested_block.line(), 'output': Objects.names(),
               'parent': '1'}
     lines.append.assert_called_with('catch', tree.line(), **kwargs)
@@ -641,7 +652,9 @@ def test_compiler_finally_block(patch, compiler, lines, tree):
     """
     patch.object(Compiler, 'subtree')
     compiler.finally_block(tree, '1')
+    lines.set_exit.assert_called_with(tree.line())
     lines.set_scope.assert_called_with(tree.line(), '1')
+    lines.finish_scope.assert_called_with(tree.line())
     kwargs = {'enter': tree.nested_block.line(), 'parent': '1'}
     lines.append.assert_called_with('finally', tree.line(), **kwargs)
     Compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())

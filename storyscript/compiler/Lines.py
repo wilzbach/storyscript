@@ -13,6 +13,7 @@ class Lines:
         self.functions = {}
         self.output_scopes = {}
         self.modules = {}
+        self.finished_scopes = []
 
     def sort(self):
         """
@@ -62,9 +63,10 @@ class Lines:
         Sets the current line as the exit line for a previous one, as needed
         in if/elif/else and try/catch/finally blocks.
         """
-        methods = ['if', 'elif', 'try', 'catch', 'for', 'while']
+        methods = ['if', 'elif', 'try', 'catch']
         for line_number in self.sort()[::-1]:
             if self.lines[line_number]['method'] in methods:
+                self.finished_scopes = []
                 self.lines[line_number]['exit'] = line
                 break
 
@@ -73,8 +75,14 @@ class Lines:
         Keeps track of output scopes so that defined outputs are recognized for
         nested children.
         """
-        self.set_exit(line)
         self.output_scopes[line] = {'parent': parent, 'output': output}
+
+    def finish_scope(self, line):
+        """
+        Finshes an output scope and prepares 'exit' adjustment for the scope
+        when the next line gets added.
+        """
+        self.finished_scopes.append(line)
 
     def is_output(self, parent, service):
         """
@@ -125,6 +133,9 @@ class Lines:
         return 'execute'
 
     def append(self, method, line, **kwargs):
+        for scope in self.finished_scopes:
+            self.lines[scope]['exit'] = line
+        self.finished_scopes = []
         if 'service' in kwargs:
             method = self.service_method(kwargs['service'], line)
 

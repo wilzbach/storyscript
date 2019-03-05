@@ -105,7 +105,7 @@
       "function": null,
       "args": null,
       "enter": "5",
-      "exit": null,
+      "exit": "6",
       "parent": null,
       "next": "5"
     },

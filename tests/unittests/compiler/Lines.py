@@ -95,22 +95,29 @@ def test_lines_set_next(patch, lines):
 @mark.parametrize('method', ['if', 'elif', 'try', 'catch'])
 def test_lines_set_exit(patch, lines, method):
     patch.object(Lines, 'sort', return_value=['1', '2'])
+    lines.finished_scopes = ['1']
     lines.lines = {'1': {}, '2': {'method': method}}
     lines.set_exit('3')
     assert lines.sort.call_count == 1
     assert lines.lines['2']['exit'] == '3'
+    assert lines.finished_scopes == []
 
 
 def test_lines_set_scope(patch, lines):
-    patch.object(Lines, 'set_exit')
     lines.set_scope('2', '1')
-    Lines.set_exit.assert_called_with('2')
     assert lines.output_scopes['2'] == {'parent': '1', 'output': []}
 
 
 def test_lines_set_scope_output(lines):
     lines.set_scope('2', '1', output=['x'])
     assert lines.output_scopes['2']['output'] == ['x']
+
+
+def test_lines_finish_scope(lines):
+    lines.finish_scope('1')
+    assert lines.finished_scopes == ['1']
+    lines.finish_scope('2')
+    assert lines.finished_scopes == ['1', '2']
 
 
 def test_lines_is_output(lines):
@@ -227,6 +234,19 @@ def test_lines_append_function_call(patch, lines):
     lines.functions['function'] = 1
     lines.append('execute', 'line', service='function')
     lines.make.assert_called_with('call', 'line', service='function')
+
+
+def test_lines_append_scope(patch, lines):
+    """
+    Ensures that 'exit' is set properly after a scope was left.
+    """
+    patch.many(Lines, ['make', 'set_next'])
+    lines.finished_scopes = ['1']
+    lines.lines['1'] = {}
+    lines.append('method', 'line', extras='whatever')
+    lines.set_next.assert_called_with('line')
+    lines.make.assert_called_with('method', 'line', extras='whatever')
+    assert lines.lines['1']['exit'] == 'line'
 
 
 def test_lines_execute(patch, lines):
