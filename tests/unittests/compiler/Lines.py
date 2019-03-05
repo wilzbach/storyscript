@@ -101,8 +101,10 @@ def test_lines_set_exit(patch, lines, method):
     assert lines.lines['2']['exit'] == '3'
 
 
-def test_lines_set_scope(lines):
+def test_lines_set_scope(patch, lines):
+    patch.object(Lines, 'set_exit')
     lines.set_scope('2', '1')
+    Lines.set_exit.assert_called_with('2')
     assert lines.output_scopes['2'] == {'parent': '1', 'output': []}
 
 

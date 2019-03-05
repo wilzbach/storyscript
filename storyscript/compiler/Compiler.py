@@ -202,7 +202,6 @@ class Compiler:
         Compiles elseif_block trees
         """
         line = tree.line()
-        self.lines.set_exit(line)
         args = Objects.expression(tree.elseif_statement.expression)
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent)
@@ -215,7 +214,6 @@ class Compiler:
         Compiles else_block trees
         """
         line = tree.line()
-        self.lines.set_exit(line)
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent)
         self.lines.append('else', line, enter=nested_block.line(),
@@ -337,7 +335,6 @@ class Compiler:
         Compiles a catch block
         """
         line = tree.line()
-        self.lines.set_exit(line)
         nested_block = tree.nested_block
         output = Objects.names(tree.catch_statement)
         self.lines.set_scope(line, parent, output)
@@ -350,7 +347,6 @@ class Compiler:
         Compiles a finally block
         """
         line = tree.line()
-        self.lines.set_exit(line)
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent)
         self.lines.append('finally', line, enter=nested_block.line(),
