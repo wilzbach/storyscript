@@ -5,6 +5,7 @@ import sys
 from os import getenv, path
 
 from setuptools import find_packages, setup
+from setuptools.command.bdist_egg import bdist_egg as _bdist_egg
 from setuptools.command.install import install as _install
 from setuptools.command.sdist import sdist as _sdist
 
@@ -84,7 +85,14 @@ class Sdist(_sdist):
     def make_release_tree(self, basedir, files):
         _sdist.make_release_tree(self, basedir, files)
         self.execute(prepare_release, (basedir, True),
-                     msg='Building the release')
+                     msg='Building the source release')
+
+
+class BdistEgg(_bdist_egg):
+    def copy_metadata_to(self, egg_info):
+        _bdist_egg.copy_metadata_to(self, egg_info)
+        self.execute(prepare_release, (self.bdist_dir, True),
+                     msg='Building the binary release')
 
 
 class VerifyVersionCommand(_install):
@@ -126,5 +134,6 @@ setup(name=name,
       cmdclass={
         'install': Install,
         'sdist': Sdist,
+        'bdist_egg': BdistEgg,
         'verify': VerifyVersionCommand,
       })
