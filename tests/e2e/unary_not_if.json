@@ -1,55 +1,47 @@
 {
-  "stories": {
-    "tests/e2e/unary_not_if.story": {
-      "tree": {
-        "1": {
-          "method": "if",
-          "ln": "1",
-          "output": null,
-          "name": null,
-          "service": null,
-          "command": null,
-          "function": null,
-          "args": {
-            "$OBJECT": "expression",
-            "expression": "not",
-            "values": [
-              {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
+  "tree": {
+    "1": {
+      "method": "if",
+      "ln": "1",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": {
+        "$OBJECT": "expression",
+        "expression": "not",
+        "values": [
+          {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
             ]
-          },
-          "enter": "2",
-          "exit": null,
-          "parent": null,
-          "next": "2"
-        },
-        "2": {
-          "method": "return",
-          "ln": "2",
-          "output": null,
-          "name": null,
-          "service": null,
-          "command": null,
-          "function": null,
-          "args": null,
-          "enter": null,
-          "exit": null,
-          "parent": "1"
-        }
+          }
+        ]
       },
-      "services": [],
-      "entrypoint": "1",
-      "modules": {},
-      "functions": {},
-      "version": "0.0.0-static"
+      "enter": "2",
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": null,
+      "enter": null,
+      "exit": null,
+      "parent": "1"
     }
   },
   "services": [],
-  "entrypoint": [
-    "tests/e2e/unary_not_if.story"
-  ]
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {},
+  "version": null
 }

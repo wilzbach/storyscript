@@ -38,10 +38,6 @@ def run_test(story_path):
     # deserialize the expected story
     expected_story = json.loads(expected_story)
 
-    # take the first story (at the moment only the runner supports single
-    # StoryScript files)
-    expected_story = next(iter(expected_story['stories'].values()))
-
     run_test_story(story_string, expected_story)
 
 
