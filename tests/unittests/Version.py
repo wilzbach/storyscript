@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-import io
 import subprocess
 from unittest import mock
+
+import pkg_resources
 
 from storyscript import Version
 
@@ -35,16 +36,13 @@ def test_git_describe(patch):
 
 
 def test_read_version(patch):
-    patch.object(io, 'open')
+    patch.object(pkg_resources, 'resource_string')
     Version.read_version.cache_clear()
     r = Version.read_version()
-    io.open.assert_called_with(
-        mock.ANY,
-        'r',
-        encoding='utf8'
+    pkg_resources.resource_string.assert_called_with(
+        'storyscript.Version', 'VERSION'
     )
-    assert io.open.call_args[0][0].endswith('VERSION')
-    assert r == io.open().read().strip()
+    assert r == pkg_resources.resource_string().decode('utf8').strip()
 
 
 def test_get_version(patch):
