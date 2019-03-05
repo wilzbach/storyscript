@@ -1,0 +1,173 @@
+{
+  "stories": {
+    "tests/e2e/complex_assert.story": {
+      "tree": {
+        "1": {
+          "method": "set",
+          "ln": "1",
+          "output": null,
+          "name": [
+            "foo"
+          ],
+          "service": null,
+          "command": null,
+          "function": null,
+          "args": [
+            true
+          ],
+          "enter": null,
+          "exit": null,
+          "parent": null,
+          "next": "2"
+        },
+        "2": {
+          "method": "if",
+          "ln": "2",
+          "output": null,
+          "name": null,
+          "service": null,
+          "command": null,
+          "function": null,
+          "args": {
+            "$OBJECT": "expression",
+            "expression": "and",
+            "values": [
+              {
+                "$OBJECT": "expression",
+                "expression": "equals",
+                "values": [
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "foo"
+                    ]
+                  },
+                  true
+                ]
+              },
+              {
+                "$OBJECT": "expression",
+                "expression": "equals",
+                "values": [
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "foo"
+                    ]
+                  },
+                  {
+                    "$OBJECT": "expression",
+                    "expression": "sum",
+                    "values": [
+                      1,
+                      2
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "enter": "3",
+          "exit": "4",
+          "parent": null,
+          "next": "3"
+        },
+        "3": {
+          "method": "execute",
+          "ln": "3",
+          "output": [],
+          "name": null,
+          "service": "log",
+          "command": "info",
+          "function": null,
+          "args": [
+            {
+              "$OBJECT": "argument",
+              "name": "msg",
+              "argument": {
+                "$OBJECT": "string",
+                "string": "true"
+              }
+            }
+          ],
+          "enter": null,
+          "exit": null,
+          "parent": "2",
+          "next": "4"
+        },
+        "4": {
+          "method": "else",
+          "ln": "4",
+          "output": null,
+          "name": null,
+          "service": null,
+          "command": null,
+          "function": null,
+          "args": null,
+          "enter": "5",
+          "exit": null,
+          "parent": null,
+          "next": "5"
+        },
+        "5": {
+          "method": "execute",
+          "ln": "5",
+          "output": [],
+          "name": null,
+          "service": "log",
+          "command": "info",
+          "function": null,
+          "args": [
+            {
+              "$OBJECT": "argument",
+              "name": "msg",
+              "argument": {
+                "$OBJECT": "string",
+                "string": "false"
+              }
+            }
+          ],
+          "enter": null,
+          "exit": null,
+          "parent": "4",
+          "next": "6"
+        },
+        "6": {
+          "method": "execute",
+          "ln": "6",
+          "output": [],
+          "name": null,
+          "service": "log",
+          "command": "info",
+          "function": null,
+          "args": [
+            {
+              "$OBJECT": "argument",
+              "name": "msg",
+              "argument": {
+                "$OBJECT": "string",
+                "string": "completed"
+              }
+            }
+          ],
+          "enter": null,
+          "exit": null,
+          "parent": null
+        }
+      },
+      "services": [
+        "log"
+      ],
+      "entrypoint": "1",
+      "modules": {},
+      "functions": {},
+      "version": "0.9.7-24-ga888d76-dirty"
+    }
+  },
+  "services": [
+    "log"
+  ],
+  "entrypoint": [
+    "tests/e2e/complex_assert.story"
+  ]
+}

@@ -382,18 +382,3 @@ class Objects:
                     tree, op,
                     cls.or_expression(tree.child(0)),
                     cls.and_expression(tree.child(2)))
-
-    @classmethod
-    def assertion(cls, tree):
-        """
-        Compiles an assertion object.
-        """
-        e = Objects.expression(tree.expression)
-        if not hasattr(e, 'get') or e.get('expression', None) is None:
-            return [e]
-        # Do we really need this special case here?
-        return [{
-            '$OBJECT': 'assertion',
-            'assertion': e['expression'],
-            'values': e['values'],
-        }]

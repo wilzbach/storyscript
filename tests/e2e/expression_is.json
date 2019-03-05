@@ -1,0 +1,63 @@
+{
+  "stories": {
+    "tests/e2e/expression_is.story": {
+      "tree": {
+        "1": {
+          "method": "if",
+          "ln": "1",
+          "output": null,
+          "name": null,
+          "service": null,
+          "command": null,
+          "function": null,
+          "args": {
+            "$OBJECT": "expression",
+            "expression": "equals",
+            "values": [
+              {
+                "$OBJECT": "path",
+                "paths": [
+                  "colour"
+                ]
+              },
+              {
+                "$OBJECT": "string",
+                "string": "red"
+              }
+            ]
+          },
+          "enter": "2",
+          "exit": null,
+          "parent": null,
+          "next": "2"
+        },
+        "2": {
+          "method": "set",
+          "ln": "2",
+          "output": null,
+          "name": [
+            "x"
+          ],
+          "service": null,
+          "command": null,
+          "function": null,
+          "args": [
+            0
+          ],
+          "enter": null,
+          "exit": null,
+          "parent": "1"
+        }
+      },
+      "services": [],
+      "entrypoint": "1",
+      "modules": {},
+      "functions": {},
+      "version": "0.9.7-24-ga888d76-dirty"
+    }
+  },
+  "services": [],
+  "entrypoint": [
+    "tests/e2e/expression_is.story"
+  ]
+}

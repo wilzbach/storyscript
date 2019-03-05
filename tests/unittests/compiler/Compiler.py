@@ -366,14 +366,14 @@ def test_compiler_return_statement_error(patch, compiler, tree):
 
 
 def test_compiler_if_block(patch, compiler, lines, tree):
-    patch.object(Objects, 'assertion')
+    patch.object(Objects, 'expression')
     patch.object(Compiler, 'subtree')
     tree.elseif_block = None
     tree.else_block = None
     compiler.if_block(tree, '1')
-    Objects.assertion.assert_called_with(tree.if_statement)
+    Objects.expression.assert_called_with(tree.if_statement.expression)
     nested_block = tree.nested_block
-    args = Objects.assertion()
+    args = Objects.expression()
     lines.set_scope.assert_called_with(tree.line(), '1')
     lines.append.assert_called_with('if', tree.line(), args=args,
                                     enter=nested_block.line(), parent='1')
@@ -381,7 +381,7 @@ def test_compiler_if_block(patch, compiler, lines, tree):
 
 
 def test_compiler_if_block_with_elseif(patch, compiler, tree):
-    patch.object(Objects, 'assertion')
+    patch.object(Objects, 'expression')
     patch.many(Compiler, ['subtree', 'subtrees'])
     tree.else_block = None
     tree.extract.return_value = ['one']
@@ -391,7 +391,7 @@ def test_compiler_if_block_with_elseif(patch, compiler, tree):
 
 
 def test_compiler_if_block_with_else(patch, compiler, tree):
-    patch.object(Objects, 'assertion')
+    patch.object(Objects, 'expression')
     patch.many(Compiler, ['subtree', 'subtrees'])
     tree.extract.return_value = []
     compiler.if_block(tree, '1')
@@ -399,12 +399,12 @@ def test_compiler_if_block_with_else(patch, compiler, tree):
 
 
 def test_compiler_elseif_block(patch, compiler, lines, tree):
-    patch.object(Objects, 'assertion')
+    patch.object(Objects, 'expression')
     patch.object(Compiler, 'subtree')
     compiler.elseif_block(tree, '1')
     lines.set_exit.assert_called_with(tree.line())
-    Objects.assertion.assert_called_with(tree.elseif_statement)
-    args = Objects.assertion()
+    Objects.expression.assert_called_with(tree.elseif_statement.expression)
+    args = Objects.expression()
     lines.set_scope.assert_called_with(tree.line(), '1')
     lines.append.assert_called_with('elif', tree.line(), args=args,
                                     enter=tree.nested_block.line(),
