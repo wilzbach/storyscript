@@ -99,6 +99,7 @@ jobs:
                   name: create packages
                   command: |
                     rm -rf dist
+                    rm -rf tests # not needed in the released package
                     . venv/bin/activate
                     python setup.py sdist
             - run:
