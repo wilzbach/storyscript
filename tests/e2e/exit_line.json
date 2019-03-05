@@ -63,7 +63,7 @@
         }
       ],
       "enter": "5",
-      "exit": "9",
+      "exit": "6",
       "parent": null,
       "next": "5"
     },
@@ -95,7 +95,7 @@
       "function": null,
       "args": null,
       "enter": "7",
-      "exit": null,
+      "exit": "9",
       "parent": null,
       "next": "7"
     },
@@ -195,7 +195,7 @@
       "function": null,
       "args": null,
       "enter": "15",
-      "exit": null,
+      "exit": "17",
       "parent": null,
       "next": "15"
     },
