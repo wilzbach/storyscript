@@ -1,6 +1,6 @@
 {
   "stories": {
-    "tests/e2e/mutation2.story": {
+    "tests/e2e/service_mutation2.story": {
       "tree": {
         "1": {
           "method": "execute",
@@ -72,13 +72,13 @@
       "entrypoint": "1",
       "modules": {},
       "functions": {},
-      "version": "0.9.7"
+      "version": "0.0.0-static"
     }
   },
   "services": [
     "http"
   ],
   "entrypoint": [
-    "tests/e2e/mutation2.story"
+    "tests/e2e/service_mutation2.story"
   ]
 }

@@ -72,7 +72,7 @@
       "entrypoint": "1.1",
       "modules": {},
       "functions": {},
-      "version": "0.9.7-dirty"
+      "version": "0.0.0-static"
     }
   },
   "services": [
