@@ -1,0 +1,241 @@
+{
+  "tree": {
+    "1": {
+      "method": "for",
+      "ln": "1",
+      "output": [
+        "item"
+      ],
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "items"
+          ]
+        }
+      ],
+      "enter": "2",
+      "exit": "4",
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "set",
+      "ln": "2",
+      "output": null,
+      "name": [
+        "x"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "item"
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "1",
+      "next": "4"
+    },
+    "4": {
+      "method": "if",
+      "ln": "4",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": {
+        "$OBJECT": "path",
+        "paths": [
+          "a"
+        ]
+      },
+      "enter": "5",
+      "exit": "9",
+      "parent": null,
+      "next": "5"
+    },
+    "5": {
+      "method": "set",
+      "ln": "5",
+      "output": null,
+      "name": [
+        "a"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "4",
+      "next": "6"
+    },
+    "6": {
+      "method": "else",
+      "ln": "6",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": null,
+      "enter": "7",
+      "exit": null,
+      "parent": null,
+      "next": "7"
+    },
+    "7": {
+      "method": "set",
+      "ln": "7",
+      "output": null,
+      "name": [
+        "b"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "6",
+      "next": "9"
+    },
+    "9": {
+      "method": "while",
+      "ln": "9",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        true
+      ],
+      "enter": "10",
+      "exit": "12",
+      "parent": null,
+      "next": "10"
+    },
+    "10": {
+      "method": "set",
+      "ln": "10",
+      "output": null,
+      "name": [
+        "x"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "9",
+      "next": "12"
+    },
+    "12": {
+      "method": "try",
+      "ln": "12",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": null,
+      "enter": "13",
+      "exit": "14",
+      "parent": null,
+      "next": "13"
+    },
+    "13": {
+      "method": "set",
+      "ln": "13",
+      "output": null,
+      "name": [
+        "a"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "12",
+      "next": "14"
+    },
+    "14": {
+      "method": "catch",
+      "ln": "14",
+      "output": [
+        "e"
+      ],
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": null,
+      "enter": "15",
+      "exit": null,
+      "parent": null,
+      "next": "15"
+    },
+    "15": {
+      "method": "set",
+      "ln": "15",
+      "output": null,
+      "name": [
+        "b"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "14",
+      "next": "17"
+    },
+    "17": {
+      "method": "set",
+      "ln": "17",
+      "output": null,
+      "name": [
+        "x"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null
+    }
+  },
+  "services": [],
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {},
+  "version": null
+}

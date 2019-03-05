@@ -62,7 +62,7 @@ class Lines:
         Sets the current line as the exit line for a previous one, as needed
         in if/elif/else and try/catch/finally blocks.
         """
-        methods = ['if', 'elif', 'try', 'catch']
+        methods = ['if', 'elif', 'try', 'catch', 'for', 'while']
         for line_number in self.sort()[::-1]:
             if self.lines[line_number]['method'] in methods:
                 self.lines[line_number]['exit'] = line
@@ -73,6 +73,7 @@ class Lines:
         Keeps track of output scopes so that defined outputs are recognized for
         nested children.
         """
+        self.set_exit(line)
         self.output_scopes[line] = {'parent': parent, 'output': output}
 
     def is_output(self, parent, service):
