@@ -1,0 +1,87 @@
+{
+  "tree": {
+    "1": {
+      "method": "if",
+      "ln": "1",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": {
+        "$OBJECT": "expression",
+        "expression": "equals",
+        "values": [
+          {
+            "$OBJECT": "path",
+            "paths": [
+              "colour"
+            ]
+          },
+          {
+            "$OBJECT": "string",
+            "string": "red"
+          }
+        ]
+      },
+      "enter": "2",
+      "exit": "3",
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "set",
+      "ln": "2",
+      "output": null,
+      "name": [
+        "x"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "1",
+      "next": "3"
+    },
+    "3": {
+      "method": "else",
+      "ln": "3",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": null,
+      "enter": "4",
+      "exit": null,
+      "parent": null,
+      "next": "4"
+    },
+    "4": {
+      "method": "set",
+      "ln": "4",
+      "output": null,
+      "name": [
+        "x"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        1
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "3"
+    }
+  },
+  "services": [],
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {},
+  "version": null
+}

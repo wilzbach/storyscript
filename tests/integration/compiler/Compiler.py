@@ -134,52 +134,6 @@ def test_compiler_expression_path(parser):
     assert result['tree']['2']['args'][0]['values'][0] == path
 
 
-def test_compiler_if(parser):
-    tree = parser.parse('if colour == "red"\n\tx = 0')
-    result = Compiler.compile(tree)
-    args = [
-        {'$OBJECT': 'assertion', 'assertion': 'equals',
-         'values': [{'$OBJECT': 'path', 'paths': ['colour']},
-                    {'$OBJECT': 'string', 'string': 'red'}]}
-    ]
-    assert result['tree']['1']['method'] == 'if'
-    assert result['tree']['1']['args'] == args
-    assert result['tree']['1']['enter'] == '2'
-    assert result['tree']['2']['parent'] == '1'
-
-
-def test_compiler_if_inline_expression(parser):
-    tree = parser.parse('if (random numbers)\n\tx = 0')
-    result = Compiler.compile(tree)
-    entry = result['entrypoint']
-    name = result['tree'][entry]['name']
-    assert result['tree']['1']['method'] == 'if'
-    assert result['tree']['1']['args'] == [{'$OBJECT': 'path', 'paths': name}]
-
-
-def test_compiler_if_elseif(parser):
-    source = 'if colour == "red"\n\tx = 0\nelse if colour == "blue"\n\tx = 1'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
-    args = [
-        {'$OBJECT': 'assertion', 'assertion': 'equals',
-         'values': [{'$OBJECT': 'path', 'paths': ['colour']},
-                    {'$OBJECT': 'string', 'string': 'blue'}]}]
-    assert result['tree']['1']['exit'] == '3'
-    assert result['tree']['3']['method'] == 'elif'
-    assert result['tree']['3']['args'] == args
-    assert result['tree']['4']['parent'] == '3'
-
-
-def test_compiler_if_else(parser):
-    source = 'if colour == "red"\n\tx = 0\nelse\n\tx = 1'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
-    assert result['tree']['1']['exit'] == '3'
-    assert result['tree']['3']['method'] == 'else'
-    assert result['tree']['4']['parent'] == '3'
-
-
 def test_compiler_foreach(parser):
     tree = parser.parse('foreach items as item\n\tx = 0')
     result = Compiler.compile(tree)
@@ -480,59 +434,6 @@ def test_compiler_expression_exponential_flat(parser):
     assert result['tree']['1']['args'][0]['$OBJECT'] == 'expression'
     assert result['tree']['1']['args'][0]['expression'] == 'exponential'
     assert result['tree']['1']['args'][0]['values'] == [2, 3]
-
-
-def test_compiler_complex_assert(parser):
-    """
-    Ensures that complex assertions are compiled correctly
-    """
-    source = """foo = true
-if (foo == true) and foo == (1 + 2)
-  log info msg: "true"
-else
-  log info msg: "false"
-log info msg: "completed" """
-    result = Compiler.compile(parser.parse(source))
-    assert result['tree']['2']['method'] == 'if'
-    assert result['tree']['2']['args'] == [{
-      '$OBJECT': 'assertion',
-      'assertion': 'and',
-      'values': [
-        {
-          '$OBJECT': 'expression',
-          'expression': 'equals',
-          'values': [
-            {
-              '$OBJECT': 'path',
-              'paths': [
-                'foo'
-              ]
-            },
-            True
-          ]
-        },
-        {
-          '$OBJECT': 'expression',
-          'expression': 'equals',
-          'values': [
-            {
-              '$OBJECT': 'path',
-              'paths': [
-                'foo'
-              ]
-            },
-            {
-              '$OBJECT': 'expression',
-              'expression': 'sum',
-              'values': [
-                1,
-                2
-              ]
-            }
-          ]
-        }
-      ]
-    }]
 
 
 def test_compiler_complex_nested_expression(parser):
@@ -1833,27 +1734,6 @@ def test_compiler_unary_not(parser):
     }]
 
 
-def test_compiler_unary_not_if(parser):
-    """
-    Ensures that unary expression in if statements are compiled correctly
-    """
-    source = 'if !b\n\treturn'
-    result = Compiler.compile(parser.parse(source))
-    assert result['tree']['1']['method'] == 'if'
-    assert result['tree']['1']['args'] == [{
-        '$OBJECT': 'assertion',
-        'assertion': 'not',
-        'values': [
-          {
-            '$OBJECT': 'path',
-            'paths': [
-              'b'
-            ]
-          }
-        ]
-    }]
-
-
 def test_compiler_unary_double(parser):
     """
     Ensures that double unary expressions are compiled correctly
@@ -2312,43 +2192,3 @@ def test_compiler_expression_is_nested_2(parser):
           }
         ]
     }]
-
-
-def test_compiler_expression_is_if_statement(parser):
-    """
-    Ensures that 'is' expressions can be used in if statements
-    """
-    source = """if (weather tommorow where:'Amsterdam') == 'horrible'
-    echo message:'oh no!'
-"""
-    result = Compiler.compile(parser.parse(source))
-    assert result['tree']['1']['method'] == 'if'
-    assert result['tree']['1']['args'] == [{
-        '$OBJECT': 'assertion',
-        'assertion': 'equals',
-        'values': [
-          {
-            '$OBJECT': 'path',
-            'paths': [
-              'p-1.1'
-            ]
-          },
-          {
-            '$OBJECT': 'string',
-            'string': 'horrible'
-          }
-        ]
-    }]
-    assert result['tree']['1.1']['method'] == 'execute'
-    assert result['tree']['1.1']['service'] == 'weather'
-    assert result['tree']['1.1']['args'] == [{
-        '$OBJECT': 'argument',
-        'name': 'where',
-        'argument': {
-          '$OBJECT': 'string',
-          'string': 'Amsterdam'
-        }
-    }]
-    assert result['tree']['2']['method'] == 'execute'
-    assert result['tree']['2']['service'] == 'echo'
-    assert result['tree']['2']['args'][0]['argument']['string'] == 'oh no!'

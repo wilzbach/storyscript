@@ -329,29 +329,6 @@ def test_objects_expression(patch, tree):
     Objects.or_expression.assert_called_with(tree.child(0))
 
 
-def test_objects_assertion_single_entity(patch, tree):
-    """
-    Ensures that Objects.assertion handles single entities
-    """
-    patch.many(Objects, ['expression'])
-    Objects.expression.return_value = True
-    result = Objects.assertion(tree)
-    Objects.expression.assert_called_with(tree.expression)
-    assert result == [Objects.expression()]
-
-
-def test_objects_assertion(patch, tree):
-    patch.many(Objects, ['expression'])
-    result = Objects.assertion(tree)
-    Objects.expression.assert_called_with(tree.expression)
-    expected = [{
-        '$OBJECT': 'assertion',
-        'assertion': Objects.expression()['expression'],
-        'values': Objects.expression()['values']
-    }]
-    assert result == expected
-
-
 def test_objects_absolute_expression(patch, tree):
     """
     Ensures Objects.absolute_expression calls expression

@@ -1,0 +1,88 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "output": [],
+      "name": [
+        "p-1.1"
+      ],
+      "service": "weather",
+      "command": "tommorow",
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "where",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "Amsterdam"
+          }
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "1"
+    },
+    "1": {
+      "method": "if",
+      "ln": "1",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": {
+        "$OBJECT": "expression",
+        "expression": "equals",
+        "values": [
+          {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.1"
+            ]
+          },
+          {
+            "$OBJECT": "string",
+            "string": "horrible"
+          }
+        ]
+      },
+      "enter": "2",
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "output": [],
+      "name": null,
+      "service": "echo",
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "message",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "oh no!"
+          }
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "1"
+    }
+  },
+  "services": [
+    "echo",
+    "weather"
+  ],
+  "entrypoint": "1.1",
+  "modules": {},
+  "functions": {},
+  "version": null
+}

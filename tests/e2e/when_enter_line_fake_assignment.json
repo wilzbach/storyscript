@@ -1,120 +1,109 @@
 {
-  "stories": {
-    "tests/e2e/when_enter_line_fake_assignment.story": {
-      "tree": {
-        "1": {
-          "method": "execute",
-          "ln": "1",
-          "output": [
-            "s"
-          ],
-          "name": null,
-          "service": "http",
-          "command": "server",
-          "function": null,
-          "args": [],
-          "enter": "2",
-          "exit": null,
-          "parent": null,
-          "next": "2"
-        },
-        "2": {
-          "method": "when",
-          "ln": "2",
-          "output": [
-            "req"
-          ],
-          "name": null,
-          "service": "s",
-          "command": "listen",
-          "function": null,
-          "args": [
-            {
-              "$OBJECT": "argument",
-              "name": "path",
-              "argument": {
-                "$OBJECT": "string",
-                "string": "/test"
-              }
-            }
-          ],
-          "enter": "3.1",
-          "exit": null,
-          "parent": "1",
-          "next": "3.1"
-        },
-        "3.1": {
-          "method": "execute",
-          "ln": "3.1",
-          "output": [],
-          "name": [
-            "p-3.1"
-          ],
-          "service": "fullcontact",
-          "command": "person",
-          "function": null,
-          "args": [],
-          "enter": null,
-          "exit": null,
-          "parent": "2",
-          "next": "3"
-        },
-        "3": {
-          "method": "set",
-          "ln": "3",
-          "output": null,
-          "name": [
-            "a"
-          ],
-          "service": null,
-          "command": null,
-          "function": null,
-          "args": [
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "p-3.1"
-              ]
-            }
-          ],
-          "enter": null,
-          "exit": null,
-          "parent": "2",
-          "next": "4"
-        },
-        "4": {
-          "method": "set",
-          "ln": "4",
-          "output": null,
-          "name": [
-            "a"
-          ],
-          "service": null,
-          "command": null,
-          "function": null,
-          "args": [
-            4
-          ],
-          "enter": null,
-          "exit": null,
-          "parent": "1"
-        }
-      },
-      "services": [
-        "fullcontact",
-        "http"
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "output": [
+        "s"
       ],
-      "entrypoint": "1",
-      "modules": {},
-      "functions": {},
-      "version": "0.9.7-11-g7cc2be8-dirty"
+      "name": null,
+      "service": "http",
+      "command": "server",
+      "function": null,
+      "args": [],
+      "enter": "2",
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "when",
+      "ln": "2",
+      "output": [
+        "req"
+      ],
+      "name": null,
+      "service": "s",
+      "command": "listen",
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "path",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "/test"
+          }
+        }
+      ],
+      "enter": "3.1",
+      "exit": null,
+      "parent": "1",
+      "next": "3.1"
+    },
+    "3.1": {
+      "method": "execute",
+      "ln": "3.1",
+      "output": [],
+      "name": [
+        "p-3.1"
+      ],
+      "service": "fullcontact",
+      "command": "person",
+      "function": null,
+      "args": [],
+      "enter": null,
+      "exit": null,
+      "parent": "2",
+      "next": "3"
+    },
+    "3": {
+      "method": "set",
+      "ln": "3",
+      "output": null,
+      "name": [
+        "a"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "p-3.1"
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "2",
+      "next": "4"
+    },
+    "4": {
+      "method": "set",
+      "ln": "4",
+      "output": null,
+      "name": [
+        "a"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        4
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "1"
     }
   },
   "services": [
     "fullcontact",
     "http"
   ],
-  "entrypoint": [
-    "tests/e2e/when_enter_line_fake_assignment.story"
-  ]
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {},
+  "version": null
 }
