@@ -187,7 +187,7 @@ class Compiler:
     def if_block(self, tree, parent):
         line = tree.line()
         nested_block = tree.nested_block
-        args = Objects.expression(tree.if_statement.expression)
+        args = [Objects.expression(tree.if_statement.expression)]
         self.lines.set_scope(line, parent)
         self.lines.append('if', line, args=args, enter=nested_block.line(),
                           parent=parent)
@@ -202,7 +202,7 @@ class Compiler:
         Compiles elseif_block trees
         """
         line = tree.line()
-        args = Objects.expression(tree.elseif_statement.expression)
+        args = [Objects.expression(tree.elseif_statement.expression)]
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent)
         self.lines.append('elif', line, args=args, enter=nested_block.line(),

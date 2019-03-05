@@ -33,22 +33,24 @@
       "service": null,
       "command": null,
       "function": null,
-      "args": {
-        "$OBJECT": "expression",
-        "expression": "equals",
-        "values": [
-          {
-            "$OBJECT": "path",
-            "paths": [
-              "p-1.1"
-            ]
-          },
-          {
-            "$OBJECT": "string",
-            "string": "horrible"
-          }
-        ]
-      },
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "equals",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "p-1.1"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": "horrible"
+            }
+          ]
+        }
+      ],
       "enter": "2",
       "exit": null,
       "parent": null,

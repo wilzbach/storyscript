@@ -26,45 +26,47 @@
       "service": null,
       "command": null,
       "function": null,
-      "args": {
-        "$OBJECT": "expression",
-        "expression": "and",
-        "values": [
-          {
-            "$OBJECT": "expression",
-            "expression": "equals",
-            "values": [
-              {
-                "$OBJECT": "path",
-                "paths": [
-                  "foo"
-                ]
-              },
-              true
-            ]
-          },
-          {
-            "$OBJECT": "expression",
-            "expression": "equals",
-            "values": [
-              {
-                "$OBJECT": "path",
-                "paths": [
-                  "foo"
-                ]
-              },
-              {
-                "$OBJECT": "expression",
-                "expression": "sum",
-                "values": [
-                  1,
-                  2
-                ]
-              }
-            ]
-          }
-        ]
-      },
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "and",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "equals",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "foo"
+                  ]
+                },
+                true
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "equals",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "foo"
+                  ]
+                },
+                {
+                  "$OBJECT": "expression",
+                  "expression": "sum",
+                  "values": [
+                    1,
+                    2
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
       "enter": "3",
       "exit": "4",
       "parent": null,
