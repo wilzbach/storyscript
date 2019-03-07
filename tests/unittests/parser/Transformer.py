@@ -182,3 +182,29 @@ def test_transformer_absolute_expression_zero(patch, tree, magic):
         Tree('service', [m, Tree('service_fragment', [])])
     ])
     assert result == expected
+
+
+def test_transformer_function_block_empty(patch, tree, magic):
+    """
+    Ensures that indented arguments are added back to the their original node
+    """
+    assert Transformer.function_block([]) == Tree('function_block', [])
+    assert Transformer.function_block([0]) == Tree('function_block', [0])
+    m = magic()
+    m.data = 'some_block'
+    assert Transformer.function_block([m]) == Tree('function_block', [m])
+    assert Transformer.function_block([m, m]) == Tree('function_block', [m, m])
+
+
+def test_transformer_function_block(patch, tree, magic):
+    """
+    Ensures that indented arguments are added back to the their original node
+    """
+    function_block = magic()
+    m = magic()
+    m.data = 'indented_typed_arguments'
+    m.find_data.return_value = ['.indented.node.']
+    r = Transformer.function_block([function_block, m])
+    m.find_data.assert_called_with('typed_argument')
+    function_block.children.append.assert_called_with('.indented.node.')
+    assert r == Tree('function_block', [function_block])

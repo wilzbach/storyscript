@@ -111,5 +111,18 @@ class Transformer(LarkTransformer):
                 return Tree('service_block', [service])
         return Tree('absolute_expression', matches)
 
+    @classmethod
+    def function_block(cls, matches):
+        """
+        Transforms function blocks, moving indented arguments back to the first
+        node.
+        """
+        if len(matches) > 1:
+            if matches[1].data == 'indented_typed_arguments':
+                for argument in matches.pop(1).find_data('typed_argument'):
+                    matches[0].children.append(argument)
+
+        return Tree('function_block', matches)
+
     def __getattr__(self, attribute, *args):
         return lambda matches: Tree(attribute, matches)
