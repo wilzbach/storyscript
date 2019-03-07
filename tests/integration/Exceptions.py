@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-import re
+from click import unstyle
 
 from pytest import raises
 
 from storyscript.Story import Story
 from storyscript.exceptions.StoryError import StoryError
-
-ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
 
 
 def test_exceptions_service_name(capsys):
@@ -15,7 +13,7 @@ def test_exceptions_service_name(capsys):
 
     message = e.value.message()
     # test with coloring once, but we representing ANSI color codes is tricky
-    lines = ansi_escape.sub('', message).splitlines()
+    lines = unstyle(message).splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 1'
     assert lines[2] == '1|    al.pine echo'
     assert lines[5] == "E0002: A service name can't contain `.`"
