@@ -21,11 +21,11 @@ class Transformer(LarkTransformer):
     def is_keyword(cls, token):
         keyword = token.value
         if keyword in cls.reserved_keywords:
-            error_name = 'reserved_keyword_{}'.format(keyword)
-            raise StorySyntaxError(error_name, token=token)
+            raise StorySyntaxError('reserved_keyword',
+                                   token=token, format={'keyword': keyword})
         if keyword in cls.future_reserved_keywords:
-            error_name = 'future_reserved_keyword_{}'.format(keyword)
-            raise StorySyntaxError(error_name, token=token)
+            raise StorySyntaxError('future_reserved_keyword',
+                                   token=token, format={'keyword': keyword})
 
     @staticmethod
     def implicit_output(tree):

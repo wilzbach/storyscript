@@ -176,8 +176,7 @@ class Compiler:
         """
         Compiles a return_statement tree
         """
-        if parent is None:
-            raise CompilerError('return_outside', tree=tree)
+        tree.expect(parent is not None, 'return_outside')
         line = tree.line()
         args = None
         if tree.expression:
@@ -260,8 +259,10 @@ class Compiler:
         if function_name in self.lines.functions:
             raise CompilerError(
                 'function_already_declared', token=function.child(1),
-                function_name=function_name,
-                previous_line=self.lines.functions[function_name])
+                format={
+                    'function_name': function_name,
+                    'line': self.lines.functions[function_name],
+                })
         self.lines.append('function', line, function=function_name,
                           output=output, args=args, enter=nested_block.line(),
                           parent=parent)
@@ -368,8 +369,7 @@ class Compiler:
         self.lines.finish_scope(line)
 
     def break_statement(self, tree, parent):
-        if parent is None:
-            raise CompilerError('break_outside', tree=tree)
+        tree.expect(parent is not None, 'break_outside')
         self.lines.append('break', tree.line(), parent=parent)
 
     def subtrees(self, *trees, parent=None):

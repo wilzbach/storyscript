@@ -126,16 +126,18 @@ def test_storyerror_hint(storyerror):
     assert storyerror.hint() == 'hint'
 
 
-def test_storyerror_hint_unidentified_error(storyerror):
+def test_storyerror_hint_unidentified_error(storyerror, patch):
+    patch.object(StoryError, '_internal_error')
     storyerror.error_tuple = ErrorCodes.unidentified_error
     storyerror.error = Exception('Custom.Error')
-    assert storyerror.hint() == 'Custom.Error'
+    assert storyerror.hint() == storyerror._internal_error()
 
 
-def test_storyerror_hint_unidentified_compiler_error(storyerror):
+def test_storyerror_hint_unidentified_compiler_error(storyerror, patch):
+    patch.object(StoryError, '_internal_error')
     storyerror.error_tuple = ErrorCodes.unidentified_error
-    storyerror.error = CompilerError(None, message='Custom.Compiler.Error')
-    assert storyerror.hint() == 'Custom.Compiler.Error'
+    storyerror.error = CompilerError(None)
+    assert storyerror.hint() == storyerror._internal_error()
 
 
 def test_storyerror_hint_invalid_character(patch, storyerror):
@@ -147,13 +149,12 @@ def test_storyerror_hint_invalid_character(patch, storyerror):
 
 def test_storyerror_hint_redeclared(patch, storyerror, magic):
     patch.object(storyerror, 'get_line', return_value='foo')
-    storyerror.error = UnexpectedCharacters('seq', 0, line=1, column=5)
-    storyerror.error = magic()
-    storyerror.error.extra.function_name = '.function_name.'
-    storyerror.error.extra.previous_line = '.previous.line.'
+    storyerror.error = CompilerError(
+        'function_already_declared',
+        format={'function_name': '.function_name.', 'line': '.line.'})
     storyerror.error_tuple = ErrorCodes.function_already_declared
     assert storyerror.hint() == \
-        '`.function_name.` has already been declared at line .previous.line.'
+        '`.function_name.` has already been declared at line .line.'
 
 
 def test_storyerror_hint_unexpected_token(patch, storyerror, ):
@@ -314,12 +315,28 @@ def test_storyerror_echo(patch, storyerror):
     click.echo.assert_called_with(StoryError.message())
 
 
-def test_storyerror_unnamed_error(patch):
+def test_storyerror_create_error(patch):
+    """
+    Ensures that Errors without Tokens can be created
+    """
     patch.init(StoryError)
     patch.init(CompilerError)
-    error = StoryError.unnamed_error('message')
+    error = StoryError.create_error('error_code')
     assert isinstance(error, StoryError)
-    CompilerError.__init__.assert_called_with(None, message='message')
+    CompilerError.__init__.assert_called_with('error_code', format={})
+    assert isinstance(StoryError.__init__.call_args[0][0], CompilerError)
+    assert StoryError.__init__.call_args[0][1] is None
+
+
+def test_storyerror_create_error_kwargs(patch):
+    """
+    Ensures that Errors without Tokens can be created and kwargs are passed on.
+    """
+    patch.init(StoryError)
+    patch.init(CompilerError)
+    error = StoryError.create_error('error_code', a=0)
+    assert isinstance(error, StoryError)
+    CompilerError.__init__.assert_called_with('error_code', format={'a': 0})
     assert isinstance(StoryError.__init__.call_args[0][0], CompilerError)
     assert StoryError.__init__.call_args[0][1] is None
 
@@ -328,10 +345,19 @@ def test_storyerror_internal(patch):
     """
     Ensures that an internal error gets properly constructed
     """
-    patch.object(StoryError, 'unnamed_error')
-    error = StoryError.internal_error(Exception('ICE happened'))
-    msg = (
-        'Internal error occured: ICE happened\n'
+    patch.init(StoryError)
+    e = Exception('.ICE.')
+    error = StoryError.internal_error(e)
+    assert isinstance(error, StoryError)
+    StoryError.__init__.assert_called_with(e, story=None)
+
+
+def test_storyerror_internal_message(patch):
+    """
+    Ensures that the internal error message gets properly built
+    """
+    error = Exception('.ICE.')
+    expected = (
+        'Internal error occured: .ICE.\n'
         'Please report at https://github.com/storyscript/storyscript/issues')
-    StoryError.unnamed_error.assert_called_with(msg)
-    assert error == StoryError.unnamed_error()
+    assert StoryError._internal_error(error) == expected

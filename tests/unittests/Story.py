@@ -102,7 +102,7 @@ def test_story_read_not_found(patch, capsys):
     patch.object(os, 'path')
     with raises(StoryError) as e:
         Story.read('whatever')
-    assert 'E0001: File "whatever" not found at ' in e.value.short_message()
+    assert 'E0047: File `whatever` not found at ' in e.value.short_message()
 
 
 def test_story_from_file(patch):

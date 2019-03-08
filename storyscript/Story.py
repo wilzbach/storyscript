@@ -48,16 +48,17 @@ class Story:
         """
         Reads a story
         """
-        msg = None
+        has_error = False
         try:
             with io.open(path, 'r') as file:
                 return file.read()
         except FileNotFoundError:
-            abspath = os.path.abspath(path)
-            msg = 'File "{}" not found at {}'.format(path, abspath)
+            has_error = True
 
-        if msg is not None:
-            raise StoryError.unnamed_error(msg)
+        if has_error:
+            abspath = os.path.abspath(path)
+            raise StoryError.create_error('file_not_found', path=path,
+                                          abspath=abspath)
 
     @classmethod
     def from_file(cls, path):
