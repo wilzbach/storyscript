@@ -57,10 +57,19 @@ class Tree(LarkTree):
         first token its first token and returning the token's positional
         attribute
         """
+        token = self.find_first_token()
+        if token is not None:
+            return str(getattr(token, position))
+        return None
+
+    def find_first_token(self):
+        """
+        Finds the first token in a tree
+        """
         for child in self.children:
             if isinstance(child, Token):
-                return str(getattr(child, position))
-            return child._find_position(position)
+                return child
+            return child.find_first_token()
 
     def line(self):
         """
