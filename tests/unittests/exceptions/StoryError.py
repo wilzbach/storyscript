@@ -55,11 +55,35 @@ def test_storyerror_name_reduce_path(patch, storyerror):
     assert storyerror.name() == 'hello.story'
 
 
+def test_storyerror_int_line(patch, storyerror, error):
+    """
+    Ensures int_line returns the correct line number
+    """
+    storyerror.error.line = 1
+    assert storyerror.int_line() == 1
+
+
+def test_storyerror_int_line_string(patch, storyerror, error):
+    """
+    Ensures int_line returns the correct line number with string lines
+    """
+    storyerror.error.line = '1'
+    assert storyerror.int_line() == 1
+
+
+def test_storyerror_int_line_fake_tree(patch, storyerror, error):
+    """
+    Ensures int_line returns the correct line number with fake tree lines
+    """
+    storyerror.error.line = '1.2.3'
+    assert storyerror.int_line() == 1
+
+
 def test_storyerror_get_line(patch, storyerror, error):
     """
     Ensures get_line returns the error line
     """
-    error.line = '1'
+    patch.object(StoryError, 'int_line', return_value=1)
     storyerror.story = 'x = 0\ny = 1'
     assert storyerror.get_line() == 'x = 0'
 
@@ -69,11 +93,12 @@ def test_storyerror_header(patch, storyerror, error):
     Ensures StoryError.header returns the correct text.
     """
     patch.object(click, 'style')
-    patch.object(StoryError, 'name')
+    patch.many(StoryError, ['name', 'int_line'])
     template = 'Error: syntax error in {} at line {}, column {}'
     result = storyerror.header()
     click.style.assert_called_with(StoryError.name(), bold=True)
-    assert result == template.format(click.style(), error.line, error.column)
+    assert result == template.format(click.style(),
+                                     storyerror.int_line(), error.column)
 
 
 def test_storyerror_symbols(patch, storyerror, error):
@@ -108,11 +133,11 @@ def test_storyerror_highlight(patch, storyerror, error):
     """
     Ensures StoryError.highlight produces the correct text.
     """
-    patch.many(StoryError, ['get_line', 'symbols'])
+    patch.many(StoryError, ['get_line', 'int_line', 'symbols'])
     error.column = '1'
     result = storyerror.highlight()
     highlight = '{}{}'.format(' ' * 6, StoryError.symbols())
-    args = (error.line, StoryError.get_line(), highlight)
+    args = (storyerror.int_line(), StoryError.get_line(), highlight)
     assert result == '{}|    {}\n{}'.format(*args)
 
 

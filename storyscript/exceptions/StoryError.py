@@ -36,11 +36,21 @@ class StoryError(SyntaxError):
             return self.path
         return 'story'
 
+    def int_line(self):
+        """
+        Gets the error line as an integer
+        """
+        line = self.error.line
+        if not isinstance(line, int):
+            line = int(line.split('.')[0])
+        return line
+
     def get_line(self):
         """
         Gets the error line
         """
-        return self.story.splitlines(keepends=False)[int(self.error.line) - 1]
+        line = self.int_line()
+        return self.story.splitlines(keepends=False)[line - 1]
 
     def header(self):
         """
@@ -50,7 +60,7 @@ class StoryError(SyntaxError):
         name = self.name()
         if self.with_color:
             name = click.style(self.name(), bold=True)
-        return template.format(name, self.error.line, self.error.column)
+        return template.format(name, self.int_line(), self.error.column)
 
     def symbols(self):
         """
@@ -71,7 +81,7 @@ class StoryError(SyntaxError):
         """
         spaces = ' ' * (int(self.error.column) + 5)
         highlight = '{}{}'.format(spaces, self.symbols())
-        line = self.error.line
+        line = self.int_line()
         return '{}|    {}\n{}'.format(line, self.get_line(), highlight)
 
     def error_code(self):
