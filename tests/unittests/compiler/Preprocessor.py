@@ -34,10 +34,27 @@ def test_preprocessor_replace_expression(magic, preprocessor, entity):
     """
     node = magic()
     entity.line = lambda: 42
-    entity.path.line = lambda: 123
+    entity.path.line = magic()
     fake_tree = magic()
     preprocessor.replace_expression(node, fake_tree, entity)
     fake_tree.add_assignment.assert_called_with(node.service, original_line=42)
+    assignment = fake_tree.add_assignment()
+    entity.path.replace.assert_called_with(0, assignment.child(0))
+
+
+def test_preprocessor_replace_expression_function_call(magic, preprocessor,
+                                                       entity):
+    """
+    Check that the new function call is inserted above the tree
+    """
+    node = magic()
+    node.service = None
+    entity.line = lambda: 42
+    entity.path.line = magic()
+    fake_tree = magic()
+    preprocessor.replace_expression(node, fake_tree, entity)
+    fake_tree.add_assignment.assert_called_with(node.call_expression,
+                                                original_line=42)
     assignment = fake_tree.add_assignment()
     entity.path.replace.assert_called_with(0, assignment.child(0))
 

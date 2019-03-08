@@ -70,7 +70,8 @@ class Grammar:
         objects = ('ocb', 'key_value', 'key_value', 'ccb')
         self.ebnf.objects = self.ebnf.collection(*objects)
         self.ebnf.regular_expression = 'regexp name?'
-        self.ebnf.inline_expression = 'op service cp'
+        self.ebnf.inline_expression = ('op service cp, '
+                                       'call_expression')
         values = ('number, string, boolean, void, list, objects, '
                   'regular_expression')
         self.ebnf.values = values
@@ -166,6 +167,9 @@ class Grammar:
         self.ebnf.service = 'path service_fragment chained_mutation*'
         self.ebnf.service_block = 'service nl (nested_block)?'
 
+    def call_expression(self):
+        self.ebnf.call_expression = 'path op arguments* cp'
+
     def if_block(self):
         self.ebnf._IF = 'if'
         self.ebnf._ELSE = 'else'
@@ -240,6 +244,7 @@ class Grammar:
         self.rules()
         self.mutation_block()
         self.service_block()
+        self.call_expression()
         self.if_block()
         self.foreach_block()
         self.while_block()

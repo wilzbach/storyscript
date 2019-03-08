@@ -120,24 +120,19 @@ class Lines:
         }
         self.lines = {**self.lines, **dictionary}
 
-    def service_method(self, service, line):
+    def check_service_name(self, service, line):
         """
-        Finds whether a service is a function call or a service.
+        Checks whether a service name is valid
         """
-        if service in self.functions:
-            return 'call'
-        if service.split('.')[0] in self.modules:
-            return 'call'
         if '.' in service:
             raise StorySyntaxError('service_name')
-        return 'execute'
 
     def append(self, method, line, **kwargs):
         for scope in self.finished_scopes:
             self.lines[scope]['exit'] = line
         self.finished_scopes = []
         if 'service' in kwargs:
-            method = self.service_method(kwargs['service'], line)
+            self.check_service_name(kwargs['service'], line)
 
         if method == 'function':
             self.functions[kwargs['function']] = line

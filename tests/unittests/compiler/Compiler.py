@@ -199,6 +199,21 @@ def test_compiler_assignment_expression(patch, compiler, lines, tree):
     lines.set_name.assert_called_with('name')
 
 
+def test_compiler_assignment_function_call(patch, compiler, lines, tree):
+    """
+    Ensures that assignments with function calls are compiled correctly.
+    """
+    patch.object(Objects, 'names', return_value='name')
+    patch.object(Compiler, 'call_expression')
+    af = tree.assignment_fragment
+    af.service = None
+    af.mutation = None
+    af.expression = None
+    compiler.assignment(tree, '1')
+    Compiler.call_expression.assert_called_with(af.call_expression, '1')
+    lines.set_name.assert_called_with('name')
+
+
 def test_compiler_arguments(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
     lines.last.return_value = '1'
@@ -232,6 +247,131 @@ def test_compiler_arguments_not_execute(patch, compiler, lines, tree):
         compiler.arguments(tree, '0')
     error = 'arguments_noservice'
     StorySyntaxError.__init__.assert_called_with(error, tree=tree)
+
+
+def test_compiler_call_expression(patch, compiler, lines, tree):
+    """
+    Ensures that function call expression can be compiled
+    """
+    patch.many(Objects, ['arguments', 'names'])
+    Objects.names.return_values = ['.path.']
+    compiler.call_expression(tree, 'parent')
+    Objects.arguments.assert_called_with(tree)
+    lines.append.assert_called_with('call', tree.line(),
+                                    service=tree.path.extract_path(),
+                                    args=Objects.arguments(), parent='parent',
+                                    output=None)
+
+
+def test_compiler_call_expression_no_inline(patch, compiler, tree):
+    """
+    Ensures that function call expression checks its arguments correctly
+    """
+    patch.object(Objects, 'arguments')
+    tree.expect.side_effect = Exception('.')
+    tree.path.inline_expression = True
+    with raises(Exception):
+        compiler.call_expression(tree, 'parent')
+    tree.expect.assert_called_with(False, 'function_call_no_inline_expression')
+
+
+def test_compiler_call_expression_no_invalid_path(patch, compiler, tree):
+    """
+    Ensures that function call expression checks its arguments correctly
+    """
+    patch.many(Objects, ['arguments', 'names'])
+    error_code = None
+    args = None
+
+    def expect(cond, _error_code, **_args):
+        nonlocal error_code, args
+        if not cond:
+            assert args is None
+            args = _args
+            error_code = _error_code
+
+    tree.expect = expect
+    tree.path.inline_expression = None
+    Objects.names.return_value = ['a', 'b']
+    name = tree.path.extract_path()
+    compiler.lines.functions = [name]
+
+    compiler.call_expression(tree, 'parent')
+    assert error_code == 'function_call_invalid_path'
+    assert args == {'name': 'a.b'}
+
+
+def test_compiler_call_expression_no_function(patch, compiler, tree):
+    """
+    Ensures that function call expression checks its arguments correctly
+    """
+    patch.many(Objects, ['arguments', 'names'])
+
+    error_code = None
+    args = None
+
+    def expect(cond, _error_code, **_args):
+        nonlocal error_code, args
+        if not cond:
+            assert args is None
+            args = _args
+            error_code = _error_code
+
+    tree.expect = expect
+    Objects.names.return_value = ['path']
+    tree.path.inline_expression = None
+    name = tree.path.extract_path()
+
+    compiler.call_expression(tree, 'parent')
+    assert error_code == 'function_call_no_function'
+    assert args == {'name': name}
+
+
+def test_compiler_call_expression_other_module(patch, compiler, tree):
+    """
+    Ensures that function call expression checks its arguments correctly
+    when calling a function from another module
+    """
+    patch.many(Objects, ['arguments', 'names'])
+
+    def expect(cond, _error_code, **_args):
+        assert cond, _error_code
+
+    Objects.names.return_value = ['path']
+    tree.expect = expect
+    tree.path.inline_expression = None
+    tree.path.extract_path.return_value = 'my_module.my_function'
+    compiler.lines.modules = ['my_module']
+
+    compiler.call_expression(tree, 'parent')
+
+
+def test_compiler_call_expression_other_module_error(patch, compiler, tree):
+    """
+    Ensures that function call expression checks its arguments correctly
+    when calling a function from another module
+    """
+    patch.many(Objects, ['arguments', 'names'])
+    error_code = None
+    args = None
+
+    def expect(cond, _error_code, **_args):
+        nonlocal error_code, args
+        if not cond:
+            assert args is None
+            args = _args
+            error_code = _error_code
+
+    Objects.names.return_value = ['path']
+    tree.expect = expect
+    tree.path.inline_expression = None
+    tree.path.extract_path.return_value = 'my_module2.my_function'
+    compiler.lines.modules = ['my_module']
+    name = tree.path.extract_path()
+
+    compiler.call_expression(tree, 'parent')
+    assert error_code == 'function_call_no_function'
+    assert args == {'name': name}
 
 
 def test_compiler_service(patch, compiler, lines, tree):

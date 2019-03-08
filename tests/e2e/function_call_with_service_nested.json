@@ -1,0 +1,202 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [
+        "int"
+      ],
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": "random",
+      "args": [],
+      "enter": "2",
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        28
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "1",
+      "next": "4"
+    },
+    "4": {
+      "method": "function",
+      "ln": "4",
+      "output": [
+        "int"
+      ],
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": "my_func",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "k1",
+          "argument": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "k2",
+          "argument": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        }
+      ],
+      "enter": "5",
+      "exit": null,
+      "parent": null,
+      "next": "5"
+    },
+    "5": {
+      "method": "return",
+      "ln": "5",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        28
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "4",
+      "next": "7.1"
+    },
+    "7.1": {
+      "method": "call",
+      "ln": "7.1",
+      "output": null,
+      "name": [
+        "p-7.1"
+      ],
+      "service": "random",
+      "command": null,
+      "function": null,
+      "args": [],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "7.2"
+    },
+    "7.2": {
+      "method": "execute",
+      "ln": "7.2",
+      "output": [],
+      "name": [
+        "p-7.2"
+      ],
+      "service": "another_service",
+      "command": "command",
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "p1",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-7.1"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "k2",
+          "argument": 2
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "7.3"
+    },
+    "7.3": {
+      "method": "call",
+      "ln": "7.3",
+      "output": null,
+      "name": [
+        "p-7.3"
+      ],
+      "service": "my_func",
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "k1",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-7.2"
+            ]
+          }
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "7"
+    },
+    "7": {
+      "method": "execute",
+      "ln": "7",
+      "output": [],
+      "name": [
+        "b"
+      ],
+      "service": "my_service",
+      "command": "command",
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "p0",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-7.3"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "p2",
+          "argument": 2
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null
+    }
+  },
+  "services": [
+    "another_service",
+    "my_service"
+  ],
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {
+    "random": "1",
+    "my_func": "4"
+  },
+  "version": null
+}

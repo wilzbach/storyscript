@@ -1,0 +1,150 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [],
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": "name",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "key",
+          "argument": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "set",
+      "ln": "2",
+      "output": null,
+      "name": [
+        "a"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "1",
+      "next": "4.1"
+    },
+    "4.1": {
+      "method": "call",
+      "ln": "4.1",
+      "output": null,
+      "name": [
+        "p-4.1"
+      ],
+      "service": "name",
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "key",
+          "argument": 4
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "4.2"
+    },
+    "4.2": {
+      "method": "call",
+      "ln": "4.2",
+      "output": null,
+      "name": [
+        "p-4.2"
+      ],
+      "service": "name",
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "key",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-4.1"
+            ]
+          }
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "4.3"
+    },
+    "4.3": {
+      "method": "call",
+      "ln": "4.3",
+      "output": null,
+      "name": [
+        "p-4.3"
+      ],
+      "service": "name",
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "key",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-4.2"
+            ]
+          }
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "4"
+    },
+    "4": {
+      "method": "set",
+      "ln": "4",
+      "output": null,
+      "name": [
+        "b"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "p-4.3"
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null
+    }
+  },
+  "services": [],
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {
+    "name": "1"
+  },
+  "version": null
+}

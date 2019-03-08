@@ -48,6 +48,12 @@ class ErrorCodes:
                              'An indented block is required to be before here')
     file_not_found = ('E0047',
                       'File `{path}` not found at `{abspath}`')
+    function_call_no_function = ('E0048',
+                                 'Function {name} has not been defined yet')
+    function_call_invalid_path = ('E0049',
+                                  'Function {name} is not a valid path')
+    function_call_no_inline_expression = (
+        'E0050', 'Service output can not be called as a function')
 
     @staticmethod
     def is_error(error_name):
