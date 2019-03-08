@@ -31,48 +31,9 @@ from storyscript.ErrorCodes import ErrorCodes
     ('object_closing_bracket', ('E0018',
                                 'Missing closing bracket for object')),
     ('service_argument_colon', ('E0019', 'Missing colon in service argument')),
-    ('reserved_keyword_function', ('E0020',
-                                   '`function` is a reserved keyword')),
-    ('reserved_keyword_if', ('E0021', '`if` is a reserved keyword')),
-    ('reserved_keyword_else', ('E0022', '`else` is a reserved keyword')),
-    ('reserved_keyword_foreach', ('E0023', '`foreach` is a reserved keyword')),
-    ('reserved_keyword_return', ('E0024', '`return` is a reserved keyword')),
-    ('reserved_keyword_returns', ('E0025', '`returns` is a reserved keyword')),
-    ('reserved_keyword_try', ('E0026', '`try` is a reserved keyword')),
-    ('reserved_keyword_catch', ('E0027', '`catch` is a reserved keyword')),
-    ('reserved_keyword_finally', ('E0028', '`finally` is a reserved keyword')),
-    ('reserved_keyword_when', ('E0029', '`when` is a reserved keyword')),
-    ('reserved_keyword_as', ('E0030', '`as` is a reserved keyword')),
-    ('reserved_keyword_import', ('E0031', '`import` is a reserved keyword')),
-    ('reserved_keyword_while', ('E0032', '`while` is a reserved keyword')),
-    ('reserved_keyword_throw', ('E0033', '`throw` is a reserved keyword')),
-    ('future_reserved_keyword_async', (
-        'E0034',
-        '`async` is reserved for future use')),
-    ('future_reserved_keyword_story', (
-        'E0035',
-        '`story` is reserved for future use')),
-    ('future_reserved_keyword_assert', (
-        'E0036',
-        '`assert` is reserved for future use')),
-    ('future_reserved_keyword_called', (
-        'E0037',
-        '`called` is reserved for future use')),
-    ('future_reserved_keyword_mock', (
-        'E0038',
-        '`mock` is reserved for future use')),
-    ('arguments_nomutation', (
-        'E0039',
-        'You have defined a chained mutation, but not a mutation')),
-    ('compiler_error_no_operator', ('E0040', 'No operator provided')),
-    ('invalid_character', (('E0041', '`{}` is not allowed here'))),
-    ('function_already_declared',
-        ('E0042', '`{}` has already been declared at line {}')),
-    ('unexpected_token', ('E0043', '`{}` is not allowed here. Allowed: {}')),
-    ('break_outside', ('E0044', '`break` is allowed only inside loops')),
-    ('unnecessary_colon', (
-        'E0045',
-        'There is an unnecessary colon at the end of the line'))
+    ('reserved_keyword', ('E0020', '`{keyword}` is a reserved keyword')),
+    ('future_reserved_keyword',
+        ('E0030', '`{keyword}` is reserved for future use')),
 ])
 def test_errorcodes_errors(name, definition):
     assert getattr(ErrorCodes, name) == definition

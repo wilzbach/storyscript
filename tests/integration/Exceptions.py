@@ -73,7 +73,7 @@ def test_exceptions_file_not_found(capsys):
     with raises(StoryError) as e:
         Story.from_file('this-file-does-not-exist')
     message = e.value.message()
-    assert 'File "this-file-does-not-exist" not found at' in message
+    assert 'File `this-file-does-not-exist` not found at' in message
 
 
 def test_exceptions_dollar(capsys):

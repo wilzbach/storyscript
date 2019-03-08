@@ -202,6 +202,18 @@ def test_tree_expect(tree):
     assert e.value.message() == 'Unknown compiler error'
 
 
+def test_tree_expect_kwargs(tree):
+    """
+    Ensures expect throws an error and forwards arguments
+    """
+    with raises(CompilerError) as e:
+        tree.expect(0, 'error', a=0, b=1, c=2)
+
+    assert e.value.format.a == 0
+    assert e.value.format.b == 1
+    assert e.value.format.c == 2
+
+
 def test_follow_node_chain_no_children(tree):
     """
     Ensures we don't follow a node chain if there are no children

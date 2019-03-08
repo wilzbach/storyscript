@@ -136,12 +136,12 @@ class Tree(LarkTree):
             e = e.child(0)
         return True
 
-    def expect(self, cond, error):
+    def expect(self, cond, error, **kwargs):
         """
         Throws a compiler error with message if the condition is falsy.
         """
         if not cond:
-            raise CompilerError(error, tree=self)
+            raise CompilerError(error, tree=self, format=kwargs)
 
     def follow_node_chain(self, expected_nodes):
         """

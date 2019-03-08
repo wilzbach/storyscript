@@ -38,7 +38,7 @@ def test_cli_exit_file_not_found():
 
     assert e.exit_code == 1
     # the error message contains the absolute path too
-    assert 'File "this-path-will-never-ever-exist-123456" not found' \
+    assert 'File `this-path-will-never-ever-exist-123456` not found' \
         in e.output
 
 
@@ -52,7 +52,7 @@ def test_cli_parse_exit_file_not_found():
 
     assert e.exit_code == 1
     # the error message contains the absolute path too
-    assert 'File "this-path-will-never-ever-exist-123456" not found' \
+    assert 'File `this-path-will-never-ever-exist-123456` not found' \
         in e.output
 
 
@@ -66,5 +66,5 @@ def test_cli_lex_exit_file_not_found():
 
     assert e.exit_code == 1
     # the error message contains the absolute path too
-    assert 'File "this-path-will-never-ever-exist-123456" not found' \
+    assert 'File `this-path-will-never-ever-exist-123456` not found' \
         in e.output

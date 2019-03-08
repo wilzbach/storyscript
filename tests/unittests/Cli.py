@@ -163,12 +163,12 @@ def test_cli_parse_debug(runner, echo, app):
     Ensures the parse command supports raises errors with debug=True
     """
     runner.invoke(Cli.parse, ['--debug'])
-    ce = CompilerError(None, message='unexpected error')
+    ce = CompilerError(None)
     app.parse.side_effect = StoryError(ce, None)
     e = runner.invoke(Cli.parse, ['--debug', '/a/non/existent/file'])
     assert e.exit_code == 1
     assert isinstance(e.exception, CompilerError)
-    assert e.exception.message() == 'unexpected error'
+    assert e.exception.message() == 'Unknown compiler error'
 
 
 def test_cli_parse_ice(runner, echo, app):
@@ -198,11 +198,11 @@ def test_cli_parse_not_found(runner, echo, app):
     """
     Ensures the parse command catches errors
     """
-    ce = CompilerError(None, message='error')
+    ce = CompilerError(None)
     app.parse.side_effect = StoryError(ce, None)
     e = runner.invoke(Cli.parse, ['/a/non/existent/file'])
     assert e.exit_code == 1
-    click.echo.assert_called_with('error')
+    click.echo.assert_called_with(StoryError._internal_error(ce))
 
 
 def test_cli_compile(patch, runner, echo, app):
@@ -294,27 +294,28 @@ def test_cli_compile_debug_ice(runner, echo, app):
     assert str(e.exception) == 'ICE'
 
 
-def test_cli_compile_not_found(runner, echo, app):
+def test_cli_compile_not_found(patch, runner, echo, app):
     """
     Ensures the compile command catches errors
     """
-    ce = CompilerError(None, message='error')
+    patch.object(StoryError, '_internal_error')
+    ce = CompilerError(None)
     app.compile.side_effect = StoryError(ce, None)
     e = runner.invoke(Cli.compile, ['/a/non/existent/file'])
     assert e.exit_code == 1
-    click.echo.assert_called_with('error')
+    click.echo.assert_called_with(StoryError._internal_error())
 
 
 def test_cli_compile_not_found_debug(runner, echo, app):
     """
     Ensures the compile command raises errors with debug=True
     """
-    ce = CompilerError(None, message='error')
+    ce = CompilerError(None)
     app.compile.side_effect = StoryError(ce, None)
     e = runner.invoke(Cli.compile, ['--debug', '/a/non/existent/file'])
     assert e.exit_code == 1
     assert isinstance(e.exception, CompilerError)
-    assert e.exception.message() == 'error'
+    assert e.exception.message() == 'Unknown compiler error'
 
 
 def test_cli_lex(patch, magic, runner, app, echo):
@@ -374,25 +375,26 @@ def test_cli_lex_not_found(patch, runner, echo, app):
     """
     Ensures the lex command catches errors
     """
-    ce = CompilerError(None, message='error')
+    patch.object(StoryError, '_internal_error')
+    ce = CompilerError(None)
     patch.object(App, 'lex')
     App.lex.side_effect = StoryError(ce, None)
     e = runner.invoke(Cli.lex, ['/a/non/existent/file'])
     assert e.exit_code == 1
-    click.echo.assert_called_with('error')
+    click.echo.assert_called_with(StoryError._internal_error())
 
 
 def test_cli_lex_not_found_debug(patch, runner, echo, app):
     """
     Ensures the lex command raises errors with debug=True
     """
-    ce = CompilerError(None, message='error')
+    ce = CompilerError(None)
     patch.object(App, 'lex')
     App.lex.side_effect = StoryError(ce, None)
     e = runner.invoke(Cli.lex, ['--debug', '/a/non/existent/file'])
     assert e.exit_code == 1
     assert isinstance(e.exception, CompilerError)
-    assert e.exception.message() == 'error'
+    assert e.exception.message() == 'Unknown compiler error'
 
 
 def test_cli_grammar(patch, runner, app, echo):

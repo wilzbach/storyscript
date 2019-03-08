@@ -32,8 +32,9 @@ def test_transformer_is_keyword(syntax_error, keyword):
     token = Token('any', keyword)
     with raises(StorySyntaxError):
         Transformer.is_keyword(token)
-    name = 'reserved_keyword_{}'.format(keyword)
-    syntax_error.assert_called_with(name, token=token)
+    name = 'reserved_keyword'
+    format = {'keyword': keyword}
+    syntax_error.assert_called_with(name, token=token, format=format)
 
 
 @mark.parametrize('keyword', [
@@ -43,8 +44,9 @@ def test_transformer_is_keyword_future(syntax_error, keyword):
     token = Token('any', keyword)
     with raises(StorySyntaxError):
         Transformer.is_keyword(token)
-    name = 'future_reserved_keyword_{}'.format(keyword)
-    syntax_error.assert_called_with(name, token=token)
+    name = 'future_reserved_keyword'
+    format = {'keyword': keyword}
+    syntax_error.assert_called_with(name, token=token, format=format)
 
 
 def test_transformer_implicit_output(tree):

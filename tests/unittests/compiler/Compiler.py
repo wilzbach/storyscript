@@ -359,10 +359,9 @@ def test_compiler_return_statement_error(patch, compiler, tree):
     Ensures Compiler.return_statement raises CompilerError when the return
     is outside a function.
     """
-    patch.init(CompilerError)
-    with raises(CompilerError):
-        compiler.return_statement(tree, None)
-    CompilerError.__init__.assert_called_with('return_outside', tree=tree)
+    patch.object(Objects, 'expression')
+    compiler.return_statement(tree, None)
+    tree.expect.assert_called_with(False, 'return_outside')
 
 
 def test_compiler_if_block(patch, compiler, lines, tree):
@@ -481,9 +480,9 @@ def test_compiler_function_block_redeclared(patch, compiler, lines, tree):
     with raises(CompilerError) as e:
         compiler.function_block(tree, '1')
 
-    e.value.extra.function_name = '.function.'
-    e.value.extra.previous_line = '0'
-    e.value.extra.error = 'function_already_declared'
+    e.value.format.function_name = '.function.'
+    e.value.format.line = '0'
+    e.value.error = 'function_already_declared'
 
 
 def test_compiler_throw_statement(patch, compiler, lines, tree):
@@ -666,10 +665,8 @@ def test_compiler_break_statement(compiler, lines, tree):
 
 
 def test_compiler_break_statement_outside(patch, compiler, lines, tree):
-    patch.init(CompilerError)
-    with raises(CompilerError):
-        compiler.break_statement(tree, None)
-    CompilerError.__init__.assert_called_with('break_outside', tree=tree)
+    compiler.break_statement(tree, None)
+    tree.expect.assert_called_with(False, 'break_outside')
 
 
 @mark.parametrize('method_name', [

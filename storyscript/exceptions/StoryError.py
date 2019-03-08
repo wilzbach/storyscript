@@ -6,6 +6,7 @@ import click
 from lark.exceptions import UnexpectedCharacters, UnexpectedToken
 
 from .CompilerError import CompilerError
+from .ProcessingError import ProcessingError
 from ..ErrorCodes import ErrorCodes
 from ..Intention import Intention
 
@@ -84,22 +85,23 @@ class StoryError(SyntaxError):
         Provides an hint for the current error.
         """
         if self.error_tuple == ErrorCodes.unidentified_error:
-            if hasattr(self.error, 'message'):
-                return self.error.message()
-            else:
-                return str(self.error)
+            print(self.error)
+            return StoryError._internal_error(self.error)
+
         if self.error_tuple == ErrorCodes.invalid_character:
             return self.error_tuple[1].format(
-                    self.get_line()[self.error.column - 1])
-        elif self.error_tuple == ErrorCodes.function_already_declared:
-            extra = self.error.extra
-            return self.error_tuple[1].format(extra.function_name,
-                                              extra.previous_line)
+                    character=self.get_line()[self.error.column - 1])
         elif self.error_tuple == ErrorCodes.unexpected_token:
             token = self.error.token
             expected = str(self.error.expected)
-            return self.error_tuple[1].format(token, expected)
-        return self.error_tuple[1]
+            return self.error_tuple[1].format(token=token, allowed=expected)
+
+        # Not every error originates from a ProcessingError
+        # (we also catch Lark's errors)
+        if isinstance(self.error, ProcessingError):
+            return self.error.message()
+        else:
+            return self.error_tuple[1]
 
     def unexpected_token_code(self):
         """
@@ -115,8 +117,11 @@ class StoryError(SyntaxError):
         return ErrorCodes.unexpected_token
 
     @staticmethod
-    def is_valid_name_start(token):
-        return token.isalpha() or token == '_'
+    def is_valid_name_start(char):
+        """
+        Checks whether a character token is a valid start of a name
+        """
+        return char.isalpha() or char == '_'
 
     def unexpected_characters_code(self):
         """
@@ -169,7 +174,7 @@ class StoryError(SyntaxError):
                     self.error_code(), self.hint())
             return '{}\n\n{}\n\n{}: {}'.format(*args)
         else:
-            return self.error.message()
+            return self.hint()
 
     def short_message(self):
         """
@@ -185,11 +190,25 @@ class StoryError(SyntaxError):
         click.echo(self.message())
 
     @staticmethod
-    def unnamed_error(message):
-        return StoryError(CompilerError(None, message=message), None)
+    def create_error(error_code, **kwargs):
+        """
+        Builds a compiler error with 'error_code' and all other arguments
+        as its format parameters.
+        """
+        return StoryError(CompilerError(error_code, format=kwargs), None)
 
     @staticmethod
     def internal_error(error):
+        """
+        Builds an internal error.
+        """
+        return StoryError(error, story=None)
+
+    @staticmethod
+    def _internal_error(error):
+        """
+        Creates the error message for an internal error.
+        """
         url = 'https://github.com/storyscript/storyscript/issues'
-        message = 'Internal error occured: {}\nPlease report at {}'
-        return StoryError.unnamed_error(message.format(error, url))
+        return ('Internal error occured: {error}\n'
+                'Please report at {url}').format(error=str(error), url=url)

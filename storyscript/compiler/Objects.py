@@ -225,7 +225,8 @@ class Objects:
                  'NOT_EQUAL': 'not_equal',
                  'GREATER_EQUAL': 'greater_equal',
                  'LESSER_EQUAL': 'less_equal'}
-        tree.expect(operator in types, 'compiler_error_no_operator')
+        tree.expect(operator in types, 'compiler_error_no_operator',
+                    operator=operator)
         return types[operator]
 
     @classmethod
