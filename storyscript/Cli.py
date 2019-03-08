@@ -57,7 +57,7 @@ class Cli:
                     click.echo(tree.pretty())
         except StoryError as e:
             if debug:
-                raise e
+                raise e.error
             else:
                 e.echo()
                 exit(1)
@@ -97,7 +97,7 @@ class Cli:
                     click.echo(click.style(msg, fg='green'))
         except StoryError as e:
             if debug:
-                raise e
+                raise e.error
             else:
                 e.echo()
                 exit(1)
@@ -125,7 +125,7 @@ class Cli:
                     click.echo('{} {} {}'.format(n, token.type, token.value))
         except StoryError as e:
             if debug:
-                raise e
+                raise e.error
             else:
                 e.echo()
                 exit(1)

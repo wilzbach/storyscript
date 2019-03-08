@@ -167,8 +167,8 @@ def test_cli_parse_debug(runner, echo, app):
     app.parse.side_effect = StoryError(ce, None)
     e = runner.invoke(Cli.parse, ['--debug', '/a/non/existent/file'])
     assert e.exit_code == 1
-    assert isinstance(e.exception, StoryError)
-    assert e.exception.short_message() == 'E0001: unexpected error'
+    assert isinstance(e.exception, CompilerError)
+    assert e.exception.message() == 'unexpected error'
 
 
 def test_cli_parse_ice(runner, echo, app):
@@ -313,8 +313,8 @@ def test_cli_compile_not_found_debug(runner, echo, app):
     app.compile.side_effect = StoryError(ce, None)
     e = runner.invoke(Cli.compile, ['--debug', '/a/non/existent/file'])
     assert e.exit_code == 1
-    assert isinstance(e.exception, StoryError)
-    assert e.exception.short_message() == 'E0001: error'
+    assert isinstance(e.exception, CompilerError)
+    assert e.exception.message() == 'error'
 
 
 def test_cli_lex(patch, magic, runner, app, echo):
@@ -391,8 +391,8 @@ def test_cli_lex_not_found_debug(patch, runner, echo, app):
     App.lex.side_effect = StoryError(ce, None)
     e = runner.invoke(Cli.lex, ['--debug', '/a/non/existent/file'])
     assert e.exit_code == 1
-    assert isinstance(e.exception, StoryError)
-    assert e.exception.short_message() == 'E0001: error'
+    assert isinstance(e.exception, CompilerError)
+    assert e.exception.message() == 'error'
 
 
 def test_cli_grammar(patch, runner, app, echo):
