@@ -52,7 +52,8 @@ class FakeTree:
         Creates a fake assignment tree, equivalent to "$fake = value"
         """
         line = self.get_line(value)
-        value.child(0).child(0).line = line
+        first_token = value.find_first_token()
+        first_token.line = line
         path = self.path(line=line)
         equals = Token('EQUALS', '=', line=line)
         fragment = Tree('assignment_fragment', [equals, value])

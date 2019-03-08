@@ -129,6 +129,15 @@ def test_tree_find():
     assert tree.find('assignment') == [expected]
 
 
+def test_tree_find_first_token():
+    """
+    Ensures Tree.find_first_token can find the correct Token
+    """
+    expected = Tree('assignment', ['x'])
+    tree = Tree('start', [Tree('block', [Tree('line', [expected])])])
+    assert tree.find('assignment') == [expected]
+
+
 def test_tree_extract():
     target = Tree('target', [])
     tree = Tree('tree', [target, Tree('more', [target])])
