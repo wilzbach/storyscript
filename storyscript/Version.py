@@ -22,7 +22,7 @@ def git_version():
 
 def git_describe():
     return subprocess.run(
-        ['git', 'describe', '--dirty'],
+        ['git', 'describe', '--dirty', '--tags'],
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
         universal_newlines=True,
