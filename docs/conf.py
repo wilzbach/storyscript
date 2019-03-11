@@ -66,7 +66,7 @@ version = None
 # try loading the current version
 try:
     script = io.open(path.join(root_dir, 'storyscript', 'Version.py')).read()
-    result = {}
+    result = {'__file__': path.join(root_dir, 'storyscript', 'Version.py')}
     exec(script, result)
     version = result['release_version']
 except FileNotFoundError:
