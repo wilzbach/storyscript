@@ -162,7 +162,7 @@ class Tree(LarkTree):
 
     def follow_node_chain(self, expected_nodes):
         """
-        Checks whether all expected nodes can seen in the tree
+        Checks whether all expected nodes can be seen in the tree.
         Returns the lowest expected node if all expected nodes and
         no other nodes have been observed, `None` otherwise.
         """

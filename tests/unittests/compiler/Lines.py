@@ -154,24 +154,18 @@ def test_lines_make_keywords(lines, keywords):
     assert lines.lines['1'][keywords] == keywords
 
 
-def test_lines_service_method(lines):
-    assert lines.service_method('alpine', '1') == 'execute'
+def test_lines_check_service_name(lines):
+    """
+    Asserts that these service names are valid and don't throw an Error
+    """
+    lines.check_service_name('alpine', '1')
+    lines.check_service_name('_alpine', '1')
 
 
-def test_lines_service_method_call(lines):
-    lines.functions['makeTea'] = '1'
-    assert lines.service_method('makeTea', '1') == 'call'
-
-
-def test_lines_service_method_call_from_module(lines):
-    lines.modules['afternoon'] = 'afternoon.story'
-    assert lines.service_method('afternoon.makeTea', '1') == 'call'
-
-
-def test_lines_service_method_error(patch, lines):
+def test_lines_check_service_name_error(patch, lines):
     patch.init(StorySyntaxError)
     with raises(StorySyntaxError):
-        lines.service_method('wrong.name', '1')
+        lines.check_service_name('wrong.name', '1')
     StorySyntaxError.__init__.assert_called_with('service_name')
 
 
@@ -204,13 +198,23 @@ def test_compiler_append_service(patch, lines):
     """
     Ensures that a service is registed in Compiler.services
     """
-    patch.many(Lines, ['make', 'set_next', 'is_output', 'service_method'])
-    Lines.service_method.return_value = 'execute'
+    patch.many(Lines, ['make', 'set_next', 'is_output', 'check_service_name'])
     Lines.is_output.return_value = False
     lines.append('execute', 'line', service='service', parent='parent')
-    Lines.service_method.assert_called_with('service', 'line')
+    Lines.check_service_name.assert_called_with('service', 'line')
     lines.is_output.assert_called_with('parent', 'service')
     assert lines.services[0] == 'service'
+
+
+def test_compiler_append_function_call(patch, lines):
+    """
+    Ensures that a function is registed in Compiler.services
+    """
+    patch.many(Lines, ['make', 'set_next', 'is_output', 'check_service_name'])
+    Lines.is_output.return_value = False
+    lines.append('call', 'line', service='my_function', parent='parent')
+    lines.is_output.assert_not_called()
+    assert lines.services == []
 
 
 def test_lines_append_service_block_output(patch, lines):
@@ -218,8 +222,7 @@ def test_lines_append_service_block_output(patch, lines):
     Ensures that a service is not registered if the current service block
     has defined it as output
     """
-    patch.many(Lines, ['make', 'set_next', 'is_output', 'service_method'])
-    Lines.service_method.return_value = 'execute'
+    patch.many(Lines, ['make', 'set_next', 'is_output', 'check_service_name'])
     lines.outputs = {'line': ['service']}
     lines.append('execute', 'line', service='service', parent='parent')
     assert lines.services == []
@@ -229,10 +232,9 @@ def test_lines_append_function_call(patch, lines):
     """
     Ensures that a function call is registered properly.
     """
-    patch.many(Lines, ['make', 'set_next', 'service_method'])
-    Lines.service_method.return_value = 'call'
+    patch.many(Lines, ['make', 'set_next', 'check_service_name'])
     lines.functions['function'] = 1
-    lines.append('execute', 'line', service='function')
+    lines.append('call', 'line', service='function')
     lines.make.assert_called_with('call', 'line', service='function')
 
 

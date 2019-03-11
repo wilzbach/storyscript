@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 4
+
+1|    [] (key: 2)
+         ^
+
+E0043: `(` is not allowed here. Allowed: ['_NL']

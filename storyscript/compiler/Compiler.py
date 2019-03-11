@@ -117,6 +117,11 @@ class Compiler:
                 self.expression(fragment, parent)
                 self.lines.set_name(name)
             return
+        elif fragment.call_expression:
+            exp = fragment.call_expression
+            self.call_expression(exp, parent)
+            self.lines.set_name(name)
+            return
         internal_assert(0)
 
     def arguments(self, tree, parent):
@@ -131,6 +136,26 @@ class Compiler:
             line['args'] = line['args'] + Objects.arguments(tree)
             return
         raise StorySyntaxError('arguments_noservice', tree=tree)
+
+    def call_expression(self, tree, parent):
+        """
+        Compiles a function call expression
+        """
+        line = tree.line()
+        tree.expect(tree.path.inline_expression is None,
+                    'function_call_no_inline_expression')
+        name = Objects.names(tree.path)
+        tree.expect(len(name) == 1, 'function_call_invalid_path',
+                    name='.'.join(name))
+        name = tree.path.extract_path()
+        args = Objects.arguments(tree)
+        # check whether function exists in this or imported modules
+        in_module = name.split('.')[0] in self.lines.modules
+        is_valid_function = name in self.lines.functions
+        tree.expect(in_module or is_valid_function,
+                    'function_call_no_function', name=name)
+        self.lines.append('call', line, service=name,
+                          output=None, args=args, parent=parent)
 
     def service(self, tree, nested_block, parent):
         """

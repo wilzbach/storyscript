@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from lark.lexer import Token
+
 from storyscript.compiler import Compiler
 
 
@@ -57,10 +59,13 @@ def test_functions_function_call_arguments(parser):
     """
     Ensures that functions with arguments can be called
     """
-    source = 'function f n:int\n\tx = 0\nf n:1\n'
+    source = 'function f n:int\n\tx = 0\nf(n:1)\n'
     tree = parser.parse(source)
     result = Compiler.compile(tree)
     args = [{'$OBJECT': 'argument', 'name': 'n', 'argument': 1}]
-    assert result['tree']['3']['method'] == 'call'
-    assert result['tree']['3']['service'] == 'f'
+    assert result['tree']['3.1']['method'] == 'call'
+    assert result['tree']['3.1']['service'] == 'f'
+    assert result['tree']['3.1']['args'] == args
+    assert result['tree']['3']['method'] == 'expression'
+    args = [{'$OBJECT': 'path', 'paths': [Token('NAME', 'p-3.1')]}]
     assert result['tree']['3']['args'] == args

@@ -25,7 +25,14 @@ class Preprocessor:
         # generate a new assignment line
         # insert it above this statement in the current block
         # return a path reference
-        fake_path = fake_tree.add_assignment(node.service, original_line=line)
+        child_node = None
+        if node.service is not None:
+            child_node = node.service
+        else:
+            assert node.call_expression is not None
+            child_node = node.call_expression
+
+        fake_path = fake_tree.add_assignment(child_node, original_line=line)
 
         # Replace the inline expression with a fake_path reference
         entity.path.replace(0, fake_path.child(0))
