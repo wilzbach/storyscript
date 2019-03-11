@@ -47,6 +47,36 @@ def test_tree_node(patch):
     assert result == Tree.walk()
 
 
+def test_tree_first_child():
+    tree = Tree('rule', ['child'])
+    assert tree.first_child() == 'child'
+
+
+def test_tree_first_child_multiple():
+    tree = Tree('rule', ['child', 'child2'])
+    assert tree.first_child() == 'child'
+
+
+def test_tree_first_child_empty():
+    tree = Tree('rule', [])
+    assert tree.first_child() is None
+
+
+def test_tree_last_child():
+    tree = Tree('rule', ['child'])
+    assert tree.last_child() == 'child'
+
+
+def test_tree_last_child_multiple():
+    tree = Tree('rule', ['child', 'child2'])
+    assert tree.last_child() == 'child2'
+
+
+def test_tree_last_child_empty():
+    tree = Tree('rule', [])
+    assert tree.last_child() is None
+
+
 def test_tree_child():
     tree = Tree('rule', ['child'])
     assert tree.child(0) == 'child'
