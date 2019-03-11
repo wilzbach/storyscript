@@ -31,7 +31,24 @@ class Tree(LarkTree):
                 current = self.walk(current, shard)
         return current
 
+    def first_child(self):
+        """
+        Return the first child
+        """
+        if len(self.children) > 0:
+            return self.children[0]
+
+    def last_child(self):
+        """
+        Return the first child
+        """
+        if len(self.children) > 0:
+            return self.children[-1]
+
     def child(self, index):
+        """
+        Returns the child at the position of `index`.
+        """
         if len(self.children) > index:
             return self.children[index]
 

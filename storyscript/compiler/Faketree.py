@@ -65,13 +65,9 @@ class FakeTree:
         Returns a fake path reference to this assignment
         """
         assignment = self.assignment(value)
-        if self.block.child(1):
-            children = [self.block.child(0), assignment, self.block.child(1)]
-            self.block.children = children
-        else:
-            self.block.children = [assignment, self.block.child(0)]
-        # we need a new node, s.t. already inserted fake node doesn't get
-        # changed
+        self.block.children = [*self.block.children[:-1], assignment,
+                               self.block.last_child()]
+        # we need a new node, s.t. already inserted fake node don't get changed
         name = Token('NAME', assignment.path.child(0), line=original_line)
         fake_path = Tree('path', [name])
         return fake_path
