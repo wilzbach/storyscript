@@ -4,46 +4,53 @@ Reference for the current syntax
 
 Strings
 -------
-::
+
+Strings can be declared with single or double quotes::
 
     color = 'blue'
     color = "blue"
 
+Escaping is done with backslashes::
+
+    funky = ".\"."
+
 Templating
 ##########
-::
+
+Strings can reference existing variables with templating.
+In curly brace blocks, variables can be referenced::
 
     where = "Amsterdam"
     message = "Hello, {where}!"
 
 Numbers
 -------
-::
+
+Storyscript support integer and floating point numbers::
 
     n = 1
     pie = 3.14
 
 Boolean
 -------
-::
+
+Boolean types have two states (`true` and `false`)::
 
     happy = true
     sad = false
 
 Lists
 -----
-Lists are a set of elements with guaranteed order.
 
-::
+Lists are a set of elements with guaranteed order::
 
-    colours = ["blue", 'red', 0]
+    colours = ["blue", "red"]
 
 A list can be defined over more lines::
 
     colours = [
         "blue",
-        'red',
-        0
+        "red",
     ]
 
 Elements are accessed by index::
@@ -53,9 +60,10 @@ Elements are accessed by index::
 
 Objects
 -------
+
 An unordered collection of elements, accessable by key::
 
-    colours = {'red':'#f00', 'blue':'#00f'}
+    colours = {'red': '#f00', 'blue': '#00f'}
 
 
 Keys can be variables::
@@ -83,15 +91,47 @@ Flags are supported::
 
 
 Arithmetical expressions
--------------------------
-An arithmetical operation between values::
+------------------------
+
+An arithmetical operation between values.
+Addition (`+`), subtraction (`-`), multiplication (`*`), divison (`/`),
+power (`^`), modulus (`%`) are supported::
 
     a = 1 + 2
+    a = 1 - 2
+    a = 1 * 2
+    a = 1 / 2
+    a = 1 % 2
 
 
-Conditions
-----------
-::
+Logical expressions
+-------------------
+
+A logical operation between values.
+The logical `and`, `or` and the unary negation (`!`) are supported::
+
+    c = a and b
+    c = a or b
+    c = !a
+
+Comparison expressions
+----------------------
+
+A comparison between values.
+The equal (`==`), not equal (`!=`), greater (`>`), greater or equal (`>=`),
+less (`<`) and less or equal (`<=`) relation are supported::
+
+    foo == bar
+    foo != bar
+    foo > bar
+    foo >= bar
+    foo < bar
+    foo <= bar
+
+Control flow
+------------
+
+Program flow can be controlled with `if` conditional blocks::
 
     if foo
         bar = foo
@@ -100,58 +140,50 @@ Conditions
     else
         bar = foo
 
-Comparisons
-###########
-::
-
-    if foo == bar
-    if foo != bar
-    if foo > bar
-    if foo >= bar
-    if foo < bar
-    if foo <= bar
-
-
 Iterating
 ---------
-::
+
+Iteration over lists can be done with `foreach`::
 
     foreach items as item
         # ..
 
 
-Or::
+And over objects::
 
-    foreach items as key, value
+    foreach object as key, value
         # ...
 
 Loops
 -----
-::
+
+For more flexible looping, a `while` block can be used::
 
     while cond
 
 
 Functions
 ---------
-::
+
+Functions allow to write repeatable sub procedures::
 
     function sum a:int b:int returns int
         x = a + b
         return x
 
-The output is optional::
+The output declaration is optional::
 
     function sum a:int b:int
         # ...
 
-Calling a function::
+Calling a function requires parentheses::
 
-    sum a:1 b:2
+    sum (a:1 b:2)
 
 Services
 --------
-::
+
+Services can be called with a `<service-name> <command-name> <arguments>*` expression::
 
     result = service command key:value foo:bar
 

@@ -85,7 +85,7 @@ function arguments, string or numeric values::
     {
         "args": [
             {
-                "$OBJECT": "objectype",
+                "$OBJECT": "<objectype>",
                 "objectype": "value"
             }
         ]
@@ -93,8 +93,18 @@ function arguments, string or numeric values::
 
 String
 ######
-String objects have a string property. If they are string templates, they will
-also have a values list, indicating the variables to use when compiling the string::
+String objects have a `string` property.
+For example, `"hello"` would evaluate to::
+
+    {
+      "$OBJECT": "string",
+      "string": "hello",
+    }
+
+
+If they are string templates, they will
+also have a values list, indicating the variables to use when compiling the string.
+For example, `"hello, {path}` would evaluate to::
 
     {
       "$OBJECT": "string",
@@ -111,16 +121,35 @@ also have a values list, indicating the variables to use when compiling the stri
 
 List
 ####
-Declares a list. Items will be a list of other objects::
+Declares a list. Items will be a list of other objects.
+For example, `[1, 2, 3]` would evaluate to::
 
     {
       "$OBJECT": "list",
-      "items": [...]
+      "items": [1, 2]
+    }
+
+However, note that for other types the object types needs to be passed too.
+For example, `["hello", "world"]` would evaluate to::
+
+    {
+      "$OBJECT": "list",
+      "items": [
+        {
+          "$OBJECT": "string",
+          "string": "hello"
+        },
+        {
+          "$OBJECT": "string",
+          "string": "world"
+        }
+      ]
     }
 
 Dict
 ####
 Declares an object::
+For example, `["key": "value"]` would evaluate to::
 
     {
       "$OBJECT": "dict",
@@ -141,12 +170,13 @@ Declares an object::
 
 Regexp
 ######
-Declares a regular expression::
+Declares a regular expression.
+For example, `/^foo/g` would evaluate to::
 
     {
         "$OBJECT": "regexp"
         "regexp": "/^foo/",
-        "flags": "flags"
+        "flags": "g"
     }
 
 
@@ -162,14 +192,29 @@ Type objects declare the use of a type::
 Path
 ####
 
-::
+A path is a reference to an existing variable::
 
     {
         "args": [
             {
                 "$OBJECT": "path",
                 "paths": [
-                    "varname"
+                    "<varname>"
+                ]
+            }
+        ]
+    }
+
+Is more than one `paths` member given, this implies object access
+to the referenced variable.
+For example, `a.b` would evaluate to::
+
+    {
+        "args": [
+            {
+                "$OBJECT": "path",
+                "paths": [
+                    "a", "b"
                 ]
             }
         ]
@@ -178,12 +223,13 @@ Path
 Expression
 ##########
 Expression have an expression property indicating the type of expression and
-the two hand-sides of the expression in the values list. These will be two
-other objects: paths or values::
+a `values` array with one (unary) or two (binary) expression values.
+Values can be`paths` or `values` objects::
+For example, `a <type> b` would like similar to::
 
     {
       "$OBJECT": "expression",
-      "expression": "{} == {}",
+      "expression": "<type>",
       "values": [
           {
             "$OBJECT": "path",
@@ -195,6 +241,34 @@ other objects: paths or values::
       ]
     }
 
+Storyscript engines must support the following unary and binary expression types.
+
+Arithmetic operations
+---------------------
+
+- `sum` (`a + b`)
+- `subtraction` (`a -b`)
+- `exponential` (`a ^^ b`)
+- `multiplication` (`a * b`)
+- `division` (`a / b`)
+- `modulus` (`a % b`)
+
+Logical operations
+------------------
+
+- `and` (`a && b`)
+- `or` (`a || b`)
+- `not` (`not a`)
+
+Comparison
+-----------
+
+- `equals` (`a == b`)
+- `greater` (`a > b`)
+- `less` (`a < b`)
+- `not_equal` (`a != b`)
+- `greater_equal` (`a >= b`)
+- `less_equal` (`a <= b`)
 
 
 Argument
@@ -266,7 +340,7 @@ Compiles to::
         "args": [
             {
               "$OBJECT": "expression",
-              "expression": "{} + {}",
+              "expression": "sum",
               "values": [
                 1,
                 1
@@ -296,14 +370,16 @@ Will result in::
           "args": [
             1
           ],
-          "next": "next line"
+          "next": "<next line>"
         }
     }
 
 If
 ##
 Args can be a path, an expression object or a pure value. When part of block of
-conditionals, the exit property will refer to the next *else if* or *else*::
+conditionals, the exit property will refer to the next *else if* or *else*.
+
+For example, `if color` would evaluate to::
 
     {
       "method": "if",
@@ -328,7 +404,7 @@ conditionals, the exit property will refer to the next *else if* or *else*::
 
 Elif
 ####
-Similar to if::
+Similar to `if`. For example, `elif a == 1` would evaluate to::
 
     {
       "method": "elif",
@@ -339,9 +415,16 @@ Similar to if::
       "function": null,
       "args": [
         {
-          "$OBJECT": "path",
-          "paths": [
-            "blue"
+          "$OBJECT": "expression",
+          "expression": "equals",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            1
           ]
         }
       ],
@@ -432,9 +515,9 @@ regardless of the previous try outcome::
       "exit": null
     }
 
-For
+Foreach
 ###
-Declares a for iteration::
+Declares a for iteration. For example `foreach items as item` would evaluate to::
 
     {
       "method": "for",
@@ -461,7 +544,8 @@ Declares a for iteration::
 
 Execute
 #######
-Used for services. Service arguments will be in *args*::
+Used for services. Service arguments will be in *args*.
+For example, `alpine echo message: "text"` would evaluate to::
 
     {
       "method": "execute",
@@ -488,7 +572,8 @@ Used for services. Service arguments will be in *args*::
 
 Function
 ########
-Declares a function. Output maybe null::
+Declares a function. Output maybe null.
+For example, `function sum a:int b: int returns int` would evaluate to::
 
     {
       "method": "function",
@@ -526,7 +611,8 @@ Declares a function. Output maybe null::
 Return
 ######
 Declares a return statement. Can be used only inside a function, thus will
-always have a parent::
+always have a parent.
+For example, `return x` would evaluate to::
 
     {
       "method": "return",
@@ -551,8 +637,8 @@ always have a parent::
 
 Call
 ####
-Declares a function call, but otherwise identical to the execute method::
-
+Declares a function call, but otherwise identical to the execute method.
+For example, `sum(a: 1, b:2)` would evaluate to::
 
     {
       "method": "call",
