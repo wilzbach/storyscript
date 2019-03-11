@@ -26,7 +26,7 @@ def test_git_describe(patch):
     patch.object(subprocess, 'run')
     r = Version.git_describe()
     subprocess.run.assert_called_with(
-        ['git', 'describe', '--dirty'],
+        ['git', 'describe', '--dirty', '--tags'],
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
         universal_newlines=True,
