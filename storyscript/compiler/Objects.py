@@ -137,7 +137,8 @@ class Objects:
             child = item.child(0)
             if child.data == 'string':
                 key = cls.string(child)
-            elif child.data == 'path':
+            else:
+                internal_assert(child.data == 'path')
                 key = cls.path(child)
             value = cls.base_expression(item.child(1))
             items.append([key, value])
@@ -185,9 +186,9 @@ class Objects:
                 return cls.types(subtree)
             elif subtree.data == 'void':
                 return None
-        else:
-            internal_assert(subtree.type == 'NAME')
-            return cls.path(tree)
+
+        internal_assert(subtree.type == 'NAME')
+        return cls.path(tree)
 
     @classmethod
     def argument(cls, tree):

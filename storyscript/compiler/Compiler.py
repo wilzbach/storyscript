@@ -73,9 +73,8 @@ class Compiler:
         service = tree.service
         if service:
             path = Objects.names(service.path)
-            if not self.lines.is_variable_defined(path):
-                self.service(service, None, parent)
-                return
+            internal_assert(not self.lines.is_variable_defined(path))
+            self.service(service, None, parent)
         elif tree.mutation:
             self.mutation_block(tree, parent)
             return
@@ -84,7 +83,7 @@ class Compiler:
             self.lines.append('expression', line, args=args, parent=parent)
             return
         else:
-            internal_assert(tree.child(0).data == 'call_expression')
+            internal_assert(tree.call_expression)
             exp = tree.call_expression
             self.call_expression(exp, parent)
             return
