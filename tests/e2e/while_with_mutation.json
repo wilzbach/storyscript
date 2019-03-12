@@ -1,0 +1,91 @@
+{
+  "tree": {
+    "1": {
+      "method": "set",
+      "ln": "1",
+      "output": null,
+      "name": [
+        "x"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        5
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "output": null,
+      "name": [
+        "p-2.1"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "x"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "is_odd",
+          "arguments": []
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "while",
+      "ln": "2",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "p-2.1"
+          ]
+        }
+      ],
+      "enter": "3",
+      "exit": null,
+      "parent": null,
+      "next": "3"
+    },
+    "3": {
+      "method": "execute",
+      "ln": "3",
+      "output": [],
+      "name": null,
+      "service": "continue",
+      "command": null,
+      "function": null,
+      "args": [],
+      "enter": null,
+      "exit": null,
+      "parent": "2"
+    }
+  },
+  "services": [
+    "continue"
+  ],
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {},
+  "version": null
+}

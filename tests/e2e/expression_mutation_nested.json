@@ -1,0 +1,82 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "mutation",
+      "ln": "1.1",
+      "output": null,
+      "name": [
+        "p-1.1"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "string",
+              "string": "opened"
+            },
+            {
+              "$OBJECT": "string",
+              "string": "labeled"
+            }
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "contains",
+          "arguments": [
+            {
+              "$OBJECT": "argument",
+              "name": "item",
+              "argument": {
+                "$OBJECT": "string",
+                "string": "a"
+              }
+            }
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "output": null,
+      "name": [
+        "b"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "and",
+          "values": [
+            1,
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "p-1.1"
+              ]
+            }
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null
+    }
+  },
+  "services": [],
+  "entrypoint": "1.1",
+  "modules": {},
+  "functions": {},
+  "version": null
+}

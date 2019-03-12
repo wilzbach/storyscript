@@ -43,7 +43,7 @@ def test_parser_list_path(parser):
     expression = result.child(1).rules.absolute_expression
     entity = get_entity(arith_exp(expression))
     list = arith_exp(Tree('absolute_expression',
-                          [entity.values.list.child(3)]))
+                          [entity.values.list.child(3).expression]))
     x = get_entity(list)
     assert x.path.child(0) == Token('NAME', 'x')
 
@@ -59,7 +59,7 @@ def test_parser_assignment(parser, code, token):
     assignment = result.block.rules.assignment
     assert assignment.path.child(0) == Token('NAME', 'var')
     assert assignment.assignment_fragment.child(0) == Token('EQUALS', '=')
-    expression = assignment.assignment_fragment
+    expression = assignment.assignment_fragment.base_expression
     entity = get_entity(arith_exp(expression))
     assert entity.values.child(0).child(0) == token
 
@@ -96,7 +96,7 @@ def test_parser_foreach_block(parser):
 def test_parser_while_block(parser):
     result = parser.parse('while cond\n\tvar=3\n')
     block = result.block.while_block
-    exp = arith_exp(block.while_statement)
+    exp = arith_exp(block.while_statement.base_expression)
     entity = get_entity(exp)
     assert entity.path.child(0) == Token('NAME', 'cond')
     assert block.nested_block.data == 'nested_block'
@@ -127,7 +127,7 @@ def test_parser_service_output(parser):
 def test_parser_if_block(parser):
     result = parser.parse('if expr\n\tvar=3\n')
     if_block = result.block.if_block
-    ar_exp = arith_exp(if_block.if_statement)
+    ar_exp = arith_exp(if_block.if_statement.base_expression)
     entity = get_entity(ar_exp)
     path = entity.path
     assignment = if_block.nested_block.block.rules.assignment
@@ -138,7 +138,7 @@ def test_parser_if_block(parser):
 def test_parser_if_block_nested(parser):
     result = parser.parse('if expr\n\tif things\n\t\tvar=3\n')
     if_block = result.block.if_block.nested_block.block.if_block
-    ar_exp = arith_exp(if_block.if_statement)
+    ar_exp = arith_exp(if_block.if_statement.base_expression)
     entity = get_entity(ar_exp)
     path = entity.path
     assignment = if_block.nested_block.block.rules.assignment
@@ -249,6 +249,7 @@ def test_parser_number_float(parser, number):
 def test_parser_string_double_quoted(parser):
     result = parser.parse(r'a = "b\n.\\.\".c"')
     result = result.block.rules.assignment.assignment_fragment
+    result = result.base_expression
     ar_exp = arith_exp(result)
     lhs = get_entity(ar_exp.child(0)).values.string.child(0)
     assert lhs == r'"b\n.\\.\".c"'
@@ -257,6 +258,7 @@ def test_parser_string_double_quoted(parser):
 def test_parser_string_single_quoted(parser):
     result = parser.parse(r"""a = 'b.\n.\\.\'.c'""")
     result = result.block.rules.assignment.assignment_fragment
+    result = result.base_expression
     ar_exp = arith_exp(result)
     lhs = get_entity(ar_exp.child(0)).values.string.child(0)
     assert lhs == r"""'b.\n.\\.\'.c'"""

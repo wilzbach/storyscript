@@ -79,7 +79,7 @@ class Lines:
 
     def finish_scope(self, line):
         """
-        Finshes an output scope and prepares 'exit' adjustment for the scope
+        Finishes an output scope and prepares 'exit' adjustment for the scope
         when the next line gets added.
         """
         self.finished_scopes.append(line)
