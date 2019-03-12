@@ -95,8 +95,8 @@ def test_values_list(parser):
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     list = entity.values.list
-    c1 = get_entity(list.child(1))
-    c2 = get_entity(list.child(3))
+    c1 = get_entity(list.child(1).expression)
+    c2 = get_entity(list.child(3).expression)
     assert c1.values.number.child(0) == Token('INT', 3)
     assert c2.values.number.child(0) == Token('INT', 4)
 
@@ -116,7 +116,7 @@ def test_values_object(parser):
     values = entity.values
     key_value = values.objects.key_value
     assert key_value.string.child(0) == Token('SINGLE_QUOTED', "'color'")
-    entity = get_entity(key_value.child(1))
+    entity = get_entity(key_value.child(1).expression)
     assert entity.values.string.child(0) == Token('SINGLE_QUOTED', "'red'")
 
 

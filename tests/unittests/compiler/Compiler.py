@@ -22,15 +22,6 @@ def compiler(patch, lines):
     return compiler
 
 
-def get_entity(obj):
-    """
-    returns the entity for an expression
-    """
-    return obj.or_expression.and_expression.cmp_expression.arith_expression. \
-        mul_expression.unary_expression.pow_expression.primary_expression. \
-        entity
-
-
 def test_compiler_init(patch):
     patch.init(Lines)
     compiler = Compiler()
@@ -65,20 +56,20 @@ def test_compiler_extract_values_expression(patch, tree):
 
 
 def test_compiler_extract_values_mutation(patch, tree):
-    patch.many(Objects, ['values', 'mutation'])
+    patch.many(Objects, ['values', 'mutation_fragment'])
     result = Compiler.extract_values(tree)
     Objects.values.assert_called_with(tree.expression.values)
-    Objects.mutation.assert_called_with(tree.expression.mutation)
-    assert result == [Objects.values(), Objects.mutation()]
+    Objects.mutation_fragment.assert_called_with(tree.expression.mutation)
+    assert result == [Objects.values(), Objects.mutation_fragment()]
 
 
 def test_compiler_chained_mutations(patch, magic, tree):
-    patch.object(Objects, 'mutation')
+    patch.object(Objects, 'mutation_fragment')
     mutation = magic()
     tree.find_data.return_value = [mutation]
     result = Compiler.chained_mutations(tree)
-    Objects.mutation.assert_called_with(mutation.mutation_fragment)
-    assert result == [Objects.mutation()]
+    Objects.mutation_fragment.assert_called_with(mutation.mutation_fragment)
+    assert result == [Objects.mutation_fragment()]
 
 
 def test_compiler_function_output(patch, tree):
@@ -95,74 +86,30 @@ def test_compiler_imports(patch, compiler, lines, tree):
     assert lines.modules[module] == tree.string.child(0).value[1:-1]
 
 
-def test_compiler_expression(patch, compiler, lines, tree):
-    """
-    Ensures that expressions are compiled correctly
-    """
-    patch.object(Objects, 'expression')
-    compiler.expression(tree, '1')
-    Objects.expression.assert_called_with(tree.expression)
-    args = [Objects.expression()]
-    lines.append.assert_called_with('expression', tree.line(), args=args,
-                                    parent='1')
-
-
-def test_compiler_unary_expression(patch, compiler, lines, tree):
-    patch.object(Lines, 'append')
-    patch.object(Objects, 'entity')
-    method = 'set.method'
-    parent = '.parent.'
-    compiler.unary_expression(tree, parent, method)
-    args = [Objects.entity(tree.expression.multiplication.exponential.
-                           factor.entity)]
-    lines.append.assert_called_with(method, tree.line(), args=args,
-                                    parent=parent)
-
-
-def test_compiler_unary_expression_name(patch, compiler, lines, tree):
-    patch.object(Lines, 'append')
-    patch.object(Objects, 'entity')
-    method = 'set.method'
-    parent = '.parent.'
-    name = '.name.'
-    line = '.line.'
-    compiler.unary_expression(tree, parent, method, name=name, line=line)
-    args = [Objects.entity(tree.expression.multiplication.exponential.
-                           factor.entity)]
-    lines.append.assert_called_with(method, line, args=args, parent=parent,
-                                    name=name)
-
-
 def test_compiler_absolute_expression(patch, compiler, lines, tree):
-    patch.object(Compiler, 'expression')
-    tree.expression.is_unary_leaf.return_value = False
+    patch.object(Objects, 'expression')
     compiler.absolute_expression(tree, '1')
-    Compiler.expression.assert_called_with(tree, '1')
+    Objects.expression.assert_called_with(tree.expression)
 
 
-def test_compiler_absolute_expression_unary(patch, compiler, lines, tree):
-    patch.object(Compiler, 'unary_expression')
-    tree.expression.is_unary_leaf.return_value = True
-    compiler.absolute_expression(tree, '1')
-    Compiler.unary_expression.assert_called_with(tree.expression, '1',
-                                                 method='expression')
-
-
-def test_compiler_assignment(patch, compiler, lines, tree):
+def test_compiler_assignment_unary(patch, compiler, lines, tree):
     """
     Ensures a line like "x = value" is compiled correctly
     """
-    patch.many(Objects, ['names', 'entity'])
-    tree.assignment_fragment.service = None
-    tree.assignment_fragment.mutation = None
+    patch.many(Objects, ['names', 'entity', 'expression'])
+    af = tree.assignment_fragment.base_expression
+    af.expression.is_unary_leaf.return_value = True
+    af.service = None
+    af.mutation = None
+    lines.lines = {lines.last(): {'method': None}}
     compiler.assignment(tree, '1')
     Objects.names.assert_called_with(tree.path)
-    fragment = tree.assignment_fragment
-    entity = get_entity(fragment.expression)
-    Objects.entity.assert_called_with(entity)
-    kwargs = {'name': Objects.names(), 'args': [Objects.entity()],
+    Objects.expression.assert_called_with(af.expression)
+    kwargs = {'args': [Objects.expression()],
               'parent': '1'}
-    lines.append.assert_called_with('set', tree.line(), **kwargs)
+    lines.append.assert_called_with('expression', tree.line(), **kwargs)
+    lines.set_name.assert_called_with(Objects.names())
+    assert lines.lines[compiler.lines.last()]['method'] == 'set'
 
 
 def test_compiler_assignment_service(patch, compiler, lines, tree):
@@ -170,7 +117,7 @@ def test_compiler_assignment_service(patch, compiler, lines, tree):
     patch.object(Compiler, 'service')
     lines.is_variable_defined.return_value = False
     compiler.assignment(tree, '1')
-    service = tree.assignment_fragment.service
+    service = tree.assignment_fragment.base_expression.service
     Compiler.service.assert_called_with(service, None, '1')
     lines.set_name.assert_called_with(Objects.names())
 
@@ -181,21 +128,22 @@ def test_compiler_assignment_mutation(patch, compiler, lines, tree):
     """
     patch.object(Objects, 'names', return_value='name')
     patch.object(Compiler, 'mutation_block')
-    tree.assignment_fragment.service = None
+    af = tree.assignment_fragment.base_expression
+    af.service = None
     compiler.assignment(tree, '1')
-    Compiler.mutation_block.assert_called_with(tree.assignment_fragment, '1')
+    Compiler.mutation_block.assert_called_with(af, '1')
     lines.set_name.assert_called_with('name')
 
 
 def test_compiler_assignment_expression(patch, compiler, lines, tree):
     patch.object(Objects, 'names', return_value='name')
-    patch.object(Compiler, 'expression')
-    tree.assignment_fragment.service = None
-    tree.assignment_fragment.mutation = None
-    tree.assignment_fragment.expression.is_unary_leaf.return_value = False
+    patch.object(Objects, 'expression')
+    af = tree.assignment_fragment.base_expression
+    af.service = None
+    af.mutation = None
+    af.expression.is_unary_leaf.return_value = False
     compiler.assignment(tree, '1')
-    fragment = tree.assignment_fragment
-    Compiler.expression.assert_called_with(fragment, '1')
+    Objects.expression.assert_called_with(af.expression)
     lines.set_name.assert_called_with('name')
 
 
@@ -205,7 +153,7 @@ def test_compiler_assignment_function_call(patch, compiler, lines, tree):
     """
     patch.object(Objects, 'names', return_value='name')
     patch.object(Compiler, 'call_expression')
-    af = tree.assignment_fragment
+    af = tree.assignment_fragment.base_expression
     af.service = None
     af.mutation = None
     af.expression = None
@@ -474,7 +422,7 @@ def test_compiler_return_statement(patch, compiler, lines, tree):
     """
     Ensures Compiler.return_statement can compile return statements.
     """
-    tree.expression = None
+    tree.base_expression = None
     compiler.return_statement(tree, '1')
     line = tree.line()
     kwargs = {'args': None, 'parent': '1'}
@@ -486,11 +434,11 @@ def test_compiler_return_statement_entity(patch, compiler, lines, tree):
     Ensures Compiler.return_statement can compile return statements that return
     entities.
     """
-    patch.object(Objects, 'expression')
+    patch.object(Compiler, 'fake_base_expression')
     compiler.return_statement(tree, '1')
     line = tree.line()
-    Objects.expression.assert_called_with(tree.expression)
-    kwargs = {'args': [Objects.expression()], 'parent': '1'}
+    Compiler.fake_base_expression.assert_called_with(tree.base_expression, '1')
+    kwargs = {'args': [Compiler.fake_base_expression()], 'parent': '1'}
     lines.append.assert_called_with('return', line, **kwargs)
 
 
@@ -499,21 +447,21 @@ def test_compiler_return_statement_error(patch, compiler, tree):
     Ensures Compiler.return_statement raises CompilerError when the return
     is outside a function.
     """
-    patch.object(Objects, 'expression')
+    patch.object(Compiler, 'fake_base_expression')
     compiler.return_statement(tree, None)
     tree.expect.assert_called_with(False, 'return_outside')
 
 
 def test_compiler_if_block(patch, compiler, lines, tree):
-    patch.object(Objects, 'expression')
-    patch.object(Compiler, 'subtree')
+    patch.many(Compiler, ['subtree', 'fake_base_expression'])
     tree.elseif_block = None
     tree.else_block = None
     tree.extract.return_value = []
     compiler.if_block(tree, '1')
-    Objects.expression.assert_called_with(tree.if_statement.expression)
+    exp = tree.if_statement.base_expression
+    Compiler.fake_base_expression.assert_called_with(exp, '1')
     nested_block = tree.nested_block
-    args = [Objects.expression()]
+    args = [Compiler.fake_base_expression()]
     lines.set_scope.assert_called_with(tree.line(), '1')
     lines.finish_scope.assert_called_with(tree.line())
     lines.append.assert_called_with('if', tree.line(), args=args,
@@ -522,8 +470,7 @@ def test_compiler_if_block(patch, compiler, lines, tree):
 
 
 def test_compiler_if_block_with_elseif(patch, compiler, tree):
-    patch.object(Objects, 'expression')
-    patch.many(Compiler, ['subtree', 'subtrees'])
+    patch.many(Compiler, ['subtree', 'subtrees', 'fake_base_expression'])
     tree.else_block = None
     tree.extract.return_value = ['one']
     compiler.if_block(tree, '1')
@@ -532,20 +479,19 @@ def test_compiler_if_block_with_elseif(patch, compiler, tree):
 
 
 def test_compiler_if_block_with_else(patch, compiler, tree):
-    patch.object(Objects, 'expression')
-    patch.many(Compiler, ['subtree', 'subtrees'])
+    patch.many(Compiler, ['subtree', 'subtrees', 'fake_base_expression'])
     tree.extract.return_value = []
     compiler.if_block(tree, '1')
     compiler.subtrees.assert_called_with(tree.else_block, parent='1')
 
 
 def test_compiler_elseif_block(patch, compiler, lines, tree):
-    patch.object(Objects, 'expression')
-    patch.object(Compiler, 'subtree')
+    patch.many(Compiler, ['subtree', 'fake_base_expression'])
     compiler.elseif_block(tree, '1')
     lines.set_exit.assert_called_with(tree.line())
-    Objects.expression.assert_called_with(tree.elseif_statement.expression)
-    args = [Objects.expression()]
+    exp = tree.elseif_statement.base_expression
+    Compiler.fake_base_expression.assert_called_with(exp, '1')
+    args = [Compiler.fake_base_expression()]
     lines.set_scope.assert_called_with(tree.line(), '1')
     lines.finish_scope.assert_called_with(tree.line())
     lines.append.assert_called_with('elif', tree.line(), args=args,
@@ -583,10 +529,9 @@ def test_compiler_foreach_block(patch, compiler, lines, tree):
 
 def test_compiler_while_block(patch, compiler, lines, tree):
     patch.init(Tree)
-    patch.object(Objects, 'expression')
-    patch.many(Compiler, ['subtree'])
+    patch.many(Compiler, ['subtree', 'fake_base_expression'])
     compiler.while_block(tree, '1')
-    args = [Objects.expression()]
+    args = [compiler.fake_base_expression()]
     lines.set_scope.assert_called_with(tree.line(), '1')
     lines.finish_scope.assert_called_with(tree.line())
     lines.append.assert_called_with('while', tree.line(), args=args,
@@ -642,39 +587,41 @@ def test_compiler_throw_name_statement(patch, compiler, lines, tree):
 
 
 def test_compiler_mutation_block(patch, compiler, lines, tree):
-    patch.many(Objects, ['entity', 'mutation'])
+    patch.many(Objects, ['entity', 'mutation_fragment'])
     patch.object(Compiler, 'chained_mutations', return_value=['chained'])
     tree.path = None
     tree.nested_block = None
     compiler.mutation_block(tree, None)
     Objects.entity.assert_called_with(tree.mutation.entity)
-    Objects.mutation.assert_called_with(tree.mutation.mutation_fragment)
+    Objects.mutation_fragment.assert_called_with(
+        tree.mutation.mutation_fragment)
     Compiler.chained_mutations.assert_called_with(tree.mutation)
-    args = [Objects.entity(), Objects.mutation(), 'chained']
+    args = [Objects.entity(), Objects.mutation_fragment(), 'chained']
     kwargs = {'args': args, 'parent': None}
     lines.append.assert_called_with('mutation', tree.line(), **kwargs)
 
 
 def test_compiler_mutation_block_nested(patch, compiler, lines, tree):
-    patch.many(Objects, ['entity', 'mutation'])
+    patch.many(Objects, ['entity', 'mutation_fragment'])
     patch.object(Compiler, 'chained_mutations', return_value=['chained'])
     tree.path = None
     compiler.mutation_block(tree, None)
     Compiler.chained_mutations.assert_called_with(tree.nested_block)
-    args = [Objects.entity(), Objects.mutation(), 'chained', 'chained']
+    args = [Objects.entity(), Objects.mutation_fragment(), 'chained',
+            'chained']
     kwargs = {'args': args, 'parent': None}
     lines.append.assert_called_with('mutation', tree.line(), **kwargs)
 
 
 def test_compiler_mutation_block_from_service(patch, compiler, lines, tree):
-    patch.many(Objects, ['path', 'mutation'])
+    patch.many(Objects, ['path', 'mutation_fragment'])
     patch.object(Compiler, 'chained_mutations', return_value=['chained'])
     tree.nested_block = None
     compiler.mutation_block(tree, None)
     Objects.path.assert_called_with(tree.path)
-    Objects.mutation.assert_called_with(tree.service_fragment)
+    Objects.mutation_fragment.assert_called_with(tree.service_fragment)
     Compiler.chained_mutations.assert_called_with(tree)
-    args = [Objects.path(), Objects.mutation(), 'chained']
+    args = [Objects.path(), Objects.mutation_fragment(), 'chained']
     kwargs = {'args': args, 'parent': None}
     lines.append.assert_called_with('mutation', tree.line(), **kwargs)
 

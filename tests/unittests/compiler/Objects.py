@@ -54,33 +54,45 @@ def test_objects_path(patch):
     assert result == {'$OBJECT': 'path', 'paths': Objects.names()}
 
 
-def test_objects_mutation(token):
+def test_objects_mutation(patch, tree):
     """
     Ensures that mutations objects are compiled correctly.
+    """
+    patch.object(Objects, 'entity')
+    patch.object(Objects, 'mutation_fragment')
+    expected = {'method': 'mutation', 'name': [Objects.entity(tree.entity)],
+                'args': [Objects.mutation_fragment(tree.mutation_fragment)]}
+    assert Objects.mutation(tree) == expected
+
+
+def test_objects_mutation_fragment(token):
+    """
+    Ensures that mutations fragments are compiled correctly.
     """
     tree = Tree('mutation', [token])
     expected = {'$OBJECT': 'mutation', 'mutation': token.value,
                 'arguments': []}
-    assert Objects.mutation(tree) == expected
+    assert Objects.mutation_fragment(tree) == expected
 
 
-def test_objects_mutation_from_service(token):
+def test_objects_mutation_fragment_from_service(token):
     """
     Ensures that mutations objects from service trees are compiled correctly.
     """
     tree = Tree('service_fragment', [Tree('command', [token])])
     expected = {'$OBJECT': 'mutation', 'mutation': token.value,
                 'arguments': []}
-    assert Objects.mutation(tree) == expected
+    assert Objects.mutation_fragment(tree) == expected
 
 
-def test_objects_mutation_arguments(patch, magic):
+def test_objects_mutation_fragment_arguments(patch, magic):
     """
-    Ensures that mutations objects with arguments are compiled correctly.
+    Ensures that mutation fragment objects with arguments are compiled
+    correctly.
     """
     patch.object(Objects, 'arguments')
     tree = magic()
-    result = Objects.mutation(tree)
+    result = Objects.mutation_fragment(tree)
     Objects.arguments.assert_called_with(tree)
     assert result['arguments'] == Objects.arguments()
 
@@ -180,22 +192,23 @@ def test_objects_boolean_false():
 
 
 def test_objects_list(patch, tree):
-    patch.object(Objects, 'expression')
+    patch.object(Objects, 'base_expression')
     tree.children = [Tree('value', 'value'), 'token']
     result = Objects.list(tree)
-    Objects.expression.assert_called_with(Tree('value', 'value'))
-    assert result == {'$OBJECT': 'list', 'items': [Objects.expression()]}
+    Objects.base_expression.assert_called_with(Tree('value', 'value'))
+    items = [Objects.base_expression()]
+    assert result == {'$OBJECT': 'list', 'items': items}
 
 
 def test_objects_objects(patch, tree):
-    patch.many(Objects, ['string', 'expression'])
+    patch.many(Objects, ['string', 'base_expression'])
     subtree = Tree('key_value', [Tree('string', ['key']), 'value'])
     tree.children = [subtree]
     result = Objects.objects(tree)
     Objects.string.assert_called_with(subtree.string)
-    Objects.expression.assert_called_with('value')
-    expected = {'$OBJECT': 'dict', 'items': [[Objects.string(),
-                                              Objects.expression()]]}
+    Objects.base_expression.assert_called_with('value')
+    items = [[Objects.string(), Objects.base_expression()]]
+    expected = {'$OBJECT': 'dict', 'items': items}
     assert result == expected
 
 
@@ -203,7 +216,7 @@ def test_objects_objects_key_path(patch, tree):
     """
     Ensures that objects like {x: 0} are compiled
     """
-    patch.many(Objects, ['path', 'expression'])
+    patch.many(Objects, ['path', 'base_expression'])
     subtree = Tree('key_value', [Tree('path', ['path'])])
     tree.children = [subtree]
     result = Objects.objects(tree)
@@ -336,6 +349,16 @@ def test_objects_absolute_expression(patch, tree):
     patch.many(Objects, ['expression'])
     tree.child(0).data = 'expression'
     Objects.absolute_expression(tree)
+    Objects.expression.assert_called_with(tree.child(0))
+
+
+def test_objects_base_expression(patch, tree):
+    """
+    Ensures Objects.base_expression calls expression
+    """
+    patch.many(Objects, ['expression'])
+    tree.child(0).data = 'expression'
+    Objects.base_expression(tree)
     Objects.expression.assert_called_with(tree.child(0))
 
 

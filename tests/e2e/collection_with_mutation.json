@@ -1,0 +1,61 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "mutation",
+      "ln": "1.1",
+      "output": null,
+      "name": [
+        "p-1.1"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        2,
+        {
+          "$OBJECT": "mutation",
+          "mutation": "increment",
+          "arguments": []
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "1"
+    },
+    "1": {
+      "method": "set",
+      "ln": "1",
+      "output": null,
+      "name": [
+        "a"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            1,
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "p-1.1"
+              ]
+            },
+            3
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null
+    }
+  },
+  "services": [],
+  "entrypoint": "1.1",
+  "modules": {},
+  "functions": {},
+  "version": null
+}

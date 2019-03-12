@@ -83,6 +83,7 @@ def test_faketree_assignment(patch, tree, fake_tree):
     tree.find_first_token.assert_called()
     assert tree.find_first_token().line == line
     assert result.children[0] == FakeTree.path()
+    tree = Tree('base_expression', [tree])
     subtree = [Token('EQUALS', '=', line=line), tree]
     expected = Tree('assignment_fragment', subtree)
     assert result.children[1] == expected

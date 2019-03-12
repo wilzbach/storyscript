@@ -1,0 +1,91 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [],
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": "random",
+      "args": [],
+      "enter": "2",
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "set",
+      "ln": "2",
+      "output": null,
+      "name": [
+        "my_int"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        5
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "1",
+      "next": "3.1"
+    },
+    "3.1": {
+      "method": "mutation",
+      "ln": "3.1",
+      "output": null,
+      "name": [
+        "p-3.1"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "my_int"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "decrement",
+          "arguments": []
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "1",
+      "next": "3"
+    },
+    "3": {
+      "method": "return",
+      "ln": "3",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "p-3.1"
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "1"
+    }
+  },
+  "services": [],
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {
+    "random": "1"
+  },
+  "version": null
+}

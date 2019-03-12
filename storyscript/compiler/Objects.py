@@ -32,6 +32,12 @@ class Objects:
 
     @classmethod
     def mutation(cls, tree):
+        entity = Objects.entity(tree.entity)
+        args = Objects.mutation_fragment(tree.mutation_fragment)
+        return {'method': 'mutation', 'name': [entity], 'args': [args]}
+
+    @classmethod
+    def mutation_fragment(cls, tree):
         """
         Compiles a mutation object, either from a mutation or a
         service_fragment tree.
@@ -121,7 +127,7 @@ class Objects:
         items = []
         for value in tree.children:
             if isinstance(value, Tree):
-                items.append(cls.expression(value))
+                items.append(cls.base_expression(value))
         return {'$OBJECT': 'list', 'items': items}
 
     @classmethod
@@ -133,7 +139,7 @@ class Objects:
                 key = cls.string(child)
             elif child.data == 'path':
                 key = cls.path(child)
-            value = cls.expression(item.child(1))
+            value = cls.base_expression(item.child(1))
             items.append([key, value])
         return {'$OBJECT': 'dict', 'items': items}
 
@@ -179,9 +185,9 @@ class Objects:
                 return cls.types(subtree)
             elif subtree.data == 'void':
                 return None
-        if subtree.type == 'NAME':
+        else:
+            internal_assert(subtree.type == 'NAME')
             return cls.path(tree)
-        internal_assert(0)
 
     @classmethod
     def argument(cls, tree):
@@ -244,6 +250,18 @@ class Objects:
         """
         assert tree.child(0).data == 'expression'
         return cls.expression(tree.child(0))
+
+    @classmethod
+    def base_expression(cls, tree):
+        """
+        Compiles an soon to be expression object with the given tree.
+        """
+        child = tree.child(0)
+        if child.data == 'expression':
+            return cls.expression(child)
+        else:
+            assert child.data == 'path'
+            return cls.path(child)
 
     @classmethod
     def build_unary_expression(cls, tree, op, left):

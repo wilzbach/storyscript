@@ -3,15 +3,15 @@ boolean: TRUE| FALSE
 void: NULL
 number: INT| FLOAT
 string: SINGLE_QUOTED| DOUBLE_QUOTED
-!list: _OSB (_NL _INDENT)? (expression (_COMMA _NL? expression)*)? (_NL _DEDENT)? _CSB
-key_value: (string| path) _COLON expression
+!list: _OSB (_NL _INDENT)? (base_expression (_COMMA _NL? base_expression)*)? (_NL _DEDENT)? _CSB
+key_value: (string| path) _COLON base_expression
 objects: _OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)? (_NL _DEDENT)? _CCB
 regular_expression: REGEXP NAME?
-inline_expression: _OP service _CP| call_expression
+inline_expression: _OP service _CP| call_expression| _OP mutation _CP
 values: number| string| boolean| void| list| objects| regular_expression
 path_fragment: _DOT NAME| _OSB INT _CSB| _OSB string _CSB| _OSB path _CSB
 path: NAME (path_fragment)* | inline_expression (path_fragment)*
-assignment_fragment: EQUALS (expression| service| mutation)
+assignment_fragment: EQUALS base_expression
 assignment: path assignment_fragment
 imports: _IMPORT string _AS NAME
 cmp_operator: GREATER| GREATER_EQUAL| LESSER| LESSER_EQUAL| NOT_EQUAL| EQUAL
@@ -28,7 +28,8 @@ and_expression: (and_expression AND)? cmp_expression
 or_expression: (or_expression OR)? and_expression
 expression: or_expression
 absolute_expression: expression
-return_statement: RETURN expression?
+base_expression: (expression| service| mutation)
+return_statement: RETURN base_expression?
 break_statement: BREAK
 entity: values| path
 rules: absolute_expression| assignment| imports| return_statement| throw_statement| break_statement| block
@@ -44,15 +45,15 @@ service_fragment: (command arguments*|arguments+) output?
 service: path service_fragment chained_mutation*
 service_block: service _NL (nested_block)?
 call_expression: path _OP arguments* _CP
-if_statement: _IF expression
-elseif_statement: _ELSE _IF expression
+if_statement: _IF base_expression
+elseif_statement: _ELSE _IF base_expression
 elseif_block: elseif_statement _NL nested_block
 !else_statement: _ELSE
 else_block: else_statement _NL nested_block
 if_block: if_statement _NL nested_block elseif_block* else_block?
 foreach_statement: _FOREACH entity output
 foreach_block: foreach_statement _NL nested_block
-while_statement: _WHILE expression
+while_statement: _WHILE base_expression
 while_block: while_statement _NL nested_block
 typed_argument: NAME _COLON types
 function_output: _RETURNS types

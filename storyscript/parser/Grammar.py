@@ -64,14 +64,16 @@ class Grammar:
         self.ebnf.void = 'null'
         self.ebnf.number = 'int, float'
         self.ebnf.string = 'single_quoted, double_quoted'
-        list = self.ebnf.collection('osb', 'expression', 'expression', 'csb')
+        list = self.ebnf.collection('osb', 'base_expression',
+                                    'base_expression', 'csb')
         self.ebnf.set_rule('!list', list)
-        self.ebnf.key_value = '(string, path) colon expression'
+        self.ebnf.key_value = '(string, path) colon base_expression'
         objects = ('ocb', 'key_value', 'key_value', 'ccb')
         self.ebnf.objects = self.ebnf.collection(*objects)
         self.ebnf.regular_expression = 'regexp name?'
         self.ebnf.inline_expression = ('op service cp, '
-                                       'call_expression')
+                                       'call_expression, '
+                                       'op mutation cp')
         values = ('number, string, boolean, void, list, objects, '
                   'regular_expression')
         self.ebnf.values = values
@@ -83,7 +85,7 @@ class Grammar:
         self.ebnf.path_fragment = path_fragment
         self.ebnf.path = ('name (path_fragment)* | '
                           'inline_expression (path_fragment)*')
-        assignment_fragment = 'equals (expression, service, mutation)'
+        assignment_fragment = 'equals base_expression'
         self.ebnf.assignment_fragment = assignment_fragment
         self.ebnf.assignment = 'path assignment_fragment'
 
@@ -136,6 +138,9 @@ class Grammar:
 
         self.ebnf.expression = 'or_expression'
         self.ebnf.absolute_expression = 'expression'
+        # service and mutation calls don't need parentheses when they are at
+        # the base,e.g. `if my_service commmand`
+        self.ebnf.base_expression = '(expression, service, mutation)'
 
     def throw_statement(self):
         self.ebnf.THROW = 'throw'
@@ -144,7 +149,7 @@ class Grammar:
     def rules(self):
         self.ebnf.RETURN = 'return'
         self.ebnf.BREAK = 'break'
-        self.ebnf.return_statement = 'return expression?'
+        self.ebnf.return_statement = 'return base_expression?'
         self.ebnf.break_statement = 'break'
         self.ebnf.entity = 'values, path'
         rules = ('absolute_expression, assignment, imports, return_statement, '
@@ -173,8 +178,8 @@ class Grammar:
     def if_block(self):
         self.ebnf._IF = 'if'
         self.ebnf._ELSE = 'else'
-        self.ebnf.if_statement = 'if expression'
-        elseif_statement = 'else if expression'
+        self.ebnf.if_statement = 'if base_expression'
+        elseif_statement = 'else if base_expression'
         self.ebnf.elseif_statement = elseif_statement
         self.ebnf.elseif_block = self.ebnf.simple_block('elseif_statement')
         self.ebnf.set_rule('!else_statement', 'else')
@@ -184,7 +189,7 @@ class Grammar:
 
     def while_block(self):
         self.ebnf._WHILE = 'while'
-        self.ebnf.while_statement = 'while expression'
+        self.ebnf.while_statement = 'while base_expression'
         self.ebnf.while_block = self.ebnf.simple_block('while_statement')
 
     def foreach_block(self):

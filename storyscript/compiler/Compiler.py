@@ -32,8 +32,8 @@ class Compiler:
         """
         if fragment.expression:
             if fragment.expression.mutation:
-                return [Objects.values(fragment.expression.values),
-                        Objects.mutation(fragment.expression.mutation)]
+                m = Objects.mutation_fragment(fragment.expression.mutation)
+                return [Objects.values(fragment.expression.values), m]
             return [Objects.expression(fragment.expression)]
         return [Objects.entity(fragment.child(1))]
 
@@ -44,7 +44,8 @@ class Compiler:
         """
         mutations = []
         for mutation in tree.find_data('chained_mutation'):
-            mutations.append(Objects.mutation(mutation.mutation_fragment))
+            m = Objects.mutation_fragment(mutation.mutation_fragment)
+            mutations.append(m)
         return mutations
 
     @classmethod
@@ -58,71 +59,60 @@ class Compiler:
         module = tree.child(1).value
         self.lines.modules[module] = tree.string.child(0).value[1:-1]
 
-    def expression(self, tree, parent):
-        """
-        Compiles an expression
-        """
-        args = [Objects.expression(tree.expression)]
-        self.lines.append('expression', tree.line(), args=args, parent=parent)
-
-    def unary_expression(self, tree, parent, method, name=None, line=None):
-        """
-        Simplifies an expression with only one leaf to its respective value
-        """
-        entity = tree.or_expression.and_expression.cmp_expression. \
-            arith_expression.mul_expression.unary_expression.pow_expression. \
-            primary_expression.entity
-        args = [Objects.entity(entity)]
-        kwargs = {}
-        # name is required for 'set' only
-        if name is not None:
-            kwargs['name'] = name
-        if line is None:
-            line = tree.line()
-        self.lines.append(method, line, args=args, parent=parent, **kwargs)
-
     def absolute_expression(self, tree, parent):
         """
         Compiles an absolute expression using Compiler.expression
         """
-        exp = tree.expression
-        if exp is not None and exp.is_unary_leaf():
-            self.unary_expression(tree.expression, parent, method='expression')
+        args = [Objects.expression(tree.expression)]
+        self.lines.append('expression', tree.line(), args=args, parent=parent)
+
+    def base_expression_assignment(self, tree, parent, line):
+        """
+        Compiles a base expression into an expression, service or mutation
+        """
+        service = tree.service
+        if service:
+            path = Objects.names(service.path)
+            if not self.lines.is_variable_defined(path):
+                self.service(service, None, parent)
+                return
+        elif tree.mutation:
+            self.mutation_block(tree, parent)
+            return
+        elif tree.expression:
+            args = [Objects.expression(tree.expression)]
+            self.lines.append('expression', line, args=args, parent=parent)
+            return
         else:
-            self.expression(tree, parent)
+            internal_assert(tree.child(0).data == 'call_expression')
+            exp = tree.call_expression
+            self.call_expression(exp, parent)
+            return
+
+    def fake_base_expression(self, tree, parent):
+        """
+        Process a fake base expression which can only be an expression or path
+        as mutations and service calls have been replaced with fake paths.
+        """
+        if tree.expression:
+            return Objects.expression(tree.expression)
+        else:
+            internal_assert(tree.child(0).data == 'path')
+            return Objects.entity(tree)
 
     def assignment(self, tree, parent):
         """
         Compiles an assignment tree
         """
         name = Objects.names(tree.path)
-        fragment = tree.assignment_fragment
-        service = fragment.service
-        if service:
-            path = Objects.names(service.path)
-            if not self.lines.is_variable_defined(path):
-                self.service(service, None, parent)
-                self.lines.set_name(name)
-                return
-        elif fragment.mutation:
-            self.mutation_block(fragment, parent)
-            self.lines.set_name(name)
-            return
-        elif fragment.expression:
-            exp = fragment.expression
-            if exp.is_unary_leaf():
-                self.unary_expression(exp, parent, method='set',
-                                      name=name, line=tree.line())
-            else:
-                self.expression(fragment, parent)
-                self.lines.set_name(name)
-            return
-        elif fragment.call_expression:
-            exp = fragment.call_expression
-            self.call_expression(exp, parent)
-            self.lines.set_name(name)
-            return
-        internal_assert(0)
+        line = tree.line()
+        fragment = tree.assignment_fragment.base_expression
+        self.base_expression_assignment(fragment, parent, line)
+        self.lines.set_name(name)
+        # Is this superfluous?
+        # See: https://github.com/storyscript/storyscript/issues/657
+        if fragment.expression and fragment.expression.is_unary_leaf():
+            self.lines.lines[self.lines.last()]['method'] = 'set'
 
     def arguments(self, tree, parent):
         """
@@ -180,6 +170,7 @@ class Compiler:
         try:
             args = (line, service, command, arguments, output, enter, parent)
             self.lines.execute(*args)
+            return
         except StorySyntaxError as error:
             error.tree_position(tree)
             raise error
@@ -204,14 +195,15 @@ class Compiler:
         tree.expect(parent is not None, 'return_outside')
         line = tree.line()
         args = None
-        if tree.expression:
-            args = [Objects.expression(tree.expression)]
+        if tree.base_expression:
+            args = [self.fake_base_expression(tree.base_expression, parent)]
         self.lines.append('return', line, args=args, parent=parent)
 
     def if_block(self, tree, parent):
         line = tree.line()
         nested_block = tree.nested_block
-        args = [Objects.expression(tree.if_statement.expression)]
+        args = [self.fake_base_expression(tree.if_statement.base_expression,
+                                          parent)]
         self.lines.set_scope(line, parent)
         self.lines.append('if', line, args=args, enter=nested_block.line(),
                           parent=parent)
@@ -229,7 +221,8 @@ class Compiler:
         """
         line = tree.line()
         self.lines.set_exit(line)
-        args = [Objects.expression(tree.elseif_statement.expression)]
+        exp = tree.elseif_statement.base_expression
+        args = [self.fake_base_expression(exp, parent)]
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent)
         self.lines.append('elif', line, args=args, enter=nested_block.line(),
@@ -263,7 +256,8 @@ class Compiler:
 
     def while_block(self, tree, parent):
         line = tree.line()
-        args = [Objects.expression(tree.while_statement.expression)]
+        exp = tree.while_statement.base_expression
+        args = [self.fake_base_expression(exp, parent)]
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent)
         self.lines.append('while', line, args=args, enter=nested_block.line(),
@@ -300,13 +294,13 @@ class Compiler:
         if tree.path:
             args = [
                 Objects.path(tree.path),
-                Objects.mutation(tree.service_fragment)
+                Objects.mutation_fragment(tree.service_fragment)
             ]
             args = args + self.chained_mutations(tree)
         else:
             args = [
                 Objects.entity(tree.mutation.entity),
-                Objects.mutation(tree.mutation.mutation_fragment)
+                Objects.mutation_fragment(tree.mutation.mutation_fragment)
             ]
             args = args + self.chained_mutations(tree.mutation)
         if tree.nested_block:

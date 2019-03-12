@@ -17,28 +17,33 @@ class Preprocessor:
         return FakeTree(block)
 
     @classmethod
-    def replace_expression(cls, node, fake_tree, entity):
+    def replace_expression(cls, node, fake_tree, insert_point):
         """
-        Replaces an inline expression with a fake assignment
+        Inserts `node` as a new like with a fake path reference.
+        Then, replaces the first child of the insert_point
+        with this path reference.
         """
-        line = entity.line()
+        line = insert_point.line()
         # generate a new assignment line
         # insert it above this statement in the current block
         # return a path reference
         child_node = None
         if node.service is not None:
             child_node = node.service
-        else:
+        elif node.call_expression is not None:
             assert node.call_expression is not None
             child_node = node.call_expression
+        else:
+            assert node.mutation is not None
+            child_node = node.mutation
 
         fake_path = fake_tree.add_assignment(child_node, original_line=line)
 
         # Replace the inline expression with a fake_path reference
-        entity.path.replace(0, fake_path.child(0))
+        insert_point.replace(0, fake_path.child(0))
 
     @classmethod
-    def visit(cls, node, block, entity, pred, fun):
+    def visit(cls, node, block, entity, pred, fun, parent):
         if not hasattr(node, 'children') or len(node.children) == 0:
             return
 
@@ -53,8 +58,19 @@ class Preprocessor:
         elif node.data == 'service' and node.child(0).data == 'path':
             entity = node
 
+        # create fake lines for base_expressions too, but only when required:
+        # 1) `expressions` are already allowed to be nested
+        # 2) `assignment_fragments` are ignored to avoid two lines for simple
+        #    service/mutation assignments (`a = my_service command`)
+        if node.data == 'base_expression' and \
+                node.child(0).data != 'expression' and \
+                parent.data != 'assignment_fragment':
+            # replace base_expression too
+            fun(node, block, node)
+            node.children = [Tree('path', node.children)]
+
         for c in node.children:
-            cls.visit(c, block, entity, pred, fun)
+            cls.visit(c, block, entity, pred, fun, parent=node)
 
         if pred(node):
             assert entity is not None
@@ -64,7 +80,7 @@ class Preprocessor:
                 fake_tree = cls.fake_tree(block)
 
             # Evaluate from leaf to the top
-            fun(node, fake_tree, entity)
+            fun(node, fake_tree, entity.path)
 
             # split services into service calls and mutations
             if entity.data == 'service':
@@ -79,5 +95,5 @@ class Preprocessor:
     @classmethod
     def process(cls, tree):
         pred = Preprocessor.is_inline_expression
-        cls.visit(tree, None, None, pred, cls.replace_expression)
+        cls.visit(tree, None, None, pred, cls.replace_expression, parent=None)
         return tree
