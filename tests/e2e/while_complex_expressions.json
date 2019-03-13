@@ -1,0 +1,108 @@
+{
+  "tree": {
+    "1": {
+      "method": "set",
+      "ln": "1",
+      "output": null,
+      "name": [
+        "i"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "output": null,
+      "name": [
+        "p-2.1"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "i"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "increment",
+          "arguments": [
+            {
+              "$OBJECT": "argument",
+              "name": "by",
+              "argument": 1
+            }
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "while",
+      "ln": "2",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "p-2.1"
+          ]
+        }
+      ],
+      "enter": "3",
+      "exit": null,
+      "parent": null,
+      "next": "3"
+    },
+    "3": {
+      "method": "execute",
+      "ln": "3",
+      "output": [],
+      "name": null,
+      "service": "alpine",
+      "command": "echo",
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "message",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "i"
+            ]
+          }
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "2"
+    }
+  },
+  "services": [
+    "alpine"
+  ],
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {},
+  "version": null
+}
