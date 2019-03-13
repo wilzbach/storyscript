@@ -56,6 +56,8 @@ class ErrorCodes:
         'E0050', 'Service output can not be called as a function')
     when_no_output_parent = (
         'E0051', 'No service parent has been found.')
+    service_without_command = (
+        'E0052', 'Service calls require a command.')
 
     @staticmethod
     def is_error(error_name):

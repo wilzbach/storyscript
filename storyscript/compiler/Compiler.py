@@ -156,8 +156,8 @@ class Compiler:
             return
         line = tree.line()
         command = tree.service_fragment.command
-        if command:
-            command = command.child(0)
+        tree.expect(command is not None, 'service_without_command')
+        command = command.child(0)
         arguments = Objects.arguments(tree.service_fragment)
         service = tree.path.extract_path()
         output = self.output(tree.service_fragment.output)

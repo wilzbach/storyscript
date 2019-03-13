@@ -61,8 +61,8 @@
       "ln": "2",
       "output": [],
       "name": null,
-      "service": "echo",
-      "command": null,
+      "service": "logger",
+      "command": "echo",
       "function": null,
       "args": [
         {
@@ -80,7 +80,7 @@
     }
   },
   "services": [
-    "echo",
+    "logger",
     "weather"
   ],
   "entrypoint": "1.1",

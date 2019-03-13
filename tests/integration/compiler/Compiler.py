@@ -318,16 +318,6 @@ def test_compiler_try_nested_throw_error(parser):
     assert result['tree']['5']['args'] == args
 
 
-def test_compiler_service_with_zero_args(parser):
-    source = 'foo'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
-    assert result['tree']['1']['method'] == 'execute'
-    assert result['tree']['1']['service'] == 'foo'
-    assert result['tree']['1']['args'] == []
-    assert result['services'] == ['foo']
-
-
 def test_compiler_break(parser):
     source = 'while true\n\tbreak'
     tree = parser.parse(source)
@@ -1494,71 +1484,6 @@ def test_compiler_service_expression(parser):
     ]
 
 
-def test_compiler_function_expression(parser):
-    """
-    Ensures that function calls with expressions are compiled correctly
-    """
-    source = 'my_function k1: 2 + 2 % 4 k2: a / b - c'
-    result = Compiler.compile(parser.parse(source))
-    assert result['tree']['1']['method'] == 'execute'
-    assert result['tree']['1']['service'] == 'my_function'
-    assert result['tree']['1']['args'] == [
-        {
-          '$OBJECT': 'argument',
-          'name': 'k1',
-          'argument': {
-            '$OBJECT': 'expression',
-            'expression': 'sum',
-            'values': [
-              2,
-              {
-                '$OBJECT': 'expression',
-                'expression': 'modulus',
-                'values': [
-                  2,
-                  4
-                ]
-              }
-            ]
-          }
-        },
-        {
-          '$OBJECT': 'argument',
-          'name': 'k2',
-          'argument': {
-            '$OBJECT': 'expression',
-            'expression': 'subtraction',
-            'values': [
-              {
-                '$OBJECT': 'expression',
-                'expression': 'division',
-                'values': [
-                  {
-                    '$OBJECT': 'path',
-                    'paths': [
-                      'a'
-                    ]
-                  },
-                  {
-                    '$OBJECT': 'path',
-                    'paths': [
-                      'b'
-                    ]
-                  }
-                ]
-              },
-              {
-                '$OBJECT': 'path',
-                'paths': [
-                  'c'
-                ]
-              }
-            ]
-          }
-        }
-    ]
-
-
 def test_compiler_mutation_expression_list(parser):
     """
     Ensures that mutations on lists work
@@ -1896,38 +1821,6 @@ def test_compiler_unary_complex_3(parser):
             ]
           }
         ]
-    }]
-
-
-def test_compiler_unary_complex_4(parser):
-    """
-    Ensures that complex unary expressions are compiled correctly
-    """
-    source = 'a = my_function k1: !b or 2'
-    result = Compiler.compile(parser.parse(source))
-    assert result['tree']['1']['method'] == 'execute'
-    assert result['tree']['1']['args'] == [{
-        '$OBJECT': 'argument',
-        'name': 'k1',
-        'argument': {
-          '$OBJECT': 'expression',
-          'expression': 'or',
-          'values': [
-            {
-              '$OBJECT': 'expression',
-              'expression': 'not',
-              'values': [
-                {
-                  '$OBJECT': 'path',
-                  'paths': [
-                    'b'
-                  ]
-                }
-              ]
-            },
-            2
-          ]
-        }
     }]
 
 

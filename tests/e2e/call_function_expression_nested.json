@@ -1,0 +1,148 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [],
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": "my_function",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "k1",
+          "argument": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "k2",
+          "argument": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "1",
+      "next": "4.1"
+    },
+    "4.1": {
+      "method": "call",
+      "ln": "4.1",
+      "output": null,
+      "name": [
+        "p-4.1"
+      ],
+      "service": "my_function",
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "k1",
+          "argument": {
+            "$OBJECT": "expression",
+            "expression": "sum",
+            "values": [
+              2,
+              {
+                "$OBJECT": "expression",
+                "expression": "modulus",
+                "values": [
+                  2,
+                  4
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "k2",
+          "argument": {
+            "$OBJECT": "expression",
+            "expression": "subtraction",
+            "values": [
+              {
+                "$OBJECT": "expression",
+                "expression": "division",
+                "values": [
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "a"
+                    ]
+                  },
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
+                ]
+              },
+              {
+                "$OBJECT": "path",
+                "paths": [
+                  "c"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "output": null,
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "p-4.1"
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null
+    }
+  },
+  "services": [],
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {
+    "my_function": "1"
+  },
+  "version": null
+}
