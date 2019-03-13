@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from lark import Transformer as LarkTransformer
+from lark.lexer import Token
 
 from .Tree import Tree
 from ..exceptions import StorySyntaxError
@@ -33,7 +34,7 @@ class Transformer(LarkTransformer):
         Adds implicit output to a service.
         """
         fragment = tree.service_fragment
-        if fragment.output is None:
+        if fragment and fragment.output is None:
             output = Tree('output', [fragment.command.child(0)])
             fragment.children.append(output)
 
@@ -89,7 +90,27 @@ class Transformer(LarkTransformer):
         """
         Transforms when blocks.
         """
-        cls.implicit_output(matches[0])
+        m = matches[0]
+        if isinstance(m, Token):
+            # manually add implicit output for service without commands for
+            # which the command will be inferred from the parent service call
+            # e.g. `when my_service`
+            assert m.type == 'NAME'
+            output = Tree('output', [m])
+            path = Tree('path', [m])
+            service_fragment = Tree('service_fragment', [output])
+            service = Tree('service', [path, service_fragment])
+            matches[0] = service
+        elif m.data == 'service' and \
+                m.service_fragment.command is None and \
+                m.service_fragment.output is None:
+            # manually add implicit output for service without commands for
+            # which the command will be inferred from the parent service call
+            # e.g. `when my_service argument: 2`
+            output = Tree('output', [m.path.find_first_token()])
+            m.service_fragment.children.append(output)
+        else:
+            cls.implicit_output(m)
         return Tree('when_block', matches)
 
     @classmethod

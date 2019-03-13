@@ -228,7 +228,7 @@ class Grammar:
 
     def block(self):
         self.ebnf._WHEN = 'when'
-        when = 'when (path output|service)'
+        when = 'when (path output, service, name)'
         self.ebnf.when_block = self.ebnf.simple_block(when)
         self.ebnf.indented_arguments = 'indent (arguments nl)+ dedent'
         block = ('rules nl, if_block, foreach_block, function_block, '

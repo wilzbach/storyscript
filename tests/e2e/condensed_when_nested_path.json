@@ -1,0 +1,203 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "output": [],
+      "name": [
+        "log"
+      ],
+      "service": "logging",
+      "command": "error",
+      "function": null,
+      "args": [],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "output": [
+        "default"
+      ],
+      "name": null,
+      "service": "logging",
+      "command": "default",
+      "function": null,
+      "args": [],
+      "enter": "3",
+      "exit": null,
+      "parent": null,
+      "next": "3"
+    },
+    "3": {
+      "method": "when",
+      "ln": "3",
+      "output": [
+        "logger"
+      ],
+      "name": null,
+      "service": "default",
+      "command": "log",
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "level",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "normal"
+          }
+        }
+      ],
+      "enter": "4",
+      "exit": null,
+      "parent": "2",
+      "next": "4"
+    },
+    "4": {
+      "method": "set",
+      "ln": "4",
+      "output": null,
+      "name": [
+        "x"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "3",
+      "next": "5"
+    },
+    "5": {
+      "method": "when",
+      "ln": "5",
+      "output": [
+        "log"
+      ],
+      "name": null,
+      "service": "default",
+      "command": "log",
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "level",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "normal"
+          }
+        }
+      ],
+      "enter": "6",
+      "exit": null,
+      "parent": "2",
+      "next": "6"
+    },
+    "6": {
+      "method": "set",
+      "ln": "6",
+      "output": null,
+      "name": [
+        "x"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        1
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "5",
+      "next": "7"
+    },
+    "7": {
+      "method": "when",
+      "ln": "7",
+      "output": [
+        "logger"
+      ],
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "log"
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "2",
+      "next": "8"
+    },
+    "8": {
+      "method": "set",
+      "ln": "8",
+      "output": null,
+      "name": [
+        "x"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        2
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "7",
+      "next": "9"
+    },
+    "9": {
+      "method": "when",
+      "ln": "9",
+      "output": [
+        "log"
+      ],
+      "name": null,
+      "service": "default",
+      "command": "log",
+      "function": null,
+      "args": [],
+      "enter": "10",
+      "exit": null,
+      "parent": "2",
+      "next": "10"
+    },
+    "10": {
+      "method": "set",
+      "ln": "10",
+      "output": null,
+      "name": [
+        "x"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        3
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "9"
+    }
+  },
+  "services": [
+    "logging"
+  ],
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {},
+  "version": null
+}

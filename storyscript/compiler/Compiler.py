@@ -199,10 +199,25 @@ class Compiler:
             self.service(tree.service, nested_block, parent)
             self.lines.lines[self.lines.last()]['method'] = 'when'
         elif tree.path:
-            args = [Objects.path(tree.path)]
-            output = self.output(tree.output)
-            self.lines.append('when', tree.line(), args=args,
-                              output=output, parent=parent)
+            name = tree.path.find_first_token()
+            if len(tree.path.children) == 1 and \
+                    not self.lines.is_variable_defined(name):
+                # path is hasn't been defined ->
+                # transform into service for which the command will be inferred
+                # from the 'output' of the parent service call
+                output = tree.output
+                if output is None:
+                    output = Tree('output', [name])
+                path = Tree('path', [name])
+                service_fragment = Tree('service_fragment', [output])
+                service = Tree('service', [path, service_fragment])
+                when = Tree('when', [service])
+                self.when(when, nested_block, parent)
+            else:
+                args = [Objects.path(tree.path)]
+                output = self.output(tree.output)
+                self.lines.append('when', tree.line(), args=args,
+                                  output=output, parent=parent)
 
     def return_statement(self, tree, parent):
         """
