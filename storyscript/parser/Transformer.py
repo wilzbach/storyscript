@@ -77,8 +77,7 @@ class Transformer(LarkTransformer):
         node.
         """
         if len(matches) > 1:
-            if matches[1].block.when_block:
-                cls.implicit_output(matches[0])
+            cls.implicit_output(matches[0])
             if matches[1].block.rules:
                 for argument in matches[1].find_data('arguments'):
                     matches[0].service_fragment.children.append(argument)

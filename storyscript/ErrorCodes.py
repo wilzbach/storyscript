@@ -54,6 +54,8 @@ class ErrorCodes:
                                   'Function {name} is not a valid path')
     function_call_no_inline_expression = (
         'E0050', 'Service output can not be called as a function')
+    when_no_output_parent = (
+        'E0051', 'No service parent has been found.')
 
     @staticmethod
     def is_error(error_name):

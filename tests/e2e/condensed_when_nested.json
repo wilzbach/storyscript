@@ -1,0 +1,100 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "output": [
+        "server"
+      ],
+      "name": null,
+      "service": "http",
+      "command": "server",
+      "function": null,
+      "args": [],
+      "enter": "2",
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "for",
+      "ln": "2",
+      "output": [
+        "item"
+      ],
+      "name": null,
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "items"
+          ]
+        }
+      ],
+      "enter": "3",
+      "exit": null,
+      "parent": "1",
+      "next": "3"
+    },
+    "3": {
+      "method": "when",
+      "ln": "3",
+      "output": [
+        "client"
+      ],
+      "name": null,
+      "service": "server",
+      "command": "listen",
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "path",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "/health"
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "method",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "get"
+          }
+        }
+      ],
+      "enter": "4",
+      "exit": null,
+      "parent": "2",
+      "next": "4"
+    },
+    "4": {
+      "method": "set",
+      "ln": "4",
+      "output": null,
+      "name": [
+        "x"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": "3"
+    }
+  },
+  "services": [
+    "http"
+  ],
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {},
+  "version": null
+}
