@@ -398,6 +398,89 @@ def test_compiler_service_syntax_error(patch, compiler, lines, tree):
     StorySyntaxError.tree_position.assert_called_with(tree)
 
 
+def test_compiler_find_parent_with_output_parent_none(patch, compiler, lines,
+                                                      tree, magic):
+    """
+    test end when parent is none
+    """
+    patch.object(tree, 'expect')
+    tree.expect.side_effect = Exception('.error.')
+    parent = None
+    # only do the recursion once
+    orig_method = compiler.find_parent_with_output
+    patch.object(compiler, 'find_parent_with_output')
+    with raises(Exception) as e:
+        orig_method(tree, parent)
+    assert str(e.value) == '.error.'
+    compiler.find_parent_with_output.assert_not_called()
+    tree.expect.assert_called_with(0, 'when_no_output_parent')
+
+
+def test_compiler_find_parent_with_output_parent_returned(patch, compiler,
+                                                          lines, tree, magic):
+    """
+    Test whether the parent's output gets correctly returned
+    """
+    patch.object(Tree, 'expect')
+    parent = '1'
+    lines.lines = {'1': {'output': ['.output.'], 'service': 'my_service'}}
+    # only do the recursion once
+    orig_method = compiler.find_parent_with_output
+    patch.object(compiler, 'find_parent_with_output')
+    result = orig_method(tree, parent)
+    compiler.find_parent_with_output.assert_not_called()
+    assert result == ['.output.']
+
+
+def test_compiler_find_parent_with_output(patch, compiler, lines, tree, magic):
+    """
+    Test continue to look upword in the tree
+    """
+    patch.object(Tree, 'expect')
+    parent = magic()
+    lines.lines = {parent: {'parent': '0', 'output': None}}
+    # only do the recursion once
+    orig_method = compiler.find_parent_with_output
+    patch.object(compiler, 'find_parent_with_output')
+    result = orig_method(tree, parent)
+    compiler.find_parent_with_output.assert_called_with(tree, '0')
+    assert result == compiler.find_parent_with_output()
+
+
+def test_compiler_find_parent_with_output_empty(patch, compiler, lines, tree,
+                                                magic):
+    """
+    Test continue to look upword in the tree when output is empty
+    """
+    patch.object(Tree, 'expect')
+    parent = '1'
+    lines.lines = {'1': {'output': [], 'parent': '0'}}
+    # only do the recursion once
+    orig_method = compiler.find_parent_with_output
+    patch.object(compiler, 'find_parent_with_output')
+    result = orig_method(tree, parent)
+    compiler.find_parent_with_output.assert_called_with(tree, '0')
+    assert result == compiler.find_parent_with_output()
+
+
+def test_compiler_find_parent_with_no_service(patch, compiler, lines, tree,
+                                              magic):
+    """
+    Test continue to look upword in the tree when no service is defined
+    """
+    patch.object(Tree, 'expect')
+    parent = '1'
+    lines.lines = {'1': {
+        'output': ['.output.'], 'parent': '0', 'service': None}
+    }
+    # only do the recursion once
+    orig_method = compiler.find_parent_with_output
+    patch.object(compiler, 'find_parent_with_output')
+    result = orig_method(tree, parent)
+    compiler.find_parent_with_output.assert_called_with(tree, '0')
+    assert result == compiler.find_parent_with_output()
+
+
 def test_compiler_when(patch, compiler, lines, tree):
     patch.object(Compiler, 'service')
     lines.lines = {'1': {}}
@@ -405,6 +488,28 @@ def test_compiler_when(patch, compiler, lines, tree):
     compiler.when(tree, 'nested_block', '1')
     Compiler.service.assert_called_with(tree.service, 'nested_block', '1')
     assert lines.lines['1']['method'] == 'when'
+
+
+def test_compiler_when_condensed(patch, compiler, lines, tree, magic):
+    patch.object(Compiler, 'service')
+    patch.object(Compiler, 'find_parent_with_output')
+    # manual patching for staticmethod
+    orig_method = Objects.name_to_path
+    Objects.name_to_path = magic()
+    sf = tree.service.service_fragment
+    tree.service.path = '.path.'
+    sf.command = None
+    lines.lines = {'1': {}}
+    lines.last.return_value = '1'
+    compiler.when(tree, 'nested_block', '1')
+    Compiler.service.assert_called_with(tree.service, 'nested_block', '1')
+    assert lines.lines['1']['method'] == 'when'
+    assert sf.command == '.path.'
+    Compiler.find_parent_with_output.assert_called_with(tree, '1')
+    output_name = compiler.find_parent_with_output()[0]
+    Objects.name_to_path.assert_called_with(output_name)
+    assert tree.service.path == Objects.name_to_path()
+    Objects.name_to_path = orig_method
 
 
 def test_compiler_when_path(patch, compiler, lines, tree):

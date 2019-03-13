@@ -174,11 +174,28 @@ class Compiler:
             error.tree_position(tree)
             raise error
 
+    def find_parent_with_output(self, tree, parent):
+        """
+        Searches upword in the tree for a parent with an output field.
+        """
+        tree.expect(parent is not None, 'when_no_output_parent')
+        parent = self.lines.lines[parent]
+        if parent['output'] is not None and len(parent['output']) > 0 and \
+                parent['service'] is not None:
+            return parent['output']
+
+        return self.find_parent_with_output(tree, parent['parent'])
+
     def when(self, tree, nested_block, parent):
         """
         Compiles a when tree
         """
         if tree.service:
+            sf = tree.service.service_fragment
+            if not sf.command:
+                sf.command = tree.service.path
+                output_name = self.find_parent_with_output(tree, parent)
+                tree.service.path = Objects.name_to_path(output_name[0])
             self.service(tree.service, nested_block, parent)
             self.lines.lines[self.lines.last()]['method'] = 'when'
         elif tree.path:
