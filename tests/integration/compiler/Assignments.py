@@ -78,22 +78,6 @@ def test_assignments_string(parser):
     assert result['tree']['1']['args'] == expected
 
 
-def test_assignments_string_template(parser):
-    tree = parser.parse('a = "hello {nl}"')
-    result = Compiler.compile(tree)
-    assert result['tree']['1']['args'][0]['string'] == 'hello {}'
-    values = [{'$OBJECT': 'path', 'paths': ['nl']}]
-    assert result['tree']['1']['args'][0]['values'] == values
-
-
-def test_assignments_string_template_dots(parser):
-    tree = parser.parse('a = "hello {nl.ams}"')
-    result = Compiler.compile(tree)
-    assert result['tree']['1']['args'][0]['string'] == 'hello {}'
-    values = [{'$OBJECT': 'path', 'paths': ['nl', 'ams']}]
-    assert result['tree']['1']['args'][0]['values'] == values
-
-
 def test_assignments_list(parser):
     """
     Ensures that assignments to lists are compiled correctly

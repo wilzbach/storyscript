@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import re
-
 from lark.lexer import Token
 
 from pytest import fixture, mark
@@ -127,11 +125,6 @@ def test_objects_number_float():
     assert Objects.number(tree) == -1.2
 
 
-def test_objects_replace_fillers():
-    result = Objects.replace_fillers('hello, {world}', ['world'])
-    assert result == 'hello, {}'
-
-
 def test_objects_name_to_path():
     result = Objects.name_to_path('name')
     assert result == Tree('path', [Token('NAME', 'name')])
@@ -144,12 +137,39 @@ def test_objects_name_to_path_dots():
     assert result == Tree('path', children)
 
 
-def test_objects_fillers_values(patch):
-    patch.many(Objects, ['path', 'name_to_path'])
-    result = Objects.fillers_values(['one'])
-    Objects.name_to_path.assert_called_with('one')
+def flatten_to_string(s):
+    return {'$OBJECT': 'string', 'string': s}
+
+
+def test_objects_flatten_template_no_templates(patch, tree):
+    patch.object(Objects, 'name_to_path')
+    patch.object(Objects, 'path')
+    result = list(Objects.flatten_template(tree, '.s.'))
+    Objects.name_to_path.assert_not_called()
+    Objects.path.assert_not_called()
+    assert result == [flatten_to_string('.s.')]
+
+
+def test_objects_flatten_template_only_templates(patch, tree):
+    patch.object(Objects, 'name_to_path')
+    patch.object(Objects, 'path')
+    result = list(Objects.flatten_template(tree, '{hello}'))
+    Objects.name_to_path.assert_called_with('hello')
     Objects.path.assert_called_with(Objects.name_to_path())
-    assert result == [Objects.path()]
+    assert result == [Objects.path(Objects.name_to_path())]
+
+
+def test_objects_flatten_template_mixed(patch, tree):
+    patch.object(Objects, 'name_to_path')
+    patch.object(Objects, 'path')
+    result = list(Objects.flatten_template(tree, 'a{hello}b'))
+    Objects.name_to_path.assert_called_with('hello')
+    Objects.path.assert_called_with(Objects.name_to_path())
+    assert result == [
+        flatten_to_string('a'),
+        Objects.path(Objects.name_to_path()),
+        flatten_to_string('b')
+    ]
 
 
 def test_objects_unescape_string(tree):
@@ -160,25 +180,25 @@ def test_objects_unescape_string(tree):
 
 def test_objects_string(patch, tree):
     patch.object(Objects, 'unescape_string')
-    patch.object(re, 'findall', return_value=[])
+    patch.object(Objects, 'flatten_template', return_value=['a'])
     result = Objects.string(tree)
     Objects.unescape_string.assert_called_with(tree)
-    re.findall.assert_called_with(r'(?<!\\){(.*?)(?<!\\)}',
-                                  Objects.unescape_string())
-    assert result == {'$OBJECT': 'string', 'string': Objects.unescape_string()}
+    Objects.flatten_template.assert_called_with(tree,
+                                                Objects.unescape_string())
+    assert result == 'a'
 
 
-def test_objects_string_templating(patch):
-    patch.many(Objects, ['unescape_string', 'fillers_values',
-                         'replace_fillers'])
-    patch.object(re, 'findall', return_value=['var'])
-    tree = Tree('string', [Token('DOUBLE_QUOTED', '"{var} is \\{notvar\\}"')])
+def test_objects_string_templating(patch, tree):
+    patch.many(Objects, ['flatten_template', 'unescape_string'])
     result = Objects.string(tree)
-    Objects.fillers_values.assert_called_with(re.findall())
-    Objects.replace_fillers.assert_called_with(Objects.unescape_string(),
-                                               re.findall())
-    assert result['string'] == Objects.replace_fillers()
-    assert result['values'] == Objects.fillers_values()
+    Objects.unescape_string.assert_called_with(tree)
+    Objects.flatten_template.assert_called_with(tree,
+                                                Objects.unescape_string())
+    assert result == {
+            '$OBJECT': 'expression',
+            'expression': 'sum',
+            'values': list(Objects.flatten_template()),
+    }
 
 
 def test_objects_boolean():
