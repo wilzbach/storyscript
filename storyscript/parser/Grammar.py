@@ -259,4 +259,10 @@ class Grammar:
         self.block()
         self.ebnf.start = 'nl? block*'
         self.ebnf.ignore('_WS')
+        self.ebnf.SINGLE_LINE_COMMENT = r'/(\r?\n)?\s*#[^\n\r]*/'
+        self.ebnf.ignore('SINGLE_LINE_COMMENT')
+        self.ebnf.MULTI_LINE_COMMENT = \
+            r'/(\r?\n)?\s*#+##[^#](.|\n)*?###[^\n\r]*/'
+        self.ebnf.ignore('MULTI_LINE_COMMENT')
+
         return self.ebnf.build()
