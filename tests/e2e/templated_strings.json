@@ -1,0 +1,158 @@
+{
+  "tree": {
+    "1": {
+      "method": "set",
+      "ln": "1",
+      "output": null,
+      "name": [
+        "t1"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "hello"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "story"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": "world"
+            }
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "2"
+    },
+    "2": {
+      "method": "set",
+      "ln": "2",
+      "output": null,
+      "name": [
+        "t2"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "c"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": "."
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d"
+              ]
+            }
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "3"
+    },
+    "3": {
+      "method": "set",
+      "ln": "3",
+      "output": null,
+      "name": [
+        "t3"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "4"
+    },
+    "4": {
+      "method": "set",
+      "ln": "4",
+      "output": null,
+      "name": [
+        "t4"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "hello\\{with\\}\\{"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a",
+                "b",
+                "c"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": " paths"
+            }
+          ]
+        }
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null
+    }
+  },
+  "services": [],
+  "entrypoint": "1",
+  "modules": {},
+  "functions": {},
+  "version": null
+}

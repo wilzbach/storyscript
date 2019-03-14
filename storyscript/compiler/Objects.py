@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import re
-
 from lark.lexer import Token
 
 from ..exceptions import internal_assert
@@ -64,16 +62,6 @@ class Objects:
         return int(token.value)
 
     @staticmethod
-    def replace_fillers(string, matches):
-        """
-        Replaces filler values with '{}'
-        """
-        for match in matches:
-            placeholder = '{}{}{}'.format('{', match, '}')
-            string = string.replace(placeholder, '{}')
-        return string
-
-    @staticmethod
     def name_to_path(name):
         """
         Builds the tree for a name or dotted name.
@@ -87,11 +75,33 @@ class Objects:
         return tree
 
     @classmethod
-    def fillers_values(cls, matches):
-        values = []
-        for match in matches:
-            values.append(cls.path(cls.name_to_path(match)))
-        return values
+    def flatten_template(cls, tree, text):
+        """
+        Flattens a string template into concatenation
+        """
+        preceding_slash = False
+        in_var = False
+        buf = ''
+        for c in text:
+            if in_var:
+                if not preceding_slash and c == '}':
+                    in_var = False
+                    tree.expect(len(buf) > 0, 'template_string_empty')
+                    yield Objects.path(Objects.name_to_path(buf))
+                    buf = ''
+                else:
+                    buf += c
+            elif not preceding_slash and c == '{':
+                if len(buf) > 0:
+                    yield {'$OBJECT': 'string', 'string': buf}
+                buf = ''
+                in_var = True
+            else:
+                buf += c
+            preceding_slash = c == '\\'
+
+        if len(buf) > 0:
+            yield {'$OBJECT': 'string', 'string': buf}
 
     @staticmethod
     def unescape_string(tree):
@@ -108,13 +118,10 @@ class Objects:
         Compiles a string tree. If the string has templated values, they
         are processed and compiled.
         """
-        item = {'$OBJECT': 'string', 'string': cls.unescape_string(tree)}
-        matches = re.findall(r'(?<!\\){(.*?)(?<!\\)}', item['string'])
-        if matches == []:
-            return item
-        item['values'] = cls.fillers_values(matches)
-        item['string'] = cls.replace_fillers(item['string'], matches)
-        return item
+        values = list(cls.flatten_template(tree, cls.unescape_string(tree)))
+        if len(values) == 1:
+            return values[0]
+        return {'$OBJECT': 'expression', 'expression': 'sum', 'values': values}
 
     @staticmethod
     def boolean(tree):
