@@ -1,0 +1,62 @@
+{
+  "tree": {
+    "2": {
+      "method": "set",
+      "ln": "2",
+      "output": null,
+      "name": [
+        "a"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "6"
+    },
+    "6": {
+      "method": "set",
+      "ln": "6",
+      "output": null,
+      "name": [
+        "b"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null,
+      "next": "10"
+    },
+    "10": {
+      "method": "set",
+      "ln": "10",
+      "output": null,
+      "name": [
+        "c"
+      ],
+      "service": null,
+      "command": null,
+      "function": null,
+      "args": [
+        0
+      ],
+      "enter": null,
+      "exit": null,
+      "parent": null
+    }
+  },
+  "services": [],
+  "entrypoint": "2",
+  "modules": {},
+  "functions": {},
+  "version": null
+}

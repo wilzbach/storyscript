@@ -137,9 +137,11 @@ _CATCH: "catch"
 FINALLY: "finally"
 THROW: "throw"
 _WHEN: "when"
-COMMENT: /###[^#]+###/|/#(.)*/
+SINGLE_LINE_COMMENT: /(\r?\n)?\s*#[^\n\r]*/
+MULTI_LINE_COMMENT: /(\r?\n)?\s*#+##[^#](.|\n)*?###[^\n\r]*/
 
 %ignore _WS
-%ignore COMMENT
+%ignore SINGLE_LINE_COMMENT
+%ignore MULTI_LINE_COMMENT
 
 
