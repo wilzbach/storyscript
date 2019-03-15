@@ -3,78 +3,47 @@
     "2": {
       "method": "set",
       "ln": "2",
-      "output": null,
       "name": [
         "a"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         1
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "9"
     },
     "9": {
       "method": "set",
       "ln": "9",
-      "output": null,
       "name": [
         "b"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         2
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "12"
     },
     "12": {
       "method": "set",
       "ln": "12",
-      "output": null,
       "name": [
         "c"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         3
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "19"
     },
     "19": {
       "method": "set",
       "ln": "19",
-      "output": null,
       "name": [
         "d"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         4
-      ],
-      "enter": null,
-      "exit": null,
-      "parent": null
+      ]
     }
   },
-  "services": [],
   "entrypoint": "2",
-  "modules": {},
-  "functions": {},
   "version": null
 }

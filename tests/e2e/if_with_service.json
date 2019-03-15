@@ -3,13 +3,11 @@
     "1.1": {
       "method": "execute",
       "ln": "1.1",
-      "output": [],
       "name": [
         "p-1.1"
       ],
       "service": "my_service",
       "command": "command",
-      "function": null,
       "args": [
         {
           "$OBJECT": "argument",
@@ -22,21 +20,16 @@
           "argument": 2
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "1.2"
     },
     "1.2": {
       "method": "execute",
       "ln": "1.2",
-      "output": [],
       "name": [
         "p-1.2"
       ],
       "service": "my_service2",
       "command": "command",
-      "function": null,
       "args": [
         {
           "$OBJECT": "argument",
@@ -49,19 +42,11 @@
           "argument": 4
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "1"
     },
     "1": {
       "method": "if",
       "ln": "1",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -72,35 +57,23 @@
       ],
       "enter": "2",
       "exit": "3",
-      "parent": null,
       "next": "2"
     },
     "2": {
       "method": "set",
       "ln": "2",
-      "output": null,
       "name": [
         "x"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         0
       ],
-      "enter": null,
-      "exit": null,
       "parent": "1",
       "next": "3"
     },
     "3": {
       "method": "elif",
       "ln": "3",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -111,75 +84,48 @@
       ],
       "enter": "4",
       "exit": "5",
-      "parent": null,
       "next": "4"
     },
     "4": {
       "method": "set",
       "ln": "4",
-      "output": null,
       "name": [
         "x"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         1
       ],
-      "enter": null,
-      "exit": null,
       "parent": "3",
       "next": "5"
     },
     "5": {
       "method": "else",
       "ln": "5",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
-      "args": null,
       "enter": "6",
       "exit": "8",
-      "parent": null,
       "next": "6"
     },
     "6": {
       "method": "set",
       "ln": "6",
-      "output": null,
       "name": [
         "x"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         2
       ],
-      "enter": null,
-      "exit": null,
       "parent": "5",
       "next": "8"
     },
     "8": {
       "method": "set",
       "ln": "8",
-      "output": null,
       "name": [
         "x"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         3
-      ],
-      "enter": null,
-      "exit": null,
-      "parent": null
+      ]
     }
   },
   "services": [
@@ -187,7 +133,5 @@
     "my_service2"
   ],
   "entrypoint": "1.1",
-  "modules": {},
-  "functions": {},
   "version": null
 }

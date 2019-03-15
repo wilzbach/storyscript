@@ -3,13 +3,9 @@
     "1": {
       "method": "set",
       "ln": "1",
-      "output": null,
       "name": [
         "labels"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "list",
@@ -32,27 +28,17 @@
           ]
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "2"
     },
     "2": {
       "method": "set",
       "ln": "2",
-      "output": null,
       "name": [
         "found"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         false
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "3"
     },
     "3": {
@@ -61,10 +47,6 @@
       "output": [
         "label"
       ],
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -75,17 +57,11 @@
       ],
       "enter": "4",
       "exit": "10",
-      "parent": null,
       "next": "4"
     },
     "4": {
       "method": "if",
       "ln": "4",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "expression",
@@ -142,30 +118,18 @@
     "5": {
       "method": "set",
       "ln": "5",
-      "output": null,
       "name": [
         "found"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         true
       ],
-      "enter": null,
-      "exit": null,
       "parent": "4",
       "next": "6"
     },
     "6": {
       "method": "else",
       "ln": "6",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
-      "args": null,
       "enter": "7",
       "exit": "8",
       "parent": "3",
@@ -174,29 +138,18 @@
     "7": {
       "method": "set",
       "ln": "7",
-      "output": null,
       "name": [
         "found"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         false
       ],
-      "enter": null,
-      "exit": null,
       "parent": "6",
       "next": "8"
     },
     "8": {
       "method": "if",
       "ln": "8",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -213,42 +166,26 @@
     "9": {
       "method": "set",
       "ln": "9",
-      "output": null,
       "name": [
         "x"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         0
       ],
-      "enter": null,
-      "exit": null,
       "parent": "8",
       "next": "10"
     },
     "10": {
       "method": "set",
       "ln": "10",
-      "output": null,
       "name": [
         "outside"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         true
-      ],
-      "enter": null,
-      "exit": null,
-      "parent": null
+      ]
     }
   },
-  "services": [],
   "entrypoint": "1",
-  "modules": {},
-  "functions": {},
   "version": null
 }

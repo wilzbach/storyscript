@@ -10,6 +10,7 @@ from click import unstyle
 from pytest import mark
 
 from storyscript.Api import Api
+from storyscript.App import _clean_dict
 from storyscript.exceptions import StoryError
 
 test_dir = path.dirname(path.realpath(__file__))
@@ -20,7 +21,7 @@ test_files = list(map(lambda e: path.relpath(e, test_dir),
 
 # compile a story and compare its tree with the expected tree
 def run_test_story(source, expected_story):
-    result = Api.loads(source)
+    result = _clean_dict(Api.loads(source))
     del result['version']
     del expected_story['version']
     assert result == expected_story

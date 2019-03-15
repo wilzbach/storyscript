@@ -3,13 +3,9 @@
     "1": {
       "method": "set",
       "ln": "1",
-      "output": null,
       "name": [
         "t1"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "expression",
@@ -32,21 +28,14 @@
           ]
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "2"
     },
     "2": {
       "method": "set",
       "ln": "2",
-      "output": null,
       "name": [
         "t2"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "expression",
@@ -83,21 +72,14 @@
           ]
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "3"
     },
     "3": {
       "method": "set",
       "ln": "3",
-      "output": null,
       "name": [
         "t3"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -106,21 +88,14 @@
           ]
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "4"
     },
     "4": {
       "method": "set",
       "ln": "4",
-      "output": null,
       "name": [
         "t4"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "expression",
@@ -144,15 +119,9 @@
             }
           ]
         }
-      ],
-      "enter": null,
-      "exit": null,
-      "parent": null
+      ]
     }
   },
-  "services": [],
   "entrypoint": "1",
-  "modules": {},
-  "functions": {},
   "version": null
 }

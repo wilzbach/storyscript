@@ -3,13 +3,11 @@
     "1": {
       "method": "execute",
       "ln": "1",
-      "output": [],
       "name": [
         "diff"
       ],
       "service": "http",
       "command": "get",
-      "function": null,
       "args": [
         {
           "$OBJECT": "argument",
@@ -22,21 +20,14 @@
           }
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "2"
     },
     "2": {
       "method": "mutation",
       "ln": "2",
-      "output": null,
       "name": [
         "lines"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -58,17 +49,12 @@
             }
           ]
         }
-      ],
-      "enter": null,
-      "exit": null,
-      "parent": null
+      ]
     }
   },
   "services": [
     "http"
   ],
   "entrypoint": "1",
-  "modules": {},
-  "functions": {},
   "version": null
 }

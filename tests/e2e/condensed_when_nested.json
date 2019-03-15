@@ -6,14 +6,9 @@
       "output": [
         "server"
       ],
-      "name": null,
       "service": "http",
       "command": "server",
-      "function": null,
-      "args": [],
       "enter": "2",
-      "exit": null,
-      "parent": null,
       "next": "2"
     },
     "2": {
@@ -22,10 +17,6 @@
       "output": [
         "item"
       ],
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -35,7 +26,6 @@
         }
       ],
       "enter": "3",
-      "exit": null,
       "parent": "1",
       "next": "3"
     },
@@ -45,10 +35,8 @@
       "output": [
         "client"
       ],
-      "name": null,
       "service": "server",
       "command": "listen",
-      "function": null,
       "args": [
         {
           "$OBJECT": "argument",
@@ -68,25 +56,18 @@
         }
       ],
       "enter": "4",
-      "exit": null,
       "parent": "2",
       "next": "4"
     },
     "4": {
       "method": "set",
       "ln": "4",
-      "output": null,
       "name": [
         "x"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         0
       ],
-      "enter": null,
-      "exit": null,
       "parent": "3"
     }
   },
@@ -94,7 +75,5 @@
     "http"
   ],
   "entrypoint": "1",
-  "modules": {},
-  "functions": {},
   "version": null
 }

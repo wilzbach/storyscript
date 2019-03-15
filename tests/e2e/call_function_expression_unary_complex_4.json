@@ -3,10 +3,6 @@
     "1": {
       "method": "function",
       "ln": "1",
-      "output": [],
-      "name": null,
-      "service": null,
-      "command": null,
       "function": "my_function",
       "args": [
         {
@@ -19,36 +15,24 @@
         }
       ],
       "enter": "2",
-      "exit": null,
-      "parent": null,
       "next": "2"
     },
     "2": {
       "method": "return",
       "ln": "2",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         0
       ],
-      "enter": null,
-      "exit": null,
       "parent": "1",
       "next": "4.1"
     },
     "4.1": {
       "method": "call",
       "ln": "4.1",
-      "output": null,
       "name": [
         "p-4.1"
       ],
       "service": "my_function",
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "argument",
@@ -74,21 +58,14 @@
           }
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "4"
     },
     "4": {
       "method": "set",
       "ln": "4",
-      "output": null,
       "name": [
         "a"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -96,15 +73,10 @@
             "p-4.1"
           ]
         }
-      ],
-      "enter": null,
-      "exit": null,
-      "parent": null
+      ]
     }
   },
-  "services": [],
   "entrypoint": "1",
-  "modules": {},
   "functions": {
     "my_function": "1"
   },

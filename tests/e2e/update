@@ -83,7 +83,7 @@ story="${file}.story"
 output_json="${file}.json"
 output_error="${file}.error"
 
-output="$(cd "$SCRIPT_DIR/../.." && python -m storyscript compile -j "${story}" 2>&1)"
+output="$(cd "$SCRIPT_DIR/../.." && python -m storyscript compile -j --concise "${story}" 2>&1)"
 exit_code=$?
 
 # depending on whether the compiler failed, we want to write the

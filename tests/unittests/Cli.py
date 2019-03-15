@@ -97,7 +97,8 @@ def test_cli_compile_with_ignore_option(runner, app):
     runner.invoke(Cli.compile, ['path/fake.story',
                                 '--ignore', 'path/sub_dir/my_fake.story'])
     App.compile.assert_called_with('path/fake.story', ebnf=None,
-                                   ignored_path='path/sub_dir/my_fake.story')
+                                   ignored_path='path/sub_dir/my_fake.story',
+                                   concise=False)
 
 
 def test_cli_parse_with_ignore_option(runner, app):
@@ -212,7 +213,7 @@ def test_cli_compile(patch, runner, echo, app):
     patch.object(click, 'style')
     runner.invoke(Cli.compile, [])
     App.compile.assert_called_with(os.getcwd(), ebnf=None,
-                                   ignored_path=None)
+                                   ignored_path=None, concise=False)
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
 
@@ -223,7 +224,7 @@ def test_cli_compile_path(patch, runner, app):
     """
     runner.invoke(Cli.compile, ['/path'])
     App.compile.assert_called_with('/path', ebnf=None,
-                                   ignored_path=None)
+                                   ignored_path=None, concise=False)
 
 
 def test_cli_compile_output_file(patch, runner, app):
@@ -243,15 +244,25 @@ def test_cli_compile_silent(runner, echo, app, option):
     """
     result = runner.invoke(Cli.compile, [option])
     App.compile.assert_called_with(os.getcwd(), ebnf=None,
-                                   ignored_path=None)
+                                   ignored_path=None, concise=False)
     assert result.output == ''
     assert click.echo.call_count == 0
+
+
+@mark.parametrize('option', ['--concise', '-c'])
+def test_cli_compile_concise(runner, echo, app, option):
+    """
+    Ensures --concise makes everything concise
+    """
+    runner.invoke(Cli.compile, [option])
+    App.compile.assert_called_with(os.getcwd(), ebnf=None,
+                                   ignored_path=None, concise=True)
 
 
 def test_cli_compile_debug(runner, echo, app):
     runner.invoke(Cli.compile, ['--debug'])
     App.compile.assert_called_with(os.getcwd(), ebnf=None,
-                                   ignored_path=None)
+                                   ignored_path=None, concise=False)
 
 
 @mark.parametrize('option', ['--json', '-j'])
@@ -261,14 +272,14 @@ def test_cli_compile_json(runner, echo, app, option):
     """
     runner.invoke(Cli.compile, [option])
     App.compile.assert_called_with(os.getcwd(), ebnf=None,
-                                   ignored_path=None)
+                                   ignored_path=None, concise=False)
     click.echo.assert_called_with(App.compile())
 
 
 def test_cli_compile_ebnf(runner, echo, app):
     runner.invoke(Cli.compile, ['--ebnf', 'test.ebnf'])
     App.compile.assert_called_with(os.getcwd(), ebnf='test.ebnf',
-                                   ignored_path=None)
+                                   ignored_path=None, concise=False)
 
 
 def test_cli_compile_ice(runner, echo, app):

@@ -3,6 +3,7 @@ import json
 
 from pytest import fixture
 
+import storyscript.App as AppModule
 from storyscript.App import App
 from storyscript.Bundle import Bundle
 from storyscript.compiler.Preprocessor import Preprocessor
@@ -60,6 +61,17 @@ def test_app_compile(patch, bundle):
     assert result == json.dumps()
 
 
+def test_app_compile_concise(patch, bundle):
+    patch.object(json, 'dumps')
+    patch.object(AppModule, '_clean_dict')
+    result = App.compile('path', concise=True)
+    Bundle.from_path.assert_called_with('path', ignored_path=None)
+    Bundle.from_path().bundle.assert_called_with(ebnf=None)
+    AppModule._clean_dict.assert_called_with(Bundle.from_path().bundle())
+    json.dumps.assert_called_with(AppModule._clean_dict(), indent=2)
+    assert result == json.dumps()
+
+
 def test_app_compile_ignored_path(patch, bundle):
     patch.object(json, 'dumps')
     App.compile('path', ignored_path='ignored')
@@ -91,3 +103,17 @@ def test_app_grammar(patch):
     patch.init(Grammar)
     patch.object(Grammar, 'build')
     assert App.grammar() == Grammar().build()
+
+
+def test_app_clean_dict():
+    assert AppModule._clean_dict(0) == 0
+    assert AppModule._clean_dict('a') == 'a'
+    assert AppModule._clean_dict('') == ''
+    assert AppModule._clean_dict(True) is True
+    assert AppModule._clean_dict(False) is False
+    assert AppModule._clean_dict([0]) == [0]
+    assert AppModule._clean_dict([]) == []
+    assert AppModule._clean_dict({}) == {}
+    assert AppModule._clean_dict({'a': False}) == {}
+    assert AppModule._clean_dict({'a': None}) == {}
+    assert AppModule._clean_dict({'a': None, 'b': 1}) == {'b': 1}

@@ -3,13 +3,11 @@
     "1.1": {
       "method": "execute",
       "ln": "1.1",
-      "output": [],
       "name": [
         "p-1.1"
       ],
       "service": "weather",
       "command": "tommorow",
-      "function": null,
       "args": [
         {
           "$OBJECT": "argument",
@@ -20,19 +18,11 @@
           }
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "1"
     },
     "1": {
       "method": "if",
       "ln": "1",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "expression",
@@ -52,18 +42,13 @@
         }
       ],
       "enter": "2",
-      "exit": null,
-      "parent": null,
       "next": "2"
     },
     "2": {
       "method": "execute",
       "ln": "2",
-      "output": [],
-      "name": null,
       "service": "logger",
       "command": "echo",
-      "function": null,
       "args": [
         {
           "$OBJECT": "argument",
@@ -74,8 +59,6 @@
           }
         }
       ],
-      "enter": null,
-      "exit": null,
       "parent": "1"
     }
   },
@@ -84,7 +67,5 @@
     "weather"
   ],
   "entrypoint": "1.1",
-  "modules": {},
-  "functions": {},
   "version": null
 }

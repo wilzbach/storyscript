@@ -3,13 +3,11 @@
     "1.1": {
       "method": "execute",
       "ln": "1.1",
-      "output": [],
       "name": [
         "p-1.1"
       ],
       "service": "my_service",
       "command": "command",
-      "function": null,
       "args": [
         {
           "$OBJECT": "argument",
@@ -17,21 +15,14 @@
           "argument": 1
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "1"
     },
     "1": {
       "method": "set",
       "ln": "1",
-      "output": null,
       "name": [
         "a"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "dict",
@@ -57,17 +48,12 @@
             ]
           ]
         }
-      ],
-      "enter": null,
-      "exit": null,
-      "parent": null
+      ]
     }
   },
   "services": [
     "my_service"
   ],
   "entrypoint": "1.1",
-  "modules": {},
-  "functions": {},
   "version": null
 }

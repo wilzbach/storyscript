@@ -3,27 +3,16 @@
     "1.1": {
       "method": "execute",
       "ln": "1.1",
-      "output": [],
       "name": [
         "p-1.1"
       ],
       "service": "random",
       "command": "numbers",
-      "function": null,
-      "args": [],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "1"
     },
     "1": {
       "method": "if",
       "ln": "1",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -33,25 +22,17 @@
         }
       ],
       "enter": "2",
-      "exit": null,
-      "parent": null,
       "next": "2"
     },
     "2": {
       "method": "set",
       "ln": "2",
-      "output": null,
       "name": [
         "x"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         0
       ],
-      "enter": null,
-      "exit": null,
       "parent": "1"
     }
   },
@@ -59,7 +40,5 @@
     "random"
   ],
   "entrypoint": "1.1",
-  "modules": {},
-  "functions": {},
   "version": null
 }
