@@ -3,6 +3,7 @@ import json
 
 from .Bundle import Bundle
 from .compiler.Preprocessor import Preprocessor
+from .exceptions import StoryError
 from .parser import Grammar
 
 
@@ -24,12 +25,20 @@ class App:
         return stories
 
     @staticmethod
-    def compile(path, ignored_path=None, ebnf=None):
+    def compile(path, ignored_path=None, ebnf=None, concise=False,
+                first=False):
         """
         Parses and compiles stories found in path, returning JSON
         """
         bundle = Bundle.from_path(path, ignored_path=ignored_path)
-        return json.dumps(bundle.bundle(ebnf=ebnf), indent=2)
+        result = bundle.bundle(ebnf=ebnf)
+        if concise:
+            result = _clean_dict(result)
+        if first:
+            if len(result['stories']) != 1:
+                raise StoryError.create_error('first_option_more_stories')
+            result = next(iter(result['stories'].values()))
+        return json.dumps(result, indent=2)
 
     @staticmethod
     def lex(path, ebnf=None):
@@ -44,3 +53,12 @@ class App:
         Returns the current grammar
         """
         return Grammar().build()
+
+
+def _clean_dict(d):
+    """
+    Removes all falsy elements from a nested dict
+    """
+    if not isinstance(d, dict):
+        return d
+    return {k: _clean_dict(v) for k, v in d.items() if v}

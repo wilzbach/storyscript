@@ -3,31 +3,20 @@
     "1": {
       "method": "set",
       "ln": "1",
-      "output": null,
       "name": [
         "var"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         0
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "2.1"
     },
     "2.1": {
       "method": "mutation",
       "ln": "2.1",
-      "output": null,
       "name": [
         "p-2.1"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -41,21 +30,14 @@
           "arguments": []
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "2.2"
     },
     "2.2": {
       "method": "mutation",
       "ln": "2.2",
-      "output": null,
       "name": [
         "p-2.2"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -69,19 +51,11 @@
           "arguments": []
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "2"
     },
     "2": {
       "method": "if",
       "ln": "2",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -92,35 +66,23 @@
       ],
       "enter": "3",
       "exit": "4",
-      "parent": null,
       "next": "3"
     },
     "3": {
       "method": "set",
       "ln": "3",
-      "output": null,
       "name": [
         "x"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         0
       ],
-      "enter": null,
-      "exit": null,
       "parent": "2",
       "next": "4"
     },
     "4": {
       "method": "elif",
       "ln": "4",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -131,80 +93,50 @@
       ],
       "enter": "5",
       "exit": "6",
-      "parent": null,
       "next": "5"
     },
     "5": {
       "method": "set",
       "ln": "5",
-      "output": null,
       "name": [
         "x"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         1
       ],
-      "enter": null,
-      "exit": null,
       "parent": "4",
       "next": "6"
     },
     "6": {
       "method": "else",
       "ln": "6",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
-      "args": null,
       "enter": "7",
       "exit": "9",
-      "parent": null,
       "next": "7"
     },
     "7": {
       "method": "set",
       "ln": "7",
-      "output": null,
       "name": [
         "x"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         2
       ],
-      "enter": null,
-      "exit": null,
       "parent": "6",
       "next": "9"
     },
     "9": {
       "method": "set",
       "ln": "9",
-      "output": null,
       "name": [
         "x"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         3
-      ],
-      "enter": null,
-      "exit": null,
-      "parent": null
+      ]
     }
   },
-  "services": [],
   "entrypoint": "1",
-  "modules": {},
-  "functions": {},
   "version": null
 }

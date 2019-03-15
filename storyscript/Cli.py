@@ -75,16 +75,19 @@ class Cli:
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
     @click.option('--debug', is_flag=True)
+    @click.option('--concise', '-c', is_flag=True)
+    @click.option('--first', '-f', is_flag=True)
     @click.option('--ebnf', help=ebnf_help)
     @click.option('--ignore', default=None,
                   help='Specify path of ignored files')
-    def compile(path, output, json, silent, debug, ebnf, ignore):
+    def compile(path, output, json, silent, debug, ebnf, ignore, concise,
+                first):
         """
         Compiles stories and prints the resulting json
         """
         try:
             results = App.compile(path, ignored_path=ignore,
-                                  ebnf=ebnf)
+                                  ebnf=ebnf, concise=concise, first=first)
             if not silent:
                 if json:
                     if output:

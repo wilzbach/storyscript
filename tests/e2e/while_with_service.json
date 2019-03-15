@@ -3,13 +3,11 @@
     "1.1": {
       "method": "execute",
       "ln": "1.1",
-      "output": [],
       "name": [
         "p-1.1"
       ],
       "service": "my_service",
       "command": "my_command",
-      "function": null,
       "args": [
         {
           "$OBJECT": "argument",
@@ -17,19 +15,11 @@
           "argument": 42
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "1"
     },
     "1": {
       "method": "while",
       "ln": "1",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -39,25 +29,17 @@
         }
       ],
       "enter": "2",
-      "exit": null,
-      "parent": null,
       "next": "2"
     },
     "2": {
       "method": "set",
       "ln": "2",
-      "output": null,
       "name": [
         "x"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         0
       ],
-      "enter": null,
-      "exit": null,
       "parent": "1"
     }
   },
@@ -65,7 +47,5 @@
     "my_service"
   ],
   "entrypoint": "1.1",
-  "modules": {},
-  "functions": {},
   "version": null
 }

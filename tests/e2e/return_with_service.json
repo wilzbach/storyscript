@@ -3,41 +3,24 @@
     "1": {
       "method": "function",
       "ln": "1",
-      "output": [],
-      "name": null,
-      "service": null,
-      "command": null,
       "function": "random",
-      "args": [],
       "enter": "2.1",
-      "exit": null,
-      "parent": null,
       "next": "2.1"
     },
     "2.1": {
       "method": "execute",
       "ln": "2.1",
-      "output": [],
       "name": [
         "p-2.1"
       ],
       "service": "my_random_service",
       "command": "get_integer",
-      "function": null,
-      "args": [],
-      "enter": null,
-      "exit": null,
       "parent": "1",
       "next": "2"
     },
     "2": {
       "method": "return",
       "ln": "2",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -46,8 +29,6 @@
           ]
         }
       ],
-      "enter": null,
-      "exit": null,
       "parent": "1"
     }
   },
@@ -55,7 +36,6 @@
     "my_random_service"
   ],
   "entrypoint": "1",
-  "modules": {},
   "functions": {
     "random": "1"
   },

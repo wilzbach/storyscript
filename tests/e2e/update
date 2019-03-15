@@ -3,7 +3,7 @@
 # Small e2e update tool
 # This script can be used to automatically create or update the output/error
 # file of an e2e story test.
-# Required tools: 'parallel', 'jq'
+# Required tools: 'parallel' (for 'all')
 ################################################################################
 
 set -uo pipefail
@@ -44,11 +44,6 @@ if [ "${1:-x}" == "x" ] ; then
 	exit 1
 fi
 
-if ! command -v jq > /dev/null 2>&1 ; then
-    error "ERROR: 'jq' is not installed, but required."
-    exit 1
-fi
-
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # shortcut for running in parallel
@@ -83,7 +78,7 @@ story="${file}.story"
 output_json="${file}.json"
 output_error="${file}.error"
 
-output="$(cd "$SCRIPT_DIR/../.." && python -m storyscript compile -j "${story}" 2>&1)"
+output="$(cd "$SCRIPT_DIR/../.." && python -m storyscript compile -j --concise --first "${story}" 2>&1)"
 exit_code=$?
 
 # depending on whether the compiler failed, we want to write the
@@ -91,8 +86,7 @@ exit_code=$?
 if [ $exit_code -eq 0 ] ; then
     echo "> $(relpath "$output_json")"
     echo "$output" | \
-    sed 's/"version": ".*"/"version": null/' | \
-    jq ".stories[\"${story}\"]"> "${output_json}"
+    sed 's/"version": ".*"/"version": null/' > "${output_json}"
 else
     echo "> $output_error"
     # SS failed, write error file

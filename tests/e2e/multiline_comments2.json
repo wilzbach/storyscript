@@ -3,96 +3,58 @@
     "1": {
       "method": "set",
       "ln": "1",
-      "output": null,
       "name": [
         "a"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         0
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "5"
     },
     "5": {
       "method": "set",
       "ln": "5",
-      "output": null,
       "name": [
         "b"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         0
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "9"
     },
     "9": {
       "method": "set",
       "ln": "9",
-      "output": null,
       "name": [
         "c"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         0
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "13"
     },
     "13": {
       "method": "set",
       "ln": "13",
-      "output": null,
       "name": [
         "d"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         0
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "20"
     },
     "20": {
       "method": "set",
       "ln": "20",
-      "output": null,
       "name": [
         "f"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         1
-      ],
-      "enter": null,
-      "exit": null,
-      "parent": null
+      ]
     }
   },
-  "services": [],
   "entrypoint": "1",
-  "modules": {},
-  "functions": {},
   "version": null
 }

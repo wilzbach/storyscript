@@ -6,29 +6,16 @@
       "output": [
         "int"
       ],
-      "name": null,
-      "service": null,
-      "command": null,
       "function": "random",
-      "args": [],
       "enter": "2",
-      "exit": null,
-      "parent": null,
       "next": "2"
     },
     "2": {
       "method": "return",
       "ln": "2",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         28
       ],
-      "enter": null,
-      "exit": null,
       "parent": "1",
       "next": "4"
     },
@@ -38,9 +25,6 @@
       "output": [
         "int"
       ],
-      "name": null,
-      "service": null,
-      "command": null,
       "function": "my_func",
       "args": [
         {
@@ -61,52 +45,32 @@
         }
       ],
       "enter": "5",
-      "exit": null,
-      "parent": null,
       "next": "5"
     },
     "5": {
       "method": "return",
       "ln": "5",
-      "output": null,
-      "name": null,
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         28
       ],
-      "enter": null,
-      "exit": null,
       "parent": "4",
       "next": "7.1"
     },
     "7.1": {
       "method": "call",
       "ln": "7.1",
-      "output": null,
       "name": [
         "p-7.1"
       ],
       "service": "random",
-      "command": null,
-      "function": null,
-      "args": [],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "7"
     },
     "7": {
       "method": "set",
       "ln": "7",
-      "output": null,
       "name": [
         "a"
       ],
-      "service": null,
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "path",
@@ -115,37 +79,24 @@
           ]
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "8.1"
     },
     "8.1": {
       "method": "call",
       "ln": "8.1",
-      "output": null,
       "name": [
         "p-8.1"
       ],
       "service": "random",
-      "command": null,
-      "function": null,
-      "args": [],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "8.2"
     },
     "8.2": {
       "method": "call",
       "ln": "8.2",
-      "output": null,
       "name": [
         "p-8.2"
       ],
       "service": "random",
-      "command": null,
-      "function": null,
       "args": [
         {
           "$OBJECT": "argument",
@@ -158,37 +109,25 @@
           "argument": 2
         }
       ],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "8.3"
     },
     "8.3": {
       "method": "call",
       "ln": "8.3",
-      "output": null,
       "name": [
         "p-8.3"
       ],
       "service": "random",
-      "command": null,
-      "function": null,
-      "args": [],
-      "enter": null,
-      "exit": null,
-      "parent": null,
       "next": "8"
     },
     "8": {
       "method": "execute",
       "ln": "8",
-      "output": [],
       "name": [
         "b"
       ],
       "service": "my_service",
       "command": "command",
-      "function": null,
       "args": [
         {
           "$OBJECT": "argument",
@@ -220,17 +159,13 @@
             ]
           }
         }
-      ],
-      "enter": null,
-      "exit": null,
-      "parent": null
+      ]
     }
   },
   "services": [
     "my_service"
   ],
   "entrypoint": "1",
-  "modules": {},
   "functions": {
     "random": "1",
     "my_func": "4"
