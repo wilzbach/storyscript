@@ -39,7 +39,7 @@ $ asyncy deploy  # Zero-devop deployments into Kubernetes
 ## Current status
 
 Storyscript is at an alpha stage and is part of the [Asyncy](https://asyncy.com)
-project. If you want to learn more about Asyncy, and how to use StoryScript
+project. If you want to learn more about Asyncy, and how to use Storyscript
 with Asyncy, you can visit the [asyncy documentation](https://docs.asyncy.com)
 
 ## Getting started
