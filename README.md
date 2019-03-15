@@ -11,7 +11,9 @@
 </div>
 
 ## 👋 Meet Storyscript
-The [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) for **Application Storytelling**. The age of cloud native, rapid application development. Developed passionatly by [@Asyncy](https://github.com/asyncy) on a mission to make development 100x easier.
+The [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) for **Application Storytelling**.
+_Write stories_, not code. Develop rapidly. Deploy natively to the cloud.
+Designed with :heart: by [@Asyncy](https://asyncy.com) on a mission to bring application development to the next level.
 
 ```coffee
 # Applications are stories of data.
