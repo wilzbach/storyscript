@@ -60,6 +60,8 @@ class ErrorCodes:
         'E0052', 'Service calls require a command.')
     unexpected_end_of_line = (
         'E0053', 'Unexpected end of line. Expected: {allowed}.')
+    arguments_expected = (
+        'E0054', 'Arguments need to be declared with `key:value`')
 
     @staticmethod
     def is_error(error_name):
