@@ -117,6 +117,8 @@ class StoryError(SyntaxError):
             return ErrorCodes.unnecessary_colon
         elif self.error.expected == ['_INDENT']:
             return ErrorCodes.block_expected_after
+        elif self.error.expected == ['_COLON']:
+            return ErrorCodes.arguments_expected
 
         self._format = {'allowed': str(self.error.expected)}
         token = self.error.token
