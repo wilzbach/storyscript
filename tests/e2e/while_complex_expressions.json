@@ -1,7 +1,7 @@
 {
   "tree": {
     "1": {
-      "method": "set",
+      "method": "expression",
       "ln": "1",
       "name": [
         "i"

@@ -26,7 +26,7 @@
       "next": "2"
     },
     "2": {
-      "method": "set",
+      "method": "expression",
       "ln": "2",
       "name": [
         "x"
@@ -44,7 +44,7 @@
       "next": "4"
     },
     "4": {
-      "method": "set",
+      "method": "expression",
       "ln": "4",
       "name": [
         "x"

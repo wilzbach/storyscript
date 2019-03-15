@@ -18,7 +18,7 @@
       "next": "1"
     },
     "1": {
-      "method": "set",
+      "method": "expression",
       "ln": "1",
       "name": [
         "a"

@@ -1,7 +1,7 @@
 {
   "tree": {
     "1": {
-      "method": "set",
+      "method": "expression",
       "ln": "1",
       "name": [
         "a"
@@ -12,7 +12,7 @@
       "next": "4"
     },
     "4": {
-      "method": "set",
+      "method": "expression",
       "ln": "4",
       "name": [
         "b"
@@ -23,7 +23,7 @@
       "next": "6"
     },
     "6": {
-      "method": "set",
+      "method": "expression",
       "ln": "6",
       "name": [
         "c"
@@ -34,7 +34,7 @@
       "next": "8"
     },
     "8": {
-      "method": "set",
+      "method": "expression",
       "ln": "8",
       "name": [
         "d"
@@ -45,7 +45,7 @@
       "next": "11"
     },
     "11": {
-      "method": "set",
+      "method": "expression",
       "ln": "11",
       "name": [
         "e"
@@ -56,7 +56,7 @@
       "next": "15"
     },
     "15": {
-      "method": "set",
+      "method": "expression",
       "ln": "15",
       "name": [
         "f"

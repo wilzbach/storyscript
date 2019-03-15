@@ -42,7 +42,7 @@
       "next": "4"
     },
     "4": {
-      "method": "set",
+      "method": "expression",
       "ln": "4",
       "name": [
         "a"
@@ -54,7 +54,7 @@
       "next": "5"
     },
     "5": {
-      "method": "set",
+      "method": "expression",
       "ln": "5",
       "name": [
         "b"

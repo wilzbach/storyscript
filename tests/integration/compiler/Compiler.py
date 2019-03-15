@@ -204,7 +204,7 @@ def test_compiler_service_streaming(parser):
     assert result['tree']['2']['method'] == 'when'
     assert result['tree']['2']['output'] == ['e']
     assert result['tree']['2']['enter'] == '3'
-    assert result['tree']['3']['method'] == 'set'
+    assert result['tree']['3']['method'] == 'expression'
 
 
 def test_compiler_service_inline_expression(parser):
@@ -338,11 +338,11 @@ def test_compiler_expression_signed_number(parser):
     Ensures that signed numbers are compiled correctly
     """
     result = Compiler.compile(parser.parse('a = -2'))
-    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [-2]
 
     result = Compiler.compile(parser.parse('a = +2'))
-    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [2]
 
 
@@ -379,11 +379,11 @@ def test_compiler_expression_signed_float(parser):
     Ensures that signed numbers are compiled correctly
     """
     result = Compiler.compile(parser.parse('a = -5.5'))
-    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [-5.5]
 
     result = Compiler.compile(parser.parse('a = +5.5'))
-    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [5.5]
 
 
@@ -1135,7 +1135,7 @@ def test_compiler_list_expression(parser):
     Ensures that list accept arbitrary expressions
     """
     result = Compiler.compile(parser.parse('a = [b + c, 1 / 2 + 3]'))
-    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'list',
         'items': [
@@ -1182,7 +1182,7 @@ def test_compiler_object_expression(parser):
     """
     source = 'a = {"1": b - c, "2": 1 % 2 - 3}'
     result = Compiler.compile(parser.parse(source))
-    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'dict',
         'items': [
@@ -1241,7 +1241,7 @@ def test_compiler_mutation_assignment(parser):
     """
     source = 'a = "hello world"\nb = a uppercase'
     result = Compiler.compile(parser.parse(source))
-    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['name'] == ['a']
     assert result['tree']['2']['method'] == 'mutation'
     assert result['tree']['2']['name'] == ['b']
@@ -1396,7 +1396,7 @@ def test_compiler_mutation_expression(parser):
     source = ('a = ["opened", "labeled"]\n'
               'a contains item: req.body["action"] == false')
     result = Compiler.compile(parser.parse(source))
-    assert result['tree']['1']['method'] == 'set'
+    assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['name'] == ['a']
     assert result['tree']['2']['method'] == 'mutation'
     assert result['tree']['2']['args'] == [

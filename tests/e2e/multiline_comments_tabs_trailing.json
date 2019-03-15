@@ -1,7 +1,7 @@
 {
   "tree": {
     "2": {
-      "method": "set",
+      "method": "expression",
       "ln": "2",
       "name": [
         "a"
@@ -12,7 +12,7 @@
       "next": "9"
     },
     "9": {
-      "method": "set",
+      "method": "expression",
       "ln": "9",
       "name": [
         "b"
@@ -23,7 +23,7 @@
       "next": "12"
     },
     "12": {
-      "method": "set",
+      "method": "expression",
       "ln": "12",
       "name": [
         "c"
@@ -34,7 +34,7 @@
       "next": "19"
     },
     "19": {
-      "method": "set",
+      "method": "expression",
       "ln": "19",
       "name": [
         "d"

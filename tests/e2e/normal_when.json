@@ -42,7 +42,7 @@
       "next": "3"
     },
     "3": {
-      "method": "set",
+      "method": "expression",
       "ln": "3",
       "name": [
         "x"

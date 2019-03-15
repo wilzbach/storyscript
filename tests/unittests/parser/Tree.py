@@ -2,7 +2,7 @@
 from lark.lexer import Token
 from lark.tree import Tree as LarkTree
 
-from pytest import fixture, mark, raises
+from pytest import fixture, raises
 
 from storyscript.exceptions.CompilerError import CompilerError
 from storyscript.parser import Tree
@@ -172,54 +172,6 @@ def test_tree_extract():
     target = Tree('target', [])
     tree = Tree('tree', [target, Tree('more', [target])])
     assert tree.extract('target') == [target]
-
-
-def test_tree_is_unary_leaf():
-    """
-    Ensures is_unary_leaf can find out whether an expression is unary leaf
-    """
-    tree = Tree('expression', [
-        Tree('or_expression', [
-            Tree('and_expression', [
-                Tree('cmp_expression', [
-                    Tree('arith_expression', [
-                        Tree('mul_expression', [
-                            Tree('unary_expression', [
-                                Tree('pow_expression', [
-                                    Tree('primary_expression', [
-                                        Tree('entity', [
-                                            Tree('values', [
-                                                0
-                                            ])
-                                        ])
-                                    ])
-                                ])
-                            ])
-                        ])
-                    ])
-                ])
-            ])
-        ])
-    ])
-    assert tree.is_unary_leaf() is True
-
-
-@mark.parametrize('tree', [
-    Tree('any', []),
-    Tree('arith_expression', [1, 2]),
-    Tree('arith_expression', [Tree('unary_expression', [1, 2])]),
-    Tree('arith_expression',
-         [Tree('unary_expression', [Tree('pow_expression', [1, 2])])]),
-    Tree('arith_expression',
-         [Tree('unary_expression',
-               [Tree('pow_expression',
-                     [Tree('primary_expression', [1, 2])])])]),
-])
-def test_tree_is_unary_leaf_false(tree):
-    """
-    Ensures is_unary returns False when the tree is not an unary
-    """
-    assert tree.is_unary_leaf() is False
 
 
 def test_tree_expect(tree):

@@ -60,7 +60,7 @@
       "next": "4"
     },
     "4": {
-      "method": "set",
+      "method": "expression",
       "ln": "4",
       "name": [
         "x"

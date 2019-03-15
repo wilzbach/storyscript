@@ -1,7 +1,7 @@
 {
   "tree": {
     "1": {
-      "method": "set",
+      "method": "expression",
       "ln": "1",
       "name": [
         "labels"
@@ -31,7 +31,7 @@
       "next": "2"
     },
     "2": {
-      "method": "set",
+      "method": "expression",
       "ln": "2",
       "name": [
         "found"
@@ -116,7 +116,7 @@
       "next": "5"
     },
     "5": {
-      "method": "set",
+      "method": "expression",
       "ln": "5",
       "name": [
         "found"
@@ -136,7 +136,7 @@
       "next": "7"
     },
     "7": {
-      "method": "set",
+      "method": "expression",
       "ln": "7",
       "name": [
         "found"
@@ -164,7 +164,7 @@
       "next": "9"
     },
     "9": {
-      "method": "set",
+      "method": "expression",
       "ln": "9",
       "name": [
         "x"
@@ -176,7 +176,7 @@
       "next": "10"
     },
     "10": {
-      "method": "set",
+      "method": "expression",
       "ln": "10",
       "name": [
         "outside"
