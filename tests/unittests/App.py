@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import json
 
-from pytest import fixture
+from pytest import fixture, raises
 
 import storyscript.App as AppModule
 from storyscript.App import App
 from storyscript.Bundle import Bundle
 from storyscript.compiler.Preprocessor import Preprocessor
+from storyscript.exceptions import StoryError
 from storyscript.parser import Grammar
 
 
@@ -85,6 +86,35 @@ def test_app_compile_ebnf(patch, bundle):
     patch.object(json, 'dumps')
     App.compile('path', ebnf='ebnf')
     Bundle.from_path().bundle.assert_called_with(ebnf='ebnf')
+
+
+def test_app_compile_first(patch, bundle):
+    """
+    Ensures that the App only returns the first story
+    """
+    Bundle.from_path().bundle.return_value = {'stories': {'my_story': 42}}
+    patch.object(json, 'dumps')
+    result = App.compile('path', first=True)
+    Bundle.from_path.assert_called_with('path', ignored_path=None)
+    Bundle.from_path().bundle.assert_called_with(ebnf=None)
+    json.dumps.assert_called_with(42, indent=2)
+    assert result == json.dumps()
+
+
+def test_app_compile_first_error(patch, bundle):
+    """
+    Ensures that the App throws an error for --first with more than one story
+    """
+    Bundle.from_path().bundle.return_value = {'stories': {
+        'my_story': 42, 'another_story': 43,
+    }}
+    patch.object(json, 'dumps')
+    with raises(StoryError) as e:
+        App.compile('path', first=True)
+    assert e.value.message() == \
+        'The option `--first`/-`f` can only be used if one story is complied.'
+    Bundle.from_path.assert_called_with('path', ignored_path=None)
+    Bundle.from_path().bundle.assert_called_with(ebnf=None)
 
 
 def test_app_lex(bundle):

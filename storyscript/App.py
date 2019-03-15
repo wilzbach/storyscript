@@ -3,6 +3,7 @@ import json
 
 from .Bundle import Bundle
 from .compiler.Preprocessor import Preprocessor
+from .exceptions import StoryError
 from .parser import Grammar
 
 
@@ -24,7 +25,8 @@ class App:
         return stories
 
     @staticmethod
-    def compile(path, ignored_path=None, ebnf=None, concise=False):
+    def compile(path, ignored_path=None, ebnf=None, concise=False,
+                first=False):
         """
         Parses and compiles stories found in path, returning JSON
         """
@@ -32,6 +34,10 @@ class App:
         result = bundle.bundle(ebnf=ebnf)
         if concise:
             result = _clean_dict(result)
+        if first:
+            if len(result['stories']) != 1:
+                raise StoryError.create_error('first_option_more_stories')
+            result = next(iter(result['stories'].values()))
         return json.dumps(result, indent=2)
 
     @staticmethod

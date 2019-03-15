@@ -62,6 +62,9 @@ class ErrorCodes:
         'E0053', 'Unexpected end of line. Expected: {allowed}.')
     arguments_expected = (
         'E0054', 'Arguments need to be declared with `key:value`')
+    first_option_more_stories = (
+        'E0055',
+        'The option `--first`/-`f` can only be used if one story is complied.')
 
     @staticmethod
     def is_error(error_name):
