@@ -1,4 +1,3 @@
-![storyscript-logo](https://user-images.githubusercontent.com/2041757/44708914-9c66a380-aaa8-11e8-8e53-502c17ab5be3.png)
 
 [![PyPi](https://img.shields.io/pypi/v/storyscript.svg?maxAge=600&style=for-the-badge)](https://pypi.python.org/pypi/storyscript)
 [![CircleCI](https://img.shields.io/circleci/project/github/storyscript/storyscript/master.svg?style=for-the-badge)](https://circleci.com/gh/storyscript/storyscript)
@@ -7,41 +6,41 @@
 [![Devdocs](https://img.shields.io/badge/devdocs-online-brightgreen.svg?style=for-the-badge)](https://storyscript.readthedocs.io)
 
 
-# Storyscript
+<div align="center">
+<img src="https://user-images.githubusercontent.com/2041757/44708914-9c66a380-aaa8-11e8-8e53-502c17ab5be3.png" width="275">
+</div>
 
-StoryScript is an high-level language that can be used to orchestrate
-microservices in an algorithmic way. Unlike a traditional language, StoryScript
-describes operations against or with services:
-
-```coffee
-today = date now
-invoices = database get items:"invoices" where:"month={{today.month}}"
-if today.day == 1
-  send invoices
-```
-
-You can launch a scalable web application with a five-liner:
+## 👋 Meet Storyscript
+The [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) for **Application Storytelling**.
+Develop rapidly, deploy natively to the cloud and focus on what matters most: business-logic.
+Designed with :heart: by [@Asyncy](https://asyncy.com) on a mission to bring application development to the next level.
 
 ```coffee
-stream http-server as request
-  query = parse-request request:request
-  data = database get query:query
-  html = erb template:'/assets/template.erb' data:data
-  request.write input:html
+# Applications are stories of data.
+when http server listen path: '/' as request     # Serverless
+    result = anyMicroservice action key: value   # Written in any language wrapped in Docker or RKT
+    result = anyFunction(key: value)             # Lambda, OpenFaaS, KNative or Storyscript
+    items = 'string' split by: ','               # Mutations == No middleware
+    data = OpenAPI get users: users              # OpenAPI & AsyncAPI for legacy system support
+    sent = machinebox/textbox process input:data # Free/Paid Serivces
+    if sent.positive                             # Conditions
+        foreach list as item                     # Turing complete
+            # ...
+    request write content: 'Hello World!'
+
+# Next launch on the Asyncy Platform
+$ asyncy deploy  # Zero-devop deployments into Kubernetes
 ```
 
-These stories are compiled into event trees and run by a platform that
-implements StoryScript execution, like [Asyncy](https://github.com/Asyncy)
+💯Open Source for a delicious application development. :sparkles::cake::sparkles:
+
+> 🚀Choose: hosted **Asyncy Cloud** or `helm install asyncy` for on-premises deployments.
 
 ## Current status
 
-StoryScript is at an alpha stage and is part of the [Asyncy](https://asyncy.com)
-project. If you want to learn more about Asyncy, and how to use StoryScript
+Storyscript is at an alpha stage and is part of the [Asyncy](https://asyncy.com)
+project. If you want to learn more about Asyncy, and how to use Storyscript
 with Asyncy, you can visit the [asyncy documentation](https://docs.asyncy.com)
-
-At the moment, Asyncy is the only platform that can execute StoryScript, however
-due the open source nature of the project, there might be more platforms that
-support StoryScript in the future.
 
 ## Getting started
 
