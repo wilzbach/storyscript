@@ -22,7 +22,6 @@ when http server listen path: '/' as request     # Serverless
     data = OpenAPI get users: users              # OpenAPI & AsyncAPI for legacy system support
     sent = machinebox/textbox process input:data # Free/Paid Serivces
     if sent.positive                             # Conditions
-        async doSomethingAsync()                 # Fully-Asynchronous
         foreach list as item                     # Turning complete
             # ...
     request write content: 'Hello World!'
