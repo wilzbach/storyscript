@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 13
+
+1|    foo like /r/
+                  ^
+
+E0053: Unexpected end of line. Expected: ['_COLON'].

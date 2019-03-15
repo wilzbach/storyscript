@@ -166,14 +166,13 @@ def test_storyerror_hint_unidentified_compiler_error(storyerror, patch):
 
 
 def test_storyerror_hint_invalid_character(patch, storyerror):
-    patch.object(storyerror, 'get_line', return_value='x = $')
     storyerror.error = UnexpectedCharacters('seq', 0, line=1, column=5)
     storyerror.error_tuple = ErrorCodes.invalid_character
+    storyerror._format = {'character': '$'}
     assert storyerror.hint() == '`$` is not allowed here'
 
 
 def test_storyerror_hint_redeclared(patch, storyerror, magic):
-    patch.object(storyerror, 'get_line', return_value='foo')
     storyerror.error = CompilerError(
         'function_already_declared',
         format={'function_name': '.function_name.', 'line': '.line.'})
@@ -183,10 +182,10 @@ def test_storyerror_hint_redeclared(patch, storyerror, magic):
 
 
 def test_storyerror_hint_unexpected_token(patch, storyerror, ):
-    patch.object(storyerror, 'get_line', return_value='if a and b')
     expected = ['a', 'b', 'c']
     storyerror.error = UnexpectedToken(token='and', expected=expected)
     storyerror.error_tuple = ErrorCodes.unexpected_token
+    storyerror._format = {'token': 'and', 'allowed': str(expected)}
     assert storyerror.hint() == ('`and` is not allowed here. '
                                  f'Allowed: {str(expected)}')
 
@@ -199,6 +198,27 @@ def test_storyerror_unexpected_token_code(patch, call_count, storyerror):
     Intention.__init__.assert_called_with(storyerror.get_line())
     call_count(Intention, ['assignment', 'unnecessary_colon'])
     assert result == ErrorCodes.unexpected_token
+    assert storyerror._format == {
+        'token': str(storyerror.error.token),
+        'allowed': str(storyerror.error.expected),
+    }
+
+
+def test_storyerror_unexpected_token_code_nl(patch, call_count, storyerror):
+    """
+    Test an unexpected token error with _NL
+    """
+    patch.init(Intention)
+    patch.object(Intention, 'assignment', return_value=False)
+    patch.object(Intention, 'unnecessary_colon', return_value=False)
+    storyerror.error.token.type = '_NL'
+    result = storyerror.unexpected_token_code()
+    Intention.__init__.assert_called_with(storyerror.get_line())
+    call_count(Intention, ['assignment', 'unnecessary_colon'])
+    assert result == ErrorCodes.unexpected_end_of_line
+    assert storyerror._format == {
+        'allowed': str(storyerror.error.expected),
+    }
 
 
 def test_storyerror_unexpected_token_code_assignment(patch, storyerror):
@@ -229,10 +249,13 @@ def test_storyerror_unexpected_characters_code(patch, call_count, storyerror):
     patch.init(Intention)
     patch.object(Intention, 'is_function', return_value=False)
     patch.object(Intention, 'unnecessary_colon', return_value=False)
+    patch.object(storyerror, 'get_line', return_value='x = $')
+    storyerror.error.column = 5
     result = storyerror.unexpected_characters_code()
     Intention.__init__.assert_called_with(storyerror.get_line())
     call_count(Intention, ['is_function', 'unnecessary_colon'])
     assert result == ErrorCodes.invalid_character
+    assert storyerror._format == {'character': '$'}
 
 
 def test_storyerror_unexpected_characters_code_function(patch, storyerror):
