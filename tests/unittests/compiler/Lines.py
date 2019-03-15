@@ -185,15 +185,6 @@ def test_lines_append_function(patch, lines):
     assert lines.functions['function'] == 'line'
 
 
-def test_lines_append_set(patch, lines):
-    """
-    Ensures that a variable is registered properly
-    """
-    patch.many(Lines, ['make', 'set_next'])
-    lines.append('set', 'line', name=['name'])
-    assert lines.variables[-1] == ['name']
-
-
 def test_compiler_append_service(patch, lines):
     """
     Ensures that a service is registed in Compiler.services

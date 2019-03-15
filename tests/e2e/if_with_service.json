@@ -60,7 +60,7 @@
       "next": "2"
     },
     "2": {
-      "method": "set",
+      "method": "expression",
       "ln": "2",
       "name": [
         "x"
@@ -87,7 +87,7 @@
       "next": "4"
     },
     "4": {
-      "method": "set",
+      "method": "expression",
       "ln": "4",
       "name": [
         "x"
@@ -106,7 +106,7 @@
       "next": "6"
     },
     "6": {
-      "method": "set",
+      "method": "expression",
       "ln": "6",
       "name": [
         "x"
@@ -118,7 +118,7 @@
       "next": "8"
     },
     "8": {
-      "method": "set",
+      "method": "expression",
       "ln": "8",
       "name": [
         "x"

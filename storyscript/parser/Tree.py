@@ -136,23 +136,6 @@ class Tree(LarkTree):
                 string += child.value
         return string
 
-    def is_unary_leaf(self):
-        """
-        Whether the current expression tree is an unary expression leaf
-        """
-        e = self
-        nodes = ['expression',
-                 'or_expression', 'and_expression', 'cmp_expression',
-                 'arith_expression', 'mul_expression', 'unary_expression',
-                 'pow_expression', 'primary_expression', 'entity']
-        for n in nodes:
-            if e.data != n:
-                return False
-            if len(e.children) != 1:
-                return False
-            e = e.child(0)
-        return True
-
     def expect(self, cond, error, **kwargs):
         """
         Throws a compiler error with message if the condition is falsy.

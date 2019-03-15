@@ -353,10 +353,10 @@ Compiles to::
     }
 
 
-Set
-###
-Used when declaring a variable, or assigning a value to a property. For example
-a story like::
+Setting variables
+#################
+
+When declaring a variable, or assigning a value to a property the `name` field will be set. For example, a story like::
 
     x = "hello"
 
@@ -364,7 +364,7 @@ Will result in::
 
     {
         "1": {
-          "method": "set",
+          "method": "expression",
           "ln": "1",
           "name": ["a"],
           "args": [

@@ -136,8 +136,6 @@ class Lines:
 
         if method == 'function':
             self.functions[kwargs['function']] = line
-        elif method == 'set':
-            self.variables.append(kwargs['name'])
         elif method == 'execute':
             if self.is_output(kwargs['parent'], kwargs['service']) is False:
                 self.services.append(kwargs['service'])

@@ -13,7 +13,7 @@ def test_functions_function(parser):
     assert result['tree']['1']['method'] == 'function'
     assert result['tree']['1']['function'] == 'f'
     assert result['tree']['1']['next'] == '2'
-    assert result['tree']['2']['method'] == 'set'
+    assert result['tree']['2']['method'] == 'expression'
     assert result['tree']['2']['args'] == [0]
     assert result['tree']['2']['parent'] == '1'
 

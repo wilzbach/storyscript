@@ -108,10 +108,6 @@ class Compiler:
         fragment = tree.assignment_fragment.base_expression
         self.base_expression_assignment(fragment, parent, line)
         self.lines.set_name(name)
-        # Is this superfluous?
-        # See: https://github.com/storyscript/storyscript/issues/657
-        if fragment.expression and fragment.expression.is_unary_leaf():
-            self.lines.lines[self.lines.last()]['method'] = 'set'
 
     def arguments(self, tree, parent):
         """

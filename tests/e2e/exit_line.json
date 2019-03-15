@@ -19,7 +19,7 @@
       "next": "2"
     },
     "2": {
-      "method": "set",
+      "method": "expression",
       "ln": "2",
       "name": [
         "x"
@@ -51,7 +51,7 @@
       "next": "5"
     },
     "5": {
-      "method": "set",
+      "method": "expression",
       "ln": "5",
       "name": [
         "a"
@@ -70,7 +70,7 @@
       "next": "7"
     },
     "7": {
-      "method": "set",
+      "method": "expression",
       "ln": "7",
       "name": [
         "b"
@@ -92,7 +92,7 @@
       "next": "10"
     },
     "10": {
-      "method": "set",
+      "method": "expression",
       "ln": "10",
       "name": [
         "x"
@@ -111,7 +111,7 @@
       "next": "13"
     },
     "13": {
-      "method": "set",
+      "method": "expression",
       "ln": "13",
       "name": [
         "a"
@@ -133,7 +133,7 @@
       "next": "15"
     },
     "15": {
-      "method": "set",
+      "method": "expression",
       "ln": "15",
       "name": [
         "b"
@@ -145,7 +145,7 @@
       "next": "17"
     },
     "17": {
-      "method": "set",
+      "method": "expression",
       "ln": "17",
       "name": [
         "x"

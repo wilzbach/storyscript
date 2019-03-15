@@ -98,7 +98,6 @@ def test_compiler_assignment_unary(patch, compiler, lines, tree):
     """
     patch.many(Objects, ['names', 'entity', 'expression'])
     af = tree.assignment_fragment.base_expression
-    af.expression.is_unary_leaf.return_value = True
     af.service = None
     af.mutation = None
     lines.lines = {lines.last(): {'method': None}}
@@ -109,7 +108,6 @@ def test_compiler_assignment_unary(patch, compiler, lines, tree):
               'parent': '1'}
     lines.append.assert_called_with('expression', tree.line(), **kwargs)
     lines.set_name.assert_called_with(Objects.names())
-    assert lines.lines[compiler.lines.last()]['method'] == 'set'
 
 
 def test_compiler_assignment_service(patch, compiler, lines, tree):
@@ -141,7 +139,6 @@ def test_compiler_assignment_expression(patch, compiler, lines, tree):
     af = tree.assignment_fragment.base_expression
     af.service = None
     af.mutation = None
-    af.expression.is_unary_leaf.return_value = False
     compiler.assignment(tree, '1')
     Objects.expression.assert_called_with(af.expression)
     lines.set_name.assert_called_with('name')
