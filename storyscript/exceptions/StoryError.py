@@ -97,20 +97,14 @@ class StoryError(SyntaxError):
         if self.error_tuple == ErrorCodes.unidentified_error:
             return StoryError._internal_error(self.error)
 
-        if self.error_tuple == ErrorCodes.invalid_character:
-            return self.error_tuple[1].format(
-                    character=self.get_line()[self.error.column - 1])
-        elif self.error_tuple == ErrorCodes.unexpected_token:
-            token = self.error.token
-            expected = str(self.error.expected)
-            return self.error_tuple[1].format(token=token, allowed=expected)
-
         # Not every error originates from a ProcessingError
         # (we also catch Lark's errors)
         if isinstance(self.error, ProcessingError):
             return self.error.message()
-        else:
-            return self.error_tuple[1]
+
+        # We might have added formatting attributes to a Lark error
+        values = getattr(self, '_format', {})
+        return self.error_tuple[1].format(**values)
 
     def unexpected_token_code(self):
         """
@@ -123,6 +117,13 @@ class StoryError(SyntaxError):
             return ErrorCodes.unnecessary_colon
         elif self.error.expected == ['_INDENT']:
             return ErrorCodes.block_expected_after
+
+        self._format = {'allowed': str(self.error.expected)}
+        token = self.error.token
+        if token.type == '_NL':
+            return ErrorCodes.unexpected_end_of_line
+
+        self._format['token'] = str(token)
         return ErrorCodes.unexpected_token
 
     @staticmethod
@@ -147,6 +148,7 @@ class StoryError(SyntaxError):
                 self.is_valid_name_start(error_column):
             return ErrorCodes.block_expected_before
 
+        self._format = {'character': error_column}
         return ErrorCodes.invalid_character
 
     def identify(self):

@@ -58,6 +58,8 @@ class ErrorCodes:
         'E0051', 'No service parent has been found.')
     service_without_command = (
         'E0052', 'Service calls require a command.')
+    unexpected_end_of_line = (
+        'E0053', 'Unexpected end of line. Expected: {allowed}.')
 
     @staticmethod
     def is_error(error_name):
