@@ -113,12 +113,11 @@ class Compiler:
         """
         Compiles arguments. This is called only for nested arguments.
         """
-        previous_line = self.lines.last()
-        if previous_line:
-            line = self.lines.lines[previous_line]
-            if line['method'] != 'execute':
+        prev_line = self.lines.last()
+        if prev_line is not None:
+            if prev_line['method'] != 'execute':
                 raise StorySyntaxError('arguments_noservice', tree=tree)
-            line['args'] = line['args'] + Objects.arguments(tree)
+            prev_line['args'] = prev_line['args'] + Objects.arguments(tree)
             return
         raise StorySyntaxError('arguments_noservice', tree=tree)
 
@@ -193,7 +192,7 @@ class Compiler:
                 output_name = self.find_parent_with_output(tree, parent)
                 tree.service.path = Objects.name_to_path(output_name[0])
             self.service(tree.service, nested_block, parent)
-            self.lines.lines[self.lines.last()]['method'] = 'when'
+            self.lines.last()['method'] = 'when'
         elif tree.path:
             args = [Objects.path(tree.path)]
             output = self.output(tree.output)
@@ -323,12 +322,12 @@ class Compiler:
         """
         Compiles an indented mutation.
         """
-        previous_line = self.lines.last()
-        if previous_line:
-            line = self.lines.lines[previous_line]
-            if line['method'] != 'mutation':
+        prev_line = self.lines.last()
+        if prev_line is not None:
+            if prev_line['method'] != 'mutation':
                 raise StorySyntaxError('arguments_nomutation', tree=tree)
-            line['args'] = line['args'] + self.chained_mutations(tree)
+            prev_line['args'] = prev_line['args'] + \
+                self.chained_mutations(tree)
             return
         raise StorySyntaxError('arguments_nomutation', tree=tree)
 
@@ -445,5 +444,5 @@ class Compiler:
         compiler.parse_tree(tree)
         lines = compiler.lines
         return {'tree': lines.lines, 'services': lines.get_services(),
-                'entrypoint': lines.first(), 'modules': lines.modules,
+                'entrypoint': lines.entrypoint(), 'modules': lines.modules,
                 'functions': lines.functions, 'version': version}
