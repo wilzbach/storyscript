@@ -8,6 +8,7 @@ class Lines:
     """
     def __init__(self):
         self.lines = {}
+        self._lines = []  # sorted line nr (by insertion)
         self.variables = []
         self.services = []
         self.functions = {}
@@ -15,38 +16,38 @@ class Lines:
         self.modules = {}
         self.finished_scopes = []
 
-    def sort(self):
+    def entrypoint(self):
         """
-        Returns ordered line numbers
-        Inserted fake lines ('.' suffix) must appear before their inserted
-        line, but after their original's line previous line.
+        Returns the first line number or None
         """
-        # Generates this sorting: 0, 1.0.9, 1.0, 1.1, 1, 2
-        return sorted(self.lines.keys(), reverse=True,
-                      key=lambda x: list(map(
-                          lambda i: -int(i), x.split('.'))))
+        # empty files are allowed
+        if len(self._lines) == 0:
+            return None
+        return self._lines[0]
 
     def first(self):
         """
         Gets the first line.
         """
-        if self.lines:
-            return self.sort()[0]
+        if len(self._lines) == 0:
+            return None
+        return self.lines[self._lines[0]]
 
     def last(self):
         """
         Gets the last line
         """
-        if self.lines:
-            return self.sort()[-1]
+        if len(self._lines) == 0:
+            return None
+        return self.lines[self._lines[-1]]
 
     def set_name(self, name):
         """
         Sets the name of the previous line
         """
         previous_line = self.last()
-        if previous_line:
-            self.lines[previous_line]['name'] = name
+        if previous_line is not None:
+            previous_line['name'] = name
 
         self.variables.append(name)
 
@@ -55,8 +56,8 @@ class Lines:
         Finds the previous line, and set the current as its next line
         """
         previous_line = self.last()
-        if previous_line:
-            self.lines[previous_line]['next'] = line_number
+        if previous_line is not None:
+            previous_line['next'] = line_number
 
     def set_exit(self, line):
         """
@@ -64,7 +65,7 @@ class Lines:
         in if/elif/else and try/catch/finally blocks.
         """
         methods = ['if', 'elif', 'try', 'catch']
-        for line_number in self.sort()[::-1]:
+        for line_number in self._lines[::-1]:
             if self.lines[line_number]['method'] in methods:
                 self.finished_scopes = []
                 self.lines[line_number]['exit'] = line
@@ -103,22 +104,22 @@ class Lines:
         """
         Creates the base dictionary for a given line.
         """
-        dictionary = {
-            line: {
-                'method': method,
-                'ln': line,
-                'output': output,
-                'name': name,
-                'service': service,
-                'command': command,
-                'function': function,
-                'args': args,
-                'enter': enter,
-                'exit': exit,
-                'parent': parent
-            }
+        assert line not in self.lines, 'Line numbers must be unique'
+        self.lines[line] = {
+            'method': method,
+            'ln': line,
+            'output': output,
+            'name': name,
+            'service': service,
+            'command': command,
+            'function': function,
+            'args': args,
+            'enter': enter,
+            'exit': exit,
+            'parent': parent,
         }
-        self.lines = {**self.lines, **dictionary}
+        # save insertion order
+        self._lines.append(line)
 
     def check_service_name(self, service, line):
         """

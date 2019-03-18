@@ -19,49 +19,10 @@ def test_lines_init(lines):
     assert lines.modules == {}
 
 
-def test_lines_sort(lines):
-    lines.lines = {'1': '1', '2': '2', '2.1': '2'}
-    assert lines.sort() == ['1', '2.1', '2']
-
-
-def test_lines_sort_complex(lines):
-    lines.lines = {'1': '.', '1.0': '.', '1.1': '.'}
-    assert lines.sort() == ['1.0', '1.1', '1']
-
-
-def test_lines_sort_more_complex(lines):
-    lines.lines = {
-        '1': '.', '1.0': '.', '1.1': '.',
-        '0': '.', '2': '.', '2.1': '.',
-        '1.9.0': '.', '1.6': '.', '1.4.1': '.',
-        '1.1.0': '.', '1.0.0': '.', '1.0.1': '.',
-        '1.1.26': '.', '1.1.3': '.',
-        '1.0.9': '.', '1.0.22': '.',
-    }
-    assert lines.sort() == [
-        '0',
-        '1.0.0',
-        '1.0.1',
-        '1.0.9',
-        '1.0.22',
-        '1.0',
-        '1.1.0',
-        '1.1.3',
-        '1.1.26',
-        '1.1',
-        '1.4.1',
-        '1.6',
-        '1.9.0',
-        '1',
-        '2.1',
-        '2',
-    ]
-
-
 def test_lines_first(patch, lines):
-    patch.object(Lines, 'sort')
     lines.lines = {'1': '1'}
-    assert lines.first() == lines.sort()[0]
+    lines._lines = ['1']
+    assert lines.first() == '1'
 
 
 def test_lines_first_none(lines):
@@ -69,9 +30,9 @@ def test_lines_first_none(lines):
 
 
 def test_lines_last(patch, lines):
-    patch.object(Lines, 'sort')
     lines.lines = {'1': '1'}
-    assert lines.last() == lines.sort()[-1]
+    lines._lines = ['1']
+    assert lines.last() == '1'
 
 
 def test_lines_last_no_lines(lines):
@@ -79,26 +40,25 @@ def test_lines_last_no_lines(lines):
 
 
 def test_lines_set_name(patch, lines):
-    patch.object(Lines, 'last')
-    lines.lines[lines.last()] = {}
+    d = {}
+    patch.object(Lines, 'last', return_value=d)
     lines.set_name('name')
-    assert lines.lines[lines.last()]['name'] == 'name'
+    assert d['name'] == 'name'
 
 
 def test_lines_set_next(patch, lines):
-    patch.object(Lines, 'last', return_value='1')
     lines.lines['1'] = {}
+    patch.object(Lines, 'last', return_value=lines.lines['1'])
     lines.set_next('2')
     assert lines.lines['1']['next'] == '2'
 
 
 @mark.parametrize('method', ['if', 'elif', 'try', 'catch'])
 def test_lines_set_exit(patch, lines, method):
-    patch.object(Lines, 'sort', return_value=['1', '2'])
     lines.finished_scopes = ['1']
     lines.lines = {'1': {}, '2': {'method': method}}
+    lines._lines = ['1', '2']
     lines.set_exit('3')
-    assert lines.sort.call_count == 1
     assert lines.lines['2']['exit'] == '3'
     assert lines.finished_scopes == []
 

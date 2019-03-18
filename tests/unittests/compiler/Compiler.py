@@ -161,8 +161,8 @@ def test_compiler_assignment_function_call(patch, compiler, lines, tree):
 
 def test_compiler_arguments(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
-    lines.last.return_value = '1'
     lines.lines = {'1': {'method': 'execute', 'args': ['args']}}
+    lines.last.return_value = lines.lines['1']
     compiler.arguments(tree, '0')
     Objects.arguments.assert_called_with(tree)
     assert lines.lines['1']['args'] == ['args'] + Objects.arguments()
@@ -186,8 +186,8 @@ def test_compiler_arguments_not_execute(patch, compiler, lines, tree):
     """
     patch.init(StorySyntaxError)
     patch.object(Objects, 'arguments')
-    lines.last.return_value = '1'
     lines.lines = {'1': {'method': 'whatever'}}
+    lines.last.return_value = lines.lines['1']
     with raises(StorySyntaxError):
         compiler.arguments(tree, '0')
     error = 'arguments_noservice'
@@ -481,7 +481,7 @@ def test_compiler_find_parent_with_no_service(patch, compiler, lines, tree,
 def test_compiler_when(patch, compiler, lines, tree):
     patch.object(Compiler, 'service')
     lines.lines = {'1': {}}
-    lines.last.return_value = '1'
+    lines.last.return_value = lines.lines['1']
     compiler.when(tree, 'nested_block', '1')
     Compiler.service.assert_called_with(tree.service, 'nested_block', '1')
     assert lines.lines['1']['method'] == 'when'
@@ -497,7 +497,7 @@ def test_compiler_when_condensed(patch, compiler, lines, tree, magic):
     tree.service.path = '.path.'
     sf.command = None
     lines.lines = {'1': {}}
-    lines.last.return_value = '1'
+    lines.last.return_value = lines.lines['1']
     compiler.when(tree, 'nested_block', '1')
     Compiler.service.assert_called_with(tree.service, 'nested_block', '1')
     assert lines.lines['1']['method'] == 'when'
@@ -730,8 +730,8 @@ def test_compiler_mutation_block_from_service(patch, compiler, lines, tree):
 
 def test_compiler_indented_chain(patch, compiler, lines, tree):
     patch.object(Compiler, 'chained_mutations')
-    lines.last.return_value = '1'
     lines.lines = {'1': {'method': 'mutation', 'args': ['args']}}
+    lines.last.return_value = lines.lines['1']
     compiler.indented_chain(tree, '0')
     Compiler.chained_mutations.assert_called_with(tree)
     assert lines.lines['1']['args'] == ['args'] + Compiler.chained_mutations()
@@ -755,7 +755,6 @@ def test_compiler_indented_chain_not_mutation(patch, compiler, lines, tree):
     """
     patch.init(StorySyntaxError)
     patch.object(Compiler, 'chained_mutations')
-    lines.last.return_value = '1'
     lines.lines = {'1': {'method': 'whatever'}}
     with raises(StorySyntaxError):
         compiler.indented_chain(tree, '0')
@@ -919,6 +918,7 @@ def test_compiler_compile(patch, magic):
     patch.init(Preprocessor)
     patch.object(Preprocessor, 'process')
     patch.many(Compiler, ['parse_tree', 'compiler'])
+    patch.object(Lines, 'entrypoint')
     tree = magic()
     result = Compiler.compile(tree)
     Preprocessor.__init__.assert_called_with(parser=tree.parser)
@@ -927,5 +927,5 @@ def test_compiler_compile(patch, magic):
     lines = Compiler.compiler().lines
     expected = {'tree': lines.lines, 'version': version,
                 'services': lines.get_services(), 'functions': lines.functions,
-                'entrypoint': lines.first(), 'modules': lines.modules}
+                'entrypoint': lines.entrypoint(), 'modules': lines.modules}
     assert result == expected
