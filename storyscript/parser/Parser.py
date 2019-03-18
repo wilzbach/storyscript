@@ -17,6 +17,7 @@ class Parser:
     def __init__(self, algo='lalr', ebnf=None):
         self.algo = algo
         self.ebnf = ebnf
+        self.lark = self._lark()
 
     @staticmethod
     def indenter():
@@ -38,7 +39,7 @@ class Parser:
                 return f.read()
         return Grammar().build()
 
-    def lark(self):
+    def _lark(self):
         """
         Get the grammar and initialize Lark.
         """
@@ -51,12 +52,14 @@ class Parser:
         if source == '':
             return Tree('empty', [])
         source = '{}\n'.format(source)
-        lark = self.lark()
+        lark = self.lark
         tree = lark.parse(source)
-        return self.transformer().transform(tree)
+        result = self.transformer().transform(tree)
+        result.parser = self
+        return result
 
     def lex(self, source):
         """
         Lexes the source string
         """
-        return self.lark().lex(source)
+        return self.lark.lex(source)

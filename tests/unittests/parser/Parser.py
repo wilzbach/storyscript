@@ -10,21 +10,30 @@ from storyscript.parser import (CustomIndenter, Grammar, Parser, Transformer,
 
 
 @fixture
-def parser():
-    return Parser()
+def parser(magic, patch):
+    patch.init(Parser)
+    parser = Parser()
+    parser.algo = 'lalr'
+    parser.ebnf = None
+    parser.lark = magic()
+    return parser
 
 
-def test_parser_init(parser):
+def test_parser_init(patch):
+    patch.object(Parser, '_lark')
+    parser = Parser()
     assert parser.algo == 'lalr'
     assert parser.ebnf is None
 
 
-def test_parser_init_algo():
+def test_parser_init_algo(patch):
+    patch.object(Parser, '_lark')
     parser = Parser(algo='algo')
     assert parser.algo == 'algo'
 
 
-def test_parser_init_ebnf():
+def test_parser_init_ebnf(patch):
+    patch.object(Parser, '_lark')
     parser = Parser(ebnf='grammar.ebnf')
     assert parser.ebnf == 'grammar.ebnf'
 
@@ -62,7 +71,7 @@ def test_parser_lark(patch, parser):
     """
     patch.init(Lark)
     patch.many(Parser, ['indenter', 'grammar'])
-    result = parser.lark()
+    result = parser._lark()
     kwargs = {'parser': parser.algo, 'postlex': Parser.indenter()}
     Lark.__init__.assert_called_with(parser.grammar(), **kwargs)
     assert isinstance(result, Lark)
@@ -72,14 +81,14 @@ def test_parser_parse(patch, parser):
     """
     Ensures the build method can build the grammar
     """
-    patch.many(Parser, ['lark', 'transformer'])
+    patch.many(Parser, ['transformer'])
     result = parser.parse('source')
-    Parser.lark().parse.assert_called_with('source\n')
-    Parser.transformer().transform.assert_called_with(Parser.lark().parse())
+    parser.lark.parse.assert_called_with('source\n')
+    Parser.transformer().transform.assert_called_with(parser.lark.parse())
     assert result == Parser.transformer().transform()
 
 
-def test_parser_parse_empty(patch, parser):
+def test_parser_parse_empty(patch, parser, magic):
     """
     Ensures that empty stories are parsed correctly
     """
@@ -87,7 +96,7 @@ def test_parser_parse_empty(patch, parser):
 
 
 def test_parser_lex(patch, parser):
-    patch.many(Parser, ['lark', 'indenter'])
+    patch.many(Parser, ['indenter'])
     result = parser.lex('source')
-    Parser.lark().lex.assert_called_with('source')
-    assert result == Parser.lark().lex()
+    parser.lark.lex.assert_called_with('source')
+    assert result == parser.lark.lex()

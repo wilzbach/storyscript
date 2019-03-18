@@ -440,7 +440,7 @@ class Compiler:
 
     @classmethod
     def compile(cls, tree, debug=False):
-        tree = Preprocessor.process(tree)
+        tree = Preprocessor(parser=tree.parser).process(tree)
         compiler = cls.compiler()
         compiler.parse_tree(tree)
         lines = compiler.lines

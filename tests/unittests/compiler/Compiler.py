@@ -915,11 +915,14 @@ def test_compiler_compiler(patch):
     assert isinstance(result, Compiler)
 
 
-def test_compiler_compile(patch):
+def test_compiler_compile(patch, magic):
+    patch.init(Preprocessor)
     patch.object(Preprocessor, 'process')
     patch.many(Compiler, ['parse_tree', 'compiler'])
-    result = Compiler.compile('tree')
-    Preprocessor.process.assert_called_with('tree')
+    tree = magic()
+    result = Compiler.compile(tree)
+    Preprocessor.__init__.assert_called_with(parser=tree.parser)
+    Preprocessor.process.assert_called_with(tree)
     Compiler.compiler().parse_tree.assert_called_with(Preprocessor.process())
     lines = Compiler.compiler().lines
     expected = {'tree': lines.lines, 'version': version,

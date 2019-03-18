@@ -3,6 +3,8 @@ import os
 import subprocess
 
 from .Story import Story
+from .compiler import Preprocessor
+from .parser import Parser
 
 
 class Bundle:
@@ -99,31 +101,28 @@ class Bundle:
         services.sort()
         return services
 
-    def compile_modules(self, stories, ebnf):
-        self.compile(stories, ebnf)
+    def parser(self, ebnf):
+        return Parser(ebnf=ebnf)
 
-    def parse_modules(self, stories, ebnf):
-        self.parse(stories, ebnf)
-
-    def parse(self, stories, ebnf):
+    def parse(self, stories, parser):
         """
         Parse stories.
         """
         for storypath in stories:
             story = self.load_story(storypath)
-            story.parse(ebnf=ebnf)
-            self.parse_modules(story.modules(), ebnf)
+            story.parse(parser=parser)
+            self.parse(story.modules(), parser=parser)
             self.stories[storypath] = story.tree
 
-    def compile(self, stories, ebnf):
+    def compile(self, stories, parser):
         """
         Reads and parses a story, then compiles its modules and finally
         compiles the story itself.
         """
         for storypath in stories:
             story = self.load_story(storypath)
-            story.parse(ebnf=ebnf)
-            self.compile_modules(story.modules(), ebnf)
+            story.parse(parser=parser)
+            self.compile(story.modules(), parser=parser)
             story.compile()
             self.stories[storypath] = story.compiled
 
@@ -132,15 +131,21 @@ class Bundle:
         Makes the bundle
         """
         entrypoint = self.find_stories()
-        self.compile(entrypoint, ebnf)
+        parser = self.parser(ebnf)
+        self.compile(entrypoint, parser=parser)
         return {'stories': self.stories, 'services': self.services(),
                 'entrypoint': entrypoint}
 
-    def bundle_trees(self, ebnf=None):
+    def bundle_trees(self, ebnf=None, preprocess=False):
         """
         Makes a bundle of syntax trees
         """
-        self.parse(self.find_stories(), ebnf)
+        parser = self.parser(ebnf)
+        self.parse(self.find_stories(), parser=parser)
+        if preprocess:
+            proc = Preprocessor(parser)
+            for story, tree in self.stories.items():
+                self.stories[story] = proc.process(tree)
         return self.stories
 
     def lex(self, ebnf=None):

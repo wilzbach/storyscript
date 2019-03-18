@@ -6,6 +6,7 @@ from pytest import fixture
 
 from storyscript.Bundle import Bundle
 from storyscript.Story import Story
+from storyscript.compiler.Preprocessor import Preprocessor
 
 
 @fixture
@@ -186,66 +187,64 @@ def test_bundle_services_no_duplicates(bundle):
     assert result == ['one']
 
 
-def test_bundle_compile_modules(patch, bundle):
-    patch.object(Bundle, 'compile')
-    bundle.compile_modules(['stories'], 'ebnf')
-    Bundle.compile.assert_called_with(['stories'], 'ebnf')
-
-
-def test_bundle_parse_modules(patch, bundle):
-    patch.object(Bundle, 'parse')
-    bundle.parse_modules(['stories'], 'ebnf')
-    Bundle.parse.assert_called_with(['stories'], 'ebnf')
-
-
 def test_bundle_parse(patch, bundle):
-    patch.many(Bundle, ['parse_modules', 'load_story'])
-    bundle.parse(['one.story'], None)
+    parse = bundle.parse
+    patch.many(Bundle, ['parse', 'load_story'])
+    parse(['one.story'], None)
     Bundle.load_story.assert_called_with('one.story')
     story = Bundle.load_story()
-    Bundle.parse_modules.assert_called_with(story.modules(), None)
+    Bundle.parse.assert_called_with(story.modules(), parser=None)
     assert bundle.stories['one.story'] == story.tree
 
 
 def test_bundle_compile(mocker, patch, bundle):
-    patch.many(Bundle, ['compile_modules', 'load_story'])
+    compile = bundle.compile
+    patch.many(Bundle, ['compile', 'load_story'])
     patch.many(Story, ['parse'])
 
-    bundle.compile(['one.story'], None)
+    compile(['one.story'], parser=None)
     Bundle.load_story.assert_called_with('one.story')
 
     story = Bundle.load_story()
-    Bundle.compile_modules.assert_called_with(story.modules(), None)
+    Bundle.compile.assert_called_with(story.modules(), parser=None)
     story.compile.assert_called()
     assert bundle.stories['one.story'] == story.compiled
 
 
 def test_bundle_bundle(patch, bundle):
-    patch.many(Bundle, ['find_stories', 'services', 'compile'])
+    patch.many(Bundle, ['find_stories', 'services', 'compile', 'parser'])
     result = bundle.bundle()
-    Bundle.compile.assert_called_with(Bundle.find_stories(), None)
+    Bundle.parser.assert_called_with(None)
+    Bundle.compile.assert_called_with(Bundle.find_stories(),
+                                      parser=Bundle.parser())
     expected = {'stories': bundle.stories, 'services': Bundle.services(),
                 'entrypoint': Bundle.find_stories()}
     assert result == expected
 
 
 def test_bundle_bundle_ebnf(patch, bundle):
-    patch.many(Bundle, ['find_stories', 'services', 'compile'])
+    patch.many(Bundle, ['find_stories', 'services', 'compile', 'parser'])
     bundle.bundle(ebnf='ebnf')
-    Bundle.compile.assert_called_with(Bundle.find_stories(), 'ebnf')
+    Bundle.parser.assert_called_with('ebnf')
+    Bundle.compile.assert_called_with(Bundle.find_stories(),
+                                      parser=Bundle.parser())
 
 
 def test_bundle_bundle_trees(patch, bundle):
-    patch.many(Bundle, ['find_stories', 'parse'])
+    patch.many(Bundle, ['find_stories', 'parse', 'parser'])
     result = bundle.bundle_trees()
-    Bundle.parse.assert_called_with(Bundle.find_stories(), None)
+    Bundle.parser.assert_called_with(None)
+    Bundle.parse.assert_called_with(Bundle.find_stories(),
+                                    parser=Bundle.parser())
     assert result == bundle.stories
 
 
 def test_bundle_bundle_trees_ebnf(patch, bundle):
-    patch.many(Bundle, ['find_stories', 'parse'])
+    patch.many(Bundle, ['find_stories', 'parse', 'parser'])
     bundle.bundle_trees(ebnf='ebnf')
-    Bundle.parse.assert_called_with(Bundle.find_stories(), 'ebnf')
+    Bundle.parser.assert_called_with('ebnf')
+    Bundle.parse.assert_called_with(Bundle.find_stories(),
+                                    parser=Bundle.parser())
 
 
 def test_bundle_lex(patch, bundle):
@@ -268,3 +267,16 @@ def test_bundle_lex_ebnf(patch, bundle):
     patch.object(Bundle, 'find_stories', return_value=['story'])
     bundle.lex(ebnf='ebnf')
     Story.from_file().lex.assert_called_with(ebnf='ebnf')
+
+
+def test_bundle_bundle_preprocess(patch, bundle, magic):
+    patch.many(Bundle, ['find_stories', 'parse', 'parser'])
+    patch.object(Preprocessor, 'process')
+    a_story = magic()
+    bundle.stories = {'foo': a_story}
+    bundle.bundle_trees(ebnf='ebnf', preprocess=True)
+    Bundle.parser.assert_called_with('ebnf')
+    Bundle.parse.assert_called_with(Bundle.find_stories(),
+                                    parser=Bundle.parser())
+    Preprocessor.process.assert_called_with(a_story)
+    assert bundle.stories == {'foo': Preprocessor.process(a_story)}

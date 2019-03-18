@@ -9,6 +9,9 @@ class Preprocessor:
     too complicated for the Transformer, before the tree is compiled.
     """
 
+    def __init__(self, parser):
+        self.parser = parser
+
     @staticmethod
     def fake_tree(block):
         """
@@ -92,8 +95,8 @@ class Preprocessor:
     def is_inline_expression(n):
         return hasattr(n, 'data') and n.data == 'inline_expression'
 
-    @classmethod
-    def process(cls, tree):
+    def process(self, tree):
         pred = Preprocessor.is_inline_expression
-        cls.visit(tree, None, None, pred, cls.replace_expression, parent=None)
+        self.visit(tree, None, None, pred, self.replace_expression,
+                   parent=None)
         return tree
