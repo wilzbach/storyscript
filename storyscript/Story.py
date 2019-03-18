@@ -56,11 +56,10 @@ class Story:
         """
         return StoryError(error, self.story, path=self.path)
 
-    def parse(self, ebnf=None):
+    def parse(self, parser):
         """
         Parses the story, storing the tree
         """
-        parser = Parser(ebnf=ebnf)
         e = None
         try:
             self.tree = parser.parse(self.story)
@@ -97,16 +96,18 @@ class Story:
         if e is not None:
             raise e
 
-    def lex(self, ebnf=None):
+    def lex(self, parser):
         """
         Lexes a story
         """
-        return Parser(ebnf=ebnf).lex(self.story)
+        return parser.lex(self.story)
 
-    def process(self, ebnf=None):
+    def process(self, parser=None):
         """
         Parse and compile a story, returning the compiled JSON
         """
-        self.parse(ebnf=ebnf)
+        if parser is None:
+            parser = Parser()
+        self.parse(parser=parser)
         self.compile()
         return self.compiled

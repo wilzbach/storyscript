@@ -21,6 +21,7 @@ def story():
 def parser(patch):
     patch.init(Parser)
     patch.many(Parser, ['parse', 'lex'])
+    return Parser()
 
 
 @fixture
@@ -82,20 +83,14 @@ def test_story_error(patch, story):
 
 
 def test_story_parse(patch, story, parser):
-    story.parse()
-    Parser.__init__.assert_called_with(ebnf=None)
-    Parser.parse.assert_called_with(story.story)
+    story.parse(parser=parser)
+    parser.parse.assert_called_with(story.story)
     assert story.tree == Parser.parse()
 
 
-def test_story_parse_ebnf(patch, story, parser):
-    story.parse(ebnf='ebnf')
-    Parser.__init__.assert_called_with(ebnf='ebnf')
-
-
 def test_story_parse_debug(patch, story, parser):
-    story.parse()
-    Parser.parse.assert_called_with(story.story)
+    story.parse(parser=parser)
+    parser.parse.assert_called_with(story.story)
 
 
 @mark.parametrize('error', [
@@ -107,10 +102,10 @@ def test_story_parse_error(patch, story, parser, error):
     """
     Ensures Story.parse uses Story.error for UnexpectedToken errors.
     """
-    Parser.parse.side_effect = error
+    parser.parse.side_effect = error
     patch.object(Story, 'error')
     with raises(Exception):
-        story.parse()
+        story.parse(parser=parser)
     Story.error.assert_called_with(error)
 
 
@@ -150,28 +145,33 @@ def test_story_compiler_error(patch, story, compiler, error):
 
 
 def test_story_lex(patch, story, parser):
-    result = story.lex()
-    Parser.__init__.assert_called_with(ebnf=None)
-    Parser.lex.assert_called_with(story.story)
+    result = story.lex(parser=parser)
+    parser.lex.assert_called_with(story.story)
     assert result == Parser.lex()
 
 
-def test_story_lex_ebnf(patch, story, parser):
-    story.lex(ebnf='ebnf')
-    Parser.__init__.assert_called_with(ebnf='ebnf')
+def test_story_lex_parser(patch, story, parser):
+    story.lex(parser=parser)
+    parser.lex.assert_called_with(story.story)
 
 
 def test_story_process(patch, story):
     patch.many(Story, ['parse', 'compile'])
     story.compiled = 'compiled'
     result = story.process()
-    Story.parse.assert_called_with(ebnf=None)
-    Story.compile.assert_called_with()
+    assert story.parse.call_args_list[0][0] == ()
+    kw_args = story.parse.call_args_list[0][1]
+    assert len(kw_args) == 1
+    assert isinstance(kw_args['parser'], Parser)
+    story.parse.assert_called()
+    story.compile.assert_called_with()
     assert result == story.compiled
 
 
-def test_story_process_ebnf(patch, story):
+def test_story_process_parser(patch, story, parser):
     patch.many(Story, ['parse', 'compile'])
     story.compiled = 'compiled'
-    story.process(ebnf='ebnf')
-    Story.parse.assert_called_with(ebnf='ebnf')
+    result = story.process(parser=parser)
+    story.parse.assert_called_with(parser=parser)
+    story.compile.assert_called_with()
+    assert result == story.compiled

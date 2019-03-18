@@ -6,7 +6,6 @@ from pytest import fixture, raises
 import storyscript.App as AppModule
 from storyscript.App import App
 from storyscript.Bundle import Bundle
-from storyscript.compiler.Preprocessor import Preprocessor
 from storyscript.exceptions import StoryError
 from storyscript.parser import Grammar
 
@@ -22,7 +21,8 @@ def test_app_parse(bundle):
     """
     result = App.parse('path')
     Bundle.from_path.assert_called_with('path', ignored_path=None)
-    Bundle.from_path().bundle_trees.assert_called_with(ebnf=None)
+    bt = Bundle.from_path().bundle_trees
+    bt.assert_called_with(ebnf=None, preprocess=False)
     assert result == Bundle.from_path().bundle_trees()
 
 
@@ -36,21 +36,21 @@ def test_app_parse_ebnf(bundle):
     Ensures App.parse supports specifying an ebnf
     """
     App.parse('path', ebnf='ebnf')
-    Bundle.from_path().bundle_trees.assert_called_with(ebnf='ebnf')
+    bt = Bundle.from_path().bundle_trees
+    bt.assert_called_with(ebnf='ebnf', preprocess=False)
 
 
 def test_app_parse_preprocess(patch, bundle, magic):
     """
     Ensures App.parse applies the preprocessor
     """
-    patch.object(Preprocessor, 'process')
     story = magic()
     Bundle.from_path().bundle_trees.return_value = {'foo.story': story}
     result = App.parse('path', preprocess=True)
-    assert Preprocessor.process.call_count == 1
     Bundle.from_path.assert_called_with('path', ignored_path=None)
-    Bundle.from_path().bundle_trees.assert_called_with(ebnf=None)
-    assert result == {'foo.story': Preprocessor.process(story)}
+    bt = Bundle.from_path().bundle_trees
+    bt.assert_called_with(ebnf=None, preprocess=True)
+    assert result == Bundle.from_path().bundle_trees(story)
 
 
 def test_app_compile(patch, bundle):
