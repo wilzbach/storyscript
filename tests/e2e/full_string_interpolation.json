@@ -1,0 +1,65 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "expression",
+      "ln": "1.1",
+      "name": [
+        "p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "pull_request",
+            {
+              "$OBJECT": "string",
+              "string": "number"
+            }
+          ]
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "diff_url"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "https://github.com/"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "repo_full_name"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": "/pull/"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "p-1.1"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": ".diff"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1.1",
+  "version": null
+}

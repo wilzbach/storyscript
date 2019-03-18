@@ -1,0 +1,63 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "bar"
+      ],
+      "args": [
+        0
+      ],
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "name": [
+        "p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "bar"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "my_mutation",
+          "arguments": []
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "foo"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "p-2.1"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

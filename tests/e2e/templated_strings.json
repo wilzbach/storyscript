@@ -18,7 +18,7 @@
             {
               "$OBJECT": "path",
               "paths": [
-                "story"
+                "my_story"
               ]
             },
             {
@@ -88,6 +88,24 @@
           ]
         }
       ],
+      "next": "4.1"
+    },
+    "4.1": {
+      "method": "expression",
+      "ln": "4.1",
+      "name": [
+        "p-4.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a",
+            "b",
+            "c"
+          ]
+        }
+      ],
       "next": "4"
     },
     "4": {
@@ -108,9 +126,7 @@
             {
               "$OBJECT": "path",
               "paths": [
-                "a",
-                "b",
-                "c"
+                "p-4.1"
               ]
             },
             {

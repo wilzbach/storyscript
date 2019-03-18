@@ -67,6 +67,8 @@ class ErrorCodes:
         'The option `--first`/-`f` can only be used if one story is complied.')
     expected_end_of_line = (
         'E0056', 'Expected end of line instead of `{token}`.')
+    string_interpolation_no_assignment = (
+        'E0057', 'Only expressions are allowed inside string templates')
 
     @staticmethod
     def is_error(error_name):

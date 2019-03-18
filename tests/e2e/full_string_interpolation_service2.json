@@ -1,0 +1,54 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "name": [
+        "p-1.1"
+      ],
+      "service": "my_service",
+      "command": "ask",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "q",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "question"
+          }
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "my_string"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "Answer: "
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "p-1.1"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "services": [
+    "my_service"
+  ],
+  "entrypoint": "1.1",
+  "version": null
+}

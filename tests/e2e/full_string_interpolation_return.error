@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = "foo{return}"
+          ^^^^^^^^^^^^^
+
+E0057: Only expressions are allowed inside string templates

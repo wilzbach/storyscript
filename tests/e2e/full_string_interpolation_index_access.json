@@ -1,0 +1,48 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "expression",
+      "ln": "1.1",
+      "name": [
+        "p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "path",
+            "0"
+          ]
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "foo"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "p-1.1"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1.1",
+  "version": null
+}
