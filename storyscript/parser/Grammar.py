@@ -50,7 +50,7 @@ class Grammar:
                             '"." RAW_INT')
         self.ebnf.SINGLE_QUOTED = r"/'([^'\\]*(?:\\.[^'\\]*)*)'/"
         self.ebnf.DOUBLE_QUOTED = r'/"([^"\\]*(?:\\.[^"\\]*)*)"/'
-        self.ebnf.set_token('REGEXP.2', r'/\/([^\/]*)\//')
+        self.ebnf.set_token('REGEXP.10', r'/\/([^\/]*)\//')
         self.ebnf.set_token('NAME.1', r'/[a-zA-Z-\/_0-9]+/')
         self.ebnf._OSB = '['
         self.ebnf._CSB = ']'

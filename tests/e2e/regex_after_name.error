@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 7
+
+1|    "aaa" /regexp/
+            ^
+
+E0056: Expected end of line instead of `/regexp/`.

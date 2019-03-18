@@ -65,6 +65,8 @@ class ErrorCodes:
     first_option_more_stories = (
         'E0055',
         'The option `--first`/-`f` can only be used if one story is complied.')
+    expected_end_of_line = (
+        'E0056', 'Expected end of line instead of `{token}`.')
 
     @staticmethod
     def is_error(error_name):

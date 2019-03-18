@@ -94,7 +94,7 @@ INT.2: ("+"|"-")? RAW_INT
 FLOAT.2: ("+"|"-")? INT "." RAW_INT? | "." RAW_INT
 SINGLE_QUOTED: /'([^'\\]*(?:\\.[^'\\]*)*)'/
 DOUBLE_QUOTED: /"([^"\\]*(?:\\.[^"\\]*)*)"/
-REGEXP.2: /\/([^\/]*)\//
+REGEXP.10: /\/([^\/]*)\//
 NAME.1: /[a-zA-Z-\/_0-9]+/
 _OSB: "["
 _CSB: "]"

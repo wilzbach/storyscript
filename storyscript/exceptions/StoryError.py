@@ -126,6 +126,10 @@ class StoryError(SyntaxError):
             return ErrorCodes.unexpected_end_of_line
 
         self._format['token'] = str(token)
+        if len(self.error.expected) == 1 and \
+                self.error.expected[0] == '_NL':
+            return ErrorCodes.expected_end_of_line
+
         return ErrorCodes.unexpected_token
 
     @staticmethod
