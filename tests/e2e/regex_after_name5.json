@@ -1,0 +1,25 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "service": "my_service",
+      "command": "command",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "item",
+          "argument": {
+            "$OBJECT": "regexp",
+            "regexp": "/regexp/"
+          }
+        }
+      ]
+    }
+  },
+  "services": [
+    "my_service"
+  ],
+  "entrypoint": "1",
+  "version": null
+}
