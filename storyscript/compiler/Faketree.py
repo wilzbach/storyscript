@@ -12,6 +12,14 @@ class FakeTree:
         self.block = block
         self.original_line = str(block.line())
         self.new_lines = {}
+        self._check_existing_fake_lines(block)
+
+    def _check_existing_fake_lines(self, block):
+        for child in block.children:
+            if child.path:
+                tok = child.path.find_first_token().value
+                if tok.startswith("p-"):
+                    self.new_lines[tok] = False
 
     def line(self):
         """
