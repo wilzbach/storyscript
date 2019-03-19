@@ -155,6 +155,13 @@ def test_story_lex_parser(patch, story, parser):
     parser.lex.assert_called_with(story.story)
 
 
+def test_story_lex_parser_cached(patch, story, magic):
+    my_parser = magic()
+    patch.object(Story, '_parser', return_value=my_parser)
+    story.lex(parser=None)
+    my_parser.lex.assert_called_with(story.story)
+
+
 def test_story_process(patch, story):
     patch.many(Story, ['parse', 'compile'])
     story.compiled = 'compiled'

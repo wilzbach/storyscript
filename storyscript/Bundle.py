@@ -102,7 +102,9 @@ class Bundle:
         return services
 
     def parser(self, ebnf):
-        return Parser(ebnf=ebnf)
+        if ebnf is not None:
+            return Parser(ebnf=ebnf)
+        return None
 
     def parse(self, stories, parser):
         """

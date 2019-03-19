@@ -93,7 +93,7 @@ def test_api_load_ice():
 Please report at https://github.com/storyscript/storyscript/issues"""
 
 
-def test_compiler_only_comments(parser):
+def test_compiler_only_comments():
     api_result = Api.load_map({'a.story': '# foo\n'})
     result = api_result['stories']['a.story']
     assert result['tree'] == {}

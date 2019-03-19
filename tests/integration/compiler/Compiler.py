@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 from pytest import mark
 
-from storyscript.compiler import Compiler
+from storyscript.Api import Api
 
 
-def test_compiler_expression_sum(parser):
+def test_compiler_expression_sum():
     """
     Ensures that sums are compiled correctly
     """
-    tree = parser.parse('3 + 2')
-    result = Compiler.compile(tree)
+    result = Api.loads('3 + 2')
     args = [
         {'$OBJECT': 'expression', 'expression': 'sum', 'values': [3, 2]}
     ]
@@ -17,12 +16,11 @@ def test_compiler_expression_sum(parser):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_expression_sum_many(parser):
+def test_compiler_expression_sum_many():
     """
     Ensures that sums of N-numbers are compiled correctly
     """
-    tree = parser.parse('3 + 2 + 1')
-    result = Compiler.compile(tree)
+    result = Api.loads('3 + 2 + 1')
     first_sum = {'$OBJECT': 'expression', 'expression': 'sum',
                  'values': [3, 2]}
     args = [{'$OBJECT': 'expression', 'expression': 'sum',
@@ -31,12 +29,11 @@ def test_compiler_expression_sum_many(parser):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_expression_multiplication(parser):
+def test_compiler_expression_multiplication():
     """
     Ensures that multiplications are compiled correctly
     """
-    tree = parser.parse('3 * 2')
-    result = Compiler.compile(tree)
+    result = Api.loads('3 * 2')
     args = [
         {'$OBJECT': 'expression', 'expression': 'multiplication',
          'values': [3, 2]}
@@ -45,12 +42,11 @@ def test_compiler_expression_multiplication(parser):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_expression_multiplication_many(parser):
+def test_compiler_expression_multiplication_many():
     """
     Ensures that sums of N-numbers are compiled correctly
     """
-    tree = parser.parse('3 * 2 * 1')
-    result = Compiler.compile(tree)
+    result = Api.loads('3 * 2 * 1')
     first_node = {'$OBJECT': 'expression', 'expression': 'multiplication',
                   'values': [3, 2]}
     args = [{'$OBJECT': 'expression', 'expression': 'multiplication',
@@ -59,9 +55,8 @@ def test_compiler_expression_multiplication_many(parser):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_expression_complex(parser):
-    tree = parser.parse('3 * 2 + 1 ^ 5')
-    result = Compiler.compile(tree)
+def test_compiler_expression_complex():
+    result = Api.loads('3 * 2 + 1 ^ 5')
     lhs = {'$OBJECT': 'expression', 'expression': 'multiplication',
            'values': [3, 2]}
     rhs = {'$OBJECT': 'expression', 'expression': 'exponential',
@@ -72,9 +67,8 @@ def test_compiler_expression_complex(parser):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_expression_sum_to_parenthesis(parser):
-    tree = parser.parse('1 + (2 + 3)')
-    result = Compiler.compile(tree)
+def test_compiler_expression_sum_to_parenthesis():
+    result = Api.loads('1 + (2 + 3)')
     rhs = {'$OBJECT': 'expression', 'expression': 'sum', 'values': [2, 3]}
     args = [{'$OBJECT': 'expression', 'expression': 'sum',
              'values': [1, rhs]}]
@@ -82,9 +76,8 @@ def test_compiler_expression_sum_to_parenthesis(parser):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_expression_multiplication_to_parenthesis(parser):
-    tree = parser.parse('1 * (2 + 3)')
-    result = Compiler.compile(tree)
+def test_compiler_expression_multiplication_to_parenthesis():
+    result = Api.loads('1 * (2 + 3)')
     rhs = {'$OBJECT': 'expression', 'expression': 'sum', 'values': [2, 3]}
     args = [{'$OBJECT': 'expression', 'expression': 'multiplication',
              'values': [1, rhs]}]
@@ -92,12 +85,11 @@ def test_compiler_expression_multiplication_to_parenthesis(parser):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_mutation(parser):
+def test_compiler_mutation():
     """
     Ensures that mutations are compiled correctly
     """
-    tree = parser.parse("'hello' length")
-    result = Compiler.compile(tree)
+    result = Api.loads("'hello' length")
     args = [
         {'$OBJECT': 'string', 'string': 'hello'},
         {'$OBJECT': 'mutation', 'mutation': 'length', 'arguments': []}
@@ -110,12 +102,11 @@ def test_compiler_mutation(parser):
     '1 increment then format to:"string"',
     '1 increment\n\tthen format to:"string"'
 ])
-def test_compiler_mutation_chained(parser, source):
+def test_compiler_mutation_chained(source):
     """
     Ensures that chained mutations are compiled correctly
     """
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
+    result = Api.loads(source)
     args = [1,
             {'$OBJECT': 'mutation', 'mutation': 'increment', 'arguments': []},
             {'$OBJECT': 'mutation', 'mutation': 'format', 'arguments': [
@@ -124,19 +115,17 @@ def test_compiler_mutation_chained(parser, source):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_expression_path(parser):
+def test_compiler_expression_path():
     """
     Ensures that expressions with paths are compiled correctly.
     """
-    tree = parser.parse('x = 3\nx + 2')
-    result = Compiler.compile(tree)
+    result = Api.loads('x = 3\nx + 2')
     path = {'$OBJECT': 'path', 'paths': ['x']}
     assert result['tree']['2']['args'][0]['values'][0] == path
 
 
-def test_compiler_foreach(parser):
-    tree = parser.parse('foreach items as item\n\tx = 0')
-    result = Compiler.compile(tree)
+def test_compiler_foreach():
+    result = Api.loads('foreach items as item\n\tx = 0')
     args = [{'$OBJECT': 'path', 'paths': ['items']}]
     assert result['tree']['1']['method'] == 'for'
     assert result['tree']['1']['output'] == ['item']
@@ -145,15 +134,13 @@ def test_compiler_foreach(parser):
     assert result['tree']['2']['parent'] == '1'
 
 
-def test_compiler_foreach_key_value(parser):
-    tree = parser.parse('foreach items as key, value\n\tx = 0')
-    result = Compiler.compile(tree)
+def test_compiler_foreach_key_value():
+    result = Api.loads('foreach items as key, value\n\tx = 0')
     assert result['tree']['1']['output'] == ['key', 'value']
 
 
-def test_compiler_while(parser):
-    tree = parser.parse('while cond\n\tx = 0')
-    result = Compiler.compile(tree)
+def test_compiler_while():
+    result = Api.loads('while cond\n\tx = 0')
     args = [{'$OBJECT': 'path', 'paths': ['cond']}]
     assert result['tree']['1']['method'] == 'while'
     assert result['tree']['1']['args'] == args
@@ -161,12 +148,11 @@ def test_compiler_while(parser):
     assert result['tree']['2']['parent'] == '1'
 
 
-def test_compiler_service(parser):
+def test_compiler_service():
     """
     Ensures that services are compiled correctly
     """
-    tree = parser.parse("alpine echo message:'hello'")
-    result = Compiler.compile(tree)
+    result = Api.loads("alpine echo message:'hello'")
     args = [
         {'$OBJECT': 'argument', 'name': 'message', 'argument':
          {'$OBJECT': 'string', 'string': 'hello'}}
@@ -177,12 +163,11 @@ def test_compiler_service(parser):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_service_indented_arguments(parser):
+def test_compiler_service_indented_arguments():
     """
     Ensures that services with indented arguments are compiled correctly
     """
-    tree = parser.parse('alpine echo message:"hello"\n\tcolour:"red"')
-    result = Compiler.compile(tree)
+    result = Api.loads('alpine echo message:"hello"\n\tcolour:"red"')
     args = [
         {'$OBJECT': 'argument', 'name': 'message', 'argument':
          {'$OBJECT': 'string', 'string': 'hello'}},
@@ -192,13 +177,12 @@ def test_compiler_service_indented_arguments(parser):
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_service_streaming(parser):
+def test_compiler_service_streaming():
     """
     Ensures that streaming services are compiled correctly
     """
     source = 'api stream as client\n\twhen client event as e\n\t\tx=0'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
+    result = Api.loads(source)
     assert result['tree']['1']['output'] == ['client']
     assert result['tree']['1']['enter'] == '2'
     assert result['tree']['2']['method'] == 'when'
@@ -207,13 +191,12 @@ def test_compiler_service_streaming(parser):
     assert result['tree']['3']['method'] == 'expression'
 
 
-def test_compiler_service_inline_expression(parser):
+def test_compiler_service_inline_expression():
     """
     Ensures that inline expressions in services are compiled correctly
     """
     source = 'alpine echo text:(random strings)'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
+    result = Api.loads(source)
     entry = result['entrypoint']
     name = result['tree'][entry]['name']
     assert result['tree'][entry]['method'] == 'execute'
@@ -225,13 +208,12 @@ def test_compiler_service_inline_expression(parser):
     assert result['tree']['1']['args'] == [argument]
 
 
-def test_compiler_service_inline_expression_nested(parser):
+def test_compiler_service_inline_expression_nested():
     """
     Ensures that nested inline expressions are compiled correctly
     """
     source = 'slack message text:(twitter get id:(sql select))'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
+    result = Api.loads(source)
     entry = result['entrypoint']
     next = result['tree'][entry]['next']
     last = result['tree'][next]['next']
@@ -240,32 +222,29 @@ def test_compiler_service_inline_expression_nested(parser):
     assert result['tree'][last]['service'] == 'slack'
 
 
-def test_compiler_inline_expression_access(parser):
+def test_compiler_inline_expression_access():
     """
     Ensures that inline expressions followed a bracket accessor are compiled
     correctly.
     """
-    tree = parser.parse('x = (random array)[0]')
-    result = Compiler.compile(tree)
+    result = Api.loads('x = (random array)[0]')
     entry = result['entrypoint']
     name = result['tree'][entry]['name'][0]
     args = [{'$OBJECT': 'path', 'paths': [name, '0']}]
     assert result['tree']['1']['args'] == args
 
 
-def test_compiler_try(parser):
+def test_compiler_try():
     source = 'try\n\tx=0'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'try'
     assert result['tree']['1']['enter'] == '2'
     assert result['tree']['2']['parent'] == '1'
 
 
-def test_compiler_try_catch(parser):
+def test_compiler_try_catch():
     source = 'try\n\tx=0\ncatch as error\n\tx=1'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
+    result = Api.loads(source)
     assert result['tree']['1']['exit'] == '3'
     assert result['tree']['3']['method'] == 'catch'
     assert result['tree']['3']['output'] == ['error']
@@ -273,29 +252,26 @@ def test_compiler_try_catch(parser):
     assert result['tree']['4']['parent'] == '3'
 
 
-def test_compiler_try_finally(parser):
+def test_compiler_try_finally():
     source = 'try\n\tx=0\nfinally\n\tx=1'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
+    result = Api.loads(source)
     assert result['tree']['3']['method'] == 'finally'
     assert result['tree']['3']['enter'] == '4'
     assert result['tree']['4']['parent'] == '3'
 
 
-def test_compiler_try_throw(parser):
+def test_compiler_try_throw():
     source = 'try\n\tx=0\ncatch as error\n\tthrow'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
+    result = Api.loads(source)
     assert result['tree']['1']['exit'] == '3'
     assert result['tree']['3']['method'] == 'catch'
     assert result['tree']['4']['method'] == 'throw'
     assert result['tree']['4']['parent'] == '3'
 
 
-def test_compiler_try_throw_error(parser):
+def test_compiler_try_throw_error():
     source = 'try\n\tx=0\ncatch as error\n\tthrow error'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
+    result = Api.loads(source)
     args = [{'$OBJECT': 'path', 'paths': ['error']}]
     assert result['tree']['1']['exit'] == '3'
     assert result['tree']['3']['method'] == 'catch'
@@ -305,10 +281,9 @@ def test_compiler_try_throw_error(parser):
     assert result['tree']['4']['args'] == args
 
 
-def test_compiler_try_nested_throw_error(parser):
+def test_compiler_try_nested_throw_error():
     source = 'try\n\tx=0\ncatch as error\n\tif TRUE\n\t\tthrow error'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
+    result = Api.loads(source)
     args = [{'$OBJECT': 'path', 'paths': ['error']}]
     assert result['tree']['1']['exit'] == '3'
     assert result['tree']['3']['method'] == 'catch'
@@ -318,120 +293,118 @@ def test_compiler_try_nested_throw_error(parser):
     assert result['tree']['5']['args'] == args
 
 
-def test_compiler_break(parser):
+def test_compiler_break():
     source = 'while true\n\tbreak'
-    tree = parser.parse(source)
-    result = Compiler.compile(tree)
+    result = Api.loads(source)
     assert result['tree']['2']['method'] == 'break'
     assert result['tree']['2']['parent'] == '1'
 
 
-def test_compiler_empty_files(parser):
-    tree = parser.parse('\n\n')
-    result = Compiler.compile(tree)
+def test_compiler_empty_files():
+    result = Api.loads('\n\n')
     assert result['tree'] == {}
     assert result['entrypoint'] is None
 
 
-def test_compiler_expression_signed_number(parser):
+def test_compiler_expression_signed_number():
     """
     Ensures that signed numbers are compiled correctly
     """
-    result = Compiler.compile(parser.parse('a = -2'))
+    result = Api.loads('a = -2')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [-2]
 
-    result = Compiler.compile(parser.parse('a = +2'))
+    result = Api.loads('a = +2')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [2]
 
 
-def test_compiler_expression_signed_number_complex(parser):
+def test_compiler_expression_signed_number_complex():
     """
     Ensures that signed numbers are compiled correctly
     """
-    result = Compiler.compile(parser.parse('a = 2 + -3'))
+    result = Api.loads('a = 2 + -3')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'][0]['expression'] == 'sum'
     assert result['tree']['1']['args'][0]['values'] == [2, -3]
 
-    result = Compiler.compile(parser.parse('a = -2 + 3'))
+    result = Api.loads('a = -2 + 3')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'][0]['expression'] == 'sum'
     assert result['tree']['1']['args'][0]['values'] == [-2, 3]
 
 
-def test_compiler_expression_signed_number_absolute(parser):
+def test_compiler_expression_signed_number_absolute():
     """
     Ensures that absolute signed numbers are compiled correctly
     """
-    result = Compiler.compile(parser.parse('-2'))
+    result = Api.loads('-2')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [-2]
 
-    result = Compiler.compile(parser.parse('+2'))
+    result = Api.loads('+2')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [2]
 
 
-def test_compiler_expression_signed_float(parser):
+def test_compiler_expression_signed_float():
     """
     Ensures that signed numbers are compiled correctly
     """
-    result = Compiler.compile(parser.parse('a = -5.5'))
+    result = Api.loads('a = -5.5')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [-5.5]
 
-    result = Compiler.compile(parser.parse('a = +5.5'))
+    result = Api.loads('a = +5.5')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [5.5]
 
 
-def test_compiler_expression_signed_float_absolute(parser):
+def test_compiler_expression_signed_float_absolute():
     """
     Ensures that absolute signed numbers are compiled correctly
     """
-    result = Compiler.compile(parser.parse('-5.5'))
+    result = Api.loads('-5.5')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [-5.5]
 
-    result = Compiler.compile(parser.parse('+5.5'))
+    result = Api.loads('+5.5')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [5.5]
 
 
-def test_compiler_expression_signed_float_complex(parser):
+def test_compiler_expression_signed_float_complex():
     """
     Ensures that signed numbers are compiled correctly
     """
-    result = Compiler.compile(parser.parse('a = 2.5 + -3.5'))
+    result = Api.loads('a = 2.5 + -3.5')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'][0]['expression'] == 'sum'
     assert result['tree']['1']['args'][0]['values'] == [2.5, -3.5]
 
-    result = Compiler.compile(parser.parse('a = -2.5 + 3.5'))
+    result = Api.loads('a = -2.5 + 3.5')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'][0]['expression'] == 'sum'
     assert result['tree']['1']['args'][0]['values'] == [-2.5, 3.5]
 
 
-def test_compiler_expression_exponential_flat(parser):
+def test_compiler_expression_exponential_flat():
     """
     Ensures that exponential expressions are not nested
     """
-    result = Compiler.compile(parser.parse('2 ^ 3'))
+    result = Api.loads('2 ^ 3')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'][0]['$OBJECT'] == 'expression'
     assert result['tree']['1']['args'][0]['expression'] == 'exponential'
     assert result['tree']['1']['args'][0]['values'] == [2, 3]
 
 
-def test_compiler_complex_nested_expression(parser):
+def test_compiler_complex_nested_expression():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = '2 + 3 / 4'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -450,12 +423,12 @@ def test_compiler_complex_nested_expression(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_2(parser):
+def test_compiler_complex_nested_expression_2():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = 'true and 1 + 1 == 2 or 3'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -488,12 +461,12 @@ def test_compiler_complex_nested_expression_2(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_3(parser):
+def test_compiler_complex_nested_expression_3():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = '0 + 1 * 2 - 3 / 4 % 5 == 6 ^ 2 > 7 or 8'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -561,12 +534,12 @@ def test_compiler_complex_nested_expression_3(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_4(parser):
+def test_compiler_complex_nested_expression_4():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = '1 % 2 + 3 - -4'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -592,13 +565,13 @@ def test_compiler_complex_nested_expression_4(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_5(parser):
+def test_compiler_complex_nested_expression_5():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = ('1 + 0.1 < 2 - 0.2 <= 3 / 0.3 '
               '== 4 * 0.4 != 5 * 0.5 > 6 * 0.6 >= 7 * 0.7')
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -694,12 +667,12 @@ def test_compiler_complex_nested_expression_5(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_6(parser):
+def test_compiler_complex_nested_expression_6():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = '1 and 2 or 3 and 4 or 5'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -732,12 +705,12 @@ def test_compiler_complex_nested_expression_6(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_7(parser):
+def test_compiler_complex_nested_expression_7():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = '1 and (2 or 3) and (4 or 5)'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -770,12 +743,12 @@ def test_compiler_complex_nested_expression_7(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_8(parser):
+def test_compiler_complex_nested_expression_8():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = '(1 + 2) == (0 - -3) and -4 - (-5 + -6)'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -822,12 +795,12 @@ def test_compiler_complex_nested_expression_8(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_9(parser):
+def test_compiler_complex_nested_expression_9():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = 'foo[0] > 5 + foo[1] and foo[1]'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -871,12 +844,12 @@ def test_compiler_complex_nested_expression_9(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_10(parser):
+def test_compiler_complex_nested_expression_10():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = """d['a'] + list[0] / list[1] * d['a'] % d['b']"""
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -948,12 +921,12 @@ def test_compiler_complex_nested_expression_10(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_11(parser):
+def test_compiler_complex_nested_expression_11():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = '1 == 2 != 3 < 4 == 5 + 6 - 7 * 8 > 9 <= 10'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -1021,12 +994,12 @@ def test_compiler_complex_nested_expression_11(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_12(parser):
+def test_compiler_complex_nested_expression_12():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = '1 == (foo contains)'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1.1']['service'] == 'foo'
     assert result['tree']['1.1']['name'] == ['p-1.1']
@@ -1046,12 +1019,12 @@ def test_compiler_complex_nested_expression_12(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_13(parser):
+def test_compiler_complex_nested_expression_13():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = 'a + b -c / d'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -1097,12 +1070,12 @@ def test_compiler_complex_nested_expression_13(parser):
     }]
 
 
-def test_compiler_complex_nested_expression_14(parser):
+def test_compiler_complex_nested_expression_14():
     """
     Ensures that complex nested expressions are compiled correctly
     """
     source = '((0 == 1)) + (d[\'a\'])'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -1130,11 +1103,11 @@ def test_compiler_complex_nested_expression_14(parser):
     }]
 
 
-def test_compiler_list_expression(parser):
+def test_compiler_list_expression():
     """
     Ensures that list accept arbitrary expressions
     """
-    result = Compiler.compile(parser.parse('a = [b + c, 1 / 2 + 3]'))
+    result = Api.loads('a = [b + c, 1 / 2 + 3]')
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'list',
@@ -1176,12 +1149,12 @@ def test_compiler_list_expression(parser):
     }]
 
 
-def test_compiler_object_expression(parser):
+def test_compiler_object_expression():
     """
     Ensures that objects accept arbitrary expressions
     """
     source = 'a = {"1": b - c, "2": 1 % 2 - 3}'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'dict',
@@ -1235,12 +1208,12 @@ def test_compiler_object_expression(parser):
     }]
 
 
-def test_compiler_mutation_assignment(parser):
+def test_compiler_mutation_assignment():
     """
     Ensures that mutation assignments compile correctly
     """
     source = 'a = "hello world"\nb = a uppercase'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['name'] == ['a']
     assert result['tree']['2']['method'] == 'mutation'
@@ -1305,13 +1278,13 @@ def path(name):
     ('b<=c', 'less_equal', [path('b'), path('c')]),
     ('b>=c', 'greater_equal', [path('b'), path('c')]),
 ])
-def test_compiler_expression_whitespace(parser, source_pair):
+def test_compiler_expression_whitespace(source_pair):
     """
     Ensures that expression isn't whitespace sensitive
     """
     source, expression, values = source_pair
     source = 'a=' + source
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['name'] == ['a']
     assert len(result['tree']['1']['args']) == 1
@@ -1320,11 +1293,11 @@ def test_compiler_expression_whitespace(parser, source_pair):
     assert result['tree']['1']['args'][0]['values'] == values
 
 
-def test_compiler_complex_while(parser):
+def test_compiler_complex_while():
     """
     Ensures that while statements with an expression are compiled correctly
     """
-    result = Compiler.compile(parser.parse('while i < 10\n\ti = i + 1'))
+    result = Api.loads('while i < 10\n\ti = i + 1')
     assert result['tree']['1']['method'] == 'while'
     assert result['tree']['1']['args'][0]['$OBJECT'] == 'expression'
     assert result['tree']['1']['args'][0]['expression'] == 'less'
@@ -1338,12 +1311,12 @@ def test_compiler_complex_while(parser):
     ]
 
 
-def test_compiler_complex_while_2(parser):
+def test_compiler_complex_while_2():
     """
     Ensures that while statements with an expression are compiled correctly
     """
     source = 'while a + b == c or d\n\ti = i + 1'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'while'
     assert result['tree']['1']['args'] == [{
           '$OBJECT': 'expression',
@@ -1389,13 +1362,13 @@ def test_compiler_complex_while_2(parser):
     }]
 
 
-def test_compiler_mutation_expression(parser):
+def test_compiler_mutation_expression():
     """
     Ensures that mutations with expressions are compiled correctly
     """
     source = ('a = ["opened", "labeled"]\n'
               'a contains item: req.body["action"] == false')
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['name'] == ['a']
     assert result['tree']['2']['method'] == 'mutation'
@@ -1437,12 +1410,12 @@ def test_compiler_mutation_expression(parser):
     ]
 
 
-def test_compiler_service_expression(parser):
+def test_compiler_service_expression():
     """
     Ensures that mutations with expressions are compiled correctly
     """
     source = 'my_service my_command k1: 2 + 2 k2: a == b'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'execute'
     assert result['tree']['1']['command'] == 'my_command'
     assert result['tree']['1']['service'] == 'my_service'
@@ -1484,12 +1457,12 @@ def test_compiler_service_expression(parser):
     ]
 
 
-def test_compiler_mutation_expression_list(parser):
+def test_compiler_mutation_expression_list():
     """
     Ensures that mutations on lists work
     """
     source = '["opened", "labeled"] contains item: "opened"'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'mutation'
     assert result['tree']['1']['args'] == [
         {
@@ -1522,12 +1495,12 @@ def test_compiler_mutation_expression_list(parser):
     ]
 
 
-def test_compiler_mutation_expression_object(parser):
+def test_compiler_mutation_expression_object():
     """
     Ensures that mutations on objects work
     """
     source = '{"opened":1, "labeled":1} has key: "opened"'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'mutation'
     assert result['tree']['1']['args'] == [
         {
@@ -1566,12 +1539,12 @@ def test_compiler_mutation_expression_object(parser):
     ]
 
 
-def test_compiler_return_complex_expression(parser):
+def test_compiler_return_complex_expression():
     """
     Ensures that return accepts arbitrary expressions
     """
     source = 'function name key:int\n\treturn 2 + 2'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'function'
     assert result['tree']['1']['function'] == 'name'
     assert result['tree']['2']['method'] == 'return'
@@ -1585,12 +1558,12 @@ def test_compiler_return_complex_expression(parser):
     }]
 
 
-def test_compiler_return_complex_expression_2(parser):
+def test_compiler_return_complex_expression_2():
     """
     Ensures that return accepts arbitrary expressions
     """
     source = 'function name key:int\n\treturn a / b + c or d'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'function'
     assert result['tree']['1']['function'] == 'name'
     assert result['tree']['2']['method'] == 'return'
@@ -1638,12 +1611,12 @@ def test_compiler_return_complex_expression_2(parser):
     }]
 
 
-def test_compiler_unary_not(parser):
+def test_compiler_unary_not():
     """
     Ensures that unary expressions are compiled correctly
     """
     source = 'a = !b'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -1659,12 +1632,12 @@ def test_compiler_unary_not(parser):
     }]
 
 
-def test_compiler_unary_double(parser):
+def test_compiler_unary_double():
     """
     Ensures that double unary expressions are compiled correctly
     """
     source = 'a = !!b'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -1686,12 +1659,12 @@ def test_compiler_unary_double(parser):
     }]
 
 
-def test_compiler_unary_complex(parser):
+def test_compiler_unary_complex():
     """
     Ensures that complex unary expressions are compiled correctly
     """
     source = 'a = b and !c'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -1719,12 +1692,12 @@ def test_compiler_unary_complex(parser):
     }]
 
 
-def test_compiler_unary_complex_2(parser):
+def test_compiler_unary_complex_2():
     """
     Ensures that complex unary expressions are compiled correctly
     """
     source = 'a = ! 2 == !3 or ! 4'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -1761,12 +1734,12 @@ def test_compiler_unary_complex_2(parser):
     }]
 
 
-def test_compiler_unary_complex_3(parser):
+def test_compiler_unary_complex_3():
     """
     Ensures that complex unary expressions are compiled correctly
     """
     source = 'a = [! b, !2] <= ! t + t'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -1824,13 +1797,13 @@ def test_compiler_unary_complex_3(parser):
     }]
 
 
-def test_compiler_unary_complex_5(parser):
+def test_compiler_unary_complex_5():
     """
     Ensures that complex unary expressions are compiled correctly
     """
     source = ('a = ! (my_service command k1: !b) or '
               '!(my_service2 command k2: ! !c)')
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -1902,12 +1875,12 @@ def test_compiler_unary_complex_5(parser):
     }]
 
 
-def test_compiler_unary_complex_6(parser):
+def test_compiler_unary_complex_6():
     """
     Ensures that complex unary expressions are compiled correctly
     """
     source = 'a = !-2 or ! -3 - -4'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -1938,12 +1911,12 @@ def test_compiler_unary_complex_6(parser):
     }]
 
 
-def test_compiler_expression_is(parser):
+def test_compiler_expression_is():
     """
     Ensures that 'is' expressions compile correctly
     """
     source = 'a = 1 == 2'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -1955,12 +1928,12 @@ def test_compiler_expression_is(parser):
     }]
 
 
-def test_compiler_expression_is_nested(parser):
+def test_compiler_expression_is_nested():
     """
     Ensures that nested 'is' expressions compile correctly
     """
     source = 'a = 1 + 2 == 3/4 == 5*6 == 7%8 or 9'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',
@@ -2021,12 +1994,12 @@ def test_compiler_expression_is_nested(parser):
     }]
 
 
-def test_compiler_expression_is_nested_2(parser):
+def test_compiler_expression_is_nested_2():
     """
     Ensures that nested 'is' expressions compile correctly
     """
     source = 'a = 1 == 2 < 3 or 4 > 0.5+5 == -6 and 7 == 8'
-    result = Compiler.compile(parser.parse(source))
+    result = Api.loads(source)
     assert result['tree']['1']['method'] == 'expression'
     assert result['tree']['1']['args'] == [{
         '$OBJECT': 'expression',

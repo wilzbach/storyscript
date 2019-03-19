@@ -1,12 +1,22 @@
 # -*- coding: utf-8 -*-
 import io
 import os
+from functools import lru_cache
+
 
 from lark.exceptions import UnexpectedInput, UnexpectedToken
 
 from .compiler import Compiler
 from .exceptions import CompilerError, StoryError, StorySyntaxError
 from .parser import Parser
+
+
+@lru_cache(maxsize=1)
+def _parser():
+    """
+    Cached instance of the parser
+    """
+    return Parser()
 
 
 class Story:
@@ -60,17 +70,16 @@ class Story:
         """
         Parses the story, storing the tree
         """
-        e = None
+        if parser is None:
+            parser = self._parser()
         try:
             self.tree = parser.parse(self.story)
         except StorySyntaxError as error:
-            e = self.error(error)
+            raise self.error(error) from error
         except UnexpectedToken as error:
-            e = self.error(error)
+            raise self.error(error) from error
         except UnexpectedInput as error:
-            e = self.error(error)
-        if e is not None:
-            raise e
+            raise self.error(error) from error
 
     def modules(self):
         """
@@ -88,18 +97,17 @@ class Story:
         """
         Compiles the story and stores the result.
         """
-        e = None
         try:
             self.compiled = Compiler.compile(self.tree)
         except (CompilerError, StorySyntaxError) as error:
-            e = self.error(error)
-        if e is not None:
-            raise e
+            raise self.error(error) from error
 
     def lex(self, parser):
         """
         Lexes a story
         """
+        if parser is None:
+            parser = self._parser()
         return parser.lex(self.story)
 
     def process(self, parser=None):
@@ -107,7 +115,13 @@ class Story:
         Parse and compile a story, returning the compiled JSON
         """
         if parser is None:
-            parser = Parser()
+            parser = self._parser()
         self.parse(parser=parser)
         self.compile()
         return self.compiled
+
+    def _parser(self):
+        """
+        Returns the default Parser instance (cached)
+        """
+        return _parser()
