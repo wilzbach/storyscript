@@ -48,7 +48,10 @@
           "$OBJECT": "expression",
           "expression": "and",
           "values": [
-            1,
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
             {
               "$OBJECT": "path",
               "paths": [

@@ -19,14 +19,20 @@
                   "$OBJECT": "expression",
                   "expression": "not",
                   "values": [
-                    2
+                    {
+                      "$OBJECT": "int",
+                      "int": 2
+                    }
                   ]
                 },
                 {
                   "$OBJECT": "expression",
                   "expression": "not",
                   "values": [
-                    3
+                    {
+                      "$OBJECT": "int",
+                      "int": 3
+                    }
                   ]
                 }
               ]
@@ -35,7 +41,10 @@
               "$OBJECT": "expression",
               "expression": "not",
               "values": [
-                4
+                {
+                  "$OBJECT": "int",
+                  "int": 4
+                }
               ]
             }
           ]

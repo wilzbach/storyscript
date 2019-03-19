@@ -12,11 +12,20 @@
               "$OBJECT": "expression",
               "expression": "sum",
               "values": [
-                3,
-                2
+                {
+                  "$OBJECT": "int",
+                  "int": 3
+                },
+                {
+                  "$OBJECT": "int",
+                  "int": 2
+                }
               ]
             },
-            1
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
           ]
         }
       ]

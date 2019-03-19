@@ -57,7 +57,10 @@
         "a"
       ],
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "4",
       "next": "6"
@@ -76,7 +79,10 @@
         "b"
       ],
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "6",
       "next": "9"
@@ -98,7 +104,10 @@
         "x"
       ],
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "9",
       "next": "12"
@@ -117,7 +126,10 @@
         "a"
       ],
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "12",
       "next": "14"
@@ -139,7 +151,10 @@
         "b"
       ],
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "14",
       "next": "17"
@@ -151,7 +166,10 @@
         "x"
       ],
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ]
     }
   },

@@ -24,7 +24,10 @@
         "x"
       ],
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "1",
       "next": "3.1"
@@ -40,7 +43,10 @@
         {
           "$OBJECT": "argument",
           "name": "n",
-          "argument": 1
+          "argument": {
+            "$OBJECT": "int",
+            "int": 1
+          }
         }
       ],
       "next": "3"

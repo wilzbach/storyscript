@@ -14,7 +14,10 @@
         "my_int"
       ],
       "args": [
-        5
+        {
+          "$OBJECT": "int",
+          "int": 5
+        }
       ],
       "parent": "1",
       "next": "3.1"

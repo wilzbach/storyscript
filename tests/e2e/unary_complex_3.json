@@ -30,7 +30,10 @@
                   "$OBJECT": "expression",
                   "expression": "not",
                   "values": [
-                    2
+                    {
+                      "$OBJECT": "int",
+                      "int": 2
+                    }
                   ]
                 }
               ]

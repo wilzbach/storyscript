@@ -21,16 +21,28 @@
                       "$OBJECT": "expression",
                       "expression": "sum",
                       "values": [
-                        1,
-                        1
+                        {
+                          "$OBJECT": "int",
+                          "int": 1
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": 1
+                        }
                       ]
                     },
-                    2
+                    {
+                      "$OBJECT": "int",
+                      "int": 2
+                    }
                   ]
                 }
               ]
             },
-            3
+            {
+              "$OBJECT": "int",
+              "int": 3
+            }
           ]
         }
       ]

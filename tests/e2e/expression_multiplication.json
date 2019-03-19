@@ -8,8 +8,14 @@
           "$OBJECT": "expression",
           "expression": "multiplication",
           "values": [
-            3,
-            2
+            {
+              "$OBJECT": "int",
+              "int": 3
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            }
           ]
         }
       ]

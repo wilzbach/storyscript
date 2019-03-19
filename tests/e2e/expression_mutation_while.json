@@ -10,9 +10,18 @@
         {
           "$OBJECT": "list",
           "items": [
-            1,
-            2,
-            3
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            },
+            {
+              "$OBJECT": "int",
+              "int": 3
+            }
           ]
         },
         {
@@ -22,7 +31,10 @@
             {
               "$OBJECT": "argument",
               "name": "item",
-              "argument": 1
+              "argument": {
+                "$OBJECT": "int",
+                "int": 1
+              }
             }
           ]
         }

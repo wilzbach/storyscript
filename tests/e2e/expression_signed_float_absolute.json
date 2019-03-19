@@ -4,7 +4,10 @@
       "method": "expression",
       "ln": "1",
       "args": [
-        -5.5
+        {
+          "$OBJECT": "float",
+          "float": -5.5
+        }
       ],
       "next": "2"
     },
@@ -12,7 +15,10 @@
       "method": "expression",
       "ln": "2",
       "args": [
-        5.5
+        {
+          "$OBJECT": "float",
+          "float": 5.5
+        }
       ]
     }
   },

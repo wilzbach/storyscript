@@ -27,7 +27,10 @@
           "$OBJECT": "expression",
           "expression": "sum",
           "values": [
-            2,
+            {
+              "$OBJECT": "int",
+              "int": 2
+            },
             {
               "$OBJECT": "regexp",
               "regexp": "/regexp/"
@@ -85,8 +88,14 @@
             {
               "$OBJECT": "list",
               "items": [
-                1,
-                2
+                {
+                  "$OBJECT": "int",
+                  "int": 1
+                },
+                {
+                  "$OBJECT": "int",
+                  "int": 2
+                }
               ]
             },
             {

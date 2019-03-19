@@ -32,7 +32,10 @@
         "x"
       ],
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "1",
       "next": "3"
@@ -50,7 +53,10 @@
         "x"
       ],
       "args": [
-        1
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
       ],
       "parent": "3"
     }

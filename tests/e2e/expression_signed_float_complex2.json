@@ -11,8 +11,14 @@
           "$OBJECT": "expression",
           "expression": "sum",
           "values": [
-            -2.5,
-            3.5
+            {
+              "$OBJECT": "float",
+              "float": -2.5
+            },
+            {
+              "$OBJECT": "float",
+              "float": 3.5
+            }
           ]
         }
       ]

@@ -14,7 +14,10 @@
       "method": "return",
       "ln": "2",
       "args": [
-        28
+        {
+          "$OBJECT": "int",
+          "int": 28
+        }
       ],
       "parent": "1",
       "next": "4"
@@ -51,7 +54,10 @@
       "method": "return",
       "ln": "5",
       "args": [
-        28
+        {
+          "$OBJECT": "int",
+          "int": 28
+        }
       ],
       "parent": "4",
       "next": "7.1"
@@ -101,12 +107,18 @@
         {
           "$OBJECT": "argument",
           "name": "k1",
-          "argument": 1
+          "argument": {
+            "$OBJECT": "int",
+            "int": 1
+          }
         },
         {
           "$OBJECT": "argument",
           "name": "k2",
-          "argument": 2
+          "argument": {
+            "$OBJECT": "int",
+            "int": 2
+          }
         }
       ],
       "next": "8.1"
