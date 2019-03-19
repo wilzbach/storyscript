@@ -1,0 +1,108 @@
+{
+  "tree": {
+    "2": {
+      "method": "mutation",
+      "ln": "2",
+      "args": [
+        0,
+        {
+          "$OBJECT": "mutation",
+          "mutation": "increase",
+          "arguments": [
+            {
+              "$OBJECT": "argument",
+              "name": "by",
+              "argument": 1
+            }
+          ]
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "mutation",
+      "ln": "3",
+      "name": [
+        "mutation"
+      ],
+      "args": [
+        0,
+        {
+          "$OBJECT": "mutation",
+          "mutation": "increase",
+          "arguments": [
+            {
+              "$OBJECT": "argument",
+              "name": "by",
+              "argument": 1
+            }
+          ]
+        }
+      ],
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "a"
+      ],
+      "args": [
+        0
+      ],
+      "next": "6"
+    },
+    "6": {
+      "method": "mutation",
+      "ln": "6",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "increase",
+          "arguments": [
+            {
+              "$OBJECT": "argument",
+              "name": "by",
+              "argument": 1
+            }
+          ]
+        }
+      ],
+      "next": "7"
+    },
+    "7": {
+      "method": "mutation",
+      "ln": "7",
+      "name": [
+        "mutation"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "increase",
+          "arguments": [
+            {
+              "$OBJECT": "argument",
+              "name": "by",
+              "argument": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "2",
+  "version": null
+}
