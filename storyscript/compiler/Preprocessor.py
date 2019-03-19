@@ -214,6 +214,8 @@ class Preprocessor:
             fake_tree = self.fake_tree(block)
             if string:
                 text = Objects.unescape_string(string)
+                # ignore newlines in string interpolation
+                text = ''.join(text.split('\n'))
                 strings = list(self.flatten_template(string, text))
                 is_plain_string = len(strings) == 1 and \
                     strings[0]['$OBJECT'] == 'string'
