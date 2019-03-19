@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 1
+
+1|    __a = b
+      ^^^
+
+E0058: Path names can't start with double underscore

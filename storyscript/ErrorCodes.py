@@ -69,6 +69,8 @@ class ErrorCodes:
         'E0056', 'Expected end of line instead of `{token}`.')
     string_interpolation_no_assignment = (
         'E0057', 'Only expressions are allowed inside string templates')
+    path_name_internal = (
+        'E0058', 'Path names can\'t start with double underscore')
 
     @staticmethod
     def is_error(error_name):

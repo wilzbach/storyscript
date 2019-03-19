@@ -20,12 +20,16 @@ class Transformer(LarkTransformer):
     @classmethod
     def is_keyword(cls, token):
         keyword = token.value
+        if keyword is None:
+            return
         if keyword in cls.reserved_keywords:
             raise StorySyntaxError('reserved_keyword',
                                    token=token, format={'keyword': keyword})
         if keyword in cls.future_reserved_keywords:
             raise StorySyntaxError('future_reserved_keyword',
                                    token=token, format={'keyword': keyword})
+        if keyword.startswith('__'):
+            raise StorySyntaxError('path_name_internal', token=token)
 
     @staticmethod
     def implicit_output(tree):
