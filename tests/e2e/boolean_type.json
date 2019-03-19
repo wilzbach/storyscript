@@ -1,0 +1,132 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        10
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "function",
+      "ln": "2",
+      "output": [
+        "boolean"
+      ],
+      "function": "is_even",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "n",
+          "argument": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        }
+      ],
+      "enter": "3",
+      "next": "3"
+    },
+    "3": {
+      "method": "if",
+      "ln": "3",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "equals",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "modulus",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "n"
+                  ]
+                },
+                2
+              ]
+            },
+            0
+          ]
+        }
+      ],
+      "enter": "4",
+      "exit": "5",
+      "parent": "2",
+      "next": "4"
+    },
+    "4": {
+      "method": "return",
+      "ln": "4",
+      "args": [
+        true
+      ],
+      "parent": "3",
+      "next": "5"
+    },
+    "5": {
+      "method": "else",
+      "ln": "5",
+      "enter": "6",
+      "exit": "8.1",
+      "parent": "2",
+      "next": "6"
+    },
+    "6": {
+      "method": "return",
+      "ln": "6",
+      "args": [
+        false
+      ],
+      "parent": "5",
+      "next": "8.1"
+    },
+    "8.1": {
+      "method": "call",
+      "ln": "8.1",
+      "name": [
+        "__p-8.1"
+      ],
+      "function": "is_even",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "n",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "a"
+            ]
+          }
+        }
+      ],
+      "next": "8"
+    },
+    "8": {
+      "method": "expression",
+      "ln": "8",
+      "name": [
+        "even"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-8.1"
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "is_even": "2"
+  },
+  "version": null
+}
