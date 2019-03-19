@@ -59,7 +59,7 @@ def test_faketree_path(patch, fake_tree):
     patch.object(FakeTree, 'line')
     FakeTree.line.return_value = 'fake.line'
     result = fake_tree.path()
-    name = 'p-fake.line'
+    name = '__p-fake.line'
     assert result == Tree('path', [Token('NAME', name, line=FakeTree.line())])
 
 

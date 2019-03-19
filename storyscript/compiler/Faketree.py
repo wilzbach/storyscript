@@ -5,6 +5,9 @@ from ..parser import Tree
 
 
 class FakeTree:
+    # unique prefix for all compiler-inserted paths
+    prefix = '__p-'
+
     """
     Creates fake trees that are not in the original story source.
     """
@@ -18,7 +21,7 @@ class FakeTree:
         for child in block.children:
             if child.path:
                 tok = child.path.find_first_token().value
-                if tok.startswith("p-"):
+                if tok.startswith(self.prefix):
                     self.new_lines[tok] = False
 
     def line(self):
@@ -52,7 +55,7 @@ class FakeTree:
         if line is None:
             line = self.line()
         if name is None:
-            name = f'p-{line}'
+            name = f'{self.prefix}{line}'
         return Tree('path', [Token('NAME', name, line=line)])
 
     def assignment(self, value):
