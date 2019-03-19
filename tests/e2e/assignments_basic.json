@@ -1,0 +1,302 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "t"
+      ],
+      "args": [
+        true
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "f"
+      ],
+      "args": [
+        false
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "_null"
+      ],
+      "args": [
+        null
+      ],
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "zero"
+      ],
+      "args": [
+        0
+      ],
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "_int"
+      ],
+      "args": [
+        3
+      ],
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "name": [
+        "_float"
+      ],
+      "args": [
+        3.14
+      ],
+      "next": "7"
+    },
+    "7": {
+      "method": "expression",
+      "ln": "7",
+      "name": [
+        "_string"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "cake"
+        }
+      ],
+      "next": "8"
+    },
+    "8": {
+      "method": "expression",
+      "ln": "8",
+      "name": [
+        "_list"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            1,
+            2
+          ]
+        }
+      ],
+      "next": "9"
+    },
+    "9": {
+      "method": "expression",
+      "ln": "9",
+      "name": [
+        "list_empty"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": []
+        }
+      ],
+      "next": "10"
+    },
+    "10": {
+      "method": "expression",
+      "ln": "10",
+      "name": [
+        "list_multiline"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            1,
+            2
+          ]
+        }
+      ],
+      "next": "14"
+    },
+    "14": {
+      "method": "expression",
+      "ln": "14",
+      "name": [
+        "obj"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "x"
+              },
+              1
+            ],
+            [
+              {
+                "$OBJECT": "string",
+                "string": "y"
+              },
+              3
+            ]
+          ]
+        }
+      ],
+      "next": "15"
+    },
+    "15": {
+      "method": "expression",
+      "ln": "15",
+      "name": [
+        "obj_empty"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": []
+        }
+      ],
+      "next": "16"
+    },
+    "16": {
+      "method": "expression",
+      "ln": "16",
+      "name": [
+        "obj_multiline"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "x"
+              },
+              1
+            ],
+            [
+              {
+                "$OBJECT": "string",
+                "string": "y"
+              },
+              3
+            ]
+          ]
+        }
+      ],
+      "next": "20"
+    },
+    "20": {
+      "method": "expression",
+      "ln": "20",
+      "name": [
+        "regexp"
+      ],
+      "args": [
+        {
+          "$OBJECT": "regexp",
+          "regexp": "/^foo/"
+        }
+      ],
+      "next": "21"
+    },
+    "21": {
+      "method": "expression",
+      "ln": "21",
+      "name": [
+        "regexp_flags"
+      ],
+      "args": [
+        {
+          "$OBJECT": "regexp",
+          "regexp": "/^foo/",
+          "flags": "g"
+        }
+      ],
+      "next": "22"
+    },
+    "22": {
+      "method": "expression",
+      "ln": "22",
+      "name": [
+        "sum"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            3,
+            2
+          ]
+        }
+      ],
+      "next": "23"
+    },
+    "23": {
+      "method": "expression",
+      "ln": "23",
+      "name": [
+        "mul"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "multiplication",
+          "values": [
+            3,
+            2
+          ]
+        }
+      ],
+      "next": "24"
+    },
+    "24": {
+      "method": "expression",
+      "ln": "24",
+      "name": [
+        "service"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "alpine_echo"
+          ]
+        }
+      ],
+      "next": "25"
+    },
+    "25": {
+      "method": "expression",
+      "ln": "25",
+      "name": [
+        "service_inline"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "alpine_echo"
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}
