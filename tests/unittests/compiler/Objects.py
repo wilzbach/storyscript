@@ -106,11 +106,11 @@ def test_objects_number():
     Ensures that an int is compiled correctly.
     """
     tree = Tree('number', [Token('INT', '1')])
-    assert Objects.number(tree) == 1
+    assert Objects.number(tree) == {'$OBJECT': 'int', 'int': 1}
     tree = Tree('number', [Token('INT', '+1')])
-    assert Objects.number(tree) == 1
+    assert Objects.number(tree) == {'$OBJECT': 'int', 'int': 1}
     tree = Tree('number', [Token('INT', '-1')])
-    assert Objects.number(tree) == -1
+    assert Objects.number(tree) == {'$OBJECT': 'int', 'int': -1}
 
 
 def test_objects_number_float():
@@ -118,11 +118,11 @@ def test_objects_number_float():
     Ensures that a float is compiled correctly.
     """
     tree = Tree('number', [Token('FLOAT', '1.2')])
-    assert Objects.number(tree) == 1.2
+    assert Objects.number(tree) == {'$OBJECT': 'float', 'float': 1.2}
     tree = Tree('number', [Token('FLOAT', '+1.2')])
-    assert Objects.number(tree) == 1.2
+    assert Objects.number(tree) == {'$OBJECT': 'float', 'float': 1.2}
     tree = Tree('number', [Token('FLOAT', '-1.2')])
-    assert Objects.number(tree) == -1.2
+    assert Objects.number(tree) == {'$OBJECT': 'float', 'float': -1.2}
 
 
 def test_objects_name_to_path():
