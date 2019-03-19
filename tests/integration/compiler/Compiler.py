@@ -13,7 +13,7 @@ def test_compiler_mutation_chained(source):
     Ensures that chained mutations are compiled correctly
     """
     result = Api.loads(source)
-    args = [1,
+    args = [{'$OBJECT': 'int', 'int': 1},
             {'$OBJECT': 'mutation', 'mutation': 'increment', 'arguments': []},
             {'$OBJECT': 'mutation', 'mutation': 'format', 'arguments': [
                 {'$OBJECT': 'argument', 'name': 'to',
@@ -34,30 +34,37 @@ def path(name):
     return {'$OBJECT': 'path', 'paths': [name]}
 
 
+def int_(value):
+    """
+    Generate an int object
+    """
+    return {'$OBJECT': 'int', 'int': value}
+
+
 @mark.parametrize('source_pair', [
-    ('1+2', 'sum', [1, 2]),
-    ('1+-2', 'sum', [1, -2]),
-    ('1-3', 'subtraction', [1, 3]),
-    ('1--3', 'subtraction', [1, -3]),
-    ('0*2', 'multiplication', [0, 2]),
-    ('0*-2', 'multiplication', [0, -2]),
-    ('1/6', 'division', [1, 6]),
-    ('1/-6', 'division', [1, -6]),
-    ('0%2', 'modulus', [0, 2]),
-    ('0%-2', 'modulus', [0, -2]),
-    ('1==2', 'equals', [1, 2]),
-    ('1==-2', 'equals', [1, -2]),
-    ('1!=2', 'not_equal', [1, 2]),
-    ('1!=-2', 'not_equal', [1, -2]),
-    ('1<2', 'less', [1, 2]),
-    ('1<-2', 'less', [1, -2]),
-    ('1>2', 'greater', [1, 2]),
-    ('1>-2', 'greater', [1, -2]),
-    ('1<=2', 'less_equal', [1, 2]),
-    ('1<=-2', 'less_equal', [1, -2]),
-    ('1>=2', 'greater_equal', [1, 2]),
-    ('-1>=2', 'greater_equal', [-1, 2]),
-    ('1>=-2', 'greater_equal', [1, -2]),
+    ('1+2', 'sum', [int_(1), int_(2)]),
+    ('1+-2', 'sum', [int_(1), int_(-2)]),
+    ('1-3', 'subtraction', [int_(1), int_(3)]),
+    ('1--3', 'subtraction', [int_(1), int_(-3)]),
+    ('0*2', 'multiplication', [int_(0), int_(2)]),
+    ('0*-2', 'multiplication', [int_(0), int_(-2)]),
+    ('1/6', 'division', [int_(1), int_(6)]),
+    ('1/-6', 'division', [int_(1), int_(-6)]),
+    ('0%2', 'modulus', [int_(0), int_(2)]),
+    ('0%-2', 'modulus', [int_(0), int_(-2)]),
+    ('1==2', 'equals', [int_(1), int_(2)]),
+    ('1==-2', 'equals', [int_(1), int_(-2)]),
+    ('1!=2', 'not_equal', [int_(1), int_(2)]),
+    ('1!=-2', 'not_equal', [int_(1), int_(-2)]),
+    ('1<2', 'less', [int_(1), int_(2)]),
+    ('1<-2', 'less', [int_(1), int_(-2)]),
+    ('1>2', 'greater', [int_(1), int_(2)]),
+    ('1>-2', 'greater', [int_(1), int_(-2)]),
+    ('1<=2', 'less_equal', [int_(1), int_(2)]),
+    ('1<=-2', 'less_equal', [int_(1), int_(-2)]),
+    ('1>=2', 'greater_equal', [int_(1), int_(2)]),
+    ('-1>=2', 'greater_equal', [int_(-1), int_(2)]),
+    ('1>=-2', 'greater_equal', [int_(1), int_(-2)]),
     ('b+c', 'sum', [path('b'), path('c')]),
     # Currently a valid entity
     # ('b-c', 'subtraction', [path('b'), path('c')]),
