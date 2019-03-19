@@ -1,0 +1,34 @@
+{
+  "tree": {
+    "1": {
+      "method": "for",
+      "ln": "1",
+      "output": [
+        "item"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "items"
+          ]
+        }
+      ],
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "x"
+      ],
+      "args": [
+        0
+      ],
+      "parent": "1"
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

@@ -1,0 +1,34 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "multiplication",
+              "values": [
+                3,
+                2
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "exponential",
+              "values": [
+                1,
+                5
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

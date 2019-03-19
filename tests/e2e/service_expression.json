@@ -1,0 +1,51 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "service": "my_service",
+      "command": "my_command",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "k1",
+          "argument": {
+            "$OBJECT": "expression",
+            "expression": "sum",
+            "values": [
+              2,
+              2
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "k2",
+          "argument": {
+            "$OBJECT": "expression",
+            "expression": "equals",
+            "values": [
+              {
+                "$OBJECT": "path",
+                "paths": [
+                  "a"
+                ]
+              },
+              {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "services": [
+    "my_service"
+  ],
+  "entrypoint": "1",
+  "version": null
+}

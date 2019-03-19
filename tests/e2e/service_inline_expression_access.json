@@ -1,0 +1,35 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "service": "random",
+      "command": "array",
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "x"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1",
+            "0"
+          ]
+        }
+      ]
+    }
+  },
+  "services": [
+    "random"
+  ],
+  "entrypoint": "1.1",
+  "version": null
+}

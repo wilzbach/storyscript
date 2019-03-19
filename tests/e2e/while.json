@@ -1,0 +1,31 @@
+{
+  "tree": {
+    "1": {
+      "method": "while",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "cond"
+          ]
+        }
+      ],
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "x"
+      ],
+      "args": [
+        0
+      ],
+      "parent": "1"
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

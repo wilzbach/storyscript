@@ -1,0 +1,38 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "service": "random",
+      "command": "strings",
+      "next": "1"
+    },
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "service": "alpine",
+      "command": "echo",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "text",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.1"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "services": [
+    "alpine",
+    "random"
+  ],
+  "entrypoint": "1.1",
+  "version": null
+}

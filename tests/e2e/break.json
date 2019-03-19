@@ -1,0 +1,20 @@
+{
+  "tree": {
+    "1": {
+      "method": "while",
+      "ln": "1",
+      "args": [
+        true
+      ],
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "break",
+      "ln": "2",
+      "parent": "1"
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

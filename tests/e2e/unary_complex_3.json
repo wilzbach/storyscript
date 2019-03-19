@@ -1,0 +1,69 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "less_equal",
+          "values": [
+            {
+              "$OBJECT": "list",
+              "items": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "not",
+                  "values": [
+                    {
+                      "$OBJECT": "path",
+                      "paths": [
+                        "b"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "expression",
+                  "expression": "not",
+                  "values": [
+                    2
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "not",
+                  "values": [
+                    {
+                      "$OBJECT": "path",
+                      "paths": [
+                        "t"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "t"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

@@ -1,0 +1,34 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "subtraction",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "modulus",
+                  "values": [
+                    1,
+                    2
+                  ]
+                },
+                3
+              ]
+            },
+            -4
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

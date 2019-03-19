@@ -1,0 +1,41 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "or",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "and",
+              "values": [
+                true,
+                {
+                  "$OBJECT": "expression",
+                  "expression": "equals",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "sum",
+                      "values": [
+                        1,
+                        1
+                      ]
+                    },
+                    2
+                  ]
+                }
+              ]
+            },
+            3
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

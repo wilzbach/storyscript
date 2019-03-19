@@ -1,0 +1,45 @@
+{
+  "tree": {
+    "1": {
+      "method": "mutation",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "opened"
+              },
+              1
+            ],
+            [
+              {
+                "$OBJECT": "string",
+                "string": "labeled"
+              },
+              1
+            ]
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "has",
+          "arguments": [
+            {
+              "$OBJECT": "argument",
+              "name": "key",
+              "argument": {
+                "$OBJECT": "string",
+                "string": "opened"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}
