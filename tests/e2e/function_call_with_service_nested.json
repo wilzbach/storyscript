@@ -54,13 +54,13 @@
         28
       ],
       "parent": "4",
-      "next": "7.1"
+      "next": "7.3"
     },
-    "7.1": {
+    "7.3": {
       "method": "call",
-      "ln": "7.1",
+      "ln": "7.3",
       "name": [
-        "p-7.1"
+        "p-7.3"
       ],
       "service": "random",
       "next": "7.2"
@@ -80,7 +80,7 @@
           "argument": {
             "$OBJECT": "path",
             "paths": [
-              "p-7.1"
+              "p-7.3"
             ]
           }
         },
@@ -90,13 +90,13 @@
           "argument": 2
         }
       ],
-      "next": "7.3"
+      "next": "7.1"
     },
-    "7.3": {
+    "7.1": {
       "method": "call",
-      "ln": "7.3",
+      "ln": "7.1",
       "name": [
-        "p-7.3"
+        "p-7.1"
       ],
       "service": "my_func",
       "args": [
@@ -128,7 +128,7 @@
           "argument": {
             "$OBJECT": "path",
             "paths": [
-              "p-7.3"
+              "p-7.1"
             ]
           }
         },

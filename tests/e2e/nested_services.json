@@ -1,0 +1,320 @@
+{
+  "tree": {
+    "1.14": {
+      "method": "execute",
+      "ln": "1.14",
+      "name": [
+        "p-1.14"
+      ],
+      "service": "serv222",
+      "command": "c222",
+      "next": "1.13"
+    },
+    "1.13": {
+      "method": "execute",
+      "ln": "1.13",
+      "name": [
+        "p-1.13"
+      ],
+      "service": "serv221",
+      "command": "c221",
+      "next": "1.12"
+    },
+    "1.12": {
+      "method": "execute",
+      "ln": "1.12",
+      "name": [
+        "p-1.12"
+      ],
+      "service": "serv21",
+      "command": "c21",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "arg1",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.13"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "arg2",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.14"
+            ]
+          }
+        }
+      ],
+      "next": "1.11"
+    },
+    "1.11": {
+      "method": "execute",
+      "ln": "1.11",
+      "name": [
+        "p-1.11"
+      ],
+      "service": "serv212",
+      "command": "c212",
+      "next": "1.10"
+    },
+    "1.10": {
+      "method": "execute",
+      "ln": "1.10",
+      "name": [
+        "p-1.10"
+      ],
+      "service": "serv211",
+      "command": "c211",
+      "next": "1.9"
+    },
+    "1.9": {
+      "method": "execute",
+      "ln": "1.9",
+      "name": [
+        "p-1.9"
+      ],
+      "service": "serv11",
+      "command": "c21",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "arg1",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.10"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "arg2",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.11"
+            ]
+          }
+        }
+      ],
+      "next": "1.8"
+    },
+    "1.8": {
+      "method": "execute",
+      "ln": "1.8",
+      "name": [
+        "p-1.8"
+      ],
+      "service": "serv2",
+      "command": "c2",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "arg1",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.9"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "arg2",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.12"
+            ]
+          }
+        }
+      ],
+      "next": "1.7"
+    },
+    "1.7": {
+      "method": "execute",
+      "ln": "1.7",
+      "name": [
+        "p-1.7"
+      ],
+      "service": "serv122",
+      "command": "c122",
+      "next": "1.6"
+    },
+    "1.6": {
+      "method": "execute",
+      "ln": "1.6",
+      "name": [
+        "p-1.6"
+      ],
+      "service": "serv121",
+      "command": "c121",
+      "next": "1.5"
+    },
+    "1.5": {
+      "method": "execute",
+      "ln": "1.5",
+      "name": [
+        "p-1.5"
+      ],
+      "service": "serv12",
+      "command": "c12",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "arg1",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.6"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "arg2",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.7"
+            ]
+          }
+        }
+      ],
+      "next": "1.4"
+    },
+    "1.4": {
+      "method": "execute",
+      "ln": "1.4",
+      "name": [
+        "p-1.4"
+      ],
+      "service": "serv112",
+      "command": "c112",
+      "next": "1.3"
+    },
+    "1.3": {
+      "method": "execute",
+      "ln": "1.3",
+      "name": [
+        "p-1.3"
+      ],
+      "service": "serv111",
+      "command": "c111",
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "execute",
+      "ln": "1.2",
+      "name": [
+        "p-1.2"
+      ],
+      "service": "serv11",
+      "command": "c11",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "arg1",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.3"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "arg2",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.4"
+            ]
+          }
+        }
+      ],
+      "next": "1.1"
+    },
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "name": [
+        "p-1.1"
+      ],
+      "service": "serv1",
+      "command": "c1",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "arg1",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.2"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "arg2",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "p-1.5"
+            ]
+          }
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "p-1.1"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "p-1.8"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "services": [
+    "serv1",
+    "serv11",
+    "serv111",
+    "serv112",
+    "serv12",
+    "serv121",
+    "serv122",
+    "serv2",
+    "serv21",
+    "serv211",
+    "serv212",
+    "serv221",
+    "serv222"
+  ],
+  "entrypoint": "1.14",
+  "version": null
+}

@@ -79,9 +79,6 @@ class Preprocessor:
             fun(node, block, node)
             node.children = [Tree('path', node.children)]
 
-        for c in node.children:
-            cls.visit(c, block, entity, pred, fun, parent=node)
-
         if pred(node):
             assert entity is not None
             assert block is not None
@@ -97,6 +94,9 @@ class Preprocessor:
                 entity.data = 'mutation'
                 entity.entity = Tree('entity', [entity.path])
                 entity.service_fragment.data = 'mutation_fragment'
+
+        for c in node.children:
+            cls.visit(c, block, entity, pred, fun, parent=node)
 
     @staticmethod
     def is_inline_expression(n):
