@@ -374,13 +374,13 @@ def test_objects_flatten_template_no_templates(patch, tree):
 
 def test_objects_flatten_template_only_templates(patch, tree):
     result = list(Preprocessor.flatten_template(tree, '{hello}'))
-    assert result == [{'$OBJECT': 'path', 'paths': 'hello'}]
+    assert result == [{'$OBJECT': 'code', 'code': 'hello'}]
 
 
 def test_objects_flatten_template_mixed(patch, tree):
     result = list(Preprocessor.flatten_template(tree, 'a{hello}b'))
     assert result == [
         flatten_to_string('a'),
-        {'$OBJECT': 'path', 'paths': 'hello'},
+        {'$OBJECT': 'code', 'code': 'hello'},
         flatten_to_string('b')
     ]

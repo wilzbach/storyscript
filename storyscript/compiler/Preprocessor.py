@@ -169,7 +169,7 @@ class Preprocessor:
                     # end string interpolation
                     inside_interpolation = False
                     tree.expect(len(buf) > 0, 'string_templates_empty')
-                    yield {'$OBJECT': 'path', 'paths': buf}
+                    yield {'$OBJECT': 'code', 'code': buf}
                     buf = ''
                 else:
                     tree.expect(c != '{', 'string_templates_nested')
@@ -188,7 +188,7 @@ class Preprocessor:
         if len(buf) > 0:
             yield {'$OBJECT': 'string', 'string': buf}
 
-    def eval(self, node, code_string, fake_tree):
+    def eval(self, orig_node, code_string, fake_tree):
         """
         Evaluates a string by parsing it to its AST representation.
         Inserts the AST expression as fake_node and returns the path
@@ -196,11 +196,11 @@ class Preprocessor:
         """
         new_node = self.parser.parse(code_string)
         new_node = new_node.block
-        node.expect(new_node, 'string_templates_no_assignment')
+        orig_node.expect(new_node, 'string_templates_no_assignment')
         # go to the actual node -> jump into block.rules or block.service
         for i in range(2):
-            node.expect(len(new_node.children) == 1,
-                        'string_templates_no_assignment')
+            orig_node.expect(len(new_node.children) == 1,
+                             'string_templates_no_assignment')
             new_node = new_node.children[0]
         # for now only expressions or service_blocks are allowed inside string
         # templates
@@ -214,10 +214,11 @@ class Preprocessor:
         if new_node.data == 'absolute_expression':
             new_node = new_node.children[0]
         else:
-            node.expect(new_node.data == 'service',
-                        'string_templates_no_assignment')
+            orig_node.expect(new_node.data == 'service',
+                             'string_templates_no_assignment')
 
-        return fake_tree.add_assignment(new_node, original_line=node.line())
+        line = orig_node.line()
+        return fake_tree.add_assignment(new_node, original_line=line)
 
     @classmethod
     def build_string_value(cls, text):
@@ -230,50 +231,75 @@ class Preprocessor:
             ])
         ])
 
+    def concat_string_templates(self, block, orig_node, string_objs):
+        """
+        Concatenes the to-be-inserted string templates.
+        For example, a string template like "a{exp}b" gets flatten to:
+            "a" + fake_path_to_exp + "b"
+
+        Strings can be inserted directly, but string templates must be
+        evaluated to new AST nodes and the reference to their fake_node
+        assignment should be used instead.
+        """
+        fake_tree = self.fake_tree(block)
+        ks = []
+        for s in string_objs:
+            if s['$OBJECT'] == 'string':
+                # plain string -> insert directly
+                value = f'"'+s['string']+'"'
+                ks.append(self.build_string_value(value))
+            else:
+                assert s['$OBJECT'] == 'code'
+                # string template -> eval
+                # ignore newlines in string interpolation
+                code = ''.join(s['code'].split('\n'))
+                ks.append(self.eval(orig_node, code, fake_tree))
+        return self.add_strings(*ks)
+
     def inline_string_templates(self, node, block, parent):
         """
-        Iterates the AST and evaluates string templates.
         String templates generate fake_nodes in the AST before their block
         and are replaced with a reference to their fake_nodes.
-        In particular, a string templates "a{exp}b" gets flatten to:
-            "a" + fake_path_to_exp + "b"
+        """
+        string_node = node.follow_node_chain([
+            'cmp_expression',
+            'arith_expression', 'mul_expression', 'unary_expression',
+            'pow_expression', 'primary_expression', 'entity', 'values',
+            'string'])
+        if string_node is None:
+            return
+
+        text = Objects.unescape_string(string_node)
+        string_objs = list(self.flatten_template(string_node, text))
+
+        # is plain string without string templates?
+        if len(string_objs) == 1 and string_objs[0]['$OBJECT'] == 'string':
+            return
+
+        node.children = [self.concat_string_templates(block, string_node,
+                                                      string_objs)]
+
+    def visit_string_templates(self, node, block, parent):
+        """
+        Iterates the AST and evaluates string templates.
         """
         if not hasattr(node, 'children'):
             return
+
         if node.data == 'block':
             block = node
         elif node.data == 'cmp_expression':
-            string = node.follow_node_chain([
-                'cmp_expression',
-                'arith_expression', 'mul_expression', 'unary_expression',
-                'pow_expression', 'primary_expression', 'entity', 'values',
-                'string'])
-            fake_tree = self.fake_tree(block)
-            if string:
-                text = Objects.unescape_string(string)
-                # ignore newlines in string interpolation
-                text = ''.join(text.split('\n'))
-                strings = list(self.flatten_template(string, text))
-                is_plain_string = len(strings) == 1 and \
-                    strings[0]['$OBJECT'] == 'string'
-                if not is_plain_string:
-                    ks = []
-                    for s in strings:
-                        if s['$OBJECT'] == 'string':
-                            value = f'"'+s['string']+'"'
-                            ks.append(self.build_string_value(value))
-                        else:
-                            ks.append(self.eval(string, s['paths'], fake_tree))
-                        node.children = [Preprocessor.add_strings(*ks)]
+            self.inline_string_templates(node, block, parent)
+
         for c in node.children:
-            self.inline_string_templates(c, block, node)
+            self.visit_string_templates(c, block, node)
 
     def process(self, tree):
         """
         Applies several preprocessing steps to the existing AST.
         """
         pred = Preprocessor.is_inline_expression
-        self.inline_string_templates(tree, block=None, parent=None)
+        self.visit_string_templates(tree, block=None, parent=None)
         self.visit(tree, None, None, pred,
                    self.replace_expression, parent=None)
         return tree
