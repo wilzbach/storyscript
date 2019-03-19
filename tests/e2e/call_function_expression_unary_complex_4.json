@@ -21,7 +21,10 @@
       "method": "return",
       "ln": "2",
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "1",
       "next": "4.1"
@@ -53,7 +56,10 @@
                   }
                 ]
               },
-              2
+              {
+                "$OBJECT": "int",
+                "int": 2
+              }
             ]
           }
         }

@@ -12,7 +12,10 @@
         {
           "$OBJECT": "argument",
           "name": "arg",
-          "argument": 2
+          "argument": {
+            "$OBJECT": "int",
+            "int": 2
+          }
         }
       ],
       "next": "1.11"
@@ -29,7 +32,10 @@
         {
           "$OBJECT": "argument",
           "name": "arg",
-          "argument": 1
+          "argument": {
+            "$OBJECT": "int",
+            "int": 1
+          }
         }
       ],
       "next": "1.10"
@@ -78,7 +84,10 @@
         {
           "$OBJECT": "argument",
           "name": "arg",
-          "argument": 2
+          "argument": {
+            "$OBJECT": "int",
+            "int": 2
+          }
         }
       ],
       "next": "1.8"
@@ -95,7 +104,10 @@
         {
           "$OBJECT": "argument",
           "name": "arg",
-          "argument": 1
+          "argument": {
+            "$OBJECT": "int",
+            "int": 1
+          }
         }
       ],
       "next": "1.7"
@@ -144,7 +156,10 @@
         {
           "$OBJECT": "argument",
           "name": "arg",
-          "argument": 2
+          "argument": {
+            "$OBJECT": "int",
+            "int": 2
+          }
         }
       ],
       "next": "1.5"
@@ -161,7 +176,10 @@
         {
           "$OBJECT": "argument",
           "name": "arg",
-          "argument": 1
+          "argument": {
+            "$OBJECT": "int",
+            "int": 1
+          }
         }
       ],
       "next": "1.4"
@@ -210,7 +228,10 @@
         {
           "$OBJECT": "argument",
           "name": "arg",
-          "argument": 2
+          "argument": {
+            "$OBJECT": "int",
+            "int": 2
+          }
         }
       ],
       "next": "1.2"
@@ -227,7 +248,10 @@
         {
           "$OBJECT": "argument",
           "name": "arg",
-          "argument": 1
+          "argument": {
+            "$OBJECT": "int",
+            "int": 1
+          }
         }
       ],
       "next": "1.1"
@@ -298,7 +322,10 @@
         "x"
       ],
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "1",
       "next": "3"
@@ -337,7 +364,10 @@
         "x"
       ],
       "args": [
-        1
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
       ],
       "parent": "3",
       "next": "5"
@@ -356,7 +386,10 @@
         "x"
       ],
       "args": [
-        2
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
       ],
       "parent": "5",
       "next": "8"
@@ -368,7 +401,10 @@
         "x"
       ],
       "args": [
-        3
+        {
+          "$OBJECT": "int",
+          "int": 3
+        }
       ]
     }
   },

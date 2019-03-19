@@ -27,16 +27,28 @@
                           "$OBJECT": "expression",
                           "expression": "sum",
                           "values": [
-                            1,
-                            2
+                            {
+                              "$OBJECT": "int",
+                              "int": 1
+                            },
+                            {
+                              "$OBJECT": "int",
+                              "int": 2
+                            }
                           ]
                         },
                         {
                           "$OBJECT": "expression",
                           "expression": "division",
                           "values": [
-                            3,
-                            4
+                            {
+                              "$OBJECT": "int",
+                              "int": 3
+                            },
+                            {
+                              "$OBJECT": "int",
+                              "int": 4
+                            }
                           ]
                         }
                       ]
@@ -45,8 +57,14 @@
                       "$OBJECT": "expression",
                       "expression": "multiplication",
                       "values": [
-                        5,
-                        6
+                        {
+                          "$OBJECT": "int",
+                          "int": 5
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": 6
+                        }
                       ]
                     }
                   ]
@@ -55,13 +73,22 @@
                   "$OBJECT": "expression",
                   "expression": "modulus",
                   "values": [
-                    7,
-                    8
+                    {
+                      "$OBJECT": "int",
+                      "int": 7
+                    },
+                    {
+                      "$OBJECT": "int",
+                      "int": 8
+                    }
                   ]
                 }
               ]
             },
-            9
+            {
+              "$OBJECT": "int",
+              "int": 9
+            }
           ]
         }
       ]

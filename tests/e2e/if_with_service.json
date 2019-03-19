@@ -12,12 +12,18 @@
         {
           "$OBJECT": "argument",
           "name": "p3",
-          "argument": 3
+          "argument": {
+            "$OBJECT": "int",
+            "int": 3
+          }
         },
         {
           "$OBJECT": "argument",
           "name": "p4",
-          "argument": 4
+          "argument": {
+            "$OBJECT": "int",
+            "int": 4
+          }
         }
       ],
       "next": "1.1"
@@ -34,12 +40,18 @@
         {
           "$OBJECT": "argument",
           "name": "p1",
-          "argument": 1
+          "argument": {
+            "$OBJECT": "int",
+            "int": 1
+          }
         },
         {
           "$OBJECT": "argument",
           "name": "p2",
-          "argument": 2
+          "argument": {
+            "$OBJECT": "int",
+            "int": 2
+          }
         }
       ],
       "next": "1"
@@ -66,7 +78,10 @@
         "x"
       ],
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "1",
       "next": "3"
@@ -93,7 +108,10 @@
         "x"
       ],
       "args": [
-        1
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
       ],
       "parent": "3",
       "next": "5"
@@ -112,7 +130,10 @@
         "x"
       ],
       "args": [
-        2
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
       ],
       "parent": "5",
       "next": "8"
@@ -124,7 +145,10 @@
         "x"
       ],
       "args": [
-        3
+        {
+          "$OBJECT": "int",
+          "int": 3
+        }
       ]
     }
   },

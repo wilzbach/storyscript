@@ -11,7 +11,7 @@ def test_functions_function():
     assert result['tree']['1']['function'] == 'f'
     assert result['tree']['1']['next'] == '2'
     assert result['tree']['2']['method'] == 'expression'
-    assert result['tree']['2']['args'] == [0]
+    assert result['tree']['2']['args'] == [{'$OBJECT': 'int', 'int': 0}]
     assert result['tree']['2']['parent'] == '1'
 
 
@@ -45,5 +45,5 @@ def test_functions_function_return():
     """
     result = Api.loads('function f\n\treturn 0')
     assert result['tree']['2']['method'] == 'return'
-    assert result['tree']['2']['args'] == [0]
+    assert result['tree']['2']['args'] == [{'$OBJECT': 'int', 'int': 0}]
     assert result['tree']['2']['parent'] == '1'

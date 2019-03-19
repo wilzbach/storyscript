@@ -24,13 +24,22 @@
                           "$OBJECT": "expression",
                           "expression": "sum",
                           "values": [
-                            0,
+                            {
+                              "$OBJECT": "int",
+                              "int": 0
+                            },
                             {
                               "$OBJECT": "expression",
                               "expression": "multiplication",
                               "values": [
-                                1,
-                                2
+                                {
+                                  "$OBJECT": "int",
+                                  "int": 1
+                                },
+                                {
+                                  "$OBJECT": "int",
+                                  "int": 2
+                                }
                               ]
                             }
                           ]
@@ -43,11 +52,20 @@
                               "$OBJECT": "expression",
                               "expression": "division",
                               "values": [
-                                3,
-                                4
+                                {
+                                  "$OBJECT": "int",
+                                  "int": 3
+                                },
+                                {
+                                  "$OBJECT": "int",
+                                  "int": 4
+                                }
                               ]
                             },
-                            5
+                            {
+                              "$OBJECT": "int",
+                              "int": 5
+                            }
                           ]
                         }
                       ]
@@ -56,16 +74,28 @@
                       "$OBJECT": "expression",
                       "expression": "exponential",
                       "values": [
-                        6,
-                        2
+                        {
+                          "$OBJECT": "int",
+                          "int": 6
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": 2
+                        }
                       ]
                     }
                   ]
                 },
-                7
+                {
+                  "$OBJECT": "int",
+                  "int": 7
+                }
               ]
             },
-            8
+            {
+              "$OBJECT": "int",
+              "int": 8
+            }
           ]
         }
       ]

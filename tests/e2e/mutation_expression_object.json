@@ -12,14 +12,20 @@
                 "$OBJECT": "string",
                 "string": "opened"
               },
-              1
+              {
+                "$OBJECT": "int",
+                "int": 1
+              }
             ],
             [
               {
                 "$OBJECT": "string",
                 "string": "labeled"
               },
-              1
+              {
+                "$OBJECT": "int",
+                "int": 1
+              }
             ]
           ]
         },

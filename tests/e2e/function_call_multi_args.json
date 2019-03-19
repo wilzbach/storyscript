@@ -32,7 +32,10 @@
         "a"
       ],
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "1",
       "next": "4.1"
@@ -48,12 +51,18 @@
         {
           "$OBJECT": "argument",
           "name": "k1",
-          "argument": 1
+          "argument": {
+            "$OBJECT": "int",
+            "int": 1
+          }
         },
         {
           "$OBJECT": "argument",
           "name": "k2",
-          "argument": 2
+          "argument": {
+            "$OBJECT": "int",
+            "int": 2
+          }
         }
       ],
       "next": "4"

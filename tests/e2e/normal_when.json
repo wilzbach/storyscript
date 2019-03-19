@@ -48,7 +48,10 @@
         "x"
       ],
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "2"
     }

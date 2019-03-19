@@ -4,7 +4,10 @@
       "method": "expression",
       "ln": "1",
       "args": [
-        -2
+        {
+          "$OBJECT": "int",
+          "int": -2
+        }
       ],
       "next": "2"
     },
@@ -12,7 +15,10 @@
       "method": "expression",
       "ln": "2",
       "args": [
-        2
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
       ]
     }
   },

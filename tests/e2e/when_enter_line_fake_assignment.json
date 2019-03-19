@@ -68,7 +68,10 @@
         "a"
       ],
       "args": [
-        4
+        {
+          "$OBJECT": "int",
+          "int": 4
+        }
       ],
       "parent": "1"
     }

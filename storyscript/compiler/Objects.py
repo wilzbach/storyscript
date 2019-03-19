@@ -58,8 +58,8 @@ class Objects:
         if token.value[0] == '+':
             token.value = token.value[1:]
         if token.type == 'FLOAT':
-            return float(token.value)
-        return int(token.value)
+            return {'$OBJECT': 'float', 'float': float(token.value)}
+        return {'$OBJECT': 'int', 'int': int(token.value)}
 
     @staticmethod
     def name_to_path(name):

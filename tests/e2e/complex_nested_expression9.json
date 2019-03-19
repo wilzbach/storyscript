@@ -23,7 +23,10 @@
                   "$OBJECT": "expression",
                   "expression": "sum",
                   "values": [
-                    5,
+                    {
+                      "$OBJECT": "int",
+                      "int": 5
+                    },
                     {
                       "$OBJECT": "path",
                       "paths": [

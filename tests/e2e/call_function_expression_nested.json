@@ -29,7 +29,10 @@
       "method": "return",
       "ln": "2",
       "args": [
-        0
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
       ],
       "parent": "1",
       "next": "4.1"
@@ -49,13 +52,22 @@
             "$OBJECT": "expression",
             "expression": "sum",
             "values": [
-              2,
+              {
+                "$OBJECT": "int",
+                "int": 2
+              },
               {
                 "$OBJECT": "expression",
                 "expression": "modulus",
                 "values": [
-                  2,
-                  4
+                  {
+                    "$OBJECT": "int",
+                    "int": 2
+                  },
+                  {
+                    "$OBJECT": "int",
+                    "int": 4
+                  }
                 ]
               }
             ]

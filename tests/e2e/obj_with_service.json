@@ -12,7 +12,10 @@
         {
           "$OBJECT": "argument",
           "name": "p1",
-          "argument": 1
+          "argument": {
+            "$OBJECT": "int",
+            "int": 1
+          }
         }
       ],
       "next": "1"
@@ -44,7 +47,10 @@
                 "$OBJECT": "string",
                 "string": "k2"
               },
-              2
+              {
+                "$OBJECT": "int",
+                "int": 2
+              }
             ]
           ]
         }

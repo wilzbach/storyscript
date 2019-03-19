@@ -16,14 +16,26 @@
                   "$OBJECT": "expression",
                   "expression": "modulus",
                   "values": [
-                    1,
-                    2
+                    {
+                      "$OBJECT": "int",
+                      "int": 1
+                    },
+                    {
+                      "$OBJECT": "int",
+                      "int": 2
+                    }
                   ]
                 },
-                3
+                {
+                  "$OBJECT": "int",
+                  "int": 3
+                }
               ]
             },
-            -4
+            {
+              "$OBJECT": "int",
+              "int": -4
+            }
           ]
         }
       ]

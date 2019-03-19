@@ -7,7 +7,10 @@
         "a"
       ],
       "args": [
-        -5.5
+        {
+          "$OBJECT": "float",
+          "float": -5.5
+        }
       ],
       "next": "2"
     },
@@ -18,7 +21,10 @@
         "a"
       ],
       "args": [
-        5.5
+        {
+          "$OBJECT": "float",
+          "float": 5.5
+        }
       ]
     }
   },
