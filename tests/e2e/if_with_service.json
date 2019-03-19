@@ -1,32 +1,10 @@
 {
   "tree": {
-    "1.1": {
-      "method": "execute",
-      "ln": "1.1",
-      "name": [
-        "p-1.1"
-      ],
-      "service": "my_service",
-      "command": "command",
-      "args": [
-        {
-          "$OBJECT": "argument",
-          "name": "p1",
-          "argument": 1
-        },
-        {
-          "$OBJECT": "argument",
-          "name": "p2",
-          "argument": 2
-        }
-      ],
-      "next": "1.2"
-    },
     "1.2": {
       "method": "execute",
       "ln": "1.2",
       "name": [
-        "p-1.2"
+        "__p-1.2"
       ],
       "service": "my_service2",
       "command": "command",
@@ -42,6 +20,28 @@
           "argument": 4
         }
       ],
+      "next": "1.1"
+    },
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "service": "my_service",
+      "command": "command",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "p1",
+          "argument": 1
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "p2",
+          "argument": 2
+        }
+      ],
       "next": "1"
     },
     "1": {
@@ -51,7 +51,7 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "p-1.1"
+            "__p-1.1"
           ]
         }
       ],
@@ -78,7 +78,7 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "p-1.2"
+            "__p-1.2"
           ]
         }
       ],
@@ -132,6 +132,6 @@
     "my_service",
     "my_service2"
   ],
-  "entrypoint": "1.1",
+  "entrypoint": "1.2",
   "version": null
 }

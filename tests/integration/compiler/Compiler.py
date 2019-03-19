@@ -994,31 +994,6 @@ def test_compiler_complex_nested_expression_11():
     }]
 
 
-def test_compiler_complex_nested_expression_12():
-    """
-    Ensures that complex nested expressions are compiled correctly
-    """
-    source = '1 == (foo contains)'
-    result = Api.loads(source)
-    assert result['tree']['1']['method'] == 'expression'
-    assert result['tree']['1.1']['service'] == 'foo'
-    assert result['tree']['1.1']['name'] == ['p-1.1']
-    assert result['tree']['1.1']['command'] == 'contains'
-    assert result['tree']['1']['args'] == [{
-        '$OBJECT': 'expression',
-        'expression': 'equals',
-        'values': [
-          1,
-          {
-            '$OBJECT': 'path',
-            'paths': [
-              'p-1.1'
-            ]
-          }
-        ]
-    }]
-
-
 def test_compiler_complex_nested_expression_13():
     """
     Ensures that complex nested expressions are compiled correctly
@@ -1794,84 +1769,6 @@ def test_compiler_unary_complex_3():
             ]
           }
         ]
-    }]
-
-
-def test_compiler_unary_complex_5():
-    """
-    Ensures that complex unary expressions are compiled correctly
-    """
-    source = ('a = ! (my_service command k1: !b) or '
-              '!(my_service2 command k2: ! !c)')
-    result = Api.loads(source)
-    assert result['tree']['1']['method'] == 'expression'
-    assert result['tree']['1']['args'] == [{
-        '$OBJECT': 'expression',
-        'expression': 'or',
-        'values': [
-          {
-            '$OBJECT': 'expression',
-            'expression': 'not',
-            'values': [
-              {
-                '$OBJECT': 'path',
-                'paths': [
-                  'p-1.1'
-                ]
-              }
-            ]
-          },
-          {
-            '$OBJECT': 'expression',
-            'expression': 'not',
-            'values': [
-              {
-                '$OBJECT': 'path',
-                'paths': [
-                  'p-1.2'
-                ]
-              }
-            ]
-          }
-        ]
-    }]
-    assert result['tree']['1.1']['args'] == [{
-        '$OBJECT': 'argument',
-        'name': 'k1',
-        'argument': {
-          '$OBJECT': 'expression',
-          'expression': 'not',
-          'values': [
-            {
-              '$OBJECT': 'path',
-              'paths': [
-                'b'
-              ]
-            }
-          ]
-        }
-    }]
-    assert result['tree']['1.2']['args'] == [{
-        '$OBJECT': 'argument',
-        'name': 'k2',
-        'argument': {
-          '$OBJECT': 'expression',
-          'expression': 'not',
-          'values': [
-            {
-              '$OBJECT': 'expression',
-              'expression': 'not',
-              'values': [
-                {
-                  '$OBJECT': 'path',
-                  'paths': [
-                    'c'
-                  ]
-                }
-              ]
-            }
-          ]
-        }
     }]
 
 

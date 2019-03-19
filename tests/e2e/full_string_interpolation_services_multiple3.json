@@ -1,0 +1,160 @@
+{
+  "tree": {
+    "1.6": {
+      "method": "execute",
+      "ln": "1.6",
+      "name": [
+        "__p-1.6"
+      ],
+      "service": "serv21",
+      "command": "c21",
+      "next": "1.5"
+    },
+    "1.5": {
+      "method": "execute",
+      "ln": "1.5",
+      "name": [
+        "__p-1.5"
+      ],
+      "service": "serv2",
+      "command": "c2",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "arg1",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "serv11_c21"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "arg2",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.6"
+            ]
+          }
+        }
+      ],
+      "next": "1.4"
+    },
+    "1.4": {
+      "method": "execute",
+      "ln": "1.4",
+      "name": [
+        "__p-1.4"
+      ],
+      "service": "serv12",
+      "command": "c12",
+      "next": "1.3"
+    },
+    "1.3": {
+      "method": "execute",
+      "ln": "1.3",
+      "name": [
+        "__p-1.3"
+      ],
+      "service": "serv11",
+      "command": "c11",
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "execute",
+      "ln": "1.2",
+      "name": [
+        "__p-1.2"
+      ],
+      "service": "serv1",
+      "command": "c1",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "arg1",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.3"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "arg2",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.4"
+            ]
+          }
+        }
+      ],
+      "next": "1.1"
+    },
+    "1.1": {
+      "method": "expression",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.2"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.5"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "foo "
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.1"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "services": [
+    "serv1",
+    "serv11",
+    "serv12",
+    "serv2",
+    "serv21"
+  ],
+  "entrypoint": "1.6",
+  "version": null
+}

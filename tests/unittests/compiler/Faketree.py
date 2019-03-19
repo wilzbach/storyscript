@@ -18,6 +18,56 @@ def test_faketree_init(block, fake_tree):
     assert fake_tree.new_lines == {}
 
 
+def test_faketree_check_existing_empty(block, fake_tree):
+    """
+    Checks checking for fake lines with an empty block
+    """
+    fake_tree._check_existing_fake_lines(block)
+    assert fake_tree.new_lines == {}
+
+
+def test_faketree_check_existing_one_child(block, fake_tree):
+    """
+    Checks checking for fake lines with an one child block
+    """
+    block.children = [
+        Tree('path', [Token('NAME', 'foo')]),
+        Tree('assignment', [Tree('path', [Token('NAME', 'foo')])]),
+    ]
+    fake_tree._check_existing_fake_lines(block)
+    assert fake_tree.new_lines == {}
+
+
+def test_faketree_check_existing_with_fake(block, fake_tree):
+    """
+    Checks checking for fake lines with a fake path
+    """
+    block.children = [
+        Tree('assignment', [Tree('path', [Token('NAME', 'foo')])]),
+        Tree('assignment', [Tree('path', [Token('NAME', '__p-bar')])]),
+    ]
+    fake_tree._check_existing_fake_lines(block)
+    assert fake_tree.new_lines == {'__p-bar': False}
+
+
+def test_faketree_check_existing_multiple_fake(block, fake_tree):
+    """
+    Checks checking for fake lines with multiple fake paths
+    """
+    block.children = [
+        Tree('assignment', [Tree('path', [Token('NAME', '__p-bar1')])]),
+        Tree('assignment', [Tree('path', [Token('NAME', 'foo')])]),
+        Tree('assignment', [Tree('path', [Token('NAME', '__p-bar2')])]),
+        Tree('assignment', [Tree('path', [Token('NAME', 'foo')])]),
+        Tree('assignment', [Tree('path', [Token('NAME', '__p-bar3')])]),
+    ]
+    fake_tree._check_existing_fake_lines(block)
+    assert fake_tree.new_lines == {
+        '__p-bar1': False,
+        '__p-bar2': False,
+        '__p-bar3': False}
+
+
 def test_faketree_line(patch, fake_tree):
     """
     Ensures FakeTree.line can create a fake line number
@@ -59,7 +109,7 @@ def test_faketree_path(patch, fake_tree):
     patch.object(FakeTree, 'line')
     FakeTree.line.return_value = 'fake.line'
     result = fake_tree.path()
-    name = 'p-fake.line'
+    name = '__p-fake.line'
     assert result == Tree('path', [Token('NAME', name, line=FakeTree.line())])
 
 
@@ -91,10 +141,11 @@ def test_faketree_assignment(patch, tree, fake_tree):
 
 def test_faketree_add_assignment(patch, fake_tree, block):
     patch.object(FakeTree, 'assignment')
+    block.children = [1]
     block.child.return_value = None
     result = fake_tree.add_assignment('value', original_line=10)
     FakeTree.assignment.assert_called_with('value')
-    assert block.children == [FakeTree.assignment(), block.last_child()]
+    assert block.children == [FakeTree.assignment(), 1]
     name = Token('NAME', FakeTree.assignment().path.child(0), line=10)
     assert result.data == 'path'
     assert result.children == [name]
@@ -104,7 +155,7 @@ def test_faketree_add_assignment_more_children(patch, fake_tree, block):
     patch.object(FakeTree, 'assignment')
     block.children = ['c1', fake_tree.block.last_child()]
     fake_tree.add_assignment('value', original_line=42)
-    expected = ['c1', FakeTree.assignment(), block.last_child()]
+    expected = [FakeTree.assignment(), 'c1', block.last_child()]
     assert block.children == expected
 
 
@@ -112,5 +163,5 @@ def test_faketree_add_assignment_four_children(patch, fake_tree, block):
     patch.object(FakeTree, 'assignment')
     block.children = ['c1', 'c2', 'c3', fake_tree.block.last_child()]
     fake_tree.add_assignment('value', original_line=42)
-    expected = ['c1', 'c2', 'c3', FakeTree.assignment(), block.last_child()]
+    expected = [FakeTree.assignment(), 'c1', 'c2', 'c3', block.last_child()]
     assert block.children == expected

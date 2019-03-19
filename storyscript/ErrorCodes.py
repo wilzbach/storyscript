@@ -67,6 +67,14 @@ class ErrorCodes:
         'The option `--first`/-`f` can only be used if one story is complied.')
     expected_end_of_line = (
         'E0056', 'Expected end of line instead of `{token}`.')
+    string_templates_no_assignment = (
+        'E0057', 'Only expressions are allowed inside string templates')
+    path_name_internal = (
+        'E0058', 'Path names can\'t start with double underscore')
+    string_templates_nested = (
+        'E0059', 'String templates can\'t be nested')
+    string_templates_empty = (
+        'E0060', 'String templates can\'t be empty')
 
     @staticmethod
     def is_error(error_name):

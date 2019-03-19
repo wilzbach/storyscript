@@ -137,41 +137,6 @@ def test_objects_name_to_path_dots():
     assert result == Tree('path', children)
 
 
-def flatten_to_string(s):
-    return {'$OBJECT': 'string', 'string': s}
-
-
-def test_objects_flatten_template_no_templates(patch, tree):
-    patch.object(Objects, 'name_to_path')
-    patch.object(Objects, 'path')
-    result = list(Objects.flatten_template(tree, '.s.'))
-    Objects.name_to_path.assert_not_called()
-    Objects.path.assert_not_called()
-    assert result == [flatten_to_string('.s.')]
-
-
-def test_objects_flatten_template_only_templates(patch, tree):
-    patch.object(Objects, 'name_to_path')
-    patch.object(Objects, 'path')
-    result = list(Objects.flatten_template(tree, '{hello}'))
-    Objects.name_to_path.assert_called_with('hello')
-    Objects.path.assert_called_with(Objects.name_to_path())
-    assert result == [Objects.path(Objects.name_to_path())]
-
-
-def test_objects_flatten_template_mixed(patch, tree):
-    patch.object(Objects, 'name_to_path')
-    patch.object(Objects, 'path')
-    result = list(Objects.flatten_template(tree, 'a{hello}b'))
-    Objects.name_to_path.assert_called_with('hello')
-    Objects.path.assert_called_with(Objects.name_to_path())
-    assert result == [
-        flatten_to_string('a'),
-        Objects.path(Objects.name_to_path()),
-        flatten_to_string('b')
-    ]
-
-
 def test_objects_unescape_string(tree):
     result = Objects.unescape_string(tree)
     string = tree.child().value[1:-1]
@@ -179,26 +144,10 @@ def test_objects_unescape_string(tree):
 
 
 def test_objects_string(patch, tree):
-    patch.object(Objects, 'unescape_string')
-    patch.object(Objects, 'flatten_template', return_value=['a'])
+    patch.object(Objects, 'unescape_string', return_value='a')
     result = Objects.string(tree)
     Objects.unescape_string.assert_called_with(tree)
-    Objects.flatten_template.assert_called_with(tree,
-                                                Objects.unescape_string())
-    assert result == 'a'
-
-
-def test_objects_string_templating(patch, tree):
-    patch.many(Objects, ['flatten_template', 'unescape_string'])
-    result = Objects.string(tree)
-    Objects.unescape_string.assert_called_with(tree)
-    Objects.flatten_template.assert_called_with(tree,
-                                                Objects.unescape_string())
-    assert result == {
-            '$OBJECT': 'expression',
-            'expression': 'sum',
-            'values': list(Objects.flatten_template()),
-    }
+    assert result == {'$OBJECT': 'string', 'string': 'a'}
 
 
 def test_objects_boolean():
@@ -537,17 +486,23 @@ def test_objects_arith_expression_two(patch, tree):
     """
     Ensures Objects.arith_expression works with two nodes
     """
-    patch.many(Objects, ['build_binary_expression', 'mul_expression'])
+    patch.many(Objects, ['expression_type', 'mul_expression'])
     tree.child(1).data = 'arith_operator'
     tree.children = [1, '+', 2]
     arith_expression = Objects.arith_expression
     patch.object(Objects, 'arith_expression')
     r = arith_expression(tree)
-    Objects.build_binary_expression.assert_called_with(
-        tree, tree.child(1).child(0),
-        Objects.arith_expression(tree.child(0)),
-        Objects.mul_expression(tree.child(2)))
-    assert r == Objects.build_binary_expression()
+    op_type = tree.child(1).child(0).type
+    Objects.expression_type.assert_called_with(op_type, tree)
+
+    assert r == {
+        '$OBJECT': 'expression',
+        'expression': Objects.expression_type(),
+        'values': [
+            Objects.arith_expression(tree.child(0)),
+            Objects.mul_expression(tree.child(2))
+        ]
+    }
 
 
 def test_objects_or_expression_one(patch, tree):

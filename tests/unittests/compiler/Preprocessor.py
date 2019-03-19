@@ -361,3 +361,26 @@ def test_preprocessor_visit_base_expression_ignore(patch, magic, preprocessor,
                        replace, parent=None)
     preprocessor.fake_tree.assert_not_called()
     replace.assert_not_called()
+
+
+def flatten_to_string(s):
+    return {'$OBJECT': 'string', 'string': s}
+
+
+def test_objects_flatten_template_no_templates(patch, tree):
+    result = list(Preprocessor.flatten_template(tree, '.s.'))
+    assert result == [flatten_to_string('.s.')]
+
+
+def test_objects_flatten_template_only_templates(patch, tree):
+    result = list(Preprocessor.flatten_template(tree, '{hello}'))
+    assert result == [{'$OBJECT': 'code', 'code': 'hello'}]
+
+
+def test_objects_flatten_template_mixed(patch, tree):
+    result = list(Preprocessor.flatten_template(tree, 'a{hello}b'))
+    assert result == [
+        flatten_to_string('a'),
+        {'$OBJECT': 'code', 'code': 'hello'},
+        flatten_to_string('b')
+    ]

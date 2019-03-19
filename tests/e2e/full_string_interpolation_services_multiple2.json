@@ -1,0 +1,83 @@
+{
+  "tree": {
+    "1.3": {
+      "method": "execute",
+      "ln": "1.3",
+      "name": [
+        "__p-1.3"
+      ],
+      "service": "serv2",
+      "command": "c2",
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "execute",
+      "ln": "1.2",
+      "name": [
+        "__p-1.2"
+      ],
+      "service": "serv1",
+      "command": "c1",
+      "next": "1.1"
+    },
+    "1.1": {
+      "method": "expression",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.2"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.3"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "foo "
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.1"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "services": [
+    "serv1",
+    "serv2"
+  ],
+  "entrypoint": "1.3",
+  "version": null
+}

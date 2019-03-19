@@ -74,35 +74,6 @@ class Objects:
                 tree.children.append(fragment)
         return tree
 
-    @classmethod
-    def flatten_template(cls, tree, text):
-        """
-        Flattens a string template into concatenation
-        """
-        preceding_slash = False
-        in_var = False
-        buf = ''
-        for c in text:
-            if in_var:
-                if not preceding_slash and c == '}':
-                    in_var = False
-                    tree.expect(len(buf) > 0, 'template_string_empty')
-                    yield Objects.path(Objects.name_to_path(buf))
-                    buf = ''
-                else:
-                    buf += c
-            elif not preceding_slash and c == '{':
-                if len(buf) > 0:
-                    yield {'$OBJECT': 'string', 'string': buf}
-                buf = ''
-                in_var = True
-            else:
-                buf += c
-            preceding_slash = c == '\\'
-
-        if len(buf) > 0:
-            yield {'$OBJECT': 'string', 'string': buf}
-
     @staticmethod
     def unescape_string(tree):
         """
@@ -115,13 +86,9 @@ class Objects:
     @classmethod
     def string(cls, tree):
         """
-        Compiles a string tree. If the string has templated values, they
-        are processed and compiled.
+        Compiles a string tree.
         """
-        values = list(cls.flatten_template(tree, cls.unescape_string(tree)))
-        if len(values) == 1:
-            return values[0]
-        return {'$OBJECT': 'expression', 'expression': 'sum', 'values': values}
+        return {'$OBJECT': 'string', 'string': cls.unescape_string(tree)}
 
     @staticmethod
     def boolean(tree):
@@ -355,12 +322,18 @@ class Objects:
             assert tree.child(0).data == 'mul_expression'
             return cls.mul_expression(tree.child(0))
 
+        assert len(tree.children) >= 3
         assert tree.child(1).data == 'arith_operator'
         op = tree.child(1).child(0)
-        return cls.build_binary_expression(
-                    tree, op,
-                    cls.arith_expression(tree.child(0)),
-                    cls.mul_expression(tree.child(2)))
+
+        expression = Objects.expression_type(op.type, tree)
+        c0 = cls.arith_expression(tree.child(0))
+        cs = [cls.mul_expression(n) for n in tree.children[2:]]
+        return {
+            '$OBJECT': 'expression',
+            'expression': expression,
+            'values': [c0, *cs]
+        }
 
     @classmethod
     def cmp_expression(cls, tree):

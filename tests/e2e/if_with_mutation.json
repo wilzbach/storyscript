@@ -9,34 +9,13 @@
       "args": [
         0
       ],
-      "next": "2.1"
-    },
-    "2.1": {
-      "method": "mutation",
-      "ln": "2.1",
-      "name": [
-        "p-2.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "path",
-          "paths": [
-            "var"
-          ]
-        },
-        {
-          "$OBJECT": "mutation",
-          "mutation": "increment",
-          "arguments": []
-        }
-      ],
       "next": "2.2"
     },
     "2.2": {
       "method": "mutation",
       "ln": "2.2",
       "name": [
-        "p-2.2"
+        "__p-2.2"
       ],
       "args": [
         {
@@ -51,6 +30,27 @@
           "arguments": []
         }
       ],
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "var"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "increment",
+          "arguments": []
+        }
+      ],
       "next": "2"
     },
     "2": {
@@ -60,7 +60,7 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "p-2.1"
+            "__p-2.1"
           ]
         }
       ],
@@ -87,7 +87,7 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "p-2.2"
+            "__p-2.2"
           ]
         }
       ],
