@@ -2,6 +2,15 @@
 from lark.lexer import Token
 from lark.tree import Tree
 
+from storyscript.Story import _parser
+
+
+def parse(source):
+    """
+    Don't regenerate the parser on every call
+    """
+    return _parser().parse(source)
+
 
 def get_entity(obj):
     """
@@ -12,86 +21,86 @@ def get_entity(obj):
         entity
 
 
-def test_values_true(parser):
-    result = parser.parse('true\n')
+def test_values_true():
+    result = parse('true\n')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     assert entity.values.boolean.child(0) == Token('TRUE', 'true')
 
 
-def test_values_false(parser):
-    result = parser.parse('false\n')
+def test_values_false():
+    result = parse('false\n')
     token = Token('FALSE', 'false')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     assert entity.values.boolean.child(0) == token
 
 
-def test_values_null(parser):
-    result = parser.parse('null\n')
+def test_values_null():
+    result = parse('null\n')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     assert entity.values.void.child(0) == Token('NULL', 'null')
 
 
-def test_values_int(parser):
+def test_values_int():
     """
     Ensures that parsing an int produces the expected tree
     """
-    result = parser.parse('3\n')
+    result = parse('3\n')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     assert entity.values.number.child(0) == Token('INT', 3)
 
 
-def test_values_int_negative(parser):
+def test_values_int_negative():
     """
     Ensures that parsing a negative int produces the expected tree
     """
-    result = parser.parse('-3\n')
+    result = parse('-3\n')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     assert entity.values.number.child(0) == Token('INT', '-3')
 
 
-def test_values_float(parser):
+def test_values_float():
     """
     Ensures that parsing a float produces the expected tree
     """
-    result = parser.parse('3.14\n')
+    result = parse('3.14\n')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     assert entity.values.number.child(0) == Token('FLOAT', 3.14)
 
 
-def test_values_float_negative(parser):
+def test_values_float_negative():
     """
     Ensures that parsing a negative float produces the expected tree
     """
-    result = parser.parse('-3.14\n')
+    result = parse('-3.14\n')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     assert entity.values.number.child(0) == Token('FLOAT', '-3.14')
 
 
-def test_values_single_quoted_string(parser):
-    result = parser.parse("'red'\n")
+def test_values_single_quoted_string():
+    result = parse("'red'\n")
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     expected = entity.values.string.child(0)
     assert expected == Token('SINGLE_QUOTED', "'red'")
 
 
-def test_values_double_quoted_string(parser):
-    result = parser.parse('"red"\n')
+def test_values_double_quoted_string():
+    result = parse('"red"\n')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     expected = entity.values.string.child(0)
     assert expected == Token('DOUBLE_QUOTED', '"red"')
 
 
-def test_values_list(parser):
-    result = parser.parse('[3,4]\n')
+def test_values_list():
+    result = parse('[3,4]\n')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     list = entity.values.list
@@ -101,16 +110,16 @@ def test_values_list(parser):
     assert c2.values.number.child(0) == Token('INT', 4)
 
 
-def test_values_list_empty(parser):
-    result = parser.parse('[]\n')
+def test_values_list_empty():
+    result = parse('[]\n')
     expected = Tree('list', [Token('_OSB', '['), Token('_CSB', ']')])
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     assert entity.values.list == expected
 
 
-def test_values_object(parser):
-    result = parser.parse("{'color':'red','shape':1}\n")
+def test_values_object():
+    result = parse("{'color':'red','shape':1}\n")
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     values = entity.values
@@ -120,22 +129,22 @@ def test_values_object(parser):
     assert entity.values.string.child(0) == Token('SINGLE_QUOTED', "'red'")
 
 
-def test_values_regular_expression(parser):
+def test_values_regular_expression():
     """
     Ensures regular expressions are parsed correctly
     """
-    result = parser.parse('/^foo/')
+    result = parse('/^foo/')
     token = Token('REGEXP', '/^foo/')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     assert entity.values.regular_expression.child(0) == token
 
 
-def test_values_regular_expression_flags(parser):
+def test_values_regular_expression_flags():
     """
     Ensures regular expressions with flags are parsed correctly
     """
-    result = parser.parse('/^foo/i')
+    result = parse('/^foo/i')
     token = Token('NAME', 'i')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)

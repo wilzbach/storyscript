@@ -7,6 +7,7 @@ from pytest import fixture
 from storyscript.Bundle import Bundle
 from storyscript.Story import Story
 from storyscript.compiler.Preprocessor import Preprocessor
+from storyscript.parser import Parser
 
 
 @fixture
@@ -280,3 +281,23 @@ def test_bundle_bundle_preprocess(patch, bundle, magic):
                                     parser=Bundle.parser())
     Preprocessor.process.assert_called_with(a_story)
     assert bundle.stories == {'foo': Preprocessor.process(a_story)}
+
+
+def test_bundle_parser_default(patch, bundle):
+    """
+    Ensures Bundle.parser creates no new instance of the parser by default
+    """
+    patch.init(Parser)
+    assert bundle.parser(None) is None
+    Parser.__init__.assert_not_called()
+
+
+def test_bundle_parser_ebnf(patch, bundle):
+    """
+    Ensures Bundle.parser creates a new instance of a parser for custom
+    EBNF files
+    """
+    patch.init(Parser)
+    result = bundle.parser(ebnf='ebnf')
+    Parser.__init__.assert_called_with(ebnf='ebnf')
+    assert isinstance(result, Parser)

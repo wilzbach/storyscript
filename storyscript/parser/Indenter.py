@@ -7,6 +7,9 @@ from lark.lexer import Token
 
 class Indenter:
     def __init__(self):
+        self.reset()
+
+    def reset(self):
         self.paren_level = 0
         self.indent_level = [0]
 
@@ -38,6 +41,7 @@ class Indenter:
                         '%s != %s' % (indent, self.indent_level[-1])
 
     def process(self, stream):
+        self.reset()
         for token in stream:
             if token.type == self.NL_type:
                 for t in self.handle_nl(token):
