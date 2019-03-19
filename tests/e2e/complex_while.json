@@ -1,0 +1,50 @@
+{
+  "tree": {
+    "1": {
+      "method": "while",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "less",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "i"
+              ]
+            },
+            10
+          ]
+        }
+      ],
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "i"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "i"
+              ]
+            },
+            1
+          ]
+        }
+      ],
+      "parent": "1"
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

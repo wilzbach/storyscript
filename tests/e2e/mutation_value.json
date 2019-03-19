@@ -1,0 +1,21 @@
+{
+  "tree": {
+    "1": {
+      "method": "mutation",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "hello"
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "length",
+          "arguments": []
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

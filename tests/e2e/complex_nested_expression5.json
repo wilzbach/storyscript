@@ -1,0 +1,104 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "greater_equal",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "greater",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "not_equal",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "equals",
+                      "values": [
+                        {
+                          "$OBJECT": "expression",
+                          "expression": "less_equal",
+                          "values": [
+                            {
+                              "$OBJECT": "expression",
+                              "expression": "less",
+                              "values": [
+                                {
+                                  "$OBJECT": "expression",
+                                  "expression": "sum",
+                                  "values": [
+                                    1,
+                                    0.1
+                                  ]
+                                },
+                                {
+                                  "$OBJECT": "expression",
+                                  "expression": "subtraction",
+                                  "values": [
+                                    2,
+                                    0.2
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "$OBJECT": "expression",
+                              "expression": "division",
+                              "values": [
+                                3,
+                                0.3
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "$OBJECT": "expression",
+                          "expression": "multiplication",
+                          "values": [
+                            4,
+                            0.4
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "multiplication",
+                      "values": [
+                        5,
+                        0.5
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "expression",
+                  "expression": "multiplication",
+                  "values": [
+                    6,
+                    0.6
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "multiplication",
+              "values": [
+                7,
+                0.7
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

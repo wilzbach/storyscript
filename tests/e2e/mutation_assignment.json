@@ -1,0 +1,40 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "hello world"
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "mutation",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "uppercase",
+          "arguments": []
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

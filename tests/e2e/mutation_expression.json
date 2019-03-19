@@ -1,0 +1,69 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "string",
+              "string": "opened"
+            },
+            {
+              "$OBJECT": "string",
+              "string": "labeled"
+            }
+          ]
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "mutation",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "contains",
+          "arguments": [
+            {
+              "$OBJECT": "argument",
+              "name": "item",
+              "argument": {
+                "$OBJECT": "expression",
+                "expression": "equals",
+                "values": [
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "req",
+                      "body",
+                      {
+                        "$OBJECT": "string",
+                        "string": "action"
+                      }
+                    ]
+                  },
+                  false
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

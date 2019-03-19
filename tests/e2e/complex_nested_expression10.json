@@ -1,0 +1,80 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d",
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                }
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "modulus",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "multiplication",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "division",
+                      "values": [
+                        {
+                          "$OBJECT": "path",
+                          "paths": [
+                            "list",
+                            "0"
+                          ]
+                        },
+                        {
+                          "$OBJECT": "path",
+                          "paths": [
+                            "list",
+                            "1"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$OBJECT": "path",
+                      "paths": [
+                        "d",
+                        {
+                          "$OBJECT": "string",
+                          "string": "a"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "d",
+                    {
+                      "$OBJECT": "string",
+                      "string": "b"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

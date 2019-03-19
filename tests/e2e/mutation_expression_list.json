@@ -1,0 +1,39 @@
+{
+  "tree": {
+    "1": {
+      "method": "mutation",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "string",
+              "string": "opened"
+            },
+            {
+              "$OBJECT": "string",
+              "string": "labeled"
+            }
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "contains",
+          "arguments": [
+            {
+              "$OBJECT": "argument",
+              "name": "item",
+              "argument": {
+                "$OBJECT": "string",
+                "string": "opened"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

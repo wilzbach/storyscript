@@ -1,0 +1,72 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "or",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "equals",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "equals",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "equals",
+                      "values": [
+                        {
+                          "$OBJECT": "expression",
+                          "expression": "sum",
+                          "values": [
+                            1,
+                            2
+                          ]
+                        },
+                        {
+                          "$OBJECT": "expression",
+                          "expression": "division",
+                          "values": [
+                            3,
+                            4
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "multiplication",
+                      "values": [
+                        5,
+                        6
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "expression",
+                  "expression": "modulus",
+                  "values": [
+                    7,
+                    8
+                  ]
+                }
+              ]
+            },
+            9
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

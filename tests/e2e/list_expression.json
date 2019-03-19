@@ -1,0 +1,53 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "b"
+                  ]
+                },
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "c"
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "division",
+                  "values": [
+                    1,
+                    2
+                  ]
+                },
+                3
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

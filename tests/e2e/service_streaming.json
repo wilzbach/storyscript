@@ -1,0 +1,43 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "output": [
+        "client"
+      ],
+      "service": "api",
+      "command": "stream",
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "when",
+      "ln": "2",
+      "output": [
+        "e"
+      ],
+      "service": "client",
+      "command": "event",
+      "enter": "3",
+      "parent": "1",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "x"
+      ],
+      "args": [
+        0
+      ],
+      "parent": "2"
+    }
+  },
+  "services": [
+    "api"
+  ],
+  "entrypoint": "1",
+  "version": null
+}

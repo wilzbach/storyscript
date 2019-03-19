@@ -1,0 +1,62 @@
+{
+  "tree": {
+    "1": {
+      "method": "try",
+      "ln": "1",
+      "enter": "2",
+      "exit": "3",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "x"
+      ],
+      "args": [
+        0
+      ],
+      "parent": "1",
+      "next": "3"
+    },
+    "3": {
+      "method": "catch",
+      "ln": "3",
+      "output": [
+        "error"
+      ],
+      "enter": "4",
+      "next": "4"
+    },
+    "4": {
+      "method": "if",
+      "ln": "4",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "TRUE"
+          ]
+        }
+      ],
+      "enter": "5",
+      "parent": "3",
+      "next": "5"
+    },
+    "5": {
+      "method": "throw",
+      "ln": "5",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "error"
+          ]
+        }
+      ],
+      "parent": "4"
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

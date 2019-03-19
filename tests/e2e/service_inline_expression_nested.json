@@ -1,0 +1,61 @@
+{
+  "tree": {
+    "1.2": {
+      "method": "execute",
+      "ln": "1.2",
+      "name": [
+        "__p-1.2"
+      ],
+      "service": "sql",
+      "command": "select",
+      "next": "1.1"
+    },
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "service": "twitter",
+      "command": "get",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "id",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.2"
+            ]
+          }
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "service": "slack",
+      "command": "message",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "text",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.1"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "services": [
+    "slack",
+    "sql",
+    "twitter"
+  ],
+  "entrypoint": "1.2",
+  "version": null
+}

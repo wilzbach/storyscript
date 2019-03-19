@@ -1,0 +1,36 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "output": [
+        "echo"
+      ],
+      "service": "alpine",
+      "command": "echo",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "message",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "hello"
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "colour",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "red"
+          }
+        }
+      ]
+    }
+  },
+  "services": [
+    "alpine"
+  ],
+  "entrypoint": "1",
+  "version": null
+}

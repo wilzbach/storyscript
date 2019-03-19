@@ -1,0 +1,36 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "equals",
+              "values": [
+                0,
+                1
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d",
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

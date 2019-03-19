@@ -1,0 +1,75 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "function": "name",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "key",
+          "argument": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        }
+      ],
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "or",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "division",
+                  "values": [
+                    {
+                      "$OBJECT": "path",
+                      "paths": [
+                        "a"
+                      ]
+                    },
+                    {
+                      "$OBJECT": "path",
+                      "paths": [
+                        "b"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "c"
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d"
+              ]
+            }
+          ]
+        }
+      ],
+      "parent": "1"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "name": "1"
+  },
+  "version": null
+}
