@@ -203,7 +203,7 @@ def test_compiler_call_expression(patch, compiler, lines, tree):
     compiler.call_expression(tree, 'parent')
     Objects.arguments.assert_called_with(tree)
     lines.append.assert_called_with('call', tree.line(),
-                                    service=tree.path.extract_path(),
+                                    function=tree.path.extract_path(),
                                     args=Objects.arguments(), parent='parent',
                                     output=None)
 

@@ -62,7 +62,7 @@
       "name": [
         "__p-7.3"
       ],
-      "service": "random",
+      "function": "random",
       "next": "7.2"
     },
     "7.2": {
@@ -98,7 +98,7 @@
       "name": [
         "__p-7.1"
       ],
-      "service": "my_func",
+      "function": "my_func",
       "args": [
         {
           "$OBJECT": "argument",

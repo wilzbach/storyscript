@@ -35,7 +35,7 @@
       "name": [
         "__p-4.1"
       ],
-      "service": "name",
+      "function": "name",
       "next": "4"
     },
     "4": {

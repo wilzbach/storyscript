@@ -62,7 +62,7 @@
       "name": [
         "__p-7.1"
       ],
-      "service": "random",
+      "function": "random",
       "next": "7"
     },
     "7": {
@@ -87,7 +87,7 @@
       "name": [
         "__p-8.3"
       ],
-      "service": "random",
+      "function": "random",
       "next": "8.2"
     },
     "8.2": {
@@ -96,7 +96,7 @@
       "name": [
         "__p-8.2"
       ],
-      "service": "random",
+      "function": "random",
       "args": [
         {
           "$OBJECT": "argument",
@@ -117,7 +117,7 @@
       "name": [
         "__p-8.1"
       ],
-      "service": "random",
+      "function": "random",
       "next": "8"
     },
     "8": {
