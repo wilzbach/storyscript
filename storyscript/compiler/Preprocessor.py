@@ -104,6 +104,11 @@ class Preprocessor:
 
     @staticmethod
     def add_strings(n1, *other_nodes):
+        """
+        Create an AST for concating two or more nodes.
+        """
+        # concatenation is currently defined as
+        # arith_expression = arith_expression arith_operator mul_expression
         base_tree = Tree('arith_expression', [
             Tree('arith_expression', [
                 Tree('mul_expression', [
@@ -119,12 +124,18 @@ class Preprocessor:
                 ]),
             ]),
         ])
+        # if we only got one node, no concatenation is required. return
+        # directly
         if len(other_nodes) == 0:
             return base_tree.children[0]
 
         base_tree.children.append(
             Tree('arith_operator', [Token('PLUS', '+')]),
         )
+        # Technically, the grammar only supports binary expressions, but
+        # the compiler and engine can handle n-ary expressions, so we can
+        # directly flatten the tree and add all additional nodes as extra
+        # mul_expressions
         for n2 in other_nodes:
             base_tree.children.append(Tree('mul_expression', [
                 Tree('unary_expression', [
@@ -144,40 +155,55 @@ class Preprocessor:
         """
         Flattens a string template into concatenation
         """
-        preceding_slash = False
-        in_var = False
+        # the previously seen character (n-1)
+        last_char = None
+        # indicates whether we're inside of a string template
+        inside_interpolation = False
         buf = ''
         for c in text:
-            if in_var:
-                if not preceding_slash and c == '}':
-                    in_var = False
-                    tree.expect(len(buf) > 0, 'template_string_empty')
-                    # yield Objects.path(Objects.name_to_path(buf))
+            preceding_slash = last_char == '\\'
+            if preceding_slash:
+                buf += c
+            elif inside_interpolation:
+                if c == '}':
+                    # end string interpolation
+                    inside_interpolation = False
+                    tree.expect(len(buf) > 0, 'string_templates_empty')
                     yield {'$OBJECT': 'path', 'paths': buf}
                     buf = ''
                 else:
+                    tree.expect(c != '{', 'string_templates_nested')
                     buf += c
-            elif not preceding_slash and c == '{':
+            elif c == '{':
+                # string interpolation might be the start of the string: "{..}"
                 if len(buf) > 0:
                     yield {'$OBJECT': 'string', 'string': buf}
-                buf = ''
-                in_var = True
+                    buf = ''
+                inside_interpolation = True
             else:
                 buf += c
-            preceding_slash = c == '\\'
+            last_char = c
 
+        # emit remaining string in the buffer
         if len(buf) > 0:
             yield {'$OBJECT': 'string', 'string': buf}
 
     def eval(self, node, code_string, fake_tree):
+        """
+        Evaluates a string by parsing it to its AST representation.
+        Inserts the AST expression as fake_node and returns the path
+        reference to the inserted fake_node.
+        """
         new_node = self.parser.parse(code_string)
-        string_error = 'string_interpolation_no_assignment'
         new_node = new_node.block
-        node.expect(new_node, string_error)
-        node.expect(len(new_node.children) == 1, string_error)
-        new_node = new_node.children[0]
-        new_node = new_node.children[0]
-        # print(new_node.pretty())
+        node.expect(new_node, 'string_templates_no_assignment')
+        # go to the actual node -> jump into block.rules or block.service
+        for i in range(2):
+            node.expect(len(new_node.children) == 1,
+                        'string_templates_no_assignment')
+            new_node = new_node.children[0]
+        # for now only expressions or service_blocks are allowed inside string
+        # templates
         if new_node.data == 'service_block' and \
                 new_node.service_fragment is None:
             # it was a plain-old path initially
@@ -188,12 +214,16 @@ class Preprocessor:
         if new_node.data == 'absolute_expression':
             new_node = new_node.children[0]
         else:
-            node.expect(new_node.data == 'service', string_error)
+            node.expect(new_node.data == 'service',
+                        'string_templates_no_assignment')
 
         return fake_tree.add_assignment(new_node, original_line=node.line())
 
     @classmethod
     def build_string_value(cls, text):
+        """
+        Returns the AST for a plain string AST node with 'text'
+        """
         return Tree('values', [
             Tree('string', [
                 Token('DOUBLE_QUOTED', text)
@@ -201,6 +231,13 @@ class Preprocessor:
         ])
 
     def inline_string_templates(self, node, block, parent):
+        """
+        Iterates the AST and evaluates string templates.
+        String templates generate fake_nodes in the AST before their block
+        and are replaced with a reference to their fake_nodes.
+        In particular, a string templates "a{exp}b" gets flatten to:
+            "a" + fake_path_to_exp + "b"
+        """
         if not hasattr(node, 'children'):
             return
         if node.data == 'block':
@@ -232,6 +269,9 @@ class Preprocessor:
             self.inline_string_templates(c, block, node)
 
     def process(self, tree):
+        """
+        Applies several preprocessing steps to the existing AST.
+        """
         pred = Preprocessor.is_inline_expression
         self.inline_string_templates(tree, block=None, parent=None)
         self.visit(tree, None, None, pred,
