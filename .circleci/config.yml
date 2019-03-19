@@ -49,10 +49,16 @@ jobs:
                   #  -not -name '*__init__.py')
 
             - run:
+                name: run pep8 linter
+                command: |
+                    . venv/bin/activate
+                    tox -e pep8
+
+            - run:
                 name: run unit tests
                 command: |
                     . venv/bin/activate
-                    tox -e pep8,unit
+                    tox -e unit
 
             - run:
                 name: collect unit coverage
