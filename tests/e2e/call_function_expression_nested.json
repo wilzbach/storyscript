@@ -40,7 +40,7 @@
       "name": [
         "__p-4.1"
       ],
-      "service": "my_function",
+      "function": "my_function",
       "args": [
         {
           "$OBJECT": "argument",

@@ -138,7 +138,7 @@ class Compiler:
         is_valid_function = name in self.lines.functions
         tree.expect(in_module or is_valid_function,
                     'function_call_no_function', name=name)
-        self.lines.append('call', line, service=name,
+        self.lines.append('call', line, function=name,
                           output=None, args=args, parent=parent)
 
     def service(self, tree, nested_block, parent):
