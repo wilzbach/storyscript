@@ -1,0 +1,38 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "service": "foo",
+      "command": "contains",
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "equals",
+          "values": [
+            1,
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.1"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "services": [
+    "foo"
+  ],
+  "entrypoint": "1.1",
+  "version": null
+}
