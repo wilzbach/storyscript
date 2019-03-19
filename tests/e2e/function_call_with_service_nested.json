@@ -60,7 +60,7 @@
       "method": "call",
       "ln": "7.3",
       "name": [
-        "p-7.3"
+        "__p-7.3"
       ],
       "service": "random",
       "next": "7.2"
@@ -69,7 +69,7 @@
       "method": "execute",
       "ln": "7.2",
       "name": [
-        "p-7.2"
+        "__p-7.2"
       ],
       "service": "another_service",
       "command": "command",
@@ -80,7 +80,7 @@
           "argument": {
             "$OBJECT": "path",
             "paths": [
-              "p-7.3"
+              "__p-7.3"
             ]
           }
         },
@@ -96,7 +96,7 @@
       "method": "call",
       "ln": "7.1",
       "name": [
-        "p-7.1"
+        "__p-7.1"
       ],
       "service": "my_func",
       "args": [
@@ -106,7 +106,7 @@
           "argument": {
             "$OBJECT": "path",
             "paths": [
-              "p-7.2"
+              "__p-7.2"
             ]
           }
         }
@@ -128,7 +128,7 @@
           "argument": {
             "$OBJECT": "path",
             "paths": [
-              "p-7.1"
+              "__p-7.1"
             ]
           }
         },

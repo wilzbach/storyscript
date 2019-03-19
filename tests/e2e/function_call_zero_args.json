@@ -33,7 +33,7 @@
       "method": "call",
       "ln": "4.1",
       "name": [
-        "p-4.1"
+        "__p-4.1"
       ],
       "service": "name",
       "next": "4"
@@ -48,7 +48,7 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "p-4.1"
+            "__p-4.1"
           ]
         }
       ]

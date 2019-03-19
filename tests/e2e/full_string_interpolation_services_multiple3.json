@@ -4,7 +4,7 @@
       "method": "execute",
       "ln": "1.5",
       "name": [
-        "p-1.5"
+        "__p-1.5"
       ],
       "service": "serv21",
       "command": "c21",
@@ -14,7 +14,7 @@
       "method": "execute",
       "ln": "1.4",
       "name": [
-        "p-1.4"
+        "__p-1.4"
       ],
       "service": "serv2",
       "command": "c2",
@@ -35,7 +35,7 @@
           "argument": {
             "$OBJECT": "path",
             "paths": [
-              "p-1.5"
+              "__p-1.5"
             ]
           }
         }
@@ -46,7 +46,7 @@
       "method": "execute",
       "ln": "1.3",
       "name": [
-        "p-1.3"
+        "__p-1.3"
       ],
       "service": "serv12",
       "command": "c12",
@@ -56,7 +56,7 @@
       "method": "execute",
       "ln": "1.2",
       "name": [
-        "p-1.2"
+        "__p-1.2"
       ],
       "service": "serv1",
       "command": "c1",
@@ -77,7 +77,7 @@
           "argument": {
             "$OBJECT": "path",
             "paths": [
-              "p-1.3"
+              "__p-1.3"
             ]
           }
         }
@@ -88,7 +88,7 @@
       "method": "expression",
       "ln": "1.1",
       "name": [
-        "p-1.1"
+        "__p-1.1"
       ],
       "args": [
         {
@@ -98,13 +98,13 @@
             {
               "$OBJECT": "path",
               "paths": [
-                "p-1.2"
+                "__p-1.2"
               ]
             },
             {
               "$OBJECT": "path",
               "paths": [
-                "p-1.4"
+                "__p-1.4"
               ]
             }
           ]
@@ -130,7 +130,7 @@
             {
               "$OBJECT": "path",
               "paths": [
-                "p-1.1"
+                "__p-1.1"
               ]
             }
           ]

@@ -4,7 +4,7 @@
       "method": "execute",
       "ln": "1.2",
       "name": [
-        "p-1.2"
+        "__p-1.2"
       ],
       "service": "my_service2",
       "command": "command",
@@ -26,7 +26,7 @@
       "method": "execute",
       "ln": "1.1",
       "name": [
-        "p-1.1"
+        "__p-1.1"
       ],
       "service": "my_service",
       "command": "command",
@@ -51,7 +51,7 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "p-1.1"
+            "__p-1.1"
           ]
         }
       ],
@@ -78,7 +78,7 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "p-1.2"
+            "__p-1.2"
           ]
         }
       ],
