@@ -293,10 +293,12 @@ class Compiler:
                     'function_name': function_name,
                     'line': self.lines.functions[function_name],
                 })
+        self.lines.set_scope(line, parent)
         self.lines.append('function', line, function=function_name,
                           output=output, args=args, enter=nested_block.line(),
                           parent=parent)
         self.subtree(nested_block, parent=line)
+        self.lines.finish_scope(line)
 
     def mutation_block(self, tree, parent):
         """
