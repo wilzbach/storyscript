@@ -76,18 +76,18 @@ If you want to contribute to Storyscript, you can join the community at
 [our slack](https://asyncy.click/slack) where we discuss features and future
 plans.
 
-You can find open issues on [github](https://github.com/asyncy/storyscript/issues),
-along with [contribution guidelines](https://github.com/asyncy/storyscript/blob/master/CONTRIBUTING.md)
+You can find open issues on [github](https://github.com/storyscript/storyscript/issues),
+along with [contribution guidelines](https://github.com/storyscript/storyscript/blob/master/CONTRIBUTING.md)
 for happy coding.
-There are [simple issues](https://github.com/asyncy/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
+There are [simple issues](https://github.com/storyscript/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
 for new contributors and
-[issues that need help](https://github.com/asyncy/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
+[issues that need help](https://github.com/storyscript/storyscript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
 
 ### Contributors
 
-The list of contributors is available [here](https://github.com/asyncy/storyscript/contributors)
+The list of contributors is available [here](https://github.com/storyscript/storyscript/contributors)
 
 ## Issues
 
-For problems directly related to the CLI, [add an issue on GitHub](https://github.com/asyncy/storyscript/issues/new)
+For problems directly related to the CLI, [add an issue on GitHub](https://github.com/storyscript/storyscript/issues/new)
 For other issues, [submit a support ticket](mailto:help@storyscripts.org)
