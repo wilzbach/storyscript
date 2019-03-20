@@ -90,4 +90,4 @@ The list of contributors is available [here](https://github.com/storyscript/stor
 ## Issues
 
 For problems directly related to the CLI, [add an issue on GitHub](https://github.com/storyscript/storyscript/issues/new)
-For other issues, [submit a support ticket](mailto:help@storyscripts.org)
+For other issues, [submit a support ticket](mailto:support@asyncy.com)
