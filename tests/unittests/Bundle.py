@@ -254,9 +254,11 @@ def test_bundle_lex(patch, bundle):
     """
     patch.object(Story, 'from_file')
     patch.object(Bundle, 'find_stories', return_value=['story'])
+    patch.object(Bundle, 'parser')
     result = bundle.lex()
     Story.from_file.assert_called_with('story')
-    Story.from_file().lex.assert_called_with(ebnf=None)
+    Bundle.parser.assert_called_with(None)
+    Story.from_file().lex.assert_called_with(parser=Bundle.parser())
     assert result['story'] == Story.from_file().lex()
 
 
@@ -266,8 +268,10 @@ def test_bundle_lex_ebnf(patch, bundle):
     """
     patch.object(Story, 'from_file')
     patch.object(Bundle, 'find_stories', return_value=['story'])
+    patch.object(Bundle, 'parser')
     bundle.lex(ebnf='ebnf')
-    Story.from_file().lex.assert_called_with(ebnf='ebnf')
+    Bundle.parser.assert_called_with('ebnf')
+    Story.from_file().lex.assert_called_with(parser=Bundle.parser())
 
 
 def test_bundle_bundle_preprocess(patch, bundle, magic):

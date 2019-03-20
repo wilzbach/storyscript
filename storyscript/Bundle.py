@@ -155,7 +155,8 @@ class Bundle:
         Lexes the bundle
         """
         stories = self.find_stories()
+        parser = self.parser(ebnf)
         results = {}
         for story in stories:
-            results[story] = Story.from_file(story).lex(ebnf=ebnf)
+            results[story] = Story.from_file(story).lex(parser=parser)
         return results
