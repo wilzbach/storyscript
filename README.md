@@ -36,32 +36,15 @@ $ asyncy deploy  # Zero-devop deployments into Kubernetes
 
 > 🚀Choose: hosted **Asyncy Cloud** or `helm install asyncy` for on-premises deployments.
 
-## Current status
+## Installation
 
-Storyscript is at an alpha stage and is part of the [Asyncy](https://asyncy.com)
-project. If you want to learn more about Asyncy, and how to use Storyscript
-with Asyncy, you can visit the [asyncy documentation](https://docs.asyncy.com)
-
-## Getting started
-
-Create a Python 3.6 virtualenv:
-
-```sh
-virtualenv --python=python3.6 folder
-```
-
-Activate it:
-
-```sh
-cd folder
-source bin/activate
-```
-
-Install with pip:
+Storyscript can be installed with [pip](https://pip.pypa.io):
 
 ```sh
 pip install storyscript
 ```
+
+## Usage
 
 Write a simple story:
 
@@ -80,6 +63,12 @@ storyscript compile -j hello.story
 [Development docs](https://storyscript.readthedocs.io) are provided for those
 who wish to contribute to the project or want to understand how to execute
 compiled stories.
+
+## Current status
+
+Storyscript is at an alpha stage and is part of the [Asyncy](https://asyncy.com)
+project. If you want to learn more about Asyncy, and how to use Storyscript
+with Asyncy, you can visit the [asyncy documentation](https://docs.asyncy.com)
 
 ## Contributing
 
