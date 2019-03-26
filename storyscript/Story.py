@@ -37,7 +37,8 @@ class Story:
         has_error = False
         try:
             with io.open(path, 'r') as file:
-                return file.read()
+                r = file.read()
+                return r
         except FileNotFoundError:
             has_error = True
 
