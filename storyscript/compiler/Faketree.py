@@ -58,6 +58,16 @@ class FakeTree:
             name = f'{self.prefix}{line}'
         return Tree('path', [Token('NAME', name, line=line)])
 
+    def mark_line(self, node, line):
+        """
+        Updates the line for all tokens of a given `node`.
+        """
+        for child in node.children:
+            if isinstance(child, Token):
+                child.line = line
+            else:
+                self.mark_line(child, line)
+
     def assignment(self, value):
         """
         Creates a fake assignment tree, equivalent to "$fake = value"
@@ -65,19 +75,42 @@ class FakeTree:
         line = self.get_line(value)
         first_token = value.find_first_token()
         first_token.line = line
+        # updates all tokens
+        self.mark_line(value, line)
         path = self.path(line=line)
         equals = Token('EQUALS', '=', line=line)
         expr = Tree('base_expression', [value])
         fragment = Tree('assignment_fragment', [equals, expr])
         return Tree('assignment', [path, fragment])
 
+    def find_insert_pos(self, original_line):
+        """
+        Finds the insert position for a targeted line in the fake tree block.
+        """
+        for i, n in enumerate(self.block.children):
+            line = n.line()
+            if line == original_line:
+                return i
+        # use the last position as insert position by default
+        # this inserts the new assignment node _before_ the last node
+        return -1
+
     def add_assignment(self, value, original_line):
         """
         Creates an assignments and adds it to the current block
         Returns a fake path reference to this assignment
         """
+        assert len(self.block.children) >= 1
+
+        insert_pos = self.find_insert_pos(original_line)
         assignment = self.assignment(value)
-        self.block.children = [assignment, *self.block.children]
+
+        self.block.children = [
+            *self.block.children[:insert_pos],
+            assignment,
+            *self.block.children[insert_pos:],
+        ]
+
         # we need a new node, s.t. already inserted fake node don't get changed
         name = Token('NAME', assignment.path.child(0), line=original_line)
         fake_path = Tree('path', [name])

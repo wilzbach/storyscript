@@ -1,13 +1,55 @@
 {
   "tree": {
-    "1.6": {
+    "1.2": {
       "method": "execute",
-      "ln": "1.6",
+      "ln": "1.2",
       "name": [
-        "__p-1.6"
+        "__p-1.2"
       ],
-      "service": "serv21",
-      "command": "c21",
+      "service": "serv11",
+      "command": "c11",
+      "next": "1.3"
+    },
+    "1.3": {
+      "method": "execute",
+      "ln": "1.3",
+      "name": [
+        "__p-1.3"
+      ],
+      "service": "serv12",
+      "command": "c12",
+      "next": "1.4"
+    },
+    "1.4": {
+      "method": "execute",
+      "ln": "1.4",
+      "name": [
+        "__p-1.4"
+      ],
+      "service": "serv1",
+      "command": "c1",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "arg1",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.2"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "arg2",
+          "argument": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.3"
+            ]
+          }
+        }
+      ],
       "next": "1.5"
     },
     "1.5": {
@@ -15,6 +57,16 @@
       "ln": "1.5",
       "name": [
         "__p-1.5"
+      ],
+      "service": "serv21",
+      "command": "c21",
+      "next": "1.6"
+    },
+    "1.6": {
+      "method": "execute",
+      "ln": "1.6",
+      "name": [
+        "__p-1.6"
       ],
       "service": "serv2",
       "command": "c2",
@@ -35,59 +87,7 @@
           "argument": {
             "$OBJECT": "path",
             "paths": [
-              "__p-1.6"
-            ]
-          }
-        }
-      ],
-      "next": "1.4"
-    },
-    "1.4": {
-      "method": "execute",
-      "ln": "1.4",
-      "name": [
-        "__p-1.4"
-      ],
-      "service": "serv12",
-      "command": "c12",
-      "next": "1.3"
-    },
-    "1.3": {
-      "method": "execute",
-      "ln": "1.3",
-      "name": [
-        "__p-1.3"
-      ],
-      "service": "serv11",
-      "command": "c11",
-      "next": "1.2"
-    },
-    "1.2": {
-      "method": "execute",
-      "ln": "1.2",
-      "name": [
-        "__p-1.2"
-      ],
-      "service": "serv1",
-      "command": "c1",
-      "args": [
-        {
-          "$OBJECT": "argument",
-          "name": "arg1",
-          "argument": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.3"
-            ]
-          }
-        },
-        {
-          "$OBJECT": "argument",
-          "name": "arg2",
-          "argument": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.4"
+              "__p-1.5"
             ]
           }
         }
@@ -108,13 +108,13 @@
             {
               "$OBJECT": "path",
               "paths": [
-                "__p-1.2"
+                "__p-1.4"
               ]
             },
             {
               "$OBJECT": "path",
               "paths": [
-                "__p-1.5"
+                "__p-1.6"
               ]
             }
           ]
@@ -155,6 +155,6 @@
     "serv2",
     "serv21"
   ],
-  "entrypoint": "1.6",
+  "entrypoint": "1.2",
   "version": null
 }

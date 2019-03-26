@@ -1,20 +1,20 @@
 {
   "tree": {
-    "1.2": {
-      "method": "execute",
-      "ln": "1.2",
-      "name": [
-        "__p-1.2"
-      ],
-      "service": "sql",
-      "command": "select",
-      "next": "1.1"
-    },
     "1.1": {
       "method": "execute",
       "ln": "1.1",
       "name": [
         "__p-1.1"
+      ],
+      "service": "sql",
+      "command": "select",
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "execute",
+      "ln": "1.2",
+      "name": [
+        "__p-1.2"
       ],
       "service": "twitter",
       "command": "get",
@@ -25,7 +25,7 @@
           "argument": {
             "$OBJECT": "path",
             "paths": [
-              "__p-1.2"
+              "__p-1.1"
             ]
           }
         }
@@ -44,7 +44,7 @@
           "argument": {
             "$OBJECT": "path",
             "paths": [
-              "__p-1.1"
+              "__p-1.2"
             ]
           }
         }
@@ -56,6 +56,6 @@
     "sql",
     "twitter"
   ],
-  "entrypoint": "1.2",
+  "entrypoint": "1.1",
   "version": null
 }

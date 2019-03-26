@@ -79,6 +79,9 @@ class Preprocessor:
             fun(node, block, node)
             node.children = [Tree('path', node.children)]
 
+        for c in node.children:
+            cls.visit(c, block, entity, pred, fun, parent=node)
+
         if pred(node):
             assert entity is not None
             assert block is not None
@@ -94,9 +97,6 @@ class Preprocessor:
                 entity.data = 'mutation'
                 entity.entity = Tree('entity', [entity.path])
                 entity.service_fragment.data = 'mutation_fragment'
-
-        for c in node.children:
-            cls.visit(c, block, entity, pred, fun, parent=node)
 
     @staticmethod
     def is_inline_expression(n):
@@ -122,8 +122,9 @@ class Preprocessor:
                         ])
                     ])
                 ]),
-            ]),
+            ])
         ])
+
         # if we only got one node, no concatenation is required. return
         # directly
         if len(other_nodes) == 0:
@@ -132,6 +133,7 @@ class Preprocessor:
         base_tree.children.append(
             Tree('arith_operator', [Token('PLUS', '+')]),
         )
+
         # Technically, the grammar only supports binary expressions, but
         # the compiler and engine can handle n-ary expressions, so we can
         # directly flatten the tree and add all additional nodes as extra
@@ -149,6 +151,19 @@ class Preprocessor:
                 ])
             ]))
         return base_tree
+
+    @staticmethod
+    def make_full_tree_from_cmp(expr):
+        """
+        Builds a full tree from a cmp_expression node.
+        """
+        return Tree('expression', [
+            Tree('or_expression', [
+                Tree('and_expression', [
+                    Tree('cmp_expression', [expr])
+                ])
+            ])
+        ])
 
     @classmethod
     def flatten_template(cls, tree, text):
@@ -218,6 +233,7 @@ class Preprocessor:
                              'string_templates_no_assignment')
 
         line = orig_node.line()
+        # the new assignment should be inserted at the top of the current block
         return fake_tree.add_assignment(new_node, original_line=line)
 
     @classmethod
@@ -231,7 +247,7 @@ class Preprocessor:
             ])
         ])
 
-    def concat_string_templates(self, block, orig_node, string_objs):
+    def concat_string_templates(self, fake_tree, orig_node, string_objs):
         """
         Concatenes the to-be-inserted string templates.
         For example, a string template like "a{exp}b" gets flatten to:
@@ -241,7 +257,6 @@ class Preprocessor:
         evaluated to new AST nodes and the reference to their fake_node
         assignment should be used instead.
         """
-        fake_tree = self.fake_tree(block)
         ks = []
         for s in string_objs:
             if s['$OBJECT'] == 'string':
@@ -254,18 +269,74 @@ class Preprocessor:
                 # ignore newlines in string interpolation
                 code = ''.join(s['code'].split('\n'))
                 ks.append(self.eval(orig_node, code, fake_tree))
-        return self.add_strings(*ks)
 
-    def inline_string_templates(self, node, block, parent):
+        return ks
+
+    def insert_string_template_concat(self, fake_tree, new_node):
         """
-        String templates generate fake_nodes in the AST before their block
-        and are replaced with a reference to their fake_nodes.
+        If the string concatenation has only one child, its returned directly.
+        Otherwise, the string template concatenation gets inserted into the
+        FakeTree.
+        Returns: a path reference to newly inserted assignment.
         """
-        string_node = node.follow_node_chain([
+        line = new_node.line()
+
+        # shortcut for single-child code like '${a}'
+        if len(new_node.children) == 1:
+            return new_node.mul_expression.unary_expression.pow_expression. \
+                    primary_expression.entity.path
+
+        assert len(new_node.children) >= 2
+
+        # Otherwise we need to insert a new fake node with the concatenation
+        new_node = self.make_full_tree_from_cmp(new_node)
+        # The new concatenation node needs to be inserted below the
+        # evaluated line
+        return fake_tree.add_assignment(new_node, original_line=line)
+
+    @staticmethod
+    def resolve_cmp_expr_to_string(cmp_expr):
+        """
+        Checks whether cmp_expression has only a string as a child.
+        """
+        if cmp_expr is None:
+            return None
+
+        return cmp_expr.follow_node_chain([
             'cmp_expression',
             'arith_expression', 'mul_expression', 'unary_expression',
             'pow_expression', 'primary_expression', 'entity', 'values',
             'string'])
+
+    def resolve_string_nodes(self, node, cmp_expr):
+        """
+        Searches for string nodes in the cmp_expression and given node.
+        Cmp_expression has a higher priority than the given node, but
+        will only be used if the found string node is the only node
+        in cmp_expr.
+
+        Returns: [<found string node>, <search node>]
+            where <search node> is either `cmp_expr` (when the
+            string node was a single leaf) or `node` otherwise.
+        """
+        only_cmp_expr = self.resolve_cmp_expr_to_string(cmp_expr)
+        if only_cmp_expr is not None:
+            # cmp_expression has only one leaf (the string), so we
+            # can directly replace its children
+            return only_cmp_expr, cmp_expr
+
+        return node.follow_node_chain(['entity', 'values', 'string']), node
+
+    def inline_string_templates(self, node, block, parent, cmp_expr):
+        """
+        String templates generate fake_nodes in the AST before their block
+        and are replaced with a reference to their fake_nodes.
+
+        If the string expression is the only node in its cmp_expression, it
+        will be directly inserted in the AST.
+        Otherwise, the string concatenation will be inserted as a new AST node.
+        """
+        string_node, node = self.resolve_string_nodes(node, cmp_expr)
         if string_node is None:
             return
 
@@ -274,12 +345,22 @@ class Preprocessor:
 
         # is plain string without string templates?
         if len(string_objs) == 1 and string_objs[0]['$OBJECT'] == 'string':
+            # no AST modifications required
             return
 
-        node.children = [self.concat_string_templates(block, string_node,
-                                                      string_objs)]
+        fake_tree = self.fake_tree(block)
+        children = self.concat_string_templates(fake_tree, string_node,
+                                                string_objs)
+        new_node = self.add_strings(*children)
+        # if there is more than one node in cmp_expression, node will point
+        # to the only the string entity and thus we can't insert string
+        # concatenation directly, but must insert it as a new fake node
+        # assignment.
+        if node.data != 'cmp_expression':
+            new_node = self.insert_string_template_concat(fake_tree, new_node)
+        node.children = [new_node]
 
-    def visit_string_templates(self, node, block, parent):
+    def visit_string_templates(self, node, block, parent, cmp_expr):
         """
         Iterates the AST and evaluates string templates.
         """
@@ -288,18 +369,21 @@ class Preprocessor:
 
         if node.data == 'block':
             block = node
-        elif node.data == 'cmp_expression':
-            self.inline_string_templates(node, block, parent)
+        if node.data == 'cmp_expression':
+            cmp_expr = node
+        elif node.data == 'entity':
+            self.inline_string_templates(node, block, parent, cmp_expr)
 
         for c in node.children:
-            self.visit_string_templates(c, block, node)
+            self.visit_string_templates(c, block, node, cmp_expr=cmp_expr)
 
     def process(self, tree):
         """
         Applies several preprocessing steps to the existing AST.
         """
         pred = Preprocessor.is_inline_expression
-        self.visit_string_templates(tree, block=None, parent=None)
+        self.visit_string_templates(tree, block=None, parent=None,
+                                    cmp_expr=None)
         self.visit(tree, None, None, pred,
                    self.replace_expression, parent=None)
         return tree
