@@ -185,19 +185,14 @@ class Compiler:
         """
         Compiles a when tree
         """
-        if tree.service:
-            sf = tree.service.service_fragment
-            if not sf.command:
-                sf.command = tree.service.path
-                output_name = self.find_parent_with_output(tree, parent)
-                tree.service.path = Objects.name_to_path(output_name[0])
-            self.service(tree.service, nested_block, parent)
-            self.lines.last()['method'] = 'when'
-        elif tree.path:
-            args = [Objects.path(tree.path)]
-            output = self.output(tree.output)
-            self.lines.append('when', tree.line(), args=args,
-                              output=output, parent=parent)
+        assert tree.service
+        sf = tree.service.service_fragment
+        if not sf.command:
+            sf.command = tree.service.path
+            output_name = self.find_parent_with_output(tree, parent)
+            tree.service.path = Objects.name_to_path(output_name[0])
+        self.service(tree.service, nested_block, parent)
+        self.lines.last()['method'] = 'when'
 
     def return_statement(self, tree, parent):
         """

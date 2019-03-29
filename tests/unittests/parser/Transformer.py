@@ -145,9 +145,50 @@ def test_transformer_when_block(patch, tree):
     Ensures when_block nodes are transformed correctly
     """
     patch.object(Transformer, 'implicit_output')
-    result = Transformer.when_block([tree])
+    tree.data = 'when_service'
+    tree.output = None
+    tree.children = [Token('NAME', '.name.')]
+    tree.child_token.return_value = Token('NAME', '.child.', line=42)
+    tree.path.child_token.return_value = '.path.'
+    result = Transformer.when_block([tree, 'block'])
     Transformer.implicit_output.assert_called_with(tree)
-    assert result == Tree('when_block', [tree])
+    assert result == Tree('service_block', [
+        Tree('service', [
+            Tree('path', [Token('NAME', '.child.')]),
+            Tree('service_fragment', [
+                Tree('command', ['.path.']),
+                Tree('output', ['.path.'])
+            ])
+        ]),
+        Tree('nested_block', [
+            Tree('block', [
+                Tree('when_block', [
+                    tree,
+                    'block'
+                ])
+            ])
+        ])
+    ])
+
+
+def test_transformer_when_block_no_command(patch, tree):
+    """
+    Ensures when_block nodes without command are transformed correctly
+    """
+    patch.object(Transformer, 'implicit_output')
+    tree.data = 'when_service'
+    tree.output = None
+    tree.children = [Token('NAME', '.name.')]
+    tree.service_fragment.command = None
+    result = Transformer.when_block([tree, 'block'])
+    Transformer.implicit_output.assert_not_called()
+    assert result == Tree('when_block', [
+        Tree('service', [
+            Tree('path', [tree.child_token()]),
+            tree.service_fragment,
+        ]),
+        'block',
+    ])
 
 
 @mark.parametrize('rule', ['start', 'line', 'block', 'statement'])

@@ -509,17 +509,6 @@ def test_compiler_when_condensed(patch, compiler, lines, tree, magic):
     Objects.name_to_path = orig_method
 
 
-def test_compiler_when_path(patch, compiler, lines, tree):
-    patch.object(Objects, 'path')
-    patch.object(Compiler, 'output')
-    tree.service = None
-    compiler.when(tree, 'nested_block', '1')
-    Objects.path.assert_called_with(tree.path)
-    Compiler.output.assert_called_with(tree.output)
-    lines.append.assert_called_with('when', tree.line(), args=[Objects.path()],
-                                    output=Compiler.output(), parent='1')
-
-
 def test_compiler_return_statement(patch, compiler, lines, tree):
     """
     Ensures Compiler.return_statement can compile return statements.
