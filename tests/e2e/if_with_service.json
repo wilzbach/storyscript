@@ -1,33 +1,5 @@
 {
   "tree": {
-    "1.2": {
-      "method": "execute",
-      "ln": "1.2",
-      "name": [
-        "__p-1.2"
-      ],
-      "service": "my_service2",
-      "command": "command",
-      "args": [
-        {
-          "$OBJECT": "argument",
-          "name": "p3",
-          "argument": {
-            "$OBJECT": "int",
-            "int": 3
-          }
-        },
-        {
-          "$OBJECT": "argument",
-          "name": "p4",
-          "argument": {
-            "$OBJECT": "int",
-            "int": 4
-          }
-        }
-      ],
-      "next": "1.1"
-    },
     "1.1": {
       "method": "execute",
       "ln": "1.1",
@@ -51,6 +23,34 @@
           "argument": {
             "$OBJECT": "int",
             "int": 2
+          }
+        }
+      ],
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "execute",
+      "ln": "1.2",
+      "name": [
+        "__p-1.2"
+      ],
+      "service": "my_service2",
+      "command": "command",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "p3",
+          "argument": {
+            "$OBJECT": "int",
+            "int": 3
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "p4",
+          "argument": {
+            "$OBJECT": "int",
+            "int": 4
           }
         }
       ],
@@ -156,6 +156,6 @@
     "my_service",
     "my_service2"
   ],
-  "entrypoint": "1.2",
+  "entrypoint": "1.1",
   "version": null
 }

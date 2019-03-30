@@ -141,6 +141,7 @@ def test_faketree_assignment(patch, tree, fake_tree):
 
 def test_faketree_add_assignment(patch, fake_tree, block):
     patch.object(FakeTree, 'assignment')
+    patch.object(FakeTree, 'find_insert_pos', return_value=0)
     block.children = [1]
     block.child.return_value = None
     result = fake_tree.add_assignment('value', original_line=10)
@@ -153,6 +154,7 @@ def test_faketree_add_assignment(patch, fake_tree, block):
 
 def test_faketree_add_assignment_more_children(patch, fake_tree, block):
     patch.object(FakeTree, 'assignment')
+    patch.object(FakeTree, 'find_insert_pos', return_value=0)
     block.children = ['c1', fake_tree.block.last_child()]
     fake_tree.add_assignment('value', original_line=42)
     expected = [FakeTree.assignment(), 'c1', block.last_child()]
@@ -161,7 +163,17 @@ def test_faketree_add_assignment_more_children(patch, fake_tree, block):
 
 def test_faketree_add_assignment_four_children(patch, fake_tree, block):
     patch.object(FakeTree, 'assignment')
+    patch.object(FakeTree, 'find_insert_pos', return_value=1)
     block.children = ['c1', 'c2', 'c3', fake_tree.block.last_child()]
     fake_tree.add_assignment('value', original_line=42)
-    expected = [FakeTree.assignment(), 'c1', 'c2', 'c3', block.last_child()]
+    expected = ['c1', FakeTree.assignment(), 'c2', 'c3', block.last_child()]
+    assert block.children == expected
+
+
+def test_faketree_add_assignment_four_children_bottom(patch, fake_tree, block):
+    patch.object(FakeTree, 'assignment')
+    patch.object(FakeTree, 'find_insert_pos', return_value=-1)
+    block.children = ['c1', 'c2', 'c3', fake_tree.block.last_child()]
+    fake_tree.add_assignment('value', original_line=42)
+    expected = ['c1', 'c2', 'c3', FakeTree.assignment(), block.last_child()]
     assert block.children == expected

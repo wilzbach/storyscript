@@ -1,0 +1,15 @@
+a1  = 0 + "a{servb call}c{servd call}"
+a2  = "a{servb call}c{servd call}" + 0
+a3  = 0 + "a{servb call}c{servd call}" + 0
+a4  = 0 + "{servb call}" + 0
+a5  = 0 + "{servb call}"
+a6  = "{servb call}" + 0
+a7  = 0 + "a{servb call}"
+a7  = "a{servb call}" + 0
+a8  = 0 + "a{servb call}" + 0
+a9  = "a{servb call}c" + 0
+a10 = 0 + "a{servb call}c"
+a11 = 0 + "a{servb call}c" + 0
+a12 = "a{servb call}c{servd call}" + 0
+a13 = 0 + "a{servb call}c{servd call}"
+a14 = 0 + "a{servb call}c{servd call}" + 0

@@ -37,7 +37,8 @@ def test_preprocessor_replace_expression(magic, preprocessor, entity):
     entity.path.line = magic()
     fake_tree = magic()
     preprocessor.replace_expression(node, fake_tree, entity)
-    fake_tree.add_assignment.assert_called_with(node.service, original_line=42)
+    fake_tree.add_assignment.assert_called_with(node.service,
+                                                original_line=42)
     assignment = fake_tree.add_assignment()
     entity.replace.assert_called_with(0, assignment.child(0))
 

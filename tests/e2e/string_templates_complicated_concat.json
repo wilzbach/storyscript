@@ -1,0 +1,121 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "expression",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "multiplication",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            }
+          ]
+        }
+      ],
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "execute",
+      "ln": "1.2",
+      "name": [
+        "__p-1.2"
+      ],
+      "service": "another_service",
+      "command": "call",
+      "next": "1.3"
+    },
+    "1.3": {
+      "method": "execute",
+      "ln": "1.3",
+      "name": [
+        "__p-1.3"
+      ],
+      "service": "foo_service",
+      "command": "call",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "arg1",
+          "argument": {
+            "$OBJECT": "expression",
+            "expression": "sum",
+            "values": [
+              {
+                "$OBJECT": "string",
+                "string": "^"
+              },
+              {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-1.2"
+                ]
+              },
+              {
+                "$OBJECT": "string",
+                "string": "$"
+              }
+            ]
+          }
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "division",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "__p-1.1"
+                  ]
+                },
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "__p-1.3"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "services": [
+    "another_service",
+    "foo_service"
+  ],
+  "entrypoint": "1.1",
+  "version": null
+}
