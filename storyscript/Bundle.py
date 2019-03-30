@@ -2,7 +2,7 @@
 import os
 import subprocess
 
-from .Story import Story
+from .Story import Story, _parser
 from .compiler import Preprocessor
 from .parser import Parser
 
@@ -12,8 +12,10 @@ class Bundle:
     Bundles all stories that must be compiled together.
     """
 
-    def __init__(self, story_files={}):
+    def __init__(self, story_files=None):
         self.stories = {}
+        if story_files is None:
+            story_files = {}
         self.story_files = story_files
 
     @staticmethod
@@ -145,6 +147,8 @@ class Bundle:
         parser = self.parser(ebnf)
         self.parse(self.find_stories(), parser=parser)
         if preprocess:
+            if parser is None:
+                parser = _parser()
             proc = Preprocessor(parser)
             for story, tree in self.stories.items():
                 self.stories[story] = proc.process(tree)
