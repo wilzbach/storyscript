@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-class InternalCompilerError(BaseException):
+class InternalCompilerError(Exception):
     """
     An internal compiler error is unrecoverable and fatal.
     It should never happen for any user input.
