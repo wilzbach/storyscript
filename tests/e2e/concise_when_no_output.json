@@ -1,0 +1,64 @@
+{
+  "tree": {
+    "0.9": {
+      "method": "execute",
+      "ln": "0.9",
+      "output": [
+        "server"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "1",
+      "next": "1"
+    },
+    "1": {
+      "method": "when",
+      "ln": "1",
+      "output": [
+        "listen"
+      ],
+      "service": "server",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "path",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "/health"
+          }
+        },
+        {
+          "$OBJECT": "argument",
+          "name": "method",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "get"
+          }
+        }
+      ],
+      "enter": "2",
+      "parent": "0.9",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "x"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "1"
+    }
+  },
+  "services": [
+    "http"
+  ],
+  "entrypoint": "0.9",
+  "version": null
+}

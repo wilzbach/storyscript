@@ -59,7 +59,8 @@ def test_tree_first_child_multiple():
 
 def test_tree_first_child_empty():
     tree = Tree('rule', [])
-    assert tree.first_child() is None
+    with raises(AssertionError):
+        tree.first_child()
 
 
 def test_tree_last_child():
@@ -74,7 +75,8 @@ def test_tree_last_child_multiple():
 
 def test_tree_last_child_empty():
     tree = Tree('rule', [])
-    assert tree.last_child() is None
+    with raises(AssertionError):
+        tree.last_child()
 
 
 def test_tree_child():
@@ -84,7 +86,8 @@ def test_tree_child():
 
 def test_tree_child_overflow():
     tree = Tree('rule', ['child'])
-    assert tree.child(1) is None
+    with raises(AssertionError):
+        tree.child(1)
 
 
 def test_tree_line():

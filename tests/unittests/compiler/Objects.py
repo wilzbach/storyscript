@@ -181,15 +181,36 @@ def test_objects_objects(patch, tree):
     assert result == expected
 
 
+def test_objects_objects_key_string(patch, tree):
+    """
+    Ensures that objects like {x: 0} are compiled
+    """
+    patch.many(Objects, ['base_expression', 'string'])
+    subtree = Tree('key_value', [
+        Tree('string', ['string.name']),
+        Tree('path', ['value.path']),
+    ])
+    tree.children = [subtree]
+    result = Objects.objects(tree)
+    assert result['items'] == [[
+        Objects.string(), Objects.base_expression()
+    ]]
+
+
 def test_objects_objects_key_path(patch, tree):
     """
     Ensures that objects like {x: 0} are compiled
     """
-    patch.many(Objects, ['path', 'base_expression'])
-    subtree = Tree('key_value', [Tree('path', ['path'])])
+    patch.many(Objects, ['base_expression', 'path'])
+    subtree = Tree('key_value', [
+        Tree('path', ['string.name']),
+        Tree('path', ['value.path']),
+    ])
     tree.children = [subtree]
     result = Objects.objects(tree)
-    assert result['items'][0][0] == Objects.path()
+    assert result['items'] == [[
+        Objects.path(), Objects.base_expression()
+    ]]
 
 
 def test_objects_regular_expression():

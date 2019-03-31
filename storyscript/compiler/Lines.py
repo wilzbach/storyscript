@@ -95,6 +95,7 @@ class Lines:
             if service in scope['output']:
                 return True
             if scope['parent']:
+                assert scope['parent'] != parent
                 return self.is_output(scope['parent'], service)
         return False
 

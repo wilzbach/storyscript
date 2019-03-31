@@ -1,0 +1,342 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "output": [
+        "server"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "when",
+      "ln": "2",
+      "output": [
+        "li"
+      ],
+      "service": "server",
+      "command": "listen",
+      "enter": "3",
+      "parent": "1",
+      "next": "3"
+    },
+    "3": {
+      "method": "break",
+      "ln": "3",
+      "parent": "2",
+      "next": "4"
+    },
+    "4": {
+      "method": "when",
+      "ln": "4",
+      "service": "server",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "path",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "/foo"
+          }
+        }
+      ],
+      "enter": "5",
+      "parent": "1",
+      "next": "5"
+    },
+    "5": {
+      "method": "break",
+      "ln": "5",
+      "parent": "4",
+      "next": "6"
+    },
+    "6": {
+      "method": "when",
+      "ln": "6",
+      "output": [
+        "li"
+      ],
+      "service": "server",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "path",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "/foo"
+          }
+        }
+      ],
+      "enter": "7",
+      "parent": "1",
+      "next": "7"
+    },
+    "7": {
+      "method": "break",
+      "ln": "7",
+      "parent": "6",
+      "next": "9"
+    },
+    "9": {
+      "method": "execute",
+      "ln": "9",
+      "output": [
+        "serv"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "10",
+      "next": "10"
+    },
+    "10": {
+      "method": "when",
+      "ln": "10",
+      "output": [
+        "listen"
+      ],
+      "service": "serv",
+      "command": "listen",
+      "enter": "11",
+      "parent": "9",
+      "next": "11"
+    },
+    "11": {
+      "method": "break",
+      "ln": "11",
+      "parent": "10",
+      "next": "12"
+    },
+    "12": {
+      "method": "when",
+      "ln": "12",
+      "output": [
+        "sa"
+      ],
+      "service": "serv",
+      "command": "listen",
+      "enter": "13",
+      "parent": "9",
+      "next": "13"
+    },
+    "13": {
+      "method": "break",
+      "ln": "13",
+      "parent": "12",
+      "next": "14"
+    },
+    "14": {
+      "method": "when",
+      "ln": "14",
+      "service": "serv",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "path",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "/foo"
+          }
+        }
+      ],
+      "enter": "15",
+      "parent": "9",
+      "next": "15"
+    },
+    "15": {
+      "method": "break",
+      "ln": "15",
+      "parent": "14",
+      "next": "16"
+    },
+    "16": {
+      "method": "when",
+      "ln": "16",
+      "output": [
+        "li"
+      ],
+      "service": "serv",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "path",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "/foo"
+          }
+        }
+      ],
+      "enter": "17",
+      "parent": "9",
+      "next": "17"
+    },
+    "17": {
+      "method": "break",
+      "ln": "17",
+      "parent": "16",
+      "next": "19"
+    },
+    "19": {
+      "method": "execute",
+      "ln": "19",
+      "output": [
+        "server"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "19.9",
+      "next": "19.9"
+    },
+    "19.9": {
+      "method": "execute",
+      "ln": "19.9",
+      "output": [
+        "command"
+      ],
+      "service": "other_service",
+      "command": "command",
+      "enter": "20",
+      "parent": "19",
+      "next": "20"
+    },
+    "20": {
+      "method": "when",
+      "ln": "20",
+      "output": [
+        "listen"
+      ],
+      "service": "command",
+      "command": "listen",
+      "enter": "21",
+      "parent": "19.9",
+      "next": "21"
+    },
+    "21": {
+      "method": "break",
+      "ln": "21",
+      "parent": "20",
+      "next": "21.9"
+    },
+    "21.9": {
+      "method": "execute",
+      "ln": "21.9",
+      "output": [
+        "command"
+      ],
+      "service": "other_service",
+      "command": "command",
+      "enter": "22",
+      "parent": "19",
+      "next": "22"
+    },
+    "22": {
+      "method": "when",
+      "ln": "22",
+      "output": [
+        "os"
+      ],
+      "service": "command",
+      "command": "listen",
+      "enter": "23",
+      "parent": "21.9",
+      "next": "23"
+    },
+    "23": {
+      "method": "break",
+      "ln": "23",
+      "parent": "22",
+      "next": "23.9"
+    },
+    "23.9": {
+      "method": "execute",
+      "ln": "23.9",
+      "output": [
+        "command"
+      ],
+      "service": "other_service",
+      "command": "command",
+      "enter": "24",
+      "parent": "19",
+      "next": "24"
+    },
+    "24": {
+      "method": "when",
+      "ln": "24",
+      "output": [
+        "listen"
+      ],
+      "service": "command",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "path",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "/foo"
+          }
+        }
+      ],
+      "enter": "25",
+      "parent": "23.9",
+      "next": "25"
+    },
+    "25": {
+      "method": "break",
+      "ln": "25",
+      "parent": "24",
+      "next": "25.9"
+    },
+    "25.9": {
+      "method": "execute",
+      "ln": "25.9",
+      "output": [
+        "command"
+      ],
+      "service": "other_service",
+      "command": "command",
+      "enter": "26",
+      "parent": "19",
+      "next": "26"
+    },
+    "26": {
+      "method": "when",
+      "ln": "26",
+      "output": [
+        "li"
+      ],
+      "service": "command",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "path",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "/foo"
+          }
+        }
+      ],
+      "enter": "27",
+      "parent": "25.9",
+      "next": "27"
+    },
+    "27": {
+      "method": "break",
+      "ln": "27",
+      "parent": "26"
+    }
+  },
+  "services": [
+    "http",
+    "other_service"
+  ],
+  "entrypoint": "1",
+  "version": null
+}

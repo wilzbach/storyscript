@@ -1,0 +1,154 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "name": [
+        "log"
+      ],
+      "service": "logging",
+      "command": "error",
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "output": [
+        "default"
+      ],
+      "service": "logging",
+      "command": "default",
+      "enter": "3",
+      "next": "3"
+    },
+    "3": {
+      "method": "when",
+      "ln": "3",
+      "output": [
+        "logger"
+      ],
+      "service": "default",
+      "command": "log",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "level",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "normal"
+          }
+        }
+      ],
+      "enter": "4",
+      "parent": "2",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "x"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "3",
+      "next": "5"
+    },
+    "5": {
+      "method": "when",
+      "ln": "5",
+      "service": "default",
+      "command": "log",
+      "args": [
+        {
+          "$OBJECT": "argument",
+          "name": "level",
+          "argument": {
+            "$OBJECT": "string",
+            "string": "normal"
+          }
+        }
+      ],
+      "enter": "6",
+      "parent": "2",
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "name": [
+        "x"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "5",
+      "next": "7"
+    },
+    "7": {
+      "method": "when",
+      "ln": "7",
+      "output": [
+        "logger"
+      ],
+      "service": "default",
+      "command": "log",
+      "enter": "8",
+      "parent": "2",
+      "next": "8"
+    },
+    "8": {
+      "method": "expression",
+      "ln": "8",
+      "name": [
+        "x"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
+      "parent": "7",
+      "next": "9"
+    },
+    "9": {
+      "method": "when",
+      "ln": "9",
+      "output": [
+        "log"
+      ],
+      "service": "default",
+      "command": "log",
+      "enter": "10",
+      "parent": "2",
+      "next": "10"
+    },
+    "10": {
+      "method": "expression",
+      "ln": "10",
+      "name": [
+        "x"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 3
+        }
+      ],
+      "parent": "9"
+    }
+  },
+  "services": [
+    "logging"
+  ],
+  "entrypoint": "1",
+  "version": null
+}

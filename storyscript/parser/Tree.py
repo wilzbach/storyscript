@@ -35,22 +35,22 @@ class Tree(LarkTree):
         """
         Return the first child
         """
-        if len(self.children) > 0:
-            return self.children[0]
+        assert len(self.children) > 0
+        return self.children[0]
 
     def last_child(self):
         """
         Return the first child
         """
-        if len(self.children) > 0:
-            return self.children[-1]
+        assert len(self.children) > 0
+        return self.children[-1]
 
     def child(self, index):
         """
         Returns the child at the position of `index`.
         """
-        if len(self.children) > index:
-            return self.children[index]
+        assert len(self.children) > index
+        return self.children[index]
 
     def find(self, path):
         """
@@ -166,6 +166,15 @@ class Tree(LarkTree):
                 return None
             if p.data != e:
                 return None
+
+    def child_token(self, index, name):
+        """
+        Returns a child and ensures its a Token of type `name`.
+        """
+        child = self.child(index)
+        assert isinstance(child, Token)
+        assert child.type == 'NAME'
+        return child
 
     def __getattr__(self, attribute):
         return self.node(attribute)
