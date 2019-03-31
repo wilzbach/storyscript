@@ -75,6 +75,9 @@ class ErrorCodes:
         'E0059', 'String templates can\'t be nested')
     string_templates_empty = (
         'E0060', 'String templates can\'t be empty')
+    path_name_invalid_char = (
+        'E0061', 'Invalid path name: `{path}`. '
+        'Path names can\'t contain `{token}`')
 
     @staticmethod
     def is_error(error_name):
