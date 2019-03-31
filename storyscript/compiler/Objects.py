@@ -26,7 +26,15 @@ class Objects:
 
     @classmethod
     def path(cls, tree):
-        return {'$OBJECT': 'path', 'paths': cls.names(tree)}
+        paths = cls.names(tree)
+        for p in paths:
+            if not isinstance(p, str) or p.startswith('__p-'):
+                continue
+            tree.expect('-' not in p,
+                        'path_name_invalid_char', path=p, token='-')
+            tree.expect('/' not in p,
+                        'path_name_invalid_char', path=p, token='/')
+        return {'$OBJECT': 'path', 'paths': paths}
 
     @classmethod
     def mutation(cls, tree):

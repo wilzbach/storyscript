@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    c = a/b
+          ^^^
+
+E0061: Invalid path name: `a/b`. Path names can't contain `/`
