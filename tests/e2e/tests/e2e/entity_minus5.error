@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 10
+
+1|    foo like /r/
+               ^
+
+E0041: `/` is not allowed here

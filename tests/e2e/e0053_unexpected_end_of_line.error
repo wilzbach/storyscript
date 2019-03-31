@@ -1,6 +1,0 @@
-Error: syntax error in story at line 1, column 13
-
-1|    foo like /r/
-                  ^
-
-E0054: Arguments need to be declared with `key:value`

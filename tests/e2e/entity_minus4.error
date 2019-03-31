@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 10
+
+1|    a = a + 0b
+               ^
+
+E0007: Missing value after `=`
