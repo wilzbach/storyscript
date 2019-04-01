@@ -1,0 +1,6 @@
+Error: syntax error in story at line 5, column 5
+
+5|    e = d + 1
+          ^
+
+E0103: `{string:int[][]}[]` is not compatible with `int`

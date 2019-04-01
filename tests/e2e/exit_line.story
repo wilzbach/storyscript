@@ -1,6 +1,8 @@
 foreach items as item
 	x = item
 
+a = 2
+
 if a
 	a = 0
 else

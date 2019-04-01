@@ -5,6 +5,6 @@ foreach labels as label
 		found = true
 	else
 		found = false
-	if a
+	if found
 		x = 0
 outside = true

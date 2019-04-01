@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .ReturnVisitor import ReturnVisitor
+from .TypeResolver import TypeResolver
 
 
 class Semantics:
@@ -8,7 +8,7 @@ class Semantics:
     Performs semantic analysis on the AST
     """
 
-    visitors = [ReturnVisitor]
+    visitors = [TypeResolver]
 
     def process(self, tree):
         for visitor in self.visitors:

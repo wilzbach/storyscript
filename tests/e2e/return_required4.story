@@ -1,8 +1,8 @@
-function sum a:int returns int
+function sum a:int returns string
     a + b
     if true
-        return
+        return "0"
     else if true
-        return
+        return "1"
     else
-        return
+        return "2"

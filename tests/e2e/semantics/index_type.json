@@ -1,0 +1,72 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "b"
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "path",
+                "paths": [
+                  "a"
+                ]
+              },
+              {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            ],
+            [
+              {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              },
+              {
+                "$OBJECT": "int",
+                "int": 2
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

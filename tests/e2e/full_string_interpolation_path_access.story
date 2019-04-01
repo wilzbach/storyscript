@@ -1,1 +1,2 @@
-a = "foo{a.long.path}"
+a = {}
+b = "foo{a.long.path}"

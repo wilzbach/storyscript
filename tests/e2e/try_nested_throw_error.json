@@ -36,10 +36,8 @@
       "ln": "4",
       "args": [
         {
-          "$OBJECT": "path",
-          "paths": [
-            "TRUE"
-          ]
+          "$OBJECT": "boolean",
+          "boolean": true
         }
       ],
       "enter": "5",

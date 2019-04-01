@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 2
+
+2|    	return
+       ^^^^^^
+
+E0102: `none` can't be implicitly converted to expected return type `int`.

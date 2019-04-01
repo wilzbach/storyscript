@@ -63,6 +63,12 @@
     "4": {
       "method": "return",
       "ln": "4",
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
       "parent": "3",
       "next": "5"
     },
@@ -96,6 +102,12 @@
     "7": {
       "method": "return",
       "ln": "7",
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
       "parent": "6",
       "next": "8"
     },
@@ -109,6 +121,12 @@
     "9": {
       "method": "return",
       "ln": "9",
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
       "parent": "8"
     }
   },

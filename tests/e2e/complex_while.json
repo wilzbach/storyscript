@@ -1,8 +1,22 @@
 {
   "tree": {
     "1": {
-      "method": "while",
+      "method": "expression",
       "ln": "1",
+      "name": [
+        "i"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "while",
+      "ln": "2",
       "args": [
         {
           "$OBJECT": "expression",
@@ -21,12 +35,12 @@
           ]
         }
       ],
-      "enter": "2",
-      "next": "2"
+      "enter": "3",
+      "next": "3"
     },
-    "2": {
+    "3": {
       "method": "expression",
-      "ln": "2",
+      "ln": "3",
       "name": [
         "i"
       ],
@@ -48,7 +62,7 @@
           ]
         }
       ],
-      "parent": "1"
+      "parent": "2"
     }
   },
   "entrypoint": "1",

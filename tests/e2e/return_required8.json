@@ -63,6 +63,12 @@
     "4": {
       "method": "return",
       "ln": "4",
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
       "parent": "3",
       "next": "5"
     },

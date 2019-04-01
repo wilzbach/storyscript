@@ -1,0 +1,80 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "service": "any_service",
+      "command": "call",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "."
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "execute",
+      "ln": "3",
+      "name": [
+        "b"
+      ],
+      "service": "any_service",
+      "command": "call",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": "."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "services": [
+    "any_service"
+  ],
+  "entrypoint": "1",
+  "version": null
+}

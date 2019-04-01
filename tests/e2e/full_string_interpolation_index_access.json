@@ -1,10 +1,29 @@
 {
   "tree": {
-    "1.1": {
+    "1": {
       "method": "expression",
-      "ln": "1.1",
+      "ln": "1",
       "name": [
-        "__p-1.1"
+        "path"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "string",
+              "string": "bar"
+            }
+          ]
+        }
+      ],
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "expression",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
       ],
       "args": [
         {
@@ -15,11 +34,11 @@
           ]
         }
       ],
-      "next": "1"
+      "next": "2"
     },
-    "1": {
+    "2": {
       "method": "expression",
-      "ln": "1",
+      "ln": "2",
       "name": [
         "a"
       ],
@@ -35,7 +54,7 @@
             {
               "$OBJECT": "path",
               "paths": [
-                "__p-1.1"
+                "__p-2.1"
               ]
             }
           ]
@@ -43,6 +62,6 @@
       ]
     }
   },
-  "entrypoint": "1.1",
+  "entrypoint": "1",
   "version": null
 }

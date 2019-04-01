@@ -1,9 +1,9 @@
 function sum a:int returns int
     a + b
     if true
-        return
+        return 2
     else if true
         while true
-            return
+            return 1
     else
-        return
+        return 0

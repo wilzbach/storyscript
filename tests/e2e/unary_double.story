@@ -1,1 +1,2 @@
+b = false
 a = !!b
