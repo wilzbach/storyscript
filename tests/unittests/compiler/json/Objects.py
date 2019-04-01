@@ -3,7 +3,7 @@ from lark.lexer import Token
 
 from pytest import fixture, mark
 
-from storyscript.compiler import Objects
+from storyscript.compiler.json import Objects
 from storyscript.parser import Tree
 
 

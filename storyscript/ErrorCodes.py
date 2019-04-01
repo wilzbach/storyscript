@@ -78,6 +78,7 @@ class ErrorCodes:
     path_name_invalid_char = (
         'E0061', 'Invalid path name: `{path}`. '
         'Path names can\'t contain `{token}`')
+    return_required = ('E0062', 'All paths of a function need to return')
 
     @staticmethod
     def is_error(error_name):

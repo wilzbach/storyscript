@@ -12,12 +12,12 @@ class App:
     """
 
     @staticmethod
-    def parse(path, ignored_path=None, ebnf=None, preprocess=False):
+    def parse(path, ignored_path=None, ebnf=None, lower=False):
         """
         Parses stories found in path, returning their trees
         """
         bundle = Bundle.from_path(path, ignored_path=ignored_path)
-        return bundle.bundle_trees(ebnf=ebnf, preprocess=preprocess)
+        return bundle.bundle_trees(ebnf=ebnf, lower=lower)
 
     @staticmethod
     def compile(path, ignored_path=None, ebnf=None, concise=False,

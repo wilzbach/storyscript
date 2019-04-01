@@ -3,7 +3,7 @@ from lark.lexer import Token
 
 from pytest import fixture
 
-from storyscript.compiler import FakeTree
+from storyscript.compiler.lowering import FakeTree
 from storyscript.parser import Tree
 
 

@@ -3,15 +3,15 @@ from unittest import mock
 
 from pytest import fixture
 
-from storyscript.compiler import FakeTree, Preprocessor
+from storyscript.compiler.lowering import FakeTree, Lowering
 from storyscript.parser import Tree
 
 
 @fixture
 def preprocessor(patch):
     patch.init(FakeTree)
-    patch.object(Preprocessor, 'fake_tree', return_value=FakeTree(None))
-    return Preprocessor(parser=None)
+    patch.object(Lowering, 'fake_tree', return_value=FakeTree(None))
+    return Lowering(parser=None)
 
 
 @fixture
@@ -23,7 +23,7 @@ def entity(magic):
 
 def test_preprocessor_fake_tree(patch):
     patch.init(FakeTree)
-    result = Preprocessor.fake_tree('block')
+    result = Lowering.fake_tree('block')
     FakeTree.__init__.assert_called_with('block')
     assert isinstance(result, FakeTree)
 
@@ -63,7 +63,7 @@ def test_preprocessor_process(patch, magic, preprocessor):
     """
     Check that process initializes the visitor correctly
     """
-    patch.object(Preprocessor, 'visit')
+    patch.object(Lowering, 'visit')
     tree = magic()
     result = preprocessor.process(tree)
     assert result == tree
@@ -77,18 +77,18 @@ def test_preprocessor_is_inline_expression(magic):
     Check that inline_expressions are correctly detected
     """
     n = magic()
-    assert not Preprocessor.is_inline_expression(n)
+    assert not Lowering.is_inline_expression(n)
     n.data = 'foo'
-    assert not Preprocessor.is_inline_expression(n)
+    assert not Lowering.is_inline_expression(n)
     n.data = 'inline_expression'
-    assert Preprocessor.is_inline_expression(n)
+    assert Lowering.is_inline_expression(n)
 
 
 def test_preprocessor_visit_empty(patch, magic, preprocessor):
     """
     Check that no inline_expression is found
     """
-    patch.object(Preprocessor, 'replace_expression')
+    patch.object(Lowering, 'replace_expression')
     tree = magic()
     preprocessor.process(tree)
     assert not preprocessor.replace_expression.called
@@ -98,7 +98,7 @@ def test_preprocessor_visit_no_children(patch, magic, preprocessor):
     """
     Check that no inline_expression is found
     """
-    patch.object(Preprocessor, 'replace_expression')
+    patch.object(Lowering, 'replace_expression')
     tree = magic()
     tree.children = []
     preprocessor.process(tree)
@@ -230,7 +230,7 @@ def test_preprocessor_visit_nested_multiple_block_nearest(patch,
     """
     Check that the fake tree is always generated from the nearest block
     """
-    patch.object(Preprocessor, 'fake_tree')
+    patch.object(Lowering, 'fake_tree')
     tree = magic()
     tree.data = 'block'
     replace = magic()
@@ -320,7 +320,7 @@ def test_preprocessor_visit_base_expression(patch, magic, preprocessor,
     """
     Check that a base_expression is found and replaced
     """
-    patch.object(Preprocessor, 'fake_tree')
+    patch.object(Lowering, 'fake_tree')
     tree = magic()
     c1 = magic()
     base_expression = magic()
@@ -346,7 +346,7 @@ def test_preprocessor_visit_base_expression_ignore(patch, magic, preprocessor,
     """
     Check that a base_expression is not replaced for assignments
     """
-    patch.object(Preprocessor, 'fake_tree')
+    patch.object(Lowering, 'fake_tree')
     tree = magic()
     c1 = magic()
     base_expression = magic()
@@ -369,17 +369,17 @@ def flatten_to_string(s):
 
 
 def test_objects_flatten_template_no_templates(patch, tree):
-    result = list(Preprocessor.flatten_template(tree, '.s.'))
+    result = list(Lowering.flatten_template(tree, '.s.'))
     assert result == [flatten_to_string('.s.')]
 
 
 def test_objects_flatten_template_only_templates(patch, tree):
-    result = list(Preprocessor.flatten_template(tree, '{hello}'))
+    result = list(Lowering.flatten_template(tree, '{hello}'))
     assert result == [{'$OBJECT': 'code', 'code': 'hello'}]
 
 
 def test_objects_flatten_template_mixed(patch, tree):
-    result = list(Preprocessor.flatten_template(tree, 'a{hello}b'))
+    result = list(Lowering.flatten_template(tree, 'a{hello}b'))
     assert result == [
         flatten_to_string('a'),
         {'$OBJECT': 'code', 'code': 'hello'},

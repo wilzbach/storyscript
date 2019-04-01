@@ -6,7 +6,7 @@ from pytest import fixture
 
 from storyscript.Bundle import Bundle
 from storyscript.Story import Story
-from storyscript.compiler.Preprocessor import Preprocessor
+from storyscript.compiler.lowering.Lowering import Lowering
 from storyscript.parser import Parser
 
 
@@ -274,17 +274,17 @@ def test_bundle_lex_ebnf(patch, bundle):
     Story.from_file().lex.assert_called_with(parser=Bundle.parser())
 
 
-def test_bundle_bundle_preprocess(patch, bundle, magic):
+def test_bundle_bundle_lower(patch, bundle, magic):
     patch.many(Bundle, ['find_stories', 'parse', 'parser'])
-    patch.object(Preprocessor, 'process')
+    patch.object(Lowering, 'process')
     a_story = magic()
     bundle.stories = {'foo': a_story}
-    bundle.bundle_trees(ebnf='ebnf', preprocess=True)
+    bundle.bundle_trees(ebnf='ebnf', lower=True)
     Bundle.parser.assert_called_with('ebnf')
     Bundle.parse.assert_called_with(Bundle.find_stories(),
                                     parser=Bundle.parser())
-    Preprocessor.process.assert_called_with(a_story)
-    assert bundle.stories == {'foo': Preprocessor.process(a_story)}
+    Lowering.process.assert_called_with(a_story)
+    assert bundle.stories == {'foo': Lowering.process(a_story)}
 
 
 def test_bundle_parser_default(patch, bundle):
