@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
 
-from ..exceptions import internal_assert
-from ..parser import Tree
+from storyscript.exceptions import internal_assert
+from storyscript.parser import Tree
 
 
 class Objects:

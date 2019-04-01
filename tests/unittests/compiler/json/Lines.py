@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from pytest import fixture, mark, raises
 
-from storyscript.compiler import Lines
+from storyscript.compiler.json import Lines
 from storyscript.exceptions import StorySyntaxError
 
 

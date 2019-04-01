@@ -6,7 +6,7 @@ from pytest import fixture
 
 from storyscript.Bundle import Bundle
 from storyscript.Story import Story
-from storyscript.compiler.Preprocessor import Preprocessor
+from storyscript.compiler.lowering.Preprocessor import Preprocessor
 from storyscript.parser import Parser
 
 

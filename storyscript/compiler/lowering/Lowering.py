@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
 
-from .Faketree import FakeTree
-from .Objects import Objects
-from ..parser.Tree import Tree
+from storyscript.compiler.json.Objects import Objects
+from storyscript.compiler.lowering.Faketree import FakeTree
+from storyscript.parser.Tree import Tree
 
 
-class Preprocessor:
+class Lowering:
     """
     Performs additional transformations that can't be performed, or would be
     too complicated for the Transformer, before the tree is compiled.
@@ -381,7 +381,7 @@ class Preprocessor:
         """
         Applies several preprocessing steps to the existing AST.
         """
-        pred = Preprocessor.is_inline_expression
+        pred = Lowering.is_inline_expression
         self.visit_string_templates(tree, block=None, parent=None,
                                     cmp_expr=None)
         self.visit(tree, None, None, pred,

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from ..exceptions import StorySyntaxError
+from storyscript.exceptions import StorySyntaxError
 
 
 class Lines:
