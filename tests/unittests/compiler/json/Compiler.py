@@ -41,7 +41,7 @@ def test_compiler_output_none():
 def test_compiler_extract_values(patch, tree):
     patch.object(Objects, 'entity')
     tree.expression = None
-    result = JSONCompiler.extract_values(tree)
+    result = JSONCompiler().extract_values(tree)
     tree.child.assert_called_with(1)
     Objects.entity.assert_called_with(tree.child())
     assert result == [Objects.entity()]
@@ -50,14 +50,14 @@ def test_compiler_extract_values(patch, tree):
 def test_compiler_extract_values_expression(patch, tree):
     patch.object(Objects, 'expression')
     tree.expression.mutation = None
-    result = JSONCompiler.extract_values(tree)
+    result = JSONCompiler().extract_values(tree)
     Objects.expression.assert_called_with(tree.expression)
     assert result == [Objects.expression()]
 
 
 def test_compiler_extract_values_mutation(patch, tree):
     patch.many(Objects, ['values', 'mutation_fragment'])
-    result = JSONCompiler.extract_values(tree)
+    result = JSONCompiler().extract_values(tree)
     Objects.values.assert_called_with(tree.expression.values)
     Objects.mutation_fragment.assert_called_with(tree.expression.mutation)
     assert result == [Objects.values(), Objects.mutation_fragment()]
@@ -67,7 +67,7 @@ def test_compiler_chained_mutations(patch, magic, tree):
     patch.object(Objects, 'mutation_fragment')
     mutation = magic()
     tree.find_data.return_value = [mutation]
-    result = JSONCompiler.chained_mutations(tree)
+    result = JSONCompiler().chained_mutations(tree)
     Objects.mutation_fragment.assert_called_with(mutation.mutation_fragment)
     assert result == [Objects.mutation_fragment()]
 

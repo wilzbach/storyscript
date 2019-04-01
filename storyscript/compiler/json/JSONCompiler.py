@@ -15,6 +15,7 @@ class JSONCompiler:
     """
     def __init__(self):
         self.lines = Lines()
+        self.objects = Objects()
 
     @staticmethod
     def output(tree):
@@ -24,27 +25,26 @@ class JSONCompiler:
                 output.append(item.value)
         return output
 
-    @staticmethod
-    def extract_values(fragment):
+    def extract_values(self, fragment):
         """
         Extracts values from an assignment_fragment tree, to be used as
         arguments in a set method.
         """
         if fragment.expression:
             if fragment.expression.mutation:
-                m = Objects.mutation_fragment(fragment.expression.mutation)
-                return [Objects.values(fragment.expression.values), m]
-            return [Objects.expression(fragment.expression)]
-        return [Objects.entity(fragment.child(1))]
+                mutation = fragment.expression.mutation
+                frag = self.objects.mutation_fragment(mutation)
+                return [self.objects.values(fragment.expression.values), frag]
+            return [self.objects.expression(fragment.expression)]
+        return [self.objects.entity(fragment.child(1))]
 
-    @staticmethod
-    def chained_mutations(tree):
+    def chained_mutations(self, tree):
         """
         Finds and compile chained mutations
         """
         mutations = []
         for mutation in tree.find_data('chained_mutation'):
-            m = Objects.mutation_fragment(mutation.mutation_fragment)
+            m = self.objects.mutation_fragment(mutation.mutation_fragment)
             mutations.append(m)
         return mutations
 
@@ -63,7 +63,7 @@ class JSONCompiler:
         """
         Compiles an absolute expression using Compiler.expression
         """
-        args = [Objects.expression(tree.expression)]
+        args = [self.objects.expression(tree.expression)]
         self.lines.append('expression', tree.line(), args=args, parent=parent)
 
     def base_expression_assignment(self, tree, parent, line):
@@ -72,14 +72,14 @@ class JSONCompiler:
         """
         service = tree.service
         if service:
-            path = Objects.names(service.path)
+            path = self.objects.names(service.path)
             internal_assert(not self.lines.is_variable_defined(path))
             self.service(service, None, parent)
         elif tree.mutation:
             self.mutation_block(tree, parent)
             return
         elif tree.expression:
-            args = [Objects.expression(tree.expression)]
+            args = [self.objects.expression(tree.expression)]
             self.lines.append('expression', line, args=args, parent=parent)
             return
         else:
@@ -94,16 +94,16 @@ class JSONCompiler:
         as mutations and service calls have been replaced with fake paths.
         """
         if tree.expression:
-            return Objects.expression(tree.expression)
+            return self.objects.expression(tree.expression)
         else:
             internal_assert(tree.child(0).data == 'path')
-            return Objects.entity(tree)
+            return self.objects.entity(tree)
 
     def assignment(self, tree, parent):
         """
         Compiles an assignment tree
         """
-        name = Objects.names(tree.path)
+        name = self.objects.names(tree.path)
         line = tree.line()
         fragment = tree.assignment_fragment.base_expression
         self.base_expression_assignment(fragment, parent, line)
@@ -117,7 +117,8 @@ class JSONCompiler:
         if prev_line is not None:
             if prev_line['method'] != 'execute':
                 raise StorySyntaxError('arguments_noservice', tree=tree)
-            prev_line['args'] = prev_line['args'] + Objects.arguments(tree)
+            prev_args = prev_line['args']
+            prev_line['args'] = prev_args + self.objects.arguments(tree)
             return
         raise StorySyntaxError('arguments_noservice', tree=tree)
 
@@ -128,11 +129,11 @@ class JSONCompiler:
         line = tree.line()
         tree.expect(tree.path.inline_expression is None,
                     'function_call_no_inline_expression')
-        name = Objects.names(tree.path)
+        name = self.objects.names(tree.path)
         tree.expect(len(name) == 1, 'function_call_invalid_path',
                     name='.'.join(name))
         name = tree.path.extract_path()
-        args = Objects.arguments(tree)
+        args = self.objects.arguments(tree)
         # check whether function exists in this or imported modules
         in_module = name.split('.')[0] in self.lines.modules
         is_valid_function = name in self.lines.functions
@@ -145,7 +146,7 @@ class JSONCompiler:
         """
         Compiles a service tree.
         """
-        service_name = Objects.names(tree.path)
+        service_name = self.objects.names(tree.path)
         if service_name in self.lines.variables:
             self.mutation_block(tree, parent)
             return
@@ -153,7 +154,7 @@ class JSONCompiler:
         command = tree.service_fragment.command
         tree.expect(command is not None, 'service_without_command')
         command = command.child(0)
-        arguments = Objects.arguments(tree.service_fragment)
+        arguments = self.objects.arguments(tree.service_fragment)
         service = tree.path.extract_path()
         output = self.output(tree.service_fragment.output)
         if output:
@@ -190,7 +191,7 @@ class JSONCompiler:
         if not sf.command:
             sf.command = tree.service.path
             output_name = self.find_parent_with_output(tree, parent)
-            tree.service.path = Objects.name_to_path(output_name[0])
+            tree.service.path = self.objects.name_to_path(output_name[0])
         self.service(tree.service, nested_block, parent)
         self.lines.last()['method'] = 'when'
 
@@ -251,7 +252,7 @@ class JSONCompiler:
 
     def foreach_block(self, tree, parent):
         line = tree.line()
-        args = [Objects.entity(tree.foreach_statement.child(0))]
+        args = [self.objects.entity(tree.foreach_statement.child(0))]
         output = self.output(tree.foreach_statement.output)
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent, output)
@@ -277,7 +278,7 @@ class JSONCompiler:
         """
         line = tree.line()
         function = tree.function_statement
-        args = Objects.function_arguments(function)
+        args = self.objects.function_arguments(function)
         output = self.function_output(function)
         nested_block = tree.nested_block or tree.block
         function_name = function.child(1).value
@@ -301,14 +302,14 @@ class JSONCompiler:
         """
         if tree.path:
             args = [
-                Objects.path(tree.path),
-                Objects.mutation_fragment(tree.service_fragment)
+                self.objects.path(tree.path),
+                self.objects.mutation_fragment(tree.service_fragment)
             ]
             args = args + self.chained_mutations(tree)
         else:
             args = [
-                Objects.entity(tree.mutation.entity),
-                Objects.mutation_fragment(tree.mutation.mutation_fragment)
+                self.objects.entity(tree.mutation.entity),
+                self.objects.mutation_fragment(tree.mutation.mutation_fragment)
             ]
             args = args + self.chained_mutations(tree.mutation)
         if tree.nested_block:
@@ -365,7 +366,7 @@ class JSONCompiler:
         line = tree.line()
         args = []
         if len(tree.children) > 1:
-            args = [Objects.entity(tree.child(1))]
+            args = [self.objects.entity(tree.child(1))]
         self.lines.append('throw', line, args=args, parent=parent)
 
     def catch_block(self, tree, parent):
@@ -375,7 +376,7 @@ class JSONCompiler:
         line = tree.line()
         self.lines.set_exit(line)
         nested_block = tree.nested_block
-        output = Objects.names(tree.catch_statement)
+        output = self.objects.names(tree.catch_statement)
         self.lines.set_scope(line, parent, output)
         self.lines.append('catch', line, enter=nested_block.line(),
                           output=output, parent=parent)
