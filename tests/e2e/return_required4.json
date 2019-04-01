@@ -50,7 +50,10 @@
       "method": "if",
       "ln": "3",
       "args": [
-        true
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
       ],
       "enter": "4",
       "exit": "5",
@@ -67,7 +70,10 @@
       "method": "elif",
       "ln": "5",
       "args": [
-        true
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
       ],
       "enter": "6",
       "exit": "7",

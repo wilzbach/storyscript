@@ -75,7 +75,10 @@
       "method": "return",
       "ln": "4",
       "args": [
-        true
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
       ],
       "parent": "3",
       "next": "5"
@@ -92,7 +95,10 @@
       "method": "return",
       "ln": "6",
       "args": [
-        false
+        {
+          "$OBJECT": "boolean",
+          "boolean": false
+        }
       ],
       "parent": "5",
       "next": "8.1"

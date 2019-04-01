@@ -50,7 +50,10 @@
       "method": "while",
       "ln": "3",
       "args": [
-        true
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
       ],
       "enter": "4",
       "exit": "5",

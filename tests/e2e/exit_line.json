@@ -91,7 +91,10 @@
       "method": "while",
       "ln": "9",
       "args": [
-        true
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
       ],
       "enter": "10",
       "exit": "12",

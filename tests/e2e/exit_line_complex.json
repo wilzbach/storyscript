@@ -37,7 +37,10 @@
         "found"
       ],
       "args": [
-        false
+        {
+          "$OBJECT": "boolean",
+          "boolean": false
+        }
       ],
       "next": "3"
     },
@@ -122,7 +125,10 @@
         "found"
       ],
       "args": [
-        true
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
       ],
       "parent": "4",
       "next": "6"
@@ -142,7 +148,10 @@
         "found"
       ],
       "args": [
-        false
+        {
+          "$OBJECT": "boolean",
+          "boolean": false
+        }
       ],
       "parent": "6",
       "next": "8"
@@ -185,7 +194,10 @@
         "outside"
       ],
       "args": [
-        true
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
       ]
     }
   },
