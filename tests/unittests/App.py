@@ -22,7 +22,7 @@ def test_app_parse(bundle):
     result = App.parse('path')
     Bundle.from_path.assert_called_with('path', ignored_path=None)
     bt = Bundle.from_path().bundle_trees
-    bt.assert_called_with(ebnf=None, preprocess=False)
+    bt.assert_called_with(ebnf=None, lower=False)
     assert result == Bundle.from_path().bundle_trees()
 
 
@@ -37,19 +37,19 @@ def test_app_parse_ebnf(bundle):
     """
     App.parse('path', ebnf='ebnf')
     bt = Bundle.from_path().bundle_trees
-    bt.assert_called_with(ebnf='ebnf', preprocess=False)
+    bt.assert_called_with(ebnf='ebnf', lower=False)
 
 
-def test_app_parse_preprocess(patch, bundle, magic):
+def test_app_parse_lower(patch, bundle, magic):
     """
-    Ensures App.parse applies the preprocessor
+    Ensures App.parse applies the loweror
     """
     story = magic()
     Bundle.from_path().bundle_trees.return_value = {'foo.story': story}
-    result = App.parse('path', preprocess=True)
+    result = App.parse('path', lower=True)
     Bundle.from_path.assert_called_with('path', ignored_path=None)
     bt = Bundle.from_path().bundle_trees
-    bt.assert_called_with(ebnf=None, preprocess=True)
+    bt.assert_called_with(ebnf=None, lower=True)
     assert result == Bundle.from_path().bundle_trees(story)
 
 

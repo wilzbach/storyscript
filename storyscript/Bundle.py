@@ -3,7 +3,7 @@ import os
 import subprocess
 
 from .Story import Story, _parser
-from .compiler import Preprocessor
+from .compiler.lowering import Lowering
 from .parser import Parser
 
 
@@ -140,16 +140,16 @@ class Bundle:
         return {'stories': self.stories, 'services': self.services(),
                 'entrypoint': entrypoint}
 
-    def bundle_trees(self, ebnf=None, preprocess=False):
+    def bundle_trees(self, ebnf=None, lower=False):
         """
         Makes a bundle of syntax trees
         """
         parser = self.parser(ebnf)
         self.parse(self.find_stories(), parser=parser)
-        if preprocess:
+        if lower:
             if parser is None:
                 parser = _parser()
-            proc = Preprocessor(parser)
+            proc = Lowering(parser)
             for story, tree in self.stories.items():
                 self.stories[story] = proc.process(tree)
         return self.stories

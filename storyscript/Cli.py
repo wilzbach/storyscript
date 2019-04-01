@@ -39,16 +39,16 @@ class Cli:
     @click.option('--debug', is_flag=True)
     @click.option('--ebnf', help=ebnf_help)
     @click.option('--raw', is_flag=True)
-    @click.option('--preprocess', is_flag=True)
+    @click.option('--lower', is_flag=True)
     @click.option('--ignore', default=None,
                   help='Specify path of ignored files')
-    def parse(path, debug, ebnf, raw, ignore, preprocess):
+    def parse(path, debug, ebnf, raw, ignore, lower):
         """
         Parses stories, producing the abstract syntax tree.
         """
         try:
             trees = App.parse(path, ignored_path=ignore, ebnf=ebnf,
-                              preprocess=preprocess)
+                              lower=lower)
             for story, tree in trees.items():
                 click.echo('File: {}'.format(story))
                 if raw:

@@ -94,13 +94,13 @@ start
     assert e.exit_code == 0
 
 
-def test_cli_parse_preprocess_file(mocker, runner):
+def test_cli_parse_lower_file(mocker, runner):
     """
-    Ensures that parser with proprocess works properly
+    Ensures that parser with --lower works properly
     """
     m = mock.mock_open(read_data='".{a}"')
     mocker.patch.object(io, 'open', m)
-    e = runner.invoke(Cli.parse, ['--preprocess', '/parse/path'])
+    e = runner.invoke(Cli.parse, ['--lower', '/parse/path'])
 
     assert e.output == """File: /parse/path
 start
