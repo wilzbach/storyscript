@@ -240,6 +240,7 @@ class Transformer(LarkTransformer):
             if matches[1].data == 'indented_typed_arguments':
                 for argument in matches.pop(1).find_data('typed_argument'):
                     matches[0].children.append(argument)
+                matches[-1] = Tree('nested_block', [matches[-1]])
 
         return Tree('function_block', matches)
 
