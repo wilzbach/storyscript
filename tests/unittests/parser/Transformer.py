@@ -245,9 +245,14 @@ def test_transformer_function_block(patch, tree, magic):
     """
     function_block = magic()
     m = magic()
+    block = magic()
     m.data = 'indented_typed_arguments'
     m.find_data.return_value = ['.indented.node.']
-    r = Transformer.function_block([function_block, m])
+    r = Transformer.function_block([function_block, m, block])
     m.find_data.assert_called_with('typed_argument')
     function_block.children.append.assert_called_with('.indented.node.')
-    assert r == Tree('function_block', [function_block])
+    assert r.data == 'function_block'
+    assert r.children == [
+        function_block,
+        Tree('nested_block', [block])
+    ]
