@@ -163,7 +163,7 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "a"
+            "found"
           ]
         }
       ],

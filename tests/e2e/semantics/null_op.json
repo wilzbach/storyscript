@@ -1,0 +1,236 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        null
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        null
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "s"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": ""
+        }
+      ],
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "multiplication",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "multiplication",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "name": [
+        "e"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "7"
+    },
+    "7": {
+      "method": "expression",
+      "ln": "7",
+      "name": [
+        "f"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "s"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "8"
+    },
+    "8": {
+      "method": "expression",
+      "ln": "8",
+      "name": [
+        "g"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "s"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "9"
+    },
+    "9": {
+      "method": "expression",
+      "ln": "9",
+      "name": [
+        "h"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "10"
+    },
+    "10": {
+      "method": "expression",
+      "ln": "10",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "next": "11"
+    },
+    "11": {
+      "method": "expression",
+      "ln": "11",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

@@ -1,0 +1,68 @@
+{
+  "tree": {
+    "1": {
+      "method": "try",
+      "ln": "1",
+      "enter": "2",
+      "exit": "3",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "1",
+      "next": "3"
+    },
+    "3": {
+      "method": "catch",
+      "ln": "3",
+      "output": [
+        "e"
+      ],
+      "enter": "4",
+      "exit": "5",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "3",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

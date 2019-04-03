@@ -4,6 +4,20 @@
       "method": "expression",
       "ln": "1",
       "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
         "a"
       ],
       "args": [

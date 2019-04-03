@@ -1,0 +1,131 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [
+        "function"
+      ],
+      "function": "a",
+      "enter": "2",
+      "exit": "3",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "1",
+      "next": "3"
+    },
+    "3": {
+      "method": "function",
+      "ln": "3",
+      "output": [
+        "regex"
+      ],
+      "function": "b",
+      "enter": "4",
+      "exit": "5",
+      "next": "4"
+    },
+    "4": {
+      "method": "return",
+      "ln": "4",
+      "args": [
+        {
+          "$OBJECT": "regexp",
+          "regexp": "/foo/"
+        }
+      ],
+      "parent": "3",
+      "next": "5"
+    },
+    "5": {
+      "method": "function",
+      "ln": "5",
+      "output": [
+        "any"
+      ],
+      "function": "c",
+      "enter": "6",
+      "exit": "7",
+      "next": "6"
+    },
+    "6": {
+      "method": "return",
+      "ln": "6",
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "5",
+      "next": "7"
+    },
+    "7": {
+      "method": "function",
+      "ln": "7",
+      "output": [
+        "object"
+      ],
+      "function": "d",
+      "enter": "8",
+      "exit": "9",
+      "next": "8"
+    },
+    "8": {
+      "method": "return",
+      "ln": "8",
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": []
+        }
+      ],
+      "parent": "7",
+      "next": "9"
+    },
+    "9": {
+      "method": "function",
+      "ln": "9",
+      "output": [
+        "list"
+      ],
+      "function": "e",
+      "enter": "10",
+      "next": "10"
+    },
+    "10": {
+      "method": "return",
+      "ln": "10",
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        }
+      ],
+      "parent": "9"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "a": "1",
+    "b": "3",
+    "c": "5",
+    "d": "7",
+    "e": "9"
+  },
+  "version": null
+}

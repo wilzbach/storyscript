@@ -1,8 +1,22 @@
 {
   "tree": {
     "1": {
-      "method": "if",
+      "method": "expression",
       "ln": "1",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": false
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "if",
+      "ln": "2",
       "args": [
         {
           "$OBJECT": "expression",
@@ -17,13 +31,13 @@
           ]
         }
       ],
-      "enter": "2",
-      "next": "2"
+      "enter": "3",
+      "next": "3"
     },
-    "2": {
+    "3": {
       "method": "return",
-      "ln": "2",
-      "parent": "1"
+      "ln": "3",
+      "parent": "2"
     }
   },
   "entrypoint": "1",

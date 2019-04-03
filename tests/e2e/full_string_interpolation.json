@@ -1,10 +1,49 @@
 {
   "tree": {
-    "1.1": {
+    "1": {
       "method": "expression",
-      "ln": "1.1",
+      "ln": "1",
       "name": [
-        "__p-1.1"
+        "repo_full_name"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "storyscript/storyscript"
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "pull_request"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "number"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 42
+              }
+            ]
+          ]
+        }
+      ],
+      "next": "3.1"
+    },
+    "3.1": {
+      "method": "expression",
+      "ln": "3.1",
+      "name": [
+        "__p-3.1"
       ],
       "args": [
         {
@@ -18,11 +57,11 @@
           ]
         }
       ],
-      "next": "1"
+      "next": "3"
     },
-    "1": {
+    "3": {
       "method": "expression",
-      "ln": "1",
+      "ln": "3",
       "name": [
         "diff_url"
       ],
@@ -48,7 +87,7 @@
             {
               "$OBJECT": "path",
               "paths": [
-                "__p-1.1"
+                "__p-3.1"
               ]
             },
             {
@@ -60,6 +99,6 @@
       ]
     }
   },
-  "entrypoint": "1.1",
+  "entrypoint": "1",
   "version": null
 }

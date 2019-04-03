@@ -84,11 +84,15 @@ def test_compiler_expression_whitespace(source_pair):
     Ensures that expression isn't whitespace sensitive
     """
     source, expression, values = source_pair
-    source = 'a=' + source
-    result = Api.loads(source)
-    assert result['tree']['1']['method'] == 'expression'
-    assert result['tree']['1']['name'] == ['a']
-    assert len(result['tree']['1']['args']) == 1
-    assert result['tree']['1']['args'][0]['$OBJECT'] == 'expression'
-    assert result['tree']['1']['args'][0]['expression'] == expression
-    assert result['tree']['1']['args'][0]['values'] == values
+    full_source = 'a=' + source
+    index = '1'
+    if source.startswith('b'):
+        full_source = 'b=0\nc=0\n' + full_source
+        index = '3'
+    result = Api.loads(full_source)
+    assert result['tree'][index]['method'] == 'expression'
+    assert result['tree'][index]['name'] == ['a']
+    assert len(result['tree'][index]['args']) == 1
+    assert result['tree'][index]['args'][0]['$OBJECT'] == 'expression'
+    assert result['tree'][index]['args'][0]['expression'] == expression
+    assert result['tree'][index]['args'][0]['values'] == values

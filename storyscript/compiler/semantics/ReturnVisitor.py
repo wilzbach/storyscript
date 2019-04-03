@@ -2,13 +2,21 @@
 
 from storyscript.exceptions import CompilerError
 
-from .Visitors import SelectiveVisitor
+from .ExpressionResolver import ExpressionResolver
+from .SymbolResolver import SymbolResolver
+from .symbols.SymbolTypes import NoneType
 
 
-class ReturnVisitor(SelectiveVisitor):
+class ReturnVisitor:
     """
     Checks the return type of functions.
     """
+    def __init__(self, return_type):
+        self.return_type = return_type
+        self.symbol_resolver = SymbolResolver(scope=None)
+        self.resolver = ExpressionResolver(
+            symbol_resolver=self.symbol_resolver
+        )
 
     def has_return(self, tree):
         if tree.rules and tree.rules.return_statement:
@@ -34,14 +42,29 @@ class ReturnVisitor(SelectiveVisitor):
                     return True
         return False
 
-    def function_block(self, tree):
+    def return_statement(self, tree, scope):
+        assert tree.data == 'return_statement'
+        self.symbol_resolver.update_scope(scope)
+        obj = tree.base_expression
+        if obj is None:
+            return NoneType.instance(), tree
+        return self.resolver.base_expression(tree.base_expression), obj
+
+    def function_block(self, tree, scope):
         if tree.function_statement.function_output:
             if not self.has_return(tree):
                 t = tree.function_statement.function_output
                 raise CompilerError('return_required', tree=t)
+            for ret in tree.find_data('return_statement'):
+                ret_type, obj = self.return_statement(ret, scope)
+                obj.expect(
+                    self.return_type.can_be_assigned(ret_type),
+                    'return_type_differs',
+                    target=self.return_type,
+                    source=ret_type
+                )
 
-    def block(self, tree):
-        self.visit_children(tree)
-
-    def start(self, tree):
-        self.visit_children(tree)
+    @classmethod
+    def check(cls, tree, scope, return_type):
+        rv = ReturnVisitor(return_type)
+        rv.function_block(tree, scope)

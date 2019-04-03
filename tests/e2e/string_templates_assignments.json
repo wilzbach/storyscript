@@ -1,99 +1,15 @@
 {
   "tree": {
-    "1.1": {
-      "method": "expression",
-      "ln": "1.1",
-      "name": [
-        "__p-1.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
-            },
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "d"
-              ]
-            }
-          ]
-        }
-      ],
-      "next": "1"
-    },
     "1": {
       "method": "expression",
       "ln": "1",
       "name": [
-        "a1"
+        "b"
       ],
       "args": [
         {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "int",
-              "int": 0
-            },
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-1.1"
-              ]
-            }
-          ]
-        }
-      ],
-      "next": "2.1"
-    },
-    "2.1": {
-      "method": "expression",
-      "ln": "2.1",
-      "name": [
-        "__p-2.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
-            },
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "d"
-              ]
-            }
-          ]
+          "$OBJECT": "int",
+          "int": 1
         }
       ],
       "next": "2"
@@ -102,24 +18,12 @@
       "method": "expression",
       "ln": "2",
       "name": [
-        "a2"
+        "d"
       ],
       "args": [
         {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-2.1"
-              ]
-            },
-            {
-              "$OBJECT": "int",
-              "int": 0
-            }
-          ]
+          "$OBJECT": "int",
+          "int": 2
         }
       ],
       "next": "3.1"
@@ -164,6 +68,130 @@
       "method": "expression",
       "ln": "3",
       "name": [
+        "a1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "int",
+              "int": 0
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-3.1"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "4.1"
+    },
+    "4.1": {
+      "method": "expression",
+      "ln": "4.1",
+      "name": [
+        "__p-4.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "a"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": "c"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "a2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-4.1"
+              ]
+            },
+            {
+              "$OBJECT": "int",
+              "int": 0
+            }
+          ]
+        }
+      ],
+      "next": "5.1"
+    },
+    "5.1": {
+      "method": "expression",
+      "ln": "5.1",
+      "name": [
+        "__p-5.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "a"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": "c"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
         "a3"
       ],
       "args": [
@@ -182,7 +210,7 @@
                 {
                   "$OBJECT": "path",
                   "paths": [
-                    "__p-3.1"
+                    "__p-5.1"
                   ]
                 }
               ]
@@ -194,11 +222,11 @@
           ]
         }
       ],
-      "next": "4"
+      "next": "6"
     },
-    "4": {
+    "6": {
       "method": "expression",
-      "ln": "4",
+      "ln": "6",
       "name": [
         "a4"
       ],
@@ -230,11 +258,11 @@
           ]
         }
       ],
-      "next": "5"
+      "next": "7"
     },
-    "5": {
+    "7": {
       "method": "expression",
-      "ln": "5",
+      "ln": "7",
       "name": [
         "a5"
       ],
@@ -256,11 +284,11 @@
           ]
         }
       ],
-      "next": "6"
+      "next": "8"
     },
-    "6": {
+    "8": {
       "method": "expression",
-      "ln": "6",
+      "ln": "8",
       "name": [
         "a6"
       ],
@@ -273,110 +301,6 @@
               "$OBJECT": "path",
               "paths": [
                 "b"
-              ]
-            },
-            {
-              "$OBJECT": "int",
-              "int": 0
-            }
-          ]
-        }
-      ],
-      "next": "7.1"
-    },
-    "7.1": {
-      "method": "expression",
-      "ln": "7.1",
-      "name": [
-        "__p-7.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
-            }
-          ]
-        }
-      ],
-      "next": "7"
-    },
-    "7": {
-      "method": "expression",
-      "ln": "7",
-      "name": [
-        "a7"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "int",
-              "int": 0
-            },
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-7.1"
-              ]
-            }
-          ]
-        }
-      ],
-      "next": "8.1"
-    },
-    "8.1": {
-      "method": "expression",
-      "ln": "8.1",
-      "name": [
-        "__p-8.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
-            }
-          ]
-        }
-      ],
-      "next": "8"
-    },
-    "8": {
-      "method": "expression",
-      "ln": "8",
-      "name": [
-        "a7"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-8.1"
               ]
             },
             {
@@ -418,7 +342,7 @@
       "method": "expression",
       "ln": "9",
       "name": [
-        "a8"
+        "a7"
       ],
       "args": [
         {
@@ -426,24 +350,14 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "expression",
-              "expression": "sum",
-              "values": [
-                {
-                  "$OBJECT": "int",
-                  "int": 0
-                },
-                {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "__p-9.1"
-                  ]
-                }
-              ]
-            },
-            {
               "$OBJECT": "int",
               "int": 0
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-9.1"
+              ]
             }
           ]
         }
@@ -470,10 +384,6 @@
               "paths": [
                 "b"
               ]
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
             }
           ]
         }
@@ -484,7 +394,7 @@
       "method": "expression",
       "ln": "10",
       "name": [
-        "a9"
+        "a7"
       ],
       "args": [
         {
@@ -526,10 +436,6 @@
               "paths": [
                 "b"
               ]
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
             }
           ]
         }
@@ -540,7 +446,7 @@
       "method": "expression",
       "ln": "11",
       "name": [
-        "a10"
+        "a8"
       ],
       "args": [
         {
@@ -548,14 +454,24 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "int",
+                  "int": 0
+                },
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "__p-11.1"
+                  ]
+                }
+              ]
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-11.1"
-              ]
+              "$OBJECT": "int",
+              "int": 0
             }
           ]
         }
@@ -596,7 +512,7 @@
       "method": "expression",
       "ln": "12",
       "name": [
-        "a11"
+        "a9"
       ],
       "args": [
         {
@@ -604,19 +520,9 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "expression",
-              "expression": "sum",
-              "values": [
-                {
-                  "$OBJECT": "int",
-                  "int": 0
-                },
-                {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "__p-12.1"
-                  ]
-                }
+              "$OBJECT": "path",
+              "paths": [
+                "__p-12.1"
               ]
             },
             {
@@ -652,12 +558,6 @@
             {
               "$OBJECT": "string",
               "string": "c"
-            },
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "d"
-              ]
             }
           ]
         }
@@ -668,7 +568,7 @@
       "method": "expression",
       "ln": "13",
       "name": [
-        "a12"
+        "a10"
       ],
       "args": [
         {
@@ -676,14 +576,14 @@
           "expression": "sum",
           "values": [
             {
+              "$OBJECT": "int",
+              "int": 0
+            },
+            {
               "$OBJECT": "path",
               "paths": [
                 "__p-13.1"
               ]
-            },
-            {
-              "$OBJECT": "int",
-              "int": 0
             }
           ]
         }
@@ -714,12 +614,6 @@
             {
               "$OBJECT": "string",
               "string": "c"
-            },
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "d"
-              ]
             }
           ]
         }
@@ -730,7 +624,7 @@
       "method": "expression",
       "ln": "14",
       "name": [
-        "a13"
+        "a11"
       ],
       "args": [
         {
@@ -738,14 +632,24 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "int",
+                  "int": 0
+                },
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "__p-14.1"
+                  ]
+                }
+              ]
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-14.1"
-              ]
+              "$OBJECT": "int",
+              "int": 0
             }
           ]
         }
@@ -792,6 +696,130 @@
       "method": "expression",
       "ln": "15",
       "name": [
+        "a12"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-15.1"
+              ]
+            },
+            {
+              "$OBJECT": "int",
+              "int": 0
+            }
+          ]
+        }
+      ],
+      "next": "16.1"
+    },
+    "16.1": {
+      "method": "expression",
+      "ln": "16.1",
+      "name": [
+        "__p-16.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "a"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": "c"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "16"
+    },
+    "16": {
+      "method": "expression",
+      "ln": "16",
+      "name": [
+        "a13"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "int",
+              "int": 0
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-16.1"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "17.1"
+    },
+    "17.1": {
+      "method": "expression",
+      "ln": "17.1",
+      "name": [
+        "__p-17.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "a"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": "c"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d"
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "17"
+    },
+    "17": {
+      "method": "expression",
+      "ln": "17",
+      "name": [
         "a14"
       ],
       "args": [
@@ -810,7 +838,7 @@
                 {
                   "$OBJECT": "path",
                   "paths": [
-                    "__p-15.1"
+                    "__p-17.1"
                   ]
                 }
               ]
@@ -824,6 +852,6 @@
       ]
     }
   },
-  "entrypoint": "1.1",
+  "entrypoint": "1",
   "version": null
 }

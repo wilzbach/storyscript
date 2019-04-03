@@ -1,5 +1,5 @@
 function sum a:int returns int
     a + b
     while true
-         return
+         return 0
     a + b

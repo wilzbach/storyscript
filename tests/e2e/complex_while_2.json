@@ -1,8 +1,78 @@
 {
   "tree": {
     "1": {
-      "method": "while",
+      "method": "expression",
       "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 3
+        }
+      ],
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 4
+        }
+      ],
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "i"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "next": "6"
+    },
+    "6": {
+      "method": "while",
+      "ln": "6",
       "args": [
         {
           "$OBJECT": "expression",
@@ -47,12 +117,12 @@
           ]
         }
       ],
-      "enter": "2",
-      "next": "2"
+      "enter": "7",
+      "next": "7"
     },
-    "2": {
+    "7": {
       "method": "expression",
-      "ln": "2",
+      "ln": "7",
       "name": [
         "i"
       ],
@@ -74,7 +144,7 @@
           ]
         }
       ],
-      "parent": "1"
+      "parent": "6"
     }
   },
   "entrypoint": "1",

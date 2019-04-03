@@ -1,0 +1,30 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        null
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}

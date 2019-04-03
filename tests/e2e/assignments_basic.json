@@ -317,19 +317,23 @@
       "next": "24"
     },
     "24": {
-      "method": "expression",
+      "method": "execute",
       "ln": "24",
       "name": [
         "service"
       ],
-      "args": [
-        {
-          "$OBJECT": "path",
-          "paths": [
-            "alpine_echo"
-          ]
-        }
+      "service": "alpine",
+      "command": "echo",
+      "next": "25.1"
+    },
+    "25.1": {
+      "method": "execute",
+      "ln": "25.1",
+      "name": [
+        "__p-25.1"
       ],
+      "service": "alpine",
+      "command": "echo",
       "next": "25"
     },
     "25": {
@@ -342,12 +346,15 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "alpine_echo"
+            "__p-25.1"
           ]
         }
       ]
     }
   },
+  "services": [
+    "alpine"
+  ],
   "entrypoint": "1",
   "version": null
 }

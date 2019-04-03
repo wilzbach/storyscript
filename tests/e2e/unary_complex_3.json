@@ -4,6 +4,34 @@
       "method": "expression",
       "ln": "1",
       "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 42
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "t"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 21
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
         "a"
       ],
       "args": [
@@ -40,24 +68,24 @@
             },
             {
               "$OBJECT": "expression",
-              "expression": "sum",
+              "expression": "not",
               "values": [
                 {
                   "$OBJECT": "expression",
-                  "expression": "not",
+                  "expression": "sum",
                   "values": [
                     {
                       "$OBJECT": "path",
                       "paths": [
                         "t"
                       ]
+                    },
+                    {
+                      "$OBJECT": "path",
+                      "paths": [
+                        "t"
+                      ]
                     }
-                  ]
-                },
-                {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "t"
                   ]
                 }
               ]

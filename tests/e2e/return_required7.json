@@ -49,6 +49,12 @@
     "3": {
       "method": "return",
       "ln": "3",
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
       "parent": "1"
     }
   },

@@ -36,8 +36,14 @@
                   ]
                 },
                 {
-                  "$OBJECT": "int",
-                  "int": -4
+                  "$OBJECT": "expression",
+                  "expression": "not",
+                  "values": [
+                    {
+                      "$OBJECT": "int",
+                      "int": -4
+                    }
+                  ]
                 }
               ]
             }

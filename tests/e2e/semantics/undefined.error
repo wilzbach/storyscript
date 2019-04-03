@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = b
+          ^
+
+E0101: Variable `b` has not been defined.

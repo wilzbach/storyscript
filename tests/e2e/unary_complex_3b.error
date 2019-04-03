@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 18
+
+3|    a = [! b, !2] <= ! t + t
+                       ^
+
+E0103: `boolean` is not compatible with `int`

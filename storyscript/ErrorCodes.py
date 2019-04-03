@@ -79,6 +79,22 @@ class ErrorCodes:
         'E0061', 'Invalid path name: `{path}`. '
         'Path names can\'t contain `{token}`')
     return_required = ('E0062', 'All paths of a function need to return')
+    type_assignment_different = (
+        'E0100', 'Can\'t assign `{target}` to `{var_type}`')
+    var_not_defined = (
+        'E0101', 'Variable `{name}` has not been defined.')
+    return_type_differs = (
+        'E0102',
+        '`{source}` can\'t be implicitly converted to expected '
+        'return type `{target}`.')
+    type_operation_incompatible = (
+        'E0103',
+        '`{left}` is not compatible with `{right}`'
+    )
+    type_index_incompatible = (
+        'E0104',
+        '`{left}` can\'t be indexed with `{right}`'
+    )
 
     @staticmethod
     def is_error(error_name):

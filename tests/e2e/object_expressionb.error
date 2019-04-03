@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 11
+
+1|    a = {"1": b - c, "2": 1 % 2 - 3}
+                ^
+
+E0101: Variable `b` has not been defined.

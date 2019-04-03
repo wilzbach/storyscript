@@ -1,8 +1,22 @@
 {
   "tree": {
     "1": {
-      "method": "if",
+      "method": "expression",
       "ln": "1",
+      "name": [
+        "colour"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "blue"
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "if",
+      "ln": "2",
       "args": [
         {
           "$OBJECT": "expression",
@@ -21,13 +35,13 @@
           ]
         }
       ],
-      "enter": "2",
-      "exit": "3",
-      "next": "2"
+      "enter": "3",
+      "exit": "4",
+      "next": "3"
     },
-    "2": {
+    "3": {
       "method": "expression",
-      "ln": "2",
+      "ln": "3",
       "name": [
         "x"
       ],
@@ -37,18 +51,18 @@
           "int": 0
         }
       ],
-      "parent": "1",
-      "next": "3"
-    },
-    "3": {
-      "method": "else",
-      "ln": "3",
-      "enter": "4",
+      "parent": "2",
       "next": "4"
     },
     "4": {
-      "method": "expression",
+      "method": "else",
       "ln": "4",
+      "enter": "5",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
       "name": [
         "x"
       ],
@@ -58,7 +72,7 @@
           "int": 1
         }
       ],
-      "parent": "3"
+      "parent": "4"
     }
   },
   "entrypoint": "1",

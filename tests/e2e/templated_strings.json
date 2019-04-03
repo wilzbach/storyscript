@@ -4,6 +4,90 @@
       "method": "expression",
       "ln": "1",
       "name": [
+        "my_story"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "asyncy"
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "b"
+        }
+      ],
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 3
+        }
+      ],
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "d"
+        }
+      ],
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "name": [
+        "obj"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": []
+        }
+      ],
+      "next": "7"
+    },
+    "7": {
+      "method": "expression",
+      "ln": "7",
+      "name": [
         "t1"
       ],
       "args": [
@@ -28,11 +112,11 @@
           ]
         }
       ],
-      "next": "2"
+      "next": "8"
     },
-    "2": {
+    "8": {
       "method": "expression",
-      "ln": "2",
+      "ln": "8",
       "name": [
         "t2"
       ],
@@ -72,11 +156,11 @@
           ]
         }
       ],
-      "next": "3"
+      "next": "9"
     },
-    "3": {
+    "9": {
       "method": "expression",
-      "ln": "3",
+      "ln": "9",
       "name": [
         "t3"
       ],
@@ -88,29 +172,29 @@
           ]
         }
       ],
-      "next": "4.1"
+      "next": "10.1"
     },
-    "4.1": {
+    "10.1": {
       "method": "expression",
-      "ln": "4.1",
+      "ln": "10.1",
       "name": [
-        "__p-4.1"
+        "__p-10.1"
       ],
       "args": [
         {
           "$OBJECT": "path",
           "paths": [
-            "a",
+            "obj",
             "b",
             "c"
           ]
         }
       ],
-      "next": "4"
+      "next": "10"
     },
-    "4": {
+    "10": {
       "method": "expression",
-      "ln": "4",
+      "ln": "10",
       "name": [
         "t4"
       ],
@@ -126,7 +210,7 @@
             {
               "$OBJECT": "path",
               "paths": [
-                "__p-4.1"
+                "__p-10.1"
               ]
             },
             {

@@ -1,5 +1,5 @@
 try
 	x=0
 catch as error
-	if TRUE
+	if true
 		throw error
