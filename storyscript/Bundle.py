@@ -2,8 +2,7 @@
 import os
 import subprocess
 
-from .Story import Story, _parser
-from .compiler.lowering import Lowering
+from .Story import Story
 from .parser import Parser
 
 
@@ -108,14 +107,14 @@ class Bundle:
             return Parser(ebnf=ebnf)
         return None
 
-    def parse(self, stories, parser):
+    def parse(self, stories, parser, lower):
         """
         Parse stories.
         """
         for storypath in stories:
             story = self.load_story(storypath)
-            story.parse(parser=parser)
-            self.parse(story.modules(), parser=parser)
+            story.parse(parser=parser, lower=lower)
+            self.parse(story.modules(), parser=parser, lower=lower)
             self.stories[storypath] = story.tree
 
     def compile(self, stories, parser):
@@ -145,13 +144,7 @@ class Bundle:
         Makes a bundle of syntax trees
         """
         parser = self.parser(ebnf)
-        self.parse(self.find_stories(), parser=parser)
-        if lower:
-            if parser is None:
-                parser = _parser()
-            proc = Lowering(parser)
-            for story, tree in self.stories.items():
-                self.stories[story] = proc.process(tree)
+        self.parse(self.find_stories(), parser=parser, lower=lower)
         return self.stories
 
     def lex(self, ebnf=None):

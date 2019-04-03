@@ -8,6 +8,7 @@ from pytest import fixture, mark, raises
 
 from storyscript.Story import Story
 from storyscript.compiler import Compiler
+from storyscript.compiler.lowering.Lowering import Lowering
 from storyscript.exceptions import CompilerError, StoryError, StorySyntaxError
 from storyscript.parser import Parser
 
@@ -91,6 +92,14 @@ def test_story_parse(patch, story, parser):
 def test_story_parse_debug(patch, story, parser):
     story.parse(parser=parser)
     parser.parse.assert_called_with(story.story)
+
+
+def test_story_parse_lower(patch, story, parser):
+    patch.object(Lowering, 'process')
+    story.parse(parser=parser, lower=True)
+    parser.parse.assert_called_with(story.story)
+    Lowering.process.assert_called_with(Parser.parse())
+    assert story.tree == Lowering.process(Lowering.process())
 
 
 @mark.parametrize('error', [
