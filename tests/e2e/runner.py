@@ -16,7 +16,7 @@ from storyscript.exceptions import StoryError
 test_dir = path.dirname(path.realpath(__file__))
 # make the test_file paths relative, s.t. the tests are nice to read
 test_files = list(map(lambda e: path.relpath(e, test_dir),
-                  glob(path.join(test_dir, '*.story'))))
+                  glob(path.join(test_dir, '**', '*.story'), recursive=True)))
 
 
 # compile a story and compare its tree with the expected tree
