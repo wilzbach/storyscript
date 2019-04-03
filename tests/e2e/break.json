@@ -4,7 +4,10 @@
       "method": "while",
       "ln": "1",
       "args": [
-        true
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
       ],
       "enter": "2",
       "next": "2"

@@ -154,12 +154,12 @@ def test_objects_string(patch, tree):
 
 def test_objects_boolean():
     tree = Tree('boolean', [Token('TRUE', 'true')])
-    assert Objects.boolean(tree) is True
+    assert Objects.boolean(tree) == {'$OBJECT': 'boolean', 'boolean': True}
 
 
 def test_objects_boolean_false():
     tree = Tree('boolean', [Token('FALSE', 'false')])
-    assert Objects.boolean(tree) is False
+    assert Objects.boolean(tree) == {'$OBJECT': 'boolean', 'boolean': False}
 
 
 def test_objects_list(patch, tree):

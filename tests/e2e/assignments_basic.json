@@ -7,7 +7,10 @@
         "t"
       ],
       "args": [
-        true
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
       ],
       "next": "2"
     },
@@ -18,7 +21,10 @@
         "f"
       ],
       "args": [
-        false
+        {
+          "$OBJECT": "boolean",
+          "boolean": false
+        }
       ],
       "next": "3"
     },

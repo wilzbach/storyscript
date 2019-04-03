@@ -7,7 +7,10 @@
         "foo"
       ],
       "args": [
-        true
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
       ],
       "next": "2"
     },
@@ -29,7 +32,10 @@
                     "foo"
                   ]
                 },
-                true
+                {
+                  "$OBJECT": "boolean",
+                  "boolean": true
+                }
               ]
             },
             {

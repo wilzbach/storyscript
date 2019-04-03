@@ -55,7 +55,10 @@
                       }
                     ]
                   },
-                  false
+                  {
+                    "$OBJECT": "boolean",
+                    "boolean": false
+                  }
                 ]
               }
             }

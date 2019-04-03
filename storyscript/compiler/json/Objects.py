@@ -101,8 +101,8 @@ class Objects:
     @staticmethod
     def boolean(tree):
         if tree.child(0).value == 'true':
-            return True
-        return False
+            return {'$OBJECT': 'boolean', 'boolean': True}
+        return {'$OBJECT': 'boolean', 'boolean': False}
 
     def list(self, tree):
         items = []

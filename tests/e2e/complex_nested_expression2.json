@@ -12,7 +12,10 @@
               "$OBJECT": "expression",
               "expression": "and",
               "values": [
-                true,
+                {
+                  "$OBJECT": "boolean",
+                  "boolean": true
+                },
                 {
                   "$OBJECT": "expression",
                   "expression": "equals",
