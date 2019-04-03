@@ -6,7 +6,6 @@ from pytest import fixture
 
 from storyscript.Bundle import Bundle
 from storyscript.Story import Story
-from storyscript.compiler.lowering.Lowering import Lowering
 from storyscript.parser import Parser
 
 
@@ -191,10 +190,10 @@ def test_bundle_services_no_duplicates(bundle):
 def test_bundle_parse(patch, bundle):
     parse = bundle.parse
     patch.many(Bundle, ['parse', 'load_story'])
-    parse(['one.story'], None)
+    parse(['one.story'], None, lower=False)
     Bundle.load_story.assert_called_with('one.story')
     story = Bundle.load_story()
-    Bundle.parse.assert_called_with(story.modules(), parser=None)
+    Bundle.parse.assert_called_with(story.modules(), parser=None, lower=False)
     assert bundle.stories['one.story'] == story.tree
 
 
@@ -236,7 +235,8 @@ def test_bundle_bundle_trees(patch, bundle):
     result = bundle.bundle_trees()
     Bundle.parser.assert_called_with(None)
     Bundle.parse.assert_called_with(Bundle.find_stories(),
-                                    parser=Bundle.parser())
+                                    parser=Bundle.parser(),
+                                    lower=False)
     assert result == bundle.stories
 
 
@@ -245,7 +245,8 @@ def test_bundle_bundle_trees_ebnf(patch, bundle):
     bundle.bundle_trees(ebnf='ebnf')
     Bundle.parser.assert_called_with('ebnf')
     Bundle.parse.assert_called_with(Bundle.find_stories(),
-                                    parser=Bundle.parser())
+                                    parser=Bundle.parser(),
+                                    lower=False)
 
 
 def test_bundle_lex(patch, bundle):
@@ -276,15 +277,13 @@ def test_bundle_lex_ebnf(patch, bundle):
 
 def test_bundle_bundle_lower(patch, bundle, magic):
     patch.many(Bundle, ['find_stories', 'parse', 'parser'])
-    patch.object(Lowering, 'process')
     a_story = magic()
     bundle.stories = {'foo': a_story}
     bundle.bundle_trees(ebnf='ebnf', lower=True)
     Bundle.parser.assert_called_with('ebnf')
     Bundle.parse.assert_called_with(Bundle.find_stories(),
-                                    parser=Bundle.parser())
-    Lowering.process.assert_called_with(a_story)
-    assert bundle.stories == {'foo': Lowering.process(a_story)}
+                                    parser=Bundle.parser(),
+                                    lower=True)
 
 
 def test_bundle_parser_default(patch, bundle):

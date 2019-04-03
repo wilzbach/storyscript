@@ -343,6 +343,11 @@ class Lowering:
         text = Objects.unescape_string(string_node)
         string_objs = list(self.flatten_template(string_node, text))
 
+        # empty string
+        if len(string_objs) == 0:
+            # no AST modifications required
+            return
+
         # is plain string without string templates?
         if len(string_objs) == 1 and string_objs[0]['$OBJECT'] == 'string':
             # no AST modifications required

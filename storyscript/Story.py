@@ -7,6 +7,7 @@ from functools import lru_cache
 from lark.exceptions import UnexpectedInput, UnexpectedToken
 
 from .compiler import Compiler
+from .compiler.lowering import Lowering
 from .exceptions import CompilerError, StoryError, StorySyntaxError
 from .parser import Parser
 
@@ -67,7 +68,7 @@ class Story:
         """
         return StoryError(error, self.story, path=self.path)
 
-    def parse(self, parser):
+    def parse(self, parser, lower=False):
         """
         Parses the story, storing the tree
         """
@@ -75,7 +76,10 @@ class Story:
             parser = self._parser()
         try:
             self.tree = parser.parse(self.story)
-        except StorySyntaxError as error:
+            if lower:
+                proc = Lowering(parser)
+                self.tree = proc.process(self.tree)
+        except (CompilerError, StorySyntaxError) as error:
             raise self.error(error) from error
         except UnexpectedToken as error:
             raise self.error(error) from error
