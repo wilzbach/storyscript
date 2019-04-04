@@ -1,0 +1,116 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "app",
+            "secrets",
+            "slack"
+          ]
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "app",
+            "environment",
+            "FOO"
+          ]
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "while",
+      "ln": "3",
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
+      ],
+      "enter": "4",
+      "exit": "5",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "app",
+            "secrets",
+            "slack"
+          ]
+        }
+      ],
+      "parent": "3",
+      "next": "5"
+    },
+    "5": {
+      "method": "for",
+      "ln": "5",
+      "output": [
+        "z"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            }
+          ]
+        }
+      ],
+      "enter": "6",
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "app",
+            "secrets",
+            "slack"
+          ]
+        }
+      ],
+      "parent": "5"
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}
