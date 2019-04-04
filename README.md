@@ -58,6 +58,11 @@ Compile a story to JSON:
 storyscript compile -j hello.story
 ```
 
+## Editor plugins
+
+- [VSCode](https://asyncy.click/vscode)
+- [Atom](https://github.com/storyscript/atom)
+
 ## Development documentation
 
 [Development docs](https://storyscript.readthedocs.io) are provided for those
