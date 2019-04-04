@@ -129,7 +129,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         Create a new scope _without_ a parent scope for this function.
         Prepopulate the scope with symbols from the function arguments.
         """
-        scope = Scope()
+        scope = Scope.root()
         return_type = AnyType.instance()
         for c in tree.children:
             if isinstance(c, Tree) and c.data == 'typed_argument':
@@ -142,5 +142,5 @@ class TypeResolver(ScopeSelectiveVisitor):
 
     def start(self, tree, scope=None):
         # create the root scope
-        tree.scope = Scope(parent=None)
+        tree.scope = Scope.root()
         self.visit_children(tree, scope=tree.scope)

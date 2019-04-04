@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from .Symbols import Symbols
+from .SymbolTypes import AnyType
+from .Symbols import Symbol, Symbols
 
 
 class Scope:
@@ -45,3 +46,14 @@ class Scope:
         indent = '\t'
         return (f'Parent: {self.parent()}\n'
                 f'Symbols:\n{self.symbols().pretty(indent=indent)}')
+
+    @classmethod
+    def root(cls):
+        """
+        Creates a root scope.
+        """
+        scope = cls(parent=None)
+        # insert global symbols
+        app = Symbol(name='app', type_=AnyType.instance())
+        scope.insert('app', app)
+        return scope

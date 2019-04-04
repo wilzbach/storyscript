@@ -1,0 +1,53 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "function": "bar",
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "app",
+            "secrets",
+            "slack"
+          ]
+        }
+      ],
+      "parent": "1",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "app",
+            "environment",
+            "FOO"
+          ]
+        }
+      ],
+      "parent": "1"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "bar": "1"
+  },
+  "version": null
+}
