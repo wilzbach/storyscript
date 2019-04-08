@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = 2d2w
+          ^^^^
+
+E0063: Time value inconsistent: `w` must be the first time unit

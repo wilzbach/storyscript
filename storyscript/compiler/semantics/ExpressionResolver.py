@@ -82,6 +82,13 @@ class ExpressionResolver:
             return FloatType.instance()
         return IntType.instance()
 
+    def time(self, tree):
+        """
+        Compiles a time tree.
+        """
+        assert tree.data == 'time'
+        return IntType.instance()
+
     def string(self, tree):
         """
         Compiles a string tree.
@@ -189,6 +196,8 @@ class ExpressionResolver:
                 return self.list(subtree)
             elif subtree.data == 'number':
                 return self.number(subtree)
+            elif subtree.data == 'time':
+                return self.time(subtree)
             elif subtree.data == 'objects':
                 return self.objects(subtree)
             elif subtree.data == 'regular_expression':

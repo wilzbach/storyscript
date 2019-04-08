@@ -79,6 +79,11 @@ class ErrorCodes:
         'E0061', 'Invalid path name: `{path}`. '
         'Path names can\'t contain `{token}`')
     return_required = ('E0062', 'All paths of a function need to return')
+    time_value_inconsistent_week = (
+        'E0063', 'Time value inconsistent: `w` must be the first time unit')
+    time_value_inconsistent = (
+        'E0064',
+        'Time value inconsistent: `{current}` must to be before `{prior}`')
     type_assignment_different = (
         'E0100', 'Can\'t assign `{source}` to `{target}`')
     var_not_defined = (

@@ -3,9 +3,9 @@ from lark.lexer import Token
 
 from pytest import fixture, mark
 
-from storyscript.compiler.json import Objects
 from storyscript.compiler.json.JSONExpressionVisitor import \
         JSONExpressionVisitor
+from storyscript.compiler.json.Objects import Objects, split_into_time_parts
 from storyscript.parser import Tree
 
 
@@ -342,3 +342,16 @@ def test_objects_base_expression(patch, tree):
     r = Objects().base_expression(tree)
     Objects.expression.assert_called_with(tree.child(0))
     assert r == Objects.expression()
+
+
+@mark.parametrize('example,expected', [
+    ('1h5s', [(1, 'h'), (5, 's')]),
+    ('1s', [(1, 's')]),
+    ('001s', [(1, 's')]),
+    ('2d3h4s', [(2, 'd'), (3, 'h'), (4, 's')]),
+])
+def test_split_by_time(example, expected):
+    """
+    Test whether time splitting works correctly.
+    """
+    assert [*split_into_time_parts(example)] == expected

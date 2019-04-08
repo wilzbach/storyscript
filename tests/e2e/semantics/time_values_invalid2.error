@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = 2m2d
+          ^^^^
+
+E0064: Time value inconsistent: `d` must to be before `m`
