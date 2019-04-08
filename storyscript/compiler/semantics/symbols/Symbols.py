@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from .SymbolTypes import IntType, StringType, SymbolType
 
 
 class Symbol:
@@ -9,12 +10,6 @@ class Symbol:
         self._name = name
         self._type = type_
 
-    @staticmethod
-    def resolve_path(tree):
-        assert tree.data == 'path'
-        name = tree.first_child().value
-        return name
-
     def name(self):
         return self._name
 
@@ -23,6 +18,32 @@ class Symbol:
 
     def pretty(self):
         return f'{self._type}'
+
+    def __str__(self):
+        return f'Symbol(\'{self._name}\', {self._type})'
+
+    def index(self, paths, tree):
+        """
+        Runs index operations on a resolved symbol.
+        """
+        symbol = self
+        for p in paths:
+            if isinstance(p, str):
+                if p.isdigit():
+                    p = IntType.instance()
+                else:
+                    p = StringType.instance()
+            elif isinstance(p, Symbol):
+                p = p.type()
+            else:
+                assert isinstance(p, SymbolType)
+            new_type = symbol.type().index(p)
+            tree.expect(new_type is not None,
+                        'type_index_incompatible',
+                        left=symbol.type(),
+                        right=p)
+            symbol = Symbol(name=symbol.name() + '[]', type_=new_type)
+        return symbol
 
 
 class Symbols:

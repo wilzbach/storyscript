@@ -80,7 +80,7 @@ class ErrorCodes:
         'Path names can\'t contain `{token}`')
     return_required = ('E0062', 'All paths of a function need to return')
     type_assignment_different = (
-        'E0100', 'Can\'t assign `{target}` to `{var_type}`')
+        'E0100', 'Can\'t assign `{source}` to `{target}`')
     var_not_defined = (
         'E0101', 'Variable `{name}` has not been defined.')
     return_type_differs = (

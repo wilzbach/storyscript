@@ -3,6 +3,7 @@
 from storyscript.compiler.visitors.ExpressionVisitor import ExpressionVisitor
 from storyscript.parser import Tree
 
+from .PathResolver import PathResolver
 from .symbols.SymbolTypes import AnyType, BooleanType, \
     FloatType, IntType, ListType, ObjectType, StringType
 
@@ -63,38 +64,11 @@ class ExpressionResolver:
     def __init__(self, symbol_resolver):
         self.expr_visitor = SymbolExpressionVisitor(self)
         # how to resolve existing symbols
-        self.symbol_resolver = symbol_resolver
-
-    def names(self, tree):
-        """
-        Extracts names from a path tree
-        """
-        assert tree.data == 'path'
-        names = [tree.child(0).value]
-        for fragment in tree.children[1:]:
-            child = fragment.child(0)
-            value = child.value
-            if isinstance(child, Tree):
-                if child.data == 'string':
-                    value = self.string(child)
-                else:
-                    assert child.data == 'path'
-                    value = self.path(child)
-            names.append(value)
-        return names
+        self.path_resolver = PathResolver(symbol_resolver=symbol_resolver)
 
     def path(self, tree):
         assert tree.data == 'path'
-        paths = self.names(tree)
-        for p in paths:
-            # ignore internal variables
-            if not isinstance(p, str) or p.startswith('__p-'):
-                break
-            tree.expect('-' not in p,
-                        'path_name_invalid_char', path=p, token='-')
-            tree.expect('/' not in p,
-                        'path_name_invalid_char', path=p, token='/')
-        return self.symbol_resolver.resolve(tree, paths)
+        return self.path_resolver.path(tree).type()
 
     def number(self, tree):
         """

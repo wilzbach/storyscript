@@ -3,10 +3,11 @@
 from storyscript.parser import Tree
 
 from .ExpressionResolver import ExpressionResolver
+from .PathResolver import PathResolver
 from .ReturnVisitor import ReturnVisitor
 from .SymbolResolver import SymbolResolver
 from .symbols.Scope import Scope
-from .symbols.SymbolTypes import AnyType
+from .symbols.SymbolTypes import AnyType, NoneType
 from .symbols.Symbols import Symbol
 
 
@@ -34,20 +35,28 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.resolver = ExpressionResolver(
             symbol_resolver=self.symbol_resolver
         )
+        self.path_symbol_resolver = SymbolResolver(
+            scope=None, check_variable_existence=False)
+        self.path_resolver = PathResolver(self.path_symbol_resolver)
 
     def assignment(self, tree, scope):
-        name = Symbol.resolve_path(tree.path)
-        frag = tree.assignment_fragment
         self.symbol_resolver.update_scope(scope)
-        expr = self.resolver.base_expression(frag.base_expression)
-        resolved = scope.resolve(name)
-        if resolved is not None:
-            tree.expect(resolved.type().can_be_assigned(expr),
+        self.path_symbol_resolver.update_scope(scope)
+
+        target_symbol = self.path_resolver.path(tree.path)
+
+        frag = tree.assignment_fragment
+        expr_type = self.resolver.base_expression(frag.base_expression)
+
+        if target_symbol.type() == NoneType.instance():
+            sym = Symbol(target_symbol.name(), expr_type)
+            scope.symbols().insert(sym.name(), sym)
+        else:
+            tree.expect(target_symbol.type().can_be_assigned(expr_type),
                         'type_assignment_different',
-                        var_type=resolved._type,
-                        target=expr)
-        sym = Symbol(name, expr)
-        scope.symbols().insert(name, sym)
+                        target=target_symbol._type,
+                        source=expr_type)
+
         self.visit_children(tree, scope)
 
     def rules(self, tree, scope):
