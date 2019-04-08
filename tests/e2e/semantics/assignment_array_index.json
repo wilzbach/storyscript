@@ -1,0 +1,47 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 20
+            },
+            {
+              "$OBJECT": "int",
+              "int": 12
+            },
+            {
+              "$OBJECT": "int",
+              "int": 23
+            }
+          ]
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a",
+        "0"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 100
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}
