@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = 5h2h
+          ^^^^
+
+E0069: Time value duplication: `h` must only occur once

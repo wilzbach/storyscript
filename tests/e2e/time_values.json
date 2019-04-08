@@ -1,0 +1,242 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "s1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 1000
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "m1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 60000
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "h1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 3600000
+        }
+      ],
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "d1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 86400000
+        }
+      ],
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "w1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 604800000
+        }
+      ],
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "name": [
+        "ms1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 1
+        }
+      ],
+      "next": "8"
+    },
+    "8": {
+      "method": "expression",
+      "ln": "8",
+      "name": [
+        "ms2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 2
+        }
+      ],
+      "next": "9"
+    },
+    "9": {
+      "method": "expression",
+      "ln": "9",
+      "name": [
+        "s3"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 3000
+        }
+      ],
+      "next": "10"
+    },
+    "10": {
+      "method": "expression",
+      "ln": "10",
+      "name": [
+        "m4"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 240000
+        }
+      ],
+      "next": "11"
+    },
+    "11": {
+      "method": "expression",
+      "ln": "11",
+      "name": [
+        "h5"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 18000000
+        }
+      ],
+      "next": "12"
+    },
+    "12": {
+      "method": "expression",
+      "ln": "12",
+      "name": [
+        "d6"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 518400000
+        }
+      ],
+      "next": "13"
+    },
+    "13": {
+      "method": "expression",
+      "ln": "13",
+      "name": [
+        "w7"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 4233600000
+        }
+      ],
+      "next": "15"
+    },
+    "15": {
+      "method": "expression",
+      "ln": "15",
+      "name": [
+        "s0"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 0
+        }
+      ],
+      "next": "16"
+    },
+    "16": {
+      "method": "expression",
+      "ln": "16",
+      "name": [
+        "d0"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 0
+        }
+      ],
+      "next": "18"
+    },
+    "18": {
+      "method": "expression",
+      "ln": "18",
+      "name": [
+        "m5s2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 302000
+        }
+      ],
+      "next": "19"
+    },
+    "19": {
+      "method": "expression",
+      "ln": "19",
+      "name": [
+        "m5s0"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 300000
+        }
+      ],
+      "next": "20"
+    },
+    "20": {
+      "method": "expression",
+      "ln": "20",
+      "name": [
+        "all"
+      ],
+      "args": [
+        {
+          "$OBJECT": "time",
+          "ms": 4075382001
+        }
+      ]
+    }
+  },
+  "entrypoint": "1"
+}
