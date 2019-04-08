@@ -5,7 +5,7 @@ from storyscript.parser import Tree
 
 from .PathResolver import PathResolver
 from .symbols.SymbolTypes import AnyType, BooleanType, \
-    FloatType, IntType, ListType, ObjectType, StringType
+    FloatType, IntType, ListType, ObjectType, StringType, TimeType
 
 
 class SymbolExpressionVisitor(ExpressionVisitor):
@@ -81,6 +81,13 @@ class ExpressionResolver:
         if token.type == 'FLOAT':
             return FloatType.instance()
         return IntType.instance()
+
+    def time(self, tree):
+        """
+        Compiles a time tree.
+        """
+        assert tree.data == 'time'
+        return TimeType.instance()
 
     def string(self, tree):
         """
@@ -173,6 +180,8 @@ class ExpressionResolver:
             return ObjectType(AnyType.instance(), AnyType.instance())
         elif tok.type == 'FUNCTION_TYPE':
             return AnyType.instance()
+        elif tok.type == 'TIME_TYPE':
+            return TimeType.instance()
         else:
             assert tok.type == 'REGEXP_TYPE'
             return AnyType.instance()
@@ -191,6 +200,8 @@ class ExpressionResolver:
                 return self.list(subtree)
             elif subtree.data == 'number':
                 return self.number(subtree)
+            elif subtree.data == 'time':
+                return self.time(subtree)
             elif subtree.data == 'objects':
                 return self.objects(subtree)
             elif subtree.data == 'regular_expression':

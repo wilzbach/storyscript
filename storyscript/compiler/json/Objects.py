@@ -71,6 +71,46 @@ class Objects:
         return {'$OBJECT': 'int', 'int': int(token.value)}
 
     @staticmethod
+    def time(tree):
+        """
+        Compiles a time tree
+        """
+        assert tree.data == 'time'
+        val = tree.child(0).value
+        assert len(val) > 0
+
+        int_value = 0
+        time_parts = split_into_time_parts(val)
+        time_prior = None
+        for p, time_type in time_parts:
+            if time_type == 'w':
+                tree.expect(time_prior is None, 'time_value_inconsistent_week')
+                int_value += 604800 * p
+            elif time_type == 'd':
+                tree.expect(time_prior is None or time_prior in 'w',
+                            'time_value_inconsistent',
+                            prior=time_prior, current=time_type)
+                int_value += 86400 * p
+            elif time_type == 'h':
+                tree.expect(time_prior is None or time_prior in 'wd',
+                            'time_value_inconsistent',
+                            prior=time_prior, current=time_type)
+                int_value += 3600 * p
+            elif time_type == 'm':
+                tree.expect(time_prior is None or time_prior in 'wdh',
+                            'time_value_inconsistent',
+                            prior=time_prior, current=time_type)
+                int_value += 60 * p
+            else:
+                tree.expect(time_prior is None or time_prior in 'wdhm',
+                            'time_value_inconsistent',
+                            prior=time_prior, current=time_type)
+                int_value += p
+                assert time_type == 's'
+            time_prior = time_type
+        return {'$OBJECT': 'time', 'seconds': int_value}
+
+    @staticmethod
     def name_to_path(name):
         """
         Builds the tree for a name or dotted name.
@@ -156,6 +196,8 @@ class Objects:
                 return self.list(subtree)
             elif subtree.data == 'number':
                 return self.number(subtree)
+            elif subtree.data == 'time':
+                return self.time(subtree)
             elif subtree.data == 'objects':
                 return self.objects(subtree)
             elif subtree.data == 'regular_expression':
@@ -227,3 +269,20 @@ class Objects:
         else:
             assert child.data == 'path'
             return self.path(child)
+
+
+def split_into_time_parts(value):
+    """
+    Splits a time string into its subparts.
+    Example: 1h5s = [(1, 'h'), (5, 's')]
+    """
+    num_buf = ''
+    for c in value:
+        if c.isdigit():
+            num_buf += c
+        else:
+            assert c in 'smhdw'
+            yield int(num_buf), c
+            num_buf = ''
+
+    assert len(num_buf) == 0

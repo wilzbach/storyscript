@@ -32,9 +32,11 @@ class Grammar:
         self.ebnf.OBJECT_TYPE = 'object'
         self.ebnf.REGEXP_TYPE = 'regex'
         self.ebnf.FUNCTION_TYPE = 'function'
+        self.ebnf.TIME_TYPE = 'time'
         self.ebnf.ANY_TYPE = 'any'
         rule = ('int_type, float_type, string_type, list_type, object_type, '
-                'regexp_type, function_type, any_type, boolean_type')
+                'regexp_type, function_type, any_type, boolean_type, '
+                'time_type')
         self.ebnf.types = rule
 
     def values(self):
@@ -52,6 +54,7 @@ class Grammar:
         self.ebnf.DOUBLE_QUOTED = r'/"([^"\\]*(?:\\.[^"\\]*)*)"/'
         self.ebnf.set_token('REGEXP.10', r'/\/([^\/]*)\//')
         self.ebnf.set_token('NAME.1', r'/[a-zA-Z_][a-zA-Z-\/_0-9]*/')
+        self.ebnf.set_token('RAW_TIME.3', r'/([0-9]+[smhdw])+/')
         self.ebnf._OSB = '['
         self.ebnf._CSB = ']'
         self.ebnf._OCB = '{'
@@ -63,6 +66,7 @@ class Grammar:
         self.ebnf.boolean = 'true, false'
         self.ebnf.void = 'null'
         self.ebnf.number = 'int, float'
+        self.ebnf.time = 'raw_time'
         self.ebnf.string = 'single_quoted, double_quoted'
         list = self.ebnf.collection('osb', 'base_expression',
                                     'base_expression', 'csb')
@@ -75,7 +79,7 @@ class Grammar:
                                        'call_expression, '
                                        'op mutation cp')
         values = ('number, string, boolean, void, list, objects, '
-                  'regular_expression')
+                  'regular_expression, time')
         self.ebnf.values = values
 
     def assignments(self):

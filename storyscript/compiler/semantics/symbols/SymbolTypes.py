@@ -178,6 +178,28 @@ class StringType(SymbolType):
         return StringType()
 
 
+class TimeType(SymbolType):
+    """
+    Represents a time duration.
+    """
+
+    def __str__(self):
+        return 'time'
+
+    def __eq__(self, other):
+        return isinstance(other, TimeType)
+
+    def can_be_assigned(self, other):
+        return self == other
+
+    @singleton
+    def instance():
+        """
+        Returns a static instance of the TimeType.
+        """
+        return TimeType()
+
+
 class ListType(SymbolType):
     """
     Represents a list.

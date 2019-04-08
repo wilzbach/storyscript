@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 5
+
+2|    b = a + 10
+          ^
+
+E0103: `time` is not compatible with `int`

@@ -85,6 +85,11 @@ class ErrorCodes:
         'E0064', 'Foreach blocks require an output (e.g. `as item`)')
     nested_service_block = ('E0065', 'Nested service blocks are not allowed')
     nested_when_block = ('E0066', 'Nested when blocks are not allowed')
+    time_value_inconsistent_week = (
+        'E0067', 'Time value inconsistent: `w` must be the first time unit')
+    time_value_inconsistent = (
+        'E0068',
+        'Time value inconsistent: `{current}` must to be before `{prior}`')
     type_assignment_different = (
         'E0100', 'Can\'t assign `{source}` to `{target}`')
     var_not_defined = (
