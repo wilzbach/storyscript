@@ -168,4 +168,7 @@ class Cli:
     @staticmethod
     @main.command(aliases=['v'])
     def version():
+        """
+        Prints the current version
+        """
         click.echo(app_version)
