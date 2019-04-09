@@ -95,6 +95,14 @@ class ErrorCodes:
         'E0104',
         '`{left}` can\'t be indexed with `{right}`'
     )
+    foreach_output_children = (
+        'E0105',
+        '`foreach` can only have one or two outputs'
+    )
+    foreach_iterable_required = (
+        'E0106',
+        '`foreach` requires an iterable type, but `{target}` is not'
+    )
 
     @staticmethod
     def is_error(error_name):

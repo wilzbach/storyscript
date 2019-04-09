@@ -1,8 +1,33 @@
 {
   "tree": {
     "1": {
-      "method": "for",
+      "method": "expression",
       "ln": "1",
+      "name": [
+        "items"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "2"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 0
+              }
+            ]
+          ]
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "for",
+      "ln": "2",
       "output": [
         "key",
         "value"
@@ -15,12 +40,12 @@
           ]
         }
       ],
-      "enter": "2",
-      "next": "2"
+      "enter": "3",
+      "next": "3"
     },
-    "2": {
+    "3": {
       "method": "expression",
-      "ln": "2",
+      "ln": "3",
       "name": [
         "x"
       ],
@@ -30,7 +55,7 @@
           "int": 0
         }
       ],
-      "parent": "1"
+      "parent": "2"
     }
   },
   "entrypoint": "1",

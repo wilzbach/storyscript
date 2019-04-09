@@ -1,8 +1,31 @@
 {
   "tree": {
     "1": {
-      "method": "for",
+      "method": "expression",
       "ln": "1",
+      "name": [
+        "items"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 0
+            },
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "for",
+      "ln": "2",
       "output": [
         "item"
       ],
@@ -14,13 +37,13 @@
           ]
         }
       ],
-      "enter": "2",
-      "exit": "4",
-      "next": "2"
+      "enter": "3",
+      "exit": "5",
+      "next": "3"
     },
-    "2": {
+    "3": {
       "method": "expression",
-      "ln": "2",
+      "ln": "3",
       "name": [
         "x"
       ],
@@ -32,12 +55,12 @@
           ]
         }
       ],
-      "parent": "1",
-      "next": "4"
+      "parent": "2",
+      "next": "5"
     },
-    "4": {
+    "5": {
       "method": "expression",
-      "ln": "4",
+      "ln": "5",
       "name": [
         "a"
       ],
@@ -47,11 +70,11 @@
           "int": 2
         }
       ],
-      "next": "6"
+      "next": "7"
     },
-    "6": {
+    "7": {
       "method": "if",
-      "ln": "6",
+      "ln": "7",
       "args": [
         {
           "$OBJECT": "path",
@@ -60,13 +83,13 @@
           ]
         }
       ],
-      "enter": "7",
-      "exit": "8",
-      "next": "7"
+      "enter": "8",
+      "exit": "9",
+      "next": "8"
     },
-    "7": {
+    "8": {
       "method": "expression",
-      "ln": "7",
+      "ln": "8",
       "name": [
         "a"
       ],
@@ -76,19 +99,19 @@
           "int": 0
         }
       ],
-      "parent": "6",
-      "next": "8"
-    },
-    "8": {
-      "method": "else",
-      "ln": "8",
-      "enter": "9",
-      "exit": "11",
+      "parent": "7",
       "next": "9"
     },
     "9": {
-      "method": "expression",
+      "method": "else",
       "ln": "9",
+      "enter": "10",
+      "exit": "12",
+      "next": "10"
+    },
+    "10": {
+      "method": "expression",
+      "ln": "10",
       "name": [
         "b"
       ],
@@ -98,25 +121,25 @@
           "int": 0
         }
       ],
-      "parent": "8",
-      "next": "11"
+      "parent": "9",
+      "next": "12"
     },
-    "11": {
+    "12": {
       "method": "while",
-      "ln": "11",
+      "ln": "12",
       "args": [
         {
           "$OBJECT": "boolean",
           "boolean": true
         }
       ],
-      "enter": "12",
-      "exit": "14",
-      "next": "12"
+      "enter": "13",
+      "exit": "15",
+      "next": "13"
     },
-    "12": {
+    "13": {
       "method": "expression",
-      "ln": "12",
+      "ln": "13",
       "name": [
         "x"
       ],
@@ -126,19 +149,19 @@
           "int": 0
         }
       ],
-      "parent": "11",
-      "next": "14"
-    },
-    "14": {
-      "method": "try",
-      "ln": "14",
-      "enter": "15",
-      "exit": "16",
+      "parent": "12",
       "next": "15"
     },
     "15": {
-      "method": "expression",
+      "method": "try",
       "ln": "15",
+      "enter": "16",
+      "exit": "17",
+      "next": "16"
+    },
+    "16": {
+      "method": "expression",
+      "ln": "16",
       "name": [
         "a"
       ],
@@ -148,22 +171,22 @@
           "int": 0
         }
       ],
-      "parent": "14",
-      "next": "16"
-    },
-    "16": {
-      "method": "catch",
-      "ln": "16",
-      "output": [
-        "e"
-      ],
-      "enter": "17",
-      "exit": "19",
+      "parent": "15",
       "next": "17"
     },
     "17": {
-      "method": "expression",
+      "method": "catch",
       "ln": "17",
+      "output": [
+        "e"
+      ],
+      "enter": "18",
+      "exit": "20",
+      "next": "18"
+    },
+    "18": {
+      "method": "expression",
+      "ln": "18",
       "name": [
         "b"
       ],
@@ -173,12 +196,12 @@
           "int": 0
         }
       ],
-      "parent": "16",
-      "next": "19"
+      "parent": "17",
+      "next": "20"
     },
-    "19": {
+    "20": {
       "method": "expression",
-      "ln": "19",
+      "ln": "20",
       "name": [
         "x"
       ],

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 18
+
+3|    foreach "foo" as elem
+                       ^^^^
+
+E0106: `foreach` requires an iterable type, but `string` is not

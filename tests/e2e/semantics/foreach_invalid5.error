@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 9
+
+1|    foreach items as key, value
+              ^^^^^
+
+E0101: Variable `items` has not been defined.

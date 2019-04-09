@@ -1,0 +1,61 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "for",
+      "ln": "3",
+      "output": [
+        "k",
+        "v"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "boolean",
+              "boolean": true
+            },
+            {
+              "$OBJECT": "boolean",
+              "boolean": false
+            }
+          ]
+        }
+      ],
+      "enter": "4",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "v"
+          ]
+        }
+      ],
+      "parent": "3"
+    }
+  },
+  "entrypoint": "1",
+  "version": null
+}
