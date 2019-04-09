@@ -67,7 +67,7 @@ class Grammar:
         list = self.ebnf.collection('osb', 'base_expression',
                                     'base_expression', 'csb')
         self.ebnf.set_rule('!list', list)
-        self.ebnf.key_value = '(string, path) colon base_expression'
+        self.ebnf.key_value = '(string, path, number) colon base_expression'
         objects = ('ocb', 'key_value', 'key_value', 'ccb')
         self.ebnf.objects = self.ebnf.collection(*objects)
         self.ebnf.regular_expression = 'regexp name?'

@@ -117,6 +117,8 @@ class Objects:
             child = item.child(0)
             if child.data == 'string':
                 key = self.string(child)
+            elif child.data == 'number':
+                key = self.number(child)
             else:
                 internal_assert(child.data == 'path')
                 key = self.path(child)

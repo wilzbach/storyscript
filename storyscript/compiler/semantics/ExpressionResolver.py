@@ -126,7 +126,9 @@ class ExpressionResolver:
             assert isinstance(item, Tree)
             child = item.child(0)
             if child.data == 'string':
-                new_key = StringType()
+                new_key = self.string(child)
+            elif child.data == 'number':
+                new_key = self.number(child)
             else:
                 assert child.data == 'path'
                 new_key = self.path(child)
