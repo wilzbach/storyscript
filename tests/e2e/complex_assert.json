@@ -78,9 +78,9 @@
       "command": "info",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "msg",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "true"
           }
@@ -103,9 +103,9 @@
       "command": "info",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "msg",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "false"
           }
@@ -121,9 +121,9 @@
       "command": "info",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "msg",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "completed"
           }

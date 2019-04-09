@@ -6,9 +6,9 @@
       "function": "name",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "key",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "int"
           }

@@ -30,11 +30,11 @@
         {
           "$OBJECT": "mutation",
           "mutation": "increment",
-          "arguments": [
+          "args": [
             {
-              "$OBJECT": "argument",
+              "$OBJECT": "arg",
               "name": "by",
-              "argument": {
+              "arg": {
                 "$OBJECT": "int",
                 "int": 1
               }
@@ -65,9 +65,9 @@
       "command": "echo",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "message",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "i"

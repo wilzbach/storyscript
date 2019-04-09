@@ -10,9 +10,9 @@
       "command": "my_command",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p1",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 42
           }

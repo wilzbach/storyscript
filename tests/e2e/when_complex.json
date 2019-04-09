@@ -36,9 +36,9 @@
       "command": "listen",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "path",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "/foo"
           }
@@ -64,9 +64,9 @@
       "command": "listen",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "path",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "/foo"
           }
@@ -136,9 +136,9 @@
       "command": "listen",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "path",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "/foo"
           }
@@ -164,9 +164,9 @@
       "command": "listen",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "path",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "/foo"
           }
@@ -275,9 +275,9 @@
       "command": "listen",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "path",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "/foo"
           }
@@ -315,9 +315,9 @@
       "command": "listen",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "path",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "/foo"
           }

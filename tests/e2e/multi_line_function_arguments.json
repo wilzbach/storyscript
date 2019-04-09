@@ -6,33 +6,33 @@
       "function": "name",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "key",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "int"
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "key2",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "string"
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "key3",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "int"
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "key4",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "string"
           }

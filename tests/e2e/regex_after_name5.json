@@ -7,9 +7,9 @@
       "command": "command",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "item",
-          "argument": {
+          "arg": {
             "$OBJECT": "regexp",
             "regexp": "/regexp/"
           }

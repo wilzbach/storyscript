@@ -14,10 +14,10 @@ def test_compiler_mutation_chained(source):
     """
     result = Api.loads(source)
     args = [{'$OBJECT': 'int', 'int': 1},
-            {'$OBJECT': 'mutation', 'mutation': 'increment', 'arguments': []},
-            {'$OBJECT': 'mutation', 'mutation': 'format', 'arguments': [
-                {'$OBJECT': 'argument', 'name': 'to',
-                 'argument': {'$OBJECT': 'string', 'string': 'string'}}]}]
+            {'$OBJECT': 'mutation', 'mutation': 'increment', 'args': []},
+            {'$OBJECT': 'mutation', 'mutation': 'format', 'args': [
+                {'$OBJECT': 'arg', 'name': 'to',
+                 'arg': {'$OBJECT': 'string', 'string': 'string'}}]}]
     assert result['tree']['1']['args'] == args
 
 

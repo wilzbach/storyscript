@@ -6,9 +6,9 @@
       "function": "name",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "key",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "int"
           }
@@ -42,9 +42,9 @@
       "function": "name",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "key",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 4
           }
@@ -61,9 +61,9 @@
       "function": "name",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "key",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-4.1"
@@ -82,9 +82,9 @@
       "function": "name",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "key",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-4.2"

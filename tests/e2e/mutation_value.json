@@ -11,7 +11,7 @@
         {
           "$OBJECT": "mutation",
           "mutation": "length",
-          "arguments": []
+          "args": []
         }
       ]
     }

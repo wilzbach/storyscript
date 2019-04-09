@@ -30,7 +30,7 @@
         {
           "$OBJECT": "mutation",
           "mutation": "my_mutation",
-          "arguments": []
+          "args": []
         }
       ],
       "next": "2"

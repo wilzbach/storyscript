@@ -21,17 +21,17 @@
       "command": "listen",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "path",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "/health"
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "method",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "get"
           }

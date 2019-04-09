@@ -56,7 +56,7 @@ class Objects:
         if tree.command:
             mutation = tree.command.child(0).value
         return {'$OBJECT': 'mutation', 'mutation': mutation,
-                'arguments': arguments}
+                'args': arguments}
 
     @staticmethod
     def number(tree):
@@ -174,7 +174,7 @@ class Objects:
         """
         name = tree.child(0).value
         value = self.expression(tree.child(1))
-        return {'$OBJECT': 'argument', 'name': name, 'argument': value}
+        return {'$OBJECT': 'arg', 'name': name, 'arg': value}
 
     def arguments(self, tree):
         """
@@ -188,7 +188,7 @@ class Objects:
     def typed_argument(self, tree):
         name = tree.child(0).value
         value = self.values(Tree('anon', [tree.child(1)]))
-        return {'$OBJECT': 'argument', 'name': name, 'argument': value}
+        return {'$OBJECT': 'arg', 'name': name, 'arg': value}
 
     def function_arguments(self, tree):
         arguments = []

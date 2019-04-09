@@ -10,17 +10,17 @@
       "command": "echo",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "message",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "hello"
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "colour",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "red"
           }

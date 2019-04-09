@@ -30,7 +30,7 @@
         {
           "$OBJECT": "mutation",
           "mutation": "uppercase",
-          "arguments": []
+          "args": []
         }
       ]
     }

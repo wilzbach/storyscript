@@ -7,9 +7,9 @@
       "command": "echo",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "message",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "hello"
           }

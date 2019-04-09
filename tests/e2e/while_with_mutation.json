@@ -30,7 +30,7 @@
         {
           "$OBJECT": "mutation",
           "mutation": "is_odd",
-          "arguments": []
+          "args": []
         }
       ],
       "next": "2"

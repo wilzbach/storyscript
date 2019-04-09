@@ -32,17 +32,17 @@
       "function": "my_func",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "k1",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "int"
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "k2",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "int"
           }
@@ -83,9 +83,9 @@
       "command": "command",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p1",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-7.1"
@@ -93,9 +93,9 @@
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "k2",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 2
           }
@@ -112,9 +112,9 @@
       "function": "my_func",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "k1",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-7.2"
@@ -134,9 +134,9 @@
       "command": "command",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p0",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-7.3"
@@ -144,9 +144,9 @@
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p2",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 2
           }

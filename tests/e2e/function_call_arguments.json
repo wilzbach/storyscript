@@ -6,9 +6,9 @@
       "function": "f",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "n",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "int"
           }
@@ -42,9 +42,9 @@
       "function": "f",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "n",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 1
           }

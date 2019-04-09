@@ -23,11 +23,11 @@
         {
           "$OBJECT": "mutation",
           "mutation": "contains",
-          "arguments": [
+          "args": [
             {
-              "$OBJECT": "argument",
+              "$OBJECT": "arg",
               "name": "item",
-              "argument": {
+              "arg": {
                 "$OBJECT": "string",
                 "string": "a"
               }

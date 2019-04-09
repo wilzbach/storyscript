@@ -10,9 +10,9 @@
       "command": "ask",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "q",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "question"
           }

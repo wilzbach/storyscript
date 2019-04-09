@@ -10,9 +10,9 @@
       "command": "get",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "url",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "diff_url"
@@ -38,11 +38,11 @@
         {
           "$OBJECT": "mutation",
           "mutation": "split",
-          "arguments": [
+          "args": [
             {
-              "$OBJECT": "argument",
+              "$OBJECT": "arg",
               "name": "by",
-              "argument": {
+              "arg": {
                 "$OBJECT": "string",
                 "string": "\n"
               }
