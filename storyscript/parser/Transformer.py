@@ -72,6 +72,18 @@ class Transformer(LarkTransformer):
 
     @classmethod
     def path(cls, matches):
+        match = matches[0]
+        if isinstance(match, Tree) and match.data == 'values':
+            assert len(matches) == 1
+            return match
+
+        cls.is_keyword(matches[0])
+        return Tree('path', matches)
+
+    def name_path(cls, matches):
+        """
+        A name path is a path without any possibility of having an entity.
+        """
         cls.is_keyword(matches[0])
         return Tree('path', matches)
 

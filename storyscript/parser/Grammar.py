@@ -83,11 +83,13 @@ class Grammar:
         self.ebnf._DOT = '.'
         path_fragment = 'dot name, osb int csb, osb string csb, osb path csb'
         self.ebnf.path_fragment = path_fragment
-        self.ebnf.path = ('name (path_fragment)* | '
+        self.ebnf.path = ('(values | name) (path_fragment)* | '
                           'inline_expression (path_fragment)*')
+        self.ebnf.name_path = ('name (path_fragment)* | '
+                               'inline_expression (path_fragment)*')
         assignment_fragment = 'equals base_expression'
         self.ebnf.assignment_fragment = assignment_fragment
-        self.ebnf.assignment = 'path assignment_fragment'
+        self.ebnf.assignment = 'name_path assignment_fragment'
 
     def imports(self):
         self.ebnf._AS = 'as'
@@ -151,7 +153,7 @@ class Grammar:
         self.ebnf.BREAK = 'break'
         self.ebnf.return_statement = 'return base_expression?'
         self.ebnf.break_statement = 'break'
-        self.ebnf.entity = 'values, path'
+        self.ebnf.entity = 'path'
         rules = ('absolute_expression, assignment, imports, return_statement, '
                  'throw_statement, break_statement, block')
         self.ebnf.rules = rules
