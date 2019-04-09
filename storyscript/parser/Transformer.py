@@ -59,6 +59,9 @@ class Transformer(LarkTransformer):
         variable name.
         """
         token = matches[0].children[0]
+        if isinstance(token, Tree):
+            matches[0].expect(token.data != 'inline_expression',
+                              'assignment_inline_expression')
         if '/' in token.value:
             raise StorySyntaxError('variables_backslash', token=token)
         if '-' in token.value:

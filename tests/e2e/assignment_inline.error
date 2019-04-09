@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 2
+
+1|    (service foo) = 'bar'
+       ^^^^^^^
+
+E0063: Can't assign to inline expressions.
