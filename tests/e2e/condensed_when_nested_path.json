@@ -31,9 +31,9 @@
       "command": "log",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "level",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "normal"
           }
@@ -65,9 +65,9 @@
       "command": "log",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "level",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "normal"
           }

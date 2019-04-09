@@ -9,9 +9,9 @@
       "function": "sum",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "a",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "int"
           }

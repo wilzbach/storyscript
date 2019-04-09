@@ -6,17 +6,17 @@
       "function": "my_function",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "k1",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "int"
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "k2",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "int"
           }
@@ -47,9 +47,9 @@
       "function": "my_function",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "k1",
-          "argument": {
+          "arg": {
             "$OBJECT": "expression",
             "expression": "sum",
             "values": [
@@ -75,9 +75,9 @@
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "k2",
-          "argument": {
+          "arg": {
             "$OBJECT": "expression",
             "expression": "subtraction",
             "values": [

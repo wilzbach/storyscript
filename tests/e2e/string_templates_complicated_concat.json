@@ -74,9 +74,9 @@
       "command": "call",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "arg1",
-          "argument": {
+          "arg": {
             "$OBJECT": "expression",
             "expression": "sum",
             "values": [

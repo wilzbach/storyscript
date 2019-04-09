@@ -11,11 +11,11 @@
         {
           "$OBJECT": "mutation",
           "mutation": "increase",
-          "arguments": [
+          "args": [
             {
-              "$OBJECT": "argument",
+              "$OBJECT": "arg",
               "name": "by",
-              "argument": {
+              "arg": {
                 "$OBJECT": "int",
                 "int": 1
               }
@@ -39,11 +39,11 @@
         {
           "$OBJECT": "mutation",
           "mutation": "increase",
-          "arguments": [
+          "args": [
             {
-              "$OBJECT": "argument",
+              "$OBJECT": "arg",
               "name": "by",
-              "argument": {
+              "arg": {
                 "$OBJECT": "int",
                 "int": 1
               }
@@ -80,11 +80,11 @@
         {
           "$OBJECT": "mutation",
           "mutation": "increase",
-          "arguments": [
+          "args": [
             {
-              "$OBJECT": "argument",
+              "$OBJECT": "arg",
               "name": "by",
-              "argument": {
+              "arg": {
                 "$OBJECT": "int",
                 "int": 1
               }
@@ -110,11 +110,11 @@
         {
           "$OBJECT": "mutation",
           "mutation": "increase",
-          "arguments": [
+          "args": [
             {
-              "$OBJECT": "argument",
+              "$OBJECT": "arg",
               "name": "by",
-              "argument": {
+              "arg": {
                 "$OBJECT": "int",
                 "int": 1
               }

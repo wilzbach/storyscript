@@ -30,7 +30,7 @@
         {
           "$OBJECT": "mutation",
           "mutation": "increment",
-          "arguments": []
+          "args": []
         }
       ],
       "next": "2.2"
@@ -51,7 +51,7 @@
         {
           "$OBJECT": "mutation",
           "mutation": "decrement",
-          "arguments": []
+          "args": []
         }
       ],
       "next": "2"

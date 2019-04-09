@@ -71,7 +71,7 @@ def test_objects_mutation_fragment(token):
     """
     tree = Tree('mutation', [token])
     expected = {'$OBJECT': 'mutation', 'mutation': token.value,
-                'arguments': []}
+                'args': []}
     assert Objects().mutation_fragment(tree) == expected
 
 
@@ -81,7 +81,7 @@ def test_objects_mutation_fragment_from_service(token):
     """
     tree = Tree('service_fragment', [Tree('command', [token])])
     expected = {'$OBJECT': 'mutation', 'mutation': token.value,
-                'arguments': []}
+                'args': []}
     assert Objects().mutation_fragment(tree) == expected
 
 
@@ -94,7 +94,7 @@ def test_objects_mutation_fragment_arguments(patch, magic):
     tree = magic()
     result = Objects().mutation_fragment(tree)
     Objects.arguments.assert_called_with(tree)
-    assert result['arguments'] == Objects.arguments()
+    assert result['args'] == Objects.arguments()
 
 
 def test_objects_path_fragments(magic):
@@ -279,8 +279,8 @@ def test_objects_argument(patch, tree):
     result = Objects().argument(tree)
     assert tree.child.call_count == 2
     Objects.expression.assert_called_with(tree.child())
-    expected = {'$OBJECT': 'argument', 'name': tree.child().value,
-                'argument': Objects.expression()}
+    expected = {'$OBJECT': 'arg', 'name': tree.child().value,
+                'arg': Objects.expression()}
     assert result == expected
 
 
@@ -297,8 +297,8 @@ def test_objects_typed_argument(patch, tree):
     patch.object(Objects, 'values')
     result = Objects().typed_argument(tree)
     Objects.values.assert_called_with(Tree('anon', [tree.child(1)]))
-    expected = {'$OBJECT': 'argument', 'name': tree.child().value,
-                'argument': Objects.values()}
+    expected = {'$OBJECT': 'arg', 'name': tree.child().value,
+                'arg': Objects.values()}
     assert result == expected
 
 

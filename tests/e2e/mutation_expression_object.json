@@ -32,11 +32,11 @@
         {
           "$OBJECT": "mutation",
           "mutation": "has",
-          "arguments": [
+          "args": [
             {
-              "$OBJECT": "argument",
+              "$OBJECT": "arg",
               "name": "key",
-              "argument": {
+              "arg": {
                 "$OBJECT": "string",
                 "string": "opened"
               }

@@ -40,9 +40,9 @@
       "command": "command",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p1",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.1"
@@ -50,9 +50,9 @@
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p2",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.2"
@@ -60,9 +60,9 @@
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p3",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.3"

@@ -10,9 +10,9 @@
       "command": "tommorow",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "where",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "Amsterdam"
           }
@@ -51,9 +51,9 @@
       "command": "echo",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "message",
-          "argument": {
+          "arg": {
             "$OBJECT": "string",
             "string": "oh no!"
           }

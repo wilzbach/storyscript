@@ -6,17 +6,17 @@
       "function": "name",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "k1",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "int"
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "k2",
-          "argument": {
+          "arg": {
             "$OBJECT": "type",
             "type": "int"
           }
@@ -50,17 +50,17 @@
       "function": "name",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "k1",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 1
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "k2",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 2
           }

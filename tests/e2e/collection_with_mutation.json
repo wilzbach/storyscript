@@ -14,7 +14,7 @@
         {
           "$OBJECT": "mutation",
           "mutation": "increment",
-          "arguments": []
+          "args": []
         }
       ],
       "next": "1"

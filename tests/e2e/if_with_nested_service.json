@@ -10,9 +10,9 @@
       "command": "call",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "arg",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 1
           }
@@ -30,9 +30,9 @@
       "command": "call",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "arg",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 2
           }
@@ -50,9 +50,9 @@
       "command": "command",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p1",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.1"
@@ -60,9 +60,9 @@
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p2",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.2"
@@ -82,9 +82,9 @@
       "command": "call",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "arg",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 1
           }
@@ -102,9 +102,9 @@
       "command": "call",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "arg",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 2
           }
@@ -122,9 +122,9 @@
       "command": "command",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p1",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.4"
@@ -132,9 +132,9 @@
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p2",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.5"
@@ -154,9 +154,9 @@
       "command": "call",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "arg",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 1
           }
@@ -174,9 +174,9 @@
       "command": "call",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "arg",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 2
           }
@@ -194,9 +194,9 @@
       "command": "command",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p1",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.7"
@@ -204,9 +204,9 @@
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p2",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.8"
@@ -226,9 +226,9 @@
       "command": "call",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "arg",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 1
           }
@@ -246,9 +246,9 @@
       "command": "call",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "arg",
-          "argument": {
+          "arg": {
             "$OBJECT": "int",
             "int": 2
           }
@@ -266,9 +266,9 @@
       "command": "command",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p1",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.10"
@@ -276,9 +276,9 @@
           }
         },
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "p2",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.11"

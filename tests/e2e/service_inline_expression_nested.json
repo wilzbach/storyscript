@@ -20,9 +20,9 @@
       "command": "get",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "id",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.1"
@@ -39,9 +39,9 @@
       "command": "message",
       "args": [
         {
-          "$OBJECT": "argument",
+          "$OBJECT": "arg",
           "name": "text",
-          "argument": {
+          "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-1.2"

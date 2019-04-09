@@ -38,7 +38,7 @@
         {
           "$OBJECT": "mutation",
           "mutation": "decrement",
-          "arguments": []
+          "args": []
         }
       ],
       "parent": "1",

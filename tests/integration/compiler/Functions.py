@@ -21,8 +21,8 @@ def test_functions_function_argument():
     """
     result = Api.loads('function echo a:string\n\tx = a')
     args = [{
-        '$OBJECT': 'argument',
-        'argument': {'$OBJECT': 'type', 'type': 'string'}, 'name': 'a'
+        '$OBJECT': 'arg',
+        'arg': {'$OBJECT': 'type', 'type': 'string'}, 'name': 'a'
     }]
     assert result['tree']['1']['function'] == 'echo'
     assert result['tree']['1']['args'] == args
