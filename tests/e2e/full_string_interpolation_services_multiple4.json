@@ -341,6 +341,5 @@
     "serv221",
     "serv222"
   ],
-  "entrypoint": "1.2",
-  "version": null
+  "entrypoint": "1.2"
 }

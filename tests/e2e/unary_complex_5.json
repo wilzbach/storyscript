@@ -106,6 +106,5 @@
     "my_service",
     "my_service2"
   ],
-  "entrypoint": "1.1",
-  "version": null
+  "entrypoint": "1.1"
 }

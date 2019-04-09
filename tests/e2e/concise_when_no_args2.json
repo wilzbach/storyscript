@@ -41,6 +41,5 @@
   "services": [
     "http"
   ],
-  "entrypoint": "0.9",
-  "version": null
+  "entrypoint": "0.9"
 }

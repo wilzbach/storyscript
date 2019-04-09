@@ -61,6 +61,5 @@
   "entrypoint": "1",
   "functions": {
     "sum": "1"
-  },
-  "version": null
+  }
 }

@@ -143,6 +143,5 @@
   "entrypoint": "1",
   "functions": {
     "is_even": "2"
-  },
-  "version": null
+  }
 }

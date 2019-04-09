@@ -162,6 +162,5 @@
   "functions": {
     "random": "1",
     "my_func": "4"
-  },
-  "version": null
+  }
 }

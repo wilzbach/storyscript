@@ -6,5 +6,6 @@ omit =
   setup.py
   venv/*
   .tox/*
+  tests/e2e/update
 exclude_lines =
     internal_assert(0)

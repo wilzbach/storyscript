@@ -127,6 +127,5 @@
   "entrypoint": "1",
   "functions": {
     "my_function": "1"
-  },
-  "version": null
+  }
 }
