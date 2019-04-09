@@ -17,7 +17,7 @@ def singleton(fn):
 
 class SymbolType:
     """
-    Base class of a symbol
+    Base class of a type.
     """
 
     def op(self, other, op):
@@ -31,6 +31,12 @@ class SymbolType:
             return self
         if isinstance(other, AnyType):
             return other
+        return None
+
+    def output(self, n):
+        """
+        Output types of this type.
+        """
         return None
 
 
@@ -198,6 +204,14 @@ class ListType(SymbolType):
             return self.inner
         return None
 
+    def output(self, n):
+        """
+        Output types of the ListType.
+        """
+        if n == 1:
+            return self.inner,
+        return IntType.instance(), self.inner
+
 
 class ObjectType(SymbolType):
     """
@@ -228,6 +242,14 @@ class ObjectType(SymbolType):
         if self.key.op(other, op=None):
             return self.value
         return None
+
+    def output(self, n):
+        """
+        Output types of the ObjectType.
+        """
+        if n == 1:
+            return self.key,
+        return self.key, self.value
 
 
 class AnyType(SymbolType):
@@ -261,3 +283,11 @@ class AnyType(SymbolType):
         Returns a static instance of the AnyType.
         """
         return AnyType()
+
+    def output(self, n):
+        """
+        Output types of the AnyType.
+        """
+        if n == 1:
+            return AnyType.instance(),
+        return AnyType.instance(), AnyType.instance()

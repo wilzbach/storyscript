@@ -74,10 +74,26 @@ class TypeResolver(ScopeSelectiveVisitor):
         Create a new scope and add output variables to it
         """
         tree.scope = Scope(parent=scope)
-        for e in tree.foreach_statement.output.children:
-            name = e.value
-            sym = Symbol(name, AnyType.instance())
+        self.symbol_resolver.update_scope(tree.scope)
+
+        stmt = tree.foreach_statement
+        output_type = self.resolver.entity(stmt.entity)
+        outputs = stmt.output.children
+        nr_children = len(outputs)
+        assert(nr_children > 0)  # given by the grammar
+
+        iterable_types = output_type.output(nr_children)
+        stmt.output.expect(iterable_types is not None,
+                           'foreach_iterable_required',
+                           target=output_type)
+        stmt.output.expect(nr_children <= 2,
+                           'foreach_output_children')
+
+        for type_, output in zip(iterable_types, outputs):
+            name = output.value
+            sym = Symbol(name, type_)
             tree.scope.insert(name, sym)
+
         for c in tree.nested_block.children:
             self.visit_children(tree.nested_block, scope=tree.scope)
 

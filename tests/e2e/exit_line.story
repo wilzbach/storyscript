@@ -1,3 +1,4 @@
+items = [0, 1]
 foreach items as item
 	x = item
 

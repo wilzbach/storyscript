@@ -66,6 +66,10 @@ class ExpressionResolver:
         # how to resolve existing symbols
         self.path_resolver = PathResolver(symbol_resolver=symbol_resolver)
 
+    def entity(self, tree):
+        assert tree.data == 'entity'
+        return self.expr_visitor.entity(tree)
+
     def path(self, tree):
         assert tree.data == 'path'
         return self.path_resolver.path(tree).type()
