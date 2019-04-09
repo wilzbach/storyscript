@@ -25,8 +25,14 @@
           "$OBJECT": "path",
           "paths": [
             "a",
-            "long",
-            "path"
+            {
+              "$OBJECT": "dot",
+              "dot": "long"
+            },
+            {
+              "$OBJECT": "dot",
+              "dot": "path"
+            }
           ]
         }
       ],

@@ -48,7 +48,10 @@
                     "$OBJECT": "path",
                     "paths": [
                       "req",
-                      "body",
+                      {
+                        "$OBJECT": "dot",
+                        "dot": "body"
+                      },
                       {
                         "$OBJECT": "string",
                         "string": "action"

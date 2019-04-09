@@ -1,6 +1,2 @@
-Error: syntax error in story at line 1, column 1
-
-1|    a.b (key: 2)
-      ^
-
-E0049: Function a.b is not a valid path
+Internal error occured: sequence item 1: expected str instance, dict found
+Please report at https://github.com/storyscript/storyscript/issues

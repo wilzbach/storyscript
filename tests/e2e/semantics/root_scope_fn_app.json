@@ -18,8 +18,14 @@
           "$OBJECT": "path",
           "paths": [
             "app",
-            "secrets",
-            "slack"
+            {
+              "$OBJECT": "dot",
+              "dot": "secrets"
+            },
+            {
+              "$OBJECT": "dot",
+              "dot": "slack"
+            }
           ]
         }
       ],
@@ -37,8 +43,14 @@
           "$OBJECT": "path",
           "paths": [
             "app",
-            "environment",
-            "FOO"
+            {
+              "$OBJECT": "dot",
+              "dot": "environment"
+            },
+            {
+              "$OBJECT": "dot",
+              "dot": "FOO"
+            }
           ]
         }
       ],

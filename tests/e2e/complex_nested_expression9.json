@@ -16,7 +16,10 @@
                   "$OBJECT": "path",
                   "paths": [
                     "foo",
-                    "0"
+                    {
+                      "$OBJECT": "int",
+                      "int": 0
+                    }
                   ]
                 },
                 {
@@ -31,7 +34,10 @@
                       "$OBJECT": "path",
                       "paths": [
                         "foo",
-                        "1"
+                        {
+                          "$OBJECT": "int",
+                          "int": 1
+                        }
                       ]
                     }
                   ]
@@ -42,7 +48,10 @@
               "$OBJECT": "path",
               "paths": [
                 "foo",
-                "1"
+                {
+                  "$OBJECT": "int",
+                  "int": 1
+                }
               ]
             }
           ]
