@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 16
+
+1|    http server as a, b
+                     ^
+
+E0107: Only one output is allowed for `service` blocks.

@@ -103,6 +103,10 @@ class ErrorCodes:
         'E0106',
         '`foreach` requires an iterable type, but `{target}` is not'
     )
+    output_type_only_one = (
+        'E0107',
+        'Only one output is allowed for `{target}` blocks.'
+    )
 
     @staticmethod
     def is_error(error_name):
