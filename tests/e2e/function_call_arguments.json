@@ -68,6 +68,5 @@
   "entrypoint": "1",
   "functions": {
     "f": "1"
-  },
-  "version": null
+  }
 }

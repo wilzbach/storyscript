@@ -389,6 +389,5 @@
     "serv2",
     "serv22"
   ],
-  "entrypoint": "1.5",
-  "version": null
+  "entrypoint": "1.5"
 }

@@ -42,6 +42,5 @@
   "services": [
     "random"
   ],
-  "entrypoint": "1.1",
-  "version": null
+  "entrypoint": "1.1"
 }

@@ -78,6 +78,5 @@
     "serv1",
     "serv2"
   ],
-  "entrypoint": "1.2",
-  "version": null
+  "entrypoint": "1.2"
 }

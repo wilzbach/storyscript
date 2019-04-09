@@ -23,7 +23,6 @@ test_files = list(map(lambda e: path.relpath(e, test_dir),
 def run_test_story(source, expected_story):
     result = _clean_dict(Api.loads(source))
     del result['version']
-    del expected_story['version']
     assert result == expected_story
 
 
