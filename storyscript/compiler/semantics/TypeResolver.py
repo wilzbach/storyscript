@@ -95,13 +95,42 @@ class TypeResolver(ScopeSelectiveVisitor):
             tree.scope.insert(name, sym)
 
         for c in tree.nested_block.children:
-            self.visit_children(tree.nested_block, scope=tree.scope)
+            self.visit_children(c, scope=tree.scope)
 
     def while_block(self, tree, scope):
         self.visit_children(tree.nested_block, scope=scope)
 
     def when_block(self, tree, scope):
-        self.visit_children(tree.nested_block, scope=scope)
+        tree.scope = Scope(parent=scope)
+        self.symbol_resolver.update_scope(tree.scope)
+        output = tree.service.service_fragment.output
+        if output is not None:
+            output.expect(len(output.children) == 1, 'output_type_only_one',
+                          target='when')
+
+            name = output.children[0].value
+            sym = Symbol(name, AnyType.instance())
+            tree.scope.insert(name, sym)
+
+        for c in tree.nested_block.children:
+            self.visit_children(c, scope=tree.scope)
+
+    def service_block(self, tree, scope):
+        tree.scope = Scope(parent=scope)
+        self.symbol_resolver.update_scope(tree.scope)
+
+        output = tree.service.service_fragment.output
+        if output is not None:
+            output.expect(len(output.children) == 1, 'output_type_only_one',
+                          target='service')
+
+            name = output.children[0].value
+            sym = Symbol(name, AnyType.instance())
+            tree.scope.insert(name, sym)
+
+        if tree.nested_block:
+            for c in tree.nested_block.children:
+                self.visit_children(c, scope=tree.scope)
 
     def if_block(self, tree, scope):
         self.if_statement(tree, scope)
