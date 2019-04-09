@@ -1,0 +1,76 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 0
+            },
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            }
+          ]
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a",
+        "+0"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 5
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "a",
+        "-0"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 6
+        }
+      ],
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "a",
+        "-1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 7
+        }
+      ]
+    }
+  },
+  "entrypoint": "1"
+}

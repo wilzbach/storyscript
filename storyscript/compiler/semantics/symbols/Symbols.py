@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .SymbolTypes import IntType, StringType, SymbolType
+from .SymbolTypes import SymbolType
 
 
 class Symbol:
@@ -28,12 +28,7 @@ class Symbol:
         """
         symbol = self
         for p in paths:
-            if isinstance(p, str):
-                if p.isdigit():
-                    p = IntType.instance()
-                else:
-                    p = StringType.instance()
-            elif isinstance(p, Symbol):
+            if isinstance(p, Symbol):
                 p = p.type()
             else:
                 assert isinstance(p, SymbolType)
