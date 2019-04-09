@@ -79,6 +79,8 @@ class ErrorCodes:
         'E0061', 'Invalid path name: `{path}`. '
         'Path names can\'t contain `{token}`')
     return_required = ('E0062', 'All paths of a function need to return')
+    assignment_inline_expression = (
+        'E0063', 'Can\'t assign to inline expressions.')
     type_assignment_different = (
         'E0100', 'Can\'t assign `{source}` to `{target}`')
     var_not_defined = (
