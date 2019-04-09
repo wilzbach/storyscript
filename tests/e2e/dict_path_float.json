@@ -1,0 +1,29 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "float",
+                "float": 1.1
+              },
+              {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1"
+}

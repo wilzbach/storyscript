@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 2
+
+3|    	k = "a"
+       ^
+
+E0100: Can't assign `string` to `float`
