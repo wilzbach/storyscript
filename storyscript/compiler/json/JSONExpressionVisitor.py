@@ -14,7 +14,7 @@ class JSONExpressionVisitor(ExpressionVisitor):
         'PLUS': 'sum', 'DASH': 'subtraction', 'POWER': 'exponential',
         'MULTIPLIER': 'multiplication', 'BSLASH': 'division',
         'MODULUS': 'modulus',
-        'AND': 'and', 'OR': 'or', 'NOT': 'not', 'EQUAL': 'equals',
+        'AND': 'and', 'OR': 'or', 'NOT': 'not', 'EQUAL': 'equal',
         'GREATER': 'greater', 'LESSER': 'less',
         'NOT_EQUAL': 'not_equal',
         'GREATER_EQUAL': 'greater_equal',

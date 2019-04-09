@@ -17,7 +17,7 @@
               "values": [
                 {
                   "$OBJECT": "expression",
-                  "expression": "equals",
+                  "expression": "equal",
                   "values": [
                     {
                       "$OBJECT": "int",
@@ -41,7 +41,7 @@
               "values": [
                 {
                   "$OBJECT": "expression",
-                  "expression": "equals",
+                  "expression": "equal",
                   "values": [
                     {
                       "$OBJECT": "expression",
@@ -75,7 +75,7 @@
                 },
                 {
                   "$OBJECT": "expression",
-                  "expression": "equals",
+                  "expression": "equal",
                   "values": [
                     {
                       "$OBJECT": "int",

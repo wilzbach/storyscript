@@ -29,7 +29,7 @@
           "name": "k2",
           "argument": {
             "$OBJECT": "expression",
-            "expression": "equals",
+            "expression": "equal",
             "values": [
               {
                 "$OBJECT": "path",
