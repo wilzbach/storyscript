@@ -24,7 +24,7 @@
           "values": [
             {
               "$OBJECT": "expression",
-              "expression": "equals",
+              "expression": "equal",
               "values": [
                 {
                   "$OBJECT": "path",
@@ -40,7 +40,7 @@
             },
             {
               "$OBJECT": "expression",
-              "expression": "equals",
+              "expression": "equal",
               "values": [
                 {
                   "$OBJECT": "path",

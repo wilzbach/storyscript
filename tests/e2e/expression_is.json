@@ -20,7 +20,7 @@
       "args": [
         {
           "$OBJECT": "expression",
-          "expression": "equals",
+          "expression": "equal",
           "values": [
             {
               "$OBJECT": "path",

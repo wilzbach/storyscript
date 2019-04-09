@@ -73,7 +73,7 @@ def test_objects_build_nary_expression(patch, visitor, tree, magic):
     ('BSLASH', 'division'), ('MODULUS', 'modulus'),
     ('POWER', 'exponential'), ('DASH', 'subtraction'), ('AND', 'and'),
     ('OR', 'or'), ('NOT', 'not'),
-    ('EQUAL', 'equals'), ('GREATER', 'greater'),
+    ('EQUAL', 'equal'), ('GREATER', 'greater'),
     ('LESSER', 'less'), ('NOT_EQUAL', 'not_equal'),
     ('GREATER_EQUAL', 'greater_equal'), ('LESSER_EQUAL', 'less_equal'),
 ])
