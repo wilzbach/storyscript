@@ -16,10 +16,11 @@ class PathResolver:
         Extracts names from a path tree
         """
         assert tree.data == 'path'
-        names = [tree.child(0).value]
+        main_name = tree.child(0).value
+        names = [(main_name, tree.child(0).value)]
         for fragment in tree.children[1:]:
             child = fragment.child(0)
-            value = child.value
+            name = None
             if isinstance(child, Tree):
                 if child.data == 'string':
                     value = StringType.instance()
@@ -27,23 +28,27 @@ class PathResolver:
                     assert child.data == 'path'
                     value = self.path(child)
             else:
+                name = child.value
                 if child.type == 'INT':
                     value = IntType.instance()
                 else:
                     assert child.type == 'NAME'
                     value = StringType.instance()
-            names.append(value)
+            names.append((name, value))
         return names
 
     def path(self, tree):
         assert tree.data == 'path'
-        paths = self.names(tree)
-        for p in paths:
+        path_names = self.names(tree)
+        for name, p in path_names:
             # ignore internal variables
-            if not isinstance(p, str) or p.startswith('__p-'):
-                break
-            tree.expect('-' not in p,
-                        'path_name_invalid_char', path=p, token='-')
-            tree.expect('/' not in p,
-                        'path_name_invalid_char', path=p, token='/')
+            if name is None or name.startswith('__p-'):
+                continue
+            if p != IntType.instance():
+                tree.expect('-' not in name,
+                            'path_name_invalid_char', path=name, token='-')
+            tree.expect('/' not in name,
+                        'path_name_invalid_char', path=name, token='/')
+        # ["name", <types>...]
+        paths = [p[1] for p in path_names]
         return self.symbol_resolver.resolve(tree, paths)
