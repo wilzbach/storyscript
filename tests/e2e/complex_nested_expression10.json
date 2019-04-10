@@ -34,14 +34,20 @@
                           "$OBJECT": "path",
                           "paths": [
                             "list",
-                            "0"
+                            {
+                              "$OBJECT": "int",
+                              "int": 0
+                            }
                           ]
                         },
                         {
                           "$OBJECT": "path",
                           "paths": [
                             "list",
-                            "1"
+                            {
+                              "$OBJECT": "int",
+                              "int": 1
+                            }
                           ]
                         }
                       ]

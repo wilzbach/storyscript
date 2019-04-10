@@ -30,7 +30,10 @@
           "$OBJECT": "path",
           "paths": [
             "path",
-            "0"
+            {
+              "$OBJECT": "int",
+              "int": 0
+            }
           ]
         }
       ],

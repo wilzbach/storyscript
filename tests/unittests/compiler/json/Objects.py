@@ -20,8 +20,12 @@ def test_objects_names(tree):
 
 def test_objects_names_many(magic, tree):
     shard = magic()
+    shard.child().type = 'NAME'
     tree.children = [magic(), shard]
-    assert Objects().names(tree) == [tree.child(0).value, shard.child().value]
+    assert Objects().names(tree) == [
+        tree.child(0).value,
+        {'$OBJECT': 'dot', 'dot': shard.child().value},
+    ]
 
 
 def test_objects_names_string(patch, magic, tree):
@@ -99,8 +103,11 @@ def test_objects_mutation_fragment_arguments(patch, magic):
 
 def test_objects_path_fragments(magic):
     fragment = magic()
+    fragment.child().type = 'NAME'
     tree = Tree('path', [magic(), fragment])
-    assert Objects().path(tree)['paths'][1] == fragment.child().value
+    assert Objects().path(tree)['paths'][1] == {
+        '$OBJECT': 'dot', 'dot': fragment.child().value
+    }
 
 
 def test_objects_number():

@@ -23,20 +23,20 @@ class Objects:
             if isinstance(child, Tree):
                 if child.data == 'string':
                     value = self.string(child)
-                elif child.data == 'path':
+                else:
+                    assert child.data == 'path'
                     value = self.path(child)
+            else:
+                if child.type == 'INT':
+                    value = self.number(fragment)
+                else:
+                    assert child.type == 'NAME'
+                    value = {'$OBJECT': 'dot', 'dot': value}
             names.append(value)
         return names
 
     def path(self, tree):
         paths = self.names(tree)
-        for p in paths:
-            if not isinstance(p, str) or p.startswith('__p-'):
-                continue
-            tree.expect('-' not in p,
-                        'path_name_invalid_char', path=p, token='-')
-            tree.expect('/' not in p,
-                        'path_name_invalid_char', path=p, token='/')
         return {'$OBJECT': 'path', 'paths': paths}
 
     def mutation(self, tree):

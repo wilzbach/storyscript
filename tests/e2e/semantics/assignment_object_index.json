@@ -30,7 +30,10 @@
       "ln": "2",
       "name": [
         "a",
-        "b"
+        {
+          "$OBJECT": "dot",
+          "dot": "b"
+        }
       ],
       "args": [
         {

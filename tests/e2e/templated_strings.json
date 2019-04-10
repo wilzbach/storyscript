@@ -185,8 +185,14 @@
           "$OBJECT": "path",
           "paths": [
             "obj",
-            "b",
-            "c"
+            {
+              "$OBJECT": "dot",
+              "dot": "b"
+            },
+            {
+              "$OBJECT": "dot",
+              "dot": "c"
+            }
           ]
         }
       ],
