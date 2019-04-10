@@ -107,6 +107,7 @@ class Lines:
         Creates the base dictionary for a given line.
         """
         assert line not in self.lines, 'Line numbers must be unique'
+        raw_line = self.story.line(line)
         self.lines[line] = {
             'method': method,
             'ln': line,
@@ -119,6 +120,7 @@ class Lines:
             'enter': enter,
             'exit': exit,
             'parent': parent,
+            'src': raw_line,
         }
         # save insertion order
         self._lines.append(line)

@@ -24,10 +24,6 @@ class StoryError(SyntaxError):
         self.path = path
         self.error_tuple = None
         self.with_color = True
-        if story:
-            self.lines = self.story.splitlines(keepends=False)
-        else:
-            self.lines = []
         self.tabwidth = 2
 
     def name(self):
@@ -55,7 +51,7 @@ class StoryError(SyntaxError):
         Gets the error line
         """
         line = self.int_line()
-        return self.lines[line - 1]
+        return self.story.line(line)
 
     def header(self):
         """

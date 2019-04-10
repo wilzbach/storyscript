@@ -6,8 +6,9 @@ from storyscript.exceptions import StorySyntaxError
 
 
 @fixture
-def lines():
-    return Lines(story=None)
+def lines(magic):
+    story = magic()
+    return Lines(story=story)
 
 
 def test_lines_init(lines):
@@ -102,8 +103,9 @@ def test_lines_make(lines):
                       'name': None,
                       'function': None, 'service': None, 'command': None,
                       'enter': None, 'exit': None, 'args': None,
-                      'parent': None}}
+                      'parent': None, 'src': lines.story.line()}}
     lines.make('method', '1')
+    lines.story.line.assert_called_with('1')
     assert lines.lines == expected
 
 

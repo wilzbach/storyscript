@@ -29,6 +29,7 @@ class Story:
     def __init__(self, story, path=None):
         self.story = story
         self.path = path
+        self.lines = story.splitlines(keepends=False)
 
     @classmethod
     def read(cls, path):
@@ -66,7 +67,7 @@ class Story:
         """
         Handles errors by wrapping the real error in a smart StoryError
         """
-        return StoryError(error, self.story, path=self.path)
+        return StoryError(error, self, path=self.path)
 
     def parse(self, parser, lower=False):
         """
@@ -130,3 +131,15 @@ class Story:
         Returns the default Parser instance (cached)
         """
         return _parser()
+
+    def line(self, i):
+        """
+        Returns a line from the story source.
+        Line numbers start with 1.
+        """
+        if isinstance(i, str):
+            if not i.isdigit():
+                return None
+            i = int(i)
+        assert i <= len(self.lines)
+        return self.lines[i - 1]
