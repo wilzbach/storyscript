@@ -1,0 +1,2 @@
+foreach items
+	x = item
