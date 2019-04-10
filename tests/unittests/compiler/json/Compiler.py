@@ -606,12 +606,10 @@ def test_compiler_else_block(patch, compiler, lines, tree):
 
 def test_compiler_foreach_block(patch, compiler, lines, tree):
     patch.init(Tree)
-    patch.object(Objects, 'entity')
-    patch.many(JSONCompiler, ['subtree', 'output'])
+    patch.many(JSONCompiler, ['subtree', 'output', 'fake_base_expression'])
     compiler.foreach_block(tree, '1')
-    assert Objects.entity.call_count == 1
     compiler.output.assert_called_with(tree.foreach_statement.output)
-    args = [Objects.entity()]
+    args = [compiler.fake_base_expression()]
     lines.set_scope.assert_called_with(tree.line(), '1', JSONCompiler.output())
     lines.finish_scope.assert_called_with(tree.line())
     lines.append.assert_called_with('for', tree.line(), args=args,

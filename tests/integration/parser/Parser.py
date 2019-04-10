@@ -95,7 +95,9 @@ def test_parser_foreach_block():
     result = parse('foreach items as one, two\n\tvar=3\n')
     block = result.block.foreach_block
     foreach = block.foreach_statement
-    assert foreach.entity.path.child(0) == Token('NAME', 'items')
+    exp = arith_exp(foreach.base_expression)
+    entity = get_entity(exp)
+    assert entity.path.child(0) == Token('NAME', 'items')
     assert foreach.output.child(0) == Token('NAME', 'one')
     assert foreach.output.child(1) == Token('NAME', 'two')
     assert block.nested_block.data == 'nested_block'

@@ -252,7 +252,8 @@ class JSONCompiler:
 
     def foreach_block(self, tree, parent):
         line = tree.line()
-        args = [self.objects.entity(tree.foreach_statement.child(0))]
+        exp = tree.foreach_statement.base_expression
+        args = [self.fake_base_expression(exp, parent)]
         output = self.output(tree.foreach_statement.output)
         nested_block = tree.nested_block
         self.lines.set_scope(line, parent, output)

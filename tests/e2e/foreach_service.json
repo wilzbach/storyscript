@@ -1,0 +1,87 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "obj"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "f"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "obj"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "substring",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "start",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            }
+          ]
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "for",
+      "ln": "2",
+      "output": [
+        "item"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
+          ]
+        }
+      ],
+      "enter": "3",
+      "next": "3"
+    },
+    "3": {
+      "method": "execute",
+      "ln": "3",
+      "service": "email_service",
+      "command": "send_email",
+      "parent": "2"
+    }
+  },
+  "services": [
+    "email_service"
+  ],
+  "entrypoint": "1"
+}

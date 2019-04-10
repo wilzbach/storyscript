@@ -81,6 +81,8 @@ class ErrorCodes:
     return_required = ('E0062', 'All paths of a function need to return')
     assignment_inline_expression = (
         'E0063', 'Can\'t assign to inline expressions.')
+    foreach_output_required = (
+        'E0064', 'Foreach blocks require an output (e.g. `as item`)')
     type_assignment_different = (
         'E0100', 'Can\'t assign `{source}` to `{target}`')
     var_not_defined = (

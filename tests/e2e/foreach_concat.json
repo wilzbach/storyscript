@@ -1,0 +1,50 @@
+{
+  "tree": {
+    "1": {
+      "method": "for",
+      "ln": "1",
+      "output": [
+        "item"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "list",
+              "items": [
+                {
+                  "$OBJECT": "int",
+                  "int": 2
+                }
+              ]
+            },
+            {
+              "$OBJECT": "list",
+              "items": [
+                {
+                  "$OBJECT": "int",
+                  "int": 3
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "service": "email_service",
+      "command": "send_email",
+      "parent": "1"
+    }
+  },
+  "services": [
+    "email_service"
+  ],
+  "entrypoint": "1"
+}

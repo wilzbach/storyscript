@@ -77,7 +77,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.symbol_resolver.update_scope(tree.scope)
 
         stmt = tree.foreach_statement
-        output_type = self.resolver.entity(stmt.entity)
+        output_type = self.resolver.base_expression(stmt.base_expression)
         outputs = stmt.output.children
         nr_children = len(outputs)
         assert(nr_children > 0)  # given by the grammar

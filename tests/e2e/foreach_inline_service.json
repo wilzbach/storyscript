@@ -1,0 +1,43 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "service": "my_service",
+      "command": "list_emails",
+      "next": "1"
+    },
+    "1": {
+      "method": "for",
+      "ln": "1",
+      "output": [
+        "item"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1"
+          ]
+        }
+      ],
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "service": "email_service",
+      "command": "send_email",
+      "parent": "1"
+    }
+  },
+  "services": [
+    "email_service",
+    "my_service"
+  ],
+  "entrypoint": "1.1"
+}

@@ -235,5 +235,23 @@ class Transformer(LarkTransformer):
 
         return Tree('function_block', matches)
 
+    @classmethod
+    def foreach_block(cls, matches):
+        """
+        Transform foreach blocks.
+        Check whether an inline_service received the output instead.
+        """
+        stmt = matches[0]
+        if len(stmt.children) == 1:
+            e = stmt.base_expression.service
+            if e is not None and e.service_fragment is not None \
+                    and e.service_fragment.output:
+                output = e.service_fragment.children.pop()
+                stmt.children.append(output)
+            else:
+                stmt.expect(0, 'foreach_output_required')
+
+        return Tree('foreach_block', matches)
+
     def __getattr__(self, attribute, *args):
         return lambda matches: Tree(attribute, matches)

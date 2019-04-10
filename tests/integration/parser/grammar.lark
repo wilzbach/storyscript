@@ -51,7 +51,7 @@ elseif_block: elseif_statement _NL nested_block
 !else_statement: _ELSE
 else_block: else_statement _NL nested_block
 if_block: if_statement _NL nested_block elseif_block* else_block?
-foreach_statement: _FOREACH entity output
+foreach_statement: _FOREACH base_expression output?
 foreach_block: foreach_statement _NL nested_block
 while_statement: _WHILE base_expression
 while_block: while_statement _NL nested_block
