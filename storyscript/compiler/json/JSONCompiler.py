@@ -13,8 +13,8 @@ class JSONCompiler:
     """
     Compiles Storyscript abstract syntax tree to JSON.
     """
-    def __init__(self):
-        self.lines = Lines()
+    def __init__(self, story):
+        self.lines = Lines(story)
         self.objects = Objects()
 
     @staticmethod

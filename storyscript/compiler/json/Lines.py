@@ -6,7 +6,8 @@ class Lines:
     """
     Holds compiled lines and provides methods for operation on lines.
     """
-    def __init__(self):
+    def __init__(self, story):
+        self.story = story
         self.lines = {}
         self._lines = []  # sorted line nr (by insertion)
         self.variables = []

@@ -103,7 +103,7 @@ class Story:
         Compiles the story and stores the result.
         """
         try:
-            self.compiled = Compiler.compile(self.tree)
+            self.compiled = Compiler.compile(self.tree, story=self)
         except (CompilerError, StorySyntaxError) as error:
             raise self.error(error) from error
 

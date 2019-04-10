@@ -7,7 +7,7 @@ from storyscript.exceptions import StorySyntaxError
 
 @fixture
 def lines():
-    return Lines()
+    return Lines(story=None)
 
 
 def test_lines_init(lines):
