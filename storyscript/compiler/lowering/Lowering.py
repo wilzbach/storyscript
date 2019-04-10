@@ -209,7 +209,11 @@ class Lowering:
         Inserts the AST expression as fake_node and returns the path
         reference to the inserted fake_node.
         """
-        new_node = self.parser.parse(code_string)
+        line = orig_node.line()
+        column = int(orig_node.column()) + 1
+        # add whitespace as padding to fixup the column location of the
+        # resulting tokens.
+        new_node = self.parser.parse(' ' * column + code_string)
         new_node = new_node.block
         orig_node.expect(new_node, 'string_templates_no_assignment')
         # go to the actual node -> jump into block.rules or block.service
@@ -222,17 +226,15 @@ class Lowering:
         if new_node.data == 'service_block' and \
                 new_node.service_fragment is None:
             # it was a plain-old path initially
-            base_tree = Tree('path', [
-                Token('NAME', code_string)
-            ])
-            return base_tree
+            name = Token('NAME', code_string.strip(), line=line, column=column)
+            name.end_column = int(orig_node.end_column()) - 1
+            return Tree('path', [name])
         if new_node.data == 'absolute_expression':
             new_node = new_node.children[0]
         else:
             orig_node.expect(new_node.data == 'service',
                              'string_templates_no_assignment')
 
-        line = orig_node.line()
         # the new assignment should be inserted at the top of the current block
         return fake_tree.add_assignment(new_node, original_line=line)
 

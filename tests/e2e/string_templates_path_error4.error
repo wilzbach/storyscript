@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 6
+
+1|    c = "{ bar }"
+           ^^^^^^^
+
+E0101: Variable `bar` has not been defined.
