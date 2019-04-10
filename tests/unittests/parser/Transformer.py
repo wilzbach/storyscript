@@ -149,24 +149,15 @@ def test_transformer_when_block(patch, tree):
     tree.output = None
     tree.children = [Token('NAME', '.name.')]
     tree.child_token.return_value = Token('NAME', '.child.', line=42)
-    tree.path.child_token.return_value = '.path.'
+    tree.path.child_token.return_value = Token('NAME', '.path.')
     result = Transformer.when_block([tree, 'block'])
     Transformer.implicit_output.assert_called_with(tree)
-    assert result == Tree('service_block', [
-        Tree('service', [
-            Tree('path', [Token('NAME', '.child.')]),
-            Tree('service_fragment', [
-                Tree('command', ['.path.']),
-                Tree('output', ['.path.'])
-            ])
-        ]),
-        Tree('nested_block', [
-            Tree('block', [
-                Tree('when_block', [
-                    tree,
-                    'block'
-                ])
-            ])
+    assert result == Tree('concise_when_block', [
+        Token('NAME', '.child.'),
+        Token('NAME', '.path.'),
+        Tree('when_block', [
+            tree,
+            'block'
         ])
     ])
 
