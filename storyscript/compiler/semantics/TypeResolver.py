@@ -39,6 +39,7 @@ class TypeResolver(ScopeSelectiveVisitor):
             scope=None, check_variable_existence=False)
         self.path_resolver = PathResolver(self.path_symbol_resolver)
         self.in_service_block = False
+        self.in_when_block = False
 
     def assignment(self, tree, scope):
         self.symbol_resolver.update_scope(scope)
@@ -116,8 +117,11 @@ class TypeResolver(ScopeSelectiveVisitor):
             sym = Symbol(name, AnyType.instance())
             tree.scope.insert(name, sym)
 
+        tree.expect(not self.in_when_block, 'nested_when_block')
+        self.in_when_block = True
         for c in tree.nested_block.children:
             self.visit_children(c, scope=tree.scope)
+        self.in_when_block = False
 
     def service_block(self, tree, scope):
         tree.scope = Scope(parent=scope)
