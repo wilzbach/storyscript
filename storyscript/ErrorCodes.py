@@ -109,6 +109,8 @@ class ErrorCodes:
         'E0107',
         'Only one output is allowed for `{target}` blocks.'
     )
+    output_unique = (
+        'E0108', 'Service output `{name}` must be unique. Use `as outputName`')
 
     @staticmethod
     def is_error(error_name):

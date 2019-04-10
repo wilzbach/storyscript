@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 5
+
+2|        my_service2 command
+          ^^^^^^^^^^^
+
+E0108: Service output `command` must be unique. Use `as outputName`
