@@ -1,3 +1,3 @@
 my_service command as a
-    my_service2 command as b
+    when a command as b
     	break

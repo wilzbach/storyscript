@@ -4,10 +4,10 @@
       "method": "execute",
       "ln": "1",
       "output": [
-        "a"
+        "server"
       ],
-      "service": "my_service",
-      "command": "command",
+      "service": "http",
+      "command": "server",
       "enter": "2",
       "next": "2"
     },
@@ -15,10 +15,10 @@
       "method": "when",
       "ln": "2",
       "output": [
-        "b"
+        "listen"
       ],
-      "service": "a",
-      "command": "command",
+      "service": "command",
+      "command": "listen",
       "enter": "3",
       "parent": "1",
       "next": "3"
@@ -30,7 +30,8 @@
     }
   },
   "services": [
-    "my_service"
+    "command",
+    "http"
   ],
   "entrypoint": "1"
 }
