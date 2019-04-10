@@ -1,6 +1,6 @@
 from storyscript.parser import Tree
 
-from .symbols.SymbolTypes import StringType
+from .symbols.SymbolTypes import IntType, StringType
 
 
 class PathResolver:
@@ -22,10 +22,16 @@ class PathResolver:
             value = child.value
             if isinstance(child, Tree):
                 if child.data == 'string':
-                    value = self.string(child)
+                    value = StringType.instance()
                 else:
                     assert child.data == 'path'
                     value = self.path(child)
+            else:
+                if child.type == 'INT':
+                    value = IntType.instance()
+                else:
+                    assert child.type == 'NAME'
+                    value = StringType.instance()
             names.append(value)
         return names
 
@@ -41,10 +47,3 @@ class PathResolver:
             tree.expect('/' not in p,
                         'path_name_invalid_char', path=p, token='/')
         return self.symbol_resolver.resolve(tree, paths)
-
-    def string(self, tree):
-        """
-        Compiles a string tree.
-        """
-        assert tree.data == 'string'
-        return StringType.instance()

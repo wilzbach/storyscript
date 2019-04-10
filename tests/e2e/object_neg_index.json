@@ -1,0 +1,44 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "int",
+                "int": -2
+              },
+              {
+                "$OBJECT": "boolean",
+                "boolean": true
+              }
+            ]
+          ]
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a",
+        "-2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": false
+        }
+      ]
+    }
+  },
+  "entrypoint": "1"
+}
