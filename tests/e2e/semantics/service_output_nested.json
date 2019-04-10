@@ -1,0 +1,30 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "output": [
+        "a"
+      ],
+      "service": "my_service",
+      "command": "command",
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "output": [
+        "b"
+      ],
+      "service": "my_service2",
+      "command": "command",
+      "parent": "1"
+    }
+  },
+  "services": [
+    "my_service",
+    "my_service2"
+  ],
+  "entrypoint": "1"
+}

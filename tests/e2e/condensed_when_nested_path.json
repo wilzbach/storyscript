@@ -116,34 +116,7 @@
           "int": 2
         }
       ],
-      "parent": "7",
-      "next": "9"
-    },
-    "9": {
-      "method": "when",
-      "ln": "9",
-      "output": [
-        "log"
-      ],
-      "service": "default",
-      "command": "log",
-      "enter": "10",
-      "parent": "2",
-      "next": "10"
-    },
-    "10": {
-      "method": "expression",
-      "ln": "10",
-      "name": [
-        "x"
-      ],
-      "args": [
-        {
-          "$OBJECT": "int",
-          "int": 3
-        }
-      ],
-      "parent": "9"
+      "parent": "7"
     }
   },
   "services": [

@@ -6,5 +6,3 @@ logging default
   		x = 1
   	when log as logger
   		x = 2
-  	when log
-  		x = 3

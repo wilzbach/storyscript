@@ -109,6 +109,9 @@ class TypeResolver(ScopeSelectiveVisitor):
                           target='when')
 
             name = output.children[0].value
+            resolved = tree.scope.resolve(name)
+            tree.expect(resolved is None, 'output_unique',
+                        name=resolved.name() if resolved else None)
             sym = Symbol(name, AnyType.instance())
             tree.scope.insert(name, sym)
 
@@ -125,6 +128,9 @@ class TypeResolver(ScopeSelectiveVisitor):
                           target='service')
 
             name = output.children[0].value
+            resolved = tree.scope.resolve(name)
+            tree.expect(resolved is None, 'output_unique',
+                        name=resolved.name() if resolved else None)
             sym = Symbol(name, AnyType.instance())
             tree.scope.insert(name, sym)
 

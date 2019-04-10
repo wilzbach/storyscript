@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 6
+
+2|    when log
+           ^^^
+
+E0108: Service output `log` must be unique. Use `as outputName`
