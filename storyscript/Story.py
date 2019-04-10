@@ -8,6 +8,7 @@ from lark.exceptions import UnexpectedInput, UnexpectedToken
 
 from .compiler import Compiler
 from .compiler.lowering import Lowering
+from .compiler.pretty.PrettyPrinter import PrettyPrinter
 from .exceptions import CompilerError, StoryError, StorySyntaxError
 from .parser import Parser
 
@@ -87,6 +88,16 @@ class Story:
         except UnexpectedToken as error:
             raise self.error(error) from error
         except UnexpectedInput as error:
+            raise self.error(error) from error
+        return self
+
+    def format(self):
+        """
+        Pretty prints the story.
+        """
+        try:
+            return PrettyPrinter().compile(self.tree)
+        except (CompilerError, StorySyntaxError) as error:
             raise self.error(error) from error
 
     def compile(self):

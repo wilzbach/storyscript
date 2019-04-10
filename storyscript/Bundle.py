@@ -114,7 +114,8 @@ class Bundle:
         services.sort()
         return services
 
-    def parser(self, ebnf):
+    @staticmethod
+    def parser(ebnf):
         if ebnf is not None:
             return Parser(ebnf=ebnf)
         return None

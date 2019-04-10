@@ -510,7 +510,9 @@ class Transformer(LarkTransformer):
             t = Tree('expression', matches)
             t.kind = 'primary_expression'
             return t
-        return cls.expression_rewrite('primary_expression', matches)
+        m = cls.expression_rewrite('primary_expression', matches)
+        m.needs_parentheses = True
+        return m
 
     def __getattr__(self, attribute, *args):
         return lambda matches: Tree(attribute, matches)
