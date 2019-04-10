@@ -428,12 +428,121 @@ class Lowering:
         ])
         return t
 
+    @staticmethod
+    def build_base_entity(token):
+        return Tree('base_expression', [
+            Tree('expression', [
+                Tree('or_expression', [
+                    Tree('and_expression', [
+                        Tree('cmp_expression', [
+                            Tree('arith_expression', [
+                                Tree('mul_expression', [
+                                    Tree('unary_expression', [
+                                        Tree('pow_expression', [
+                                            Tree('primary_expression', [
+                                                Tree('entity', [
+                                                    token
+                                                ])
+                                            ])
+                                        ])
+                                    ])
+                                ])
+                            ])
+                        ])
+                    ])
+                ])
+            ])
+        ])
+
+    @staticmethod
+    def build_unary_op(t1, t2):
+        return Tree('base_expression', [
+            Tree('expression', [
+                Tree('or_expression', [
+                    Tree('and_expression', [
+                        Tree('cmp_expression', [
+                            Tree('arith_expression', [
+                                Tree('mul_expression', [
+                                    Tree('unary_expression', [
+                                        t1,
+                                        Tree('unary_expression', [
+                                            Tree('pow_expression', [
+                                                Tree('primary_expression', [
+                                                    Tree('entity', [
+                                                        t2
+                                                    ])
+                                                ])
+                                            ])
+                                        ])
+                                    ])
+                                ])
+                            ])
+                        ])
+                    ])
+                ])
+            ])
+        ])
+
+    def visit_while(self, node, block):
+        """
+        Searches for while_blocks
+        """
+        if not hasattr(node, 'children'):
+            return
+        if node.data == 'block':
+            block = node
+        elif node.data == 'while_block':
+            block = Tree('block', [Tree('dummy', [Token('foo', 'foo',
+                                                        line=node.line())])])
+            fake_tree = self.fake_tree(block)
+            l1 = fake_tree.line()
+            l2 = fake_tree.line()
+            token = Token('TRUE', 'true', line=l1)
+            while_stmt = Tree('while_statement', [
+                self.build_base_entity(Tree('values', [
+                    Tree('boolean', [token])
+                ]))
+            ])
+            e = node.while_statement.base_expression.children[0]
+            p = fake_tree.add_assignment(e, original_line=node.line())
+            not_token = Tree('unary_operator', [Token('NOT', '!',
+                                                      line=fake_tree.line())])
+            if_stmt = Tree('if_statement', [
+                self.build_unary_op(not_token, p)
+            ])
+            if_stmt.data = 'if_statement'
+            block.children.pop()
+            block.children.append(
+                Tree('if_block', [
+                    if_stmt,
+                    Tree('nested_block', [
+                        Tree('block', [
+                            Tree('rules', [
+                                Tree('break_statement', [
+                                    Token('BREAK', 'break', line=l2)
+                                ])
+                            ])
+                        ])
+                    ])
+                ])
+            )
+            nested_block = node.nested_block
+            nested_block.children.insert(0, block)
+            node.children = [
+                while_stmt,
+                nested_block,
+            ]
+
+        for c in node.children:
+            self.visit_while(c, block)
+
     def process(self, tree):
         """
         Applies several preprocessing steps to the existing AST.
         """
         pred = Lowering.is_inline_expression
         self.visit_concise_when(tree)
+        self.visit_while(tree, block=None)
         self.visit_string_templates(tree, block=None, parent=None,
                                     cmp_expr=None)
         self.visit(tree, None, None, pred,
