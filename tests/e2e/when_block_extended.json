@@ -1,0 +1,143 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "output": [
+        "command"
+      ],
+      "service": "other_service",
+      "command": "command",
+      "enter": "1",
+      "next": "1"
+    },
+    "1": {
+      "method": "when",
+      "ln": "1",
+      "output": [
+        "listen"
+      ],
+      "service": "command",
+      "command": "listen",
+      "enter": "2",
+      "parent": "1.1",
+      "next": "2"
+    },
+    "2": {
+      "method": "break",
+      "ln": "2",
+      "parent": "1",
+      "next": "3.1"
+    },
+    "3.1": {
+      "method": "execute",
+      "ln": "3.1",
+      "output": [
+        "command"
+      ],
+      "service": "other_service",
+      "command": "command",
+      "enter": "3",
+      "next": "3"
+    },
+    "3": {
+      "method": "when",
+      "ln": "3",
+      "output": [
+        "os"
+      ],
+      "service": "command",
+      "command": "listen",
+      "enter": "4",
+      "parent": "3.1",
+      "next": "4"
+    },
+    "4": {
+      "method": "break",
+      "ln": "4",
+      "parent": "3",
+      "next": "5.1"
+    },
+    "5.1": {
+      "method": "execute",
+      "ln": "5.1",
+      "output": [
+        "command"
+      ],
+      "service": "other_service",
+      "command": "command",
+      "enter": "5",
+      "next": "5"
+    },
+    "5": {
+      "method": "when",
+      "ln": "5",
+      "output": [
+        "listen"
+      ],
+      "service": "command",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "path",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "/foo"
+          }
+        }
+      ],
+      "enter": "6",
+      "parent": "5.1",
+      "next": "6"
+    },
+    "6": {
+      "method": "break",
+      "ln": "6",
+      "parent": "5",
+      "next": "7.1"
+    },
+    "7.1": {
+      "method": "execute",
+      "ln": "7.1",
+      "output": [
+        "command"
+      ],
+      "service": "other_service",
+      "command": "command",
+      "enter": "7",
+      "next": "7"
+    },
+    "7": {
+      "method": "when",
+      "ln": "7",
+      "output": [
+        "li"
+      ],
+      "service": "command",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "path",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "/foo"
+          }
+        }
+      ],
+      "enter": "8",
+      "parent": "7.1",
+      "next": "8"
+    },
+    "8": {
+      "method": "break",
+      "ln": "8",
+      "parent": "7"
+    }
+  },
+  "services": [
+    "other_service"
+  ],
+  "entrypoint": "1.1"
+}
