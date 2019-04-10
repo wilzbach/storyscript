@@ -12,6 +12,7 @@
           "boolean": true
         }
       ],
+      "src": "b = true",
       "next": "2"
     },
     "2": {
@@ -33,7 +34,8 @@
             }
           ]
         }
-      ]
+      ],
+      "src": "a = !b"
     }
   },
   "entrypoint": "1"

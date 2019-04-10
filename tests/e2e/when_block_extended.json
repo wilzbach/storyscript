@@ -21,12 +21,14 @@
       "command": "listen",
       "enter": "2",
       "parent": "1.1",
+      "src": "when other_service command listen",
       "next": "2"
     },
     "2": {
       "method": "break",
       "ln": "2",
       "parent": "1",
+      "src": "\tbreak",
       "next": "3.1"
     },
     "3.1": {
@@ -50,12 +52,14 @@
       "command": "listen",
       "enter": "4",
       "parent": "3.1",
+      "src": "when other_service command listen as os",
       "next": "4"
     },
     "4": {
       "method": "break",
       "ln": "4",
       "parent": "3",
+      "src": "\tbreak",
       "next": "5.1"
     },
     "5.1": {
@@ -89,12 +93,14 @@
       ],
       "enter": "6",
       "parent": "5.1",
+      "src": "when other_service command listen path:'/foo'",
       "next": "6"
     },
     "6": {
       "method": "break",
       "ln": "6",
       "parent": "5",
+      "src": "\tbreak",
       "next": "7.1"
     },
     "7.1": {
@@ -128,12 +134,14 @@
       ],
       "enter": "8",
       "parent": "7.1",
+      "src": "when other_service command listen path:'/foo' as li",
       "next": "8"
     },
     "8": {
       "method": "break",
       "ln": "8",
-      "parent": "7"
+      "parent": "7",
+      "src": "\tbreak"
     }
   },
   "services": [

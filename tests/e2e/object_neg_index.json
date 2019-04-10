@@ -23,6 +23,7 @@
           ]
         }
       ],
+      "src": "a = {-2: true}",
       "next": "2"
     },
     "2": {
@@ -40,7 +41,8 @@
           "$OBJECT": "boolean",
           "boolean": false
         }
-      ]
+      ],
+      "src": "a[-2] = false"
     }
   },
   "entrypoint": "1"

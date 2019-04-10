@@ -18,6 +18,7 @@
         }
       ],
       "enter": "2",
+      "src": "function sum a:int returns int",
       "next": "2"
     },
     "2": {
@@ -44,6 +45,7 @@
         }
       ],
       "parent": "1",
+      "src": "    a + b",
       "next": "3"
     },
     "3": {
@@ -55,7 +57,8 @@
           "int": 0
         }
       ],
-      "parent": "1"
+      "parent": "1",
+      "src": "    return 0"
     }
   },
   "entrypoint": "1",

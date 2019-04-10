@@ -53,12 +53,14 @@
         }
       ],
       "enter": "2",
+      "src": "while [1, 2, 3] contains item:1",
       "next": "2"
     },
     "2": {
       "method": "return",
       "ln": "2",
-      "parent": "1"
+      "parent": "1",
+      "src": "\treturn"
     }
   },
   "entrypoint": "1.1"

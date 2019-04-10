@@ -12,6 +12,7 @@
           "string": "\\{\\}"
         }
       ],
+      "src": "hello = \"\\{\\}\"",
       "next": "2"
     },
     "2": {
@@ -25,7 +26,8 @@
           "$OBJECT": "string",
           "string": "\\{\\}"
         }
-      ]
+      ],
+      "src": "hello = '\\{\\}'"
     }
   },
   "entrypoint": "1"

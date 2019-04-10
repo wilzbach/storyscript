@@ -23,6 +23,7 @@
           ]
         }
       ],
+      "src": "items = {\"2\": 0}",
       "next": "2"
     },
     "2": {
@@ -41,6 +42,7 @@
         }
       ],
       "enter": "3",
+      "src": "foreach items as key, value",
       "next": "3"
     },
     "3": {
@@ -55,7 +57,8 @@
           "int": 0
         }
       ],
-      "parent": "2"
+      "parent": "2",
+      "src": "\tx = 0"
     }
   },
   "entrypoint": "1"

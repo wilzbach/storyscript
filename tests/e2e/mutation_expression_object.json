@@ -43,7 +43,8 @@
             }
           ]
         }
-      ]
+      ],
+      "src": "{\"opened\":1, \"labeled\":1} has key: \"opened\""
     }
   },
   "entrypoint": "1"

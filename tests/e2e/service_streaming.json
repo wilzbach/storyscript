@@ -9,6 +9,7 @@
       "service": "api",
       "command": "stream",
       "enter": "2",
+      "src": "api stream as client",
       "next": "2"
     },
     "2": {
@@ -21,6 +22,7 @@
       "command": "event",
       "enter": "3",
       "parent": "1",
+      "src": "\twhen client event as e",
       "next": "3"
     },
     "3": {
@@ -35,7 +37,8 @@
           "int": 0
         }
       ],
-      "parent": "2"
+      "parent": "2",
+      "src": "\t\tx=0"
     }
   },
   "services": [

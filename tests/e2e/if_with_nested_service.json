@@ -313,6 +313,7 @@
       ],
       "enter": "2",
       "exit": "3",
+      "src": "if (if_service1 command p1:(if_service11 call arg:1) p2: (if_service12 call arg:2)) == (if_service2 command p1:(if_service21 call arg:1) p2: (if_service22 call arg:2))",
       "next": "2"
     },
     "2": {
@@ -328,6 +329,7 @@
         }
       ],
       "parent": "1",
+      "src": "\tx = 0",
       "next": "3"
     },
     "3": {
@@ -355,6 +357,7 @@
       ],
       "enter": "4",
       "exit": "5",
+      "src": "else if (else_service1 command p1:(else_service11 call arg:1) p2: (else_service12 call arg:2)) == (else_service2 command p1:(else_service21 call arg:1) p2: (else_service22 call arg:2))",
       "next": "4"
     },
     "4": {
@@ -370,6 +373,7 @@
         }
       ],
       "parent": "3",
+      "src": "\tx = 1",
       "next": "5"
     },
     "5": {
@@ -377,6 +381,7 @@
       "ln": "5",
       "enter": "6",
       "exit": "8",
+      "src": "else",
       "next": "6"
     },
     "6": {
@@ -392,6 +397,7 @@
         }
       ],
       "parent": "5",
+      "src": "\tx = 2",
       "next": "8"
     },
     "8": {
@@ -405,7 +411,8 @@
           "$OBJECT": "int",
           "int": 3
         }
-      ]
+      ],
+      "src": "x = 3"
     }
   },
   "services": [

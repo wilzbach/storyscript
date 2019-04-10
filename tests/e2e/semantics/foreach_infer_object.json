@@ -12,6 +12,7 @@
           "string": ""
         }
       ],
+      "src": "b = \"\"",
       "next": "3"
     },
     "3": {
@@ -38,6 +39,7 @@
         }
       ],
       "enter": "4",
+      "src": "foreach {\"1\": 2} as elem",
       "next": "4"
     },
     "4": {
@@ -66,7 +68,8 @@
           ]
         }
       ],
-      "parent": "3"
+      "parent": "3",
+      "src": "    b = b + elem"
     }
   },
   "entrypoint": "1"

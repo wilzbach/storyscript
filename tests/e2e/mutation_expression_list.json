@@ -31,7 +31,8 @@
             }
           ]
         }
-      ]
+      ],
+      "src": "[\"opened\", \"labeled\"] contains item: \"opened\""
     }
   },
   "entrypoint": "1"

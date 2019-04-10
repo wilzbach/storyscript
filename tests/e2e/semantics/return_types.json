@@ -9,6 +9,7 @@
       "function": "a",
       "enter": "2",
       "exit": "3",
+      "src": "function a returns function",
       "next": "2"
     },
     "2": {
@@ -21,6 +22,7 @@
         }
       ],
       "parent": "1",
+      "src": "\treturn 0",
       "next": "3"
     },
     "3": {
@@ -32,6 +34,7 @@
       "function": "b",
       "enter": "4",
       "exit": "5",
+      "src": "function b returns regex",
       "next": "4"
     },
     "4": {
@@ -44,6 +47,7 @@
         }
       ],
       "parent": "3",
+      "src": "\treturn /foo/",
       "next": "5"
     },
     "5": {
@@ -55,6 +59,7 @@
       "function": "c",
       "enter": "6",
       "exit": "7",
+      "src": "function c returns any",
       "next": "6"
     },
     "6": {
@@ -67,6 +72,7 @@
         }
       ],
       "parent": "5",
+      "src": "\treturn 1",
       "next": "7"
     },
     "7": {
@@ -78,6 +84,7 @@
       "function": "d",
       "enter": "8",
       "exit": "9",
+      "src": "function d returns object",
       "next": "8"
     },
     "8": {
@@ -90,6 +97,7 @@
         }
       ],
       "parent": "7",
+      "src": "\treturn {}",
       "next": "9"
     },
     "9": {
@@ -100,6 +108,7 @@
       ],
       "function": "e",
       "enter": "10",
+      "src": "function e returns list[int]",
       "next": "10"
     },
     "10": {
@@ -116,7 +125,8 @@
           ]
         }
       ],
-      "parent": "9"
+      "parent": "9",
+      "src": "\treturn [1]"
     }
   },
   "entrypoint": "1",

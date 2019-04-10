@@ -20,6 +20,7 @@
           }
         }
       ],
+      "src": "diff = http get url: diff_url",
       "next": "2"
     },
     "2": {
@@ -49,7 +50,8 @@
             }
           ]
         }
-      ]
+      ],
+      "src": "lines = diff split by: \"\\n\""
     }
   },
   "services": [

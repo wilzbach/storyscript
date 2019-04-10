@@ -12,6 +12,7 @@
           "items": []
         }
       ],
+      "src": "a = {}",
       "next": "2"
     },
     "2": {
@@ -29,7 +30,8 @@
           "$OBJECT": "string",
           "string": "bar"
         }
-      ]
+      ],
+      "src": "a.b = 'bar'"
     }
   },
   "entrypoint": "1"

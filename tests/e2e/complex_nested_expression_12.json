@@ -30,7 +30,8 @@
             }
           ]
         }
-      ]
+      ],
+      "src": "1 == (foo contains)"
     }
   },
   "services": [

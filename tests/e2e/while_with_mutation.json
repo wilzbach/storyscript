@@ -12,6 +12,7 @@
           "int": 5
         }
       ],
+      "src": "x = 5",
       "next": "2.1"
     },
     "2.1": {
@@ -47,12 +48,14 @@
         }
       ],
       "enter": "3",
+      "src": "while x is_odd",
       "next": "3"
     },
     "3": {
       "method": "break",
       "ln": "3",
-      "parent": "2"
+      "parent": "2",
+      "src": "\tbreak"
     }
   },
   "entrypoint": "1"

@@ -25,6 +25,7 @@
         }
       ],
       "enter": "2",
+      "src": "foreach my_service list_emails as item",
       "next": "2"
     },
     "2": {
@@ -41,7 +42,8 @@
           ]
         }
       ],
-      "parent": "1"
+      "parent": "1",
+      "src": "\tx = item"
     }
   },
   "services": [

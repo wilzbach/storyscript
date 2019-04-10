@@ -9,6 +9,7 @@
       "function": "random",
       "enter": "2",
       "exit": "4",
+      "src": "function random returns int",
       "next": "2"
     },
     "2": {
@@ -21,6 +22,7 @@
         }
       ],
       "parent": "1",
+      "src": "  return 28  # Assume some RNG here",
       "next": "4"
     },
     "4": {
@@ -50,6 +52,7 @@
       ],
       "enter": "5",
       "exit": "7.1",
+      "src": "function my_func k1: int k2: int returns int",
       "next": "5"
     },
     "5": {
@@ -62,6 +65,7 @@
         }
       ],
       "parent": "4",
+      "src": "  return 28  # Assume some RNG here",
       "next": "7.1"
     },
     "7.1": {
@@ -151,7 +155,8 @@
             "int": 2
           }
         }
-      ]
+      ],
+      "src": "b = my_service command p0: my_func(k1: (another_service command p1: random()) k2: 2) p2: 2"
     }
   },
   "services": [

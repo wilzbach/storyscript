@@ -22,6 +22,7 @@
         }
       ],
       "enter": "2",
+      "src": "if (random numbers)",
       "next": "2"
     },
     "2": {
@@ -36,7 +37,8 @@
           "int": 0
         }
       ],
-      "parent": "1"
+      "parent": "1",
+      "src": "\tx = 0"
     }
   },
   "services": [

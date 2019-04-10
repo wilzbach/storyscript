@@ -5,6 +5,7 @@
       "ln": "1",
       "function": "bar",
       "enter": "2",
+      "src": "function bar",
       "next": "2"
     },
     "2": {
@@ -30,6 +31,7 @@
         }
       ],
       "parent": "1",
+      "src": "\ta = app.secrets.slack",
       "next": "3"
     },
     "3": {
@@ -54,7 +56,8 @@
           ]
         }
       ],
-      "parent": "1"
+      "parent": "1",
+      "src": "\tb = app.environment.FOO"
     }
   },
   "entrypoint": "1",

@@ -22,7 +22,8 @@
             "string": "red"
           }
         }
-      ]
+      ],
+      "src": "alpine echo message:\"hello\""
     }
   },
   "services": [

@@ -17,6 +17,7 @@
           ]
         }
       ],
+      "src": "items = [0]",
       "next": "2"
     },
     "2": {
@@ -28,6 +29,7 @@
       "service": "http",
       "command": "server",
       "enter": "3",
+      "src": "http server",
       "next": "3"
     },
     "3": {
@@ -46,6 +48,7 @@
       ],
       "enter": "4",
       "parent": "2",
+      "src": "  foreach items as item",
       "next": "4"
     },
     "4": {
@@ -76,6 +79,7 @@
       ],
       "enter": "5",
       "parent": "3",
+      "src": "  \twhen listen path:'/health' method:'get' as client",
       "next": "5"
     },
     "5": {
@@ -90,7 +94,8 @@
           "int": 0
         }
       ],
-      "parent": "4"
+      "parent": "4",
+      "src": "  \t\tx = 0"
     }
   },
   "services": [

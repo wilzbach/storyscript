@@ -5,6 +5,7 @@
       "ln": "1",
       "enter": "2",
       "exit": "3",
+      "src": "try",
       "next": "2"
     },
     "2": {
@@ -20,6 +21,7 @@
         }
       ],
       "parent": "1",
+      "src": "\tx=0",
       "next": "3"
     },
     "3": {
@@ -29,6 +31,7 @@
         "error"
       ],
       "enter": "4",
+      "src": "catch as error",
       "next": "4"
     },
     "4": {
@@ -43,7 +46,8 @@
           "int": 1
         }
       ],
-      "parent": "3"
+      "parent": "3",
+      "src": "\tx=1"
     }
   },
   "entrypoint": "1"

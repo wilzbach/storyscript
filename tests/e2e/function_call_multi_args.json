@@ -27,6 +27,7 @@
       ],
       "enter": "2",
       "exit": "4.1",
+      "src": "function name k1:int k2:int returns string",
       "next": "2"
     },
     "2": {
@@ -39,6 +40,7 @@
         }
       ],
       "parent": "1",
+      "src": "\treturn \"a\"",
       "next": "4.1"
     },
     "4.1": {
@@ -81,7 +83,8 @@
             "__p-4.1"
           ]
         }
-      ]
+      ],
+      "src": "b = name(k1:1 k2: 2)"
     }
   },
   "entrypoint": "1",

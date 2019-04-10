@@ -21,6 +21,7 @@
           ]
         }
       ],
+      "src": "items = [1, 2]",
       "next": "2"
     },
     "2": {
@@ -38,6 +39,7 @@
         }
       ],
       "enter": "3",
+      "src": "foreach items as item",
       "next": "3"
     },
     "3": {
@@ -52,7 +54,8 @@
           "int": 0
         }
       ],
-      "parent": "2"
+      "parent": "2",
+      "src": "\tx = 0"
     }
   },
   "entrypoint": "1"

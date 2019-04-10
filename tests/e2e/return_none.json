@@ -5,12 +5,14 @@
       "ln": "1",
       "function": "bar",
       "enter": "2",
+      "src": "function bar",
       "next": "2"
     },
     "2": {
       "method": "return",
       "ln": "2",
-      "parent": "1"
+      "parent": "1",
+      "src": "\treturn"
     }
   },
   "entrypoint": "1",

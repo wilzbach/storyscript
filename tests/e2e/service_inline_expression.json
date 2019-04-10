@@ -26,7 +26,8 @@
             ]
           }
         }
-      ]
+      ],
+      "src": "alpine echo text:(random strings)"
     }
   },
   "services": [

@@ -14,7 +14,8 @@
             "regexp": "/regexp/"
           }
         }
-      ]
+      ],
+      "src": "my_service command item:/regexp/"
     }
   },
   "services": [

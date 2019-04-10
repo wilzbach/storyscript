@@ -60,7 +60,8 @@
             }
           ]
         }
-      ]
+      ],
+      "src": "b = 1 and ([\"opened\", \"labeled\"] contains item: \"a\")"
     }
   },
   "entrypoint": "1.1"
