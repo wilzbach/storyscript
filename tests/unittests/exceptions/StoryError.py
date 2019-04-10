@@ -18,13 +18,14 @@ def error(magic):
 
 
 @fixture
-def storyerror(error):
-    return StoryError(error, 'story')
+def storyerror(error, magic):
+    story = magic()
+    return StoryError(error, story)
 
 
 def test_storyerror_init(storyerror, error):
     assert storyerror.error == error
-    assert storyerror.story == 'story'
+    assert storyerror.story is not None
     assert storyerror.path is None
     assert storyerror.error_tuple is None
     assert issubclass(StoryError, SyntaxError)
@@ -84,7 +85,7 @@ def test_storyerror_get_line(patch, storyerror, error):
     Ensures get_line returns the error line
     """
     patch.object(StoryError, 'int_line', return_value=1)
-    storyerror.story = 'x = 0\ny = 1'
+    storyerror.lines = 'x = 0\ny = 1'.split('\n')
     assert storyerror.get_line() == 'x = 0'
 
 
@@ -108,8 +109,20 @@ def test_storyerror_symbols(patch, storyerror, error):
     patch.object(click, 'style')
     del error.end_column
     error.column = '1'
-    result = storyerror.symbols()
-    click.style.assert_called_with('^', fg='red')
+    result = storyerror.symbols(line=' a')
+    click.style.assert_called_with('      ^', fg='red')
+    assert result == click.style()
+
+
+def test_storyerror_symbols_tabs(patch, storyerror, error):
+    """
+    Ensures StoryError.symbols deals correctly with tabs.
+    """
+    patch.object(click, 'style')
+    del error.end_column
+    error.column = '1'
+    result = storyerror.symbols(line='\ta')
+    click.style.assert_called_with('       ^', fg='red')
     assert result == click.style()
 
 
@@ -121,12 +134,24 @@ def test_story_error_symbols_end_column(patch, storyerror, error):
     patch.object(click, 'style')
     error.end_column = '4'
     error.column = '1'
-    result = storyerror.symbols()
-    click.style.assert_called_with('^^^', fg='red')
+    result = storyerror.symbols(line=' abc')
+    click.style.assert_called_with('      ^^^', fg='red')
     assert result == click.style()
     storyerror.with_color = False
-    result = storyerror.symbols()
-    assert result == '^^^'
+    result = storyerror.symbols(line=' abc')
+    assert result == '      ^^^'
+
+
+def test_story_error_symbols_end_column_tabs(patch, storyerror, error):
+    """
+    Ensures StoryError.symbols deals correctly with tabs.
+    """
+    patch.object(click, 'style')
+    error.end_column = '4'
+    error.column = '1'
+    storyerror.with_color = False
+    result = storyerror.symbols(line='\ta\tc')
+    assert result == '       ^^^^'
 
 
 def test_storyerror_highlight(patch, storyerror, error):
@@ -136,8 +161,8 @@ def test_storyerror_highlight(patch, storyerror, error):
     patch.many(StoryError, ['get_line', 'int_line', 'symbols'])
     error.column = '1'
     result = storyerror.highlight()
-    highlight = '{}{}'.format(' ' * 6, StoryError.symbols())
-    args = (storyerror.int_line(), StoryError.get_line(), highlight)
+    highlight = StoryError.symbols()
+    args = (storyerror.int_line(), StoryError.get_line().replace(), highlight)
     assert result == '{}|    {}\n{}'.format(*args)
 
 

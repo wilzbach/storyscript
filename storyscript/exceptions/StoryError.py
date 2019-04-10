@@ -24,6 +24,11 @@ class StoryError(SyntaxError):
         self.path = path
         self.error_tuple = None
         self.with_color = True
+        if story:
+            self.lines = self.story.splitlines(keepends=False)
+        else:
+            self.lines = []
+        self.tabwidth = 2
 
     def name(self):
         """
@@ -50,7 +55,7 @@ class StoryError(SyntaxError):
         Gets the error line
         """
         line = self.int_line()
-        return self.story.splitlines(keepends=False)[line - 1]
+        return self.lines[line - 1]
 
     def header(self):
         """
@@ -62,27 +67,37 @@ class StoryError(SyntaxError):
             name = click.style(self.name(), bold=True)
         return template.format(name, self.int_line(), self.error.column)
 
-    def symbols(self):
+    def symbols(self, line):
         """
         Creates the repeated symbols that mark the error.
         """
         end_column = int(self.error.column) + 1
         if hasattr(self.error, 'end_column'):
             end_column = int(self.error.end_column)
-        symbols = '^' * (end_column - int(self.error.column))
+        start_column = int(self.error.column)
+
+        # add tab offset
+        start_column += line.count('\t', 0, start_column) * (self.tabwidth - 1)
+        end_column += line.count('\t', 0, end_column) * (self.tabwidth - 1)
+        symbols = '^' * (end_column - start_column)
+
+        spaces = ' ' * (start_column + 5)
+        highlight = f'{spaces}{symbols}'
         if self.with_color:
-            return click.style(symbols, fg='red')
+            return click.style(highlight, fg='red')
         else:
-            return symbols
+            return highlight
 
     def highlight(self):
         """
         Creates the error highlight of the message
         """
-        spaces = ' ' * (int(self.error.column) + 5)
-        highlight = '{}{}'.format(spaces, self.symbols())
         line = self.int_line()
-        return '{}|    {}\n{}'.format(line, self.get_line(), highlight)
+        # replace tabs for consistent error messages
+        raw_line = self.get_line()
+        untabbed_line = raw_line.replace('\t', ' ' * self.tabwidth)
+        highlight = self.symbols(raw_line)
+        return '{}|    {}\n{}'.format(line, untabbed_line, highlight)
 
     def error_code(self):
         """
