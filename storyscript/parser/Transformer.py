@@ -198,21 +198,9 @@ class Transformer(LarkTransformer):
         when.children.pop(0)
         when.data = 'service'
         cls.implicit_output(when)
-        # the new service block needs to be in a different line
-        name = Token('NAME', name_token.value, line=name_token.line - 0.1)
-        return Tree('service_block', [
-            Tree('service', [
-                Tree('path', [name]),
-                Tree('service_fragment', [
-                    Tree('command', [path_token]),
-                    Tree('output', [path_token]),
-                ])
-            ]),
-            Tree('nested_block', [
-                Tree('block', [
-                    Tree('when_block', [when, nested_block])
-                ])
-            ])
+        return Tree('concise_when_block', [
+            name_token, path_token,
+            Tree('when_block', [when, nested_block]),
         ])
 
     @classmethod

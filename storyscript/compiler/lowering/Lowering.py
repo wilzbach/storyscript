@@ -382,11 +382,52 @@ class Lowering:
         for c in node.children:
             self.visit_string_templates(c, block, node, cmp_expr=cmp_expr)
 
+    def visit_concise_when(self, node):
+        """
+        Searches for to be processed concise_when_block.
+        """
+        if node.data == 'start':
+            for c in node.children:
+                self.visit_concise_when(c)
+        # concise_when_blocks can only occur at the root-level, hence we can
+        # directly iterate here:
+        if node.data == 'block':
+            fake_tree = self.fake_tree(node)
+            for i, c in enumerate(node.children):
+                if c.data == 'concise_when_block':
+                    node.children[i] = self.process_concise_block(c, fake_tree)
+
+    def process_concise_block(self, node, fake_tree):
+        """
+        Creates a service_block around a concise_when_block and fixes up its
+        line numbers with the fake_tree.
+        """
+        line = fake_tree.line()
+        # create token from the "new" line
+        name = Token('NAME', node.child(0).value, line=line)
+        path_token = Token('NAME', node.child(1).value, line=line)
+        t = Tree('service_block', [
+            Tree('service', [
+                Tree('path', [name]),
+                Tree('service_fragment', [
+                    Tree('command', [path_token]),
+                    Tree('output', [path_token]),
+                ])
+            ]),
+            Tree('nested_block', [
+                Tree('block', [
+                    node.when_block
+                ])
+            ])
+        ])
+        return t
+
     def process(self, tree):
         """
         Applies several preprocessing steps to the existing AST.
         """
         pred = Lowering.is_inline_expression
+        self.visit_concise_when(tree)
         self.visit_string_templates(tree, block=None, parent=None,
                                     cmp_expr=None)
         self.visit(tree, None, None, pred,
