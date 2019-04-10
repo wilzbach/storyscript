@@ -76,7 +76,10 @@ class JSONCompiler:
             internal_assert(not self.lines.is_variable_defined(path))
             self.service(service, None, parent)
         elif tree.mutation:
-            self.mutation_block(tree, parent)
+            if tree.mutation.path:
+                self.mutation_block(tree.mutation, parent)
+            else:
+                self.mutation_block(tree, parent)
             return
         elif tree.expression:
             args = [self.objects.expression(tree.expression)]
@@ -148,6 +151,7 @@ class JSONCompiler:
         """
         service_name = self.objects.names(tree.path)
         if service_name in self.lines.variables:
+            tree.service_fragment.data = 'mutation_fragment'
             self.mutation_block(tree, parent)
             return
         line = tree.line()
@@ -304,12 +308,13 @@ class JSONCompiler:
         if tree.path:
             args = [
                 self.objects.path(tree.path),
-                self.objects.mutation_fragment(tree.service_fragment)
+                self.objects.mutation_fragment(tree.mutation_fragment)
             ]
             args = args + self.chained_mutations(tree)
         else:
+            expr = tree.mutation.primary_expression
             args = [
-                self.objects.entity(tree.mutation.entity),
+                self.objects.primary_expression(expr),
                 self.objects.mutation_fragment(tree.mutation.mutation_fragment)
             ]
             args = args + self.chained_mutations(tree.mutation)

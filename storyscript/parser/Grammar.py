@@ -160,7 +160,8 @@ class Grammar:
         self.ebnf._THEN = 'then'
         self.ebnf.mutation_fragment = 'name arguments*'
         self.ebnf.chained_mutation = 'then mutation_fragment'
-        self.ebnf.mutation = 'entity (mutation_fragment (chained_mutation)*)'
+        self.ebnf.mutation = ('primary_expression (mutation_fragment '
+                              '(chained_mutation)*)')
         self.ebnf.mutation_block = 'mutation nl (nested_block)?'
         self.ebnf.indented_chain = 'indent (chained_mutation nl)+ dedent'
 
