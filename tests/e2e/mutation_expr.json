@@ -1,0 +1,42 @@
+{
+  "tree": {
+    "1": {
+      "method": "mutation",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "a"
+            },
+            {
+              "$OBJECT": "string",
+              "string": "b"
+            }
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "contains",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "c"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1"
+}

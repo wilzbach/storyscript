@@ -203,6 +203,13 @@ class Objects:
         assert tree.child(0).data == 'or_expression'
         return self.expr_visitor.expression(tree)
 
+    def primary_expression(self, tree):
+        """
+        Compiles a primary expression object with the given tree.
+        """
+        assert tree.data == 'primary_expression'
+        return self.expr_visitor.primary_expression(tree)
+
     def absolute_expression(self, tree):
         """
         Compiles an expression object with the given tree.

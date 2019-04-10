@@ -35,7 +35,7 @@ entity: values| path
 rules: absolute_expression| assignment| imports| return_statement| throw_statement| break_statement| block
 mutation_fragment: NAME arguments*
 chained_mutation: _THEN mutation_fragment
-mutation: entity (mutation_fragment (chained_mutation)*)
+mutation: primary_expression (mutation_fragment (chained_mutation)*)
 mutation_block: mutation _NL (nested_block)?
 indented_chain: _INDENT (chained_mutation _NL)+ _DEDENT
 command: NAME
