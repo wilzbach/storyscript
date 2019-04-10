@@ -213,7 +213,11 @@ class Lowering:
         column = int(orig_node.column()) + 1
         # add whitespace as padding to fixup the column location of the
         # resulting tokens.
-        new_node = self.parser.parse(' ' * column + code_string)
+        from storyscript.Story import Story
+        story = Story(' ' * column + code_string)
+        story.parse(self.parser)
+        new_node = story.tree
+
         new_node = new_node.block
         orig_node.expect(new_node, 'string_templates_no_assignment')
         # go to the actual node -> jump into block.rules or block.service
