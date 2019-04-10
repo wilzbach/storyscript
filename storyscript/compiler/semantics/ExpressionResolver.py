@@ -224,6 +224,9 @@ class ExpressionResolver:
             return self.expression(child)
         elif child.data == 'service':
             # unknown for now
+            if child.service_fragment.output is not None:
+                child.service_fragment.output.expect(
+                    0, 'service_no_inline_output')
             return AnyType.instance()
         elif child.data == 'mutation':
             # unknown for now
