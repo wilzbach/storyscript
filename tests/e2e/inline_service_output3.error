@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 24
+
+1|    a = (listen command as client) + 0
+                             ^^^^^^
+
+E0109: Inline service calls can't define an output
