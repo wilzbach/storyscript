@@ -1,0 +1,6 @@
+Error: syntax error in story at line 5, column 11
+
+5|          return 0
+                   ^
+
+E0110: Function has no return output defined. Only `return` is allowed.

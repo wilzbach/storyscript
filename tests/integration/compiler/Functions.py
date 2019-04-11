@@ -43,7 +43,7 @@ def test_functions_function_return():
     """
     Ensures that return statements are compiled correctly
     """
-    result = Api.loads('function f\n\treturn 0')
+    result = Api.loads('function f returns int\n\treturn 0')
     assert result['tree']['2']['method'] == 'return'
     assert result['tree']['2']['args'] == [{'$OBJECT': 'int', 'int': 0}]
     assert result['tree']['2']['parent'] == '1'

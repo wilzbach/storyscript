@@ -131,6 +131,10 @@ class ErrorCodes:
         'E0108', 'Service output `{name}` must be unique. Use `as outputName`')
     service_no_inline_output = (
         'E0109', 'Inline service calls can\'t define an output')
+    function_without_output_return = (
+        'E0110',
+        ('Function has no return output defined. '
+         'Only `return` is allowed.'))
 
     @staticmethod
     def is_error(error_name):

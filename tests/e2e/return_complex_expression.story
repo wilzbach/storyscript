@@ -1,2 +1,2 @@
-function name key:int
+function name key:int returns int
 	return 2 + 2

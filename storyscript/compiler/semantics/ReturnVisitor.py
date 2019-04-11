@@ -63,6 +63,14 @@ class ReturnVisitor:
                     target=self.return_type,
                     source=ret_type
                 )
+        else:
+            # function has no return output, so only `return` may be used
+            for ret in tree.find_data('return_statement'):
+                ret_type, obj = self.return_statement(ret, scope)
+                obj.expect(
+                    ret_type == NoneType.instance(),
+                    'function_without_output_return',
+                )
 
     @classmethod
     def check(cls, tree, scope, return_type):

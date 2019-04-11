@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column None
+
+3|      return my_int decrement
+        ^^^^^^^^^^^^^^^^^^^^^^^
+
+E0110: Function has no return output defined. Only `return` is allowed.

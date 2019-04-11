@@ -3,6 +3,9 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "output": [
+        "int"
+      ],
       "function": "name",
       "args": [
         {
@@ -18,8 +21,68 @@
       "next": "2"
     },
     "2": {
-      "method": "return",
+      "method": "expression",
       "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "1",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "1",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "1",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "1",
+      "next": "6"
+    },
+    "6": {
+      "method": "return",
+      "ln": "6",
       "args": [
         {
           "$OBJECT": "expression",

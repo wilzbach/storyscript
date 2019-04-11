@@ -71,10 +71,17 @@ class StoryError(SyntaxError):
         """
         Creates the repeated symbols that mark the error.
         """
-        end_column = int(self.error.column) + 1
-        if hasattr(self.error, 'end_column'):
-            end_column = int(self.error.end_column)
-        start_column = int(self.error.column)
+        if self.error.column != 'None':
+            end_column = int(self.error.column) + 1
+            if hasattr(self.error, 'end_column'):
+                end_column = int(self.error.end_column)
+            start_column = int(self.error.column)
+        else:
+            # if the column is not known, start at the first non-whitespace
+            # token
+            # columns are 1-indexed
+            start_column = len(line) - len(line.lstrip()) + 1
+            end_column = len(line) + 1
 
         # add tab offset
         start_column += line.count('\t', 0, start_column) * (self.tabwidth - 1)

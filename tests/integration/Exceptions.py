@@ -88,11 +88,12 @@ def test_exceptions_dollar(capsys):
 
 def test_exceptions_function_redeclared(capsys):
     with raises(StoryError) as e:
-        Story('function f1\n\treturn 42\nfunction f1\n\treturn 42\n').process()
+        Story('function f1 returns int\n\treturn 42\n'
+              'function f1 returns int\n\treturn 42\n').process()
     e.value.with_color = False
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 3, column 10'
-    assert lines[2] == '3|    function f1'
+    assert lines[2] == '3|    function f1 returns int'
     assert lines[5] == 'E0042: `f1` has already been declared at line 1'
 
 
