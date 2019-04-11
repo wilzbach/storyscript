@@ -258,5 +258,15 @@ class Transformer(LarkTransformer):
 
         return Tree('foreach_block', matches)
 
+    @classmethod
+    def string(cls, matches):
+        """
+        Remove quotes from strings.
+        """
+        # Lark string still contain the raw quotes around them -> remove
+        text = matches[0].value[1:-1]
+        matches[0].value = text
+        return Tree('string', matches)
+
     def __getattr__(self, attribute, *args):
         return lambda matches: Tree(attribute, matches)

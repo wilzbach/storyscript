@@ -385,3 +385,33 @@ def test_objects_flatten_template_mixed(patch, tree):
         {'$OBJECT': 'code', 'code': 'hello'},
         flatten_to_string('b')
     ]
+
+
+def test_objects_flatten_template_escapes(patch, tree):
+    result = list(Lowering.flatten_template(tree, r'\{\}'))
+    assert result == [
+        flatten_to_string('{}'),
+    ]
+
+
+def test_objects_flatten_template_escapes2(patch, tree):
+    result = list(Lowering.flatten_template(tree, r'\\.\'.\".\\'))
+    assert result == [
+        flatten_to_string('\\.\'.\".\\'),
+    ]
+
+
+def test_objects_flatten_template_escapes3(patch, tree):
+    result = list(Lowering.flatten_template(tree, r'\\\\\\'))
+    assert result == [
+        flatten_to_string('\\\\\\'),
+    ]
+
+
+def test_objects_flatten_template_escapes4(patch, tree):
+    result = list(Lowering.flatten_template(tree, r'\\{\\}\\'))
+    assert result == [
+        flatten_to_string('\\'),
+        {'$OBJECT': 'code', 'code': '\\'},
+        flatten_to_string('\\')
+    ]

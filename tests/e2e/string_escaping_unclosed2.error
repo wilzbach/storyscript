@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = "}"
+          ^^^
+
+E0071: Unopened string template. Did you forget a `{` or wanted to escape with `\}`?

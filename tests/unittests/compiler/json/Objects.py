@@ -146,17 +146,9 @@ def test_objects_name_to_path_dots():
     assert result == Tree('path', children)
 
 
-def test_objects_unescape_string(tree):
-    result = Objects().unescape_string(tree)
-    string = tree.child().value[1:-1]
-    assert result == string.encode().decode().encode().decode()
-
-
 def test_objects_string(patch, tree):
-    patch.object(Objects, 'unescape_string', return_value='a')
     result = Objects().string(tree)
-    Objects.unescape_string.assert_called_with(tree)
-    assert result == {'$OBJECT': 'string', 'string': 'a'}
+    assert result == {'$OBJECT': 'string', 'string': tree.child(0).value}
 
 
 def test_objects_boolean():
