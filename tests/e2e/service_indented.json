@@ -3,9 +3,6 @@
     "1": {
       "method": "execute",
       "ln": "1",
-      "output": [
-        "echo"
-      ],
       "service": "alpine",
       "command": "echo",
       "args": [

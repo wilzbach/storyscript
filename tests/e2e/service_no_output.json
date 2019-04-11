@@ -1,0 +1,48 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "service": "sendgrid",
+      "command": "send_one",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "from",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "hello@world.com"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "to",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "hello@world.com"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "subject",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "Hello world"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "content",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "Hello world"
+          }
+        }
+      ]
+    }
+  },
+  "services": [
+    "sendgrid"
+  ],
+  "entrypoint": "1"
+}

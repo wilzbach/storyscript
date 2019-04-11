@@ -84,12 +84,17 @@ class Transformer(LarkTransformer):
         Transforms service blocks, moving indented arguments back to the first
         node.
         """
-        if len(matches) > 1:
-            cls.implicit_output(matches[0])
-            if matches[1].block.rules:
-                for argument in matches[1].find_data('arguments'):
-                    matches[0].service_fragment.children.append(argument)
+        if len(matches) == 1:
+            return Tree('service_block', matches)
+
+        if matches[1].block.rules:
+            args = [*matches[1].find_data('arguments')]
+            if len(args) > 0:
+                for arg in args:
+                    matches[0].service_fragment.children.append(arg)
                 return Tree('service_block', [matches[0]])
+
+        cls.implicit_output(matches[0])
         return Tree('service_block', matches)
 
     @staticmethod
