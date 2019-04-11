@@ -3,6 +3,9 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "output": [
+        "int"
+      ],
       "function": "name",
       "args": [
         {
@@ -19,11 +22,8 @@
       "next": "2"
     },
     "2": {
-      "method": "expression",
+      "method": "return",
       "ln": "2",
-      "name": [
-        "a"
-      ],
       "args": [
         {
           "$OBJECT": "int",

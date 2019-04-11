@@ -22,6 +22,15 @@ class Symbol:
     def __str__(self):
         return f'Symbol(\'{self._name}\', {self._type})'
 
+    @classmethod
+    def from_path(cls, node, type_):
+        assert node.type == 'NAME'
+        name = node.value
+        return cls(name, type_)
+
+    def is_internal(self):
+        return self._name.startswith('__p-')
+
     def index(self, paths, tree):
         """
         Runs index operations on a resolved symbol.
@@ -54,8 +63,8 @@ class Symbols:
         if name in self._symbols:
             return self._symbols[name]
 
-    def insert(self, name, symbol):
-        self._symbols[name] = symbol
+    def insert(self, symbol):
+        self._symbols[symbol.name()] = symbol
 
     def pretty(self, indent=''):
         result = ''

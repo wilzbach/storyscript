@@ -3,4 +3,4 @@ Error: syntax error in story at line 4, column 1
 4|    nam (key: 2)
       ^^^
 
-E0048: Function nam has not been defined yet
+E0112: Function `nam` has not been declared

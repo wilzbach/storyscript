@@ -6,6 +6,7 @@ from storyscript.parser import Tree
 from .PathResolver import PathResolver
 from .symbols.SymbolTypes import AnyType, BooleanType, \
     FloatType, IntType, ListType, ObjectType, StringType, TimeType
+from .symbols.Symbols import Symbol
 
 
 class SymbolExpressionVisitor(ExpressionVisitor):
@@ -61,10 +62,11 @@ class SymbolExpressionVisitor(ExpressionVisitor):
 
 class ExpressionResolver:
 
-    def __init__(self, symbol_resolver):
+    def __init__(self, symbol_resolver, function_table):
         self.expr_visitor = SymbolExpressionVisitor(self)
         # how to resolve existing symbols
         self.path_resolver = PathResolver(symbol_resolver=symbol_resolver)
+        self.function_table = function_table
 
     def path(self, tree):
         assert tree.data == 'path'
@@ -239,9 +241,21 @@ class ExpressionResolver:
             # unknown for now
             return AnyType.instance()
         elif child.data == 'call_expression':
-            # unknown for now
-            # Future: lookup function type here
-            return AnyType.instance()
+            tree.expect(child.path.inline_expression is None,
+                        'function_call_no_inline_expression')
+            names = child.path.children
+            tree.expect(len(names) == 1, 'function_call_invalid_path')
+            name = names[0].value
+            fn = self.function_table.resolve(name)
+            tree.expect(fn is not None, 'function_not_found', name=name)
+            args = {}
+            for c in child.children[1:]:
+                name = c.child(0)
+                type_ = self.expression(c.child(1))
+                sym = Symbol.from_path(name, type_)
+                args[sym.name()] = sym
+            fn.check_call(child, args)
+            return fn.output()
         else:
             assert child.data == 'path'
             return self.path(child)

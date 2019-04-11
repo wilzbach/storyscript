@@ -13,8 +13,8 @@ class Scope:
         self._parent = parent
         self._symbols = Symbols()
 
-    def insert(self, name, sym):
-        self._symbols.insert(name, sym)
+    def insert(self, sym):
+        self._symbols.insert(sym)
 
     def resolve(self, path):
         for scope in self.scopes():
@@ -55,5 +55,5 @@ class Scope:
         scope = cls(parent=None)
         # insert global symbols
         app = Symbol(name='app', type_=AnyType.instance())
-        scope.insert('app', app)
+        scope.insert(app)
         return scope

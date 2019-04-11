@@ -3,6 +3,7 @@
 from storyscript.parser import Tree
 
 from .ExpressionResolver import ExpressionResolver
+from .FunctionTable import FunctionTable
 from .PathResolver import PathResolver
 from .ReturnVisitor import ReturnVisitor
 from .SymbolResolver import SymbolResolver
@@ -32,8 +33,10 @@ class TypeResolver(ScopeSelectiveVisitor):
     """
     def __init__(self):
         self.symbol_resolver = SymbolResolver(scope=None)
+        self.function_table = FunctionTable()
         self.resolver = ExpressionResolver(
-            symbol_resolver=self.symbol_resolver
+            symbol_resolver=self.symbol_resolver,
+            function_table=self.function_table,
         )
         self.path_symbol_resolver = SymbolResolver(
             scope=None, check_variable_existence=False)
@@ -51,8 +54,11 @@ class TypeResolver(ScopeSelectiveVisitor):
         expr_type = self.resolver.base_expression(frag.base_expression)
 
         if target_symbol.type() == NoneType.instance():
+            if not target_symbol.is_internal():
+                frag.base_expression.expect(expr_type != NoneType.instance(),
+                                            'assignment_type_none')
             sym = Symbol(target_symbol.name(), expr_type)
-            scope.symbols().insert(sym.name(), sym)
+            scope.symbols().insert(sym)
         else:
             tree.expect(target_symbol.type().can_be_assigned(expr_type),
                         'type_assignment_different',
@@ -92,9 +98,8 @@ class TypeResolver(ScopeSelectiveVisitor):
                            'foreach_output_children')
 
         for type_, output in zip(iterable_types, outputs):
-            name = output.value
-            sym = Symbol(name, type_)
-            tree.scope.insert(name, sym)
+            sym = Symbol.from_path(output, type_)
+            tree.scope.insert(sym)
 
         for c in tree.nested_block.children:
             self.visit_children(c, scope=tree.scope)
@@ -110,12 +115,12 @@ class TypeResolver(ScopeSelectiveVisitor):
             output.expect(len(output.children) == 1, 'output_type_only_one',
                           target='when')
 
-            name = output.children[0].value
+            name = output.children[0]
             resolved = tree.scope.resolve(name)
             tree.expect(resolved is None, 'output_unique',
                         name=resolved.name() if resolved else None)
-            sym = Symbol(name, AnyType.instance())
-            tree.scope.insert(name, sym)
+            sym = Symbol.from_path(name, AnyType.instance())
+            tree.scope.insert(sym)
 
         tree.expect(not self.in_when_block, 'nested_when_block')
         self.in_when_block = True
@@ -132,12 +137,12 @@ class TypeResolver(ScopeSelectiveVisitor):
             output.expect(len(output.children) == 1, 'output_type_only_one',
                           target='service')
 
-            name = output.children[0].value
+            name = output.children[0]
             resolved = tree.scope.resolve(name)
             tree.expect(resolved is None, 'output_unique',
                         name=resolved.name() if resolved else None)
             sym = Symbol(name, AnyType.instance())
-            tree.scope.insert(name, sym)
+            tree.scope.insert(sym)
 
         tree.expect(not self.in_service_block, 'nested_service_block')
         self.in_service_block = True
@@ -188,22 +193,33 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.visit_children(tree, scope=scope)
 
     def function_block(self, tree, scope):
-        scope, return_type = self.function_statement(tree.function_statement)
+        scope, return_type = self.function_statement(tree.function_statement,
+                                                     scope)
         self.visit_children(tree.nested_block, scope=scope)
-        ReturnVisitor.check(tree, scope, return_type)
+        ReturnVisitor.check(tree, scope, return_type, self.function_table)
 
-    def function_statement(self, tree):
+    def function_statement(self, tree, scope):
         """
         Create a new scope _without_ a parent scope for this function.
         Prepopulate the scope with symbols from the function arguments.
         """
         scope = Scope.root()
         return_type = AnyType.instance()
-        for c in tree.children:
+        args = {}
+        for c in tree.children[2:]:
             if isinstance(c, Tree) and c.data == 'typed_argument':
-                name = c.child(0).value
-                sym = Symbol(name, self.resolver.types(c.types))
-                scope.insert(name, sym)
+                name = c.child(0)
+                sym = Symbol.from_path(name, self.resolver.types(c.types))
+                scope.insert(sym)
+                args[sym.name()] = sym
+        # add function to the function table
+        function_name = tree.child(1).value
+        tree.expect(self.function_table.resolve(function_name) is None,
+                    'function_redeclaration', name=function_name)
+        output = tree.function_output
+        if output is not None:
+            output = self.resolver.types(output.types)
+        self.function_table.insert(function_name, args, output)
         if tree.function_output:
             return_type = self.resolver.types(tree.function_output.types)
         return scope, return_type

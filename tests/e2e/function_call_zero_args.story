@@ -1,4 +1,4 @@
-function name key:int
-	a = 0
+function name returns int
+	return 0
 
 b = name ()

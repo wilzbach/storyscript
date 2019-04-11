@@ -18,7 +18,7 @@
         }
       ],
       "enter": "2",
-      "exit": "4.1",
+      "exit": "4",
       "next": "2"
     },
     "2": {
@@ -31,13 +31,27 @@
         }
       ],
       "parent": "1",
-      "next": "4.1"
+      "next": "4"
     },
-    "4.1": {
-      "method": "call",
-      "ln": "4.1",
+    "4": {
+      "method": "expression",
+      "ln": "4",
       "name": [
-        "__p-4.1"
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
+      ],
+      "next": "5.1"
+    },
+    "5.1": {
+      "method": "call",
+      "ln": "5.1",
+      "name": [
+        "__p-5.1"
       ],
       "function": "my_function",
       "args": [
@@ -68,11 +82,11 @@
           }
         }
       ],
-      "next": "4"
+      "next": "5"
     },
-    "4": {
+    "5": {
       "method": "expression",
-      "ln": "4",
+      "ln": "5",
       "name": [
         "a"
       ],
@@ -80,7 +94,7 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "__p-4.1"
+            "__p-5.1"
           ]
         }
       ]

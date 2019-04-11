@@ -91,14 +91,6 @@
               "__p-7.1"
             ]
           }
-        },
-        {
-          "$OBJECT": "arg",
-          "name": "k2",
-          "arg": {
-            "$OBJECT": "int",
-            "int": 2
-          }
         }
       ],
       "next": "7.3"
@@ -119,6 +111,14 @@
             "paths": [
               "__p-7.2"
             ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "k2",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 2
           }
         }
       ],

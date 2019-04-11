@@ -3,6 +3,9 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "output": [
+        "string"
+      ],
       "function": "name",
       "args": [
         {
@@ -27,15 +30,12 @@
       "next": "2"
     },
     "2": {
-      "method": "expression",
+      "method": "return",
       "ln": "2",
-      "name": [
-        "a"
-      ],
       "args": [
         {
-          "$OBJECT": "int",
-          "int": 0
+          "$OBJECT": "string",
+          "string": "a"
         }
       ],
       "parent": "1",
