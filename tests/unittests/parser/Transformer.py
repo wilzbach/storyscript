@@ -113,7 +113,7 @@ def test_transformer_service_block():
     """
     Ensures service_block nodes are transformed correctly
     """
-    assert Transformer.service_block([]) == Tree('service_block', [])
+    assert Transformer.service_block(['a']) == Tree('service_block', ['a'])
 
 
 def test_transformer_service_block_when(patch, tree):
