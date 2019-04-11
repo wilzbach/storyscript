@@ -56,10 +56,11 @@ foreach_statement: _FOREACH base_expression output?
 foreach_block: foreach_statement _NL nested_block
 while_statement: _WHILE base_expression
 while_block: while_statement _NL nested_block
-typed_argument: NAME _COLON types
+typed_argument: NAME _COLON (types|entity)
+typed_argument2: NAME _COLON types
 function_output: _RETURNS types
 function_statement: FUNCTION_TYPE NAME typed_argument* function_output?
-indented_typed_arguments: _INDENT (typed_argument+ _NL)+ _DEDENT _DOUBLE_DEDENT
+indented_typed_arguments: _INDENT (typed_argument2+ _NL)+ _DEDENT _DOUBLE_DEDENT
 function_block: function_statement _NL (indented_typed_arguments? block+ _DEDENT | nested_block)
 catch_statement: _CATCH _AS NAME
 catch_block: catch_statement _NL nested_block

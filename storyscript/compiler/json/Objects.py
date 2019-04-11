@@ -214,7 +214,11 @@ class Objects:
         Compiles an argument tree to the corresponding object.
         """
         name = tree.child(0).value
-        value = self.expression(tree.child(1))
+        c = tree.child(1)
+        if c.data == 'entity':
+            value = self.entity(c)
+        else:
+            value = self.expression(c)
         return {'$OBJECT': 'arg', 'name': name, 'arg': value}
 
     def arguments(self, tree):
@@ -228,7 +232,7 @@ class Objects:
 
     def typed_argument(self, tree):
         name = tree.child(0).value
-        value = self.values(Tree('anon', [tree.child(1)]))
+        value = {'$OBJECT': 'type', 'type': str(tree.child(1))}
         return {'$OBJECT': 'arg', 'name': name, 'arg': value}
 
     def function_arguments(self, tree):

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from lark.lexer import Token
 
 from storyscript.compiler.visitors.ExpressionVisitor import ExpressionVisitor
 from storyscript.parser import Tree
@@ -71,6 +72,12 @@ class ExpressionResolver:
     def path(self, tree):
         assert tree.data == 'path'
         return self.path_resolver.path(tree).type()
+
+    def entity(self, tree):
+        """
+        Compiles an entity expression with the given tree
+        """
+        return self.expr_visitor.entity(tree)
 
     def number(self, tree):
         """
@@ -254,7 +261,12 @@ class ExpressionResolver:
                 type_ = self.expression(c.child(1))
                 sym = Symbol.from_path(name, type_)
                 args[sym.name()] = sym
-            fn.check_call(child, args)
+            to_be_added = fn.check_call(child, args)
+            for c in to_be_added:
+                child.children.append(Tree('arguments', [
+                    Token('NAME', c[0].name()),
+                    c[1],
+                ]))
             return fn.output()
         else:
             assert child.data == 'path'

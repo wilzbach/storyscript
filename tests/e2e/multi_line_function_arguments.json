@@ -12,30 +12,6 @@
             "$OBJECT": "type",
             "type": "int"
           }
-        },
-        {
-          "$OBJECT": "arg",
-          "name": "key2",
-          "arg": {
-            "$OBJECT": "type",
-            "type": "string"
-          }
-        },
-        {
-          "$OBJECT": "arg",
-          "name": "key3",
-          "arg": {
-            "$OBJECT": "type",
-            "type": "int"
-          }
-        },
-        {
-          "$OBJECT": "arg",
-          "name": "key4",
-          "arg": {
-            "$OBJECT": "type",
-            "type": "string"
-          }
         }
       ],
       "enter": "4",

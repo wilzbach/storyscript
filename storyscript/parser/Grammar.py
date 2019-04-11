@@ -204,15 +204,17 @@ class Grammar:
 
     def function_block(self):
         self.ebnf._RETURNS = 'returns'
-        self.ebnf.typed_argument = 'name colon types'
+        self.ebnf.typed_argument = 'name colon (types|entity)'
+        self.ebnf.typed_argument2 = 'name colon types'
         self.ebnf.function_output = 'returns types'
         function_statement = ('function_type name typed_argument* '
                               'function_output?')
         self.ebnf.function_statement = function_statement
         self.ebnf._DOUBLE_DEDENT = '<DOUBLE_DEDENT>'
         self.ebnf.indented_typed_arguments = \
-            'indent (typed_argument+ nl)+ dedent _DOUBLE_DEDENT'
+            'indent (typed_argument2+ nl)+ dedent _DOUBLE_DEDENT'
         self.ebnf.function_block = (
+            # 'function_statement nl nested_block'
             'function_statement nl '
             '(indented_typed_arguments? block+ _DEDENT | '
             'nested_block)'

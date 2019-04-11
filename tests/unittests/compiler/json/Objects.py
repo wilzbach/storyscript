@@ -295,9 +295,8 @@ def test_objects_arguments(patch, tree):
 def test_objects_typed_argument(patch, tree):
     patch.object(Objects, 'values')
     result = Objects().typed_argument(tree)
-    Objects.values.assert_called_with(Tree('anon', [tree.child(1)]))
     expected = {'$OBJECT': 'arg', 'name': tree.child().value,
-                'arg': Objects.values()}
+                'arg': {'$OBJECT': 'type', 'type': str(tree.child())}}
     assert result == expected
 
 

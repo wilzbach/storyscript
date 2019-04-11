@@ -206,12 +206,24 @@ class TypeResolver(ScopeSelectiveVisitor):
         scope = Scope.root()
         return_type = AnyType.instance()
         args = {}
+        default_args = {}
         for c in tree.children[2:]:
             if isinstance(c, Tree) and c.data == 'typed_argument':
                 name = c.child(0)
-                sym = Symbol.from_path(name, self.resolver.types(c.types))
+                if c.entity:
+                    orig_node = c.entity
+                    val = self.resolver.entity(orig_node)
+                    is_default_arg = True
+                else:
+                    val = self.resolver.types(c.types)
+                    is_default_arg = False
+                c.children[-1] = val
+                sym = Symbol.from_path(name, val)
                 scope.insert(sym)
-                args[sym.name()] = sym
+                if is_default_arg:
+                    default_args[sym.name()] = (sym, orig_node)
+                else:
+                    args[sym.name()] = sym
         # add function to the function table
         function_name = tree.child(1).value
         tree.expect(self.function_table.resolve(function_name) is None,
@@ -219,7 +231,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         output = tree.function_output
         if output is not None:
             output = self.resolver.types(output.types)
-        self.function_table.insert(function_name, args, output)
+        self.function_table.insert(function_name, args, default_args, output)
         if tree.function_output:
             return_type = self.resolver.types(tree.function_output.types)
         return scope, return_type
