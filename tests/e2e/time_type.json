@@ -3,6 +3,9 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "output": [
+        "time"
+      ],
       "function": "foo",
       "args": [
         {

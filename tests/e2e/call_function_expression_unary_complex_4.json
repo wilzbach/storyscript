@@ -3,6 +3,9 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "output": [
+        "int"
+      ],
       "function": "my_function",
       "args": [
         {

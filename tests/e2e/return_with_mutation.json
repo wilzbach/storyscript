@@ -3,6 +3,9 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "output": [
+        "any"
+      ],
       "function": "random",
       "enter": "2",
       "next": "2"
