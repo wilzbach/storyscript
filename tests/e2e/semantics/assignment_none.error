@@ -1,0 +1,6 @@
+Error: syntax error in story at line 4, column None
+
+4|    b = foo(a:2)
+      ^^^^^^^^^^^^
+
+E0116: Assignments with the type `None` are not allowed

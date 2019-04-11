@@ -28,7 +28,7 @@ def test_symbols_pretty():
     int_sym = Symbol('foo', IntType.instance())
     string_sym = Symbol('bar', StringType.instance())
     symbols = Symbols()
-    symbols.insert('foo', int_sym)
-    symbols.insert('bar', string_sym)
+    symbols.insert(int_sym)
+    symbols.insert(string_sym)
     assert symbols.pretty() == 'foo: int\nbar: string\n'
     assert symbols.pretty(indent='  ') == '  foo: int\n  bar: string\n'

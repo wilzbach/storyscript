@@ -33,9 +33,6 @@ class ErrorCodes:
     compiler_error_no_operator = (
         'E0040', 'Invalid operator `{operator}` provided.')
     invalid_character = ('E0041', '`{character}` is not allowed here')
-    function_already_declared = (
-        'E0042',
-        '`{function_name}` has already been declared at line {line}')
     unexpected_token = ('E0043',
                         '`{token}` is not allowed here. Allowed: {allowed}')
     break_outside = ('E0044', '`break` is allowed only inside loops')
@@ -48,10 +45,8 @@ class ErrorCodes:
                              'An indented block is required to be before here')
     file_not_found = ('E0047',
                       'File `{path}` not found at `{abspath}`')
-    function_call_no_function = ('E0048',
-                                 'Function {name} has not been defined yet')
     function_call_invalid_path = ('E0049',
-                                  'Function {name} is not a valid path')
+                                  'Functions can only be called by name')
     function_call_no_inline_expression = (
         'E0050', 'Service output can not be called as a function')
     when_no_output_parent = (
@@ -135,6 +130,20 @@ class ErrorCodes:
         'E0110',
         ('Function has no return output defined. '
          'Only `return` is allowed.'))
+    function_redeclaration = (
+        'E0111', 'Function `{name}` has already been declared')
+    function_not_found = (
+        'E0112', 'Function `{name}` has not been declared')
+    function_arg_required = (
+        'E0113', 'Function `{name}` requires argument `{arg}`')
+    function_arg_invalid = (
+        'E0114', 'Function `{name}` does not accept argument `{arg}`')
+    function_arg_type_mismatch = (
+        'E0115',
+        'Function `{name}` requires argument `{arg_name}` to be of '
+        '`{target}`, not `{source}`')
+    assignment_type_none = (
+        'E0116', 'Assignments with the type `None` are not allowed')
 
     @staticmethod
     def is_error(error_name):

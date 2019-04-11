@@ -199,11 +199,10 @@ def test_storyerror_hint_invalid_character(patch, storyerror):
 
 def test_storyerror_hint_redeclared(patch, storyerror, magic):
     storyerror.error = CompilerError(
-        'function_already_declared',
-        format={'function_name': '.function_name.', 'line': '.line.'})
-    storyerror.error_tuple = ErrorCodes.function_already_declared
-    assert storyerror.hint() == \
-        '`.function_name.` has already been declared at line .line.'
+        'reserved_keyword',
+        format={'keyword': 'foo'})
+    storyerror.error_tuple = ErrorCodes.reserved_keyword
+    assert storyerror.hint() == '`foo` is a reserved keyword'
 
 
 def test_storyerror_hint_unexpected_token(patch, storyerror, ):

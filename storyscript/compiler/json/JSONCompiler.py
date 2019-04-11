@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from storyscript.Version import version
-from storyscript.exceptions import CompilerError, StorySyntaxError
+from storyscript.exceptions import StorySyntaxError
 from storyscript.exceptions import internal_assert
 from storyscript.parser import Tree
 
@@ -137,11 +137,6 @@ class JSONCompiler:
                     name='.'.join(name))
         name = tree.path.extract_path()
         args = self.objects.arguments(tree)
-        # check whether function exists in this or imported modules
-        in_module = name.split('.')[0] in self.lines.modules
-        is_valid_function = name in self.lines.functions
-        tree.expect(in_module or is_valid_function,
-                    'function_call_no_function', name=name)
         self.lines.append('call', line, function=name,
                           output=None, args=args, parent=parent)
 
@@ -287,13 +282,6 @@ class JSONCompiler:
         output = self.function_output(function)
         nested_block = tree.nested_block or tree.block
         function_name = function.child(1).value
-        if function_name in self.lines.functions:
-            raise CompilerError(
-                'function_already_declared', token=function.child(1),
-                format={
-                    'function_name': function_name,
-                    'line': self.lines.functions[function_name],
-                })
         self.lines.set_scope(line, parent)
         self.lines.append('function', line, function=function_name,
                           output=output, args=args, enter=nested_block.line(),
@@ -345,8 +333,7 @@ class JSONCompiler:
 
     def when_block(self, tree, parent):
         self.when(tree, tree.nested_block, parent)
-        if tree.nested_block:
-            self.subtree(tree.nested_block, parent=tree.line())
+        self.subtree(tree.nested_block, parent=tree.line())
 
     def try_block(self, tree, parent):
         """

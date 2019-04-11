@@ -92,9 +92,9 @@ def test_exceptions_function_redeclared(capsys):
               'function f1 returns int\n\treturn 42\n').process()
     e.value.with_color = False
     lines = e.value.message().splitlines()
-    assert lines[0] == 'Error: syntax error in story at line 3, column 10'
+    assert lines[0] == 'Error: syntax error in story at line 3, column 1'
     assert lines[2] == '3|    function f1 returns int'
-    assert lines[5] == 'E0042: `f1` has already been declared at line 1'
+    assert lines[5] == 'E0111: Function `f1` has already been declared'
 
 
 def test_exceptions_block_expected_before(capsys):

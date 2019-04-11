@@ -3,27 +3,17 @@
     "1": {
       "method": "function",
       "ln": "1",
-      "function": "name",
-      "args": [
-        {
-          "$OBJECT": "arg",
-          "name": "key",
-          "arg": {
-            "$OBJECT": "type",
-            "type": "int"
-          }
-        }
+      "output": [
+        "int"
       ],
+      "function": "name",
       "enter": "2",
       "exit": "4.1",
       "next": "2"
     },
     "2": {
-      "method": "expression",
+      "method": "return",
       "ln": "2",
-      "name": [
-        "a"
-      ],
       "args": [
         {
           "$OBJECT": "int",

@@ -5,7 +5,7 @@ from pytest import fixture, mark, raises
 
 from storyscript.Version import version
 from storyscript.compiler.json import JSONCompiler, Lines, Objects
-from storyscript.exceptions import CompilerError, StorySyntaxError
+from storyscript.exceptions import StorySyntaxError
 from storyscript.parser import Tree
 
 
@@ -246,32 +246,6 @@ def test_compiler_call_expression_no_invalid_path(patch, compiler, tree):
     assert args == {'name': 'a.b'}
 
 
-def test_compiler_call_expression_no_function(patch, compiler, tree):
-    """
-    Ensures that function call expression checks its arguments correctly
-    """
-    patch.many(Objects, ['arguments', 'names'])
-
-    error_code = None
-    args = None
-
-    def expect(cond, _error_code, **_args):
-        nonlocal error_code, args
-        if not cond:
-            assert args is None
-            args = _args
-            error_code = _error_code
-
-    tree.expect = expect
-    Objects.names.return_value = ['path']
-    tree.path.inline_expression = None
-    name = tree.path.extract_path()
-
-    compiler.call_expression(tree, 'parent')
-    assert error_code == 'function_call_no_function'
-    assert args == {'name': name}
-
-
 def test_compiler_call_expression_other_module(patch, compiler, tree):
     """
     Ensures that function call expression checks its arguments correctly
@@ -289,34 +263,6 @@ def test_compiler_call_expression_other_module(patch, compiler, tree):
     compiler.lines.modules = ['my_module']
 
     compiler.call_expression(tree, 'parent')
-
-
-def test_compiler_call_expression_other_module_error(patch, compiler, tree):
-    """
-    Ensures that function call expression checks its arguments correctly
-    when calling a function from another module
-    """
-    patch.many(Objects, ['arguments', 'names'])
-    error_code = None
-    args = None
-
-    def expect(cond, _error_code, **_args):
-        nonlocal error_code, args
-        if not cond:
-            assert args is None
-            args = _args
-            error_code = _error_code
-
-    Objects.names.return_value = ['path']
-    tree.expect = expect
-    tree.path.inline_expression = None
-    tree.path.extract_path.return_value = 'my_module2.my_function'
-    compiler.lines.modules = ['my_module']
-    name = tree.path.extract_path()
-
-    compiler.call_expression(tree, 'parent')
-    assert error_code == 'function_call_no_function'
-    assert args == {'name': name}
 
 
 def test_compiler_service(patch, compiler, lines, tree):
@@ -653,12 +599,7 @@ def test_compiler_function_block_redeclared(patch, compiler, lines, tree):
     compiler.lines.functions = {'.function.': '0'}
     statement = tree.function_statement
     statement.child(1).value = '.function.'
-    with raises(CompilerError) as e:
-        compiler.function_block(tree, '1')
-
-    e.value.format.function_name = '.function.'
-    e.value.format.line = '0'
-    e.value.error = 'function_already_declared'
+    compiler.function_block(tree, '1')
 
 
 def test_compiler_throw_statement(patch, compiler, lines, tree):
