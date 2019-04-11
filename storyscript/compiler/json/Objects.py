@@ -131,20 +131,11 @@ class Objects:
                 tree.children.append(fragment)
         return tree
 
-    @staticmethod
-    def unescape_string(tree):
-        """
-        Unescapes a string tree, returning the real string.
-        """
-        string = tree.child(0).value[1:-1]
-        unescaped = string.encode('utf-8').decode('unicode_escape')
-        return unescaped.encode('latin1').decode()
-
     def string(self, tree):
         """
         Compiles a string tree.
         """
-        return {'$OBJECT': 'string', 'string': self.unescape_string(tree)}
+        return {'$OBJECT': 'string', 'string': tree.child(0).value}
 
     @staticmethod
     def boolean(tree):

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
 
-from storyscript.compiler.json.Objects import Objects
 from storyscript.compiler.lowering.Faketree import FakeTree
 from storyscript.parser.Tree import Tree
 
@@ -171,35 +170,40 @@ class Lowering:
         Flattens a string template into concatenation
         """
         # the previously seen character (n-1)
-        last_char = None
+        preceding_slash = False
         # indicates whether we're inside of a string template
         inside_interpolation = False
         buf = ''
         for c in text:
-            preceding_slash = last_char == '\\'
             if preceding_slash:
-                buf += c
-            elif inside_interpolation:
-                if c == '}':
-                    # end string interpolation
-                    inside_interpolation = False
-                    tree.expect(len(buf) > 0, 'string_templates_empty')
-                    yield {'$OBJECT': 'code', 'code': buf}
-                    buf = ''
-                else:
-                    tree.expect(c != '{', 'string_templates_nested')
-                    buf += c
-            elif c == '{':
-                # string interpolation might be the start of the string: "{..}"
-                if len(buf) > 0:
-                    yield {'$OBJECT': 'string', 'string': buf}
-                    buf = ''
-                inside_interpolation = True
+                buf = f'{buf[:-1]}{c}'
+                preceding_slash = False
             else:
-                buf += c
-            last_char = c
+                if inside_interpolation:
+                    if c == '}':
+                        # end string interpolation
+                        inside_interpolation = False
+                        tree.expect(len(buf) > 0, 'string_templates_empty')
+                        yield {'$OBJECT': 'code', 'code': buf}
+                        buf = ''
+                    else:
+                        tree.expect(c != '{', 'string_templates_nested')
+                        buf += c
+                elif c == '{':
+                    # string interpolation might be the start of the string:
+                    # example: "{..}"
+                    if len(buf) > 0:
+                        yield {'$OBJECT': 'string', 'string': buf}
+                        buf = ''
+                    inside_interpolation = True
+                elif c == '}':
+                    tree.expect(0, 'string_templates_unopened')
+                else:
+                    buf += c
+                preceding_slash = c == '\\'
 
         # emit remaining string in the buffer
+        tree.expect(not inside_interpolation, 'string_templates_unclosed')
         if len(buf) > 0:
             yield {'$OBJECT': 'string', 'string': buf}
 
@@ -267,8 +271,7 @@ class Lowering:
         for s in string_objs:
             if s['$OBJECT'] == 'string':
                 # plain string -> insert directly
-                value = f'"'+s['string']+'"'
-                ks.append(self.build_string_value(value))
+                ks.append(self.build_string_value(s['string']))
             else:
                 assert s['$OBJECT'] == 'code'
                 # string template -> eval
@@ -346,7 +349,7 @@ class Lowering:
         if string_node is None:
             return
 
-        text = Objects.unescape_string(string_node)
+        text = string_node.child(0).value
         string_objs = list(self.flatten_template(string_node, text))
 
         # empty string

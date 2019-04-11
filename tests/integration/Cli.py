@@ -119,7 +119,7 @@ start
                           primary_expression
                             entity
                               values
-                                string	"."
+                                string	.
                   arith_operator	+
                   mul_expression
                     unary_expression

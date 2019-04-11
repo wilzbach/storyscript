@@ -87,7 +87,7 @@
           "values": [
             {
               "$OBJECT": "string",
-              "string": "\n"
+              "string": "n"
             },
             {
               "$OBJECT": "path",
@@ -127,7 +127,7 @@
           "values": [
             {
               "$OBJECT": "string",
-              "string": "\n"
+              "string": "n"
             },
             {
               "$OBJECT": "path",
@@ -137,7 +137,7 @@
             },
             {
               "$OBJECT": "string",
-              "string": "\n"
+              "string": "n"
             }
           ]
         }

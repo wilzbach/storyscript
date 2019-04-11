@@ -93,6 +93,12 @@ class ErrorCodes:
     time_value_duplicate = (
         'E0069',
         'Time value duplication: `{time_type}` must only occur once')
+    string_templates_unclosed = (
+        'E0070', 'Unclosed string template. Did you forget a `}}`?')
+    string_templates_unopened = (
+        'E0071',
+        ('Unopened string template. Did you forget a `{{` or '
+         'wanted to escape with `\\}}`?'))
     type_assignment_different = (
         'E0100', 'Can\'t assign `{source}` to `{target}`')
     var_not_defined = (

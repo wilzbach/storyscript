@@ -4,12 +4,12 @@
       "method": "expression",
       "ln": "1",
       "name": [
-        "a"
+        "hello"
       ],
       "args": [
         {
           "$OBJECT": "string",
-          "string": "b.\\n.\\\\.\\'.c"
+          "string": "\\{\\}"
         }
       ],
       "next": "2"
@@ -18,12 +18,12 @@
       "method": "expression",
       "ln": "2",
       "name": [
-        "b"
+        "hello"
       ],
       "args": [
         {
           "$OBJECT": "string",
-          "string": "b.\\n.\\\\.\\\".c"
+          "string": "\\{\\}"
         }
       ]
     }
