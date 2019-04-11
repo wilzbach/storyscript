@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = 2m3s4ms5ms
+          ^^^^^^^^^^
+
+E0069: Time value duplication: `ms` must only occur once

@@ -71,6 +71,54 @@ class Objects:
         return {'$OBJECT': 'int', 'int': int(token.value)}
 
     @staticmethod
+    def time(tree):
+        """
+        Compiles a time tree
+        """
+        assert tree.data == 'time'
+        val = tree.child(0).value
+        assert len(val) > 0
+
+        ms_value = 0
+        prev_time = None
+        time_parts = split_into_time_parts(val)
+        for p, time_type in time_parts:
+            tree.expect(prev_time != time_type, 'time_value_duplicate',
+                        time_type=time_type)
+            if time_type == 'w':
+                tree.expect(prev_time is None, 'time_value_inconsistent_week')
+                ms_value += 604800000 * p
+            elif time_type == 'd':
+                tree.expect(prev_time is None or prev_time in 'w',
+                            'time_value_inconsistent',
+                            prev=prev_time, current=time_type)
+                ms_value += 86400000 * p
+            elif time_type == 'h':
+                tree.expect(prev_time is None or prev_time in 'wd',
+                            'time_value_inconsistent',
+                            prev=prev_time, current=time_type)
+                ms_value += 3600000 * p
+            elif time_type == 'm':
+                tree.expect(prev_time is None or prev_time in 'wdh',
+                            'time_value_inconsistent',
+                            prev=prev_time, current=time_type)
+                ms_value += 60000 * p
+            elif time_type == 's':
+                assert time_type == 's'
+                tree.expect(prev_time is None or prev_time in 'wdhm',
+                            'time_value_inconsistent',
+                            prev=prev_time, current=time_type)
+                ms_value += 1000 * p
+            else:
+                assert time_type == 'ms'
+                tree.expect(prev_time is None or prev_time in 'wdhms',
+                            'time_value_inconsistent',
+                            prev=prev_time, current=time_type)
+                ms_value += p
+            prev_time = time_type
+        return {'$OBJECT': 'time', 'ms': ms_value}
+
+    @staticmethod
     def name_to_path(name):
         """
         Builds the tree for a name or dotted name.
@@ -156,6 +204,8 @@ class Objects:
                 return self.list(subtree)
             elif subtree.data == 'number':
                 return self.number(subtree)
+            elif subtree.data == 'time':
+                return self.time(subtree)
             elif subtree.data == 'objects':
                 return self.objects(subtree)
             elif subtree.data == 'regular_expression':
@@ -227,3 +277,29 @@ class Objects:
         else:
             assert child.data == 'path'
             return self.path(child)
+
+
+def split_into_time_parts(value):
+    """
+    Splits a time string into its subparts.
+    Example: 1h5s = [(1, 'h'), (5, 's')]
+    """
+    num_buf = ''
+    i = 0
+    nr_values = len(value)
+    while i < nr_values:
+        c = value[i]
+        if c.isdigit():
+            num_buf += c
+        else:
+            # peek into the future for 'ms'
+            if c == 'm' and i + 1 < nr_values and value[i + 1] == 's':
+                i = i + 1
+                yield int(num_buf), 'ms'
+            else:
+                assert c in 'smhdw'
+                yield int(num_buf), c
+            num_buf = ''
+        i = i + 1
+
+    assert len(num_buf) == 0
