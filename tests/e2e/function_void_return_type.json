@@ -1,0 +1,23 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [
+        "void"
+      ],
+      "function": "foo",
+      "enter": "2",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "parent": "1"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "foo": "1"
+  }
+}

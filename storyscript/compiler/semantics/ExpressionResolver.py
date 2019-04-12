@@ -5,7 +5,7 @@ from storyscript.parser import Tree
 
 from .PathResolver import PathResolver
 from .symbols.SymbolTypes import AnyType, BooleanType, \
-    FloatType, IntType, ListType, ObjectType, StringType, TimeType
+    FloatType, IntType, ListType, NoneType, ObjectType, StringType, TimeType
 from .symbols.Symbols import Symbol
 
 
@@ -184,6 +184,8 @@ class ExpressionResolver:
             return AnyType.instance()
         elif tok.type == 'TIME_TYPE':
             return TimeType.instance()
+        elif tok.type == 'VOID_TYPE':
+            return NoneType.instance()
         else:
             assert tok.type == 'REGEXP_TYPE'
             return AnyType.instance()

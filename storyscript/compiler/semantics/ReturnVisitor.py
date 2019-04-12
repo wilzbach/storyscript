@@ -52,26 +52,34 @@ class ReturnVisitor:
         return self.resolver.base_expression(tree.base_expression), obj
 
     def function_block(self, tree, scope):
-        if tree.function_statement.function_output:
-            if not self.has_return(tree):
-                t = tree.function_statement.function_output
-                raise CompilerError('return_required', tree=t)
-            for ret in tree.find_data('return_statement'):
-                ret_type, obj = self.return_statement(ret, scope)
-                obj.expect(
-                    self.return_type.can_be_assigned(ret_type),
-                    'return_type_differs',
-                    target=self.return_type,
-                    source=ret_type
-                )
-        else:
-            # function has no return output, so only `return` may be used
-            for ret in tree.find_data('return_statement'):
-                ret_type, obj = self.return_statement(ret, scope)
-                obj.expect(
-                    ret_type == NoneType.instance(),
-                    'function_without_output_return',
-                )
+        output = tree.function_statement.function_output
+        if not output:
+            return self.check_none(tree, scope)
+
+        output = output.types.child(0).type
+        if output == 'VOID_TYPE':
+            return self.check_none(tree, scope)
+
+        if not self.has_return(tree):
+            t = tree.function_statement.function_output
+            raise CompilerError('return_required', tree=t)
+        for ret in tree.find_data('return_statement'):
+            ret_type, obj = self.return_statement(ret, scope)
+            obj.expect(
+                self.return_type.can_be_assigned(ret_type),
+                'return_type_differs',
+                target=self.return_type,
+                source=ret_type
+            )
+
+    def check_none(self, tree, scope):
+        # function has no return output, so only `return` may be used
+        for ret in tree.find_data('return_statement'):
+            ret_type, obj = self.return_statement(ret, scope)
+            obj.expect(
+                ret_type == NoneType.instance(),
+                'function_without_output_return',
+            )
 
     @classmethod
     def check(cls, tree, scope, return_type, function_table):
