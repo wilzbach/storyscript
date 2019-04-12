@@ -257,7 +257,7 @@ class ObjectType(SymbolType):
         if not isinstance(other, ObjectType):
             return False
         key_res = self.key.can_be_assigned(other.key)
-        val_res = self.key.can_be_assigned(other.value)
+        val_res = self.value.can_be_assigned(other.value)
         return key_res and val_res
 
     def index(self, other):

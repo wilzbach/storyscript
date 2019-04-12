@@ -1,0 +1,6 @@
+Error: syntax error in story at line 9, column 20
+
+9|    function e returns list
+                         ^
+
+E0046: An indented block is required to be before here

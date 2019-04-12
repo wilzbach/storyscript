@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 10
+
+2|      return {20: ["foo", "bar"]}
+                ^^
+
+E0102: `{int:string[]}` can't be implicitly converted to expected return type `{string:string[]}`.

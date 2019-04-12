@@ -180,13 +180,14 @@ def test_parser_function_arguments():
     result = parse('function test n:int\n\tvar = 3\n')
     typed_argument = result.block.function_block.find('typed_argument')[0]
     assert typed_argument.child(0) == Token('NAME', 'n')
-    assert typed_argument.types.child(0) == Token('INT_TYPE', 'int')
+    assert typed_argument.types.base_type.child(0) == Token('INT_TYPE', 'int')
 
 
 def test_parser_function_output():
     result = parse('function test n:string returns int\n\tvar = 1\n')
     statement = result.block.function_block.function_statement
-    assert statement.function_output.types.child(0) == Token('INT_TYPE', 'int')
+    assert statement.function_output.types.base_type.child(0) == \
+        Token('INT_TYPE', 'int')
 
 
 def test_parser_try():

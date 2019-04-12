@@ -28,16 +28,22 @@ class Grammar:
         self.ebnf.BOOLEAN_TYPE = 'boolean'
         self.ebnf.FLOAT_TYPE = 'float'
         self.ebnf.STRING_TYPE = 'string'
-        self.ebnf.LIST_TYPE = 'list'
         self.ebnf.OBJECT_TYPE = 'object'
         self.ebnf.REGEXP_TYPE = 'regex'
         self.ebnf.FUNCTION_TYPE = 'function'
         self.ebnf.TIME_TYPE = 'time'
         self.ebnf.ANY_TYPE = 'any'
-        rule = ('int_type, float_type, string_type, list_type, object_type, '
-                'regexp_type, function_type, any_type, boolean_type, '
-                'time_type')
-        self.ebnf.types = rule
+        self.ebnf.base_type = ('int_type, float_type, string_type, '
+                               'object_type, regexp_type, function_type, '
+                               'any_type, boolean_type, time_type')
+        self.ebnf._OSB = '['
+        self.ebnf._CSB = ']'
+        self.ebnf.list_type = 'types osb csb'
+        self.ebnf._OCB = '{'
+        self.ebnf._CCB = '}'
+        self.ebnf._COLON = ':'
+        self.ebnf.map_type = 'ocb base_type colon types ccb'
+        self.ebnf.types = 'list_type , map_type, base_type'
 
     def values(self):
         self.ebnf._NL = r'/(\r?\n[\t ]*)+/'
@@ -55,11 +61,6 @@ class Grammar:
         self.ebnf.set_token('REGEXP.10', r'/\/([^\/]*)\//')
         self.ebnf.set_token('NAME.1', r'/[a-zA-Z_][a-zA-Z-\/_0-9]*/')
         self.ebnf.set_token('RAW_TIME.3', r'/([0-9]+(ms|[smhdw]))+/')
-        self.ebnf._OSB = '['
-        self.ebnf._CSB = ']'
-        self.ebnf._OCB = '{'
-        self.ebnf._CCB = '}'
-        self.ebnf._COLON = ':'
         self.ebnf._COMMA = ','
         self.ebnf._OP = '('
         self.ebnf._CP = ')'

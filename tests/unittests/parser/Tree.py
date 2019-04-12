@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from unittest.mock import call
+
 from lark.lexer import Token
 from lark.tree import Tree as LarkTree
 
@@ -44,6 +46,16 @@ def test_tree_node(patch):
     tree = Tree('rule', [])
     result = tree.node('inner')
     Tree.walk.assert_called_with(tree, 'inner')
+    assert result == Tree.walk()
+
+
+def test_tree_node_nested(patch):
+    patch.object(Tree, 'walk')
+    tree = Tree('rule', [])
+    result = tree.node('inner.nested')
+    assert len(Tree.walk.call_args_list) == 2
+    assert Tree.walk.call_args_list[0] == call(tree, 'inner')
+    assert Tree.walk.call_args_list[1] == call(Tree.walk(), 'nested')
     assert result == Tree.walk()
 
 

@@ -1,0 +1,127 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [
+        "object"
+      ],
+      "function": "foo",
+      "enter": "2",
+      "exit": "4",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "int",
+                "int": 20
+              },
+              {
+                "$OBJECT": "list",
+                "items": [
+                  {
+                    "$OBJECT": "string",
+                    "string": "foo"
+                  },
+                  {
+                    "$OBJECT": "string",
+                    "string": "bar"
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ],
+      "parent": "1",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "next": "5.1"
+    },
+    "5.1": {
+      "method": "call",
+      "ln": "5.1",
+      "name": [
+        "__p-5.1"
+      ],
+      "function": "foo",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-5.1"
+          ]
+        }
+      ],
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "any string"
+        }
+      ],
+      "next": "7"
+    },
+    "7": {
+      "method": "expression",
+      "ln": "7",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "b",
+            {
+              "$OBJECT": "int",
+              "int": 20
+            },
+            {
+              "$OBJECT": "int",
+              "int": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "foo": "1"
+  }
+}

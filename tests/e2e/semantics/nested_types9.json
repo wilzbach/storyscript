@@ -1,0 +1,87 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [
+        "list"
+      ],
+      "function": "foo",
+      "enter": "2",
+      "exit": "4",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "list",
+              "items": [
+                {
+                  "$OBJECT": "int",
+                  "int": 0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "parent": "1",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "next": "5.1"
+    },
+    "5.1": {
+      "method": "call",
+      "ln": "5.1",
+      "name": [
+        "__p-5.1"
+      ],
+      "function": "foo",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-5.1",
+            {
+              "$OBJECT": "int",
+              "int": 0
+            },
+            {
+              "$OBJECT": "int",
+              "int": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "foo": "1"
+  }
+}

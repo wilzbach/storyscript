@@ -72,11 +72,12 @@ def test_compiler_chained_mutations(patch, magic, tree):
     assert result == [Objects.mutation_fragment()]
 
 
-def test_compiler_function_output(patch, tree):
+def test_compiler_function_output(patch, compiler, tree):
     patch.object(JSONCompiler, 'output')
-    result = JSONCompiler.function_output(tree)
-    tree.node.assert_called_with('function_output.types')
-    assert result == JSONCompiler.output()
+    patch.object(Objects, 'types')
+    result = compiler.function_output(tree)
+    Objects.types.assert_called_with(tree.function_output.types)
+    assert result == [Objects.types()['types']]
 
 
 def test_compiler_imports(patch, compiler, lines, tree):
