@@ -1,0 +1,109 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "expression",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "foo"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            ],
+            [
+              {
+                "$OBJECT": "string",
+                "string": "bar"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 2
+              }
+            ],
+            [
+              {
+                "$OBJECT": "string",
+                "string": "car"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 3
+              }
+            ]
+          ]
+        }
+      ],
+      "next": "1.3"
+    },
+    "1.3": {
+      "method": "expression",
+      "ln": "1.3",
+      "name": [
+        "bar"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1",
+            {
+              "$OBJECT": "string",
+              "string": "bar"
+            }
+          ]
+        }
+      ],
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "expression",
+      "ln": "1.2",
+      "name": [
+        "foo"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1",
+            {
+              "$OBJECT": "string",
+              "string": "foo"
+            }
+          ]
+        }
+      ],
+      "next": "1.4"
+    },
+    "1.4": {
+      "method": "expression",
+      "ln": "1.4",
+      "name": [
+        "car"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1",
+            {
+              "$OBJECT": "string",
+              "string": "car"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1.1"
+}

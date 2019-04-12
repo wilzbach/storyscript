@@ -86,7 +86,9 @@ class Tree(LarkTree):
         for child in self.children:
             if isinstance(child, Token):
                 return child
-            return child.find_first_token()
+            t = child.find_first_token()
+            if t is not None:
+                return t
 
     def line(self):
         """

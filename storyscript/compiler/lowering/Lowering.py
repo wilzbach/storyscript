@@ -431,12 +431,88 @@ class Lowering:
         ])
         return t
 
+    @staticmethod
+    def create_entity(path):
+        """
+        Create an entity expression
+        """
+        return Tree('expression', [
+            Tree('or_expression', [
+                Tree('and_expression', [
+                    Tree('cmp_expression', [
+                        Tree('arith_expression', [
+                            Tree('mul_expression', [
+                                Tree('unary_expression', [
+                                    Tree('pow_expression', [
+                                        Tree('primary_expression', [
+                                            Tree('entity', [
+                                                path
+                                            ])
+                                        ])
+                                    ])
+                                ])
+                            ])
+                        ])
+                    ])
+                ])
+            ])
+        ])
+
+    def visit_assignment(self, node, block, parent):
+        """
+        Visit assignments and lower destructors
+        """
+        if not hasattr(node, 'children') or len(node.children) == 0:
+            return
+
+        if node.data == 'block':
+            # only generate a fake_block once for every line
+            # node: block in which the fake assignments should be inserted
+            block = self.fake_tree(node)
+
+        if node.data == 'assignment':
+            c = node.children[0]
+            if c.data == 'path':
+                # a path assignment -> no processing required
+                pass
+            else:
+                assert c.data == 'assignment_destructoring'
+                line = node.line()
+                new_node = node.assignment_fragment.base_expression.expression
+                orig_obj = block.add_assignment(new_node, original_line=line)
+                for i, n in enumerate(c.children):
+                    new_line = block.line()
+                    n.expect(len(n.children) == 1,
+                             'object_destructoring_invalid_path')
+                    name = n.child(0)
+                    name.line = new_line  # update token's line info
+                    # <n> = <val>
+                    val = self.create_entity(Tree('path', [
+                        orig_obj.child(0),
+                        Tree('path_fragment', [
+                            Tree('string', [name])
+                        ])
+                    ]))
+                    if i + 1 == len(c.children):
+                        # for the last entry, we can recycle the existing node
+                        node.children[0] = n
+                        node.assignment_fragment.base_expression.children = \
+                            [val]
+                    else:
+                        # insert new fake line
+                        a = block.assignment_path(n, val, new_line)
+                        parent.children.insert(0, a)
+        else:
+            for c in node.children:
+                self.visit_assignment(c, block, parent=node)
+
     def process(self, tree):
         """
         Applies several preprocessing steps to the existing AST.
         """
         pred = Lowering.is_inline_expression
         self.visit_concise_when(tree)
+        self.visit_assignment(tree, block=None, parent=None)
         self.visit_string_templates(tree, block=None, parent=None,
                                     cmp_expr=None)
         self.visit(tree, None, None, pred,

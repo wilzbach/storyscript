@@ -53,6 +53,12 @@ class TypeResolver(ScopeSelectiveVisitor):
         frag = tree.assignment_fragment
         expr_type = self.resolver.base_expression(frag.base_expression)
 
+        token = frag.child(0)
+        tree.expect('/' not in token.value,
+                    'variables_backslash', token=token)
+        tree.expect('/' not in token.value,
+                    'variables_dash', token=token)
+
         if target_symbol.type() == NoneType.instance():
             if not target_symbol.is_internal():
                 frag.base_expression.expect(expr_type != NoneType.instance(),

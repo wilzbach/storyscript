@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 4
+Error: syntax error in story at line 2, column 4
 
-1|    {} = ""
+2|    {} = obj
          ^
 
 E0073: Objects destructoring requires variable names.

@@ -36,7 +36,8 @@ def test_exceptions_variables_backslash(capsys):
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 1'
     assert lines[2] == '1|    a/b = 0'
-    assert lines[5] == "E0005: A variable name can't contain `/`"
+    assert lines[5] == ('E0061: Invalid path name: `a/b`. '
+                        "Path names can't contain `/`")
 
 
 def test_exceptions_variables_dash(capsys):
@@ -46,7 +47,8 @@ def test_exceptions_variables_dash(capsys):
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 1'
     assert lines[2] == '1|    a-b = 0'
-    assert lines[5] == "E0006: A variable name can't contain `-`"
+    assert lines[5] == ('E0061: Invalid path name: `a-b`. '
+                        "Path names can't contain `-`")
 
 
 def test_exceptions_return_outside(capsys):
