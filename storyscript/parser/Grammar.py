@@ -91,7 +91,10 @@ class Grammar:
                           'inline_expression (path_fragment)*')
         assignment_fragment = 'equals base_expression'
         self.ebnf.assignment_fragment = assignment_fragment
-        self.ebnf.assignment = 'path assignment_fragment'
+        objects = self.ebnf.collection('ocb', 'path', 'path', 'ccb')
+        self.ebnf.assignment_destructoring = objects
+        self.ebnf.assignment = ('(path | assignment_destructoring ) '
+                                'assignment_fragment')
 
     def imports(self):
         self.ebnf._AS = 'as'

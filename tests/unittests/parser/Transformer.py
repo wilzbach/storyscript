@@ -75,24 +75,8 @@ def test_transformer_arguments_short():
 
 
 def test_transformer_assignment(magic):
-    matches = [magic()]
+    matches = [magic(), magic()]
     assert Transformer.assignment(matches) == Tree('assignment', matches)
-
-
-def test_transformer_assignment_error_backslash(syntax_error, magic):
-    token = magic(value='/')
-    matches = [magic(children=[token])]
-    with raises(StorySyntaxError):
-        Transformer.assignment(matches)
-    syntax_error.assert_called_with('variables_backslash', token=token)
-
-
-def test_transformer_assignment_error_dash(syntax_error, magic):
-    token = magic(value='-')
-    matches = [magic(children=[token])]
-    with raises(StorySyntaxError):
-        Transformer.assignment(matches)
-    syntax_error.assert_called_with('variables_dash', token=token)
 
 
 def test_transformer_command(patch, magic):

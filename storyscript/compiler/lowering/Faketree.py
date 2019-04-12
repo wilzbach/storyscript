@@ -75,9 +75,15 @@ class FakeTree:
         line = self.get_line(value)
         first_token = value.find_first_token()
         first_token.line = line
+        path = self.path(line=line)
+        return self.assignment_path(path, value, line)
+
+    def assignment_path(self, path, value, line):
+        """
+        Adds a new assignment: `path` = `value`
+        """
         # updates all tokens
         self.mark_line(value, line)
-        path = self.path(line=line)
         equals = Token('EQUALS', '=', line=line)
         expr = Tree('base_expression', [value])
         fragment = Tree('assignment_fragment', [equals, expr])

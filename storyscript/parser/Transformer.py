@@ -58,14 +58,12 @@ class Transformer(LarkTransformer):
         Transforms an assignment tree and checks for invalid characters in the
         variable name.
         """
+        matches[1].expect(len(matches[0].children) > 0,
+                          'object_destructoring_no_variables')
         token = matches[0].children[0]
         if isinstance(token, Tree):
             matches[0].expect(token.data != 'inline_expression',
                               'assignment_inline_expression')
-        if '/' in token.value:
-            raise StorySyntaxError('variables_backslash', token=token)
-        if '-' in token.value:
-            raise StorySyntaxError('variables_dash', token=token)
         return Tree('assignment', matches)
 
     @classmethod

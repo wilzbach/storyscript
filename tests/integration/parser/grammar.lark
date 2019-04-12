@@ -13,7 +13,8 @@ values: number| string| boolean| void| list| objects| regular_expression| time
 path_fragment: _DOT NAME| _OSB INT _CSB| _OSB string _CSB| _OSB path _CSB
 path: NAME (path_fragment)* | inline_expression (path_fragment)*
 assignment_fragment: EQUALS base_expression
-assignment: path assignment_fragment
+assignment_destructoring: _OCB (_NL _INDENT)? (path (_COMMA _NL? path)*)? (_NL _DEDENT)? _CCB
+assignment: (path | assignment_destructoring ) assignment_fragment
 imports: _IMPORT string _AS NAME
 cmp_operator: GREATER| GREATER_EQUAL| LESSER| LESSER_EQUAL| NOT_EQUAL| EQUAL
 arith_operator: PLUS| DASH

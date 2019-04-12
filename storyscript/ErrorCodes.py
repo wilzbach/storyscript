@@ -94,6 +94,10 @@ class ErrorCodes:
         'E0071',
         ('Unopened string template. Did you forget a `{{` or '
          'wanted to escape with `\\}}`?'))
+    object_destructoring_invalid_path = (
+        'E0072', 'Objects can only be destructored into variable names.')
+    object_destructoring_no_variables = (
+        'E0073', 'Objects destructoring requires variable names.')
     type_assignment_different = (
         'E0100', 'Can\'t assign `{source}` to `{target}`')
     var_not_defined = (

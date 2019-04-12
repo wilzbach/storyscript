@@ -1,0 +1,85 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "obj"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "foo"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            ],
+            [
+              {
+                "$OBJECT": "string",
+                "string": "bar"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 2
+              }
+            ],
+            [
+              {
+                "$OBJECT": "string",
+                "string": "car"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 3
+              }
+            ]
+          ]
+        }
+      ],
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "expression",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "obj"
+          ]
+        }
+      ],
+      "next": "2.2"
+    },
+    "2.2": {
+      "method": "expression",
+      "ln": "2.2",
+      "name": [
+        "foo"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1",
+            {
+              "$OBJECT": "string",
+              "string": "foo"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1"
+}

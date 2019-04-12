@@ -171,6 +171,38 @@ def test_tree_find_first_token():
     assert tree.find('assignment') == [expected]
 
 
+def test_tree_find_first_token_middle():
+    """
+    Ensures Tree.find_first_token can find the correct Token
+    """
+    t1 = Token('X1', 'x1')
+    t2 = Token('X2', 'x2')
+    e1 = Tree('assignment', [t1])
+    e2 = Tree('assignment', [t2])
+    tree = Tree('start', [Tree('block', [Tree('line', [e1])]), e2])
+    assert tree.find_first_token() == t1
+
+
+def test_tree_find_first_token_end():
+    """
+    Ensures Tree.find_first_token can find the correct Token
+    """
+    t2 = Token('X', 'x')
+    e1 = Tree('assignment', [])
+    e2 = Tree('assignment', [t2])
+    tree = Tree('start', [Tree('block', [Tree('line', [e1])]), e2])
+    assert tree.find_first_token() == t2
+
+
+def test_tree_find_first_token_none():
+    """
+    Ensures Tree.find_first_token can find the correct Token
+    """
+    expected = Tree('assignment', [])
+    tree = Tree('start', [Tree('block', [Tree('line', [expected])], expected)])
+    assert tree.find_first_token() is None
+
+
 def test_tree_extract():
     target = Tree('target', [])
     tree = Tree('tree', [target, Tree('more', [target])])

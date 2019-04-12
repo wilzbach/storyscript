@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 3
+
+2|    { obj[0] } = obj
+        ^^^
+
+E0072: Objects can only be destructored into variable names.
