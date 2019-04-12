@@ -12,6 +12,7 @@
           "boolean": false
         }
       ],
+      "src": "b = false",
       "next": "2"
     },
     "2": {
@@ -32,12 +33,14 @@
         }
       ],
       "enter": "3",
+      "src": "if !b",
       "next": "3"
     },
     "3": {
       "method": "return",
       "ln": "3",
-      "parent": "2"
+      "parent": "2",
+      "src": "\treturn"
     }
   },
   "entrypoint": "1"

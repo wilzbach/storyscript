@@ -18,6 +18,7 @@
         }
       ],
       "enter": "2",
+      "src": "function name key:int returns int",
       "next": "2"
     },
     "2": {
@@ -39,7 +40,8 @@
           ]
         }
       ],
-      "parent": "1"
+      "parent": "1",
+      "src": "\treturn 2 + 2"
     }
   },
   "entrypoint": "1",

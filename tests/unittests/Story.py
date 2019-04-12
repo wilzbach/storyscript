@@ -137,7 +137,7 @@ def test_story_modules_no_extension(magic, story):
 
 def test_story_compile(patch, story, compiler):
     story.compile()
-    Compiler.compile.assert_called_with(story.tree)
+    Compiler.compile.assert_called_with(story.tree, story=story)
     assert story.compiled == Compiler.compile()
 
 

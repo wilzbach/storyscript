@@ -11,12 +11,14 @@
       ],
       "enter": "2",
       "exit": "4",
+      "src": "while /regexp/",
       "next": "2"
     },
     "2": {
       "method": "break",
       "ln": "2",
       "parent": "1",
+      "src": "\tbreak",
       "next": "4"
     },
     "4": {
@@ -40,12 +42,14 @@
       ],
       "enter": "5",
       "exit": "7",
+      "src": "while 2 + /regexp/",
       "next": "5"
     },
     "5": {
       "method": "break",
       "ln": "5",
       "parent": "4",
+      "src": "\tbreak",
       "next": "7"
     },
     "7": {
@@ -69,12 +73,14 @@
       ],
       "enter": "8",
       "exit": "10",
+      "src": "while \"a\" * /regexp/",
       "next": "8"
     },
     "8": {
       "method": "break",
       "ln": "8",
       "parent": "7",
+      "src": "\tbreak",
       "next": "10"
     },
     "10": {
@@ -106,12 +112,14 @@
         }
       ],
       "enter": "11",
+      "src": "while [1, 2] - /regexp/",
       "next": "11"
     },
     "11": {
       "method": "break",
       "ln": "11",
-      "parent": "10"
+      "parent": "10",
+      "src": "\tbreak"
     }
   },
   "entrypoint": "1"

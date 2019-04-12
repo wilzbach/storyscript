@@ -27,7 +27,8 @@
             }
           ]
         }
-      ]
+      ],
+      "src": "x = (random array)[0]"
     }
   },
   "services": [

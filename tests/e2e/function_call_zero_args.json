@@ -9,6 +9,7 @@
       "function": "name",
       "enter": "2",
       "exit": "4.1",
+      "src": "function name returns int",
       "next": "2"
     },
     "2": {
@@ -21,6 +22,7 @@
         }
       ],
       "parent": "1",
+      "src": "\treturn 0",
       "next": "4.1"
     },
     "4.1": {
@@ -45,7 +47,8 @@
             "__p-4.1"
           ]
         }
-      ]
+      ],
+      "src": "b = name ()"
     }
   },
   "entrypoint": "1",

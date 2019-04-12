@@ -6,7 +6,8 @@ class Lines:
     """
     Holds compiled lines and provides methods for operation on lines.
     """
-    def __init__(self):
+    def __init__(self, story):
+        self.story = story
         self.lines = {}
         self._lines = []  # sorted line nr (by insertion)
         self.variables = []
@@ -106,6 +107,7 @@ class Lines:
         Creates the base dictionary for a given line.
         """
         assert line not in self.lines, 'Line numbers must be unique'
+        raw_line = self.story.line(line)
         self.lines[line] = {
             'method': method,
             'ln': line,
@@ -118,6 +120,7 @@ class Lines:
             'enter': enter,
             'exit': exit,
             'parent': parent,
+            'src': raw_line,
         }
         # save insertion order
         self._lines.append(line)

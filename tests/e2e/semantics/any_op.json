@@ -8,6 +8,7 @@
       ],
       "service": "any_service",
       "command": "call",
+      "src": "a = any_service call",
       "next": "2"
     },
     "2": {
@@ -34,6 +35,7 @@
           ]
         }
       ],
+      "src": "a = \".\" + a",
       "next": "3"
     },
     "3": {
@@ -44,6 +46,7 @@
       ],
       "service": "any_service",
       "command": "call",
+      "src": "b = any_service call",
       "next": "4"
     },
     "4": {
@@ -69,7 +72,8 @@
             }
           ]
         }
-      ]
+      ],
+      "src": "c = b + \".\""
     }
   },
   "services": [

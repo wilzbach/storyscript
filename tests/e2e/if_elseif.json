@@ -12,6 +12,7 @@
           "string": "orange"
         }
       ],
+      "src": "colour = \"orange\"",
       "next": "2"
     },
     "2": {
@@ -37,6 +38,7 @@
       ],
       "enter": "3",
       "exit": "4",
+      "src": "if colour == \"red\"",
       "next": "3"
     },
     "3": {
@@ -52,6 +54,7 @@
         }
       ],
       "parent": "2",
+      "src": "\tx = 0",
       "next": "4"
     },
     "4": {
@@ -76,6 +79,7 @@
         }
       ],
       "enter": "5",
+      "src": "else if colour == \"blue\"",
       "next": "5"
     },
     "5": {
@@ -90,7 +94,8 @@
           "int": 1
         }
       ],
-      "parent": "4"
+      "parent": "4",
+      "src": "\tx = 1"
     }
   },
   "entrypoint": "1"

@@ -45,7 +45,8 @@
             }
           ]
         }
-      ]
+      ],
+      "src": "a = [1, 2 increment, 3]"
     }
   },
   "entrypoint": "1.1"

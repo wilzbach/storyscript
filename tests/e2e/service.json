@@ -14,7 +14,8 @@
             "string": "hello"
           }
         }
-      ]
+      ],
+      "src": "alpine echo message:'hello'"
     }
   },
   "services": [

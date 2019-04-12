@@ -9,6 +9,7 @@
       "service": "http",
       "command": "server",
       "enter": "2",
+      "src": "http server as s",
       "next": "2"
     },
     "2": {
@@ -39,6 +40,7 @@
       ],
       "enter": "3",
       "parent": "1",
+      "src": "  when s listen path:'/health' method:'get' as client",
       "next": "3"
     },
     "3": {
@@ -53,7 +55,8 @@
           "int": 0
         }
       ],
-      "parent": "2"
+      "parent": "2",
+      "src": "  \tx = 0"
     }
   },
   "services": [

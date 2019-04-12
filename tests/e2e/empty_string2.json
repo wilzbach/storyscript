@@ -11,7 +11,8 @@
           "$OBJECT": "string",
           "string": ""
         }
-      ]
+      ],
+      "src": "a = \"\""
     }
   },
   "entrypoint": "1"

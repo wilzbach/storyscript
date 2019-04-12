@@ -13,7 +13,8 @@
           "mutation": "length",
           "args": []
         }
-      ]
+      ],
+      "src": "'hello' length"
     }
   },
   "entrypoint": "1"

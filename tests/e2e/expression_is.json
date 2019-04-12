@@ -12,6 +12,7 @@
           "string": "green"
         }
       ],
+      "src": "colour = \"green\"",
       "next": "2"
     },
     "2": {
@@ -36,6 +37,7 @@
         }
       ],
       "enter": "3",
+      "src": "if colour == \"red\"",
       "next": "3"
     },
     "3": {
@@ -50,7 +52,8 @@
           "int": 0
         }
       ],
-      "parent": "2"
+      "parent": "2",
+      "src": "\tx = 0"
     }
   },
   "entrypoint": "1"

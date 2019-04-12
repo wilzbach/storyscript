@@ -12,6 +12,7 @@
           "string": ""
         }
       ],
+      "src": "a = \"\"",
       "next": "3"
     },
     "3": {
@@ -39,6 +40,7 @@
         }
       ],
       "enter": "4",
+      "src": "foreach {\"1\": 2} as k, v",
       "next": "4"
     },
     "4": {
@@ -67,7 +69,8 @@
           ]
         }
       ],
-      "parent": "3"
+      "parent": "3",
+      "src": "\ta = a + k"
     }
   },
   "entrypoint": "1"

@@ -12,6 +12,7 @@
           "boolean": true
         }
       ],
+      "src": "foo = true",
       "next": "2"
     },
     "2": {
@@ -69,6 +70,7 @@
       ],
       "enter": "3",
       "exit": "4",
+      "src": "if (foo == true) and foo == (1 + 2)",
       "next": "3"
     },
     "3": {
@@ -87,6 +89,7 @@
         }
       ],
       "parent": "2",
+      "src": "  log info msg: \"true\"",
       "next": "4"
     },
     "4": {
@@ -94,6 +97,7 @@
       "ln": "4",
       "enter": "5",
       "exit": "6",
+      "src": "else",
       "next": "5"
     },
     "5": {
@@ -112,6 +116,7 @@
         }
       ],
       "parent": "4",
+      "src": "  log info msg: \"false\"",
       "next": "6"
     },
     "6": {
@@ -128,7 +133,8 @@
             "string": "completed"
           }
         }
-      ]
+      ],
+      "src": "log info msg: \"completed\""
     }
   },
   "services": [

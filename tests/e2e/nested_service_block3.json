@@ -9,6 +9,7 @@
       "service": "http",
       "command": "server",
       "enter": "2",
+      "src": "http server",
       "next": "2"
     },
     "2": {
@@ -21,12 +22,14 @@
       "command": "listen",
       "enter": "3",
       "parent": "1",
+      "src": "\twhen other_service command listen",
       "next": "3"
     },
     "3": {
       "method": "break",
       "ln": "3",
-      "parent": "2"
+      "parent": "2",
+      "src": "\t\tbreak"
     }
   },
   "services": [

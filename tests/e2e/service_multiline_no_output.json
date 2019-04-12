@@ -38,7 +38,8 @@
             "string": "Hello world"
           }
         }
-      ]
+      ],
+      "src": "sendgrid send_one"
     }
   },
   "services": [

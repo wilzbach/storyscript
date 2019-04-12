@@ -12,6 +12,7 @@
           "int": 0
         }
       ],
+      "src": "bar = 0",
       "next": "2.1"
     },
     "2.1": {
@@ -58,7 +59,8 @@
             }
           ]
         }
-      ]
+      ],
+      "src": "a = \"foo{bar my_mutation}\""
     }
   },
   "entrypoint": "1"

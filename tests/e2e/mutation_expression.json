@@ -21,6 +21,7 @@
           ]
         }
       ],
+      "src": "a = [\"opened\", \"labeled\"]",
       "next": "2"
     },
     "2": {
@@ -67,7 +68,8 @@
             }
           ]
         }
-      ]
+      ],
+      "src": "a contains item: req.body[\"action\"] == false"
     }
   },
   "entrypoint": "1"

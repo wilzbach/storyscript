@@ -9,6 +9,7 @@
       "service": "logging",
       "command": "default",
       "enter": "2",
+      "src": "logging default",
       "next": "2"
     },
     "2": {
@@ -31,6 +32,7 @@
       ],
       "enter": "3",
       "parent": "1",
+      "src": "  \twhen log level: 'normal' as logger",
       "next": "3"
     },
     "3": {
@@ -46,6 +48,7 @@
         }
       ],
       "parent": "2",
+      "src": "  \t\tx = 0",
       "next": "4"
     },
     "4": {
@@ -65,6 +68,7 @@
       ],
       "enter": "5",
       "parent": "1",
+      "src": "  \twhen log level: 'normal'",
       "next": "5"
     },
     "5": {
@@ -80,6 +84,7 @@
         }
       ],
       "parent": "4",
+      "src": "  \t\tx = 1",
       "next": "6"
     },
     "6": {
@@ -92,6 +97,7 @@
       "command": "log",
       "enter": "7",
       "parent": "1",
+      "src": "  \twhen log as logger",
       "next": "7"
     },
     "7": {
@@ -107,6 +113,7 @@
         }
       ],
       "parent": "6",
+      "src": "  \t\tx = 2",
       "next": "8"
     },
     "8": {
@@ -119,6 +126,7 @@
       "command": "log",
       "enter": "9",
       "parent": "1",
+      "src": "  \twhen log",
       "next": "9"
     },
     "9": {
@@ -133,7 +141,8 @@
           "int": 3
         }
       ],
-      "parent": "8"
+      "parent": "8",
+      "src": "  \t\tx = 3"
     }
   },
   "services": [

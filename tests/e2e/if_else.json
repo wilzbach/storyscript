@@ -12,6 +12,7 @@
           "string": "blue"
         }
       ],
+      "src": "colour = \"blue\"",
       "next": "2"
     },
     "2": {
@@ -37,6 +38,7 @@
       ],
       "enter": "3",
       "exit": "4",
+      "src": "if colour == \"red\"",
       "next": "3"
     },
     "3": {
@@ -52,12 +54,14 @@
         }
       ],
       "parent": "2",
+      "src": "\tx = 0",
       "next": "4"
     },
     "4": {
       "method": "else",
       "ln": "4",
       "enter": "5",
+      "src": "else",
       "next": "5"
     },
     "5": {
@@ -72,7 +76,8 @@
           "int": 1
         }
       ],
-      "parent": "4"
+      "parent": "4",
+      "src": "\tx = 1"
     }
   },
   "entrypoint": "1"

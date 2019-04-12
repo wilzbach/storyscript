@@ -4,6 +4,7 @@
       "method": "try",
       "ln": "1",
       "enter": "2",
+      "src": "try",
       "next": "2"
     },
     "2": {
@@ -18,7 +19,8 @@
           "int": 0
         }
       ],
-      "parent": "1"
+      "parent": "1",
+      "src": "\tx=0"
     }
   },
   "entrypoint": "1"

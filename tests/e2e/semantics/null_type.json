@@ -9,6 +9,7 @@
       "args": [
         null
       ],
+      "src": "a = null",
       "next": "2"
     },
     "2": {
@@ -22,7 +23,8 @@
           "$OBJECT": "int",
           "int": 1
         }
-      ]
+      ],
+      "src": "a = 1"
     }
   },
   "entrypoint": "1"

@@ -23,7 +23,7 @@ def test_compiler_compile(patch, magic):
     patch.object(Compiler, 'generate')
     patch.object(JSONCompiler, 'compile')
     tree = magic()
-    result = Compiler.compile(tree)
+    result = Compiler.compile(tree, story=None)
     Compiler.generate.assert_called_with(tree, debug=False)
     JSONCompiler.compile.assert_called_with(Compiler.generate(), debug=False)
     assert result == JSONCompiler.compile()

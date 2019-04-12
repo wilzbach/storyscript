@@ -85,8 +85,9 @@ def test_storyerror_get_line(patch, storyerror, error):
     Ensures get_line returns the error line
     """
     patch.object(StoryError, 'int_line', return_value=1)
-    storyerror.lines = 'x = 0\ny = 1'.split('\n')
+    storyerror.story.line.return_value = 'x = 0'
     assert storyerror.get_line() == 'x = 0'
+    storyerror.story.line.assert_called_with(1)
 
 
 def test_storyerror_header(patch, storyerror, error):

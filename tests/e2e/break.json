@@ -10,12 +10,14 @@
         }
       ],
       "enter": "2",
+      "src": "while true",
       "next": "2"
     },
     "2": {
       "method": "break",
       "ln": "2",
-      "parent": "1"
+      "parent": "1",
+      "src": "\tbreak"
     }
   },
   "entrypoint": "1"

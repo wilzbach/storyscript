@@ -9,6 +9,7 @@
       "service": "http",
       "command": "server",
       "enter": "2",
+      "src": "http server",
       "next": "2"
     },
     "2": {
@@ -21,12 +22,14 @@
       "command": "listen",
       "enter": "3",
       "parent": "1",
+      "src": "\twhen listen as li",
       "next": "3"
     },
     "3": {
       "method": "break",
       "ln": "3",
       "parent": "2",
+      "src": "\t\tbreak",
       "next": "4"
     },
     "4": {
@@ -46,12 +49,14 @@
       ],
       "enter": "5",
       "parent": "1",
+      "src": "\twhen listen path:'/foo'",
       "next": "5"
     },
     "5": {
       "method": "break",
       "ln": "5",
       "parent": "4",
+      "src": "\t\tbreak",
       "next": "6"
     },
     "6": {
@@ -74,12 +79,14 @@
       ],
       "enter": "7",
       "parent": "1",
+      "src": "\twhen listen path:'/foo' as li",
       "next": "7"
     },
     "7": {
       "method": "break",
       "ln": "7",
       "parent": "6",
+      "src": "\t\tbreak",
       "next": "9"
     },
     "9": {
@@ -91,6 +98,7 @@
       "service": "http",
       "command": "server",
       "enter": "10",
+      "src": "http server as serv",
       "next": "10"
     },
     "10": {
@@ -103,12 +111,14 @@
       "command": "listen",
       "enter": "11",
       "parent": "9",
+      "src": "\twhen serv listen",
       "next": "11"
     },
     "11": {
       "method": "break",
       "ln": "11",
       "parent": "10",
+      "src": "    \tbreak",
       "next": "12"
     },
     "12": {
@@ -121,12 +131,14 @@
       "command": "listen",
       "enter": "13",
       "parent": "9",
+      "src": "\twhen serv listen as sa",
       "next": "13"
     },
     "13": {
       "method": "break",
       "ln": "13",
       "parent": "12",
+      "src": "\t\tbreak",
       "next": "14"
     },
     "14": {
@@ -146,12 +158,14 @@
       ],
       "enter": "15",
       "parent": "9",
+      "src": "\twhen serv listen path:'/foo'",
       "next": "15"
     },
     "15": {
       "method": "break",
       "ln": "15",
       "parent": "14",
+      "src": "\t\tbreak",
       "next": "16"
     },
     "16": {
@@ -174,12 +188,14 @@
       ],
       "enter": "17",
       "parent": "9",
+      "src": "\twhen serv listen path:'/foo' as li",
       "next": "17"
     },
     "17": {
       "method": "break",
       "ln": "17",
-      "parent": "16"
+      "parent": "16",
+      "src": "\t\tbreak"
     }
   },
   "services": [

@@ -19,6 +19,7 @@
       ],
       "enter": "2",
       "exit": "4.1",
+      "src": "function foo arg1: time returns time",
       "next": "2"
     },
     "2": {
@@ -31,6 +32,7 @@
         }
       ],
       "parent": "1",
+      "src": "\treturn 5s",
       "next": "4.1"
     },
     "4.1": {
@@ -62,7 +64,8 @@
             "__p-4.1"
           ]
         }
-      ]
+      ],
+      "src": "foo(arg1: 10s)"
     }
   },
   "entrypoint": "1",

@@ -9,6 +9,7 @@
       "service": "my_service",
       "command": "command",
       "enter": "2",
+      "src": "my_service command as a",
       "next": "2"
     },
     "2": {
@@ -21,12 +22,14 @@
       "command": "command",
       "enter": "3",
       "parent": "1",
+      "src": "    when a command as b",
       "next": "3"
     },
     "3": {
       "method": "break",
       "ln": "3",
-      "parent": "2"
+      "parent": "2",
+      "src": "    \tbreak"
     }
   },
   "services": [

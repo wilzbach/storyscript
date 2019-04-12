@@ -27,6 +27,7 @@
       ],
       "enter": "2",
       "exit": "4",
+      "src": "function my_function k1: int k2:int returns int",
       "next": "2"
     },
     "2": {
@@ -39,6 +40,7 @@
         }
       ],
       "parent": "1",
+      "src": "\treturn 0",
       "next": "4"
     },
     "4": {
@@ -53,6 +55,7 @@
           "int": 0
         }
       ],
+      "src": "a = 0",
       "next": "5"
     },
     "5": {
@@ -67,6 +70,7 @@
           "int": 1
         }
       ],
+      "src": "b = 1",
       "next": "6"
     },
     "6": {
@@ -81,6 +85,7 @@
           "int": 0
         }
       ],
+      "src": "c = 0",
       "next": "7.1"
     },
     "7.1": {
@@ -166,7 +171,8 @@
             "__p-7.1"
           ]
         }
-      ]
+      ],
+      "src": "my_function (k1: 2 + 2 % 4 k2: a / b - c)"
     }
   },
   "entrypoint": "1",

@@ -12,6 +12,7 @@
           "int": 0
         }
       ],
+      "src": "i = 0",
       "next": "2.1"
     },
     "2.1": {
@@ -56,6 +57,7 @@
         }
       ],
       "enter": "3",
+      "src": "while i increment by:1",
       "next": "3"
     },
     "3": {
@@ -75,7 +77,8 @@
           }
         }
       ],
-      "parent": "2"
+      "parent": "2",
+      "src": "    alpine echo message:i"
     }
   },
   "services": [

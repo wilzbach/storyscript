@@ -28,6 +28,7 @@
           ]
         }
       ],
+      "src": "labels = [{\"name\": \"a\"}]",
       "next": "2"
     },
     "2": {
@@ -42,6 +43,7 @@
           "boolean": false
         }
       ],
+      "src": "found = false",
       "next": "3"
     },
     "3": {
@@ -60,6 +62,7 @@
       ],
       "enter": "4",
       "exit": "10",
+      "src": "foreach labels as label",
       "next": "4"
     },
     "4": {
@@ -116,6 +119,7 @@
       "enter": "5",
       "exit": "6",
       "parent": "3",
+      "src": "\tif label[\"name\"] == \"a\" or label[\"name\"] == \"b\"",
       "next": "5"
     },
     "5": {
@@ -131,6 +135,7 @@
         }
       ],
       "parent": "4",
+      "src": "\t\tfound = true",
       "next": "6"
     },
     "6": {
@@ -139,6 +144,7 @@
       "enter": "7",
       "exit": "8",
       "parent": "3",
+      "src": "\telse",
       "next": "7"
     },
     "7": {
@@ -154,6 +160,7 @@
         }
       ],
       "parent": "6",
+      "src": "\t\tfound = false",
       "next": "8"
     },
     "8": {
@@ -170,6 +177,7 @@
       "enter": "9",
       "exit": "10",
       "parent": "3",
+      "src": "\tif found",
       "next": "9"
     },
     "9": {
@@ -185,6 +193,7 @@
         }
       ],
       "parent": "8",
+      "src": "\t\tx = 0",
       "next": "10"
     },
     "10": {
@@ -198,7 +207,8 @@
           "$OBJECT": "boolean",
           "boolean": true
         }
-      ]
+      ],
+      "src": "outside = true"
     }
   },
   "entrypoint": "1"

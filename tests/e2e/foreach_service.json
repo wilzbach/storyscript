@@ -23,6 +23,7 @@
           ]
         }
       ],
+      "src": "obj = {\"f\": 1}",
       "next": "2.1"
     },
     "2.1": {
@@ -70,6 +71,7 @@
         }
       ],
       "enter": "3",
+      "src": "foreach obj substring start:1 as item",
       "next": "3"
     },
     "3": {
@@ -77,7 +79,8 @@
       "ln": "3",
       "service": "email_service",
       "command": "send_email",
-      "parent": "2"
+      "parent": "2",
+      "src": "    email_service send_email"
     }
   },
   "services": [

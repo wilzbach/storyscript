@@ -9,6 +9,7 @@
       "function": "foo",
       "enter": "2",
       "exit": "4",
+      "src": "function foo returns map[int,list[string]]",
       "next": "2"
     },
     "2": {
@@ -41,6 +42,7 @@
         }
       ],
       "parent": "1",
+      "src": "\treturn {20: [\"foo\", \"bar\"]}",
       "next": "4"
     },
     "4": {
@@ -55,6 +57,7 @@
           "int": 0
         }
       ],
+      "src": "a = 0",
       "next": "5.1"
     },
     "5.1": {
@@ -80,6 +83,7 @@
           ]
         }
       ],
+      "src": "b = foo()",
       "next": "6"
     },
     "6": {
@@ -94,6 +98,7 @@
           "string": "any string"
         }
       ],
+      "src": "c = \"any string\"",
       "next": "7"
     },
     "7": {
@@ -117,7 +122,8 @@
             }
           ]
         }
-      ]
+      ],
+      "src": "c = b[20][0]"
     }
   },
   "entrypoint": "1",

@@ -33,6 +33,7 @@
         }
       ],
       "enter": "2",
+      "src": "foreach [2] + [3] as item",
       "next": "2"
     },
     "2": {
@@ -40,7 +41,8 @@
       "ln": "2",
       "service": "email_service",
       "command": "send_email",
-      "parent": "1"
+      "parent": "1",
+      "src": "    email_service send_email"
     }
   },
   "services": [

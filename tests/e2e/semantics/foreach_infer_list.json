@@ -12,6 +12,7 @@
           "boolean": true
         }
       ],
+      "src": "b = true",
       "next": "3"
     },
     "3": {
@@ -37,6 +38,7 @@
         }
       ],
       "enter": "4",
+      "src": "foreach [true, false] as k, v",
       "next": "4"
     },
     "4": {
@@ -53,7 +55,8 @@
           ]
         }
       ],
-      "parent": "3"
+      "parent": "3",
+      "src": "\tb = v"
     }
   },
   "entrypoint": "1"
