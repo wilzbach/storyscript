@@ -209,7 +209,7 @@ class ListType(SymbolType):
         self.inner = inner
 
     def __str__(self):
-        return f'{self.inner}[]'
+        return f'list[{self.inner}]'
 
     def __eq__(self, other):
         return isinstance(other, ListType) and \
@@ -246,7 +246,7 @@ class ObjectType(SymbolType):
         self.value = value
 
     def __str__(self):
-        return f'{{{self.key}:{self.value}}}'
+        return f'map[{self.key},{self.value}]'
 
     def __eq__(self, other):
         return isinstance(other, ObjectType) and \
@@ -257,7 +257,7 @@ class ObjectType(SymbolType):
         if not isinstance(other, ObjectType):
             return False
         key_res = self.key.can_be_assigned(other.key)
-        val_res = self.key.can_be_assigned(other.value)
+        val_res = self.value.can_be_assigned(other.value)
         return key_res and val_res
 
     def index(self, other):

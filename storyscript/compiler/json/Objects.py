@@ -176,7 +176,16 @@ class Objects:
 
     @staticmethod
     def types(tree):
-        return {'$OBJECT': 'type', 'type': tree.child(0).value}
+        assert tree.data == 'types'
+        c = tree.first_child()
+        if c.data == 'map_type':
+            t = 'object'
+        elif c.data == 'list_type':
+            t = 'list'
+        else:
+            assert c.data == 'base_type'
+            t = c.child(0).value
+        return {'$OBJECT': 'type', 'type': t}
 
     def entity(self, tree):
         return self.values(tree.child(0))

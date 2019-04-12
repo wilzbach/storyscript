@@ -48,9 +48,11 @@ class JSONCompiler:
             mutations.append(m)
         return mutations
 
-    @classmethod
-    def function_output(cls, tree):
-        return cls.output(tree.node('function_output.types'))
+    def function_output(self, tree):
+        function_output = tree.function_output
+        if function_output is not None:
+            output_types = self.objects.types(function_output.types)
+            return [output_types['type']]
 
     def imports(self, tree, parent):
         """

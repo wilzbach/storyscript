@@ -229,8 +229,25 @@ def test_objects_regular_expression_flags():
     assert result['flags'] == 'flags'
 
 
+def test_objects_map_type(tree):
+    tree.data = 'types'
+    c = tree.first_child()
+    c.data = 'map_type'
+    assert Objects.types(tree) == {'$OBJECT': 'type', 'type': 'object'}
+
+
+def test_objects_list_type(tree):
+    tree.data = 'types'
+    c = tree.first_child()
+    c.data = 'list_type'
+    assert Objects.types(tree) == {'$OBJECT': 'type', 'type': 'list'}
+
+
 def test_objects_types(tree):
-    token = tree.child(0)
+    tree.data = 'types'
+    c = tree.first_child()
+    c.data = 'base_type'
+    token = c.child(0)
     assert Objects.types(tree) == {'$OBJECT': 'type', 'type': token.value}
 
 

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 9
+
+2|      return [["foo"]]
+               ^
+
+E0102: `list[list[string]]` can't be implicitly converted to expected return type `list[list[int]]`.
