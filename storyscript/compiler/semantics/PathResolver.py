@@ -1,5 +1,5 @@
 from storyscript.compiler.semantics.types.Types import BooleanType, \
-    FloatType, IntType, StringType
+    FloatType, IntType, RangeType, StringType
 from storyscript.parser import Tree
 
 
@@ -34,6 +34,8 @@ class PathResolver:
                     value = StringType.instance()
                 elif child.data == 'boolean':
                     value = BooleanType.instance()
+                elif child.data == 'range':
+                    value = RangeType.instance()
                 elif child.data == 'number':
                     value = self.number(child)
                 else:

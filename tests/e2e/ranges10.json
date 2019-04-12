@@ -1,0 +1,45 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": []
+        }
+      ],
+      "src": "b = {}",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "b",
+            {
+              "$OBJECT": "range",
+              "range": {
+                "end": {
+                  "$OBJECT": "int",
+                  "int": -1
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "src": "a = b[:-1]"
+    }
+  },
+  "entrypoint": "1"
+}

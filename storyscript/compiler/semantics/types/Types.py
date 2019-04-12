@@ -342,7 +342,9 @@ class StringType(BaseType):
         return None
 
     def index(self, other):
-        # only numeric indices
+        # only numeric indices or  ranges
+        if isinstance(other, RangeType):
+            return self
         if other.implicit_to(IntType.instance()):
             return self
         return None
@@ -433,6 +435,25 @@ class RegExpType(BaseType):
             return self
 
 
+class RangeType(BaseType):
+    """
+    Represents a range.
+    """
+
+    def __str__(self):
+        return 'range'
+
+    def __eq__(self, other):
+        return isinstance(other, RangeType)
+
+    @singleton
+    def instance():
+        """
+        Returns a static instance of the RangeType.
+        """
+        return RangeType()
+
+
 class ListType(BaseType):
     """
     Represents a List.
@@ -464,7 +485,9 @@ class ListType(BaseType):
         return ListType(im_to)
 
     def index(self, other):
-        # only numeric indices
+        # only numeric indices or range indices
+        if isinstance(other, RangeType):
+            return self
         if other.implicit_to(IntType.instance()):
             return self.inner
         return None
