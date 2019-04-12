@@ -27,9 +27,9 @@ def test_singleton():
     (FloatType.instance(), 'float'),
     (NoneType.instance(), 'none'),
     (AnyType.instance(), 'any'),
-    (ListType(AnyType.instance()), 'any[]'),
+    (ListType(AnyType.instance()), 'list[any]'),
     (ObjectType(IntType.instance(), StringType.instance()),
-        '{int:string}'),
+        'map[int,string]'),
 ])
 def test_boolean_str(type_, expected):
     assert str(type_) == expected

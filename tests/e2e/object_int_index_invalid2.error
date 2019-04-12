@@ -3,4 +3,4 @@ Error: syntax error in story at line 2, column 1
 2|    a["-2"] = true
       ^
 
-E0104: `{int:boolean}` can't be indexed with `string`
+E0104: `map[int,boolean]` can't be indexed with `string`

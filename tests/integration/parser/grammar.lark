@@ -1,4 +1,7 @@
-types: INT_TYPE| FLOAT_TYPE| STRING_TYPE| LIST_TYPE| OBJECT_TYPE| REGEXP_TYPE| FUNCTION_TYPE| ANY_TYPE| BOOLEAN_TYPE| TIME_TYPE
+base_type: INT_TYPE| FLOAT_TYPE| STRING_TYPE| OBJECT_TYPE| REGEXP_TYPE| FUNCTION_TYPE| ANY_TYPE| BOOLEAN_TYPE| TIME_TYPE
+list_type: _LIST_KEYWORD _OSB types _CSB
+map_type: _MAP_KEYWORD _OSB base_type _COMMA types _CSB
+types: list_type | map_type| base_type
 boolean: TRUE| FALSE
 void: NULL
 number: INT| FLOAT
@@ -81,12 +84,16 @@ INT_TYPE: "int"
 BOOLEAN_TYPE: "boolean"
 FLOAT_TYPE: "float"
 STRING_TYPE: "string"
-LIST_TYPE: "list"
 OBJECT_TYPE: "object"
 REGEXP_TYPE: "regex"
 FUNCTION_TYPE: "function"
 TIME_TYPE: "time"
 ANY_TYPE: "any"
+_OSB: "["
+_CSB: "]"
+_COMMA: ","
+_LIST_KEYWORD: "list"
+_MAP_KEYWORD: "map"
 _NL: /(\r?\n[\t ]*)+/
 _INDENT: "<INDENT>"
 _DEDENT: "<DEDENT>"
@@ -101,12 +108,9 @@ DOUBLE_QUOTED: /"([^"\\]*(?:\\.[^"\\]*)*)"/
 REGEXP.10: /\/([^\/]*)\//
 NAME.1: /[a-zA-Z_][a-zA-Z-\/_0-9]*/
 RAW_TIME.3: /([0-9]+(ms|[smhdw]))+/
-_OSB: "["
-_CSB: "]"
 _OCB: "{"
 _CCB: "}"
 _COLON: ":"
-_COMMA: ","
 _OP: "("
 _CP: ")"
 EQUALS: "="

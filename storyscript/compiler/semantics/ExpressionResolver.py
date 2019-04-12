@@ -167,6 +167,38 @@ class ExpressionResolver:
         Resolves a type expression to a type
         """
         assert tree.data == 'types'
+        c = tree.first_child()
+        if c.data == 'map_type':
+            return self.map_type(c)
+        elif c.data == 'list_type':
+            return self.list_type(c)
+        else:
+            assert c.data == 'base_type'
+            return self.base_type(c)
+
+    def map_type(self, tree):
+        """
+        Resolves a map type expression to a type
+        """
+        assert tree.data == 'map_type'
+        key_type = self.base_type(tree.child(0))
+        value_type = self.types(tree.child(1))
+        return ObjectType(key_type, value_type)
+
+    def list_type(self, tree):
+        """
+        Resolves a list type expression to a type
+        """
+        assert tree.data == 'list_type'
+        c = tree.first_child()
+        item = self.types(c)
+        return ListType(item)
+
+    def base_type(self, tree):
+        """
+        Resolves a base type expression to a type
+        """
+        assert tree.data == 'base_type'
         tok = tree.first_child()
         if tok.type == 'BOOLEAN_TYPE':
             return BooleanType.instance()
@@ -176,8 +208,6 @@ class ExpressionResolver:
             return StringType.instance()
         elif tok.type == 'ANY_TYPE':
             return AnyType.instance()
-        elif tok.type == 'LIST_TYPE':
-            return ListType(AnyType.instance())
         elif tok.type == 'OBJECT_TYPE':
             return ObjectType(AnyType.instance(), AnyType.instance())
         elif tok.type == 'FUNCTION_TYPE':

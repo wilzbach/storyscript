@@ -3,4 +3,4 @@ Error: syntax error in story at line 5, column 5
 5|    e = [1,2] / a
           ^
 
-E0103: `int[]` is not compatible with `int`
+E0103: `list[int]` is not compatible with `int`

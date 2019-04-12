@@ -3,4 +3,4 @@ Error: syntax error in story at line 2, column 1
 2|    a[0] = 2
       ^
 
-E0100: Can't assign `int` to `int[]`
+E0100: Can't assign `int` to `list[int]`
