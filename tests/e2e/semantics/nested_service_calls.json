@@ -1,0 +1,69 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "output": [
+        "client"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "2",
+      "src": "http server as client",
+      "next": "2"
+    },
+    "2": {
+      "method": "when",
+      "ln": "2",
+      "output": [
+        "request"
+      ],
+      "service": "client",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "method",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "get"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "path",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "/"
+          }
+        }
+      ],
+      "enter": "3",
+      "parent": "1",
+      "src": "    when client listen method:'get' path:'/' as request",
+      "next": "3"
+    },
+    "3": {
+      "method": "execute",
+      "ln": "3",
+      "service": "request",
+      "command": "write",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "content",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "Hello world!"
+          }
+        }
+      ],
+      "parent": "2",
+      "src": "        request write content:'Hello world!'"
+    }
+  },
+  "services": [
+    "http"
+  ],
+  "entrypoint": "1"
+}
