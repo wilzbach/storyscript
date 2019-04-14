@@ -6,5 +6,5 @@ function c returns any
 	return 1
 function d returns object
 	return {}
-function e returns list[int]
+function e returns List[int]
 	return [1]

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = [1, 2] invalid_mutation_name
+          ^
+
+E0117: Invalid mutation invalid_mutation_name

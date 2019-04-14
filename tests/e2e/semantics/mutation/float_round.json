@@ -1,0 +1,41 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "float",
+          "float": 0.5
+        }
+      ],
+      "src": "a = 0.5",
+      "next": "2"
+    },
+    "2": {
+      "method": "mutation",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "round",
+          "args": []
+        }
+      ],
+      "src": "b = a round"
+    }
+  },
+  "entrypoint": "1"
+}

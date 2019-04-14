@@ -1,0 +1,50 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "aa"
+        }
+      ],
+      "src": "a = \"aa\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "mutation",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "split",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "by",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "."
+              }
+            }
+          ]
+        }
+      ],
+      "src": "b = a split by:\".\""
+    }
+  },
+  "entrypoint": "1"
+}

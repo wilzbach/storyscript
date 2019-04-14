@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .SymbolTypes import SymbolType
+from storyscript.compiler.semantics.types.Types import BaseType
 
 
 class Symbol:
@@ -40,7 +40,7 @@ class Symbol:
             if isinstance(p, Symbol):
                 p = p.type()
             else:
-                assert isinstance(p, SymbolType)
+                assert isinstance(p, BaseType)
             new_type = symbol.type().index(p)
             tree.expect(new_type is not None,
                         'type_index_incompatible',

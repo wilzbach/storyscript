@@ -41,17 +41,8 @@
         },
         {
           "$OBJECT": "mutation",
-          "mutation": "substring",
-          "args": [
-            {
-              "$OBJECT": "arg",
-              "name": "start",
-              "arg": {
-                "$OBJECT": "int",
-                "int": 1
-              }
-            }
-          ]
+          "mutation": "keys",
+          "args": []
         }
       ],
       "next": "2"
@@ -71,7 +62,7 @@
         }
       ],
       "enter": "3",
-      "src": "foreach obj substring start:1 as item",
+      "src": "foreach obj keys as item",
       "next": "3"
     },
     "3": {

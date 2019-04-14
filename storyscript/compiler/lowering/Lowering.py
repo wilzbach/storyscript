@@ -4,6 +4,7 @@ from enum import Enum
 from lark.lexer import Token
 
 from storyscript.compiler.lowering.Faketree import FakeTree
+from storyscript.compiler.lowering.utils import service_to_mutation
 from storyscript.parser.Tree import Tree
 
 
@@ -101,9 +102,8 @@ class Lowering:
 
             # split services into service calls and mutations
             if entity.data == 'service':
-                entity.data = 'mutation'
                 entity.entity = Tree('entity', [entity.path])
-                entity.service_fragment.data = 'mutation_fragment'
+                service_to_mutation(entity)
 
     @staticmethod
     def is_inline_expression(n):

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 5
+
+2|    b = a contains item: "foo"
+          ^
+
+E0115: Mutation `contains` requires argument `item` to be of `int`, not `string`

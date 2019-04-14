@@ -1,0 +1,33 @@
+{
+  "tree": {
+    "1": {
+      "method": "mutation",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "aa"
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "split",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "by",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "."
+              }
+            }
+          ]
+        }
+      ],
+      "src": "a = \"aa\" split by:\".\""
+    }
+  },
+  "entrypoint": "1"
+}

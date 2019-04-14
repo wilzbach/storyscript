@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
 
-from .symbols.SymbolTypes import NoneType
+from storyscript.compiler.semantics.types.Types import NoneType
+
 from .symbols.Symbols import Symbol
 
 

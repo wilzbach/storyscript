@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-
+from storyscript.compiler.lowering.utils import service_to_mutation
+from storyscript.compiler.semantics.types.Types import AnyType, NoneType
 from storyscript.parser import Tree
 
 from .ExpressionResolver import ExpressionResolver
-from .FunctionTable import FunctionTable
 from .PathResolver import PathResolver
 from .ReturnVisitor import ReturnVisitor
 from .SymbolResolver import SymbolResolver
+from .functions.FunctionTable import FunctionTable
+from .functions.MutationTable import MutationTable
 from .symbols.Scope import Scope
-from .symbols.SymbolTypes import AnyType, NoneType
 from .symbols.Symbols import Symbol
 
 
@@ -34,9 +35,11 @@ class TypeResolver(ScopeSelectiveVisitor):
     def __init__(self):
         self.symbol_resolver = SymbolResolver(scope=None)
         self.function_table = FunctionTable()
+        self.mutation_table = MutationTable.init()
         self.resolver = ExpressionResolver(
             symbol_resolver=self.symbol_resolver,
             function_table=self.function_table,
+            mutation_table=self.mutation_table,
         )
         self.path_symbol_resolver = SymbolResolver(
             scope=None, check_variable_existence=False)
@@ -135,6 +138,15 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.in_when_block = False
 
     def service_block(self, tree, scope):
+        service_name = tree.service.path.child(0).value
+        name = scope.resolve(service_name)
+        if name is not None:
+            tree.expect(tree.service.service_fragment.output is None,
+                        'mutation_nested')
+            tree.expect(tree.nested_block is None, 'mutation_nested')
+            service_to_mutation(tree.service)
+            return
+
         tree.scope = Scope(parent=scope)
         self.symbol_resolver.update_scope(tree.scope)
 
@@ -202,7 +214,8 @@ class TypeResolver(ScopeSelectiveVisitor):
         scope, return_type = self.function_statement(tree.function_statement,
                                                      scope)
         self.visit_children(tree.nested_block, scope=scope)
-        ReturnVisitor.check(tree, scope, return_type, self.function_table)
+        ReturnVisitor.check(tree, scope, return_type, self.function_table,
+                            self.mutation_table)
 
     def function_statement(self, tree, scope):
         """

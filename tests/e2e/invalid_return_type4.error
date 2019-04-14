@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 27
+
+1|    function foo returns List[]
+                                ^
+
+E0041: `]` is not allowed here

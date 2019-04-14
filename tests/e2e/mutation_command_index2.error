@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 13
+
+2|    b = a values[a]
+                  ^
+
+E0041: `[` is not allowed here

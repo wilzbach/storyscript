@@ -146,11 +146,7 @@ class JSONCompiler:
         """
         Compiles a service tree.
         """
-        service_name = self.objects.names(tree.path)
-        if service_name in self.lines.variables:
-            tree.service_fragment.data = 'mutation_fragment'
-            self.mutation_block(tree, parent)
-            return
+        assert tree.data == 'service'
         line = tree.line()
         command = tree.service_fragment.command
         tree.expect(command is not None, 'service_without_command')
@@ -329,6 +325,10 @@ class JSONCompiler:
         """
         Compiles a service block and the eventual nested block.
         """
+        mut = tree.mutation
+        if mut is not None:
+            return self.mutation_block(mut, parent=parent)
+
         self.service(tree.service, tree.nested_block, parent)
         if tree.nested_block:
             self.subtree(tree.nested_block, parent=tree.line())

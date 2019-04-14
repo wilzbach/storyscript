@@ -15,7 +15,7 @@ def singleton(fn):
     return wrapped
 
 
-class SymbolType:
+class BaseType:
     """
     Base class of a type.
     """
@@ -40,7 +40,7 @@ class SymbolType:
         return None
 
 
-class BooleanType(SymbolType):
+class BooleanType(BaseType):
     """
     Represents an boolean.
     """
@@ -62,7 +62,7 @@ class BooleanType(SymbolType):
         return BooleanType()
 
 
-class NoneType(SymbolType):
+class NoneType(BaseType):
     """
     Represents an none-representable type
     """
@@ -92,7 +92,7 @@ class NoneType(SymbolType):
         return NoneType()
 
 
-class IntType(SymbolType):
+class IntType(BaseType):
     """
     Represents an integer.
     """
@@ -125,7 +125,7 @@ class IntType(SymbolType):
         return IntType()
 
 
-class FloatType(SymbolType):
+class FloatType(BaseType):
     """
     Represents a float.
     """
@@ -156,7 +156,7 @@ class FloatType(SymbolType):
         return FloatType()
 
 
-class StringType(SymbolType):
+class StringType(BaseType):
     """
     Represents a string.
     """
@@ -178,7 +178,7 @@ class StringType(SymbolType):
         return StringType()
 
 
-class TimeType(SymbolType):
+class TimeType(BaseType):
     """
     Represents a time duration.
     """
@@ -200,16 +200,16 @@ class TimeType(SymbolType):
         return TimeType()
 
 
-class ListType(SymbolType):
+class ListType(BaseType):
     """
     Represents a list.
     """
     def __init__(self, inner):
-        assert isinstance(inner, SymbolType)
+        assert isinstance(inner, BaseType)
         self.inner = inner
 
     def __str__(self):
-        return f'list[{self.inner}]'
+        return f'List[{self.inner}]'
 
     def __eq__(self, other):
         return isinstance(other, ListType) and \
@@ -235,26 +235,26 @@ class ListType(SymbolType):
         return IntType.instance(), self.inner
 
 
-class ObjectType(SymbolType):
+class MapType(BaseType):
     """
     Represents an object
     """
     def __init__(self, key, value):
-        assert isinstance(key, SymbolType)
-        assert isinstance(value, SymbolType)
+        assert isinstance(key, BaseType)
+        assert isinstance(value, BaseType)
         self.key = key
         self.value = value
 
     def __str__(self):
-        return f'map[{self.key},{self.value}]'
+        return f'Map[{self.key},{self.value}]'
 
     def __eq__(self, other):
-        return isinstance(other, ObjectType) and \
-            self.key == other.key and \
-            self.value == other.value
+        return isinstance(other, MapType) and \
+               self.key == other.key and \
+               self.value == other.value
 
     def can_be_assigned(self, other):
-        if not isinstance(other, ObjectType):
+        if not isinstance(other, MapType):
             return False
         key_res = self.key.can_be_assigned(other.key)
         val_res = self.value.can_be_assigned(other.value)
@@ -274,7 +274,7 @@ class ObjectType(SymbolType):
         return self.key, self.value
 
 
-class AnyType(SymbolType):
+class AnyType(BaseType):
     """
     Represents any possible type.
     """

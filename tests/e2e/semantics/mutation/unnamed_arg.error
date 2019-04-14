@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 9
+
+1|    b = [0] contains :1
+              ^^^^^^^^
+
+E0118: Mutation `contains` requires arguments to be named

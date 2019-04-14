@@ -108,7 +108,7 @@
       ],
       "function": "e",
       "enter": "10",
-      "src": "function e returns list[int]",
+      "src": "function e returns List[int]",
       "next": "10"
     },
     "10": {

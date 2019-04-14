@@ -1,4 +1,4 @@
-function foo returns list[list[int]]
+function foo returns List[List[int]]
 	return [["foo"]]
 
 a = foo()

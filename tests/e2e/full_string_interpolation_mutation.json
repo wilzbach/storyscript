@@ -30,7 +30,7 @@
         },
         {
           "$OBJECT": "mutation",
-          "mutation": "my_mutation",
+          "mutation": "increment",
           "args": []
         }
       ],
@@ -60,7 +60,7 @@
           ]
         }
       ],
-      "src": "a = \"foo{bar my_mutation}\""
+      "src": "a = \"foo{bar increment}\""
     }
   },
   "entrypoint": "1"

@@ -3,4 +3,4 @@ Error: syntax error in story at line 5, column 5
 5|    e = d + 1
           ^
 
-E0103: `list[map[string,list[list[int]]]]` is not compatible with `int`
+E0103: `List[Map[string,List[List[int]]]]` is not compatible with `int`

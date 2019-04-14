@@ -4,15 +4,20 @@
       "method": "expression",
       "ln": "1",
       "name": [
-        "i"
+        "l"
       ],
       "args": [
         {
-          "$OBJECT": "int",
-          "int": 0
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 0
+            }
+          ]
         }
       ],
-      "src": "i = 0",
+      "src": "l = [0]",
       "next": "2.1"
     },
     "2.1": {
@@ -25,19 +30,19 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "i"
+            "l"
           ]
         },
         {
           "$OBJECT": "mutation",
-          "mutation": "increment",
+          "mutation": "contains",
           "args": [
             {
               "$OBJECT": "arg",
-              "name": "by",
+              "name": "item",
               "arg": {
                 "$OBJECT": "int",
-                "int": 1
+                "int": 0
               }
             }
           ]
@@ -57,7 +62,7 @@
         }
       ],
       "enter": "3",
-      "src": "while i increment by:1",
+      "src": "while l contains item:0",
       "next": "3"
     },
     "3": {

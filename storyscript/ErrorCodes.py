@@ -141,15 +141,23 @@ class ErrorCodes:
     function_not_found = (
         'E0112', 'Function `{name}` has not been declared')
     function_arg_required = (
-        'E0113', 'Function `{name}` requires argument `{arg}`')
+        'E0113', '{fn_type} `{name}` requires argument `{arg}`')
     function_arg_invalid = (
-        'E0114', 'Function `{name}` does not accept argument `{arg}`')
+        'E0114', '{fn_type} `{name}` does not accept argument `{arg}`')
     function_arg_type_mismatch = (
         'E0115',
-        'Function `{name}` requires argument `{arg_name}` to be of '
+        '{fn_type} `{name}` requires argument `{arg_name}` to be of '
         '`{target}`, not `{source}`')
     assignment_type_none = (
         'E0116', 'Assignments with the type `None` are not allowed')
+    mutation_invalid_name = (
+        'E0117', 'Invalid mutation {name}')
+    arg_name_required = (
+        'E0118', '{fn_type} `{name}` requires arguments to be named')
+    mutation_nested = (
+        'E0119', 'Mutations can\'t have nested blocks.')
+    mutation_output = (
+        'E0120', 'Mutations can\'t have outputs.')
 
     @staticmethod
     def is_error(error_name):
