@@ -105,6 +105,8 @@ class ErrorCodes:
     expected_closing_block = (
         'E0076',
         'Unexpected end of line. Maybe close a `}}` or `]` expression?')
+    indentation_error = (
+        'E0077', 'Invalid indentation detected. Did you mix tabs and spaces?')
     type_assignment_different = (
         'E0100', "Can't assign `{source}` to `{target}`")
     var_not_defined = (
