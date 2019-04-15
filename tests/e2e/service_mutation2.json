@@ -45,7 +45,7 @@
               "name": "by",
               "arg": {
                 "$OBJECT": "string",
-                "string": "\\n"
+                "string": "\n"
               }
             }
           ]

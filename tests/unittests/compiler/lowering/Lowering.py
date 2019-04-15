@@ -415,3 +415,32 @@ def test_objects_flatten_template_escapes4(patch, tree):
         {'$OBJECT': 'code', 'code': '\\'},
         flatten_to_string('\\')
     ]
+
+
+def test_objects_flatten_template_escapes_newlines(patch, tree):
+    result = list(Lowering.flatten_template(tree, r'\n\n'))
+    assert result == [
+        flatten_to_string('\n\n'),
+    ]
+
+
+def test_objects_flatten_template_escapes_uni(patch, tree):
+    result = list(Lowering.flatten_template(tree, r'\x42\t\u1212'))
+    assert result == [
+        flatten_to_string('\x42\t\u1212'),
+    ]
+
+
+def test_objects_flatten_template_escapes_uni2(patch, tree):
+    result = list(Lowering.flatten_template(tree, r'\U0001F600'))
+    assert result == [
+        flatten_to_string('\U0001F600'),
+    ]
+
+
+def test_objects_flatten_template_escapes_uni3(patch, tree):
+    result = list(Lowering.flatten_template(tree,
+                                            r'\N{LATIN CAPITAL LETTER A}'))
+    assert result == [
+        flatten_to_string('A'),
+    ]

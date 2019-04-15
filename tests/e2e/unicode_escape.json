@@ -1,0 +1,649 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "x"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "src": "x = 1",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "&"
+        }
+      ],
+      "src": "a = \"\\x26\"",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "&"
+        }
+      ],
+      "src": "b = \"\\u0026\"",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "\ud83d\ude00"
+        }
+      ],
+      "src": "c = '\\U0001F600'",
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "\t"
+        }
+      ],
+      "src": "d = \"\\t\"",
+      "next": "7"
+    },
+    "7": {
+      "method": "expression",
+      "ln": "7",
+      "name": [
+        "d2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "\t"
+        }
+      ],
+      "src": "d2 = '\\t'",
+      "next": "8"
+    },
+    "8": {
+      "method": "expression",
+      "ln": "8",
+      "name": [
+        "e"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "\n"
+        }
+      ],
+      "src": "e = '\\n'",
+      "next": "9"
+    },
+    "9": {
+      "method": "expression",
+      "ln": "9",
+      "name": [
+        "e2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "\n"
+        }
+      ],
+      "src": "e2 = \"\\n\"",
+      "next": "10"
+    },
+    "10": {
+      "method": "expression",
+      "ln": "10",
+      "name": [
+        "f"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "\r"
+        }
+      ],
+      "src": "f = '\\r'",
+      "next": "11"
+    },
+    "11": {
+      "method": "expression",
+      "ln": "11",
+      "name": [
+        "g"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "&"
+        }
+      ],
+      "src": "g = \"\\N{AMPERSAND}\"",
+      "next": "13"
+    },
+    "13": {
+      "method": "expression",
+      "ln": "13",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "&"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "a = \"\\x26{x}\"",
+      "next": "14"
+    },
+    "14": {
+      "method": "expression",
+      "ln": "14",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "&"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "b = \"\\u0026{x}\"",
+      "next": "15"
+    },
+    "15": {
+      "method": "expression",
+      "ln": "15",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "\ud83d\ude00"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "c = '\\U0001F600{x}'",
+      "next": "16"
+    },
+    "16": {
+      "method": "expression",
+      "ln": "16",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "\t"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "d = \"\\t{x}\"",
+      "next": "17"
+    },
+    "17": {
+      "method": "expression",
+      "ln": "17",
+      "name": [
+        "d2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "\t"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "d2 = '\\t{x}'",
+      "next": "18"
+    },
+    "18": {
+      "method": "expression",
+      "ln": "18",
+      "name": [
+        "e"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "\n"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "e = '\\n{x}'",
+      "next": "19"
+    },
+    "19": {
+      "method": "expression",
+      "ln": "19",
+      "name": [
+        "e2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "\n"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "e2 = \"\\n{x}\"",
+      "next": "20"
+    },
+    "20": {
+      "method": "expression",
+      "ln": "20",
+      "name": [
+        "f"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "\r"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "f = '\\r{x}'",
+      "next": "21"
+    },
+    "21": {
+      "method": "expression",
+      "ln": "21",
+      "name": [
+        "g"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "&"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "g = \"\\N{AMPERSAND}{x}\"",
+      "next": "23"
+    },
+    "23": {
+      "method": "expression",
+      "ln": "23",
+      "name": [
+        "t1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "\u0007"
+        }
+      ],
+      "src": "t1 = '\\a'",
+      "next": "24"
+    },
+    "24": {
+      "method": "expression",
+      "ln": "24",
+      "name": [
+        "t2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "\b"
+        }
+      ],
+      "src": "t2 = '\\b'",
+      "next": "25"
+    },
+    "25": {
+      "method": "expression",
+      "ln": "25",
+      "name": [
+        "t3"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "\f"
+        }
+      ],
+      "src": "t3 = '\\f'",
+      "next": "26"
+    },
+    "26": {
+      "method": "expression",
+      "ln": "26",
+      "name": [
+        "t4"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "\u000b"
+        }
+      ],
+      "src": "t4 = '\\v'",
+      "next": "27"
+    },
+    "27": {
+      "method": "expression",
+      "ln": "27",
+      "name": [
+        "t5"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "&"
+        }
+      ],
+      "src": "t5 = '\\046'",
+      "next": "28"
+    },
+    "28": {
+      "method": "expression",
+      "ln": "28",
+      "name": [
+        "t6"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "S"
+        }
+      ],
+      "src": "t6 = '\\123'",
+      "next": "30"
+    },
+    "30": {
+      "method": "expression",
+      "ln": "30",
+      "name": [
+        "t1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "\u0007"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "t1 = '\\a{x}'",
+      "next": "31"
+    },
+    "31": {
+      "method": "expression",
+      "ln": "31",
+      "name": [
+        "t2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "\b"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "t2 = '\\b{x}'",
+      "next": "32"
+    },
+    "32": {
+      "method": "expression",
+      "ln": "32",
+      "name": [
+        "t3"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "\f"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "t3 = '\\f{x}'",
+      "next": "33"
+    },
+    "33": {
+      "method": "expression",
+      "ln": "33",
+      "name": [
+        "t4"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "\u000b"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "t4 = '\\v{x}'",
+      "next": "34"
+    },
+    "34": {
+      "method": "expression",
+      "ln": "34",
+      "name": [
+        "t5"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "&"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "t5 = '\\046{x}'",
+      "next": "35"
+    },
+    "35": {
+      "method": "expression",
+      "ln": "35",
+      "name": [
+        "t6"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "string",
+              "string": "S"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "x"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "t6 = '\\123{x}'"
+    }
+  },
+  "entrypoint": "1"
+}

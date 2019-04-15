@@ -9,7 +9,7 @@
       "args": [
         {
           "$OBJECT": "string",
-          "string": "\\{\\}"
+          "string": "{}"
         }
       ],
       "src": "hello = \"\\{\\}\"",
@@ -24,7 +24,7 @@
       "args": [
         {
           "$OBJECT": "string",
-          "string": "\\{\\}"
+          "string": "{}"
         }
       ],
       "src": "hello = '\\{\\}'"

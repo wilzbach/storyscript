@@ -1,8 +1,16 @@
 # -*- coding: utf-8 -*-
+from enum import Enum
+
 from lark.lexer import Token
 
 from storyscript.compiler.lowering.Faketree import FakeTree
 from storyscript.parser.Tree import Tree
+
+
+class UnicodeNameDecodeState(Enum):
+    No = 0  # no unicode decode
+    Start = 1  # beginning
+    Running = 2  # after '{'
 
 
 class Lowering:
@@ -165,6 +173,16 @@ class Lowering:
         ])
 
     @classmethod
+    def unicode_escape(cls, tree, text):
+        """
+        Evaluates unicode escape codes like \n or \x12
+        """
+        try:
+            return bytes(text, 'utf-8').decode('unicode_escape')
+        except UnicodeError as e:
+            tree.expect(0, 'unicode_decode_error', reason=e.reason)
+
+    @classmethod
     def flatten_template(cls, tree, text):
         """
         Flattens a string template into concatenation
@@ -173,27 +191,50 @@ class Lowering:
         preceding_slash = False
         # indicates whether we're inside of a string template
         inside_interpolation = False
+        inside_unicode = UnicodeNameDecodeState.No
         buf = ''
         for c in text:
             if preceding_slash:
-                buf = f'{buf[:-1]}{c}'
+                if c == '{' or c == '}' or c == '\'' or c == '"':
+                    # custom escapes
+                    buf = f'{buf[:-1]}{c}'
+                else:
+                    if c == 'N':
+                        # start unicode escaped name sequence
+                        inside_unicode = UnicodeNameDecodeState.Start
+                    buf += c
                 preceding_slash = False
             else:
-                if inside_interpolation:
+                if inside_unicode != UnicodeNameDecodeState.No:
+                    if c == '{':
+                        inside_unicode = UnicodeNameDecodeState.Running
+                    tree.expect(inside_unicode ==
+                                UnicodeNameDecodeState.Running,
+                                'string_templates_nested')
+                    if c == '}':
+                        inside_unicode = UnicodeNameDecodeState.No
+                    buf += c
+                elif inside_interpolation:
                     if c == '}':
                         # end string interpolation
                         inside_interpolation = False
                         tree.expect(len(buf) > 0, 'string_templates_empty')
-                        yield {'$OBJECT': 'code', 'code': buf}
+                        yield {
+                            '$OBJECT': 'code',
+                            'code': cls.unicode_escape(tree, buf)
+                        }
                         buf = ''
                     else:
                         tree.expect(c != '{', 'string_templates_nested')
                         buf += c
                 elif c == '{':
-                    # string interpolation might be the start of the string:
+                    # string interpolation might be the start of the string.
                     # example: "{..}"
                     if len(buf) > 0:
-                        yield {'$OBJECT': 'string', 'string': buf}
+                        yield {
+                            '$OBJECT': 'string',
+                            'string': cls.unicode_escape(tree, buf)
+                        }
                         buf = ''
                     inside_interpolation = True
                 elif c == '}':
@@ -205,7 +246,10 @@ class Lowering:
         # emit remaining string in the buffer
         tree.expect(not inside_interpolation, 'string_templates_unclosed')
         if len(buf) > 0:
-            yield {'$OBJECT': 'string', 'string': buf}
+            yield {
+                '$OBJECT': 'string',
+                'string': cls.unicode_escape(tree, buf)
+            }
 
     def eval(self, orig_node, code_string, fake_tree):
         """
@@ -359,7 +403,8 @@ class Lowering:
 
         # is plain string without string templates?
         if len(string_objs) == 1 and string_objs[0]['$OBJECT'] == 'string':
-            # no AST modifications required
+            string_node.child(0).value = string_objs[0]['string']
+            # no further AST modifications required
             return
 
         fake_tree = self.fake_tree(block)
