@@ -9,7 +9,7 @@
       "args": [
         {
           "$OBJECT": "string",
-          "string": "b.\\n.\\\\.\\'.c"
+          "string": "b.\n.\\.'.c"
         }
       ],
       "src": "a = 'b.\\n.\\\\.\\'.c'",
@@ -24,7 +24,7 @@
       "args": [
         {
           "$OBJECT": "string",
-          "string": "b.\\n.\\\\.\\\".c"
+          "string": "b.\n.\\.\".c"
         }
       ],
       "src": "b = \"b.\\n.\\\\.\\\".c\""

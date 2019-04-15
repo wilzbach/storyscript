@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = "\N{FOO BAR}"
+          ^^^^^^^^^^^^^
+
+E0074: Unicode decode error: unknown Unicode character name.

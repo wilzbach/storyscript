@@ -8,11 +8,11 @@
       ],
       "args": [
         {
-          "$OBJECT": "string",
-          "string": "'\""
+          "$OBJECT": "int",
+          "int": 1
         }
       ],
-      "src": "a = \"\\'\\\"\"",
+      "src": "a = 1",
       "next": "2"
     },
     "2": {
@@ -23,18 +23,18 @@
       ],
       "args": [
         {
-          "$OBJECT": "string",
-          "string": "'\"{"
+          "$OBJECT": "int",
+          "int": 2
         }
       ],
-      "src": "b = '\\'\\\"\\{'",
+      "src": "b = 2",
       "next": "3"
     },
     "3": {
       "method": "expression",
       "ln": "3",
       "name": [
-        "c"
+        "name"
       ],
       "args": [
         {
@@ -43,7 +43,7 @@
           "values": [
             {
               "$OBJECT": "string",
-              "string": "a{a}"
+              "string": "New Storyscript release - "
             },
             {
               "$OBJECT": "path",
@@ -53,12 +53,22 @@
             },
             {
               "$OBJECT": "string",
-              "string": "a"
+              "string": "\n\n"
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": "\\"
             }
           ]
         }
       ],
-      "src": "c = \"a\\{a\\}{a}a\""
+      "src": "name = \"New Storyscript release - {a}\\n\\n{b}\\\\\""
     }
   },
   "entrypoint": "1"
