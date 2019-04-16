@@ -1,0 +1,50 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "body"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": ""
+        }
+      ],
+      "src": "body = \"\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "service": "my_service",
+      "command": "command",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": ""
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "body",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "body"
+            ]
+          }
+        }
+      ],
+      "src": "my_service command msg:\"\" :body"
+    }
+  },
+  "services": [
+    "my_service"
+  ],
+  "entrypoint": "1"
+}

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 5, column 1
+
+5|    test(:arg + 2)
+      ^^^^^^^^^
+
+E0118: Function `test` requires arguments to be named

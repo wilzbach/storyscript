@@ -1,0 +1,56 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "item"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "src": "item = 0",
+      "next": "2"
+    },
+    "2": {
+      "method": "mutation",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 0
+            },
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "contains",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "path",
+                "paths": [
+                  "item"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "src": "[0, 1] contains :item"
+    }
+  },
+  "entrypoint": "1"
+}

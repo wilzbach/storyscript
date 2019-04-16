@@ -1,0 +1,116 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "function": "test",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "a1",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "a2",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": "4",
+      "src": "function test a1:int a2:int",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "parent": "1",
+      "src": "\treturn",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "a1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "src": "a1 = 0",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "a2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "src": "a2 = 0",
+      "next": "6.1"
+    },
+    "6.1": {
+      "method": "call",
+      "ln": "6.1",
+      "name": [
+        "__p-6.1"
+      ],
+      "function": "test",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "a1",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "a1"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "a2",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "a2"
+            ]
+          }
+        }
+      ],
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-6.1"
+          ]
+        }
+      ],
+      "src": "test(:a1 :a2)"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "test": "1"
+  }
+}

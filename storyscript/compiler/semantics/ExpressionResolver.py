@@ -314,8 +314,7 @@ class ExpressionResolver:
     def build_arguments(self, tree, name, fn_type):
         args = {}
         for c in tree.children[1:]:
-            assert len(c.children) >= 2
-            tree.expect(not isinstance(c.child(0), Tree), 'arg_name_required',
+            tree.expect(len(c.children) >= 2, 'arg_name_required',
                         fn_type=fn_type, name=name)
             name = c.child(0)
             type_ = self.expression(c.child(1))
