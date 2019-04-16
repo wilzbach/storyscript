@@ -151,7 +151,7 @@ class ErrorCodes:
     assignment_type_none = (
         'E0116', 'Assignments with the type `None` are not allowed')
     mutation_invalid_name = (
-        'E0117', 'Invalid mutation {name}')
+        'E0117', 'Invalid mutation `{name}`')
     arg_name_required = (
         'E0118', '{fn_type} `{name}` requires arguments to be named')
     mutation_nested = (
