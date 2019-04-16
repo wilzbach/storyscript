@@ -1,1 +1,1 @@
-(service foo) (key: 2)
+(my_service foo) (key: 2)

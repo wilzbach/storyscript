@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 1
+
+1|    class = 1
+      ^^^^^
+
+E0030: `class` is reserved for future use

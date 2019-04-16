@@ -21,5 +21,5 @@ regexp = /^foo/
 regexp_flags = /^foo/g
 sum = 3 + 2
 mul = 3 * 2
-service = alpine echo
+my_service = alpine echo
 service_inline = (alpine echo)

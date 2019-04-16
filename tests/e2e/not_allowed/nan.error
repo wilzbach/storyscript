@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = nan
+          ^^^
+
+E0030: `nan` is reserved for future use

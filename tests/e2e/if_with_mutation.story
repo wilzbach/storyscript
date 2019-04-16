@@ -1,7 +1,7 @@
-var = 0
-if var increment
+a = 0
+if a increment
 	x = 0
-else if var decrement
+else if a decrement
 	x = 1
 else
 	x = 2
