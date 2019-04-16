@@ -1,0 +1,78 @@
+from storyscript.compiler.semantics.functions.MutationBuilder import \
+    mutation_builder
+
+mutations = """
+List[A] length -> int
+List[A] append item:A -> List[A]
+List[A] prepend item:A -> List[A]
+List[A] random -> A
+List[A] reverse -> List[A]
+List[A] sort -> List[A]
+List[A] min -> A
+List[A] max -> A
+List[A] sum -> A
+List[A] contains item:A -> A
+List[A] unique -> List[A]
+List[A] remove item:A -> A
+
+Map[K,V] length -> int
+Map[K,V] keys -> List[K]
+Map[K,V] values -> List[V]
+Map[K,V] pop key:K -> V
+Map[K,V] flatten -> List[List[any]]
+Map[K,V] contains key:K -> boolean
+
+string length -> int
+string replace -> string
+string contains item:string -> boolean
+string split by:string -> List[string]
+string uppercase -> string
+string lowercase -> string
+string capitalize -> string
+
+int is_odd -> boolean
+int is_even -> boolean
+int absolute -> int
+int increment -> int
+int decrement -> int
+
+float round -> int
+float ceil -> int
+float floor -> int
+float sin -> float
+float cos -> float
+float tan -> float
+float asin -> float
+float acos -> float
+float atan -> float
+float log -> float
+float log2 -> float
+float log10 -> float
+float exp -> float
+float abs -> float
+float is_nan -> boolean
+float is_infinity -> boolean
+# approx_equal?
+float sqrt -> float
+"""
+
+
+class Hub:
+    """
+    A representation of a Storyscript Hub. Assumed to be Asyncy Hub for now.
+    """
+    def __init__(self):
+        self._mutations = []
+        for m in mutations.split('\n'):
+            if len(m.strip()) == 0 or m.startswith('#'):
+                continue
+            self._mutations.append(mutation_builder(m))
+
+    def mutations(self):
+        """
+        Return all mutations supported by this hub.
+        """
+        return self._mutations
+
+
+hub = Hub()

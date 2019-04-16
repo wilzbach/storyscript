@@ -44,18 +44,28 @@
       "next": "3"
     },
     "3": {
-      "method": "execute",
+      "method": "mutation",
       "ln": "3",
-      "service": "request",
-      "command": "write",
       "args": [
         {
-          "$OBJECT": "arg",
-          "name": "content",
-          "arg": {
-            "$OBJECT": "string",
-            "string": "Hello world!"
-          }
+          "$OBJECT": "path",
+          "paths": [
+            "request"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "write",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "content",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "Hello world!"
+              }
+            }
+          ]
         }
       ],
       "parent": "2",

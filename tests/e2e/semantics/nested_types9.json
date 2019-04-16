@@ -9,7 +9,7 @@
       "function": "foo",
       "enter": "2",
       "exit": "4",
-      "src": "function foo returns list[list[int]]",
+      "src": "function foo returns List[List[int]]",
       "next": "2"
     },
     "2": {

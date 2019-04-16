@@ -273,6 +273,7 @@ def test_compiler_service(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
     patch.object(JSONCompiler, 'output')
     tree.node.return_value = None
+    tree.data = 'service'
     compiler.service(tree, None, 'parent')
     line = tree.line()
     service = tree.path.extract_path()
@@ -287,6 +288,7 @@ def test_compiler_service(patch, compiler, lines, tree):
 def test_compiler_service_command(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
     patch.object(JSONCompiler, 'output')
+    tree.data = 'service'
     compiler.service(tree, None, 'parent')
     line = tree.line()
     service = tree.path.extract_path()
@@ -302,6 +304,7 @@ def test_compiler_service_nested_block(patch, magic, compiler, lines, tree):
     patch.object(JSONCompiler, 'output')
     tree.node.return_value = None
     nested_block = magic()
+    tree.data = 'service'
     compiler.service(tree, nested_block, 'parent')
     line = tree.line()
     service = tree.path.extract_path()
@@ -315,21 +318,9 @@ def test_compiler_service_no_output(patch, compiler, lines, tree):
     patch.object(Objects, 'arguments')
     patch.object(JSONCompiler, 'output')
     JSONCompiler.output.return_value = None
+    tree.data = 'service'
     compiler.service(tree, None, 'parent')
     assert lines.set_output.call_count == 0
-
-
-def test_compiler_service_expressions(patch, compiler, lines, tree):
-    """
-    Ensures service trees that are infact mutations on paths are compiled
-    correctly
-    """
-    patch.object(Objects, 'names', return_value='x')
-    patch.object(JSONCompiler, 'mutation_block')
-    lines.variables = ['x']
-    compiler.service(tree, None, 'parent')
-    Objects.names.assert_called_with(tree.path)
-    JSONCompiler.mutation_block.assert_called_with(tree, 'parent')
 
 
 def test_compiler_service_syntax_error(patch, compiler, lines, tree):
@@ -337,6 +328,7 @@ def test_compiler_service_syntax_error(patch, compiler, lines, tree):
     patch.object(JSONCompiler, 'output')
     patch.object(StorySyntaxError, 'tree_position')
     lines.execute.side_effect = StorySyntaxError('error')
+    tree.data = 'service'
     with raises(StorySyntaxError):
         compiler.service(tree, None, 'parent')
     StorySyntaxError.tree_position.assert_called_with(tree)
@@ -699,14 +691,25 @@ def test_compiler_indented_chain_not_mutation(patch, compiler, lines, tree):
 def test_compiler_service_block(patch, compiler, tree):
     patch.object(JSONCompiler, 'service')
     tree.node.return_value = None
+    tree.mutation = None
     compiler.service_block(tree, '1')
     compiler.service.assert_called_with(tree.service, tree.nested_block, '1')
 
 
 def test_compiler_service_block_nested_block(patch, compiler, tree):
     patch.many(JSONCompiler, ['subtree', 'service'])
+    tree.mutation = None
     compiler.service_block(tree, '1')
     compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+
+
+def test_compiler_service_block_mutation(patch, compiler, tree):
+    patch.many(JSONCompiler, ['subtree', 'service', 'mutation_block'])
+    compiler.service_block(tree, '1')
+    compiler.mutation_block.assert_called_with(tree.mutation,
+                                               parent='1')
+    compiler.subtree.assert_not_called()
+    compiler.service.assert_not_called()
 
 
 def test_compiler_when_block(patch, compiler, tree):

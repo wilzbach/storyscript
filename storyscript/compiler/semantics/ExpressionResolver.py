@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-
+from storyscript.compiler.lowering.utils import service_to_mutation
+from storyscript.compiler.semantics.types.Types import AnyType, BooleanType, \
+    FloatType, IntType, ListType, MapType, StringType, TimeType
 from storyscript.compiler.visitors.ExpressionVisitor import ExpressionVisitor
+from storyscript.exceptions import CompilerError
 from storyscript.parser import Tree
 
 from .PathResolver import PathResolver
-from .symbols.SymbolTypes import AnyType, BooleanType, \
-    FloatType, IntType, ListType, ObjectType, StringType, TimeType
 from .symbols.Symbols import Symbol
 
 
@@ -62,11 +63,12 @@ class SymbolExpressionVisitor(ExpressionVisitor):
 
 class ExpressionResolver:
 
-    def __init__(self, symbol_resolver, function_table):
+    def __init__(self, symbol_resolver, function_table, mutation_table):
         self.expr_visitor = SymbolExpressionVisitor(self)
         # how to resolve existing symbols
         self.path_resolver = PathResolver(symbol_resolver=symbol_resolver)
         self.function_table = function_table
+        self.mutation_table = mutation_table
 
     def path(self, tree):
         assert tree.data == 'path'
@@ -153,7 +155,7 @@ class ExpressionResolver:
             key = AnyType.instance()
         if value is None:
             value = AnyType.instance()
-        return ObjectType(key, value)
+        return MapType(key, value)
 
     def regular_expression(self, tree):
         """
@@ -183,7 +185,7 @@ class ExpressionResolver:
         assert tree.data == 'map_type'
         key_type = self.base_type(tree.child(0))
         value_type = self.types(tree.child(1))
-        return ObjectType(key_type, value_type)
+        return MapType(key_type, value_type)
 
     def list_type(self, tree):
         """
@@ -209,7 +211,7 @@ class ExpressionResolver:
         elif tok.type == 'ANY_TYPE':
             return AnyType.instance()
         elif tok.type == 'OBJECT_TYPE':
-            return ObjectType(AnyType.instance(), AnyType.instance())
+            return MapType(AnyType.instance(), AnyType.instance())
         elif tok.type == 'FUNCTION_TYPE':
             return AnyType.instance()
         elif tok.type == 'TIME_TYPE':
@@ -253,6 +255,60 @@ class ExpressionResolver:
         assert tree.child(0).data == 'or_expression'
         return self.expr_visitor.expression(tree)
 
+    def build_arguments(self, tree, name, fn_type):
+        args = {}
+        for c in tree.children[1:]:
+            assert len(c.children) >= 2
+            tree.expect(not isinstance(c.child(0), Tree), 'arg_name_required',
+                        fn_type=fn_type, name=name)
+            name = c.child(0)
+            type_ = self.expression(c.child(1))
+            sym = Symbol.from_path(name, type_)
+            args[sym.name()] = sym
+        return args
+
+    def path_resolve_only_name(self, tree, fn_type):
+        """
+        Resolves only the first argument of a path.
+        Errors if the path contains more children.
+        """
+        names = tree.children
+        tree.expect(len(names) == 1, 'function_call_invalid_path',
+                    fn_type=fn_type)
+        return names[0].value
+
+    def resolve_mutation(self, t, tree):
+        """
+        Resolve a mutation of t with the MutationTable, instantiate it and
+        check the caller arguments.
+        """
+        # a mutation on 'any' returns 'any'
+        if t == AnyType.instance():
+            return t
+
+        name = tree.mutation_fragment.child(0).value
+        m = self.mutation_table.resolve(t, name)
+        tree.expect(m is not None, 'mutation_invalid_name', name=name)
+        m = m.instantiate(t)
+        args = self.build_arguments(tree.mutation_fragment, name,
+                                    fn_type='Mutation')
+        m.check_call(tree, args)
+        return m.output()
+
+    def resolve_function(self, tree):
+        """
+        Resolve a function with the FunctionTable and
+        check the caller arguments.
+        """
+        tree.expect(tree.path.inline_expression is None,
+                    'function_call_no_inline_expression')
+        name = self.path_resolve_only_name(tree.path, fn_type='Function')
+        fn = self.function_table.resolve(name)
+        tree.expect(fn is not None, 'function_not_found', name=name)
+        args = self.build_arguments(tree, name, fn_type='Function')
+        fn.check_call(tree, args)
+        return fn.output()
+
     def base_expression(self, tree):
         """
         Compiles an soon to be expression object with the given tree.
@@ -266,26 +322,26 @@ class ExpressionResolver:
             if child.service_fragment.output is not None:
                 child.service_fragment.output.expect(
                     0, 'service_no_inline_output')
-            return AnyType.instance()
+            try:
+                # check whether variable exists
+                t = self.path(child.path)
+                service_to_mutation(child)
+                return self.resolve_mutation(t, child)
+            except CompilerError as e:
+                # ignore only invalid variables (must be services)
+                if e.error == 'var_not_defined':
+                    return AnyType.instance()
+                raise e
         elif child.data == 'mutation':
-            # unknown for now
-            return AnyType.instance()
+            if child.path:
+                t = self.path(child.path)
+            else:
+                t = self.expr_visitor.primary_expression(
+                    child.primary_expression
+                )
+            return self.resolve_mutation(t, child)
         elif child.data == 'call_expression':
-            tree.expect(child.path.inline_expression is None,
-                        'function_call_no_inline_expression')
-            names = child.path.children
-            tree.expect(len(names) == 1, 'function_call_invalid_path')
-            name = names[0].value
-            fn = self.function_table.resolve(name)
-            tree.expect(fn is not None, 'function_not_found', name=name)
-            args = {}
-            for c in child.children[1:]:
-                name = c.child(0)
-                type_ = self.expression(c.child(1))
-                sym = Symbol.from_path(name, type_)
-                args[sym.name()] = sym
-            fn.check_call(child, args)
-            return fn.output()
+            return self.resolve_function(child)
         else:
             assert child.data == 'path'
             return self.path(child)

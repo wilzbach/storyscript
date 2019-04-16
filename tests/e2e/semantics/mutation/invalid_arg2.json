@@ -1,0 +1,28 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "name": [
+        "b"
+      ],
+      "service": "a",
+      "command": "increment",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "by",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 1
+          }
+        }
+      ],
+      "src": "b = a increment by:1"
+    }
+  },
+  "services": [
+    "a"
+  ],
+  "entrypoint": "1"
+}

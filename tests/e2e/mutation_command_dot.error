@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 8
+
+2|    b = a a.values
+             ^
+
+E0041: `.` is not allowed here

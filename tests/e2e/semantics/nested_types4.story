@@ -1,4 +1,4 @@
-function foo returns map[string,list[string]]
+function foo returns Map[string,List[string]]
 	return {20: ["foo", "bar"]}
 
 a = foo()

@@ -3,4 +3,4 @@ Error: syntax error in story at line 2, column 10
 2|      return {20: ["foo", "bar"]}
                 ^^
 
-E0102: `map[int,list[string]]` can't be implicitly converted to expected return type `map[int,list[int]]`.
+E0102: `Map[int,List[string]]` can't be implicitly converted to expected return type `Map[int,List[int]]`.

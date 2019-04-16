@@ -3,9 +3,9 @@ from lark.lexer import Token
 
 from pytest import mark
 
-from storyscript.compiler.semantics.symbols.SymbolTypes import AnyType, \
-    BooleanType, FloatType, IntType, ListType, NoneType, \
-    ObjectType, StringType, singleton
+from storyscript.compiler.semantics.types.Types import AnyType, \
+    BooleanType, FloatType, IntType, ListType, MapType, \
+    NoneType, StringType, singleton
 
 
 def test_singleton():
@@ -27,9 +27,9 @@ def test_singleton():
     (FloatType.instance(), 'float'),
     (NoneType.instance(), 'none'),
     (AnyType.instance(), 'any'),
-    (ListType(AnyType.instance()), 'list[any]'),
-    (ObjectType(IntType.instance(), StringType.instance()),
-        'map[int,string]'),
+    (ListType(AnyType.instance()), 'List[any]'),
+    (MapType(IntType.instance(), StringType.instance()),
+        'Map[int,string]'),
 ])
 def test_boolean_str(type_, expected):
     assert str(type_) == expected

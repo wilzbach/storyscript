@@ -1,6 +1,5 @@
+from storyscript.compiler.semantics.types.Types import IntType, StringType
 from storyscript.parser import Tree
-
-from .symbols.SymbolTypes import IntType, StringType
 
 
 class PathResolver:

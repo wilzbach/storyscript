@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from storyscript.compiler.semantics.symbols.SymbolTypes import IntType, \
-    StringType
 from storyscript.compiler.semantics.symbols.Symbols import Symbol, Symbols
+from storyscript.compiler.semantics.types.Types import IntType, \
+    StringType
 
 
 def test_symbol_pretty_int():

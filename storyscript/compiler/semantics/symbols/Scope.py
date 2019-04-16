@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from .SymbolTypes import AnyType
+from storyscript.compiler.semantics.types.Types import AnyType
+
 from .Symbols import Symbol, Symbols
 
 
