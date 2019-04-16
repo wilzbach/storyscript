@@ -24,7 +24,10 @@ class Bundle:
         """
         command = ['git', 'ls-files', '--others', '--ignored',
                    '--exclude-standard']
-        p = subprocess.run(command, stdout=subprocess.PIPE, encoding='utf8')
+        p = subprocess.run(command,
+                           stdout=subprocess.PIPE,
+                           stderr=subprocess.DEVNULL,
+                           encoding='utf8')
         if p.returncode != 0:
             return []
         return p.stdout.split('\n')

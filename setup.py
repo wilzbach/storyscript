@@ -70,9 +70,10 @@ def prepare_release(cwd, use_release):
         version_text = release_version
     else:
         version_text = version
-    print(f'writing version({version_text}) -> {version_file}')
-    with open(version_file, 'w') as f:
-        f.write(version_text)
+    if path.isdir(path.dirname(version_file)):
+        print(f'writing version({version_text}) -> {version_file}')
+        with open(version_file, 'w') as f:
+            f.write(version_text)
 
 
 class Install(_install):
