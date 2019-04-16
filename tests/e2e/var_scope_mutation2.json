@@ -1,0 +1,50 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "my_service"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            }
+          ]
+        }
+      ],
+      "src": "my_service = [1, 2]",
+      "next": "2"
+    },
+    "2": {
+      "method": "mutation",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "my_service"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "length",
+          "args": []
+        }
+      ],
+      "src": "a = my_service length"
+    }
+  },
+  "entrypoint": "1"
+}
