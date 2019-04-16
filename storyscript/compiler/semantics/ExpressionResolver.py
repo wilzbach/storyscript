@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from storyscript.compiler.lowering.utils import service_to_mutation
 from storyscript.compiler.semantics.types.Types import AnyType, BooleanType, \
-    FloatType, IntType, ListType, MapType, StringType, TimeType
+    FloatType, IntType, ListType, MapType, RegExpType, StringType, TimeType
 from storyscript.compiler.visitors.ExpressionVisitor import ExpressionVisitor
 from storyscript.exceptions import CompilerError
 from storyscript.parser import Tree
@@ -162,7 +162,7 @@ class ExpressionResolver:
         Compiles a regexp object from a regular_expression tree
         """
         assert tree.data == 'regular_expression'
-        return AnyType.instance()
+        return RegExpType.instance()
 
     def types(self, tree):
         """
@@ -287,12 +287,22 @@ class ExpressionResolver:
             return t
 
         name = tree.mutation_fragment.child(0).value
-        m = self.mutation_table.resolve(t, name)
-        tree.expect(m is not None, 'mutation_invalid_name', name=name)
-        m = m.instantiate(t)
         args = self.build_arguments(tree.mutation_fragment, name,
                                     fn_type='Mutation')
-        m.check_call(tree, args)
+        m = self.mutation_table.resolve(t, name, args.keys())
+        tree.expect(m is not None, 'mutation_invalid_name', name=name)
+        if isinstance(m, list):
+            # multiple overloads, but no exact match
+            overloads = []
+            for me in m:
+                overloads.append(me.instantiate(t).pretty())
+            sep = '\n\t- '
+            overloads = sep + sep.join(overloads)
+            tree.mutation_fragment.expect(0, 'mutation_overload_mismatch',
+                                          name=name,
+                                          overloads=overloads)
+        m = m.instantiate(t)
+        m.check_call(tree.mutation_fragment, args)
         return m.output()
 
     def resolve_function(self, tree):

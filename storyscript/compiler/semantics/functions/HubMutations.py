@@ -24,11 +24,15 @@ Map[K,V] contains key:K -> boolean
 
 string length -> int
 string replace -> string
+string contains pattern:regexp -> boolean
 string contains item:string -> boolean
 string split by:string -> List[string]
 string uppercase -> string
 string lowercase -> string
 string capitalize -> string
+string substring start:int -> string
+string substring start:int end:int -> string
+string substring end:int -> string
 
 int is_odd -> boolean
 int is_even -> boolean
@@ -59,7 +63,8 @@ float sqrt -> float
 
 class Hub:
     """
-    A representation of a Storyscript Hub. Assumed to be Asyncy Hub for now.
+    A representation of a Storyscript Engine and Hub.
+    Assumed to be Asyncy Engine for now.
     """
     def __init__(self):
         self._mutations = []

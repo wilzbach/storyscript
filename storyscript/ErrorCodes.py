@@ -151,13 +151,17 @@ class ErrorCodes:
     assignment_type_none = (
         'E0116', 'Assignments with the type `None` are not allowed')
     mutation_invalid_name = (
-        'E0117', 'Invalid mutation {name}')
+        'E0117', 'Invalid mutation `{name}`')
     arg_name_required = (
         'E0118', '{fn_type} `{name}` requires arguments to be named')
     mutation_nested = (
         'E0119', 'Mutations can\'t have nested blocks.')
     mutation_output = (
         'E0120', 'Mutations can\'t have outputs.')
+    mutation_overload_mismatch = (
+        'E0121', 'Multiple mutation overloads for `{name}` found:'
+        '{overloads}\n'
+        'but none matches.')
 
     @staticmethod
     def is_error(error_name):

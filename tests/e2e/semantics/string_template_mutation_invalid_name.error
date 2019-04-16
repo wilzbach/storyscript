@@ -3,4 +3,4 @@ Error: syntax error in story at line 2, column 7
 2|    a = "foo{b my_mutation}"
             ^
 
-E0117: Invalid mutation my_mutation
+E0117: Invalid mutation `my_mutation`

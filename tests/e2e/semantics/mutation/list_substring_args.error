@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 5
+
+2|    b = a substring start:1
+          ^
+
+E0117: Invalid mutation `substring`
