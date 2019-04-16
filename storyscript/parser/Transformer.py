@@ -15,8 +15,15 @@ class Transformer(LarkTransformer):
     """
     reserved_keywords = ['function', 'if', 'else', 'foreach', 'return',
                          'returns', 'try', 'catch', 'finally', 'when', 'as',
-                         'import', 'while', 'throw']
-    future_reserved_keywords = ['async', 'story', 'assert', 'called', 'mock']
+                         'import', 'while', 'throw', 'null']
+    future_reserved_keywords = [
+        'async', 'story', 'assert', 'called', 'mock', 'class', 'extends',
+        'implements', 'interface', 'type', 'public', 'private', 'protected',
+        'const', 'immutable', 'let', 'var', 'auto', 'immutable', 'switch',
+        'module', 'package', 'final', 'this', 'self', 'case', 'abstract',
+        'static', 'none', 'await', 'service', 'in', 'has', 'not', 'is', 'inf',
+        'nan'
+    ]
 
     @classmethod
     def is_keyword(cls, token):

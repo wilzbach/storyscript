@@ -57,15 +57,15 @@ def test_parser_list_path():
 
 
 @mark.parametrize('code, token', [
-    ('var="hello"\n', Token('DOUBLE_QUOTED', '"hello"')),
-    ('var = "hello"\n', Token('DOUBLE_QUOTED', '"hello"')),
-    ('var=3\n', Token('INT', 3)),
-    ('var = 3\n', Token('INT', 3))
+    ('x="hello"\n', Token('DOUBLE_QUOTED', '"hello"')),
+    ('x = "hello"\n', Token('DOUBLE_QUOTED', '"hello"')),
+    ('x=3\n', Token('INT', 3)),
+    ('x = 3\n', Token('INT', 3))
 ])
 def test_parser_assignment(code, token):
     result = parse(code)
     assignment = result.block.rules.assignment
-    assert assignment.path.child(0) == Token('NAME', 'var')
+    assert assignment.path.child(0) == Token('NAME', 'x')
     assert assignment.assignment_fragment.child(0) == Token('EQUALS', '=')
     expression = assignment.assignment_fragment.base_expression
     entity = get_entity(arith_exp(expression))
@@ -92,7 +92,7 @@ def test_parser_assignment_indented_arguments():
 
 
 def test_parser_foreach_block():
-    result = parse('foreach items as one, two\n\tvar=3\n')
+    result = parse('foreach items as one, two\n\tx=3\n')
     block = result.block.foreach_block
     foreach = block.foreach_statement
     exp = arith_exp(foreach.base_expression)
@@ -104,7 +104,7 @@ def test_parser_foreach_block():
 
 
 def test_parser_while_block():
-    result = parse('while cond\n\tvar=3\n')
+    result = parse('while cond\n\tx=3\n')
     block = result.block.while_block
     exp = arith_exp(block.while_statement.base_expression)
     entity = get_entity(exp)
@@ -135,56 +135,56 @@ def test_parser_service_output():
 
 
 def test_parser_if_block():
-    result = parse('if expr\n\tvar=3\n')
+    result = parse('if expr\n\tx=3\n')
     if_block = result.block.if_block
     ar_exp = arith_exp(if_block.if_statement.base_expression)
     entity = get_entity(ar_exp)
     path = entity.path
     assignment = if_block.nested_block.block.rules.assignment
     assert path.child(0) == Token('NAME', 'expr')
-    assert assignment.path.child(0) == Token('NAME', 'var')
+    assert assignment.path.child(0) == Token('NAME', 'x')
 
 
 def test_parser_if_block_nested():
-    result = parse('if expr\n\tif things\n\t\tvar=3\n')
+    result = parse('if expr\n\tif things\n\t\tx=3\n')
     if_block = result.block.if_block.nested_block.block.if_block
     ar_exp = arith_exp(if_block.if_statement.base_expression)
     entity = get_entity(ar_exp)
     path = entity.path
     assignment = if_block.nested_block.block.rules.assignment
     assert path.child(0) == Token('NAME', 'things')
-    assert assignment.path.child(0) == Token('NAME', 'var')
+    assert assignment.path.child(0) == Token('NAME', 'x')
 
 
 def test_parser_if_block_else():
-    result = parse('if expr\n\tvar=3\nelse\n\tvar=4\n')
+    result = parse('if expr\n\tx=3\nelse\n\tx=4\n')
     node = result.block.if_block.else_block.nested_block.block.rules
-    assert node.assignment.path.child(0) == Token('NAME', 'var')
+    assert node.assignment.path.child(0) == Token('NAME', 'x')
 
 
 def test_parser_if_block_elseif():
-    result = parse('if expr\n\tvar=3\nelse if magic\n\tvar=4\n')
+    result = parse('if expr\n\tx=3\nelse if magic\n\tx=4\n')
     node = result.block.if_block.elseif_block.nested_block.block.rules
-    assert node.assignment.path.child(0) == Token('NAME', 'var')
+    assert node.assignment.path.child(0) == Token('NAME', 'x')
 
 
 def test_parser_function():
-    result = parse('function test\n\tvar = 3\n')
+    result = parse('function test\n\tx = 3\n')
     node = result.block.function_block
     path = node.nested_block.block.rules.assignment.path
     assert node.function_statement.child(1) == Token('NAME', 'test')
-    assert path.child(0) == Token('NAME', 'var')
+    assert path.child(0) == Token('NAME', 'x')
 
 
 def test_parser_function_arguments():
-    result = parse('function test n:int\n\tvar = 3\n')
+    result = parse('function test n:int\n\tx = 3\n')
     typed_argument = result.block.function_block.find('typed_argument')[0]
     assert typed_argument.child(0) == Token('NAME', 'n')
     assert typed_argument.types.base_type.child(0) == Token('INT_TYPE', 'int')
 
 
 def test_parser_function_output():
-    result = parse('function test n:string returns int\n\tvar = 1\n')
+    result = parse('function test n:string returns int\n\tx = 1\n')
     statement = result.block.function_block.function_statement
     assert statement.function_output.types.base_type.child(0) == \
         Token('INT_TYPE', 'int')

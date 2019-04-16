@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "name": [
-        "var"
+        "a"
       ],
       "args": [
         {
@@ -12,7 +12,7 @@
           "int": 0
         }
       ],
-      "src": "var = 0",
+      "src": "a = 0",
       "next": "2.1"
     },
     "2.1": {
@@ -25,7 +25,7 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "var"
+            "a"
           ]
         },
         {
@@ -46,7 +46,7 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "var"
+            "a"
           ]
         },
         {
@@ -70,7 +70,7 @@
       ],
       "enter": "3",
       "exit": "4",
-      "src": "if var increment",
+      "src": "if a increment",
       "next": "3"
     },
     "3": {
@@ -102,7 +102,7 @@
       ],
       "enter": "5",
       "exit": "6",
-      "src": "else if var decrement",
+      "src": "else if a decrement",
       "next": "5"
     },
     "5": {

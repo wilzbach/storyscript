@@ -337,11 +337,11 @@
       "method": "execute",
       "ln": "24",
       "name": [
-        "service"
+        "my_service"
       ],
       "service": "alpine",
       "command": "echo",
-      "src": "service = alpine echo",
+      "src": "my_service = alpine echo",
       "next": "25.1"
     },
     "25.1": {

@@ -17,8 +17,15 @@ def syntax_error(patch):
 def test_transformer():
     keywords = ['function', 'if', 'else', 'foreach', 'return', 'returns',
                 'try', 'catch', 'finally', 'when', 'as', 'import', 'while',
-                'throw']
-    future_keywords = ['async', 'story', 'assert', 'called', 'mock']
+                'throw', 'null']
+    future_keywords = [
+        'async', 'story', 'assert', 'called', 'mock', 'class', 'extends',
+        'implements', 'interface', 'type', 'public', 'private', 'protected',
+        'const', 'immutable', 'let', 'var', 'auto', 'immutable', 'switch',
+        'module', 'package', 'final', 'this', 'self', 'case', 'abstract',
+        'static', 'none', 'await', 'service', 'in', 'has', 'not', 'is', 'inf',
+        'nan'
+    ]
     assert Transformer.reserved_keywords == keywords
     assert Transformer.future_reserved_keywords == future_keywords
     assert issubclass(Transformer, LarkTransformer)

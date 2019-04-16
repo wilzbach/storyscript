@@ -1,6 +1,6 @@
 Error: syntax error in story at line 1, column 2
 
-1|    (service foo) (key: 2)
-       ^^^^^^^
+1|    (my_service foo) (key: 2)
+       ^^^^^^^^^^
 
 E0050: Service output can not be called as a function
