@@ -1,0 +1,46 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "function": "random",
+      "enter": "2",
+      "exit": "4",
+      "src": "function random",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "my_service"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "1",
+      "src": "\tmy_service = 0",
+      "next": "4"
+    },
+    "4": {
+      "method": "execute",
+      "ln": "4",
+      "name": [
+        "a"
+      ],
+      "service": "my_service",
+      "command": "length",
+      "src": "a = my_service length"
+    }
+  },
+  "services": [
+    "my_service"
+  ],
+  "entrypoint": "1",
+  "functions": {
+    "random": "1"
+  }
+}
