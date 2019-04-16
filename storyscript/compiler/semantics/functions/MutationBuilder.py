@@ -2,7 +2,7 @@ from storyscript.compiler.semantics.functions.Mutation import Mutation
 from storyscript.compiler.semantics.types.GenericTypes import \
     GenericType, ListGenericType, MapGenericType, TypeSymbol
 from storyscript.compiler.semantics.types.Types import AnyType, BaseType, \
-    BooleanType, FloatType, IntType, NoneType, StringType, TimeType
+    BooleanType, FloatType, IntType, NoneType, RegExpType, StringType, TimeType
 
 
 def parse_type_inner(text, start_tok='[', end_tok=']'):
@@ -50,6 +50,8 @@ def parse_type(type_):
         return TimeType.instance()
     if type_ == 'none':
         return NoneType.instance()
+    if type_ == 'regexp':
+        return RegExpType.instance()
     if type_ == 'any':
         return AnyType.instance()
 

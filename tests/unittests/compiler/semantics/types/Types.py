@@ -5,7 +5,7 @@ from pytest import mark
 
 from storyscript.compiler.semantics.types.Types import AnyType, \
     BooleanType, FloatType, IntType, ListType, MapType, \
-    NoneType, StringType, singleton
+    NoneType, RegExpType, StringType, singleton
 
 
 def test_singleton():
@@ -27,6 +27,7 @@ def test_singleton():
     (FloatType.instance(), 'float'),
     (NoneType.instance(), 'none'),
     (AnyType.instance(), 'any'),
+    (RegExpType.instance(), 'regexp'),
     (ListType(AnyType.instance()), 'List[any]'),
     (MapType(IntType.instance(), StringType.instance()),
         'Map[int,string]'),

@@ -1,0 +1,58 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": ""
+        }
+      ],
+      "src": "a = \"\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "mutation",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "substring",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "start",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "end",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 10
+              }
+            }
+          ]
+        }
+      ],
+      "src": "b = a substring start: 1 end: 10"
+    }
+  },
+  "entrypoint": "1"
+}

@@ -35,7 +35,7 @@ class BaseFunction:
         arg_names = set(args.keys())
         name_difference = self._arg_names.symmetric_difference(arg_names)
         # check arg names for differences
-        for d in name_difference:
+        for d in sorted(name_difference):
             if d in self._arg_names:
                 tree.expect(0, 'function_arg_required', fn_type=self.fn_type,
                             name=self._name, arg=d)
@@ -61,6 +61,22 @@ class BaseFunction:
 
     def output(self):
         return self._output
+
+    def pretty(self):
+        """
+        Returns a pretty-printed representation of the function
+        """
+        args = ''
+        if self._args:
+            args_arr = []
+            for k, v in sorted(self._args.items()):
+                args_arr.append(f'{k}:`{v.type()}`')
+            args = ' '.join(args_arr)
+            if self.fn_type == 'Mutation':
+                args = f' {args}'
+        if self.fn_type == 'Function':
+            args = f'({args})'
+        return f'{self._name}{args}'
 
     def __str__(self):
         return f'{self.fn_type}({self._name})'

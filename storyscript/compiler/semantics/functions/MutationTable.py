@@ -19,8 +19,15 @@ class MutationTable:
             self.mutations[name] = {}
         muts = self.mutations[name]
         t = self.type_key(mutation.base_type())
-        assert t not in muts, f'mutation {name} for {t} already exists'
-        muts[t] = mutation
+        arg_names = mutation.arg_names_hash()
+        match = muts.get(t, None)
+        if match is not None:
+            assert arg_names not in match, \
+                    (f'mutation {name} for {t} already exists with the '
+                     'same overload')
+        else:
+            muts[t] = {}
+        muts[t][arg_names] = mutation
 
     @staticmethod
     def type_key(type_):
@@ -29,19 +36,32 @@ class MutationTable:
         """
         return type_.__name__
 
-    def resolve(self, type_, name):
+    def resolve(self, type_, name, arg_names):
         """
         Returns the mutation `name` or `None`.
         """
         if name not in self.mutations:
             return None
 
+        arg_names = Mutation.compute_arg_names_hash(arg_names)
+
         t = self.type_key(type(type_))
         muts = self.mutations[name]
-        if t not in muts:
+        overloads = muts.get(t, None)
+        if overloads is None:
             return None
 
-        return muts[t]
+        match = overloads.get(arg_names, None)
+        if match is not None:
+            return match
+
+        if len(overloads) == 1:
+            # there is only one overload -> return
+            return next(iter(overloads.values()))
+
+        # return all overloads
+        return list(sorted(overloads.values(),
+                           key=lambda d: d.arg_names_hash()))
 
     @classmethod
     def init(cls):

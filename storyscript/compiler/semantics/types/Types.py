@@ -200,6 +200,28 @@ class TimeType(BaseType):
         return TimeType()
 
 
+class RegExpType(BaseType):
+    """
+    Represents a regular expression.
+    """
+
+    def __str__(self):
+        return 'regexp'
+
+    def __eq__(self, other):
+        return isinstance(other, RegExpType)
+
+    def can_be_assigned(self, other):
+        return self == other
+
+    @singleton
+    def instance():
+        """
+        Returns a static instance of the RegExpType.
+        """
+        return RegExpType()
+
+
 class ListType(BaseType):
     """
     Represents a list.

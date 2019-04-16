@@ -158,6 +158,10 @@ class ErrorCodes:
         'E0119', 'Mutations can\'t have nested blocks.')
     mutation_output = (
         'E0120', 'Mutations can\'t have outputs.')
+    mutation_overload_mismatch = (
+        'E0121', 'Multiple mutation overloads for `{name}` found:'
+        '{overloads}\n'
+        'but none matches.')
 
     @staticmethod
     def is_error(error_name):

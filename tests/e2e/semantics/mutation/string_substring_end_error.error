@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 7
+
+2|    b = a substring end: "foo"
+            ^^^^^^^^^
+
+E0115: Mutation `substring` requires argument `end` to be of `int`, not `string`

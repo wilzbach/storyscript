@@ -1,0 +1,9 @@
+Error: syntax error in story at line 2, column 7
+
+2|    b = a contains item: "a" pattern: /aa/
+            ^^^^^^^^
+
+E0121: Multiple mutation overloads for `contains` found:
+	- contains item:`string`
+	- contains pattern:`regexp`
+but none matches.

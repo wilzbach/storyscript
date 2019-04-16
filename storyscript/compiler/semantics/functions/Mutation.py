@@ -15,6 +15,7 @@ class Mutation:
         self._args = args
         self._output = output
         self._base_type = base_type(ti)
+        self._arg_names = self.compute_arg_names_hash(args.keys())
 
     def instantiate(self, type_):
         """
@@ -46,3 +47,16 @@ class Mutation:
         The base type that this mutation can mutation, e.g. IntType or ListType
         """
         return self._base_type
+
+    def arg_names_hash(self):
+        """
+        Returns the hashed argument names of this mutation
+        """
+        return self._arg_names
+
+    @staticmethod
+    def compute_arg_names_hash(keys):
+        """
+        Converts a list of argument names to a hashable key.
+        """
+        return ','.join(sorted(keys))
