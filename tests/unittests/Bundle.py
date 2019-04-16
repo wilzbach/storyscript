@@ -34,6 +34,7 @@ def test_bundle_gitignores(patch):
     command = ['git', 'ls-files', '--others', '--ignored',
                '--exclude-standard']
     subprocess.run.assert_called_with(command, encoding='utf8',
+                                      stderr=subprocess.DEVNULL,
                                       stdout=subprocess.PIPE)
     subprocess.run().stdout.split.assert_called_with('\n')
     assert result == subprocess.run().stdout.split()
