@@ -6,7 +6,7 @@
       "args": [
         {
           "$OBJECT": "regexp",
-          "regexp": "/regexp/"
+          "regexp": "regexp"
         }
       ],
       "enter": "2",
@@ -35,7 +35,7 @@
             },
             {
               "$OBJECT": "regexp",
-              "regexp": "/regexp/"
+              "regexp": "regexp"
             }
           ]
         }
@@ -66,7 +66,7 @@
             },
             {
               "$OBJECT": "regexp",
-              "regexp": "/regexp/"
+              "regexp": "regexp"
             }
           ]
         }
@@ -106,7 +106,7 @@
             },
             {
               "$OBJECT": "regexp",
-              "regexp": "/regexp/"
+              "regexp": "regexp"
             }
           ]
         }

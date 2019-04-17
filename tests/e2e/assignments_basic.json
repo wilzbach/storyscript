@@ -261,7 +261,7 @@
       "args": [
         {
           "$OBJECT": "regexp",
-          "regexp": "/^foo/"
+          "regexp": "^foo"
         }
       ],
       "src": "regexp = /^foo/",
@@ -276,7 +276,7 @@
       "args": [
         {
           "$OBJECT": "regexp",
-          "regexp": "/^foo/",
+          "regexp": "^foo",
           "flags": "g"
         }
       ],
