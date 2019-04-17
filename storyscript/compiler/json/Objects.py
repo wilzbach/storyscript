@@ -171,9 +171,10 @@ class Objects:
         """
         Compiles a regexp object from a regular_expression tree
         """
-        dictionary = {'$OBJECT': 'regexp', 'regexp': tree.child(0)}
+        regexp = tree.child(0).value[1:-1]
+        dictionary = {'$OBJECT': 'regexp', 'regexp': regexp}
         if len(tree.children) > 1:
-            dictionary['flags'] = tree.child(1)
+            dictionary['flags'] = tree.child(1).value
         return dictionary
 
     @staticmethod

@@ -11,7 +11,7 @@
           "name": "item",
           "arg": {
             "$OBJECT": "regexp",
-            "regexp": "/regexp/"
+            "regexp": "regexp"
           }
         }
       ],
