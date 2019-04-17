@@ -20,7 +20,7 @@ class Symbol:
         return f'{self._type}'
 
     def __str__(self):
-        return f'Symbol(\'{self._name}\', {self._type})'
+        return f"Symbol('{self._name}', {self._type})"
 
     @classmethod
     def from_path(cls, node, type_):

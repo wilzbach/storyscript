@@ -11,12 +11,12 @@ def test_symbol_pretty_int():
 
 def test_symbol_str_string():
     sym = Symbol('foo', StringType.instance())
-    assert str(sym) == 'Symbol(\'foo\', string)'
+    assert str(sym) == "Symbol('foo', string)"
 
 
 def test_symbol_str_int():
     sym = Symbol('bar', IntType.instance())
-    assert str(sym) == 'Symbol(\'bar\', int)'
+    assert str(sym) == "Symbol('bar', int)"
 
 
 def test_symbol_pretty_string():
