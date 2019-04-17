@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
 
+from storyscript.compiler.lowering.utils import unicode_escape
 from storyscript.exceptions import internal_assert
 from storyscript.parser import Tree
 
@@ -135,7 +136,8 @@ class Objects:
         """
         Compiles a string tree.
         """
-        return {'$OBJECT': 'string', 'string': tree.child(0).value}
+        value = unicode_escape(tree, tree.child(0).value)
+        return {'$OBJECT': 'string', 'string': value}
 
     @staticmethod
     def boolean(tree):

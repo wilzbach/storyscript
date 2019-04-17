@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from sys import modules
+
 from lark.lexer import Token
 
 from pytest import fixture, mark
@@ -146,9 +148,28 @@ def test_objects_name_to_path_dots():
     assert result == Tree('path', children)
 
 
-def test_objects_string(patch, tree):
+@mark.parametrize('value,expected', [
+    (r'\n', '\n'),
+    (r'\\\\\\', '\\\\\\'),
+    (r'\\', '\\'),
+    (r'\n\t\r', '\n\t\r'),
+    (r'\x42\t\u1212', '\x42\t\u1212'),
+    (r'\U0001F600', '\U0001F600'),
+    (r'\N{LATIN CAPITAL LETTER A}', 'A'),
+])
+def test_objects_string_exact(value, expected, tree):
+    tree = Tree('string', [Token('string', value)])
     result = Objects().string(tree)
-    assert result == {'$OBJECT': 'string', 'string': tree.child(0).value}
+    assert result == {'$OBJECT': 'string', 'string': expected}
+
+
+def test_objects_string(patch, tree):
+    # manual function patching
+    objects = modules['storyscript.compiler.json.Objects']
+    patch.object(objects, 'unicode_escape')
+    result = Objects().string(tree)
+    objects.unicode_escape.assert_called_with(tree, tree.child(0).value)
+    assert result == {'$OBJECT': 'string', 'string': objects.unicode_escape()}
 
 
 def test_objects_boolean():

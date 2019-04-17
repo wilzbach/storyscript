@@ -4,7 +4,8 @@ from enum import Enum
 from lark.lexer import Token
 
 from storyscript.compiler.lowering.Faketree import FakeTree
-from storyscript.compiler.lowering.utils import service_to_mutation
+from storyscript.compiler.lowering.utils import service_to_mutation, \
+        unicode_escape
 from storyscript.parser.Tree import Tree
 
 
@@ -173,16 +174,6 @@ class Lowering:
         ])
 
     @classmethod
-    def unicode_escape(cls, tree, text):
-        """
-        Evaluates unicode escape codes like \n or \x12
-        """
-        try:
-            return bytes(text, 'utf-8').decode('unicode_escape')
-        except UnicodeError as e:
-            tree.expect(0, 'unicode_decode_error', reason=e.reason)
-
-    @classmethod
     def flatten_template(cls, tree, text):
         """
         Flattens a string template into concatenation
@@ -221,7 +212,7 @@ class Lowering:
                         tree.expect(len(buf) > 0, 'string_templates_empty')
                         yield {
                             '$OBJECT': 'code',
-                            'code': cls.unicode_escape(tree, buf)
+                            'code': unicode_escape(tree, buf)
                         }
                         buf = ''
                     else:
@@ -233,7 +224,7 @@ class Lowering:
                     if len(buf) > 0:
                         yield {
                             '$OBJECT': 'string',
-                            'string': cls.unicode_escape(tree, buf)
+                            'string': buf
                         }
                         buf = ''
                     inside_interpolation = True
@@ -248,7 +239,7 @@ class Lowering:
         if len(buf) > 0:
             yield {
                 '$OBJECT': 'string',
-                'string': cls.unicode_escape(tree, buf)
+                'string': buf
             }
 
     def eval(self, orig_node, code_string, fake_tree):

@@ -8,3 +8,13 @@ def service_to_mutation(tree):
     tree.mutation_fragment.children[0] = \
         tree.mutation_fragment.child(0).child(0)
     return tree
+
+
+def unicode_escape(tree, text):
+    """
+    Evaluates unicode escape codes like \n or \x12
+    """
+    try:
+        return bytes(text, 'utf-8').decode('unicode_escape')
+    except UnicodeError as e:
+        tree.expect(0, 'unicode_decode_error', reason=e.reason)
