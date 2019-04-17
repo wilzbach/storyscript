@@ -1,0 +1,73 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "map_int"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "int",
+                "int": 0
+              },
+              {
+                "$OBJECT": "int",
+                "int": 0
+              }
+            ]
+          ]
+        }
+      ],
+      "src": "map_int = {0: 0}",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "map_float"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "int",
+                "int": 0
+              },
+              {
+                "$OBJECT": "float",
+                "float": 0.5
+              }
+            ]
+          ]
+        }
+      ],
+      "src": "map_float = {0: 0.5}",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "map_float"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "map_int"
+          ]
+        }
+      ],
+      "src": "map_float = map_int"
+    }
+  },
+  "entrypoint": "1"
+}

@@ -1,6 +1,0 @@
-Error: syntax error in story at line 1, column 12
-
-1|    a = !-2 or ! -3 - -4
-                 ^
-
-E0103: `boolean` is not compatible with `int`

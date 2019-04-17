@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from lark.lexer import Token
 
-from pytest import mark
+from pytest import mark, raises
 
 from storyscript.compiler.semantics.types.Types import AnyType, \
-    BooleanType, FloatType, IntType, ListType, MapType, \
+    BaseType, BooleanType, FloatType, IntType, ListType, MapType, \
     NoneType, RegExpType, StringType, singleton
 
 
@@ -49,9 +49,13 @@ def test_none_assign():
 
 def test_none_op():
     none = NoneType.instance()
-    assert none.op(none, Token('MINUS', '-')) is None
-    assert none.op(IntType.instance(), Token('MINUS', '-')) is None
-    assert none.op(IntType.instance(), Token('PLUS', '+')) is None
-    assert none.op(StringType.instance(), Token('PLUS', '+')) == \
-        StringType.instance()
-    assert none.op(AnyType.instance(), None) is AnyType.instance()
+    assert none.binary_op(none, Token('MINUS', '-')) is None
+    assert none.binary_op(IntType.instance(), Token('MINUS', '-')) is None
+    assert none.binary_op(IntType.instance(), Token('PLUS', '+')) is None
+    assert none.binary_op(StringType.instance(), Token('PLUS', '+')) is None
+    assert none.binary_op(AnyType.instance(), None) is None
+
+
+def test_base_type_not_implemented():
+    with raises(NotImplementedError):
+        BaseType().op(None)

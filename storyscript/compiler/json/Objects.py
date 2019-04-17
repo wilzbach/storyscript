@@ -24,6 +24,8 @@ class Objects:
             if isinstance(child, Tree):
                 if child.data == 'string':
                     value = self.string(child)
+                elif child.data == 'boolean':
+                    value = self.boolean(child)
                 else:
                     assert child.data == 'path'
                     value = self.path(child)
@@ -160,6 +162,8 @@ class Objects:
                 key = self.string(child)
             elif child.data == 'number':
                 key = self.number(child)
+            elif child.data == 'boolean':
+                key = self.boolean(child)
             else:
                 internal_assert(child.data == 'path')
                 key = self.path(child)

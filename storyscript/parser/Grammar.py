@@ -74,7 +74,8 @@ class Grammar:
         list = self.ebnf.collection('osb', 'base_expression',
                                     'base_expression', 'csb')
         self.ebnf.set_rule('!list', list)
-        self.ebnf.key_value = '(string, path, number) colon base_expression'
+        self.ebnf.key_value = ('(string, path, number, boolean) '
+                               'colon base_expression')
         objects = ('ocb', 'key_value', 'key_value', 'ccb')
         self.ebnf.objects = self.ebnf.collection(*objects)
         self.ebnf.regular_expression = 'regexp name?'
@@ -88,7 +89,8 @@ class Grammar:
     def assignments(self):
         self.ebnf.EQUALS = '='
         self.ebnf._DOT = '.'
-        path_fragment = 'dot name, osb int csb, osb string csb, osb path csb'
+        path_fragment = ('dot name, osb int csb, osb string csb, osb path csb'
+                         ', osb boolean csb')
         self.ebnf.path_fragment = path_fragment
         self.ebnf.path = ('name (path_fragment)* | '
                           'inline_expression (path_fragment)*')

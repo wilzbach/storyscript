@@ -1,0 +1,6 @@
+Error: syntax error in story at line 4, column None
+
+4|    b = {"a": "a", fn_none(): "bar"}
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+E0125: `none` is not hashable and can't be used as an object key.

@@ -18,6 +18,25 @@ class SymbolExpressionVisitor(ExpressionVisitor):
     def __init__(self, visitor):
         self.visitor = visitor
 
+    _cmp_ops = {
+        'GREATER': True, 'LESSER': True, 'GREATER_EQUAL': True,
+        'LESSER_EQUAL': True
+    }
+
+    @classmethod
+    def is_cmp(cls, op):
+        """
+        Tests whether a binary operation requires comparison between types.
+        """
+        return op in cls._cmp_ops
+
+    @classmethod
+    def is_equal(cls, op):
+        """
+        Tests whether a binary operation requires equality comparison.
+        """
+        return op == 'EQUAL' or op == 'NOT_EQUAL'
+
     _boolean_types = {
         'AND': True, 'OR': True, 'NOT': True, 'EQUAL': True, 'GREATER': True,
         'LESSER': True, 'NOT_EQUAL': True, 'GREATER_EQUAL': True,
@@ -48,15 +67,39 @@ class SymbolExpressionVisitor(ExpressionVisitor):
 
     def nary_expression(self, tree, op, values):
         if self.is_boolean_operator(op.type):
+            assert len(values) <= 2
+            # e.g. a < b
+            if self.is_cmp(op.type):
+                tree.expect(values[0].cmp(values[1]),
+                            'type_operation_cmp_incompatible',
+                            left=values[0], right=values[1])
+                return BooleanType.instance()
+
+            # e.g. a == b
+            if self.is_equal(op.type):
+                tree.expect(values[0].equal(values[1]),
+                            'type_operation_equal_incompatible',
+                            left=values[0], right=values[1])
+                return BooleanType.instance()
+
+            # e.g. a and b, a or b, !a
+            tree.expect(values[0].has_boolean(),
+                        'type_operation_boolean_incompatible',
+                        val=values[0])
+            if len(values) == 2:
+                tree.expect(values[1].has_boolean(),
+                            'type_operation_boolean_incompatible',
+                            val=values[1])
             return BooleanType.instance()
+
         is_arithmetic = self.is_arithmetic_operator(op.type)
         tree.expect(is_arithmetic, 'compiler_error_no_operator',
                     operator=op.type)
         val = values[0]
         for c in values[1:]:
-            new_val = val.op(c, op)
+            new_val = val.binary_op(c, op)
             tree.expect(new_val is not None, 'type_operation_incompatible',
-                        left=val, right=c)
+                        left=val, right=c, op=op.value)
             val = new_val
         return val
 
@@ -127,19 +170,32 @@ class ExpressionResolver:
 
     def objects(self, tree):
         assert tree.data == 'objects'
-        key = None
-        value = None
+        keys = []
+        values = []
         for i, item in enumerate(tree.children):
             assert isinstance(item, Tree)
-            child = item.child(0)
-            if child.data == 'string':
-                new_key = self.string(child)
-            elif child.data == 'number':
-                new_key = self.number(child)
+            key_child = item.child(0)
+            if key_child.data == 'string':
+                new_key = self.string(key_child)
+            elif key_child.data == 'number':
+                new_key = self.number(key_child)
+            elif key_child.data == 'boolean':
+                new_key = self.boolean(key_child)
             else:
-                assert child.data == 'path'
-                new_key = self.path(child)
-            new_value = self.base_expression(item.child(1))
+                assert key_child.data == 'path'
+                new_key = self.path(key_child)
+            keys.append(new_key)
+            values.append(self.base_expression(item.child(1)))
+
+            # check all keys - even if they don't match
+            key_child.expect(new_key.hashable(),
+                             'type_key_not_hashable',
+                             key=new_key)
+
+        key = None
+        value = None
+        for i, p in enumerate(zip(keys, values)):
+            new_key, new_value = p
             if i >= 1:
                 # type mismatch in the list
                 if key != new_key:

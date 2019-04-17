@@ -15,27 +15,121 @@ def singleton(fn):
     return wrapped
 
 
+def binary_op(op, left, right):
+    """
+    Default binary operation:
+        1) if both types are equal -> left.op(op)
+        2) if string concat and the other type can be stringified -> string
+        3) try to implicitly convert left to right or right -> implicit.op(op)
+    """
+    if left == right:
+        return left.op(op)
+    if op and op.type == 'PLUS':
+        if isinstance(left, StringType) and right.string():
+            return left
+        if isinstance(right, StringType) and left.string():
+            return right
+
+    left_implicit = left.implicit_to(right)
+    right_implicit = right.implicit_to(left)
+    new_type = left_implicit or right_implicit
+    # no implicit conversion possible
+    if new_type is None:
+        return None
+
+    if new_type == AnyType.instance():
+        # one of the types is 'any', check if the type would be compatible with
+        # itself
+        if left == AnyType.instance():
+            return right.op(op)
+        else:
+            return left.op(op)
+
+    return new_type.op(op)
+
+
 class BaseType:
     """
     Base class of a type.
     """
 
-    def op(self, other, op):
-        # always support upcasting to string
-        if op and op.type == 'PLUS':
-            if isinstance(self, StringType):
-                return self
-            if isinstance(other, StringType):
-                return other
-        if self == other:
-            return self
-        if isinstance(other, AnyType):
-            return other
-        return None
+    def binary_op(self, other, op):
+        """
+        Returns the new_type if the type supports this operation.
+        `None` otherwise.
+        """
+        return binary_op(op, self, other)
+
+    def op(self, op):
+        """
+        Returns the new_type if the type supports operations on itself.
+        `None` otherwise.
+        """
+        raise NotImplementedError()
 
     def output(self, n):
         """
         Output types of this type.
+        """
+        return None
+
+    def has_boolean(self):
+        """
+        Returns True if the type can be evaluated to boolean, False otherwise.
+        """
+        return False
+
+    def cmp(self, other):
+        """
+        Returns True if the type can be compared with `other`, False otherwise.
+        """
+        if self.implicit_to(other) is not None or \
+                other.implicit_to(self) is not None:
+            return True
+        return False
+
+    def equal(self, other):
+        """
+        Returns True if the type can perform equality comparison with `other`,
+        False otherwise.
+        """
+        if self.implicit_to(other) is not None or \
+                other.implicit_to(self) is not None:
+            return True
+        return False
+
+    def can_be_assigned(self, other):
+        if other == AnyType.instance():
+            return None
+        return other.implicit_to(self)
+
+    def implicit_to(self, other):
+        """
+        Returns `other` if the type can be implicitly converted to `other`.
+        None otherwise.
+        """
+        if self == other:
+            return self
+        if other == AnyType.instance():
+            return other
+        return None
+
+    def string(self):
+        """
+        Returns True if the type can be stringified.
+        False otherwise.
+        """
+        return True
+
+    def hashable(self):
+        """
+        Returns whether the type can be hashed.
+        """
+        return True
+
+    def index(self, index_type):
+        """
+        Returns the type resulting from an index operation with `index_type`.
         """
         return None
 
@@ -51,8 +145,8 @@ class BooleanType(BaseType):
     def __eq__(self, other):
         return isinstance(other, BooleanType)
 
-    def can_be_assigned(self, other):
-        return self == other
+    def op(self, op):
+        return IntType.instance()
 
     @singleton
     def instance():
@@ -60,6 +154,19 @@ class BooleanType(BaseType):
         Returns a static instance of the BooleanType.
         """
         return BooleanType()
+
+    def has_boolean(self):
+        return True
+
+    def implicit_to(self, other):
+        s = super().implicit_to(other)
+        if s is not None:
+            return s
+        if other == IntType.instance():
+            return other
+        if other == FloatType.instance():
+            return other
+        return None
 
 
 class NoneType(BaseType):
@@ -76,12 +183,7 @@ class NoneType(BaseType):
     def can_be_assigned(self, other):
         return False
 
-    def op(self, other, op):
-        ret = super().op(other, op)
-        if self == other:
-            return None
-        if ret:
-            return ret
+    def binary_op(self, other, op):
         return None
 
     @singleton
@@ -90,6 +192,18 @@ class NoneType(BaseType):
         Returns a static instance of the NoneType.
         """
         return NoneType()
+
+    def cmp(self, other):
+        return False
+
+    def equal(self, other):
+        return False
+
+    def string(self):
+        return False
+
+    def hashable(self):
+        return False
 
 
 class IntType(BaseType):
@@ -103,16 +217,8 @@ class IntType(BaseType):
     def __eq__(self, other):
         return isinstance(other, IntType)
 
-    def can_be_assigned(self, other):
-        return self == other or isinstance(other, BooleanType)
-
-    def op(self, other, op):
-        ret = super().op(other, op)
-        if ret is not None:
-            return ret
-        if isinstance(other, FloatType):
-            return other
-        return None
+    def op(self, op):
+        return self
 
     def index(self, other):
         return None
@@ -123,6 +229,17 @@ class IntType(BaseType):
         Returns a static instance of the IntType.
         """
         return IntType()
+
+    def has_boolean(self):
+        return True
+
+    def implicit_to(self, other):
+        s = super().implicit_to(other)
+        if s is not None:
+            return s
+        if other == FloatType.instance():
+            return other
+        return None
 
 
 class FloatType(BaseType):
@@ -136,17 +253,8 @@ class FloatType(BaseType):
     def __eq__(self, other):
         return isinstance(other, FloatType)
 
-    def can_be_assigned(self, other):
-        return self == other or isinstance(other, IntType) or \
-                isinstance(other, BooleanType)
-
-    def op(self, other, op):
-        ret = super().op(other, op)
-        if ret is not None:
-            return ret
-        if isinstance(other, IntType):
-            return self
-        return None
+    def op(self, op):
+        return self
 
     @singleton
     def instance():
@@ -154,6 +262,9 @@ class FloatType(BaseType):
         Returns a static instance of the FloatType.
         """
         return FloatType()
+
+    def has_boolean(self):
+        return True
 
 
 class StringType(BaseType):
@@ -167,8 +278,16 @@ class StringType(BaseType):
     def __eq__(self, other):
         return isinstance(other, StringType)
 
-    def can_be_assigned(self, other):
-        return self == other
+    def op(self, op):
+        if op.type == 'PLUS':
+            return self
+        return None
+
+    def index(self, other):
+        # only numeric indices
+        if other.implicit_to(IntType.instance()):
+            return self
+        return None
 
     @singleton
     def instance():
@@ -176,6 +295,9 @@ class StringType(BaseType):
         Returns a static instance of the StringType.
         """
         return StringType()
+
+    def has_boolean(self):
+        return True
 
 
 class TimeType(BaseType):
@@ -189,8 +311,10 @@ class TimeType(BaseType):
     def __eq__(self, other):
         return isinstance(other, TimeType)
 
-    def can_be_assigned(self, other):
-        return self == other
+    def op(self, op):
+        if op.type == 'PLUS' or op.type == 'DASH':
+            return self
+        return None
 
     @singleton
     def instance():
@@ -198,6 +322,9 @@ class TimeType(BaseType):
         Returns a static instance of the TimeType.
         """
         return TimeType()
+
+    def has_boolean(self):
+        return True
 
 
 class RegExpType(BaseType):
@@ -211,8 +338,9 @@ class RegExpType(BaseType):
     def __eq__(self, other):
         return isinstance(other, RegExpType)
 
-    def can_be_assigned(self, other):
-        return self == other
+    def op(self, op):
+        # no operations allowed on RegExp
+        return None
 
     @singleton
     def instance():
@@ -220,6 +348,15 @@ class RegExpType(BaseType):
         Returns a static instance of the RegExpType.
         """
         return RegExpType()
+
+    def has_boolean(self):
+        return False
+
+    def cmp(self, other):
+        return False
+
+    def hashable(self):
+        return False
 
 
 class ListType(BaseType):
@@ -237,14 +374,24 @@ class ListType(BaseType):
         return isinstance(other, ListType) and \
             self.inner == other.inner
 
-    def can_be_assigned(self, other):
+    def op(self, op):
+        if op.type == 'PLUS':
+            return self
+        return None
+
+    def implicit_to(self, other):
+        if self == other:
+            return self
         if not isinstance(other, ListType):
-            return False
-        return self.inner.can_be_assigned(other.inner)
+            return None
+        im_to = self.inner.implicit_to(other.inner)
+        if im_to is None:
+            return None
+        return ListType(im_to)
 
     def index(self, other):
         # only numeric indices
-        if isinstance(other, IntType):
+        if other.implicit_to(IntType.instance()):
             return self.inner
         return None
 
@@ -255,6 +402,15 @@ class ListType(BaseType):
         if n == 1:
             return self.inner,
         return IntType.instance(), self.inner
+
+    def has_boolean(self):
+        return True
+
+    def cmp(self, other):
+        return False
+
+    def hashable(self):
+        return False
 
 
 class MapType(BaseType):
@@ -275,15 +431,22 @@ class MapType(BaseType):
                self.key == other.key and \
                self.value == other.value
 
-    def can_be_assigned(self, other):
+    def op(self, op):
+        return None
+
+    def implicit_to(self, other):
+        if self == other:
+            return self
         if not isinstance(other, MapType):
-            return False
-        key_res = self.key.can_be_assigned(other.key)
-        val_res = self.value.can_be_assigned(other.value)
-        return key_res and val_res
+            return None
+        im_key = self.key.implicit_to(other.key)
+        im_value = self.value.implicit_to(other.value)
+        if im_key is None or im_value is None:
+            return None
+        return MapType(im_key, im_value)
 
     def index(self, other):
-        if self.key.op(other, op=None):
+        if other.implicit_to(self.key) is not None:
             return self.value
         return None
 
@@ -294,6 +457,15 @@ class MapType(BaseType):
         if n == 1:
             return self.key,
         return self.key, self.value
+
+    def has_boolean(self):
+        return True
+
+    def cmp(self, other):
+        return False
+
+    def hashable(self):
+        return False
 
 
 class AnyType(BaseType):
@@ -310,16 +482,11 @@ class AnyType(BaseType):
     def can_be_assigned(self, other):
         return True
 
-    def op(self, other, op):
-        # always support upcasting to string
-        if op and op.type == 'PLUS' and isinstance(other, StringType):
-            return other
-        # we don't anything about the type, so the operation
-        # could be valid
-        return self
-
     def index(self, other):
-        return self
+        if other.hashable():
+            return self
+        # type couldn't have been a key
+        return None
 
     @singleton
     def instance():
@@ -335,3 +502,25 @@ class AnyType(BaseType):
         if n == 1:
             return AnyType.instance(),
         return AnyType.instance(), AnyType.instance()
+
+    def has_boolean(self):
+        return True
+
+    def cmp(self, other):
+        if self == other:
+            return self
+        return other.cmp(other)
+
+    def equal(self, other):
+        if self == other:
+            return self
+        return other.equal(other)
+
+    def hashable(self):
+        return True
+
+    def op(self, op):
+        return self
+
+    def implicit_to(self, other):
+        return self

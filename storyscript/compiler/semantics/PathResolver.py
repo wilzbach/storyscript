@@ -1,4 +1,5 @@
-from storyscript.compiler.semantics.types.Types import IntType, StringType
+from storyscript.compiler.semantics.types.Types import BooleanType, IntType, \
+    StringType
 from storyscript.parser import Tree
 
 
@@ -23,6 +24,8 @@ class PathResolver:
             if isinstance(child, Tree):
                 if child.data == 'string':
                     value = StringType.instance()
+                elif child.data == 'boolean':
+                    value = BooleanType.instance()
                 else:
                     assert child.data == 'path'
                     value = self.path(child)
