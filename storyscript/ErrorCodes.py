@@ -65,17 +65,17 @@ class ErrorCodes:
     string_templates_no_assignment = (
         'E0057', 'Only expressions are allowed inside string templates')
     path_name_internal = (
-        'E0058', 'Path names can\'t start with double underscore')
+        'E0058', "Path names can't start with double underscore")
     string_templates_nested = (
-        'E0059', 'String templates can\'t be nested')
+        'E0059', "String templates can't be nested")
     string_templates_empty = (
-        'E0060', 'String templates can\'t be empty')
+        'E0060', "String templates can't be empty")
     path_name_invalid_char = (
         'E0061', 'Invalid path name: `{path}`. '
-        'Path names can\'t contain `{token}`')
+        "Path names can't contain `{token}`")
     return_required = ('E0062', 'All paths of a function need to return')
     assignment_inline_expression = (
-        'E0063', 'Can\'t assign to inline expressions.')
+        'E0063', "Can't assign to inline expressions.")
     foreach_output_required = (
         'E0064', 'Foreach blocks require an output (e.g. `as item`)')
     nested_service_block = ('E0065', 'Nested service blocks are not allowed')
@@ -101,12 +101,12 @@ class ErrorCodes:
     unicode_decode_error = (
         'E0074', 'Unicode decode error: {reason}.')
     type_assignment_different = (
-        'E0100', 'Can\'t assign `{source}` to `{target}`')
+        'E0100', "Can't assign `{source}` to `{target}`")
     var_not_defined = (
         'E0101', 'Variable `{name}` has not been defined.')
     return_type_differs = (
         'E0102',
-        '`{source}` can\'t be implicitly converted to expected '
+        "`{source}` can't be implicitly converted to expected "
         'return type `{target}`.')
     type_operation_incompatible = (
         'E0103',
@@ -114,7 +114,7 @@ class ErrorCodes:
     )
     type_index_incompatible = (
         'E0104',
-        '`{left}` can\'t be indexed with `{right}`'
+        "`{left}` can't be indexed with `{right}`"
     )
     foreach_output_children = (
         'E0105',
@@ -131,7 +131,7 @@ class ErrorCodes:
     output_unique = (
         'E0108', 'Service output `{name}` must be unique. Use `as outputName`')
     service_no_inline_output = (
-        'E0109', 'Inline service calls can\'t define an output')
+        'E0109', "Inline service calls can't define an output")
     function_without_output_return = (
         'E0110',
         ('Function has no return output defined. '
@@ -155,9 +155,9 @@ class ErrorCodes:
     arg_name_required = (
         'E0118', '{fn_type} `{name}` requires arguments to be named')
     mutation_nested = (
-        'E0119', 'Mutations can\'t have nested blocks.')
+        'E0119', "Mutations can't have nested blocks.")
     mutation_output = (
-        'E0120', 'Mutations can\'t have outputs.')
+        'E0120', "Mutations can't have outputs.")
     mutation_overload_mismatch = (
         'E0121', 'Multiple mutation overloads for `{name}` found:'
         '{overloads}\n'

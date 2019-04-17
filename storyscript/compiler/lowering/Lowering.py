@@ -186,7 +186,7 @@ class Lowering:
         buf = ''
         for c in text:
             if preceding_slash:
-                if c == '{' or c == '}' or c == '\'' or c == '"':
+                if c == '{' or c == '}' or c == "\'" or c == '"':
                     # custom escapes
                     buf = f'{buf[:-1]}{c}'
                 else:
