@@ -239,13 +239,16 @@ def test_objects_regular_expression():
     """
     Ensures regular expressions are compiled correctly
     """
-    tree = Tree('regular_expression', ['regexp'])
+    tok = Token('regexp', '/regexp/')
+    tree = Tree('regular_expression', [tok])
     result = Objects().regular_expression(tree)
-    assert result == {'$OBJECT': 'regexp', 'regexp': tree.child(0)}
+    assert result == {'$OBJECT': 'regexp', 'regexp': 'regexp'}
 
 
 def test_objects_regular_expression_flags():
-    tree = Tree('regular_expression', ['regexp', 'flags'])
+    tok = Token('regexp', '/regexp/')
+    flags = Token('FLAGS', 'flags')
+    tree = Tree('regular_expression', [tok, flags])
     result = Objects().regular_expression(tree)
     assert result['flags'] == 'flags'
 

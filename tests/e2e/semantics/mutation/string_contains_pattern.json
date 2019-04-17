@@ -37,7 +37,7 @@
               "name": "pattern",
               "arg": {
                 "$OBJECT": "regexp",
-                "regexp": "/aa/"
+                "regexp": "aa"
               }
             }
           ]

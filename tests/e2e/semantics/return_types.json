@@ -43,7 +43,7 @@
       "args": [
         {
           "$OBJECT": "regexp",
-          "regexp": "/foo/"
+          "regexp": "foo"
         }
       ],
       "parent": "3",
