@@ -1,6 +1,6 @@
 Error: syntax error in story at line 6, column 2
 
 6|      c = k
-        ^
+        ^^^
 
 E0100: Can't assign `any` to `int`

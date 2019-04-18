@@ -1,6 +1,6 @@
 Error: syntax error in story at line 4, column 5
 
 4|    d = c + 1
-          ^
+          ^^^^^
 
 E0103: `+` between `List[List[List[int]]]` and `int` is not supported.

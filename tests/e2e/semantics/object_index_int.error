@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 5
 
 2|    a = a[0]
-          ^
+          ^^^
 
 E0104: `Map[string,string]` can't be indexed with `int`

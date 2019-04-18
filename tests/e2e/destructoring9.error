@@ -1,6 +1,6 @@
 Error: syntax error in story at line 3, column 3
 
 3|    { obj[b] } = obj
-        ^^^
+        ^^^^^
 
 E0072: Objects can only be destructored into variable names.

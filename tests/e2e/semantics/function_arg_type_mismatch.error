@@ -1,6 +1,6 @@
 Error: syntax error in story at line 4, column 1
 
 4|    foo(a:2)
-      ^^^
+      ^^^^^
 
 E0115: Function `foo` requires argument `a` to be of `boolean`, not `int`

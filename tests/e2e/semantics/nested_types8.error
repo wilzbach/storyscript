@@ -1,6 +1,6 @@
 Error: syntax error in story at line 5, column 1
 
 5|    a = foo()[0][0]
-      ^
+      ^^^
 
 E0100: Can't assign `int` to `string`

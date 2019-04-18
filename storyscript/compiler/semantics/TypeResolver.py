@@ -133,8 +133,8 @@ class TypeResolver(ScopeSelectiveVisitor):
 
             name = output.children[0]
             resolved = tree.scope.resolve(name)
-            tree.expect(resolved is None, 'output_unique',
-                        name=resolved.name() if resolved else None)
+            output.expect(resolved is None, 'output_unique',
+                          name=resolved.name() if resolved else None)
             sym = Symbol.from_path(name, AnyType.instance())
             tree.scope.insert(sym)
 
@@ -165,8 +165,8 @@ class TypeResolver(ScopeSelectiveVisitor):
 
             name = output.children[0]
             resolved = tree.scope.resolve(name)
-            tree.expect(resolved is None, 'output_unique',
-                        name=resolved.name() if resolved else None)
+            output.expect(resolved is None, 'output_unique',
+                          name=resolved.name() if resolved else None)
             sym = Symbol(name, AnyType.instance())
             tree.scope.insert(sym)
 

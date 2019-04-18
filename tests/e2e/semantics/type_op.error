@@ -1,6 +1,6 @@
 Error: syntax error in story at line 5, column 5
 
 5|    e = [1,2] / a
-          ^
+          ^^^^^^^^^
 
 E0103: `/` between `List[int]` and `int` is not supported.
