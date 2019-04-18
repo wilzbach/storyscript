@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 6
+
+2|    b = {a: "bar"}
+           ^
+
+E0125: `regexp` is not hashable and can't be used as an object key.

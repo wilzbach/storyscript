@@ -3,4 +3,4 @@ Error: syntax error in story at line 2, column 8
 2|    c = "{ 3 + b }"
              ^
 
-E0103: `int` is not compatible with `List[int]`
+E0103: `+` between `int` and `List[int]` is not supported.

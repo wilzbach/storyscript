@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = /foo/ and /bar/
+          ^^^^^
+
+E0122: `regexp` can't be converted to `boolean`

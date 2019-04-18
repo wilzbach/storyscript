@@ -110,7 +110,7 @@ class ErrorCodes:
         'return type `{target}`.')
     type_operation_incompatible = (
         'E0103',
-        '`{left}` is not compatible with `{right}`'
+        '`{op}` between `{left}` and `{right}` is not supported.'
     )
     type_index_incompatible = (
         'E0104',
@@ -162,6 +162,22 @@ class ErrorCodes:
         'E0121', 'Multiple mutation overloads for `{name}` found:'
         '{overloads}\n'
         'but none matches.')
+    type_operation_boolean_incompatible = (
+        'E0122',
+        "`{val}` can't be converted to `boolean`"
+    )
+    type_operation_cmp_incompatible = (
+        'E0123',
+        "`{left}` can't be compared with `{right}`"
+    )
+    type_operation_equal_incompatible = (
+        'E0124',
+        'Equality comparison not supported between `{left}` and `{right}`.'
+    )
+    type_key_not_hashable = (
+        'E0125',
+        "`{key}` is not hashable and can't be used as an object key."
+    )
 
     @staticmethod
     def is_error(error_name):

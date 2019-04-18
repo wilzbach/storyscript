@@ -70,7 +70,7 @@ class Lowering:
             # only generate a fake_block once for every line
             # node: block in which the fake assignments should be inserted
             block = cls.fake_tree(node)
-        elif node.data == 'entity':
+        elif node.data == 'entity' or node.data == 'key_value':
             # set the parent where the inline_expression path should be
             # inserted
             entity = node
