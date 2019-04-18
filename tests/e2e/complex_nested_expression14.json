@@ -3,6 +3,32 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "a"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "src": "d = {'a': 2}",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
       "args": [
         {
           "$OBJECT": "expression",

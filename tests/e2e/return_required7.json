@@ -30,22 +30,18 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "a"
-              ]
+              "$OBJECT": "int",
+              "int": 1
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "int",
+              "int": 2
             }
           ]
         }
       ],
       "parent": "1",
-      "src": "    a + b",
+      "src": "    1 + 2",
       "next": "3"
     },
     "3": {

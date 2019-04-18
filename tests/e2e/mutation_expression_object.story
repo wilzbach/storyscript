@@ -1,1 +1,1 @@
-{"opened":1, "labeled":1} has key: "opened"
+{"opened":1, "labeled":1} contains key: "opened"

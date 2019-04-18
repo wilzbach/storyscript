@@ -375,6 +375,34 @@ class ExpressionResolver:
         fn.check_call(tree, args)
         return fn.output()
 
+    def service(self, tree):
+        # unknown for now
+        if tree.service_fragment.output is not None:
+            tree.service_fragment.output.expect(
+                0, 'service_no_inline_output')
+        try:
+            # check whether variable exists
+            t = self.path(tree.path)
+            service_to_mutation(tree)
+            return self.resolve_mutation(t, tree)
+        except CompilerError as e:
+            # ignore only invalid variables (must be services)
+            if e.error == 'var_not_defined':
+                return AnyType.instance()
+            raise e
+
+    def mutation(self, tree):
+        if tree.path:
+            t = self.path(tree.path)
+        else:
+            t = self.expr_visitor.primary_expression(
+                tree.primary_expression
+            )
+        return self.resolve_mutation(t, tree)
+
+    def call_expression(self, tree):
+        return self.resolve_function(tree)
+
     def base_expression(self, tree):
         """
         Compiles an soon to be expression object with the given tree.
@@ -384,30 +412,11 @@ class ExpressionResolver:
         if child.data == 'expression':
             return self.expression(child)
         elif child.data == 'service':
-            # unknown for now
-            if child.service_fragment.output is not None:
-                child.service_fragment.output.expect(
-                    0, 'service_no_inline_output')
-            try:
-                # check whether variable exists
-                t = self.path(child.path)
-                service_to_mutation(child)
-                return self.resolve_mutation(t, child)
-            except CompilerError as e:
-                # ignore only invalid variables (must be services)
-                if e.error == 'var_not_defined':
-                    return AnyType.instance()
-                raise e
+            return self.service(child)
         elif child.data == 'mutation':
-            if child.path:
-                t = self.path(child.path)
-            else:
-                t = self.expr_visitor.primary_expression(
-                    child.primary_expression
-                )
-            return self.resolve_mutation(t, child)
+            return self.mutation(child)
         elif child.data == 'call_expression':
-            return self.resolve_function(child)
+            return self.call_expression(child)
         else:
             assert child.data == 'path'
             return self.path(child)

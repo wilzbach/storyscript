@@ -3,6 +3,56 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "a"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "src": "d = {'a': 1}",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "list"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 0
+            },
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        }
+      ],
+      "src": "list = [0, 1]",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
       "args": [
         {
           "$OBJECT": "expression",

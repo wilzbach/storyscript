@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from storyscript.compiler.lowering.utils import service_to_mutation
 from storyscript.compiler.semantics.types.Types import AnyType, NoneType
 from storyscript.parser import Tree
 
@@ -86,6 +85,16 @@ class TypeResolver(ScopeSelectiveVisitor):
         tree.scope = Scope(parent=scope)
         self.visit_children(tree, scope=tree.scope)
 
+    def mutation_block(self, tree, scope):
+        # resolve to perform checks
+        tree.scope = Scope(parent=scope)
+        self.resolver.mutation(tree.mutation)
+
+    def absolute_expression(self, tree, scope):
+        # resolve to perform checks
+        tree.scope = Scope(parent=scope)
+        self.resolver.expression(tree.expression)
+
     def foreach_block(self, tree, scope):
         """
         Create a new scope and add output variables to it
@@ -144,7 +153,8 @@ class TypeResolver(ScopeSelectiveVisitor):
             tree.expect(tree.service.service_fragment.output is None,
                         'mutation_nested')
             tree.expect(tree.nested_block is None, 'mutation_nested')
-            service_to_mutation(tree.service)
+            # resolve to perform checks
+            self.resolver.service(tree.service)
             return
 
         tree.scope = Scope(parent=scope)
@@ -246,4 +256,6 @@ class TypeResolver(ScopeSelectiveVisitor):
     def start(self, tree, scope=None):
         # create the root scope
         tree.scope = Scope.root()
+        self.symbol_resolver.update_scope(tree.scope)
+        self.path_symbol_resolver.update_scope(tree.scope)
         self.visit_children(tree, scope=tree.scope)

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 9
+
+3|      return a
+               ^
+
+E0102: `string` can't be implicitly converted to expected return type `int`.

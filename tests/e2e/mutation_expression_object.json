@@ -31,7 +31,7 @@
         },
         {
           "$OBJECT": "mutation",
-          "mutation": "has",
+          "mutation": "contains",
           "args": [
             {
               "$OBJECT": "arg",
@@ -44,7 +44,7 @@
           ]
         }
       ],
-      "src": "{\"opened\":1, \"labeled\":1} has key: \"opened\""
+      "src": "{\"opened\":1, \"labeled\":1} contains key: \"opened\""
     }
   },
   "entrypoint": "1"
