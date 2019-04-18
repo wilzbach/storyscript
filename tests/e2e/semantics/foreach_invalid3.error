@@ -1,6 +1,6 @@
 Error: syntax error in story at line 4, column 5
 
 4|        b = b + elem
-          ^
+          ^^^
 
 E0100: Can't assign `string` to `int`

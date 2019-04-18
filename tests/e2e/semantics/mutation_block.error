@@ -1,6 +1,6 @@
 Error: syntax error in story at line 1, column 10
 
 1|    {"a": 1} get key: "b"
-               ^^^
+               ^^^^^^^
 
 E0113: Mutation `get` requires argument `default`

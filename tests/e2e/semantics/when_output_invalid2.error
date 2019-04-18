@@ -1,6 +1,6 @@
 Error: syntax error in story at line 3, column 24
 
 3|      when server listen as req, b
-                              ^^^
+                              ^^^^^^
 
 E0107: Only one output is allowed for `when` blocks.

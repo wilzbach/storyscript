@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 4
 
 2|    {} = obj
-         ^
+         ^^^^^
 
 E0073: Objects destructoring requires variable names.

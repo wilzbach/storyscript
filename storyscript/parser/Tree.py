@@ -68,25 +68,28 @@ class Tree(LarkTree):
                 children.append(child)
         return children
 
-    def _find_position(self, position):
+    def _find_position(self, position, reverse=False):
         """
         Finds the request positional attribute of a tree, by finding the
         first token its first token and returning the token's positional
         attribute
         """
-        token = self.find_first_token()
+        token = self.find_first_token(reverse=reverse)
         if token is not None:
             return str(getattr(token, position))
         return None
 
-    def find_first_token(self):
+    def find_first_token(self, reverse=False):
         """
         Finds the first token in a tree
         """
-        for child in self.children:
+        childs = self.children
+        if reverse:
+            childs = reversed(childs)
+        for child in childs:
             if isinstance(child, Token):
                 return child
-            t = child.find_first_token()
+            t = child.find_first_token(reverse=False)
             if t is not None:
                 return t
 
@@ -106,7 +109,7 @@ class Tree(LarkTree):
         """
         Finds the end column number of a tree using _find_position
         """
-        return self._find_position('end_column')
+        return self._find_position('end_column', reverse=True)
 
     def insert(self, item):
         """

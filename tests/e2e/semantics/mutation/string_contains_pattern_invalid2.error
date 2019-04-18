@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 7
 
 2|    b = a contains pattern: /re/
-            ^^^^^^^^
+            ^^^^^^^^^^^^^^^^
 
 E0113: Mutation `contains` requires argument `item`

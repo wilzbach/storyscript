@@ -1,6 +1,6 @@
 Error: syntax error in story at line 7, column 5
 
 7|    c = b["foo"][0]
-          ^
+          ^^^^^^^^^^
 
 E0104: `Map[int,List[string]]` can't be indexed with `string`
