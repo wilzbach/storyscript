@@ -15,6 +15,7 @@ List[A] contains item:A -> A
 List[A] unique -> List[A]
 List[A] remove item:A -> A
 List[A] index of:A -> A
+List[A] replace item:A by:A -> List[A]
 
 Map[K,V] length -> int
 Map[K,V] keys -> List[K]
@@ -26,13 +27,15 @@ Map[K,V] contains value:V -> boolean
 Map[K,V] get key:K default:V -> V
 
 string length -> int
-string replace -> string
+string replace item:string by:string -> string
+string replace pattern:string by:string -> string
 string contains pattern:regexp -> boolean
 string contains item:string -> boolean
 string split by:string -> List[string]
 string uppercase -> string
 string lowercase -> string
 string capitalize -> string
+string trim -> string
 string substring start:int -> string
 string substring start:int end:int -> string
 string substring end:int -> string
