@@ -1,3 +1,3 @@
 function sum a:int returns int
-    a + b
+    1 + 2
     return 0

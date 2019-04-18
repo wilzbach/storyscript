@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from storyscript.compiler.lowering.utils import service_to_mutation
 from storyscript.compiler.semantics.types.Types import AnyType, NoneType
 from storyscript.parser import Tree
 
@@ -48,9 +47,6 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.in_when_block = False
 
     def assignment(self, tree, scope):
-        self.symbol_resolver.update_scope(scope)
-        self.path_symbol_resolver.update_scope(scope)
-
         target_symbol = self.path_resolver.path(tree.path)
 
         frag = tree.assignment_fragment
@@ -80,18 +76,29 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.visit_children(tree, scope)
 
     def block(self, tree, scope):
+        self.update_scope(scope)
         self.visit_children(tree, scope)
 
     def nested_block(self, tree, scope):
         tree.scope = Scope(parent=scope)
         self.visit_children(tree, scope=tree.scope)
 
+    def mutation_block(self, tree, scope):
+        # resolve to perform checks
+        tree.scope = Scope(parent=scope)
+        self.resolver.mutation(tree.mutation)
+
+    def absolute_expression(self, tree, scope):
+        # resolve to perform checks
+        tree.scope = Scope(parent=scope)
+        self.resolver.expression(tree.expression)
+
     def foreach_block(self, tree, scope):
         """
         Create a new scope and add output variables to it
         """
         tree.scope = Scope(parent=scope)
-        self.symbol_resolver.update_scope(tree.scope)
+        self.update_scope(tree.scope)
 
         stmt = tree.foreach_statement
         output_type = self.resolver.base_expression(stmt.base_expression)
@@ -118,7 +125,7 @@ class TypeResolver(ScopeSelectiveVisitor):
 
     def when_block(self, tree, scope):
         tree.scope = Scope(parent=scope)
-        self.symbol_resolver.update_scope(tree.scope)
+        self.update_scope(tree.scope)
         output = tree.service.service_fragment.output
         if output is not None:
             output.expect(len(output.children) == 1, 'output_type_only_one',
@@ -144,11 +151,12 @@ class TypeResolver(ScopeSelectiveVisitor):
             tree.expect(tree.service.service_fragment.output is None,
                         'mutation_nested')
             tree.expect(tree.nested_block is None, 'mutation_nested')
-            service_to_mutation(tree.service)
+            # resolve to perform checks
+            self.resolver.service(tree.service)
             return
 
         tree.scope = Scope(parent=scope)
-        self.symbol_resolver.update_scope(tree.scope)
+        self.update_scope(tree.scope)
 
         output = tree.service.service_fragment.output
         if output is not None:
@@ -179,7 +187,6 @@ class TypeResolver(ScopeSelectiveVisitor):
         If blocks don't create a new scope.
         """
         if_statement = tree.if_statement
-        self.symbol_resolver.update_scope(scope)
         self.resolver.base_expression(if_statement.base_expression)
         self.visit_children(tree.nested_block, scope=scope)
 
@@ -188,7 +195,6 @@ class TypeResolver(ScopeSelectiveVisitor):
         Else if blocks don't create a new scope.
         """
         if_statement = tree.elseif_statement
-        self.symbol_resolver.update_scope(scope)
         self.resolver.base_expression(if_statement.base_expression)
         self.visit_children(tree.nested_block, scope=scope)
 
@@ -196,7 +202,6 @@ class TypeResolver(ScopeSelectiveVisitor):
         """
         Else blocks don't create a new scope.
         """
-        self.symbol_resolver.update_scope(scope)
         self.visit_children(tree.nested_block, scope=scope)
 
     def try_block(self, tree, scope):
@@ -213,6 +218,7 @@ class TypeResolver(ScopeSelectiveVisitor):
     def function_block(self, tree, scope):
         scope, return_type = self.function_statement(tree.function_statement,
                                                      scope)
+        self.update_scope(scope)
         self.visit_children(tree.nested_block, scope=scope)
         ReturnVisitor.check(tree, scope, return_type, self.function_table,
                             self.mutation_table)
@@ -243,7 +249,12 @@ class TypeResolver(ScopeSelectiveVisitor):
             return_type = self.resolver.types(tree.function_output.types)
         return scope, return_type
 
+    def update_scope(self, scope):
+        self.symbol_resolver.update_scope(scope)
+        self.path_symbol_resolver.update_scope(scope)
+
     def start(self, tree, scope=None):
         # create the root scope
         tree.scope = Scope.root()
+        self.update_scope(tree.scope)
         self.visit_children(tree, scope=tree.scope)

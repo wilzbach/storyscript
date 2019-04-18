@@ -3,6 +3,30 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "name": [
+        "foo"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 10
+            },
+            {
+              "$OBJECT": "int",
+              "int": 20
+            }
+          ]
+        }
+      ],
+      "src": "foo = [10, 20]",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
       "args": [
         {
           "$OBJECT": "expression",

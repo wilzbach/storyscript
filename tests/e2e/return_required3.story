@@ -1,5 +1,5 @@
 function sum a:int returns int
-    a + b
+    1 + 2
     if true
         return
     else if true

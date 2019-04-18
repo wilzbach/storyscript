@@ -3,6 +3,66 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "src": "a = 1",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
+      "src": "b = 2",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 3
+        }
+      ],
+      "src": "c = 3",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 4
+        }
+      ],
+      "src": "d = 4",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
       "args": [
         {
           "$OBJECT": "expression",
