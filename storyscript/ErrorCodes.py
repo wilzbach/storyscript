@@ -100,6 +100,11 @@ class ErrorCodes:
         'E0073', 'Objects destructoring requires variable names.')
     unicode_decode_error = (
         'E0074', 'Unicode decode error: {reason}.')
+    expected_closing_parenthesis = (
+        'E0075', 'Expected closing parenthesis: {cp}')
+    expected_closing_block = (
+        'E0076',
+        'Unexpected end of line. Maybe close a `}}` or `]` expression?')
     type_assignment_different = (
         'E0100', "Can't assign `{source}` to `{target}`")
     var_not_defined = (

@@ -272,13 +272,7 @@ class Transformer(LarkTransformer):
         """
         stmt = matches[0]
         if len(stmt.children) == 1:
-            e = stmt.base_expression.service
-            if e is not None and e.service_fragment is not None \
-                    and e.service_fragment.output:
-                output = e.service_fragment.children.pop()
-                stmt.children.append(output)
-            else:
-                stmt.expect(0, 'foreach_output_required')
+            stmt.expect(0, 'foreach_output_required')
 
         return Tree('foreach_block', matches)
 
