@@ -98,7 +98,8 @@ class TypeResolver(ScopeSelectiveVisitor):
         Adds implicit output to a service.
         """
         fragment = tree.service.service_fragment
-        if fragment and fragment.output is None and tree.nested_block:
+        if fragment and fragment.output is None and \
+                tree.nested_block is not None:
             command = fragment.command
             if command:
                 command = command.child(0)
@@ -195,6 +196,9 @@ class TypeResolver(ScopeSelectiveVisitor):
             for c in tree.nested_block.children:
                 self.visit_children(c, scope=tree.scope)
             self.in_service_block = False
+
+    def concise_when_block(self, tree, scope):
+        tree.expect(0, 'nested_when_block')
 
     def if_block(self, tree, scope):
         self.if_statement(tree, scope)
