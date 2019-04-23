@@ -1,0 +1,57 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "service": "my_service",
+      "command": "command",
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "expression",
+      "ln": "1.2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1",
+            {
+              "$OBJECT": "string",
+              "string": "a"
+            }
+          ]
+        }
+      ],
+      "next": "1.3"
+    },
+    "1.3": {
+      "method": "expression",
+      "ln": "1.3",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1",
+            {
+              "$OBJECT": "string",
+              "string": "b"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "services": [
+    "my_service"
+  ],
+  "entrypoint": "1.1"
+}
