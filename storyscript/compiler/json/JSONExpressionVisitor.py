@@ -15,10 +15,7 @@ class JSONExpressionVisitor(ExpressionVisitor):
         'MULTIPLIER': 'multiplication', 'BSLASH': 'division',
         'MODULUS': 'modulus',
         'AND': 'and', 'OR': 'or', 'NOT': 'not', 'EQUAL': 'equal',
-        'GREATER': 'greater', 'LESSER': 'less',
-        'NOT_EQUAL': 'not_equal',
-        'GREATER_EQUAL': 'greater_equal',
-        'LESSER_EQUAL': 'less_equal'
+        'LESSER': 'less', 'LESSER_EQUAL': 'less_equal'
     }
 
     def expression_type(self, operator, tree):

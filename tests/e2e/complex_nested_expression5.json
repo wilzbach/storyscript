@@ -6,69 +6,115 @@
       "args": [
         {
           "$OBJECT": "expression",
-          "expression": "greater_equal",
+          "expression": "not",
           "values": [
             {
               "$OBJECT": "expression",
-              "expression": "greater",
+              "expression": "less",
               "values": [
                 {
                   "$OBJECT": "expression",
-                  "expression": "not_equal",
+                  "expression": "not",
                   "values": [
                     {
                       "$OBJECT": "expression",
-                      "expression": "equal",
+                      "expression": "less_equal",
                       "values": [
                         {
                           "$OBJECT": "expression",
-                          "expression": "less_equal",
+                          "expression": "not",
                           "values": [
                             {
                               "$OBJECT": "expression",
-                              "expression": "less",
+                              "expression": "equal",
                               "values": [
                                 {
                                   "$OBJECT": "expression",
-                                  "expression": "sum",
+                                  "expression": "equal",
                                   "values": [
                                     {
-                                      "$OBJECT": "int",
-                                      "int": 1
+                                      "$OBJECT": "expression",
+                                      "expression": "less_equal",
+                                      "values": [
+                                        {
+                                          "$OBJECT": "expression",
+                                          "expression": "less",
+                                          "values": [
+                                            {
+                                              "$OBJECT": "expression",
+                                              "expression": "sum",
+                                              "values": [
+                                                {
+                                                  "$OBJECT": "int",
+                                                  "int": 1
+                                                },
+                                                {
+                                                  "$OBJECT": "float",
+                                                  "float": 0.1
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "$OBJECT": "expression",
+                                              "expression": "subtraction",
+                                              "values": [
+                                                {
+                                                  "$OBJECT": "int",
+                                                  "int": 2
+                                                },
+                                                {
+                                                  "$OBJECT": "float",
+                                                  "float": 0.2
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "$OBJECT": "expression",
+                                          "expression": "division",
+                                          "values": [
+                                            {
+                                              "$OBJECT": "int",
+                                              "int": 3
+                                            },
+                                            {
+                                              "$OBJECT": "float",
+                                              "float": 0.3
+                                            }
+                                          ]
+                                        }
+                                      ]
                                     },
                                     {
-                                      "$OBJECT": "float",
-                                      "float": 0.1
+                                      "$OBJECT": "expression",
+                                      "expression": "multiplication",
+                                      "values": [
+                                        {
+                                          "$OBJECT": "int",
+                                          "int": 4
+                                        },
+                                        {
+                                          "$OBJECT": "float",
+                                          "float": 0.4
+                                        }
+                                      ]
                                     }
                                   ]
                                 },
                                 {
                                   "$OBJECT": "expression",
-                                  "expression": "subtraction",
+                                  "expression": "multiplication",
                                   "values": [
                                     {
                                       "$OBJECT": "int",
-                                      "int": 2
+                                      "int": 5
                                     },
                                     {
                                       "$OBJECT": "float",
-                                      "float": 0.2
+                                      "float": 0.5
                                     }
                                   ]
-                                }
-                              ]
-                            },
-                            {
-                              "$OBJECT": "expression",
-                              "expression": "division",
-                              "values": [
-                                {
-                                  "$OBJECT": "int",
-                                  "int": 3
-                                },
-                                {
-                                  "$OBJECT": "float",
-                                  "float": 0.3
                                 }
                               ]
                             }
@@ -80,27 +126,13 @@
                           "values": [
                             {
                               "$OBJECT": "int",
-                              "int": 4
+                              "int": 6
                             },
                             {
                               "$OBJECT": "float",
-                              "float": 0.4
+                              "float": 0.6
                             }
                           ]
-                        }
-                      ]
-                    },
-                    {
-                      "$OBJECT": "expression",
-                      "expression": "multiplication",
-                      "values": [
-                        {
-                          "$OBJECT": "int",
-                          "int": 5
-                        },
-                        {
-                          "$OBJECT": "float",
-                          "float": 0.5
                         }
                       ]
                     }
@@ -112,27 +144,13 @@
                   "values": [
                     {
                       "$OBJECT": "int",
-                      "int": 6
+                      "int": 7
                     },
                     {
                       "$OBJECT": "float",
-                      "float": 0.6
+                      "float": 0.7
                     }
                   ]
-                }
-              ]
-            },
-            {
-              "$OBJECT": "expression",
-              "expression": "multiplication",
-              "values": [
-                {
-                  "$OBJECT": "int",
-                  "int": 7
-                },
-                {
-                  "$OBJECT": "float",
-                  "float": 0.7
                 }
               ]
             }

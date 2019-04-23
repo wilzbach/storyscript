@@ -73,9 +73,9 @@ def test_objects_build_nary_expression(patch, visitor, tree, magic):
     ('BSLASH', 'division'), ('MODULUS', 'modulus'),
     ('POWER', 'exponential'), ('DASH', 'subtraction'), ('AND', 'and'),
     ('OR', 'or'), ('NOT', 'not'),
-    ('EQUAL', 'equal'), ('GREATER', 'greater'),
-    ('LESSER', 'less'), ('NOT_EQUAL', 'not_equal'),
-    ('GREATER_EQUAL', 'greater_equal'), ('LESSER_EQUAL', 'less_equal'),
+    ('EQUAL', 'equal'),
+    ('LESSER', 'less'),
+    ('LESSER_EQUAL', 'less_equal'),
 ])
 def test_objects_expression_type(operator, expression, visitor, tree):
     result = visitor.expression_type(operator, tree)

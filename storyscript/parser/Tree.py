@@ -181,5 +181,17 @@ class Tree(LarkTree):
         assert child.type == 'NAME'
         return child
 
+    def create_token(self, name, data):
+        """
+        Create a token from the current tree fragment and use the current tree
+        for the position of the to-be-created token (line, column, end_column).
+        """
+        line = self.line()
+        column = self.column()
+        end_column = self.end_column()
+        tok = Token(name, data, line=line, column=column)
+        tok.end_column = end_column
+        return tok
+
     def __getattr__(self, attribute):
         return self.node(attribute)
