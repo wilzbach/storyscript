@@ -56,18 +56,6 @@ def test_transformer_is_keyword_future(syntax_error, keyword):
     syntax_error.assert_called_with(name, token=token, format=format)
 
 
-def test_transformer_arguments():
-    assert Transformer.arguments('matches') == Tree('arguments', 'matches')
-
-
-def test_transformer_arguments_short(magic):
-    expression = magic()
-    expression.data = 'expression'
-    matches = [expression]
-    expected = [expression.follow_node_chain().child(), expression]
-    assert Transformer.arguments(matches) == Tree('arguments', expected)
-
-
 def test_transformer_assignment(magic):
     matches = [magic(), magic()]
     assert Transformer.assignment(matches) == Tree('assignment', matches)
@@ -140,6 +128,7 @@ def test_transformer_when_block_no_command(patch, tree):
     """
     Ensures when_block nodes without command are transformed correctly
     """
+    patch.object(Transformer, 'argument_shorthand')
     tree.data = 'when_service'
     tree.output = None
     tree.children = [Token('NAME', '.name.')]

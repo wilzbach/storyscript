@@ -6,6 +6,7 @@ from lark.lexer import Token
 from storyscript.compiler.lowering.Faketree import FakeTree
 from storyscript.compiler.lowering.utils import service_to_mutation, \
         unicode_escape
+from storyscript.parser.Transformer import Transformer
 from storyscript.parser.Tree import Tree
 
 
@@ -608,6 +609,20 @@ class Lowering:
         for c in node.children:
             self.visit_cmp_expr(c)
 
+    def visit_arguments(self, node):
+        """
+        Transforms an argument tree. Short-hand argument (:foo) will be
+        expanded.
+        """
+        if not hasattr(node, 'children') or len(node.children) == 0:
+            return
+
+        if node.data == 'arguments':
+            Transformer.argument_shorthand(node)
+
+        for c in node.children:
+            self.visit_arguments(c)
+
     def process(self, tree):
         """
         Applies several preprocessing steps to the existing AST.
@@ -615,6 +630,7 @@ class Lowering:
         pred = Lowering.is_inline_expression
         self.visit_concise_when(tree)
         self.visit_cmp_expr(tree)
+        self.visit_arguments(tree)
         self.visit_assignment(tree, block=None, parent=None)
         self.visit_string_templates(tree, block=None, parent=None,
                                     cmp_expr=None)
