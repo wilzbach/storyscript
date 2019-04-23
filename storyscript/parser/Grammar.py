@@ -79,7 +79,7 @@ class Grammar:
         objects = ('ocb', 'key_value', 'key_value', 'ccb')
         self.ebnf.objects = self.ebnf.collection(*objects)
         self.ebnf.regular_expression = 'regexp name?'
-        self.ebnf.inline_expression = ('op service cp, '
+        self.ebnf.inline_expression = ('op inline_service cp, '
                                        'call_expression, '
                                        'op mutation cp')
         values = ('number, string, boolean, void, list, objects, '
@@ -152,7 +152,7 @@ class Grammar:
         self.ebnf.absolute_expression = 'expression'
         # service and mutation calls don't need parentheses when they are at
         # the base,e.g. `if my_service commmand`
-        self.ebnf.base_expression = '(expression, service, mutation)'
+        self.ebnf.base_expression = '(expression, inline_service, mutation)'
 
     def throw_statement(self):
         self.ebnf.THROW = 'throw'
@@ -182,8 +182,11 @@ class Grammar:
         self.ebnf.arguments = 'name? colon expression'
         self.ebnf.output = '(as name (comma name)*)'
         self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
+        self.ebnf.inline_service_fragment = '(command arguments*|arguments+)'
         self.ebnf.service = 'path service_fragment chained_mutation*'
         self.ebnf.service_block = 'service nl (nested_block)?'
+        self.ebnf.inline_service = ('path inline_service_fragment '
+                                    'chained_mutation*')
 
     def call_expression(self):
         self.ebnf.call_expression = 'path op arguments* cp'

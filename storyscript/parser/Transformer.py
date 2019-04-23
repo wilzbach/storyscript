@@ -95,6 +95,14 @@ class Transformer(LarkTransformer):
         return Tree('path', matches)
 
     @classmethod
+    def inline_service(cls, matches):
+        """
+        Transforms an inline service back into a normal service.
+        """
+        matches[1].data = 'service_fragment'
+        return Tree('service', matches)
+
+    @classmethod
     def service_block(cls, matches):
         """
         Transforms service blocks, moving indented arguments back to the first
