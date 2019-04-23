@@ -514,8 +514,9 @@ class Lowering:
             else:
                 assert c.data == 'assignment_destructoring'
                 line = node.line()
-                new_node = node.assignment_fragment.base_expression.expression
-                orig_obj = block.add_assignment(new_node, original_line=line)
+                base_expr = node.assignment_fragment.base_expression
+                orig_node = Tree('base_expression', base_expr.children)
+                orig_obj = block.add_assignment(orig_node, original_line=line)
                 for i, n in enumerate(c.children):
                     new_line = block.line()
                     n.expect(len(n.children) == 1,

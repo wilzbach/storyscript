@@ -85,7 +85,10 @@ class FakeTree:
         # updates all tokens
         self.mark_line(value, line)
         equals = Token('EQUALS', '=', line=line)
-        expr = Tree('base_expression', [value])
+        if value.data == 'base_expression':
+            expr = value
+        else:
+            expr = Tree('base_expression', [value])
         fragment = Tree('assignment_fragment', [equals, expr])
         return Tree('assignment', [path, fragment])
 
