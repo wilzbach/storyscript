@@ -93,6 +93,21 @@ class TypeResolver(ScopeSelectiveVisitor):
         tree.scope = Scope(parent=scope)
         self.resolver.expression(tree.expression)
 
+    def implicit_output(self, tree):
+        """
+        Adds implicit output to a service.
+        """
+        fragment = tree.service.service_fragment
+        if fragment and fragment.output is None and \
+                tree.nested_block is not None:
+            command = fragment.command
+            if command:
+                command = command.child(0)
+            else:
+                command = tree.service.path.child(0)
+            output = Tree('output', [command])
+            fragment.children.append(output)
+
     def foreach_block(self, tree, scope):
         """
         Create a new scope and add output variables to it
@@ -102,9 +117,10 @@ class TypeResolver(ScopeSelectiveVisitor):
 
         stmt = tree.foreach_statement
         output_type = self.resolver.base_expression(stmt.base_expression)
+        stmt.expect(stmt.output is not None, 'foreach_output_required')
         outputs = stmt.output.children
         nr_children = len(outputs)
-        assert(nr_children > 0)  # given by the grammar
+        stmt.expect(nr_children > 0, 'foreach_output_required')
 
         iterable_types = output_type.output(nr_children)
         stmt.output.expect(iterable_types is not None,
@@ -126,17 +142,19 @@ class TypeResolver(ScopeSelectiveVisitor):
     def when_block(self, tree, scope):
         tree.scope = Scope(parent=scope)
         self.update_scope(tree.scope)
-        output = tree.service.service_fragment.output
-        if output is not None:
-            output.expect(len(output.children) == 1, 'output_type_only_one',
-                          target='when')
 
-            name = output.children[0]
-            resolved = tree.scope.resolve(name)
-            output.expect(resolved is None, 'output_unique',
-                          name=resolved.name() if resolved else None)
-            sym = Symbol.from_path(name, AnyType.instance())
-            tree.scope.insert(sym)
+        self.implicit_output(tree)
+
+        output = tree.service.service_fragment.output
+        output.expect(len(output.children) == 1, 'output_type_only_one',
+                      target='when')
+
+        name = output.children[0]
+        resolved = tree.scope.resolve(name)
+        output.expect(resolved is None, 'output_unique',
+                      name=resolved.name() if resolved else None)
+        sym = Symbol.from_path(name, AnyType.instance())
+        tree.scope.insert(sym)
 
         tree.expect(not self.in_when_block, 'nested_when_block')
         self.in_when_block = True
@@ -158,6 +176,8 @@ class TypeResolver(ScopeSelectiveVisitor):
         tree.scope = Scope(parent=scope)
         self.update_scope(tree.scope)
 
+        self.implicit_output(tree)
+
         output = tree.service.service_fragment.output
         if output is not None:
             output.expect(len(output.children) == 1, 'output_type_only_one',
@@ -176,6 +196,9 @@ class TypeResolver(ScopeSelectiveVisitor):
             for c in tree.nested_block.children:
                 self.visit_children(c, scope=tree.scope)
             self.in_service_block = False
+
+    def concise_when_block(self, tree, scope):
+        tree.expect(0, 'nested_when_block')
 
     def if_block(self, tree, scope):
         self.if_statement(tree, scope)

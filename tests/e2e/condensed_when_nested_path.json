@@ -65,21 +65,14 @@
     "5": {
       "method": "when",
       "ln": "5",
+      "output": [
+        "logger"
+      ],
       "service": "default",
       "command": "log",
-      "args": [
-        {
-          "$OBJECT": "arg",
-          "name": "level",
-          "arg": {
-            "$OBJECT": "string",
-            "string": "normal"
-          }
-        }
-      ],
       "enter": "6",
       "parent": "2",
-      "src": "  \twhen log level: 'normal'",
+      "src": "  \twhen log as logger",
       "next": "6"
     },
     "6": {
@@ -95,36 +88,7 @@
         }
       ],
       "parent": "5",
-      "src": "  \t\tx = 1",
-      "next": "7"
-    },
-    "7": {
-      "method": "when",
-      "ln": "7",
-      "output": [
-        "logger"
-      ],
-      "service": "default",
-      "command": "log",
-      "enter": "8",
-      "parent": "2",
-      "src": "  \twhen log as logger",
-      "next": "8"
-    },
-    "8": {
-      "method": "expression",
-      "ln": "8",
-      "name": [
-        "x"
-      ],
-      "args": [
-        {
-          "$OBJECT": "int",
-          "int": 2
-        }
-      ],
-      "parent": "7",
-      "src": "  \t\tx = 2"
+      "src": "  \t\tx = 1"
     }
   },
   "services": [

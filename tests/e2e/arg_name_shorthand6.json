@@ -31,12 +31,24 @@
       "next": "3"
     },
     "3": {
-      "method": "when",
+      "method": "execute",
       "ln": "3",
+      "output": [
+        "server"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "4",
+      "src": "http server",
+      "next": "4"
+    },
+    "4": {
+      "method": "when",
+      "ln": "4",
       "output": [
         "client"
       ],
-      "service": "http",
+      "service": "server",
       "command": "listen",
       "args": [
         {
@@ -60,13 +72,14 @@
           }
         }
       ],
-      "enter": "4",
-      "src": "when http listen :path :method as client",
-      "next": "4"
+      "enter": "5",
+      "parent": "3",
+      "src": "\twhen server listen :path :method as client",
+      "next": "5"
     },
-    "4": {
+    "5": {
       "method": "expression",
-      "ln": "4",
+      "ln": "5",
       "name": [
         "x"
       ],
@@ -76,8 +89,8 @@
           "int": 0
         }
       ],
-      "parent": "3",
-      "src": "    x = 0"
+      "parent": "4",
+      "src": "    \tx = 0"
     }
   },
   "services": [

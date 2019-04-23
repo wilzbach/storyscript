@@ -423,8 +423,8 @@ class JSONCompiler:
         Parses a tree looking for subtrees.
         """
         for item in tree.children:
-            if isinstance(item, Tree):
-                self.subtree(item, parent=parent)
+            assert isinstance(item, Tree)
+            self.subtree(item, parent=parent)
 
     def compile(self, tree, debug=False):
         """
