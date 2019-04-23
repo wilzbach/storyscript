@@ -56,7 +56,18 @@ class Transformer(LarkTransformer):
         expand it.
         """
         if len(matches) == 1:
-            matches = [matches[0].child(0), matches[0]]
+            assert matches[0].data == 'expression'
+            path = matches[0].follow_node_chain([
+                'expression', 'or_expression', 'and_expression',
+                'cmp_expression', 'arith_expression', 'mul_expression',
+                'unary_expression', 'pow_expression', 'primary_expression',
+                'entity', 'path'
+            ])
+            if path is not None:
+                # shorthand syntax for arguments (:name)
+                matches = [path.child(0), matches[0]]
+            else:
+                matches = [matches[0]]
         return Tree('arguments', matches)
 
     @staticmethod
@@ -193,7 +204,7 @@ class Transformer(LarkTransformer):
         if not when.service_fragment.command:
             first_arg = when.service_fragment.arguments
             if first_arg and not isinstance(first_arg.first_child(), Token) \
-                    and first_arg.first_child().data == 'or_expression':
+                    and first_arg.first_child().data == 'expression':
                 # the parser parsed the first argument as `:<or_expression>`
                 first_arg.children = [path_token, first_arg.last_child()]
             else:

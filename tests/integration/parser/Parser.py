@@ -120,7 +120,7 @@ def test_parser_service():
 
 
 def test_parser_service_arguments():
-    result = parse('container key:"value"\n')
+    result = parse('my_service command key:"value"\n')
     args = result.block.service_block.service.service_fragment.arguments
     assert args.child(0) == Token('NAME', 'key')
     entity = get_entity(arith_exp(Tree('an_exp', [args.expression])))

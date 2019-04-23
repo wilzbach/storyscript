@@ -1,0 +1,87 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "path"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "/root"
+        }
+      ],
+      "src": "path = '/root'",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "method"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "get"
+        }
+      ],
+      "src": "method = 'get'",
+      "next": "3"
+    },
+    "3": {
+      "method": "when",
+      "ln": "3",
+      "output": [
+        "client"
+      ],
+      "service": "http",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "path",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "path"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "method",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "method"
+            ]
+          }
+        }
+      ],
+      "enter": "4",
+      "src": "when http listen :path :method as client",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "x"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "3",
+      "src": "    x = 0"
+    }
+  },
+  "services": [
+    "http"
+  ],
+  "entrypoint": "1"
+}

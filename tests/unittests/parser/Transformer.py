@@ -75,9 +75,11 @@ def test_transformer_arguments():
     assert Transformer.arguments('matches') == Tree('arguments', 'matches')
 
 
-def test_transformer_arguments_short():
-    matches = [Tree('path', ['token'])]
-    expected = ['token', Tree('path', ['token'])]
+def test_transformer_arguments_short(magic):
+    expression = magic()
+    expression.data = 'expression'
+    matches = [expression]
+    expected = [expression.follow_node_chain().child(), expression]
     assert Transformer.arguments(matches) == Tree('arguments', expected)
 
 

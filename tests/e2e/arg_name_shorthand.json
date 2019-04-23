@@ -1,0 +1,83 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "function": "test",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "arg",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "int"
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": "4",
+      "src": "function test arg:int",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "parent": "1",
+      "src": "\treturn",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "arg"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "src": "arg = 0",
+      "next": "5.1"
+    },
+    "5.1": {
+      "method": "call",
+      "ln": "5.1",
+      "name": [
+        "__p-5.1"
+      ],
+      "function": "test",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "arg",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "arg"
+            ]
+          }
+        }
+      ],
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-5.1"
+          ]
+        }
+      ],
+      "src": "test(:arg)"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "test": "1"
+  }
+}

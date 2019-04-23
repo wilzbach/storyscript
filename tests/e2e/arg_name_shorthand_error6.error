@@ -1,0 +1,6 @@
+Error: syntax error in story at line 5, column 6
+
+5|    test(2 + arg:arg)
+           ^
+
+E0041: `2` is not allowed here

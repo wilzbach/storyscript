@@ -1,0 +1,72 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "start"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "src": "start = 0",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "end"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 5
+        }
+      ],
+      "src": "end = 5",
+      "next": "3"
+    },
+    "3": {
+      "method": "mutation",
+      "ln": "3",
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "aa"
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "substring",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "start",
+              "arg": {
+                "$OBJECT": "path",
+                "paths": [
+                  "start"
+                ]
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "end",
+              "arg": {
+                "$OBJECT": "path",
+                "paths": [
+                  "end"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "src": "\"aa\" substring :start :end"
+    }
+  },
+  "entrypoint": "1"
+}
