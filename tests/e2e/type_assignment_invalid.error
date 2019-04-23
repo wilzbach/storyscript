@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column None
+
+1|    string a = []
+      ^^^^^^^^^^^^^
+
+E0126: Type casting not supported between `List[any]` and `string`.

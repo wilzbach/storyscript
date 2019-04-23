@@ -46,11 +46,12 @@ def test_objects_pow_expression_two(patch, tree):
     patch.many(ExpressionVisitor, ['nary_expression',
                                    'primary_expression',
                                    'unary_expression'])
-    tree.child(1).type = 'POWER'
+    tree.child(1).child(0).type = 'POWER'
     tree.children = [1, '+', 2]
+    tree.child(1).data = 'pow_operator'
     r = ExpressionVisitor().pow_expression(tree)
     ExpressionVisitor.nary_expression.assert_called_with(
-        tree, tree.child(1), [
+        tree, tree.child(1).child(0), [
             ExpressionVisitor.primary_expression(tree.child(0)),
             ExpressionVisitor.unary_expression(tree.child(2))
         ])
@@ -244,7 +245,7 @@ def test_objects_nary_expression(patch, tree):
     Ensures that the ExpressionVisitor by default throws AssertionErrors
     for to-be-implemented methods.
     """
-    with raises(AssertionError):
+    with raises(NotImplementedError):
         ExpressionVisitor().nary_expression(0)
 
 
@@ -253,5 +254,14 @@ def test_objects_values(patch, tree):
     Ensures that the ExpressionVisitor by default throws AssertionErrors
     for to-be-implemented methods.
     """
-    with raises(AssertionError):
+    with raises(NotImplementedError):
         ExpressionVisitor().values(0)
+
+
+def test_objects_as_expression(patch, tree):
+    """
+    Ensures that the ExpressionVisitor by default throws AssertionErrors
+    for to-be-implemented methods.
+    """
+    with raises(NotImplementedError):
+        ExpressionVisitor().as_expression(None, 0)

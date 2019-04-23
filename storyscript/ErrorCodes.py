@@ -185,6 +185,10 @@ class ErrorCodes:
         'E0125',
         "`{key}` is not hashable and can't be used as an object key."
     )
+    type_operation_cast_incompatible = (
+        'E0126',
+        'Type casting not supported between `{left}` and `{right}`.'
+    )
 
     @staticmethod
     def is_error(error_name):

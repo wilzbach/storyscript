@@ -1,0 +1,54 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "expression",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": []
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "List",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "List",
+                "values": [
+                  {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.1"
+            ]
+          }
+        }
+      ],
+      "src": "List[List[string]] a = []"
+    }
+  },
+  "entrypoint": "1.1"
+}

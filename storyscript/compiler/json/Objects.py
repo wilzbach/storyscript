@@ -182,17 +182,24 @@ class Objects:
             dictionary['flags'] = re_arr[1]
         return dictionary
 
-    @staticmethod
-    def types(tree):
+    @classmethod
+    def types(cls, tree):
         assert tree.data == 'types'
         c = tree.first_child()
         if c.data == 'map_type':
-            t = 'map'
+            key = cls.base_type(c.child(0))
+            value = cls.types(c.child(1))
+            return {'$OBJECT': 'type', 'type': 'Map', 'values': [key, value]}
         elif c.data == 'list_type':
-            t = 'list'
+            inner = cls.types(c.child(0))
+            return {'$OBJECT': 'type', 'type': 'List', 'values': [inner]}
         else:
-            assert c.data == 'base_type'
-            t = c.child(0).value
+            return cls.base_type(c)
+
+    @staticmethod
+    def base_type(tree):
+        assert tree.data == 'base_type'
+        t = tree.child(0).value
         return {'$OBJECT': 'type', 'type': t}
 
     def entity(self, tree):
@@ -258,7 +265,7 @@ class Objects:
         """
         Compiles an expression object with the given tree.
         """
-        assert tree.child(0).data == 'or_expression'
+        assert tree.data == 'expression'
         return self.expr_visitor.expression(tree)
 
     def primary_expression(self, tree):

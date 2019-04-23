@@ -59,6 +59,17 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         """
         return operator in cls._arithmetic_types
 
+    def as_expression(self, tree, expr=None):
+        assert tree.child(1).data == 'as_operator'
+        if expr is None:
+            expr = self.visitor.path(tree.path)
+        # check for compatibility
+        t = self.visitor.types(tree.child(1).types)
+        tree.expect(t.can_be_assigned(expr),
+                    'type_operation_cast_incompatible',
+                    left=expr, right=t)
+        return t
+
     def values(self, tree):
         return self.visitor.values(tree)
 
@@ -305,7 +316,6 @@ class ExpressionResolver:
         Compiles an expression object with the given tree.
         """
         assert tree.data == 'expression'
-        assert tree.child(0).data == 'or_expression'
         return self.expr_visitor.expression(tree)
 
     def build_arguments(self, tree, name, fn_type):

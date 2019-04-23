@@ -102,7 +102,7 @@ class Grammar:
         self.ebnf.assignment_fragment = assignment_fragment
         objects = self.ebnf.collection('ocb', 'path', 'path', 'ccb')
         self.ebnf.assignment_destructoring = objects
-        self.ebnf.assignment = ('(path | assignment_destructoring ) '
+        self.ebnf.assignment = ('types? (path | assignment_destructoring ) '
                                 'assignment_fragment')
 
     def imports(self):
@@ -139,8 +139,12 @@ class Grammar:
         self.ebnf.mul_operator = 'MULTIPLIER, BSLASH, MODULUS'
 
         self.ebnf.primary_expression = 'entity , op or_expression cp'
-        self.ebnf.pow_expression = ('primary_expression (POWER '
-                                    'unary_expression)?')
+        self.ebnf.output_names = 'name (comma name)*'
+        self.ebnf.as_operator = 'as (types | output_names)'
+        self.ebnf.pow_operator = 'POWER'
+        self.ebnf.pow_expression = ('primary_expression ((pow_operator '
+                                    'unary_expression)'
+                                    ' | as_operator)?')
         self.ebnf.unary_expression = ('unary_operator unary_expression , '
                                       'pow_expression')
         self.ebnf.mul_expression = '(mul_expression mul_operator)? ' \
