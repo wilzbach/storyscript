@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 9
+Error: syntax error in story at line 2, column 9
 
-1|    foreach items
+2|    foreach items
               ^^^^^
 
 E0064: Foreach blocks require an output (e.g. `as item`)

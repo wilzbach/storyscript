@@ -35,6 +35,9 @@
     "4": {
       "method": "when",
       "ln": "4",
+      "output": [
+        "listen"
+      ],
       "service": "server",
       "command": "listen",
       "args": [
@@ -144,6 +147,9 @@
     "14": {
       "method": "when",
       "ln": "14",
+      "output": [
+        "listen"
+      ],
       "service": "serv",
       "command": "listen",
       "args": [

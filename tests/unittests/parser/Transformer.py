@@ -56,21 +56,6 @@ def test_transformer_is_keyword_future(syntax_error, keyword):
     syntax_error.assert_called_with(name, token=token, format=format)
 
 
-def test_transformer_implicit_output(tree):
-    """
-    Ensures Transformer.implicit_output adds an output tree when needed
-    """
-    tree.service_fragment.output = None
-    tree.service_fragment.children = []
-    Transformer.implicit_output(tree)
-    expected = Tree('output', [tree.service_fragment.command.child()])
-    assert tree.service_fragment.children[-1] == expected
-
-
-def test_transformer_implicit_output_none(tree):
-    assert Transformer.implicit_output(tree) is None
-
-
 def test_transformer_arguments():
     assert Transformer.arguments('matches') == Tree('arguments', 'matches')
 
@@ -113,11 +98,9 @@ def test_transformer_service_block_when(patch, tree):
     """
     Ensures service_block nodes with a when block are transformed correctly
     """
-    patch.object(Transformer, 'implicit_output')
     tree.block.rules = None
     matches = ['service_block', tree]
     result = Transformer.service_block(matches)
-    Transformer.implicit_output.assert_called_with('service_block')
     assert result == Tree('service_block', matches)
 
 
@@ -137,14 +120,12 @@ def test_transformer_when_block(patch, tree):
     """
     Ensures when_block nodes are transformed correctly
     """
-    patch.object(Transformer, 'implicit_output')
     tree.data = 'when_service'
     tree.output = None
     tree.children = [Token('NAME', '.name.')]
     tree.child_token.return_value = Token('NAME', '.child.', line=42)
     tree.path.child_token.return_value = Token('NAME', '.path.')
     result = Transformer.when_block([tree, 'block'])
-    Transformer.implicit_output.assert_called_with(tree)
     assert result == Tree('concise_when_block', [
         Token('NAME', '.child.'),
         Token('NAME', '.path.'),
@@ -159,13 +140,11 @@ def test_transformer_when_block_no_command(patch, tree):
     """
     Ensures when_block nodes without command are transformed correctly
     """
-    patch.object(Transformer, 'implicit_output')
     tree.data = 'when_service'
     tree.output = None
     tree.children = [Token('NAME', '.name.')]
     tree.service_fragment.command = None
     result = Transformer.when_block([tree, 'block'])
-    Transformer.implicit_output.assert_not_called()
     assert result == Tree('when_block', [
         Tree('service', [
             Tree('path', [tree.child_token()]),

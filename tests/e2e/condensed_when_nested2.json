@@ -54,6 +54,9 @@
     "4": {
       "method": "when",
       "ln": "4",
+      "output": [
+        "log"
+      ],
       "service": "default",
       "command": "log",
       "args": [

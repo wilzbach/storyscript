@@ -40,16 +40,6 @@ class Transformer(LarkTransformer):
             raise StorySyntaxError('path_name_internal', token=token)
 
     @staticmethod
-    def implicit_output(tree):
-        """
-        Adds implicit output to a service.
-        """
-        fragment = tree.service_fragment
-        if fragment and fragment.output is None:
-            output = Tree('output', [fragment.command.child(0)])
-            fragment.children.append(output)
-
-    @staticmethod
     def arguments(matches):
         """
         Transforms an argument tree. If dealing with is a short-hand argument,
@@ -118,7 +108,6 @@ class Transformer(LarkTransformer):
                     matches[0].service_fragment.children.append(arg)
                 return Tree('service_block', [matches[0]])
 
-        cls.implicit_output(matches[0])
         return Tree('service_block', matches)
 
     @staticmethod
@@ -135,19 +124,15 @@ class Transformer(LarkTransformer):
                 block=block
             )
 
-        output_name = service_name
         service_fragment = Tree('service_fragment', [])
         if command:
             assert isinstance(command, Token)
             assert command.type == 'NAME'
             service_fragment.children.append(Tree('command', [command]))
-            output_name = command
-        if not output:
-            # -> implicit output
-            output = Tree('output', [output_name])
 
-        assert output.data == 'output'
-        service_fragment.children.append(output)
+        if output:
+            assert output.data == 'output'
+            service_fragment.children.append(output)
         return Transformer.create_when_block_tree(
             service_name=service_name,
             fragment=service_fragment,
@@ -226,7 +211,6 @@ class Transformer(LarkTransformer):
         # concise when which needs to wrapped in a service block
         when.children.pop(0)
         when.data = 'service'
-        cls.implicit_output(when)
         return Tree('concise_when_block', [
             name_token, path_token,
             Tree('when_block', [when, nested_block]),
@@ -263,18 +247,6 @@ class Transformer(LarkTransformer):
                 matches[-1] = Tree('nested_block', [matches[-1]])
 
         return Tree('function_block', matches)
-
-    @classmethod
-    def foreach_block(cls, matches):
-        """
-        Transform foreach blocks.
-        Check whether an inline_service received the output instead.
-        """
-        stmt = matches[0]
-        if len(stmt.children) == 1:
-            stmt.expect(0, 'foreach_output_required')
-
-        return Tree('foreach_block', matches)
 
     @classmethod
     def string(cls, matches):

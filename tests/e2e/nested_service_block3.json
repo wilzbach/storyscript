@@ -15,9 +15,6 @@
     "2": {
       "method": "when",
       "ln": "2",
-      "output": [
-        "listen"
-      ],
       "service": "command",
       "command": "listen",
       "enter": "3",
