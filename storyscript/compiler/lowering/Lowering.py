@@ -542,12 +542,75 @@ class Lowering:
             for c in node.children:
                 self.visit_assignment(c, block, parent=node)
 
+    @staticmethod
+    def create_unary_operation(child):
+        op = Tree('unary_operator', [child.create_token('NOT', '!')])
+        return Tree('arith_expression', [
+                Tree('mul_expression', [
+                    Tree('unary_expression', [
+                        op,
+                        Tree('unary_expression', [
+                            Tree('pow_expression', [
+                                Tree('primary_expression', [
+                                    child
+                                ])
+                            ])
+                        ])
+                    ])
+                ])
+            ])
+
+    @classmethod
+    def rewrite_cmp_expr(cls, node):
+        cmp_op = node.cmp_operator
+        cmp_tok = cmp_op.child(0)
+
+        if cmp_tok.type == 'NOT_EQUAL':
+            cmp_tok = cmp_op.create_token('EQUAL', '==')
+        elif cmp_tok.type == 'GREATER_EQUAL':
+            cmp_tok = cmp_op.create_token('LESSER', '<')
+            cmp_op.children.reverse()
+        else:
+            assert cmp_tok.type == 'GREATER'
+            cmp_tok = cmp_op.create_token('LESSER_EQUAL', '<=')
+            cmp_op.children.reverse()
+
+        # replace comparison token
+        cmp_op.children = [cmp_tok]
+        # create new comparison tree with 'NOT'
+        unary_op = cls.create_unary_operation(Tree('or_expression', [
+            Tree('and_expression', [
+                Tree('cmp_expression', node.children)
+            ])
+        ]))
+        node.children = [unary_op]
+
+    def visit_cmp_expr(self, node):
+        """
+        Visit assignments and lower destructors
+        """
+        if not hasattr(node, 'children') or len(node.children) == 0:
+            return
+
+        if node.data == 'cmp_expression' and len(node.children) == 3:
+            cmp_op = node.child(1)
+            assert cmp_op.data == 'cmp_operator'
+            cmp_tok = cmp_op.child(0)
+            if cmp_tok.type == 'NOT_EQUAL' or \
+                    cmp_tok.type == 'GREATER_EQUAL' or \
+                    cmp_tok.type == 'GREATER':
+                self.rewrite_cmp_expr(node)
+
+        for c in node.children:
+            self.visit_cmp_expr(c)
+
     def process(self, tree):
         """
         Applies several preprocessing steps to the existing AST.
         """
         pred = Lowering.is_inline_expression
         self.visit_concise_when(tree)
+        self.visit_cmp_expr(tree)
         self.visit_assignment(tree, block=None, parent=None)
         self.visit_string_templates(tree, block=None, parent=None,
                                     cmp_expr=None)

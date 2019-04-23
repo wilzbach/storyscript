@@ -54,17 +54,17 @@ def int_(value):
     ('0%-2', 'modulus', [int_(0), int_(-2)]),
     ('1==2', 'equal', [int_(1), int_(2)]),
     ('1==-2', 'equal', [int_(1), int_(-2)]),
-    ('1!=2', 'not_equal', [int_(1), int_(2)]),
-    ('1!=-2', 'not_equal', [int_(1), int_(-2)]),
+    ('1!=2', 'not.equal', [int_(1), int_(2)]),
+    ('1!=-2', 'not.equal', [int_(1), int_(-2)]),
     ('1<2', 'less', [int_(1), int_(2)]),
     ('1<-2', 'less', [int_(1), int_(-2)]),
-    ('1>2', 'greater', [int_(1), int_(2)]),
-    ('1>-2', 'greater', [int_(1), int_(-2)]),
+    ('1>2', 'not.less_equal', [int_(1), int_(2)]),
+    ('1>-2', 'not.less_equal', [int_(1), int_(-2)]),
     ('1<=2', 'less_equal', [int_(1), int_(2)]),
     ('1<=-2', 'less_equal', [int_(1), int_(-2)]),
-    ('1>=2', 'greater_equal', [int_(1), int_(2)]),
-    ('-1>=2', 'greater_equal', [int_(-1), int_(2)]),
-    ('1>=-2', 'greater_equal', [int_(1), int_(-2)]),
+    ('1>=2', 'not.less', [int_(1), int_(2)]),
+    ('-1>=2', 'not.less', [int_(-1), int_(2)]),
+    ('1>=-2', 'not.less', [int_(1), int_(-2)]),
     ('b+c', 'sum', [path('b'), path('c')]),
     # Currently a valid entity
     # ('b-c', 'subtraction', [path('b'), path('c')]),
@@ -73,11 +73,11 @@ def int_(value):
     # ('b/c', 'divison', [path('b'), path('c')]),
     ('b%c', 'modulus', [path('b'), path('c')]),
     ('b==c', 'equal', [path('b'), path('c')]),
-    ('b!=c', 'not_equal', [path('b'), path('c')]),
+    ('b!=c', 'not.equal', [path('b'), path('c')]),
     ('b<c', 'less', [path('b'), path('c')]),
-    ('b>c', 'greater', [path('b'), path('c')]),
+    ('b>c', 'not.less_equal', [path('b'), path('c')]),
     ('b<=c', 'less_equal', [path('b'), path('c')]),
-    ('b>=c', 'greater_equal', [path('b'), path('c')]),
+    ('b>=c', 'not.less', [path('b'), path('c')]),
 ])
 def test_compiler_expression_whitespace(source_pair):
     """
@@ -94,5 +94,12 @@ def test_compiler_expression_whitespace(source_pair):
     assert result['tree'][index]['name'] == ['a']
     assert len(result['tree'][index]['args']) == 1
     assert result['tree'][index]['args'][0]['$OBJECT'] == 'expression'
-    assert result['tree'][index]['args'][0]['expression'] == expression
-    assert result['tree'][index]['args'][0]['values'] == values
+    expression = expression.split('.')
+    assert result['tree'][index]['args'][0]['expression'] == expression[0]
+    if len(expression) == 1:
+        assert result['tree'][index]['args'][0]['values'] == values
+    else:
+        # not rewrites
+        args = result['tree'][index]['args'][0]['values'][0]
+        assert args['expression'] == expression[1]
+        assert args['values'] == values

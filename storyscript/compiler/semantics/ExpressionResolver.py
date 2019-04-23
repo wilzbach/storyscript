@@ -18,37 +18,33 @@ class SymbolExpressionVisitor(ExpressionVisitor):
     def __init__(self, visitor):
         self.visitor = visitor
 
-    _cmp_ops = {
-        'GREATER': True, 'LESSER': True, 'GREATER_EQUAL': True,
-        'LESSER_EQUAL': True
-    }
-
     @classmethod
     def is_cmp(cls, op):
         """
         Tests whether a binary operation requires comparison between types.
         """
-        return op in cls._cmp_ops
+        return op == 'LESSER' or op == 'LESSER_EQUAL'
 
     @classmethod
     def is_equal(cls, op):
         """
         Tests whether a binary operation requires equality comparison.
         """
-        return op == 'EQUAL' or op == 'NOT_EQUAL'
-
-    _boolean_types = {
-        'AND': True, 'OR': True, 'NOT': True, 'EQUAL': True, 'GREATER': True,
-        'LESSER': True, 'NOT_EQUAL': True, 'GREATER_EQUAL': True,
-        'LESSER_EQUAL': True,
-    }
+        return op == 'EQUAL'
 
     @classmethod
-    def is_boolean_operator(cls, operator):
+    def is_boolean(cls, op):
+        """
+        Tests whether a binary operation involves boolean logic.
+        """
+        return op == 'AND' or op == 'OR' or op == 'NOT'
+
+    @classmethod
+    def op_returns_boolean(cls, op):
         """
         Checks whether a given operator is boolean.
         """
-        return operator in cls._boolean_types
+        return cls.is_cmp(op) or cls.is_equal(op) or cls.is_boolean(op)
 
     _arithmetic_types = {
         'PLUS': True, 'DASH': True, 'POWER': True, 'MULTIPLIER': True,
@@ -66,7 +62,7 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         return self.visitor.values(tree)
 
     def nary_expression(self, tree, op, values):
-        if self.is_boolean_operator(op.type):
+        if self.op_returns_boolean(op.type):
             assert len(values) <= 2
             # e.g. a < b
             if self.is_cmp(op.type):

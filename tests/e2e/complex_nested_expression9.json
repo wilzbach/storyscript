@@ -34,33 +34,39 @@
           "values": [
             {
               "$OBJECT": "expression",
-              "expression": "greater",
+              "expression": "not",
               "values": [
                 {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "foo",
-                    {
-                      "$OBJECT": "int",
-                      "int": 0
-                    }
-                  ]
-                },
-                {
                   "$OBJECT": "expression",
-                  "expression": "sum",
+                  "expression": "less_equal",
                   "values": [
-                    {
-                      "$OBJECT": "int",
-                      "int": 5
-                    },
                     {
                       "$OBJECT": "path",
                       "paths": [
                         "foo",
                         {
                           "$OBJECT": "int",
-                          "int": 1
+                          "int": 0
+                        }
+                      ]
+                    },
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "sum",
+                      "values": [
+                        {
+                          "$OBJECT": "int",
+                          "int": 5
+                        },
+                        {
+                          "$OBJECT": "path",
+                          "paths": [
+                            "foo",
+                            {
+                              "$OBJECT": "int",
+                              "int": 1
+                            }
+                          ]
                         }
                       ]
                     }

@@ -1,0 +1,66 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "not",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "equal",
+              "values": [
+                {
+                  "$OBJECT": "int",
+                  "int": 1
+                },
+                {
+                  "$OBJECT": "int",
+                  "int": 2
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "a = 1 != 2",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "not",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "equal",
+              "values": [
+                {
+                  "$OBJECT": "int",
+                  "int": 1
+                },
+                {
+                  "$OBJECT": "int",
+                  "int": 2
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "a = !(1 == 2)"
+    }
+  },
+  "entrypoint": "1"
+}
