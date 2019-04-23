@@ -129,17 +129,26 @@ class StoryError(SyntaxError):
         Finds the error code when the error is UnexpectedToken
         """
         intention = Intention(self.get_line())
-        if intention.assignment():
-            return ErrorCodes.assignment_incomplete
-        elif intention.unnecessary_colon():
+        token = self.error.token
+
+        if self.error.expected == ['_CP']:
+            if token.type == '_AS':
+                return ErrorCodes.service_no_inline_output
+            self._format = {'cp': ')'}
+            return ErrorCodes.expected_closing_parenthesis
+
+        if intention.unnecessary_colon():
             return ErrorCodes.unnecessary_colon
         elif self.error.expected == ['_INDENT']:
             return ErrorCodes.block_expected_after
+        elif self.error.expected == ['_DEDENT']:
+            return ErrorCodes.expected_closing_block
         elif self.error.expected == ['_COLON']:
             return ErrorCodes.arguments_expected
+        elif intention.assignment():
+            return ErrorCodes.assignment_incomplete
 
         self._format = {'allowed': str(self.error.expected)}
-        token = self.error.token
         if token.type == '_NL':
             return ErrorCodes.unexpected_end_of_line
 

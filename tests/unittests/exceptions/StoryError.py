@@ -248,7 +248,9 @@ def test_storyerror_unexpected_token_code_nl(patch, call_count, storyerror):
 
 def test_storyerror_unexpected_token_code_assignment(patch, storyerror):
     patch.init(Intention)
+    patch.object(storyerror, 'get_line')
     patch.object(Intention, 'assignment')
+    patch.object(Intention, 'unnecessary_colon', return_value=False)
     result = storyerror.unexpected_token_code()
     assert result == ErrorCodes.assignment_incomplete
 

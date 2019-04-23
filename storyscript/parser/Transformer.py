@@ -95,6 +95,14 @@ class Transformer(LarkTransformer):
         return Tree('path', matches)
 
     @classmethod
+    def inline_service(cls, matches):
+        """
+        Transforms an inline service back into a normal service.
+        """
+        matches[1].data = 'service_fragment'
+        return Tree('service', matches)
+
+    @classmethod
     def service_block(cls, matches):
         """
         Transforms service blocks, moving indented arguments back to the first
@@ -264,13 +272,7 @@ class Transformer(LarkTransformer):
         """
         stmt = matches[0]
         if len(stmt.children) == 1:
-            e = stmt.base_expression.service
-            if e is not None and e.service_fragment is not None \
-                    and e.service_fragment.output:
-                output = e.service_fragment.children.pop()
-                stmt.children.append(output)
-            else:
-                stmt.expect(0, 'foreach_output_required')
+            stmt.expect(0, 'foreach_output_required')
 
         return Tree('foreach_block', matches)
 

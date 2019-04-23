@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 10
+
+1|    a = [1, 2
+               ^
+
+E0076: Unexpected end of line. Maybe close a `}` or `]` expression?
