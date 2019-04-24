@@ -1,7 +1,7 @@
-from pytest import mark, raises
+from pytest import mark
 
 from storyscript.Api import Api
-from storyscript.exceptions import CompilerError, StoryError
+from storyscript.exceptions import CompilerError
 
 
 def is_boolean(op):
@@ -76,12 +76,12 @@ def runner(source, op=None, allowed=None, pre=''):
     if not isinstance(allowed, list):
         allowed = [allowed]
 
+    s = Api.loads(in_source)
     if any(allowed_fn(op) for allowed_fn in allowed):
-        Api.loads(in_source)
+        s.check_success()
     else:
-        with raises(StoryError) as e:
-            Api.loads(in_source)
-        assert isinstance(e.value.error, CompilerError)
+        e = s.errors()[0]
+        assert isinstance(e.error, CompilerError)
 
 
 ###############################################################################

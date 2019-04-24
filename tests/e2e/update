@@ -40,13 +40,14 @@ class StoryRunner():
     def run(self):
         with io.open(self.story_path, 'r') as f:
             source = f.read()
-        try:
-            result = Api.loads(source)
-            result = _clean_dict(result)
+        s = Api.loads(source)
+        if s.success():
+            result = _clean_dict(s.result())
             del result['version']
             self.update_success(result)
             return Result(status=True, updated=self.updated)
-        except StoryError as e:
+        else:
+            e = s.errors()[0]
             self.update_error(unstyle(e.message()))
 
         return Result(status=False, updated=self.updated)

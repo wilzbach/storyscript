@@ -13,7 +13,7 @@ def test_api_loads(patch):
     """
     patch.init(Story)
     patch.object(Story, 'process')
-    result = Api.loads('string')
+    result = Api.loads('string').result()
     Story.__init__.assert_called_with('string')
     Story.process.assert_called_with()
     assert result == Story.process()
@@ -25,7 +25,7 @@ def test_api_load(patch, magic):
     """
     patch.object(Story, 'from_stream')
     stream = magic()
-    result = Api.load(stream)
+    result = Api.load(stream).result()
     Story.from_stream.assert_called_with(stream)
     Story.from_stream().process.assert_called()
     story = Story.from_stream().process()
@@ -39,7 +39,7 @@ def test_api_load_map(patch, magic):
     patch.init(Bundle)
     patch.object(Bundle, 'bundle')
     files = {'a.story': "import 'b' as b", 'b.story': 'x = 0'}
-    result = Api.load_map(files)
+    result = Api.load_map(files).result()
     Bundle.__init__.assert_called_with(story_files=files)
     Bundle.bundle.assert_called()
     assert result == Bundle.bundle()
@@ -54,10 +54,10 @@ def test_api_loads_internal_error(patch):
     patch.object(StoryError, 'internal_error')
     StoryError.internal_error.return_value = Exception('ICE')
     Story.process.side_effect = Exception('An unknown error.')
-    with raises(Exception) as e:
-        Api.loads('string')
+    s = Api.loads('string')
+    e = s.errors()[0]
 
-    assert str(e.value) == 'ICE'
+    assert str(e) == 'ICE'
 
 
 def test_api_loads_internal_error_debug(patch):
@@ -70,7 +70,7 @@ def test_api_loads_internal_error_debug(patch):
     StoryError.internal_error.return_value = Exception('ICE')
     Story.process.side_effect = Exception('An unknown error.')
     with raises(Exception) as e:
-        Api.loads('string', debug=True)
+        Api.loads('string', debug=True).check_success()
 
     assert str(e.value) == 'An unknown error.'
 
@@ -85,10 +85,24 @@ def test_api_load_internal_error(patch, magic):
     StoryError.internal_error.return_value = Exception('ICE')
     Story.from_stream.side_effect = Exception('An unknown error.')
     stream = magic()
-    with raises(Exception) as e:
-        Api.load(stream)
+    s = Api.load(stream)
+    e = s.errors()[0]
 
-    assert str(e.value) == 'ICE'
+    assert str(e) == 'ICE'
+
+
+def test_api_load_story_error(patch, magic):
+    """
+    Ensures Api.loads handles unknown errors
+    """
+    patch.init(Story)
+    patch.object(Story, 'from_stream')
+    Story.from_stream.side_effect = StoryError.internal_error('.error.')
+    stream = magic()
+    s = Api.load(stream)
+    e = s.errors()[0]
+
+    assert e.message().startswith('Internal error occured: .error.')
 
 
 def test_api_load_internal_error_debug(patch, magic):
@@ -102,7 +116,7 @@ def test_api_load_internal_error_debug(patch, magic):
     Story.from_stream.side_effect = Exception('An unknown error.')
     stream = magic()
     with raises(Exception) as e:
-        Api.load(stream, debug=True)
+        Api.load(stream, debug=True).check_success()
 
     assert str(e.value) == 'An unknown error.'
 
@@ -116,10 +130,10 @@ def test_api_load_map_internal_error(patch):
     patch.object(StoryError, 'internal_error')
     StoryError.internal_error.return_value = Exception('ICE')
     Bundle.bundle.side_effect = Exception('An unknown error.')
-    with raises(Exception) as e:
-        Api.load_map({})
+    s = Api.load_map({})
+    e = s.errors()[0]
 
-    assert str(e.value) == 'ICE'
+    assert str(e) == 'ICE'
 
 
 def test_api_load_map_internal_error_debug(patch):
@@ -132,6 +146,6 @@ def test_api_load_map_internal_error_debug(patch):
     StoryError.internal_error.return_value = Exception('ICE')
     Bundle.bundle.side_effect = Exception('An unknown error.')
     with raises(Exception) as e:
-        Api.load_map({}, debug=True)
+        Api.load_map({}, debug=True).check_success()
 
     assert str(e.value) == 'An unknown error.'
