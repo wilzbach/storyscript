@@ -1,23 +1,24 @@
-from pytest import mark, raises
+from pytest import mark
 
 from storyscript.Api import Api
-from storyscript.exceptions import CompilerError, StoryError
+from storyscript.exceptions import CompilerError
 
 
 def succeed(source):
     """
     Expect the source code to pass.
     """
-    Api.loads(source)
+    Api.loads(source).check_success()
 
 
 def fail(source):
     """
     Expect the source code to error.
     """
-    with raises(StoryError) as e:
-        Api.loads(source)
-    assert isinstance(e.value.error, CompilerError)
+    s = Api.loads(source)
+    assert not s.success()
+    e = s.errors()[0]
+    assert isinstance(e.error, CompilerError)
 
 
 def run(source, should_fail):

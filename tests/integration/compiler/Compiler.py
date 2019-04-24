@@ -12,7 +12,7 @@ def test_compiler_mutation_chained(source):
     """
     Ensures that chained mutations are compiled correctly
     """
-    result = Api.loads(source)
+    result = Api.loads(source).result()
     args = [{'$OBJECT': 'int', 'int': 1},
             {'$OBJECT': 'mutation', 'mutation': 'increment', 'args': []},
             {'$OBJECT': 'mutation', 'mutation': 'format', 'args': [
@@ -22,7 +22,7 @@ def test_compiler_mutation_chained(source):
 
 
 def test_compiler_empty_files():
-    result = Api.loads('\n\n')
+    result = Api.loads('\n\n').result()
     assert result['tree'] == {}
     assert result['entrypoint'] is None
 
@@ -89,7 +89,7 @@ def test_compiler_expression_whitespace(source_pair):
     if source.startswith('b'):
         full_source = 'b=0\nc=0\n' + full_source
         index = '3'
-    result = Api.loads(full_source)
+    result = Api.loads(full_source).result()
     assert result['tree'][index]['method'] == 'expression'
     assert result['tree'][index]['name'] == ['a']
     assert len(result['tree'][index]['args']) == 1

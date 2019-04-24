@@ -11,7 +11,6 @@ from pytest import mark
 
 from storyscript.Api import Api
 from storyscript.App import _clean_dict
-from storyscript.exceptions import StoryError
 
 test_dir = path.dirname(path.realpath(__file__))
 # make the test_file paths relative, s.t. test paths are nice to read
@@ -21,7 +20,8 @@ test_files = list(map(lambda e: path.relpath(e, test_dir),
 
 # compile a story and compare its tree with the expected tree
 def run_test_story(source, expected_story):
-    result = _clean_dict(Api.loads(source))
+    s = Api.loads(source)
+    result = _clean_dict(s.result())
     del result['version']
     assert result == expected_story
 
@@ -29,10 +29,11 @@ def run_test_story(source, expected_story):
 # compile a story which should fail and compare its output text with the
 # expectation
 def run_fail_story(source, expected_output):
-    try:
-        Api.loads(source)
-    except StoryError as e:
-        result = unstyle(e.message())
+    s = Api.loads(source)
+    errors = s.errors()
+    if len(errors) > 0:
+        assert len(errors) == 1, 'Only one error supported for now'
+        result = unstyle(errors[0].message())
         assert result == expected_output
         return
 
@@ -65,9 +66,10 @@ def run_test(story_path):
 
     # If no expected file has been found, print the current output to the user
     # (for handy copy&paste)
-    try:
-        print(Api.loads(story_string))
-    except StoryError as e:
+    e = Api.loads(story_string)
+    if e.result():
+        print(e.result())
+    else:
         e.echo()
     assert 0, f'{story_path} has no expected result file.'
 
