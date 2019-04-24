@@ -4,6 +4,7 @@ import os
 import click
 
 from lark.exceptions import UnexpectedCharacters, UnexpectedToken
+from lark.lexer import Token
 
 from pytest import fixture, mark
 
@@ -267,7 +268,8 @@ def test_storyerror_unexpected_token_expected_block_after(patch, storyerror):
     patch.object(storyerror, 'get_line')
     patch.object(Intention, 'assignment', return_value=False)
     patch.object(Intention, 'unnecessary_colon', return_value=False)
-    storyerror.error = UnexpectedToken(token='and', expected=['_INDENT'])
+    and_ = Token('and', 'and')
+    storyerror.error = UnexpectedToken(token=and_, expected=['_INDENT'])
     assert storyerror.unexpected_token_code() == \
         ErrorCodes.block_expected_after
 
