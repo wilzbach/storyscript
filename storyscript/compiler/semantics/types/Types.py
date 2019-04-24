@@ -361,7 +361,7 @@ class RegExpType(BaseType):
 
 class ListType(BaseType):
     """
-    Represents a list.
+    Represents a List.
     """
     def __init__(self, inner):
         assert isinstance(inner, BaseType)
@@ -415,7 +415,7 @@ class ListType(BaseType):
 
 class MapType(BaseType):
     """
-    Represents an object
+    Represents a Map
     """
     def __init__(self, key, value):
         assert isinstance(key, BaseType)
@@ -466,6 +466,41 @@ class MapType(BaseType):
 
     def hashable(self):
         return False
+
+
+class ObjectType(BaseType):
+    """
+    Represents an object
+    """
+    def __str__(self):
+        return f'Object'
+
+    def __eq__(self, other):
+        return isinstance(other, ObjectType)
+
+    def op(self, op):
+        return None
+
+    def index(self, other):
+        if other.implicit_to(StringType.instance()) is not None:
+            return AnyType.instance()
+        return None
+
+    def has_boolean(self):
+        return True
+
+    def cmp(self, other):
+        return False
+
+    def hashable(self):
+        return False
+
+    @singleton
+    def instance():
+        """
+        Returns a static instance of the ObjectType
+        """
+        return ObjectType()
 
 
 class AnyType(BaseType):

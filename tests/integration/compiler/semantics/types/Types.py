@@ -60,6 +60,7 @@ all_types = {
     'List[time]': '[1s]',
     'any': 'ANY[0]',
     'none': 'fn_none()',
+    'object': 'app',
 }
 
 
@@ -89,6 +90,7 @@ def build_type_permutations(types):
     ('none', False),
     ('time', True),
     ('any', True),
+    ('object', False),
     ('boolean', True),
 ])
 def test_index_hashable(el, should_pass):
@@ -116,6 +118,7 @@ index_types = {
     'Map[int,string]': ['boolean', 'int', 'any'],
     'none': [],
     'any': ['boolean', 'int', 'float', 'time', 'string', 'any'],
+    'object': ['string', 'any'],
 }
 
 
@@ -145,6 +148,7 @@ implicit_assigns = {
     'Map[string,int]': ['Map[string,boolean]', 'Map[string,int]'],
     'Map[string,string]': ['Map[string,string]'],
     'none': [],
+    'object': ['object'],
     'any': [k for k in all_types.keys() if k != 'none'],
 }
 

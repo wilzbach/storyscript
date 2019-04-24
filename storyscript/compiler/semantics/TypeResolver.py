@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from storyscript.compiler.semantics.types.Types import AnyType, NoneType
+from storyscript.compiler.semantics.types.Types import AnyType, NoneType, \
+    ObjectType
 from storyscript.parser import Tree
 
 from .ExpressionResolver import ExpressionResolver
@@ -153,7 +154,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         resolved = tree.scope.resolve(name)
         output.expect(resolved is None, 'output_unique',
                       name=resolved.name() if resolved else None)
-        sym = Symbol.from_path(name, AnyType.instance())
+        sym = Symbol.from_path(name, ObjectType.instance())
         tree.scope.insert(sym)
 
         tree.expect(not self.in_when_block, 'nested_when_block')
@@ -187,7 +188,7 @@ class TypeResolver(ScopeSelectiveVisitor):
             resolved = tree.scope.resolve(name)
             output.expect(resolved is None, 'output_unique',
                           name=resolved.name() if resolved else None)
-            sym = Symbol(name, AnyType.instance())
+            sym = Symbol(name, ObjectType.instance())
             tree.scope.insert(sym)
 
         if tree.nested_block:

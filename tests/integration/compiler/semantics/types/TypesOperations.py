@@ -179,6 +179,30 @@ def test_time_boolean_ops(source, op):
 def test_time_string_ops(source, op):
     runner(source, op, allowed=[is_sum, is_boolean])
 
+###############################################################################
+# Test operations on ObjectType
+###############################################################################
+
+
+@mark.parametrize('source,op', op_builder('app', 'app'))
+def test_object_object_ops(source, op):
+    runner(source, op, allowed=[is_equal, is_boolean])
+
+
+@mark.parametrize('source,op', op_builder('app', '2', swapped=True))
+def test_object_int_ops(source, op):
+    runner(source, op, allowed=is_boolean)
+
+
+@mark.parametrize('source,op', op_builder('app', 'true', swapped=True))
+def test_object_boolean_ops(source, op):
+    runner(source, op, allowed=is_boolean)
+
+
+@mark.parametrize('source,op', op_builder('app', '"."', swapped=True))
+def test_object_string_ops(source, op):
+    runner(source, op, allowed=[is_sum, is_boolean])
+
 
 ###############################################################################
 # Test operations on NoneType

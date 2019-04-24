@@ -1,0 +1,71 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "app",
+            {
+              "$OBJECT": "dot",
+              "dot": "secrets"
+            },
+            {
+              "$OBJECT": "dot",
+              "dot": "foo"
+            }
+          ]
+        }
+      ],
+      "src": "a = app.secrets.foo",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "app",
+            {
+              "$OBJECT": "dot",
+              "dot": "hostname"
+            }
+          ]
+        }
+      ],
+      "src": "b = app.hostname",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "app",
+            {
+              "$OBJECT": "dot",
+              "dot": "version"
+            }
+          ]
+        }
+      ],
+      "src": "c = app.version"
+    }
+  },
+  "entrypoint": "1"
+}
