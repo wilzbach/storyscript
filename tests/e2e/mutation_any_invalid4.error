@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 7
+
+3|    c = b append i:0
+            ^^^^^^^^
+
+E0114: Mutation `append` does not accept argument `i`

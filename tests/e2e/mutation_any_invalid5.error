@@ -1,0 +1,12 @@
+Error: syntax error in story at line 3, column 7
+
+3|    c = b contains i:0
+            ^^^^^^^^^^
+
+E0121: Multiple mutation overloads for `contains` found:
+	- List[A] contains item:`any`
+	- string contains item:`string`
+	- Map[K,V] contains key:`any`
+	- string contains pattern:`regexp`
+	- Map[K,V] contains value:`any`
+but none matches.

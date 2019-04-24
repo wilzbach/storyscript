@@ -1,5 +1,5 @@
-from storyscript.compiler.semantics.types.Types import BaseType, ListType, \
-    MapType
+from storyscript.compiler.semantics.types.Types import AnyType, BaseType, \
+    ListType, MapType
 
 
 class TypeSymbol:
@@ -7,16 +7,22 @@ class TypeSymbol:
     An to-be-resolved symbol of a generic type.
     """
     def __init__(self, name):
-        self.name = name
+        self._name = name
 
     def __repr__(self):
-        return f'TypeSymbol({self.name})'
+        return f'TypeSymbol({self._name})'
 
     def __hash__(self):
-        return self.name.__hash__()
+        return self._name.__hash__()
 
     def __eq__(self, o):
-        return isinstance(o, TypeSymbol) and self.name == o.name
+        return isinstance(o, TypeSymbol) and self._name == o._name
+
+    def name(self):
+        """
+        Returns the name of this symbol, e.g. `A`
+        """
+        return self._name
 
     def instantiate(self, symbols):
         """
@@ -31,6 +37,9 @@ class GenericType:
     """
     A type that can be instantiated.
     """
+    def __init__(self, symbols):
+        assert len(symbols) > 0
+        self.symbols = symbols
 
     def instantiate(self, symbols):
         """
@@ -65,36 +74,60 @@ class GenericType:
         """
         raise NotImplementedError()
 
+    def base_type_name(self):
+        """
+        Returns the name of the base type of this generic type, e.g. `List`
+        """
+        raise NotImplementedError()
+
+    def __str__(self):
+        buf = self.base_type_name()
+        symbols = ','.join(x.name() for x in self.symbols)
+        return f'{buf}[{symbols}]'
+
 
 class ListGenericType(GenericType):
     """
     A generic list type.
     """
-    def __init__(self, symbols):
-        self.symbols = symbols
-        self._base_type = ListType
+    _base_type = ListType
 
     def build_type_mapping(self, l):
         assert len(self.symbols) == 1
-        assert isinstance(l, ListType)
-        return {self.symbols[0]: l.inner}
+        if isinstance(l, ListType):
+            inner = l.inner
+        else:
+            assert isinstance(l, AnyType)
+            inner = l
+
+        return {self.symbols[0]: inner}
+
+    def base_type_name(self):
+        return 'List'
 
 
 class MapGenericType(GenericType):
     """
     A generic object type.
     """
-    def __init__(self, symbols):
-        self.symbols = symbols
-        self._base_type = MapType
+    _base_type = MapType
 
     def build_type_mapping(self, l):
         assert len(self.symbols) == 2
-        assert isinstance(l, MapType)
+        if isinstance(l, MapType):
+            key = l.key
+            value = l.value
+        else:
+            assert isinstance(l, AnyType)
+            key = l
+            value = l
         return {
-            self.symbols[0]: l.key,
-            self.symbols[1]: l.value,
+            self.symbols[0]: key,
+            self.symbols[1]: value,
         }
+
+    def base_type_name(self):
+        return 'Map'
 
 
 def instantiate(symbols, t):

@@ -1,0 +1,10 @@
+Error: syntax error in story at line 3, column 7
+
+3|    c = b length arg:1
+            ^^^^^^^^^^
+
+E0121: Multiple mutation overloads for `length` found:
+	- List[A] length
+	- Map[K,V] length
+	- string length
+but none matches.

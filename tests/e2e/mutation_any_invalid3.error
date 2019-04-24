@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 7
+
+3|    c = b substring start:"2"
+            ^^^^^^^^^^^^^^^
+
+E0115: Mutation `substring` requires argument `start` to be of `int`, not `string`
