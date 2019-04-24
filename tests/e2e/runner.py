@@ -21,6 +21,7 @@ test_files = list(map(lambda e: path.relpath(e, test_dir),
 # compile a story and compare its tree with the expected tree
 def run_test_story(source, expected_story):
     s = Api.loads(source)
+    s.check_success()
     result = _clean_dict(s.result())
     del result['version']
     assert result == expected_story
@@ -70,7 +71,7 @@ def run_test(story_path):
     if e.result():
         print(e.result())
     else:
-        e.echo()
+        e.errors()[0].echo()
     assert 0, f'{story_path} has no expected result file.'
 
 

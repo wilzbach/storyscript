@@ -1,5 +1,6 @@
 from storyscript.compiler.semantics.functions.HubMutations import hub
 from storyscript.compiler.semantics.functions.Mutation import Mutation
+from storyscript.compiler.semantics.types.Types import AnyType
 
 
 class MutationOverloads:
@@ -74,10 +75,13 @@ class MutationTable:
             return None
         return self.mutations[name]
 
-    def resolve_any(self, name, arg_names):
+    def resolve_any(self, name):
+        """
+        Searches for all potential type overloads on mutation.
+        """
         muts = self.find_mutation(name)
         overloads = {}
-        for t, overload in muts:
+        for overload in muts.values():
             overloads = {**overloads, **overload}
 
         return MutationOverloads(overloads)
@@ -86,6 +90,9 @@ class MutationTable:
         """
         Returns the mutation `name` or `None`.
         """
+        if type_ == AnyType.instance():
+            return self.resolve_any(name)
+
         muts = self.find_mutation(name)
         if muts is None:
             return None

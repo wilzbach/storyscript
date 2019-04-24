@@ -352,9 +352,6 @@ class ExpressionResolver:
                                     fn_type='Mutation')
 
         # a mutation on 'any' returns 'any'
-        if t == AnyType.instance():
-            return self.resolve_any_mutation(name, args, tree)
-
         overloads = self.mutation_table.resolve(t, name)
         tree.expect(overloads is not None, 'mutation_invalid_name', name=name)
         m = overloads.match(args.keys())
