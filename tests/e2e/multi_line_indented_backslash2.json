@@ -1,0 +1,19 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "   aaabbb cc"
+        }
+      ],
+      "src": "a = '   aaa\\"
+    }
+  },
+  "entrypoint": "1"
+}

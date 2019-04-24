@@ -190,6 +190,9 @@ class Lowering:
                     # custom escapes
                     buf = f'{buf[:-1]}{c}'
                 else:
+                    # avoid deprecation messages for invalid escape sequences
+                    if c == ' ':
+                        buf += '\\'
                     if c == 'N':
                         # start unicode escaped name sequence
                         inside_unicode = UnicodeNameDecodeState.Start

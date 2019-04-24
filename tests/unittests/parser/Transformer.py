@@ -219,3 +219,37 @@ def test_transformer_function_block(patch, tree, magic):
         function_block,
         Tree('nested_block', [block])
     ]
+
+
+def test_multi_line_string_single_line():
+    assert Transformer.multi_line_string('aa') == 'aa'
+
+
+def test_multi_line_string_single_line_no_strip():
+    assert Transformer.multi_line_string('  aa') == '  aa'
+    assert Transformer.multi_line_string('\taa') == '\taa'
+
+
+def test_multi_line_string_multi_line():
+    assert Transformer.multi_line_string('aa\nbb\ncc') == 'aa bb cc'
+
+
+def test_multi_line_string_multi_line_empty_line():
+    assert Transformer.multi_line_string('aa\n\n\ncc') == 'aa cc'
+
+
+def test_multi_line_string_multi_line_indented():
+    assert Transformer.multi_line_string('aa\n\tbb\n  cc') == 'aa bb cc'
+
+
+def test_multi_line_string_multi_line_backslash():
+    text = 'aa\\\n\tbb\\\n  cc'
+    assert Transformer.multi_line_string(text) == 'aabbcc'
+
+
+def test_multi_line_string_multi_line_start_backslash():
+    assert Transformer.multi_line_string('\\\n  b') == 'b'
+
+
+def test_multi_line_string_multi_line_start_multiple_backslashs():
+    assert Transformer.multi_line_string('\\\n\\\n  b') == 'b'
