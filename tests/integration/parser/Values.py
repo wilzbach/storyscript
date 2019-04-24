@@ -123,7 +123,7 @@ def test_values_object():
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     values = entity.values
-    key_value = values.objects.key_value
+    key_value = values.map.key_value
     assert key_value.string.child(0) == Token('SINGLE_QUOTED', "'color'")
     entity = get_entity(key_value.child(1).expression)
     assert entity.values.string.child(0) == Token('SINGLE_QUOTED', "'red'")

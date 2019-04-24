@@ -191,11 +191,11 @@ def test_objects_list(patch, tree):
     assert result == {'$OBJECT': 'list', 'items': items}
 
 
-def test_objects_objects(patch, tree):
+def test_objects_map(patch, tree):
     patch.many(Objects, ['string', 'base_expression'])
     subtree = Tree('key_value', [Tree('string', ['key']), 'value'])
     tree.children = [subtree]
-    result = Objects().objects(tree)
+    result = Objects().map(tree)
     Objects.string.assert_called_with(subtree.string)
     Objects.base_expression.assert_called_with('value')
     items = [[Objects.string(), Objects.base_expression()]]
@@ -213,7 +213,7 @@ def test_objects_objects_key_string(patch, tree):
         Tree('path', ['value.path']),
     ])
     tree.children = [subtree]
-    result = Objects().objects(tree)
+    result = Objects().map(tree)
     assert result['items'] == [[
         Objects.string(), Objects.base_expression()
     ]]
@@ -229,7 +229,7 @@ def test_objects_objects_key_path(patch, tree):
         Tree('path', ['value.path']),
     ])
     tree.children = [subtree]
-    result = Objects().objects(tree)
+    result = Objects().map(tree)
     assert result['items'] == [[
         Objects.path(), Objects.base_expression()
     ]]
@@ -257,7 +257,7 @@ def test_objects_map_type(tree):
     tree.data = 'types'
     c = tree.first_child()
     c.data = 'map_type'
-    assert Objects.types(tree) == {'$OBJECT': 'type', 'type': 'object'}
+    assert Objects.types(tree) == {'$OBJECT': 'type', 'type': 'map'}
 
 
 def test_objects_list_type(tree):
@@ -284,7 +284,7 @@ def test_objects_entity(patch, tree):
 
 
 @mark.parametrize('value_type', [
-    'string', 'boolean', 'list', 'number', 'objects', 'regular_expression',
+    'string', 'boolean', 'list', 'number', 'map', 'regular_expression',
     'types'
 ])
 def test_objects_values(patch, magic, value_type):

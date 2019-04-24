@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "output": [
-        "object"
+        "map"
       ],
       "function": "foo",
       "enter": "2",
