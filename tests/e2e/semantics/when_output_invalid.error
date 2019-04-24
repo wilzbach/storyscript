@@ -3,4 +3,4 @@ Error: syntax error in story at line 4, column 3
 4|        a = req
           ^^^
 
-E0100: Can't assign `any` to `int`
+E0100: Can't assign `Object` to `int`

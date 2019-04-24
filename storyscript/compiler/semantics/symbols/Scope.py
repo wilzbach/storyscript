@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from storyscript.compiler.semantics.types.Types import AnyType
+from storyscript.compiler.semantics.types.Types import ObjectType
 
 from .Symbols import Symbol, Symbols
 
@@ -55,6 +55,6 @@ class Scope:
         """
         scope = cls(parent=None)
         # insert global symbols
-        app = Symbol(name='app', type_=AnyType.instance())
+        app = Symbol(name='app', type_=ObjectType.instance())
         scope.insert(app)
         return scope

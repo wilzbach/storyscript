@@ -79,12 +79,12 @@
       "method": "function",
       "ln": "7",
       "output": [
-        "object"
+        "map"
       ],
       "function": "d",
       "enter": "8",
       "exit": "9",
-      "src": "function d returns object",
+      "src": "function d returns Map[any,any]",
       "next": "8"
     },
     "8": {

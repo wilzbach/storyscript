@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from storyscript.compiler.lowering.utils import service_to_mutation
 from storyscript.compiler.semantics.types.Types import AnyType, BooleanType, \
-    FloatType, IntType, ListType, MapType, RegExpType, StringType, TimeType
+    FloatType, IntType, ListType, MapType, ObjectType, RegExpType, \
+    StringType, TimeType
 from storyscript.compiler.visitors.ExpressionVisitor import ExpressionVisitor
 from storyscript.exceptions import CompilerError
 from storyscript.parser import Tree
@@ -263,7 +264,7 @@ class ExpressionResolver:
         elif tok.type == 'ANY_TYPE':
             return AnyType.instance()
         elif tok.type == 'OBJECT_TYPE':
-            return MapType(AnyType.instance(), AnyType.instance())
+            return ObjectType.instance()
         elif tok.type == 'FUNCTION_TYPE':
             return AnyType.instance()
         elif tok.type == 'TIME_TYPE':
@@ -333,9 +334,9 @@ class ExpressionResolver:
         Resolve a mutation of t with the MutationTable, instantiate it and
         check the caller arguments.
         """
-        # a mutation on 'any' returns 'any'
-        if t == AnyType.instance():
-            return t
+        # a mutation on 'object' returns 'any' (for now)
+        if t == ObjectType.instance() or t == AnyType.instance():
+            return AnyType.instance()
 
         name = tree.mutation_fragment.child(0).value
         args = self.build_arguments(tree.mutation_fragment, name,
