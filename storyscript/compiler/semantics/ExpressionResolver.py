@@ -329,30 +329,45 @@ class ExpressionResolver:
                     fn_type=fn_type)
         return names[0].value
 
+    def resolve_any_mutation(self, name, args, tree):
+        """
+        Resolve a mutation on `any`.
+        This is special as the normal mutation resolving process no longer
+        applies and we can only check that at least one mutation with the
+        given name and parameters exists.
+        """
+        return AnyType.instance()
+
     def resolve_mutation(self, t, tree):
         """
-        Resolve a mutation of t with the MutationTable, instantiate it and
+        Resolve a mutation on t with the MutationTable, instantiate it and
         check the caller arguments.
         """
         # a mutation on 'object' returns 'any' (for now)
-        if t == ObjectType.instance() or t == AnyType.instance():
+        if t == AnyType.instance():
             return AnyType.instance()
 
         name = tree.mutation_fragment.child(0).value
         args = self.build_arguments(tree.mutation_fragment, name,
                                     fn_type='Mutation')
-        m = self.mutation_table.resolve(t, name, args.keys())
-        tree.expect(m is not None, 'mutation_invalid_name', name=name)
-        if isinstance(m, list):
+
+        # a mutation on 'any' returns 'any'
+        if t == AnyType.instance():
+            return self.resolve_any_mutation(name, args, tree)
+
+        overloads = self.mutation_table.resolve(t, name)
+        tree.expect(overloads is not None, 'mutation_invalid_name', name=name)
+        m = overloads.match(args.keys())
+        if m is None:
             # multiple overloads, but no exact match
-            overloads = []
-            for me in m:
-                overloads.append(me.instantiate(t).pretty())
+            overload_list = []
+            for me in overloads.all():
+                overload_list.append(me.instantiate(t).pretty())
             sep = '\n\t- '
-            overloads = sep + sep.join(overloads)
+            overload_list = sep + sep.join(overload_list)
             tree.mutation_fragment.expect(0, 'mutation_overload_mismatch',
                                           name=name,
-                                          overloads=overloads)
+                                          overloads=overload_list)
         m = m.instantiate(t)
         m.check_call(tree.mutation_fragment, args)
         return m.output()
