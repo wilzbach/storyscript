@@ -9,10 +9,10 @@ time: RAW_TIME
 string: SINGLE_QUOTED| DOUBLE_QUOTED| SINGLE_QUOTED_HEREDOC| DOUBLE_QUOTED_HEREDOC
 !list: _OSB (_NL _INDENT)? (base_expression (_COMMA _NL? base_expression)*)? (_NL _DEDENT)? _CSB
 key_value: (string| path| number| boolean) _COLON base_expression
-objects: _OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)? (_NL _DEDENT)? _CCB
+map: _OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)? (_NL _DEDENT)? _CCB
 regular_expression: REGEXP NAME?
 inline_expression: _OP inline_service _CP| call_expression| _OP mutation _CP
-values: number| string| boolean| void| list| objects| regular_expression| time
+values: number| string| boolean| void| list| map| regular_expression| time
 path_fragment: _DOT NAME| _OSB INT _CSB| _OSB string _CSB| _OSB path _CSB| _OSB boolean _CSB
 path: NAME (path_fragment)* | inline_expression (path_fragment)*
 assignment_fragment: EQUALS base_expression

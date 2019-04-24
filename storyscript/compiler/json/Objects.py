@@ -154,7 +154,7 @@ class Objects:
                 items.append(self.base_expression(value))
         return {'$OBJECT': 'list', 'items': items}
 
-    def objects(self, tree):
+    def map(self, tree):
         items = []
         for item in tree.children:
             child = item.child(0)
@@ -186,7 +186,7 @@ class Objects:
         assert tree.data == 'types'
         c = tree.first_child()
         if c.data == 'map_type':
-            t = 'object'
+            t = 'map'
         elif c.data == 'list_type':
             t = 'list'
         else:
@@ -213,8 +213,8 @@ class Objects:
                 return self.number(subtree)
             elif subtree.data == 'time':
                 return self.time(subtree)
-            elif subtree.data == 'objects':
-                return self.objects(subtree)
+            elif subtree.data == 'map':
+                return self.map(subtree)
             elif subtree.data == 'regular_expression':
                 return self.regular_expression(subtree)
             elif subtree.data == 'types':

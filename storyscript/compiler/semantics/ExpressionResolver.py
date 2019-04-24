@@ -164,8 +164,8 @@ class ExpressionResolver:
             value = AnyType.instance()
         return ListType(value)
 
-    def objects(self, tree):
-        assert tree.data == 'objects'
+    def map(self, tree):
+        assert tree.data == 'map'
         keys = []
         values = []
         for i, item in enumerate(tree.children):
@@ -288,8 +288,8 @@ class ExpressionResolver:
                 return self.number(subtree)
             elif subtree.data == 'time':
                 return self.time(subtree)
-            elif subtree.data == 'objects':
-                return self.objects(subtree)
+            elif subtree.data == 'map':
+                return self.map(subtree)
             elif subtree.data == 'regular_expression':
                 return self.regular_expression(subtree)
             else:

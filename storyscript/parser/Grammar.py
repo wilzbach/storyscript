@@ -80,13 +80,13 @@ class Grammar:
         self.ebnf.set_rule('!list', list)
         self.ebnf.key_value = ('(string, path, number, boolean) '
                                'colon base_expression')
-        objects = ('ocb', 'key_value', 'key_value', 'ccb')
-        self.ebnf.objects = self.ebnf.collection(*objects)
+        map_ = ('ocb', 'key_value', 'key_value', 'ccb')
+        self.ebnf.map = self.ebnf.collection(*map_)
         self.ebnf.regular_expression = 'regexp name?'
         self.ebnf.inline_expression = ('op inline_service cp, '
                                        'call_expression, '
                                        'op mutation cp')
-        values = ('number, string, boolean, void, list, objects, '
+        values = ('number, string, boolean, void, list, map, '
                   'regular_expression, time')
         self.ebnf.values = values
 
