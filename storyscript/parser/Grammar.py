@@ -56,8 +56,10 @@ class Grammar:
         self.ebnf.set_token('INT.2', '("+"|"-")? RAW_INT')
         self.ebnf.set_token('FLOAT.2', '("+"|"-")? INT "." RAW_INT? | '
                             '"." RAW_INT')
-        self.ebnf.SINGLE_QUOTED = r"/'([^'\\]*(?:\\.[^'\\]*)*)'/"
-        self.ebnf.DOUBLE_QUOTED = r'/"([^"\\]*(?:\\.[^"\\]*)*)"/'
+        self.ebnf.SINGLE_QUOTED = r"/'([^'\\]*(?:\\(.|\n)[^'\\]*)*)'/"
+        self.ebnf.DOUBLE_QUOTED = r'/"([^"\\]*(?:\\(.|\n)[^"\\]*)*)"/'
+        self.ebnf.set_token('SINGLE_QUOTED_HEREDOC.2', r"/'''(.|\n)*?'''/")
+        self.ebnf.set_token('DOUBLE_QUOTED_HEREDOC.2', r'/"""(.|\n)*?"""/')
         self.ebnf.set_token('REGEXP.10', r'/\/([^\/]*)\//')
         self.ebnf.set_token('NAME.1', r'/[a-zA-Z_][a-zA-Z-\/_0-9]*/')
         self.ebnf.set_token('RAW_TIME.3', r'/([0-9]+(ms|[smhdw]))+/')
@@ -70,7 +72,9 @@ class Grammar:
         self.ebnf.void = 'null'
         self.ebnf.number = 'int, float'
         self.ebnf.time = 'raw_time'
-        self.ebnf.string = 'single_quoted, double_quoted'
+        self.ebnf.string = ('single_quoted, double_quoted, '
+                            'single_quoted_heredoc, '
+                            'double_quoted_heredoc')
         list = self.ebnf.collection('osb', 'base_expression',
                                     'base_expression', 'csb')
         self.ebnf.set_rule('!list', list)

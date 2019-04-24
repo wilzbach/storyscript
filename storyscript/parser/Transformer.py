@@ -248,13 +248,44 @@ class Transformer(LarkTransformer):
 
         return Tree('function_block', matches)
 
+    @staticmethod
+    def multi_line_string(text):
+        """
+        Lines are joined by a single space unless they end with a backslash.
+        Indentation is ignored.
+        """
+        buf = ''
+        has_backslash = True
+        for i,  line in enumerate(text.split('\n')):
+            if i == 0:
+                buf += line
+            elif has_backslash:
+                buf = buf[:-1] + line.lstrip()
+            else:
+                line = line.lstrip()
+                if len(line) > 0:
+                    buf += f' {line.lstrip()}'
+
+            if len(line) > 0 and line[-1] == '\\':
+                has_backslash = True
+            else:
+                has_backslash = False
+
+        return buf
+
     @classmethod
     def string(cls, matches):
         """
         Remove quotes from strings.
         """
         # Lark string still contain the raw quotes around them -> remove
-        text = matches[0].value[1:-1]
+        if matches[0].type == 'SINGLE_QUOTED' or \
+                matches[0].type == 'DOUBLE_QUOTED':
+            text = matches[0].value[1:-1]
+            # multi-line strings
+            text = cls.multi_line_string(text)
+        else:
+            text = matches[0].value[3:-3]
         matches[0].value = text
         return Tree('string', matches)
 
