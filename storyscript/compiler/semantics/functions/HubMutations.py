@@ -36,6 +36,8 @@ string uppercase -> string
 string lowercase -> string
 string capitalize -> string
 string trim -> string
+string startswith prefix:string -> boolean
+string endswith suffix:string -> boolean
 string substring start:int -> string
 string substring start:int end:int -> string
 string substring end:int -> string
