@@ -1,0 +1,71 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": []
+        }
+      ],
+      "src": "a = {}",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a",
+            {
+              "$OBJECT": "int",
+              "int": 0
+            }
+          ]
+        }
+      ],
+      "src": "b = a[0]",
+      "next": "3"
+    },
+    "3": {
+      "method": "mutation",
+      "ln": "3",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "b"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "contains",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 0
+              }
+            }
+          ]
+        }
+      ],
+      "src": "c = b contains item:0"
+    }
+  },
+  "entrypoint": "1"
+}

@@ -1,0 +1,10 @@
+Error: syntax error in story at line 3, column 7
+
+3|    c = b substring foo:2
+            ^^^^^^^^^^^^^
+
+E0121: Multiple mutation overloads for `substring` found:
+	- string substring end:`int`
+	- string substring end:`int` start:`int`
+	- string substring start:`int`
+but none matches.

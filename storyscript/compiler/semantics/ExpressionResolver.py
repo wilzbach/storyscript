@@ -329,33 +329,59 @@ class ExpressionResolver:
                     fn_type=fn_type)
         return names[0].value
 
+    def show_available_mutation_overloads(self, tree, overloads):
+        """
+        A mutation has multiple overloads, but none matches exactly.
+        Thus, we show all of them to the user.
+        """
+        t = overloads.type()
+        overload_list = []
+        for me in overloads.all():
+            overload = me.instantiate(t).pretty()
+            if isinstance(t, AnyType):
+                overload = f'{me.type()} {overload}'
+            overload_list.append(overload)
+        sep = '\n\t- '
+        overload_list = sep + sep.join(overload_list)
+        tree.mutation_fragment.expect(0, 'mutation_overload_mismatch',
+                                      name=overloads.name(),
+                                      overloads=overload_list)
+
     def resolve_mutation(self, t, tree):
         """
-        Resolve a mutation of t with the MutationTable, instantiate it and
+        Resolve a mutation on t with the MutationTable, instantiate it and
         check the caller arguments.
         """
         # a mutation on 'object' returns 'any' (for now)
-        if t == ObjectType.instance() or t == AnyType.instance():
+        if t == ObjectType.instance():
             return AnyType.instance()
 
         name = tree.mutation_fragment.child(0).value
         args = self.build_arguments(tree.mutation_fragment, name,
                                     fn_type='Mutation')
-        m = self.mutation_table.resolve(t, name, args.keys())
-        tree.expect(m is not None, 'mutation_invalid_name', name=name)
-        if isinstance(m, list):
-            # multiple overloads, but no exact match
-            overloads = []
-            for me in m:
-                overloads.append(me.instantiate(t).pretty())
-            sep = '\n\t- '
-            overloads = sep + sep.join(overloads)
-            tree.mutation_fragment.expect(0, 'mutation_overload_mismatch',
-                                          name=name,
-                                          overloads=overloads)
-        m = m.instantiate(t)
-        m.check_call(tree.mutation_fragment, args)
-        return m.output()
+
+        # a mutation on 'any' returns 'any'
+        overloads = self.mutation_table.resolve(t, name)
+        tree.expect(overloads is not None, 'mutation_invalid_name', name=name)
+        ms = overloads.match(args.keys())
+        if ms is None:
+            # if there's only one overload, use this for a better error
+            # message
+            single = overloads.single()
+            if single is None:
+                self.show_available_mutation_overloads(tree, overloads)
+            else:
+                ms = [single]
+
+        if len(ms) > 1:
+            # a mutation on any might have matched multiple overloads
+            return AnyType.instance()
+        else:
+            assert len(ms) == 1
+            m = ms[0]
+            m = m.instantiate(t)
+            m.check_call(tree.mutation_fragment, args)
+            return m.output()
 
     def resolve_function(self, tree):
         """

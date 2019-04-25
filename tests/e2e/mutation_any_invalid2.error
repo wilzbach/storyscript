@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 5
+
+3|    c = b substring2 foo:2
+          ^^^^^^^^^^^^
+
+E0117: Invalid mutation `substring2`

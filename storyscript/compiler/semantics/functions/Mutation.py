@@ -16,6 +16,7 @@ class Mutation:
         self._output = output
         self._base_type = base_type(ti)
         self._arg_names = self.compute_arg_names_hash(args.keys())
+        self._cmp_name = name + ','.join(sorted(args.keys()))
 
     def instantiate(self, type_):
         """
@@ -42,11 +43,24 @@ class Mutation:
         """
         return self._name
 
+    def type(self):
+        """
+        The type that this mutation can mutation, e.g. List[A] or string
+        """
+        return self._ti
+
     def base_type(self):
         """
         The base type that this mutation can mutation, e.g. IntType or ListType
         """
         return self._base_type
+
+    def cmp_name(self):
+        """
+        Returns a combination of the name and argument names that can be used
+        for sorting this mutation.
+        """
+        return self._cmp_name
 
     def arg_names_hash(self):
         """
@@ -59,4 +73,4 @@ class Mutation:
         """
         Converts a list of argument names to a hashable key.
         """
-        return ','.join(sorted(keys))
+        return hash(tuple(sorted(keys)))
