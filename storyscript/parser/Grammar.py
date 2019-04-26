@@ -60,7 +60,7 @@ class Grammar:
         self.ebnf.DOUBLE_QUOTED = r'/"([^"\\]*(?:\\(.|\n)[^"\\]*)*)"/'
         self.ebnf.set_token('SINGLE_QUOTED_HEREDOC.2', r"/'''(.|\n)*?'''/")
         self.ebnf.set_token('DOUBLE_QUOTED_HEREDOC.2', r'/"""(.|\n)*?"""/')
-        self.ebnf.set_token('REGEXP.10', r'/\/([^\/]*)\//')
+        self.ebnf.set_token('REGEXP.10', r'/\/([^\/]*)\/g?i?m?s?u?y?/')
         self.ebnf.set_token('NAME.1', r'/[a-zA-Z_][a-zA-Z-\/_0-9]*/')
         self.ebnf.set_token('RAW_TIME.3', r'/([0-9]+(ms|[smhdw]))+/')
         self.ebnf._OCB = '{'
@@ -82,7 +82,7 @@ class Grammar:
                                'colon base_expression')
         map_ = ('ocb', 'key_value', 'key_value', 'ccb')
         self.ebnf.map = self.ebnf.collection(*map_)
-        self.ebnf.regular_expression = 'regexp name?'
+        self.ebnf.regular_expression = 'regexp'
         self.ebnf.inline_expression = ('op inline_service cp, '
                                        'call_expression, '
                                        'op mutation cp')

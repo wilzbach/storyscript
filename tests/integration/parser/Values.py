@@ -145,7 +145,6 @@ def test_values_regular_expression_flags():
     Ensures regular expressions with flags are parsed correctly
     """
     result = parse('/^foo/i')
-    token = Token('NAME', 'i')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
-    assert entity.values.regular_expression.child(1) == token
+    assert entity.values.regular_expression.child(0).value == '/^foo/i'

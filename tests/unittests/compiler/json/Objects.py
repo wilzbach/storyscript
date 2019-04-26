@@ -246,9 +246,8 @@ def test_objects_regular_expression():
 
 
 def test_objects_regular_expression_flags():
-    tok = Token('regexp', '/regexp/')
-    flags = Token('FLAGS', 'flags')
-    tree = Tree('regular_expression', [tok, flags])
+    tok = Token('regexp', '/regexp/flags')
+    tree = Tree('regular_expression', [tok])
     result = Objects().regular_expression(tree)
     assert result['flags'] == 'flags'
 

@@ -28,7 +28,7 @@ Map[K,V] get key:K default:V -> V
 
 string length -> int
 string replace item:string by:string -> string
-string replace pattern:string by:string -> string
+string replace pattern:regexp by:string -> string
 string contains pattern:regexp -> boolean
 string contains item:string -> boolean
 string split by:string -> List[string]
