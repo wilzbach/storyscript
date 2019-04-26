@@ -1,0 +1,59 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "str"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "hello."
+        }
+      ],
+      "src": "str = \"hello.\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "mutation",
+      "ln": "2",
+      "name": [
+        "r"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "str"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "replace",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "pattern",
+              "arg": {
+                "$OBJECT": "regexp",
+                "regexp": "hello",
+                "flags": "i"
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "by",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "foo"
+              }
+            }
+          ]
+        }
+      ],
+      "src": "r = str replace pattern:/hello/i by:\"foo\""
+    }
+  },
+  "entrypoint": "1"
+}
