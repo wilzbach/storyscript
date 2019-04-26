@@ -1,4 +1,3 @@
-
 [![PyPi](https://img.shields.io/pypi/v/storyscript.svg?maxAge=600&style=for-the-badge)](https://pypi.python.org/pypi/storyscript)
 [![CircleCI](https://img.shields.io/circleci/project/github/storyscript/storyscript/master.svg?style=for-the-badge)](https://circleci.com/gh/storyscript/storyscript)
 [![Codecov](https://img.shields.io/codecov/c/github/storyscript/storyscript.svg?style=for-the-badge)](https://codecov.io/github/storyscript/storyscript)
@@ -7,7 +6,7 @@
 
 
 <div align="center">
-<img src="https://user-images.githubusercontent.com/2041757/44708914-9c66a380-aaa8-11e8-8e53-502c17ab5be3.png" width="275">
+<img src="https://user-images.githubusercontent.com/4370550/56803568-460e5800-6823-11e9-8a70-25ab4b7e32ea.png" width="275">
 </div>
 
 ## 👋 Meet Storyscript
