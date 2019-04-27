@@ -40,27 +40,6 @@ class Transformer(LarkTransformer):
             raise StorySyntaxError('path_name_internal', token=token)
 
     @staticmethod
-    def arguments(matches):
-        """
-        Transforms an argument tree. If dealing with is a short-hand argument,
-        expand it.
-        """
-        if len(matches) == 1:
-            assert matches[0].data == 'expression'
-            path = matches[0].follow_node_chain([
-                'expression', 'or_expression', 'and_expression',
-                'cmp_expression', 'arith_expression', 'mul_expression',
-                'unary_expression', 'pow_expression', 'primary_expression',
-                'entity', 'path'
-            ])
-            if path is not None:
-                # shorthand syntax for arguments (:name)
-                matches = [path.child(0), matches[0]]
-            else:
-                matches = [matches[0]]
-        return Tree('arguments', matches)
-
-    @staticmethod
     def assignment(matches):
         """
         Transforms an assignment tree and checks for invalid characters in the
@@ -196,6 +175,7 @@ class Transformer(LarkTransformer):
         #     -> <when> <name=myservice> <path=method> <:get>
         if not when.service_fragment.command:
             first_arg = when.service_fragment.arguments
+            cls.argument_shorthand(first_arg)
             if first_arg and not isinstance(first_arg.first_child(), Token) \
                     and first_arg.first_child().data == 'expression':
                 # the parser parsed the first argument as `:<or_expression>`
@@ -288,6 +268,23 @@ class Transformer(LarkTransformer):
             text = matches[0].value[3:-3]
         matches[0].value = text
         return Tree('string', matches)
+
+    @staticmethod
+    def argument_shorthand(tree):
+        """
+        Try to convert argument to shorthand syntax if possible.
+        """
+        assert tree.data == 'arguments'
+        if len(tree.children) == 1:
+            path = tree.child(0).follow_node_chain([
+                'expression', 'or_expression', 'and_expression',
+                'cmp_expression', 'arith_expression', 'mul_expression',
+                'unary_expression', 'pow_expression', 'primary_expression',
+                'entity', 'path'
+            ])
+            if path is not None:
+                # shorthand syntax for arguments (:name)
+                tree.children = [path.child(0), tree.children[0]]
 
     def __getattr__(self, attribute, *args):
         return lambda matches: Tree(attribute, matches)
