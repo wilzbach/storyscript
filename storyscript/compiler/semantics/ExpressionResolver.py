@@ -2,7 +2,7 @@
 from storyscript.compiler.lowering.utils import service_to_mutation
 from storyscript.compiler.semantics.types.Types import AnyType, BooleanType, \
     FloatType, IntType, ListType, MapType, ObjectType, RegExpType, \
-    StringType, TimeType
+    StringType, TimeType, explicit_cast
 from storyscript.compiler.visitors.ExpressionVisitor import ExpressionVisitor
 from storyscript.exceptions import CompilerError
 from storyscript.parser import Tree
@@ -65,7 +65,7 @@ class SymbolExpressionVisitor(ExpressionVisitor):
             expr = self.visitor.path(tree.path)
         # check for compatibility
         t = self.visitor.types(tree.child(1).types)
-        tree.expect(t.can_be_assigned(expr),
+        tree.expect(explicit_cast(expr, t),
                     'type_operation_cast_incompatible',
                     left=expr, right=t)
         return t
@@ -270,6 +270,8 @@ class ExpressionResolver:
             return BooleanType.instance()
         elif tok.type == 'INT_TYPE':
             return IntType.instance()
+        elif tok.type == 'FLOAT_TYPE':
+            return FloatType.instance()
         elif tok.type == 'STRING_TYPE':
             return StringType.instance()
         elif tok.type == 'ANY_TYPE':
@@ -282,7 +284,7 @@ class ExpressionResolver:
             return TimeType.instance()
         else:
             assert tok.type == 'REGEXP_TYPE'
-            return AnyType.instance()
+            return RegExpType.instance()
 
     def values(self, tree):
         """

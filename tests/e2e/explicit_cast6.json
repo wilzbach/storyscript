@@ -1,0 +1,88 @@
+{
+  "tree": {
+    "1": {
+      "method": "mutation",
+      "ln": "1",
+      "name": [
+        "arr"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": []
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "append",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 42
+              }
+            }
+          ]
+        }
+      ],
+      "src": "arr = [] append item: 42",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "arr",
+            {
+              "$OBJECT": "int",
+              "int": 0
+            }
+          ]
+        }
+      ],
+      "src": "b = arr[0]",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "Map",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "int"
+              },
+              {
+                "$OBJECT": "type",
+                "type": "string"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "src": "c = b as Map[int, string]"
+    }
+  },
+  "entrypoint": "1"
+}

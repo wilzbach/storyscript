@@ -3,4 +3,4 @@ Error: syntax error in story at line 1, column None
 1|    List[List[string]] a = {}
       ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-E0126: Type casting not supported between `Map[any,any]` and `List[List[string]]`.
+E0126: Type casting not supported from `Map[any,any]` to `List[List[string]]`.

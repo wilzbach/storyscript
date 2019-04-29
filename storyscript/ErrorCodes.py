@@ -187,7 +187,7 @@ class ErrorCodes:
     )
     type_operation_cast_incompatible = (
         'E0126',
-        'Type casting not supported between `{left}` and `{right}`.'
+        'Type casting not supported from `{left}` to `{right}`.'
     )
 
     @staticmethod

@@ -1,1 +1,1 @@
-string a = []
+int a = []

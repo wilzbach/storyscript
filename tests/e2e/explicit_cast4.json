@@ -1,0 +1,47 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "Map",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "float"
+              },
+              {
+                "$OBJECT": "type",
+                "type": "float"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "dict",
+            "items": [
+              [
+                {
+                  "$OBJECT": "int",
+                  "int": 2
+                },
+                {
+                  "$OBJECT": "string",
+                  "string": "42"
+                }
+              ]
+            ]
+          }
+        }
+      ],
+      "src": "a = {2: \"42\"} as Map[float,float]"
+    }
+  },
+  "entrypoint": "1"
+}

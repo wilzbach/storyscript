@@ -43,8 +43,8 @@ def test_none_eq():
 
 
 def test_none_assign():
-    assert not NoneType.instance().can_be_assigned(IntType.instance)
-    assert not NoneType.instance().can_be_assigned(AnyType.instance)
+    assert not NoneType.instance().can_be_assigned(IntType.instance())
+    assert not NoneType.instance().can_be_assigned(AnyType.instance())
 
 
 def test_none_op():
@@ -54,6 +54,11 @@ def test_none_op():
     assert none.binary_op(IntType.instance(), Token('PLUS', '+')) is None
     assert none.binary_op(StringType.instance(), Token('PLUS', '+')) is None
     assert none.binary_op(AnyType.instance(), None) is None
+
+
+def test_none_explicit_from():
+    assert NoneType.instance().explicit_from(IntType.instance()) is None
+    assert NoneType.instance().explicit_from(AnyType.instance()) is None
 
 
 def test_base_type_not_implemented():
