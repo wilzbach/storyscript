@@ -51,7 +51,7 @@ all_types = {
     'Map[int,string]': '{1: "a"}',
     'Map[float,string]': '{1.5: "a"}',
     'Map[string,string]': '{"a": "b"}',
-    'regexp': '/foo/',
+    'regex': '/foo/',
     'string': '"."',
     'List[boolean]': '[true]',
     'List[int]': '[0]',
@@ -83,7 +83,7 @@ def build_type_permutations(types):
 
 
 @mark.parametrize('el,should_pass', [
-    ('regexp', False),
+    ('regex', False),
     ('List[int]', False),
     ('Map[string,int]', False),
     ('Map[int,string]', False),
@@ -107,7 +107,7 @@ index_types = {
     'int': [],
     'float': [],
     'time': [],
-    'regexp': [],
+    'regex': [],
     'string': ['boolean', 'int', 'any'],
     'List[boolean]': ['boolean', 'int', 'any'],
     'List[int]': ['boolean', 'int', 'any'],
@@ -137,7 +137,7 @@ implicit_assigns = {
     'int': ['boolean', 'int'],
     'float': ['boolean', 'int', 'float'],
     'time': ['time'],
-    'regexp': ['regexp'],
+    'regex': ['regex'],
     'string': ['string'],
     'List[boolean]': ['List[boolean]'],
     'List[int]': ['List[boolean]', 'List[int]'],
@@ -157,6 +157,52 @@ implicit_assigns = {
                   build_type_permutations(implicit_assigns))
 def test_implicit_assign(right, left, should_fail):
     run(f'a = {left[1]}\na = {right[1]}', should_fail=should_fail)
+
+###############################################################################
+# Explicit casts
+###############################################################################
+
+
+implicit_assigns = {
+    'boolean': ['boolean', 'int', 'float', 'string', 'any'],
+    'int': ['boolean', 'int', 'float', 'string', 'any'],
+    'float': ['boolean', 'int', 'float', 'string', 'any'],
+    'time': ['boolean', 'time', 'string', 'any'],
+    'regex': ['regex', 'string', 'any'],
+    'string': ['boolean', 'string', 'int', 'float', 'string', 'regex',
+               'any', 'time'],
+    'List[boolean]': ['List[boolean]', 'List[int]', 'List[float]',
+                      'List[string]', 'List[any]', 'any', 'boolean', 'string'],
+    'List[int]': ['List[boolean]', 'List[int]', 'List[float]',
+                  'List[string]', 'List[any]', 'any', 'boolean', 'string'],
+    'List[float]': ['List[boolean]', 'List[int]', 'List[float]',
+                    'List[string]', 'List[any]', 'any', 'boolean', 'string'],
+    'List[time]': ['List[boolean]', 'List[string]', 'List[any]', 'any',
+                   'boolean', 'string', 'List[time]'],
+    'List[string]': ['List[boolean]', 'List[int]', 'List[float]', 'List[time]',
+                     'List[string]', 'List[any]', 'any', 'boolean', 'string'],
+    'Map[int,string]': ['Map[boolean,string]', 'Map[int,string]',
+                        'Map[string,string]', 'string', 'boolean', 'any',
+                        'Map[float,string]', 'Map[string,float]',
+                        'Map[string,int]', 'Map[string,boolean]'],
+    'Map[string,int]': ['Map[boolean,string]', 'Map[int,string]',
+                        'Map[string,string]', 'string', 'boolean', 'any',
+                        'Map[float,string]', 'Map[string,float]',
+                        'Map[string,int]', 'Map[string,boolean]'],
+    'Map[string,string]': ['Map[boolean,string]', 'Map[int,string]',
+                           'Map[string,string]', 'string', 'boolean', 'any',
+                           'Map[float,string]', 'Map[string,float]',
+                           'Map[string,int]', 'Map[string,boolean]'],
+    'none': [],
+    'object': ['object', 'any', 'boolean', 'string'],
+    'any': [k for k in all_types.keys() if k != 'none'],
+}
+
+
+@mark.parametrize('left,right,should_fail',
+                  build_type_permutations(implicit_assigns))
+def test_explicit_cast(right, left, should_fail):
+    run(f'a = {left[1]} as {right[0]}', should_fail=should_fail)
 
 ###############################################################################
 # ConvertibleToString

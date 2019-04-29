@@ -17,14 +17,17 @@ path_fragment: _DOT NAME| _OSB INT _CSB| _OSB string _CSB| _OSB path _CSB| _OSB 
 path: NAME (path_fragment)* | inline_expression (path_fragment)*
 assignment_fragment: EQUALS base_expression
 assignment_destructoring: _OCB (_NL _INDENT)? (path (_COMMA _NL? path)*)? (_NL _DEDENT)? _CCB
-assignment: (path | assignment_destructoring ) assignment_fragment
+assignment: types? (path | assignment_destructoring ) assignment_fragment
 imports: _IMPORT string _AS NAME
 cmp_operator: GREATER| GREATER_EQUAL| LESSER| LESSER_EQUAL| NOT_EQUAL| EQUAL
 arith_operator: PLUS| DASH
 unary_operator: NOT
 mul_operator: MULTIPLIER| BSLASH| MODULUS
 primary_expression: entity | _OP or_expression _CP
-pow_expression: primary_expression (POWER unary_expression)?
+output_names: NAME (_COMMA NAME)*
+as_operator: _AS (types | output_names)
+pow_operator: POWER
+pow_expression: primary_expression ((pow_operator unary_expression) | as_operator)?
 unary_expression: unary_operator unary_expression | pow_expression
 mul_expression: (mul_expression mul_operator)? unary_expression
 arith_expression: (arith_expression arith_operator)? mul_expression

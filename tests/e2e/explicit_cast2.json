@@ -1,0 +1,26 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "float"
+          },
+          "value": {
+            "$OBJECT": "int",
+            "int": 2
+          }
+        }
+      ],
+      "src": "a = 2 as float"
+    }
+  },
+  "entrypoint": "1"
+}

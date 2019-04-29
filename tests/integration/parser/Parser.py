@@ -4,14 +4,18 @@ from lark.lexer import Token
 from pytest import mark
 
 from storyscript.Story import _parser
+from storyscript.compiler.lowering.Lowering import Lowering
 from storyscript.parser import Tree
 
 
-def parse(source):
+def parse(source, lower=False):
     """
     Don't regenerate the parser on every call
     """
-    return _parser().parse(source)
+    tree = _parser().parse(source)
+    if not lower:
+        return tree
+    return Lowering(parser=tree.parser).process(tree)
 
 
 def get_entity(obj):
@@ -92,7 +96,7 @@ def test_parser_assignment_indented_arguments():
 
 
 def test_parser_foreach_block():
-    result = parse('foreach items as one, two\n\tx=3\n')
+    result = parse('foreach items as one, two\n\tx=3\n', lower=True)
     block = result.block.foreach_block
     foreach = block.foreach_statement
     exp = arith_exp(foreach.base_expression)

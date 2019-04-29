@@ -48,6 +48,16 @@ def binary_op(op, left, right):
     return new_type.op(op)
 
 
+def explicit_cast(from_, to):
+    """
+    Checks whether from_ can be explicitly converted to to.
+    `any` can always be explicitly converted.
+    """
+    if from_ == AnyType.instance():
+        return to
+    return to.explicit_from(from_)
+
+
 class BaseType:
     """
     Base class of a type.
@@ -114,6 +124,13 @@ class BaseType:
             return other
         return None
 
+    def explicit_from(self, from_type):
+        """
+        Return `self` if the type can be explicitly converted from `other`.
+        None otherwise.
+        """
+        return from_type.implicit_to(self)
+
     def string(self):
         """
         Returns True if the type can be stringified.
@@ -168,6 +185,13 @@ class BooleanType(BaseType):
             return other
         return None
 
+    def explicit_from(self, other):
+        """
+        Almost all types explicitly converted to bool.
+        """
+        if other.has_boolean():
+            return self
+
 
 class NoneType(BaseType):
     """
@@ -205,6 +229,9 @@ class NoneType(BaseType):
     def hashable(self):
         return False
 
+    def explicit_from(self, other):
+        return None
+
 
 class IntType(BaseType):
     """
@@ -241,6 +268,17 @@ class IntType(BaseType):
             return other
         return None
 
+    def explicit_from(self, other):
+        if other == self:
+            return self
+        if other == BooleanType.instance():
+            return self
+        if other == FloatType.instance():
+            return self
+        if other == StringType.instance():
+            return self
+        return None
+
 
 class FloatType(BaseType):
     """
@@ -265,6 +303,17 @@ class FloatType(BaseType):
 
     def has_boolean(self):
         return True
+
+    def explicit_from(self, other):
+        if other == self:
+            return self
+        if other == BooleanType.instance():
+            return self
+        if other == IntType.instance():
+            return self
+        if other == StringType.instance():
+            return self
+        return None
 
 
 class StringType(BaseType):
@@ -299,6 +348,10 @@ class StringType(BaseType):
     def has_boolean(self):
         return True
 
+    def explicit_from(self, other):
+        if other != NoneType.instance():
+            return self
+
 
 class TimeType(BaseType):
     """
@@ -325,6 +378,12 @@ class TimeType(BaseType):
 
     def has_boolean(self):
         return True
+
+    def explicit_from(self, other):
+        if other == self:
+            return self
+        if other == StringType.instance():
+            return self
 
 
 class RegExpType(BaseType):
@@ -357,6 +416,12 @@ class RegExpType(BaseType):
 
     def hashable(self):
         return False
+
+    def explicit_from(self, other):
+        if other == self:
+            return self
+        if other == StringType.instance():
+            return self
 
 
 class ListType(BaseType):
@@ -412,6 +477,16 @@ class ListType(BaseType):
     def hashable(self):
         return False
 
+    def explicit_from(self, other):
+        if self == other:
+            return self
+        if not isinstance(other, ListType):
+            return None
+        im_to = explicit_cast(other.inner, self.inner)
+        if im_to is None:
+            return None
+        return ListType(im_to)
+
 
 class MapType(BaseType):
     """
@@ -466,6 +541,17 @@ class MapType(BaseType):
 
     def hashable(self):
         return False
+
+    def explicit_from(self, other):
+        if self == other:
+            return self
+        if not isinstance(other, MapType):
+            return None
+        im_key = explicit_cast(other.key, self.key)
+        im_value = explicit_cast(other.value, self.value)
+        if im_key is None or im_value is None:
+            return None
+        return MapType(im_key, im_value)
 
 
 class ObjectType(BaseType):
@@ -559,3 +645,8 @@ class AnyType(BaseType):
 
     def implicit_to(self, other):
         return self
+
+    def explicit_from(self, other):
+        if other != NoneType.instance():
+            return self
+        return None

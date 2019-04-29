@@ -252,18 +252,30 @@ def test_objects_regular_expression_flags():
     assert result['flags'] == 'flags'
 
 
-def test_objects_map_type(tree):
+def test_objects_map_type(tree, patch):
     tree.data = 'types'
+    types = Objects.types
+    patch.object(Objects, 'types')
+    patch.object(Objects, 'base_type')
     c = tree.first_child()
     c.data = 'map_type'
-    assert Objects.types(tree) == {'$OBJECT': 'type', 'type': 'map'}
+    r = types(tree)
+    Objects.base_type.assert_called_with(c.child(0))
+    Objects.types.assert_called_with(c.child(1))
+    assert r == {'$OBJECT': 'type', 'type': 'Map',
+                 'values': [Objects.base_type(), Objects.types(c.child(1))]}
 
 
-def test_objects_list_type(tree):
+def test_objects_list_type(tree, patch):
     tree.data = 'types'
+    types = Objects.types
+    patch.object(Objects, 'types')
     c = tree.first_child()
     c.data = 'list_type'
-    assert Objects.types(tree) == {'$OBJECT': 'type', 'type': 'list'}
+    r = types(tree)
+    Objects.types.assert_called_with(c.child(0))
+    assert r == {'$OBJECT': 'type', 'type': 'List',
+                 'values': [Objects.types(c.child(0))]}
 
 
 def test_objects_types(tree):
@@ -355,6 +367,7 @@ def test_objects_expression(patch, tree):
     Ensures Objects.expression calls or_expression
     """
     patch.many(JSONExpressionVisitor, ['expression'])
+    tree.data = 'expression'
     tree.child(0).data = 'or_expression'
     r = Objects().expression(tree)
     JSONExpressionVisitor.expression.assert_called_with(tree)

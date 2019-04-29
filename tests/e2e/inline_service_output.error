@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 22
+Error: syntax error in story at line 1, column 6
 
 1|    a = (listen command) as client
-                           ^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-E0007: Missing value after `=`
+E0109: Inline service calls can't define an output

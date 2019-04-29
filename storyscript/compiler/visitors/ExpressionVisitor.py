@@ -7,10 +7,13 @@ class ExpressionVisitor:
     """
 
     def nary_expression(self, tree):
-        assert 0, 'Not implemented'
+        raise NotImplementedError()
 
     def values(self, tree):
-        assert 0, 'Not implemented'
+        raise NotImplementedError()
+
+    def as_expression(self, tree, expr):
+        raise NotImplementedError()
 
     def entity(self, tree):
         """
@@ -36,10 +39,15 @@ class ExpressionVisitor:
             assert tree.child(0).data == 'primary_expression'
             return self.primary_expression(tree.child(0))
 
-        assert tree.child(1).type == 'POWER'
-        values = [self.primary_expression(tree.child(0)),
-                  self.unary_expression(tree.child(2))]
-        return self.nary_expression(tree, tree.child(1), values)
+        expr = self.primary_expression(tree.child(0))
+        if tree.child(1).data == 'pow_operator':
+            op = tree.child(1).child(0)
+            values = [expr,
+                      self.unary_expression(tree.child(2))]
+            return self.nary_expression(tree, op, values)
+        else:
+            assert tree.child(1).data == 'as_operator'
+            return self.as_expression(tree, expr)
 
     def unary_expression(self, tree):
         """
@@ -133,5 +141,9 @@ class ExpressionVisitor:
         """
         Compiles an expression object with the given tree.
         """
-        assert tree.child(0).data == 'or_expression'
-        return self.or_expression(tree.child(0))
+        child = tree.child(0)
+        if child.data == 'as_expression':
+            return self.as_expression(child)
+        else:
+            assert child.data == 'or_expression'
+            return self.or_expression(child)

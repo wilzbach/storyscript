@@ -34,3 +34,10 @@ class JSONExpressionVisitor(ExpressionVisitor):
             'expression': expression,
             'values': values,
         }
+
+    def as_expression(self, tree, expr=None):
+        assert tree.child(1).data == 'as_operator'
+        t = self.visitor.types(tree.child(1).types)
+        if expr is None:
+            expr = self.visitor.path(tree.path)
+        return {'$OBJECT': 'type_cast', 'type': t, 'value': expr}
