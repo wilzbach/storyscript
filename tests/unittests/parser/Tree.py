@@ -273,3 +273,28 @@ def test_follow_node_chain_children(patch, tree):
     assert tree.follow_node_chain(['m4', 'm2', 'mock']) is None
     assert tree.follow_node_chain(['m4', 'm3', 'm2', 'mock']) is None
     assert tree.follow_node_chain(['m3', 'm2', 'mock']) == m
+
+
+def test_follow_empty(patch, tree):
+    m = Tree('mock', [])
+    assert m.follow(['foo']) is None
+
+
+def test_follow_first(patch, tree):
+    foo = Tree('foo', [])
+    m = Tree('mock', [foo])
+    assert m.follow(['foo']) is foo
+
+
+def test_follow_multiple(patch, tree):
+    foo = Tree('foo', [])
+    bar = Tree('bar', [])
+    m = Tree('mock', [foo, bar])
+    assert m.follow(['foo']) is None
+
+
+def test_follow_nested(patch, tree):
+    bar = Tree('bar', [])
+    foo = Tree('foo', [bar])
+    m = Tree('mock', [foo])
+    assert m.follow(['foo', 'bar']) is bar

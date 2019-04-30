@@ -71,6 +71,14 @@ class Transformer(LarkTransformer):
         matches[1].data = 'service_fragment'
         return Tree('service', matches)
 
+    @staticmethod
+    def filter_nested_block(nested_block, nodes):
+        for block in nested_block.children:
+            assert block.data == 'block'
+            el = block.follow(nodes)
+            if el is not None:
+                yield el
+
     @classmethod
     def service_block(cls, matches):
         """
@@ -81,7 +89,10 @@ class Transformer(LarkTransformer):
             return Tree('service_block', matches)
 
         if matches[1].block.rules:
-            args = [*matches[1].find_data('arguments')]
+            args = [*cls.filter_nested_block(
+                matches[1],
+                ['rules', 'block', 'arguments']
+            )]
             if len(args) > 0:
                 for arg in args:
                     matches[0].service_fragment.children.append(arg)
