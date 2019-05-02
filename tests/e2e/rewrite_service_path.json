@@ -1,0 +1,111 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "output": [
+        "client"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "2",
+      "src": "http server as client",
+      "next": "2"
+    },
+    "2": {
+      "method": "when",
+      "ln": "2",
+      "output": [
+        "request"
+      ],
+      "service": "client",
+      "command": "listen",
+      "enter": "3",
+      "parent": "1",
+      "src": "    when client listen as request",
+      "next": "3"
+    },
+    "3": {
+      "method": "execute",
+      "ln": "3",
+      "name": [
+        "id"
+      ],
+      "service": "awesome",
+      "command": "id",
+      "parent": "2",
+      "src": "        id = awesome id",
+      "next": "4.1"
+    },
+    "4.1": {
+      "method": "expression",
+      "ln": "4.1",
+      "name": [
+        "__p-4.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "app",
+            {
+              "$OBJECT": "dot",
+              "dot": "hostname"
+            }
+          ]
+        }
+      ],
+      "parent": "2",
+      "next": "4"
+    },
+    "4": {
+      "method": "execute",
+      "ln": "4",
+      "service": "request",
+      "command": "write",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "content",
+          "arg": {
+            "$OBJECT": "expression",
+            "expression": "sum",
+            "values": [
+              {
+                "$OBJECT": "string",
+                "string": "https://"
+              },
+              {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-4.1"
+                ]
+              },
+              {
+                "$OBJECT": "string",
+                "string": "/?id="
+              },
+              {
+                "$OBJECT": "path",
+                "paths": [
+                  "id"
+                ]
+              },
+              {
+                "$OBJECT": "string",
+                "string": "\n"
+              }
+            ]
+          }
+        }
+      ],
+      "parent": "2",
+      "src": "        request write content: 'https://{app.hostname}/?id={id}\\n'"
+    }
+  },
+  "services": [
+    "awesome",
+    "http"
+  ],
+  "entrypoint": "1"
+}

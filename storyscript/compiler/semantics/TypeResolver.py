@@ -166,7 +166,7 @@ class TypeResolver(ScopeSelectiveVisitor):
     def service_block(self, tree, scope):
         service_name = tree.service.path.child(0).value
         name = scope.resolve(service_name)
-        if name is not None:
+        if name is not None and name.type() != ObjectType.instance():
             tree.expect(tree.service.service_fragment.output is None,
                         'mutation_nested')
             tree.expect(tree.nested_block is None, 'mutation_nested')
