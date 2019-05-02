@@ -193,5 +193,22 @@ class Tree(LarkTree):
         tok.end_column = end_column
         return tok
 
+    def follow(self, nodes):
+        """
+        Checks whether all expected nodes can be seen in the tree.
+        Returns the lowest expected node if all expected nodes and
+        no other nodes have been observed, `None` otherwise.
+        """
+        tree = self
+        for node in nodes:
+            if len(tree.children) != 1:
+                return None
+            child = tree.child(0)
+            if child.data != node:
+                return None
+            tree = child
+
+        return tree
+
     def __getattr__(self, attribute):
         return self.node(attribute)

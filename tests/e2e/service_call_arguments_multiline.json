@@ -1,0 +1,67 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "service": "json",
+      "command": "stringify",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "content",
+          "arg": {
+            "$OBJECT": "dict",
+            "items": [
+              [
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                },
+                {
+                  "$OBJECT": "int",
+                  "int": 1
+                }
+              ]
+            ]
+          }
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "service": "foo",
+      "command": "command",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "a1",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.1"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "a2",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 2
+          }
+        }
+      ],
+      "src": "foo command"
+    }
+  },
+  "services": [
+    "foo",
+    "json"
+  ],
+  "entrypoint": "1.1"
+}

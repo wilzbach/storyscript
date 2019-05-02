@@ -92,11 +92,11 @@ def test_transformer_service_block_when(patch, tree):
     assert result == Tree('service_block', matches)
 
 
-def test_transformer_service_block_indented_args(tree, magic):
+def test_transformer_service_block_indented_args(tree, magic, patch):
     """
     Ensures service_block with indented arguments are transformed correctly.
     """
-    tree.find_data.return_value = ['argument']
+    patch.object(Transformer, 'filter_nested_block', return_value=['argument'])
     block = magic()
     matches = [block, tree]
     result = Transformer.service_block(matches)
