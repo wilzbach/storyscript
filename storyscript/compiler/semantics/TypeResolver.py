@@ -10,7 +10,7 @@ from .SymbolResolver import SymbolResolver
 from .functions.FunctionTable import FunctionTable
 from .functions.MutationTable import MutationTable
 from .symbols.Scope import Scope
-from .symbols.Symbols import Symbol
+from .symbols.Symbols import StorageClass, Symbol
 
 
 class ScopeSelectiveVisitor:
@@ -70,8 +70,12 @@ class TypeResolver(ScopeSelectiveVisitor):
     def assignment(self, tree, scope):
         target_symbol = self.path_resolver.path(tree.path)
 
+        tree.expect(target_symbol.can_write(), 'readonly_type_assignment',
+                    left=target_symbol.name())
+
         frag = tree.assignment_fragment
-        expr_type = self.resolver.base_expression(frag.base_expression)
+        expr_sym = self.resolver.base_expression(frag.base_expression)
+        expr_type = expr_sym.type()
 
         token = frag.child(0)
         tree.expect('/' not in token.value,
@@ -83,7 +87,8 @@ class TypeResolver(ScopeSelectiveVisitor):
             if not target_symbol.is_internal():
                 frag.base_expression.expect(expr_type != NoneType.instance(),
                                             'assignment_type_none')
-            sym = Symbol(target_symbol.name(), expr_type)
+            sym = Symbol(target_symbol.name(), expr_type,
+                         storage_class=expr_sym._storage_class)
             scope.symbols().insert(sym)
         else:
             tree.expect(target_symbol.type().can_be_assigned(expr_type),
@@ -133,7 +138,8 @@ class TypeResolver(ScopeSelectiveVisitor):
         tree.scope = Scope(parent=scope)
         with self.create_scope(tree.scope):
             stmt = tree.foreach_statement
-            output_type = self.resolver.base_expression(stmt.base_expression)
+            output_expr = self.resolver.base_expression(stmt.base_expression)
+            output_type = output_expr.type()
             stmt.expect(stmt.output is not None, 'foreach_output_required')
             outputs = stmt.output.children
             nr_children = len(outputs)
@@ -178,7 +184,8 @@ class TypeResolver(ScopeSelectiveVisitor):
             resolved = tree.scope.resolve(name)
             output.expect(resolved is None, 'output_unique',
                           name=resolved.name() if resolved else None)
-            sym = Symbol.from_path(name, ObjectType.instance())
+            sym = Symbol.from_path(name, ObjectType.instance(),
+                                   storage_class=StorageClass.read)
             tree.scope.insert(sym)
 
             tree.expect(not self.in_when_block, 'nested_when_block')
@@ -212,7 +219,8 @@ class TypeResolver(ScopeSelectiveVisitor):
                 resolved = tree.scope.resolve(name)
                 output.expect(resolved is None, 'output_unique',
                               name=resolved.name() if resolved else None)
-                sym = Symbol(name, ObjectType.instance())
+                sym = Symbol(name, ObjectType.instance(),
+                             storage_class=StorageClass.read)
                 tree.scope.insert(sym)
 
             if tree.nested_block:
@@ -287,7 +295,8 @@ class TypeResolver(ScopeSelectiveVisitor):
         for c in tree.children[2:]:
             if isinstance(c, Tree) and c.data == 'typed_argument':
                 name = c.child(0)
-                sym = Symbol.from_path(name, self.resolver.types(c.types))
+                e_sym = self.resolver.types(c.types)
+                sym = Symbol.from_path(name, e_sym.type())
                 scope.insert(sym)
                 args[sym.name()] = sym
         # add function to the function table
@@ -296,10 +305,12 @@ class TypeResolver(ScopeSelectiveVisitor):
                     'function_redeclaration', name=function_name)
         output = tree.function_output
         if output is not None:
-            output = self.resolver.types(output.types)
+            output = self.resolver.types(output.types).type()
         self.function_table.insert(function_name, args, output)
         if tree.function_output:
-            return_type = self.resolver.types(tree.function_output.types)
+            return_type = self.resolver.types(
+                tree.function_output.types
+            ).type()
         return scope, return_type
 
     def update_scope(self, scope):

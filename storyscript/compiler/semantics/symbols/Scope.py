@@ -2,7 +2,7 @@
 
 from storyscript.compiler.semantics.types.Types import ObjectType
 
-from .Symbols import Symbol, Symbols
+from .Symbols import StorageClass, Symbol, Symbols
 
 
 class Scope:
@@ -55,6 +55,7 @@ class Scope:
         """
         scope = cls(parent=None)
         # insert global symbols
-        app = Symbol(name='app', type_=ObjectType.instance())
+        app = Symbol(name='app', type_=ObjectType.instance(),
+                     storage_class=StorageClass.read)
         scope.insert(app)
         return scope
