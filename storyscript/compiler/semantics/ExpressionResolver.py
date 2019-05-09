@@ -414,16 +414,18 @@ class ExpressionResolver:
         if tree.service_fragment.output is not None:
             tree.service_fragment.output.expect(
                 0, 'service_no_inline_output')
+        t = None
         try:
             # check whether variable exists
             t = self.path(tree.path)
-            service_to_mutation(tree)
-            return self.resolve_mutation(t, tree)
-        except CompilerError as e:
-            # ignore only invalid variables (must be services)
-            if e.error == 'var_not_defined':
-                return AnyType.instance()
-            raise e
+        except CompilerError:
+            # ignore invalid variables (not existent or invalid)
+            # -> must be a service
+            return AnyType.instance()
+
+        # variable exists -> mutation
+        service_to_mutation(tree)
+        return self.resolve_mutation(t, tree)
 
     def mutation(self, tree):
         if tree.path:

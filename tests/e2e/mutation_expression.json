@@ -4,6 +4,21 @@
       "method": "expression",
       "ln": "1",
       "name": [
+        "req"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": []
+        }
+      ],
+      "src": "req = {}",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
         "a"
       ],
       "args": [
@@ -22,11 +37,11 @@
         }
       ],
       "src": "a = [\"opened\", \"labeled\"]",
-      "next": "2"
+      "next": "3"
     },
-    "2": {
+    "3": {
       "method": "mutation",
-      "ln": "2",
+      "ln": "3",
       "args": [
         {
           "$OBJECT": "path",
@@ -42,26 +57,16 @@
               "$OBJECT": "arg",
               "name": "item",
               "arg": {
-                "$OBJECT": "expression",
-                "expression": "equal",
-                "values": [
+                "$OBJECT": "path",
+                "paths": [
+                  "req",
                   {
-                    "$OBJECT": "path",
-                    "paths": [
-                      "req",
-                      {
-                        "$OBJECT": "dot",
-                        "dot": "body"
-                      },
-                      {
-                        "$OBJECT": "string",
-                        "string": "action"
-                      }
-                    ]
+                    "$OBJECT": "dot",
+                    "dot": "body"
                   },
                   {
-                    "$OBJECT": "boolean",
-                    "boolean": false
+                    "$OBJECT": "string",
+                    "string": "action"
                   }
                 ]
               }
@@ -69,7 +74,7 @@
           ]
         }
       ],
-      "src": "a contains item: req.body[\"action\"] == false"
+      "src": "a contains item: req.body[\"action\"]"
     }
   },
   "entrypoint": "1"
