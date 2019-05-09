@@ -93,8 +93,8 @@ class Grammar:
     def assignments(self):
         self.ebnf.EQUALS = '='
         self.ebnf._DOT = '.'
-        path_fragment = ('dot name, osb int csb, osb string csb, osb path csb'
-                         ', osb boolean csb')
+        path_fragment = ('dot name, osb number csb, osb string csb, '
+                         'osb path csb, osb boolean csb')
         self.ebnf.path_fragment = path_fragment
         self.ebnf.path = ('name (path_fragment)* | '
                           'inline_expression (path_fragment)*')

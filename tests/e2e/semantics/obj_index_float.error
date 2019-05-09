@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 8
+Error: syntax error in story at line 2, column 5
 
 2|    b = a[1.5]
-             ^
+          ^^^^^
 
-E0041: `.` is not allowed here
+E0104: `Map[int,int]` can't be indexed with `float`

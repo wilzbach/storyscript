@@ -26,15 +26,14 @@ class Objects:
                     value = self.string(child)
                 elif child.data == 'boolean':
                     value = self.boolean(child)
+                elif child.data == 'number':
+                    value = self.number(child)
                 else:
                     assert child.data == 'path'
                     value = self.path(child)
             else:
-                if child.type == 'INT':
-                    value = self.number(fragment)
-                else:
-                    assert child.type == 'NAME'
-                    value = {'$OBJECT': 'dot', 'dot': value}
+                assert child.type == 'NAME'
+                value = {'$OBJECT': 'dot', 'dot': value}
             names.append(value)
         return names
 
