@@ -1,0 +1,61 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "float",
+                "float": 2.3
+              },
+              {
+                "$OBJECT": "float",
+                "float": 4.5
+              }
+            ]
+          ]
+        }
+      ],
+      "src": "a = {2.3: 4.5}",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a",
+                {
+                  "$OBJECT": "float",
+                  "float": 2.3
+                }
+              ]
+            },
+            {
+              "$OBJECT": "float",
+              "float": 4.5
+            }
+          ]
+        }
+      ],
+      "src": "b = a[2.3] + 4.5"
+    }
+  },
+  "entrypoint": "1"
+}
