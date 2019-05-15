@@ -1,49 +1,48 @@
 {
   "tree": {
     "1": {
-      "method": "expression",
+      "method": "while",
       "ln": "1",
-      "name": [
-        "cond"
-      ],
       "args": [
         {
           "$OBJECT": "boolean",
           "boolean": true
         }
       ],
-      "src": "cond = true",
+      "enter": "2",
+      "exit": "3",
+      "src": "while true",
       "next": "2"
     },
     "2": {
-      "method": "while",
+      "method": "expression",
       "ln": "2",
+      "name": [
+        "c"
+      ],
       "args": [
         {
-          "$OBJECT": "path",
-          "paths": [
-            "cond"
-          ]
+          "$OBJECT": "int",
+          "int": 1
         }
       ],
-      "enter": "3",
-      "src": "while cond",
+      "parent": "1",
+      "src": "\tc = 1",
       "next": "3"
     },
     "3": {
       "method": "expression",
       "ln": "3",
       "name": [
-        "x"
+        "c"
       ],
       "args": [
         {
-          "$OBJECT": "int",
-          "int": 0
+          "$OBJECT": "string",
+          "string": "2"
         }
       ],
-      "parent": "2",
-      "src": "\tx = 0"
+      "src": "c = \"2\""
     }
   },
   "entrypoint": "1"

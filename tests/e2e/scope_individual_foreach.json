@@ -1,0 +1,82 @@
+{
+  "tree": {
+    "1": {
+      "method": "for",
+      "ln": "1",
+      "output": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            },
+            {
+              "$OBJECT": "int",
+              "int": 3
+            }
+          ]
+        }
+      ],
+      "enter": "2",
+      "exit": "5",
+      "src": "foreach [1, 2, 3] as a",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
+      "parent": "1",
+      "src": "\tb = a",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": ""
+        }
+      ],
+      "src": "a = \"\"",
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": ""
+        }
+      ],
+      "src": "b = \"\""
+    }
+  },
+  "entrypoint": "1"
+}

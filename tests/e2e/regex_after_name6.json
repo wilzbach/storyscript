@@ -30,8 +30,8 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "int",
-              "int": 2
+              "$OBJECT": "string",
+              "string": "2"
             },
             {
               "$OBJECT": "regexp",
@@ -41,84 +41,13 @@
         }
       ],
       "enter": "5",
-      "exit": "7",
-      "src": "while 2 + /regexp/",
+      "src": "while \"2\" + /regexp/",
       "next": "5"
     },
     "5": {
       "method": "break",
       "ln": "5",
       "parent": "4",
-      "src": "\tbreak",
-      "next": "7"
-    },
-    "7": {
-      "method": "while",
-      "ln": "7",
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "multiplication",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "regexp",
-              "regexp": "regexp"
-            }
-          ]
-        }
-      ],
-      "enter": "8",
-      "exit": "10",
-      "src": "while \"a\" * /regexp/",
-      "next": "8"
-    },
-    "8": {
-      "method": "break",
-      "ln": "8",
-      "parent": "7",
-      "src": "\tbreak",
-      "next": "10"
-    },
-    "10": {
-      "method": "while",
-      "ln": "10",
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "subtraction",
-          "values": [
-            {
-              "$OBJECT": "list",
-              "items": [
-                {
-                  "$OBJECT": "int",
-                  "int": 1
-                },
-                {
-                  "$OBJECT": "int",
-                  "int": 2
-                }
-              ]
-            },
-            {
-              "$OBJECT": "regexp",
-              "regexp": "regexp"
-            }
-          ]
-        }
-      ],
-      "enter": "11",
-      "src": "while [1, 2] - /regexp/",
-      "next": "11"
-    },
-    "11": {
-      "method": "break",
-      "ln": "11",
-      "parent": "10",
       "src": "\tbreak"
     }
   },

@@ -1,0 +1,3 @@
+while true
+	c = 1
+c = "2"
