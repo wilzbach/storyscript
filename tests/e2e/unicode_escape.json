@@ -166,10 +166,17 @@
               "string": "&"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -193,10 +200,17 @@
               "string": "&"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -220,10 +234,17 @@
               "string": "\ud83d\ude00"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -247,10 +268,17 @@
               "string": "\t"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -274,10 +302,17 @@
               "string": "\t"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -301,10 +336,17 @@
               "string": "\n"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -328,10 +370,17 @@
               "string": "\n"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -355,10 +404,17 @@
               "string": "\r"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -382,10 +438,17 @@
               "string": "&"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -499,10 +562,17 @@
               "string": "\u0007"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -526,10 +596,17 @@
               "string": "\b"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -553,10 +630,17 @@
               "string": "\f"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -580,10 +664,17 @@
               "string": "\u000b"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -607,10 +698,17 @@
               "string": "&"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }
@@ -634,10 +732,17 @@
               "string": "S"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "x"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "x"
+                ]
+              }
             }
           ]
         }

@@ -46,20 +46,34 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "c"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "d"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "d"
+                ]
+              }
             }
           ]
         }
@@ -109,20 +123,34 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "c"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "d"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "d"
+                ]
+              }
             }
           ]
         }
@@ -172,20 +200,34 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "c"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "d"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "d"
+                ]
+              }
             }
           ]
         }
@@ -336,10 +378,17 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             }
           ]
         }
@@ -389,10 +438,17 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             }
           ]
         }
@@ -442,10 +498,17 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             }
           ]
         }
@@ -505,10 +568,17 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
@@ -562,10 +632,17 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
@@ -619,10 +696,17 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
@@ -686,20 +770,34 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "c"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "d"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "d"
+                ]
+              }
             }
           ]
         }
@@ -749,20 +847,34 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "c"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "d"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "d"
+                ]
+              }
             }
           ]
         }
@@ -812,20 +924,34 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "c"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "d"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "d"
+                ]
+              }
             }
           ]
         }

@@ -76,20 +76,34 @@
                 "string": "https://"
               },
               {
-                "$OBJECT": "path",
-                "paths": [
-                  "__p-4.1"
-                ]
+                "$OBJECT": "type_cast",
+                "type": {
+                  "$OBJECT": "type",
+                  "type": "string"
+                },
+                "value": {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "__p-4.1"
+                  ]
+                }
               },
               {
                 "$OBJECT": "string",
                 "string": "/?id="
               },
               {
-                "$OBJECT": "path",
-                "paths": [
-                  "id"
-                ]
+                "$OBJECT": "type_cast",
+                "type": {
+                  "$OBJECT": "type",
+                  "type": "string"
+                },
+                "value": {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "id"
+                  ]
+                }
               },
               {
                 "$OBJECT": "string",

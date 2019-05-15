@@ -8,11 +8,22 @@
       ],
       "args": [
         {
-          "$OBJECT": "int",
-          "int": 1
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "a"
+              },
+              {
+                "$OBJECT": "string",
+                "string": "b"
+              }
+            ]
+          ]
         }
       ],
-      "src": "a = 1",
+      "src": "a = {\"a\": \"b\"}",
       "next": "2"
     },
     "2": {
@@ -23,28 +34,33 @@
       ],
       "args": [
         {
-          "$OBJECT": "int",
-          "int": 2
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "string"
+          },
+          "value": {
+            "$OBJECT": "path",
+            "paths": [
+              "a"
+            ]
+          }
         }
       ],
-      "src": "b = 2",
+      "src": "b = \"{a}\"",
       "next": "3"
     },
     "3": {
       "method": "expression",
       "ln": "3",
       "name": [
-        "name"
+        "b"
       ],
       "args": [
         {
           "$OBJECT": "expression",
           "expression": "sum",
           "values": [
-            {
-              "$OBJECT": "string",
-              "string": "New Storyscript release - "
-            },
             {
               "$OBJECT": "type_cast",
               "type": {
@@ -59,10 +75,6 @@
               }
             },
             {
-              "$OBJECT": "string",
-              "string": "\n\n"
-            },
-            {
               "$OBJECT": "type_cast",
               "type": {
                 "$OBJECT": "type",
@@ -74,15 +86,11 @@
                   "b"
                 ]
               }
-            },
-            {
-              "$OBJECT": "string",
-              "string": "\\"
             }
           ]
         }
       ],
-      "src": "name = \"New Storyscript release - {a}\\n\\n{b}\\\\\""
+      "src": "b = \"{a}{b}\""
     }
   },
   "entrypoint": "1"

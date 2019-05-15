@@ -31,10 +31,17 @@
               "string": "\\"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "a"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "a"
+                ]
+              }
             },
             {
               "$OBJECT": "string",

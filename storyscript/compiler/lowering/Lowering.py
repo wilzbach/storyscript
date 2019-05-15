@@ -122,15 +122,9 @@ class Lowering:
             Tree('arith_expression', [
                 Tree('mul_expression', [
                     Tree('unary_expression', [
-                        Tree('pow_expression', [
-                            Tree('primary_expression', [
-                                Tree('entity', [
-                                    n1
-                                ])
-                            ])
-                        ])
+                        n1
                     ])
-                ]),
+                ])
             ])
         ])
 
@@ -150,13 +144,7 @@ class Lowering:
         for n2 in other_nodes:
             base_tree.children.append(Tree('mul_expression', [
                 Tree('unary_expression', [
-                    Tree('pow_expression', [
-                        Tree('primary_expression', [
-                            Tree('entity', [
-                                n2
-                            ])
-                        ])
-                    ])
+                    n2
                 ])
             ]))
         return base_tree
@@ -300,7 +288,7 @@ class Lowering:
         """
         Concatenes the to-be-inserted string templates.
         For example, a string template like "a{exp}b" gets flatten to:
-            "a" + fake_path_to_exp + "b"
+            "a" + fake_path_to_exp as string + "b"
 
         Strings can be inserted directly, but string templates must be
         evaluated to new AST nodes and the reference to their fake_node
@@ -310,13 +298,41 @@ class Lowering:
         for s in string_objs:
             if s['$OBJECT'] == 'string':
                 # plain string -> insert directly
-                ks.append(self.build_string_value(s['string']))
+                str_node = self.build_string_value(s['string'])
+                string_tree = Tree('pow_expression', [
+                    Tree('primary_expression', [
+                        Tree('entity', [
+                            str_node
+                        ])
+                    ])
+                ])
+                ks.append(string_tree)
             else:
                 assert s['$OBJECT'] == 'code'
                 # string template -> eval
                 # ignore newlines in string interpolation
                 code = ''.join(s['code'].split('\n'))
-                ks.append(self.eval(orig_node, code, fake_tree))
+
+                evaled_node = self.eval(orig_node, code, fake_tree)
+
+                # cast to string (`as string`)
+                base_type = orig_node.create_token('STRING_TYPE', 'string')
+                as_operator = Tree('as_operator', [
+                    Tree('types', [
+                        Tree('base_type', [
+                            base_type
+                        ])
+                    ])
+                ])
+                as_tree = Tree('pow_expression', [
+                    Tree('primary_expression', [
+                        Tree('entity', [
+                            evaled_node
+                        ]),
+                    ]),
+                    as_operator
+                ])
+                ks.append(as_tree)
 
         return ks
 
@@ -332,7 +348,7 @@ class Lowering:
         # shortcut for single-child code like '${a}'
         if len(new_node.children) == 1:
             return new_node.mul_expression.unary_expression.pow_expression. \
-                    primary_expression.entity.path
+                primary_expression.entity.path
 
         assert len(new_node.children) >= 2
 
@@ -406,6 +422,7 @@ class Lowering:
         children = self.concat_string_templates(fake_tree, string_node,
                                                 string_objs)
         new_node = self.add_strings(*children)
+
         # if there is more than one node in cmp_expression, node will point
         # to the only the string entity and thus we can't insert string
         # concatenation directly, but must insert it as a new fake node

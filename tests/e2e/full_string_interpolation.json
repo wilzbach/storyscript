@@ -77,20 +77,34 @@
               "string": "https://github.com/"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "repo_full_name"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "repo_full_name"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "/pull/"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-3.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-3.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
