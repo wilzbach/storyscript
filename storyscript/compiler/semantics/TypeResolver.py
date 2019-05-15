@@ -28,6 +28,26 @@ class ScopeSelectiveVisitor:
                 self.visit(c, scope)
 
 
+class ScopeBlock:
+    """
+    Maintains the scope for a current block.
+    At the end of a block, the previous scope will be restored.
+    This means that scopes are essentially a single-linked list up to the root
+    scope.
+    """
+    def __init__(self, type_resolver, scope):
+        assert scope is not None
+        self.type_resolver = type_resolver
+        self.scope = scope
+
+    def __enter__(self):
+        self.prev_scope = self.type_resolver.current_scope
+        self.type_resolver.update_scope(self.scope)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.type_resolver.update_scope(self.prev_scope)
+
+
 class TypeResolver(ScopeSelectiveVisitor):
     """
     Tries to resolve the type of a variable or function call.
@@ -77,12 +97,10 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.visit_children(tree, scope)
 
     def block(self, tree, scope):
-        self.update_scope(scope)
         self.visit_children(tree, scope)
 
     def nested_block(self, tree, scope):
-        tree.scope = Scope(parent=scope)
-        self.visit_children(tree, scope=tree.scope)
+        self.visit_children(tree, scope)
 
     def mutation_block(self, tree, scope):
         # resolve to perform checks
@@ -91,7 +109,6 @@ class TypeResolver(ScopeSelectiveVisitor):
 
     def absolute_expression(self, tree, scope):
         # resolve to perform checks
-        tree.scope = Scope(parent=scope)
         self.resolver.expression(tree.expression)
 
     def implicit_output(self, tree):
@@ -114,54 +131,55 @@ class TypeResolver(ScopeSelectiveVisitor):
         Create a new scope and add output variables to it
         """
         tree.scope = Scope(parent=scope)
-        self.update_scope(tree.scope)
+        with self.create_scope(tree.scope):
+            stmt = tree.foreach_statement
+            output_type = self.resolver.base_expression(stmt.base_expression)
+            stmt.expect(stmt.output is not None, 'foreach_output_required')
+            outputs = stmt.output.children
+            nr_children = len(outputs)
+            stmt.expect(nr_children > 0, 'foreach_output_required')
 
-        stmt = tree.foreach_statement
-        output_type = self.resolver.base_expression(stmt.base_expression)
-        stmt.expect(stmt.output is not None, 'foreach_output_required')
-        outputs = stmt.output.children
-        nr_children = len(outputs)
-        stmt.expect(nr_children > 0, 'foreach_output_required')
+            iterable_types = output_type.output(nr_children)
+            stmt.output.expect(iterable_types is not None,
+                               'foreach_iterable_required',
+                               target=output_type)
+            stmt.output.expect(nr_children <= 2,
+                               'foreach_output_children')
 
-        iterable_types = output_type.output(nr_children)
-        stmt.output.expect(iterable_types is not None,
-                           'foreach_iterable_required',
-                           target=output_type)
-        stmt.output.expect(nr_children <= 2,
-                           'foreach_output_children')
+            for type_, output in zip(iterable_types, outputs):
+                sym = Symbol.from_path(output, type_)
+                tree.scope.insert(sym)
 
-        for type_, output in zip(iterable_types, outputs):
-            sym = Symbol.from_path(output, type_)
-            tree.scope.insert(sym)
-
-        for c in tree.nested_block.children:
-            self.visit_children(c, scope=tree.scope)
+            for c in tree.nested_block.children:
+                self.visit_children(c, scope=tree.scope)
 
     def while_block(self, tree, scope):
-        self.visit_children(tree.nested_block, scope=scope)
+        # TODO: check while_statement
+        tree.scope = Scope(parent=scope)
+        with self.create_scope(tree.scope):
+            self.visit_children(tree.nested_block, scope=tree.scope)
 
     def when_block(self, tree, scope):
         tree.scope = Scope(parent=scope)
-        self.update_scope(tree.scope)
+        with self.create_scope(tree.scope):
+            self.implicit_output(tree)
 
-        self.implicit_output(tree)
+            output = tree.service.service_fragment.output
+            output.expect(len(output.children) == 1, 'output_type_only_one',
+                          target='when')
 
-        output = tree.service.service_fragment.output
-        output.expect(len(output.children) == 1, 'output_type_only_one',
-                      target='when')
+            name = output.children[0]
+            resolved = tree.scope.resolve(name)
+            output.expect(resolved is None, 'output_unique',
+                          name=resolved.name() if resolved else None)
+            sym = Symbol.from_path(name, ObjectType.instance())
+            tree.scope.insert(sym)
 
-        name = output.children[0]
-        resolved = tree.scope.resolve(name)
-        output.expect(resolved is None, 'output_unique',
-                      name=resolved.name() if resolved else None)
-        sym = Symbol.from_path(name, ObjectType.instance())
-        tree.scope.insert(sym)
-
-        tree.expect(not self.in_when_block, 'nested_when_block')
-        self.in_when_block = True
-        for c in tree.nested_block.children:
-            self.visit_children(c, scope=tree.scope)
-        self.in_when_block = False
+            tree.expect(not self.in_when_block, 'nested_when_block')
+            self.in_when_block = True
+            for c in tree.nested_block.children:
+                self.visit_children(c, scope=tree.scope)
+            self.in_when_block = False
 
     def service_block(self, tree, scope):
         service_name = tree.service.path.child(0).value
@@ -175,51 +193,53 @@ class TypeResolver(ScopeSelectiveVisitor):
             return
 
         tree.scope = Scope(parent=scope)
-        self.update_scope(tree.scope)
+        with self.create_scope(tree.scope):
 
-        self.implicit_output(tree)
+            self.implicit_output(tree)
 
-        output = tree.service.service_fragment.output
-        if output is not None:
-            output.expect(len(output.children) == 1, 'output_type_only_one',
-                          target='service')
+            output = tree.service.service_fragment.output
+            if output is not None:
+                output.expect(len(output.children) == 1,
+                              'output_type_only_one', target='service')
 
-            name = output.children[0]
-            resolved = tree.scope.resolve(name)
-            output.expect(resolved is None, 'output_unique',
-                          name=resolved.name() if resolved else None)
-            sym = Symbol(name, ObjectType.instance())
-            tree.scope.insert(sym)
+                name = output.children[0]
+                resolved = tree.scope.resolve(name)
+                output.expect(resolved is None, 'output_unique',
+                              name=resolved.name() if resolved else None)
+                sym = Symbol(name, ObjectType.instance())
+                tree.scope.insert(sym)
 
-        if tree.nested_block:
-            tree.expect(not self.in_service_block, 'nested_service_block')
-            self.in_service_block = True
-            for c in tree.nested_block.children:
-                self.visit_children(c, scope=tree.scope)
-            self.in_service_block = False
+            if tree.nested_block:
+                tree.expect(not self.in_service_block, 'nested_service_block')
+                self.in_service_block = True
+                for c in tree.nested_block.children:
+                    self.visit_children(c, scope=tree.scope)
+                self.in_service_block = False
 
     def concise_when_block(self, tree, scope):
         tree.expect(0, 'nested_when_block')
 
     def if_block(self, tree, scope):
-        self.if_statement(tree, scope)
-        for c in tree.children[2:]:
-            self.visit(c, scope)
+        tree.scope = Scope(parent=scope)
+        with self.create_scope(tree.scope):
+            self.if_statement(tree.if_statement, tree.scope)
+
+            self.visit_children(tree.nested_block, scope=tree.scope)
+
+            for c in tree.children[2:]:
+                self.visit(c, tree.scope)
 
     def if_statement(self, tree, scope):
         """
         If blocks don't create a new scope.
         """
-        if_statement = tree.if_statement
-        self.resolver.base_expression(if_statement.base_expression)
-        self.visit_children(tree.nested_block, scope=scope)
+        self.resolver.base_expression(tree.base_expression)
 
     def elseif_block(self, tree, scope):
         """
         Else if blocks don't create a new scope.
         """
-        if_statement = tree.elseif_statement
-        self.resolver.base_expression(if_statement.base_expression)
+        self.resolver.base_expression(tree.elseif_statement.base_expression)
         self.visit_children(tree.nested_block, scope=scope)
 
     def else_block(self, tree, scope):
@@ -229,9 +249,11 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.visit_children(tree.nested_block, scope=scope)
 
     def try_block(self, tree, scope):
-        self.visit_children(tree.nested_block, scope=scope)
-        for c in tree.children[2:]:
-            self.visit(c, scope)
+        tree.scope = Scope(parent=scope)
+        with self.create_scope(tree.scope):
+            self.visit_children(tree.nested_block, scope=tree.scope)
+            for c in tree.children[2:]:
+                self.visit(c, tree.scope)
 
     def catch_block(self, tree, scope):
         self.visit_children(tree, scope=scope)
@@ -240,12 +262,13 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.visit_children(tree, scope=scope)
 
     def function_block(self, tree, scope):
-        scope, return_type = self.function_statement(tree.function_statement,
-                                                     scope)
-        self.update_scope(scope)
-        self.visit_children(tree.nested_block, scope=scope)
-        ReturnVisitor.check(tree, scope, return_type, self.function_table,
-                            self.mutation_table)
+        tree.scope, return_type = self.function_statement(
+            tree.function_statement, scope
+        )
+        with self.create_scope(tree.scope):
+            self.visit_children(tree.nested_block, scope=tree.scope)
+            ReturnVisitor.check(tree, tree.scope, return_type,
+                                self.function_table, self.mutation_table)
 
     def function_statement(self, tree, scope):
         """
@@ -274,8 +297,15 @@ class TypeResolver(ScopeSelectiveVisitor):
         return scope, return_type
 
     def update_scope(self, scope):
+        """
+        Updates the current scope for the respective resolvers.
+        """
+        self.current_scope = scope
         self.symbol_resolver.update_scope(scope)
         self.path_symbol_resolver.update_scope(scope)
+
+    def create_scope(self, scope):
+        return ScopeBlock(self, scope)
 
     def start(self, tree, scope=None):
         # create the root scope
