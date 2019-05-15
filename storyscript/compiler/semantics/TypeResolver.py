@@ -154,10 +154,16 @@ class TypeResolver(ScopeSelectiveVisitor):
                 self.visit_children(c, scope=tree.scope)
 
     def while_block(self, tree, scope):
-        # TODO: check while_statement
+        self.while_statement(tree.while_statement, scope)
         tree.scope = Scope(parent=scope)
         with self.create_scope(tree.scope):
             self.visit_children(tree.nested_block, scope=tree.scope)
+
+    def while_statement(self, tree, scope):
+        """
+        Checks the inside of while statements
+        """
+        self.resolver.base_expression(tree.base_expression)
 
     def when_block(self, tree, scope):
         tree.scope = Scope(parent=scope)
