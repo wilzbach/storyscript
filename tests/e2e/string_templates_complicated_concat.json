@@ -87,10 +87,17 @@
                 "string": "^"
               },
               {
-                "$OBJECT": "path",
-                "paths": [
-                  "__p-3.2"
-                ]
+                "$OBJECT": "type_cast",
+                "type": {
+                  "$OBJECT": "type",
+                  "type": "string"
+                },
+                "value": {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "__p-3.2"
+                  ]
+                }
               },
               {
                 "$OBJECT": "string",

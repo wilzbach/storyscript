@@ -127,6 +127,9 @@ start
                         primary_expression
                           entity
                             path	a
+                        as_operator
+                          types
+                            base_type	string
 
 """
     assert e.exit_code == 0

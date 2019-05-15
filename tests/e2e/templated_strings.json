@@ -106,10 +106,17 @@
               "string": "hello"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "my_story"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "my_story"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
@@ -133,32 +140,60 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "a"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "a"
+                ]
+              }
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "c"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "c"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "."
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "d"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "d"
+                ]
+              }
             }
           ]
         }
@@ -174,10 +209,17 @@
       ],
       "args": [
         {
-          "$OBJECT": "path",
-          "paths": [
-            "a"
-          ]
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "string"
+          },
+          "value": {
+            "$OBJECT": "path",
+            "paths": [
+              "a"
+            ]
+          }
         }
       ],
       "src": "t3 = \"{a}\"",
@@ -223,10 +265,17 @@
               "string": "hello{with}{"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-10.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-10.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",

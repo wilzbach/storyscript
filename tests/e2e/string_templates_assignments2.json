@@ -36,20 +36,34 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-1.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-1.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "c"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-1.2"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-1.2"
+                ]
+              }
             }
           ]
         }
@@ -119,20 +133,34 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-2.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-2.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "c"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-2.2"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-2.2"
+                ]
+              }
             }
           ]
         }
@@ -202,20 +230,34 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-3.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-3.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "c"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-3.2"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-3.2"
+                ]
+              }
             }
           ]
         }
@@ -406,10 +448,17 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-7.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-7.1"
+                ]
+              }
             }
           ]
         }
@@ -469,10 +518,17 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-8.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-8.1"
+                ]
+              }
             }
           ]
         }
@@ -532,10 +588,17 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-9.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-9.1"
+                ]
+              }
             }
           ]
         }
@@ -605,10 +668,17 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-10.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-10.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
@@ -672,10 +742,17 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-11.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-11.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
@@ -739,10 +816,17 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-12.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-12.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
@@ -826,20 +910,34 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-13.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-13.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "c"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-13.2"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-13.2"
+                ]
+              }
             }
           ]
         }
@@ -909,20 +1007,34 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-14.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-14.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "c"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-14.2"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-14.2"
+                ]
+              }
             }
           ]
         }
@@ -992,20 +1104,34 @@
               "string": "a"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-15.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-15.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
               "string": "c"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-15.2"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-15.2"
+                ]
+              }
             }
           ]
         }

@@ -22,10 +22,17 @@
       ],
       "args": [
         {
-          "$OBJECT": "path",
-          "paths": [
-            "__p-1.1"
-          ]
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "string"
+          },
+          "value": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.1"
+            ]
+          }
         }
       ],
       "src": "a = \"{\\\"\\\"}\"",
@@ -53,10 +60,17 @@
       ],
       "args": [
         {
-          "$OBJECT": "path",
-          "paths": [
-            "__p-2.1"
-          ]
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "string"
+          },
+          "value": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-2.1"
+            ]
+          }
         }
       ],
       "src": "b = \"{\\\"'.'\\\"}\"",
@@ -92,10 +106,17 @@
               "string": "\n"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-3.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-3.1"
+                ]
+              }
             }
           ]
         }
@@ -133,10 +154,17 @@
               "string": "\n"
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-4.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-4.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",
