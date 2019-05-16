@@ -8,7 +8,7 @@ from storyscript.exceptions import CompilerError
 from storyscript.parser import Tree
 
 from .PathResolver import PathResolver
-from .symbols.Symbols import Symbol
+from .symbols.Symbols import Symbol, base_symbol
 
 
 class SymbolExpressionVisitor(ExpressionVisitor):
@@ -65,15 +65,16 @@ class SymbolExpressionVisitor(ExpressionVisitor):
             expr = self.visitor.path(tree.path)
         # check for compatibility
         t = self.visitor.types(tree.child(1).types)
-        tree.expect(explicit_cast(expr, t),
+        tree.expect(explicit_cast(expr.type(), t.type()),
                     'type_operation_cast_incompatible',
-                    left=expr, right=t)
+                    left=expr.type(), right=t.type())
         return t
 
     def values(self, tree):
         return self.visitor.values(tree)
 
     def nary_expression(self, tree, op, values):
+        values = [v.type() for v in values]
         if self.op_returns_boolean(op.type):
             assert len(values) <= 2
             # e.g. a < b
@@ -81,14 +82,14 @@ class SymbolExpressionVisitor(ExpressionVisitor):
                 tree.expect(values[0].cmp(values[1]),
                             'type_operation_cmp_incompatible',
                             left=values[0], right=values[1])
-                return BooleanType.instance()
+                return base_symbol(BooleanType.instance())
 
             # e.g. a == b
             if self.is_equal(op.type):
                 tree.expect(values[0].equal(values[1]),
                             'type_operation_equal_incompatible',
                             left=values[0], right=values[1])
-                return BooleanType.instance()
+                return base_symbol(BooleanType.instance())
 
             # e.g. a and b, a or b, !a
             tree.expect(values[0].has_boolean(),
@@ -98,7 +99,7 @@ class SymbolExpressionVisitor(ExpressionVisitor):
                 tree.expect(values[1].has_boolean(),
                             'type_operation_boolean_incompatible',
                             val=values[1])
-            return BooleanType.instance()
+            return base_symbol(BooleanType.instance())
 
         is_arithmetic = self.is_arithmetic_operator(op.type)
         tree.expect(is_arithmetic, 'compiler_error_no_operator',
@@ -109,7 +110,7 @@ class SymbolExpressionVisitor(ExpressionVisitor):
             tree.expect(new_val is not None, 'type_operation_incompatible',
                         left=val, right=c, op=op.value)
             val = new_val
-        return val
+        return base_symbol(val)
 
 
 class ExpressionResolver:
@@ -123,7 +124,7 @@ class ExpressionResolver:
 
     def path(self, tree):
         assert tree.data == 'path'
-        return self.path_resolver.path(tree).type()
+        return self.path_resolver.path(tree)
 
     def number(self, tree):
         """
@@ -134,29 +135,29 @@ class ExpressionResolver:
         if token.value[0] == '+':
             token.value = token.value[1:]
         if token.type == 'FLOAT':
-            return FloatType.instance()
-        return IntType.instance()
+            return base_symbol(FloatType.instance())
+        return base_symbol(IntType.instance())
 
     def time(self, tree):
         """
         Compiles a time tree.
         """
         assert tree.data == 'time'
-        return TimeType.instance()
+        return base_symbol(TimeType.instance())
 
     def string(self, tree):
         """
         Compiles a string tree.
         """
         assert tree.data == 'string'
-        return StringType.instance()
+        return base_symbol(StringType.instance())
 
     def boolean(self, tree):
         """
         Compiles a boolean tree.
         """
         assert tree.data == 'boolean'
-        return BooleanType.instance()
+        return base_symbol(BooleanType.instance())
 
     def list(self, tree):
         assert tree.data == 'list'
@@ -164,7 +165,7 @@ class ExpressionResolver:
         for i, c in enumerate(tree.children[1:]):
             if not isinstance(c, Tree):
                 continue
-            val = self.base_expression(c)
+            val = self.base_expression(c).type()
             if i >= 1:
                 # type mismatch in the list
                 if val != value:
@@ -174,7 +175,7 @@ class ExpressionResolver:
                 value = val
         if value is None:
             value = AnyType.instance()
-        return ListType(value)
+        return base_symbol(ListType(value))
 
     def map(self, tree):
         assert tree.data == 'map'
@@ -184,16 +185,16 @@ class ExpressionResolver:
             assert isinstance(item, Tree)
             key_child = item.child(0)
             if key_child.data == 'string':
-                new_key = self.string(key_child)
+                new_key = self.string(key_child).type()
             elif key_child.data == 'number':
-                new_key = self.number(key_child)
+                new_key = self.number(key_child).type()
             elif key_child.data == 'boolean':
-                new_key = self.boolean(key_child)
+                new_key = self.boolean(key_child).type()
             else:
                 assert key_child.data == 'path'
-                new_key = self.path(key_child)
+                new_key = self.path(key_child).type()
             keys.append(new_key)
-            values.append(self.base_expression(item.child(1)))
+            values.append(self.base_expression(item.child(1)).type())
 
             # check all keys - even if they don't match
             key_child.expect(new_key.hashable(),
@@ -219,14 +220,14 @@ class ExpressionResolver:
             key = AnyType.instance()
         if value is None:
             value = AnyType.instance()
-        return MapType(key, value)
+        return base_symbol(MapType(key, value))
 
     def regular_expression(self, tree):
         """
         Compiles a regexp object from a regular_expression tree
         """
         assert tree.data == 'regular_expression'
-        return RegExpType.instance()
+        return base_symbol(RegExpType.instance())
 
     def types(self, tree):
         """
@@ -247,9 +248,9 @@ class ExpressionResolver:
         Resolves a map type expression to a type
         """
         assert tree.data == 'map_type'
-        key_type = self.base_type(tree.child(0))
-        value_type = self.types(tree.child(1))
-        return MapType(key_type, value_type)
+        key_type = self.base_type(tree.child(0)).type()
+        value_type = self.types(tree.child(1)).type()
+        return base_symbol(MapType(key_type, value_type))
 
     def list_type(self, tree):
         """
@@ -257,8 +258,8 @@ class ExpressionResolver:
         """
         assert tree.data == 'list_type'
         c = tree.first_child()
-        item = self.types(c)
-        return ListType(item)
+        item = self.types(c).type()
+        return base_symbol(ListType(item))
 
     def base_type(self, tree):
         """
@@ -267,24 +268,24 @@ class ExpressionResolver:
         assert tree.data == 'base_type'
         tok = tree.first_child()
         if tok.type == 'BOOLEAN_TYPE':
-            return BooleanType.instance()
+            return base_symbol(BooleanType.instance())
         elif tok.type == 'INT_TYPE':
-            return IntType.instance()
+            return base_symbol(IntType.instance())
         elif tok.type == 'FLOAT_TYPE':
-            return FloatType.instance()
+            return base_symbol(FloatType.instance())
         elif tok.type == 'STRING_TYPE':
-            return StringType.instance()
+            return base_symbol(StringType.instance())
         elif tok.type == 'ANY_TYPE':
-            return AnyType.instance()
+            return base_symbol(AnyType.instance())
         elif tok.type == 'OBJECT_TYPE':
-            return ObjectType.instance()
+            return base_symbol(ObjectType.instance())
         elif tok.type == 'FUNCTION_TYPE':
-            return AnyType.instance()
+            return base_symbol(AnyType.instance())
         elif tok.type == 'TIME_TYPE':
-            return TimeType.instance()
+            return base_symbol(TimeType.instance())
         else:
             assert tok.type == 'REGEXP_TYPE'
-            return RegExpType.instance()
+            return base_symbol(RegExpType.instance())
 
     def values(self, tree):
         """
@@ -308,7 +309,7 @@ class ExpressionResolver:
                 return self.regular_expression(subtree)
             else:
                 assert subtree.data == 'void'
-                return AnyType.instance()
+                return base_symbol(AnyType.instance())
 
         assert subtree.type == 'NAME'
         return self.path(tree)
@@ -326,7 +327,7 @@ class ExpressionResolver:
             tree.expect(len(c.children) >= 2, 'arg_name_required',
                         fn_type=fn_type, name=name)
             name = c.child(0)
-            type_ = self.expression(c.child(1))
+            type_ = self.expression(c.child(1)).type()
             sym = Symbol.from_path(name, type_)
             args[sym.name()] = sym
         return args
@@ -359,14 +360,15 @@ class ExpressionResolver:
                                       name=overloads.name(),
                                       overloads=overload_list)
 
-    def resolve_mutation(self, t, tree):
+    def resolve_mutation(self, s, tree):
         """
         Resolve a mutation on t with the MutationTable, instantiate it and
         check the caller arguments.
         """
+        t = s.type()
         # a mutation on 'object' returns 'any' (for now)
         if t == ObjectType.instance():
-            return AnyType.instance()
+            return base_symbol(AnyType.instance())
 
         name = tree.mutation_fragment.child(0).value
         args = self.build_arguments(tree.mutation_fragment, name,
@@ -387,13 +389,13 @@ class ExpressionResolver:
 
         if len(ms) > 1:
             # a mutation on any might have matched multiple overloads
-            return AnyType.instance()
+            return base_symbol(AnyType.instance())
         else:
             assert len(ms) == 1
             m = ms[0]
             m = m.instantiate(t)
             m.check_call(tree.mutation_fragment, args)
-            return m.output()
+            return base_symbol(m.output())
 
     def resolve_function(self, tree):
         """
@@ -407,7 +409,7 @@ class ExpressionResolver:
         tree.expect(fn is not None, 'function_not_found', name=name)
         args = self.build_arguments(tree, name, fn_type='Function')
         fn.check_call(tree, args)
-        return fn.output()
+        return base_symbol(fn.output())
 
     def service(self, tree):
         # unknown for now
@@ -421,7 +423,7 @@ class ExpressionResolver:
         except CompilerError:
             # ignore invalid variables (not existent or invalid)
             # -> must be a service
-            return AnyType.instance()
+            return base_symbol(AnyType.instance())
 
         # variable exists -> mutation
         service_to_mutation(tree)
@@ -429,12 +431,12 @@ class ExpressionResolver:
 
     def mutation(self, tree):
         if tree.path:
-            t = self.path(tree.path)
+            s = self.path(tree.path)
         else:
-            t = self.expr_visitor.primary_expression(
+            s = self.expr_visitor.primary_expression(
                 tree.primary_expression
             )
-        return self.resolve_mutation(t, tree)
+        return self.resolve_mutation(s, tree)
 
     def call_expression(self, tree):
         return self.resolve_function(tree)

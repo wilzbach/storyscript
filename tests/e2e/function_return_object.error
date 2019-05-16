@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 9
+
+2|      return app
+               ^^^
+
+E0128: `Object` is readonly and can not be returned.

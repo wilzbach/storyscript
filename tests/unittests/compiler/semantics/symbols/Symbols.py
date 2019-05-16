@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from storyscript.compiler.semantics.symbols.Symbols import Symbol, Symbols
+from storyscript.compiler.semantics.symbols.Symbols import StorageClass, \
+    Symbol, Symbols
 from storyscript.compiler.semantics.types.Types import IntType, \
     StringType
 
@@ -22,6 +23,12 @@ def test_symbol_str_int():
 def test_symbol_pretty_string():
     sym = Symbol('foo', StringType.instance())
     assert sym.pretty() == 'string'
+
+
+def test_symbol_str_ro_string():
+    sym = Symbol('foo', StringType.instance(),
+                 storage_class=StorageClass.read)
+    assert str(sym) == "Symbol('foo', string, ro)"
 
 
 def test_symbols_pretty():

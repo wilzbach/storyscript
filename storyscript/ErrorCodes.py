@@ -189,6 +189,14 @@ class ErrorCodes:
         'E0126',
         'Type casting not supported from `{left}` to `{right}`.'
     )
+    readonly_type_assignment = (
+        'E0127',
+        '`{left}` is readonly and can not be assigned to.'
+    )
+    return_type_readonly = (
+        'E0128',
+        '`{source}` is readonly and can not be returned.'
+    )
 
     @staticmethod
     def is_error(error_name):

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from storyscript.compiler.semantics.symbols.Symbols import base_symbol
 from storyscript.compiler.semantics.types.Types import NoneType
 from storyscript.exceptions import CompilerError
 
@@ -49,7 +50,7 @@ class ReturnVisitor:
         self.symbol_resolver.update_scope(scope)
         obj = tree.base_expression
         if obj is None:
-            return NoneType.instance(), tree
+            return base_symbol(NoneType.instance()), tree
         return self.resolver.base_expression(tree.base_expression), obj
 
     def function_block(self, tree, scope):
@@ -58,7 +59,10 @@ class ReturnVisitor:
                 t = tree.function_statement.function_output
                 raise CompilerError('return_required', tree=t)
             for ret in tree.find_data('return_statement'):
-                ret_type, obj = self.return_statement(ret, scope)
+                ret_sym, obj = self.return_statement(ret, scope)
+                ret_type = ret_sym.type()
+                obj.expect(ret_sym.can_write(), 'return_type_readonly',
+                           source=ret_type)
                 obj.expect(
                     self.return_type.can_be_assigned(ret_type),
                     'return_type_differs',
@@ -68,7 +72,8 @@ class ReturnVisitor:
         else:
             # function has no return output, so only `return` may be used
             for ret in tree.find_data('return_statement'):
-                ret_type, obj = self.return_statement(ret, scope)
+                ret_sym, obj = self.return_statement(ret, scope)
+                ret_type = ret_sym.type()
                 obj.expect(
                     ret_type == NoneType.instance(),
                     'function_without_output_return',

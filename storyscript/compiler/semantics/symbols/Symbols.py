@@ -2,13 +2,26 @@
 from storyscript.compiler.semantics.types.Types import BaseType
 
 
+class StorageClass:
+    write = 0
+    read = 1
+
+
+def base_symbol(type_):
+    """
+    Creates a temporary symbol for a base type
+    """
+    return Symbol('tmp', type_)
+
+
 class Symbol:
     """
     Representation of an individual symbol.
     """
-    def __init__(self, name, type_):
+    def __init__(self, name, type_, storage_class=StorageClass.write):
         self._name = name
         self._type = type_
+        self._storage_class = storage_class
 
     def name(self):
         return self._name
@@ -20,13 +33,16 @@ class Symbol:
         return f'{self._type}'
 
     def __str__(self):
-        return f"Symbol('{self._name}', {self._type})"
+        base = f"'{self._name}', {self._type}"
+        if not self.can_write():
+            base += ', ro'
+        return f'Symbol({base})'
 
     @classmethod
-    def from_path(cls, node, type_):
+    def from_path(cls, node, type_, storage_class=StorageClass.write):
         assert node.type == 'NAME'
         name = node.value
-        return cls(name, type_)
+        return cls(name, type_, storage_class=storage_class)
 
     def is_internal(self):
         return self._name.startswith('__p-')
@@ -46,8 +62,12 @@ class Symbol:
                         'type_index_incompatible',
                         left=symbol.type(),
                         right=p)
-            symbol = Symbol(name=symbol.name() + '[]', type_=new_type)
+            symbol = Symbol(name=symbol.name() + '[]', type_=new_type,
+                            storage_class=self._storage_class)
         return symbol
+
+    def can_write(self):
+        return self._storage_class == StorageClass.write
 
 
 class Symbols:
