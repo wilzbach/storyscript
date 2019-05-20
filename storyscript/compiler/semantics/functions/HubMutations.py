@@ -13,14 +13,14 @@ List[A] max -> A
 List[A] sum -> A
 List[A] contains item:A -> A
 List[A] unique -> List[A]
-List[A] remove item:A -> A
-List[A] index of:A -> A
+List[A] remove item:A -> List[A]
+List[A] index of:A -> int
 List[A] replace item:A by:A -> List[A]
 
 Map[K,V] length -> int
 Map[K,V] keys -> List[K]
 Map[K,V] values -> List[V]
-Map[K,V] pop key:K -> V
+Map[K,V] pop key:K -> Map[K,V]
 Map[K,V] flatten -> List[List[any]]
 Map[K,V] contains key:K -> boolean
 Map[K,V] contains value:V -> boolean
