@@ -29,10 +29,17 @@
           "expression": "equal",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-1.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-1.1"
+                ]
+              }
             },
             {
               "$OBJECT": "string",

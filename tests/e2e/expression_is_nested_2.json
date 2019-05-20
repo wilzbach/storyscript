@@ -16,18 +16,25 @@
               "expression": "less",
               "values": [
                 {
-                  "$OBJECT": "expression",
-                  "expression": "equal",
-                  "values": [
-                    {
-                      "$OBJECT": "int",
-                      "int": 1
-                    },
-                    {
-                      "$OBJECT": "int",
-                      "int": 2
-                    }
-                  ]
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "int"
+                  },
+                  "value": {
+                    "$OBJECT": "expression",
+                    "expression": "equal",
+                    "values": [
+                      {
+                        "$OBJECT": "int",
+                        "int": 1
+                      },
+                      {
+                        "$OBJECT": "int",
+                        "int": 2
+                      }
+                    ]
+                  }
                 },
                 {
                   "$OBJECT": "int",
@@ -44,34 +51,55 @@
                   "expression": "equal",
                   "values": [
                     {
-                      "$OBJECT": "expression",
-                      "expression": "not",
-                      "values": [
-                        {
-                          "$OBJECT": "expression",
-                          "expression": "less_equal",
-                          "values": [
-                            {
-                              "$OBJECT": "int",
-                              "int": 4
-                            },
-                            {
-                              "$OBJECT": "expression",
-                              "expression": "sum",
-                              "values": [
-                                {
-                                  "$OBJECT": "float",
-                                  "float": 0.5
+                      "$OBJECT": "type_cast",
+                      "type": {
+                        "$OBJECT": "type",
+                        "type": "int"
+                      },
+                      "value": {
+                        "$OBJECT": "expression",
+                        "expression": "not",
+                        "values": [
+                          {
+                            "$OBJECT": "expression",
+                            "expression": "less_equal",
+                            "values": [
+                              {
+                                "$OBJECT": "type_cast",
+                                "type": {
+                                  "$OBJECT": "type",
+                                  "type": "float"
                                 },
-                                {
+                                "value": {
                                   "$OBJECT": "int",
-                                  "int": 5
+                                  "int": 4
                                 }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                              },
+                              {
+                                "$OBJECT": "expression",
+                                "expression": "sum",
+                                "values": [
+                                  {
+                                    "$OBJECT": "float",
+                                    "float": 0.5
+                                  },
+                                  {
+                                    "$OBJECT": "type_cast",
+                                    "type": {
+                                      "$OBJECT": "type",
+                                      "type": "float"
+                                    },
+                                    "value": {
+                                      "$OBJECT": "int",
+                                      "int": 5
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
                     },
                     {
                       "$OBJECT": "int",

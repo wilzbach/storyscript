@@ -13,138 +13,222 @@
               "expression": "less",
               "values": [
                 {
-                  "$OBJECT": "expression",
-                  "expression": "not",
-                  "values": [
-                    {
-                      "$OBJECT": "expression",
-                      "expression": "less_equal",
-                      "values": [
-                        {
-                          "$OBJECT": "expression",
-                          "expression": "not",
-                          "values": [
-                            {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "float"
+                  },
+                  "value": {
+                    "$OBJECT": "expression",
+                    "expression": "not",
+                    "values": [
+                      {
+                        "$OBJECT": "expression",
+                        "expression": "less_equal",
+                        "values": [
+                          {
+                            "$OBJECT": "type_cast",
+                            "type": {
+                              "$OBJECT": "type",
+                              "type": "float"
+                            },
+                            "value": {
                               "$OBJECT": "expression",
-                              "expression": "equal",
+                              "expression": "not",
                               "values": [
                                 {
                                   "$OBJECT": "expression",
                                   "expression": "equal",
                                   "values": [
                                     {
-                                      "$OBJECT": "expression",
-                                      "expression": "less_equal",
-                                      "values": [
-                                        {
-                                          "$OBJECT": "expression",
-                                          "expression": "less",
-                                          "values": [
-                                            {
-                                              "$OBJECT": "expression",
-                                              "expression": "sum",
-                                              "values": [
-                                                {
-                                                  "$OBJECT": "int",
-                                                  "int": 1
-                                                },
-                                                {
-                                                  "$OBJECT": "float",
-                                                  "float": 0.1
-                                                }
-                                              ]
+                                      "$OBJECT": "type_cast",
+                                      "type": {
+                                        "$OBJECT": "type",
+                                        "type": "float"
+                                      },
+                                      "value": {
+                                        "$OBJECT": "expression",
+                                        "expression": "equal",
+                                        "values": [
+                                          {
+                                            "$OBJECT": "type_cast",
+                                            "type": {
+                                              "$OBJECT": "type",
+                                              "type": "float"
                                             },
-                                            {
+                                            "value": {
                                               "$OBJECT": "expression",
-                                              "expression": "subtraction",
+                                              "expression": "less_equal",
                                               "values": [
                                                 {
-                                                  "$OBJECT": "int",
-                                                  "int": 2
+                                                  "$OBJECT": "type_cast",
+                                                  "type": {
+                                                    "$OBJECT": "type",
+                                                    "type": "float"
+                                                  },
+                                                  "value": {
+                                                    "$OBJECT": "expression",
+                                                    "expression": "less",
+                                                    "values": [
+                                                      {
+                                                        "$OBJECT": "expression",
+                                                        "expression": "sum",
+                                                        "values": [
+                                                          {
+                                                            "$OBJECT": "type_cast",
+                                                            "type": {
+                                                              "$OBJECT": "type",
+                                                              "type": "float"
+                                                            },
+                                                            "value": {
+                                                              "$OBJECT": "int",
+                                                              "int": 1
+                                                            }
+                                                          },
+                                                          {
+                                                            "$OBJECT": "float",
+                                                            "float": 0.1
+                                                          }
+                                                        ]
+                                                      },
+                                                      {
+                                                        "$OBJECT": "expression",
+                                                        "expression": "subtraction",
+                                                        "values": [
+                                                          {
+                                                            "$OBJECT": "type_cast",
+                                                            "type": {
+                                                              "$OBJECT": "type",
+                                                              "type": "float"
+                                                            },
+                                                            "value": {
+                                                              "$OBJECT": "int",
+                                                              "int": 2
+                                                            }
+                                                          },
+                                                          {
+                                                            "$OBJECT": "float",
+                                                            "float": 0.2
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
                                                 },
                                                 {
-                                                  "$OBJECT": "float",
-                                                  "float": 0.2
+                                                  "$OBJECT": "expression",
+                                                  "expression": "division",
+                                                  "values": [
+                                                    {
+                                                      "$OBJECT": "type_cast",
+                                                      "type": {
+                                                        "$OBJECT": "type",
+                                                        "type": "float"
+                                                      },
+                                                      "value": {
+                                                        "$OBJECT": "int",
+                                                        "int": 3
+                                                      }
+                                                    },
+                                                    {
+                                                      "$OBJECT": "float",
+                                                      "float": 0.3
+                                                    }
+                                                  ]
                                                 }
                                               ]
                                             }
-                                          ]
-                                        },
-                                        {
-                                          "$OBJECT": "expression",
-                                          "expression": "division",
-                                          "values": [
-                                            {
-                                              "$OBJECT": "int",
-                                              "int": 3
-                                            },
-                                            {
-                                              "$OBJECT": "float",
-                                              "float": 0.3
-                                            }
-                                          ]
-                                        }
-                                      ]
+                                          },
+                                          {
+                                            "$OBJECT": "expression",
+                                            "expression": "multiplication",
+                                            "values": [
+                                              {
+                                                "$OBJECT": "type_cast",
+                                                "type": {
+                                                  "$OBJECT": "type",
+                                                  "type": "float"
+                                                },
+                                                "value": {
+                                                  "$OBJECT": "int",
+                                                  "int": 4
+                                                }
+                                              },
+                                              {
+                                                "$OBJECT": "float",
+                                                "float": 0.4
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
                                     },
                                     {
                                       "$OBJECT": "expression",
                                       "expression": "multiplication",
                                       "values": [
                                         {
-                                          "$OBJECT": "int",
-                                          "int": 4
+                                          "$OBJECT": "type_cast",
+                                          "type": {
+                                            "$OBJECT": "type",
+                                            "type": "float"
+                                          },
+                                          "value": {
+                                            "$OBJECT": "int",
+                                            "int": 5
+                                          }
                                         },
                                         {
                                           "$OBJECT": "float",
-                                          "float": 0.4
+                                          "float": 0.5
                                         }
                                       ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "$OBJECT": "expression",
-                                  "expression": "multiplication",
-                                  "values": [
-                                    {
-                                      "$OBJECT": "int",
-                                      "int": 5
-                                    },
-                                    {
-                                      "$OBJECT": "float",
-                                      "float": 0.5
                                     }
                                   ]
                                 }
                               ]
                             }
-                          ]
-                        },
-                        {
-                          "$OBJECT": "expression",
-                          "expression": "multiplication",
-                          "values": [
-                            {
-                              "$OBJECT": "int",
-                              "int": 6
-                            },
-                            {
-                              "$OBJECT": "float",
-                              "float": 0.6
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                          },
+                          {
+                            "$OBJECT": "expression",
+                            "expression": "multiplication",
+                            "values": [
+                              {
+                                "$OBJECT": "type_cast",
+                                "type": {
+                                  "$OBJECT": "type",
+                                  "type": "float"
+                                },
+                                "value": {
+                                  "$OBJECT": "int",
+                                  "int": 6
+                                }
+                              },
+                              {
+                                "$OBJECT": "float",
+                                "float": 0.6
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
                 },
                 {
                   "$OBJECT": "expression",
                   "expression": "multiplication",
                   "values": [
                     {
-                      "$OBJECT": "int",
-                      "int": 7
+                      "$OBJECT": "type_cast",
+                      "type": {
+                        "$OBJECT": "type",
+                        "type": "float"
+                      },
+                      "value": {
+                        "$OBJECT": "int",
+                        "int": 7
+                      }
                     },
                     {
                       "$OBJECT": "float",
