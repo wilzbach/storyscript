@@ -14,7 +14,7 @@ List[A] sum -> A
 List[A] contains item:A -> A
 List[A] unique -> List[A]
 List[A] remove item:A -> A
-List[A] index of:A -> A
+List[A] index of:A -> int
 List[A] replace item:A by:A -> List[A]
 
 Map[K,V] length -> int
