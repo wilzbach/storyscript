@@ -58,6 +58,21 @@ def explicit_cast(from_, to):
     return to.explicit_from(from_)
 
 
+def implicit_cast(t1, t2):
+    """
+    Checks whether two types can be implicitly casted
+    to one of each other.
+    Returns `None` if no implicit cast can be performed.
+    """
+    t1_t2 = t1.implicit_to(t2)
+    if t1_t2 is not None:
+        return t1_t2
+    t2_t1 = t2.implicit_to(t1)
+    if t2_t1 is not None:
+        return t2_t1
+    return None
+
+
 class BaseType:
     """
     Base class of a type.
@@ -93,20 +108,14 @@ class BaseType:
         """
         Returns True if the type can be compared with `other`, False otherwise.
         """
-        if self.implicit_to(other) is not None or \
-                other.implicit_to(self) is not None:
-            return True
-        return False
+        return implicit_cast(self, other)
 
     def equal(self, other):
         """
         Returns True if the type can perform equality comparison with `other`,
         False otherwise.
         """
-        if self.implicit_to(other) is not None or \
-                other.implicit_to(self) is not None:
-            return True
-        return False
+        return implicit_cast(self, other)
 
     def can_be_assigned(self, other):
         if other == AnyType.instance():
@@ -218,10 +227,10 @@ class NoneType(BaseType):
         return NoneType()
 
     def cmp(self, other):
-        return False
+        return None
 
     def equal(self, other):
-        return False
+        return None
 
     def string(self):
         return False
@@ -412,7 +421,7 @@ class RegExpType(BaseType):
         return False
 
     def cmp(self, other):
-        return False
+        return None
 
     def hashable(self):
         return False
@@ -472,7 +481,7 @@ class ListType(BaseType):
         return True
 
     def cmp(self, other):
-        return False
+        return None
 
     def hashable(self):
         return False
@@ -537,7 +546,7 @@ class MapType(BaseType):
         return True
 
     def cmp(self, other):
-        return False
+        return None
 
     def hashable(self):
         return False
@@ -576,7 +585,7 @@ class ObjectType(BaseType):
         return True
 
     def cmp(self, other):
-        return False
+        return None
 
     def hashable(self):
         return False
