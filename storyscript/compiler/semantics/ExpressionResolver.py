@@ -73,22 +73,58 @@ class SymbolExpressionVisitor(ExpressionVisitor):
     def values(self, tree):
         return self.visitor.values(tree)
 
+    @staticmethod
+    def type_to_tree(tree, t):
+        """
+        Converts a type to its respective AST Tree representation.
+        """
+        if isinstance(t, ListType):
+            inner = SymbolExpressionVisitor.type_to_tree(tree, t.inner)
+            return Tree('list_type', [
+                Tree('types', [inner])
+            ])
+        if isinstance(t, MapType):
+            key = SymbolExpressionVisitor.type_to_tree(tree, t.key)
+            value = SymbolExpressionVisitor.type_to_tree(tree, t.value)
+            return Tree('map_type', [
+                key,
+                Tree('types', [value]),
+            ])
+        if t == BooleanType.instance():
+            base_type = tree.create_token('BOOLEAN_TYPE', 'boolean')
+        elif t == IntType.instance():
+            base_type = tree.create_token('INTEGER_TYPE', 'int')
+        elif t == FloatType.instance():
+            base_type = tree.create_token('FLOAT_TYPE', 'float')
+        elif t == StringType.instance():
+            base_type = tree.create_token('STRING_TYPE', 'string')
+        elif t == TimeType.instance():
+            base_type = tree.create_token('TIME_TYPE', 'time')
+        else:
+            assert t == RegExpType.instance()
+            base_type = tree.create_token('REGEXP_TYPE', 'regex')
+
+        return Tree('base_type', [base_type])
+
     def nary_expression(self, tree, op, values):
         values = [v.type() for v in values]
         if self.op_returns_boolean(op.type):
             assert len(values) <= 2
             # e.g. a < b
             if self.is_cmp(op.type):
-                tree.expect(values[0].cmp(values[1]),
-                            'type_operation_cmp_incompatible',
+                val = values[0].cmp(values[1])
+                tree.expect(val, 'type_operation_cmp_incompatible',
                             left=values[0], right=values[1])
+                self.implicit_cast(tree, val, values)
                 return base_symbol(BooleanType.instance())
 
             # e.g. a == b
             if self.is_equal(op.type):
-                tree.expect(values[0].equal(values[1]),
+                val = values[0].equal(values[1])
+                tree.expect(val,
                             'type_operation_equal_incompatible',
                             left=values[0], right=values[1])
+                self.implicit_cast(tree, val, values)
                 return base_symbol(BooleanType.instance())
 
             # e.g. a and b, a or b, !a
@@ -105,12 +141,73 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         tree.expect(is_arithmetic, 'compiler_error_no_operator',
                     operator=op.type)
         val = values[0]
-        for c in values[1:]:
-            new_val = val.binary_op(c, op)
+        for v in values[1:]:
+            new_val = val.binary_op(v, op)
             tree.expect(new_val is not None, 'type_operation_incompatible',
-                        left=val, right=c, op=op.value)
+                        left=val, right=v, op=op.value)
             val = new_val
+        # add implicit casts
+        if tree.data == 'pow_expression':
+            return base_symbol(val)
+        if tree.data == 'mul_expression':
+            self.implicit_cast(tree, val, values)
+        else:
+            assert tree.data == 'arith_expression'
+            self.implicit_cast(tree, val, values)
         return base_symbol(val)
+
+    def implicit_cast(self, tree, val, values):
+        """
+        Creates an AST with the cast.
+        This boils down to
+        - finding the right level to insert the new pow_expression with
+          its respective as_operator
+        - building a correct tree cascade in pow_expression to the old value
+        """
+        if val == AnyType.instance():
+            return
+        insert_tree_name = tree.data
+        for i, v in enumerate(values):
+            if i > 0:
+                # ignore the arith_operator tree child
+                i += 1
+            # check whether a tree child needs casting
+            if v != val:
+                element = tree.children[i]
+                casted_type = self.type_to_tree(element, val)
+                if i != 0:
+                    element = Tree(insert_tree_name, [element])
+                if element.data == 'mul_expression':
+                    element = Tree('arith_expression', [element])
+                if element.data == 'arith_expression':
+                    element = Tree('cmp_expression', [element])
+                tree.children[i] = Tree('unary_expression', [
+                    Tree('pow_expression', [
+                        Tree('primary_expression', [
+                            Tree('or_expression', [
+                                Tree('and_expression', [
+                                    element
+                                ]),
+                            ]),
+                        ]),
+                        Tree('as_operator', [
+                            Tree('types', [
+                                casted_type
+                            ])
+                        ])
+                    ])
+                ])
+                for e in ['mul_expression', 'arith_expression']:
+                    if e == insert_tree_name:
+                        break
+                    else:
+                        tree.children[i] = Tree(e, [
+                            tree.children[i]
+                        ])
+                if i == 0:
+                    tree.children[0] = Tree(insert_tree_name, [
+                        tree.children[0]
+                    ])
 
 
 class ExpressionResolver:

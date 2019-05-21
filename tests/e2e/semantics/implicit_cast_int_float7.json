@@ -9,27 +9,27 @@
       "args": [
         {
           "$OBJECT": "expression",
-          "expression": "sum",
+          "expression": "equal",
           "values": [
             {
-              "$OBJECT": "int",
-              "int": 1
+              "$OBJECT": "float",
+              "float": 2.5
             },
             {
               "$OBJECT": "type_cast",
               "type": {
                 "$OBJECT": "type",
-                "type": "int"
+                "type": "float"
               },
               "value": {
-                "$OBJECT": "boolean",
-                "boolean": true
+                "$OBJECT": "int",
+                "int": 3
               }
             }
           ]
         }
       ],
-      "src": "a = 1 + true"
+      "src": "a = 2.5 == 3"
     }
   },
   "entrypoint": "1"

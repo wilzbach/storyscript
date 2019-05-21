@@ -44,10 +44,17 @@
               "expression": "equal",
               "values": [
                 {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "foo"
-                  ]
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "int"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "foo"
+                    ]
+                  }
                 },
                 {
                   "$OBJECT": "expression",

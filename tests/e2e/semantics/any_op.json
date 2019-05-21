@@ -27,10 +27,17 @@
               "string": "."
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "a"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "a"
+                ]
+              }
             }
           ]
         }
@@ -61,10 +68,17 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             },
             {
               "$OBJECT": "string",

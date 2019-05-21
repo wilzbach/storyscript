@@ -9,100 +9,135 @@
           "expression": "less_equal",
           "values": [
             {
-              "$OBJECT": "expression",
-              "expression": "not",
-              "values": [
-                {
-                  "$OBJECT": "expression",
-                  "expression": "less_equal",
-                  "values": [
-                    {
-                      "$OBJECT": "expression",
-                      "expression": "equal",
-                      "values": [
-                        {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "int"
+              },
+              "value": {
+                "$OBJECT": "expression",
+                "expression": "not",
+                "values": [
+                  {
+                    "$OBJECT": "expression",
+                    "expression": "less_equal",
+                    "values": [
+                      {
+                        "$OBJECT": "type_cast",
+                        "type": {
+                          "$OBJECT": "type",
+                          "type": "int"
+                        },
+                        "value": {
                           "$OBJECT": "expression",
-                          "expression": "less",
+                          "expression": "equal",
                           "values": [
                             {
+                              "$OBJECT": "type_cast",
+                              "type": {
+                                "$OBJECT": "type",
+                                "type": "int"
+                              },
+                              "value": {
+                                "$OBJECT": "expression",
+                                "expression": "less",
+                                "values": [
+                                  {
+                                    "$OBJECT": "type_cast",
+                                    "type": {
+                                      "$OBJECT": "type",
+                                      "type": "int"
+                                    },
+                                    "value": {
+                                      "$OBJECT": "expression",
+                                      "expression": "not",
+                                      "values": [
+                                        {
+                                          "$OBJECT": "expression",
+                                          "expression": "equal",
+                                          "values": [
+                                            {
+                                              "$OBJECT": "type_cast",
+                                              "type": {
+                                                "$OBJECT": "type",
+                                                "type": "int"
+                                              },
+                                              "value": {
+                                                "$OBJECT": "expression",
+                                                "expression": "equal",
+                                                "values": [
+                                                  {
+                                                    "$OBJECT": "int",
+                                                    "int": 1
+                                                  },
+                                                  {
+                                                    "$OBJECT": "int",
+                                                    "int": 2
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            {
+                                              "$OBJECT": "int",
+                                              "int": 3
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    "$OBJECT": "int",
+                                    "int": 4
+                                  }
+                                ]
+                              }
+                            },
+                            {
                               "$OBJECT": "expression",
-                              "expression": "not",
+                              "expression": "subtraction",
                               "values": [
                                 {
                                   "$OBJECT": "expression",
-                                  "expression": "equal",
+                                  "expression": "sum",
                                   "values": [
                                     {
-                                      "$OBJECT": "expression",
-                                      "expression": "equal",
-                                      "values": [
-                                        {
-                                          "$OBJECT": "int",
-                                          "int": 1
-                                        },
-                                        {
-                                          "$OBJECT": "int",
-                                          "int": 2
-                                        }
-                                      ]
+                                      "$OBJECT": "int",
+                                      "int": 5
                                     },
                                     {
                                       "$OBJECT": "int",
-                                      "int": 3
+                                      "int": 6
                                     }
                                   ]
-                                }
-                              ]
-                            },
-                            {
-                              "$OBJECT": "int",
-                              "int": 4
-                            }
-                          ]
-                        },
-                        {
-                          "$OBJECT": "expression",
-                          "expression": "subtraction",
-                          "values": [
-                            {
-                              "$OBJECT": "expression",
-                              "expression": "sum",
-                              "values": [
-                                {
-                                  "$OBJECT": "int",
-                                  "int": 5
                                 },
                                 {
-                                  "$OBJECT": "int",
-                                  "int": 6
-                                }
-                              ]
-                            },
-                            {
-                              "$OBJECT": "expression",
-                              "expression": "multiplication",
-                              "values": [
-                                {
-                                  "$OBJECT": "int",
-                                  "int": 7
-                                },
-                                {
-                                  "$OBJECT": "int",
-                                  "int": 8
+                                  "$OBJECT": "expression",
+                                  "expression": "multiplication",
+                                  "values": [
+                                    {
+                                      "$OBJECT": "int",
+                                      "int": 7
+                                    },
+                                    {
+                                      "$OBJECT": "int",
+                                      "int": 8
+                                    }
+                                  ]
                                 }
                               ]
                             }
                           ]
                         }
-                      ]
-                    },
-                    {
-                      "$OBJECT": "int",
-                      "int": 9
-                    }
-                  ]
-                }
-              ]
+                      },
+                      {
+                        "$OBJECT": "int",
+                        "int": 9
+                      }
+                    ]
+                  }
+                ]
+              }
             },
             {
               "$OBJECT": "int",

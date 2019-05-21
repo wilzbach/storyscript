@@ -1,68 +1,52 @@
 {
   "tree": {
     "1": {
-      "method": "expression",
+      "method": "execute",
       "ln": "1",
       "name": [
-        "a"
+        "any_var"
       ],
-      "args": [
-        {
-          "$OBJECT": "time",
-          "ms": 5000
-        }
-      ],
-      "src": "a = 5s",
+      "service": "my_service",
+      "command": "call",
+      "src": "any_var = my_service call",
       "next": "2"
     },
     "2": {
       "method": "expression",
       "ln": "2",
       "name": [
-        "b"
+        "a"
       ],
       "args": [
         {
           "$OBJECT": "expression",
-          "expression": "sum",
+          "expression": "equal",
           "values": [
             {
               "$OBJECT": "type_cast",
               "type": {
                 "$OBJECT": "type",
-                "type": "string"
+                "type": "regex"
               },
               "value": {
                 "$OBJECT": "path",
                 "paths": [
-                  "a"
+                  "any_var"
                 ]
               }
             },
             {
-              "$OBJECT": "string",
-              "string": "a"
+              "$OBJECT": "regexp",
+              "regexp": "fo"
             }
           ]
         }
       ],
-      "src": "b = a + \"a\"",
-      "next": "3"
-    },
-    "3": {
-      "method": "expression",
-      "ln": "3",
-      "name": [
-        "c"
-      ],
-      "args": [
-        {
-          "$OBJECT": "int",
-          "int": 0
-        }
-      ],
-      "src": "c = 0"
+      "src": "a = any_var == /fo/"
     }
   },
+  "services": [
+    "my_service"
+  ],
   "entrypoint": "1"
 }

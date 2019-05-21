@@ -82,8 +82,15 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             },
             {
               "$OBJECT": "path",
@@ -185,8 +192,15 @@
               ]
             },
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             }
           ]
         }
@@ -280,8 +294,15 @@
               "expression": "sum",
               "values": [
                 {
-                  "$OBJECT": "int",
-                  "int": 0
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "int",
+                    "int": 0
+                  }
                 },
                 {
                   "$OBJECT": "path",
@@ -292,8 +313,15 @@
               ]
             },
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             }
           ]
         }
@@ -331,10 +359,17 @@
                   "int": 0
                 },
                 {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "__p-4.1"
-                  ]
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "int"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "__p-4.1"
+                    ]
+                  }
                 }
               ]
             },
@@ -374,10 +409,17 @@
               "int": 0
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-5.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "int"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-5.1"
+                ]
+              }
             }
           ]
         }
@@ -407,10 +449,17 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-6.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "int"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-6.1"
+                ]
+              }
             },
             {
               "$OBJECT": "int",
@@ -477,8 +526,15 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             },
             {
               "$OBJECT": "path",
@@ -553,8 +609,15 @@
               ]
             },
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             }
           ]
         }
@@ -621,8 +684,15 @@
               "expression": "sum",
               "values": [
                 {
-                  "$OBJECT": "int",
-                  "int": 0
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "int",
+                    "int": 0
+                  }
                 },
                 {
                   "$OBJECT": "path",
@@ -633,8 +703,15 @@
               ]
             },
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             }
           ]
         }
@@ -707,8 +784,15 @@
               ]
             },
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             }
           ]
         }
@@ -775,8 +859,15 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             },
             {
               "$OBJECT": "path",
@@ -853,8 +944,15 @@
               "expression": "sum",
               "values": [
                 {
-                  "$OBJECT": "int",
-                  "int": 0
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "int",
+                    "int": 0
+                  }
                 },
                 {
                   "$OBJECT": "path",
@@ -865,8 +963,15 @@
               ]
             },
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             }
           ]
         }
@@ -962,8 +1067,15 @@
               ]
             },
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             }
           ]
         }
@@ -1053,8 +1165,15 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             },
             {
               "$OBJECT": "path",
@@ -1154,8 +1273,15 @@
               "expression": "sum",
               "values": [
                 {
-                  "$OBJECT": "int",
-                  "int": 0
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "int",
+                    "int": 0
+                  }
                 },
                 {
                   "$OBJECT": "path",
@@ -1166,8 +1292,15 @@
               ]
             },
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             }
           ]
         }

@@ -34,8 +34,15 @@
               "string": "2"
             },
             {
-              "$OBJECT": "regexp",
-              "regexp": "regexp"
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "regexp",
+                "regexp": "regexp"
+              }
             }
           ]
         }

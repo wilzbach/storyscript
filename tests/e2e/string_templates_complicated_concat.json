@@ -137,10 +137,17 @@
                   ]
                 },
                 {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "__p-3.3"
-                  ]
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "int"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "__p-3.3"
+                    ]
+                  }
                 }
               ]
             }

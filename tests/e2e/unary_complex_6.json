@@ -26,24 +26,38 @@
               "expression": "subtraction",
               "values": [
                 {
-                  "$OBJECT": "expression",
-                  "expression": "not",
-                  "values": [
-                    {
-                      "$OBJECT": "int",
-                      "int": -3
-                    }
-                  ]
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "int"
+                  },
+                  "value": {
+                    "$OBJECT": "expression",
+                    "expression": "not",
+                    "values": [
+                      {
+                        "$OBJECT": "int",
+                        "int": -3
+                      }
+                    ]
+                  }
                 },
                 {
-                  "$OBJECT": "expression",
-                  "expression": "not",
-                  "values": [
-                    {
-                      "$OBJECT": "int",
-                      "int": -4
-                    }
-                  ]
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "int"
+                  },
+                  "value": {
+                    "$OBJECT": "expression",
+                    "expression": "not",
+                    "values": [
+                      {
+                        "$OBJECT": "int",
+                        "int": -4
+                      }
+                    ]
+                  }
                 }
               ]
             }

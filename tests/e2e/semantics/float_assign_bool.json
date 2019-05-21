@@ -16,8 +16,15 @@
               "float": 1.5
             },
             {
-              "$OBJECT": "boolean",
-              "boolean": true
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "float"
+              },
+              "value": {
+                "$OBJECT": "boolean",
+                "boolean": true
+              }
             }
           ]
         }

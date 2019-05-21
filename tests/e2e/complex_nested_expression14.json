@@ -35,18 +35,25 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "expression",
-              "expression": "equal",
-              "values": [
-                {
-                  "$OBJECT": "int",
-                  "int": 0
-                },
-                {
-                  "$OBJECT": "int",
-                  "int": 1
-                }
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "int"
+              },
+              "value": {
+                "$OBJECT": "expression",
+                "expression": "equal",
+                "values": [
+                  {
+                    "$OBJECT": "int",
+                    "int": 0
+                  },
+                  {
+                    "$OBJECT": "int",
+                    "int": 1
+                  }
+                ]
+              }
             },
             {
               "$OBJECT": "path",
