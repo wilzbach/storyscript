@@ -683,6 +683,36 @@ class Lowering:
         for c in node.children:
             self.visit_as_expr(c, block)
 
+    def visit_function_dot(self, node, block):
+        """
+        Visit function call with more than one path anme and lower
+        them into mutations.
+        """
+        if not hasattr(node, 'children') or len(node.children) == 0:
+            return
+
+        if node.data == 'call_expression':
+            call_expr = node
+            if len(call_expr.path.children) > 1:
+                path_fragments = call_expr.path.children
+                if len(path_fragments) == 2:
+                    # don't rewrite s.length.max() yet
+                    call_expr.children = [
+                        Tree('primary_expression', [
+                            Tree('entity', [
+                                Tree('path', [call_expr.path.children[0]])
+                            ])
+                        ]),
+                        Tree('mutation_fragment', [
+                            path_fragments[-1].children[0],
+                            *call_expr.children[1:]
+                        ])
+                    ]
+                    call_expr.data = 'mutation'
+
+        for c in node.children:
+            self.visit_function_dot(c, block)
+
     def process(self, tree):
         """
         Applies several preprocessing steps to the existing AST.
@@ -695,6 +725,7 @@ class Lowering:
         self.visit_assignment(tree, block=None, parent=None)
         self.visit_string_templates(tree, block=None, parent=None,
                                     cmp_expr=None)
+        self.visit_function_dot(tree, block=None)
         self.visit(tree, None, None, pred,
                    self.replace_expression, parent=None)
         return tree

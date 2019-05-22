@@ -1,0 +1,116 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "s"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "  foo"
+        }
+      ],
+      "src": "s = \"  foo\"",
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "s"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "replace",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "f"
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "by",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "b"
+              }
+            }
+          ]
+        }
+      ],
+      "next": "2.2"
+    },
+    "2.2": {
+      "method": "mutation",
+      "ln": "2.2",
+      "name": [
+        "__p-2.2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "trim",
+          "args": []
+        }
+      ],
+      "next": "2.3"
+    },
+    "2.3": {
+      "method": "mutation",
+      "ln": "2.3",
+      "name": [
+        "__p-2.3"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.2"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "length",
+          "args": []
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.3"
+          ]
+        }
+      ],
+      "src": "a = s.replace(item: \"f\" by: \"b\").trim().length()"
+    }
+  },
+  "entrypoint": "1"
+}

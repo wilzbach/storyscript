@@ -1,0 +1,101 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "my_list"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        }
+      ],
+      "src": "my_list = [1]",
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "my_list"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "append",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 2
+              }
+            }
+          ]
+        }
+      ],
+      "next": "2.2"
+    },
+    "2.2": {
+      "method": "mutation",
+      "ln": "2.2",
+      "name": [
+        "__p-2.2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "index",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "of",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 2
+              }
+            }
+          ]
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.2"
+          ]
+        }
+      ],
+      "src": "a = my_list.append(item: 2).index(of: 2)"
+    }
+  },
+  "entrypoint": "1"
+}

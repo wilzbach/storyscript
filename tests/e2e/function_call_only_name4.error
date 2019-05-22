@@ -1,6 +1,6 @@
 Error: syntax error in story at line 4, column 1
 
 4|    foo[0]()
-      ^^^^^
+      ^^^
 
-E0049: Functions can only be called by name
+E0101: Variable `foo` has not been defined.

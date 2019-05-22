@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 5
+
+2|    s = s.a.foo()
+          ^^^^^^^
+
+E0049: Functions can only be called by name
