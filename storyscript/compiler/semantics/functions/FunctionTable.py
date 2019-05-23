@@ -1,4 +1,4 @@
-from storyscript.compiler.semantics.types.Types import NoneType
+from storyscript.compiler.semantics.types.Types import BaseType
 
 from .Function import Function
 
@@ -10,13 +10,12 @@ class FunctionTable:
     def __init__(self):
         self.functions = {}
 
-    def insert(self, name, args, output=None):
+    def insert(self, name, args, output):
         """
         Insert a new function into the function table.
         """
         assert name not in self.functions
-        if output is None:
-            output = NoneType.instance()
+        assert isinstance(output, BaseType)
         fn = Function(name, args, output)
         self.functions[name] = fn
 

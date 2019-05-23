@@ -1,0 +1,69 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [
+        "int"
+      ],
+      "function": "fun",
+      "enter": "2.1",
+      "exit": "4",
+      "src": "function fun returns int",
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "call",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
+      "function": "bar",
+      "parent": "1",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
+          ]
+        }
+      ],
+      "parent": "1",
+      "src": "   return bar()",
+      "next": "4"
+    },
+    "4": {
+      "method": "function",
+      "ln": "4",
+      "output": [
+        "int"
+      ],
+      "function": "bar",
+      "enter": "5",
+      "src": "function bar returns int",
+      "next": "5"
+    },
+    "5": {
+      "method": "return",
+      "ln": "5",
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 42
+        }
+      ],
+      "parent": "4",
+      "src": "   return 42"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "fun": "1",
+    "bar": "4"
+  }
+}

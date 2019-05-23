@@ -1,31 +1,14 @@
 # -*- coding: utf-8 -*-
-from storyscript.compiler.semantics.types.Types import AnyType, NoneType, \
-    ObjectType
+from storyscript.compiler.semantics.types.Types import NoneType, ObjectType
 from storyscript.parser import Tree
 
 from .ExpressionResolver import ExpressionResolver
 from .PathResolver import PathResolver
 from .ReturnVisitor import ReturnVisitor
 from .SymbolResolver import SymbolResolver
-from .functions.FunctionTable import FunctionTable
-from .functions.MutationTable import MutationTable
+from .Visitors import ScopeSelectiveVisitor
 from .symbols.Scope import Scope
 from .symbols.Symbols import StorageClass, Symbol
-
-
-class ScopeSelectiveVisitor:
-    """
-    A selective visitor which only visits defined nodes.
-    visit_children must be called explicitly.
-    """
-    def visit(self, tree, scope=None):
-        if hasattr(self, tree.data):
-            return getattr(self, tree.data)(tree, scope)
-
-    def visit_children(self, tree, scope):
-        for c in tree.children:
-            if isinstance(c, Tree):
-                self.visit(c, scope)
 
 
 class ScopeBlock:
@@ -52,10 +35,9 @@ class TypeResolver(ScopeSelectiveVisitor):
     """
     Tries to resolve the type of a variable or function call.
     """
-    def __init__(self):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.symbol_resolver = SymbolResolver(scope=None)
-        self.function_table = FunctionTable()
-        self.mutation_table = MutationTable.init()
         self.resolver = ExpressionResolver(
             symbol_resolver=self.symbol_resolver,
             function_table=self.function_table,
@@ -290,28 +272,11 @@ class TypeResolver(ScopeSelectiveVisitor):
         Prepopulate the scope with symbols from the function arguments.
         """
         scope = Scope.root()
-        return_type = AnyType.instance()
-        args = {}
-        for c in tree.children[2:]:
-            if isinstance(c, Tree) and c.data == 'typed_argument':
-                name = c.child(0)
-                e_sym = self.resolver.types(c.types)
-                sym = Symbol.from_path(name, e_sym.type())
-                scope.insert(sym)
-                args[sym.name()] = sym
-        # add function to the function table
         function_name = tree.child(1).value
-        tree.expect(self.function_table.resolve(function_name) is None,
-                    'function_redeclaration', name=function_name)
-        output = tree.function_output
-        if output is not None:
-            output = self.resolver.types(output.types).type()
-        self.function_table.insert(function_name, args, output)
-        if tree.function_output:
-            return_type = self.resolver.types(
-                tree.function_output.types
-            ).type()
-        return scope, return_type
+        function = self.function_table.resolve(function_name)
+        for arg, sym in function._args.items():
+            scope.insert(sym)
+        return scope, function._output
 
     def update_scope(self, scope):
         """
