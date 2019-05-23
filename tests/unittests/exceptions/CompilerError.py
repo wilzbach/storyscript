@@ -20,5 +20,5 @@ def test_error_message(patch):
 
 
 def test_compiler_error_extra_parameters():
-    e2 = CompilerError('my_custom_error', format={'a': 2})
-    assert e2.format.a == 2
+    e2 = CompilerError('my_custom_error', format_args={'a': 2})
+    assert e2.format_args.a == 2

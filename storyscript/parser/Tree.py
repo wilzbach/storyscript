@@ -146,7 +146,7 @@ class Tree(LarkTree):
         Throws a compiler error with message if the condition is falsy.
         """
         if not cond:
-            raise CompilerError(error, tree=self, format=kwargs)
+            raise CompilerError(error, tree=self, format_args=kwargs)
 
     def follow_node_chain(self, expected_nodes):
         """

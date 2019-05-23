@@ -41,7 +41,7 @@ def test_transformer_is_keyword(syntax_error, keyword):
         Transformer.is_keyword(token)
     name = 'reserved_keyword'
     format = {'keyword': keyword}
-    syntax_error.assert_called_with(name, token=token, format=format)
+    syntax_error.assert_called_with(name, token=token, format_args=format)
 
 
 @mark.parametrize('keyword', [
@@ -53,7 +53,7 @@ def test_transformer_is_keyword_future(syntax_error, keyword):
         Transformer.is_keyword(token)
     name = 'future_reserved_keyword'
     format = {'keyword': keyword}
-    syntax_error.assert_called_with(name, token=token, format=format)
+    syntax_error.assert_called_with(name, token=token, format_args=format)
 
 
 def test_transformer_assignment(magic):

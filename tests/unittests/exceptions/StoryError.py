@@ -202,7 +202,7 @@ def test_storyerror_hint_invalid_character(patch, storyerror):
 def test_storyerror_hint_redeclared(patch, storyerror, magic):
     storyerror.error = CompilerError(
         'reserved_keyword',
-        format={'keyword': 'foo'})
+        format_args={'keyword': 'foo'})
     storyerror.error_tuple = ErrorCodes.reserved_keyword
     assert storyerror.hint() == '`foo` is a reserved keyword'
 
@@ -400,7 +400,7 @@ def test_storyerror_create_error(patch):
     patch.init(CompilerError)
     error = StoryError.create_error('error_code')
     assert isinstance(error, StoryError)
-    CompilerError.__init__.assert_called_with('error_code', format={})
+    CompilerError.__init__.assert_called_with('error_code', format_args={})
     assert isinstance(StoryError.__init__.call_args[0][0], CompilerError)
     assert StoryError.__init__.call_args[0][1] is None
 
@@ -413,7 +413,8 @@ def test_storyerror_create_error_kwargs(patch):
     patch.init(CompilerError)
     error = StoryError.create_error('error_code', a=0)
     assert isinstance(error, StoryError)
-    CompilerError.__init__.assert_called_with('error_code', format={'a': 0})
+    CompilerError.__init__.assert_called_with('error_code',
+                                              format_args={'a': 0})
     assert isinstance(StoryError.__init__.call_args[0][0], CompilerError)
     assert StoryError.__init__.call_args[0][1] is None
 

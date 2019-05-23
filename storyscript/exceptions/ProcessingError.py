@@ -25,15 +25,15 @@ class ProcessingError(Exception):
     A generic error that occurs while processing a story
     """
 
-    def __init__(self, error, token=None, tree=None, format=None):
+    def __init__(self, error, token=None, tree=None, format_args=None):
         self.error = error
         self.token_position(token)
         self.tree_position(tree)
-        if format is None:
-            self.format = {}
+        if format_args is None:
+            self.format_args = {}
         else:
-            self.format = format
-        self.format = ConstDict(self.format)
+            self.format_args = format_args
+        self.format_args = ConstDict(self.format_args)
 
     def token_position(self, token):
         """
@@ -56,7 +56,7 @@ class ProcessingError(Exception):
     def message(self):
         if ErrorCodes.is_error(self.error):
             return ErrorCodes.get_error(self.error)[1].format(
-                **self.format)
+                **self.format_args)
         else:
             return 'Unknown compiler error'
 

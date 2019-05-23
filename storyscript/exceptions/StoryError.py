@@ -241,7 +241,7 @@ class StoryError(SyntaxError):
         Builds a compiler error with 'error_code' and all other arguments
         as its format parameters.
         """
-        return StoryError(CompilerError(error_code, format=kwargs), None)
+        return StoryError(CompilerError(error_code, format_args=kwargs), None)
 
     @staticmethod
     def internal_error(error):

@@ -238,9 +238,9 @@ def test_tree_expect_kwargs(tree):
     with raises(CompilerError) as e:
         tree.expect(0, 'error', a=0, b=1, c=2)
 
-    assert e.value.format.a == 0
-    assert e.value.format.b == 1
-    assert e.value.format.c == 2
+    assert e.value.format_args.a == 0
+    assert e.value.format_args.b == 1
+    assert e.value.format_args.c == 2
 
 
 def test_follow_node_chain_no_children(tree):
