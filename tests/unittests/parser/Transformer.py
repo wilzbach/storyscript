@@ -24,7 +24,7 @@ def test_transformer():
         'const', 'immutable', 'let', 'var', 'auto', 'immutable', 'switch',
         'module', 'package', 'final', 'this', 'self', 'case', 'abstract',
         'static', 'none', 'await', 'service', 'in', 'has', 'not', 'is', 'inf',
-        'nan'
+        'nan', 'unknown'
     ]
     assert Transformer.reserved_keywords == keywords
     assert Transformer.future_reserved_keywords == future_keywords

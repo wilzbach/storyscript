@@ -22,7 +22,7 @@ class Transformer(LarkTransformer):
         'const', 'immutable', 'let', 'var', 'auto', 'immutable', 'switch',
         'module', 'package', 'final', 'this', 'self', 'case', 'abstract',
         'static', 'none', 'await', 'service', 'in', 'has', 'not', 'is', 'inf',
-        'nan'
+        'nan', 'unknown'
     ]
 
     @classmethod
