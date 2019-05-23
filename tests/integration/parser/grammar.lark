@@ -58,7 +58,7 @@ inline_service_fragment: (command arguments*|arguments+)
 service: path service_fragment chained_mutation*
 service_block: service _NL (nested_block)?
 inline_service: path inline_service_fragment chained_mutation*
-call_expression: path _OP arguments* _CP
+call_expression: path _OP arguments* (_NL _INDENT (arguments _NL?)* _DEDENT)? _CP
 if_statement: _IF base_expression
 elseif_statement: _ELSE _IF base_expression
 elseif_block: elseif_statement _NL nested_block
