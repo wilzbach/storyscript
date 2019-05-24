@@ -1,0 +1,49 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "aa"
+        }
+      ],
+      "src": "b = \"aa\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "b",
+            {
+              "$OBJECT": "range",
+              "range": {
+                "start": {
+                  "$OBJECT": "int",
+                  "int": 0
+                },
+                "end": {
+                  "$OBJECT": "int",
+                  "int": 2
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "src": "c = b[0:2]"
+    }
+  },
+  "entrypoint": "1"
+}

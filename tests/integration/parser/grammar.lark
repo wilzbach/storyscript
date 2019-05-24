@@ -13,7 +13,11 @@ map: _OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)? (_NL _DEDENT)? _C
 regular_expression: REGEXP
 inline_expression: _OP inline_service _CP| call_expression| _OP mutation _CP
 values: number| string| boolean| void| list| map| regular_expression| time
-path_fragment: _DOT NAME| _OSB number _CSB| _OSB string _CSB| _OSB path _CSB| _OSB boolean _CSB
+range_start: (number | path) _COLON
+range_start_end: (number | path) _COLON (number | path)
+range_end: _COLON (number | path)
+range: range_start_end | range_start | range_end
+path_fragment: _DOT NAME| _OSB (number | string | path | boolean | range) _CSB
 path: NAME (path_fragment)* | inline_expression (path_fragment)*
 assignment_fragment: EQUALS base_expression
 assignment_destructoring: _OCB (_NL _INDENT)? (path (_COMMA _NL? path)*)? (_NL _DEDENT)? _CCB

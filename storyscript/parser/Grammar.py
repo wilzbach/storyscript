@@ -93,8 +93,12 @@ class Grammar:
     def assignments(self):
         self.ebnf.EQUALS = '='
         self.ebnf._DOT = '.'
-        path_fragment = ('dot name, osb number csb, osb string csb, '
-                         'osb path csb, osb boolean csb')
+        self.ebnf.range_start = '(number | path) colon'
+        self.ebnf.range_start_end = '(number | path) colon (number | path)'
+        self.ebnf.range_end = 'colon (number | path)'
+        self.ebnf.range = 'range_start_end | range_start | range_end'
+        path_fragment = ('dot name, osb '
+                         '(number | string | path | boolean | range) csb')
         self.ebnf.path_fragment = path_fragment
         self.ebnf.path = ('name (path_fragment)* | '
                           'inline_expression (path_fragment)*')

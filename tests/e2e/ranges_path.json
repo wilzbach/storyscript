@@ -1,0 +1,96 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            },
+            {
+              "$OBJECT": "int",
+              "int": 3
+            }
+          ]
+        }
+      ],
+      "src": "a = [1, 2, 3]",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "start"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "src": "start = 1",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "end"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
+      "src": "end = 2",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a",
+            {
+              "$OBJECT": "range",
+              "range": {
+                "start": {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "start"
+                  ]
+                },
+                "end": {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "end"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "src": "b = a[start:end]"
+    }
+  },
+  "entrypoint": "1"
+}

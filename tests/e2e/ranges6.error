@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 5
+
+3|    d = c / 2
+          ^^^^^
+
+E0103: `/` between `string` and `int` is not supported.

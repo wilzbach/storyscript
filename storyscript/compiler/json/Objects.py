@@ -26,6 +26,8 @@ class Objects:
                     value = self.string(child)
                 elif child.data == 'boolean':
                     value = self.boolean(child)
+                elif child.data == 'range':
+                    value = self.range(child)
                 elif child.data == 'number':
                     value = self.number(child)
                 else:
@@ -145,6 +147,31 @@ class Objects:
         if tree.child(0).value == 'true':
             return {'$OBJECT': 'boolean', 'boolean': True}
         return {'$OBJECT': 'boolean', 'boolean': False}
+
+    def range_child(self, tree):
+        """
+        Compiles an individual range token.
+        It can be either a number or a path.
+        """
+        if tree.data == 'number':
+            return self.number(tree)
+        assert tree.data == 'path'
+        return self.path(tree)
+
+    def range(self, tree):
+        """
+        Compiles a range tree.
+        """
+        val = self.range_child(tree.child(0).child(0))
+        if tree.range_start:
+            r = {'start': val}
+        elif tree.range_end:
+            r = {'end': val}
+        else:
+            assert tree.range_start_end
+            end = self.range_child(tree.child(0).child(1))
+            r = {'start': val, 'end': end}
+        return {'$OBJECT': 'range', 'range': r}
 
     def list(self, tree):
         items = []
