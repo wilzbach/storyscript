@@ -117,7 +117,7 @@ class Cli:
     def compile(path, output, json, silent, debug, ebnf, ignore, concise,
                 first, preview):
         """
-        Compiles stories and prints the resulting json
+        Compiles stories and validates syntax
         """
         try:
             results = App.compile(path, ignored_path=ignore,
