@@ -100,7 +100,7 @@ def main():
     for story, result in results:
         if result.updated:
             status = 'OK' if result.status else 'ERR'
-            print(f'{story}: {status}')
+            print(f'{path.relpath(story)}: {status}')
 
 
 if __name__ == '__main__':
