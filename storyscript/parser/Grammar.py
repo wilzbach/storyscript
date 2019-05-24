@@ -201,7 +201,8 @@ class Grammar:
                                     'chained_mutation*')
 
     def call_expression(self):
-        self.ebnf.call_expression = 'path op arguments* cp'
+        self.ebnf.call_expression = ('path op arguments* '
+                                     '(nl indent (arguments nl?)* dedent)? cp')
 
     def if_block(self):
         self.ebnf._IF = 'if'

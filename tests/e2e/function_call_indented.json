@@ -1,0 +1,91 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [
+        "string"
+      ],
+      "function": "fun",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "a",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "string"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "b",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "string"
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": "4.1",
+      "src": "function fun a: string b:string returns string",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "foo"
+        }
+      ],
+      "parent": "1",
+      "src": "\treturn \"foo\"",
+      "next": "4.1"
+    },
+    "4.1": {
+      "method": "call",
+      "ln": "4.1",
+      "name": [
+        "__p-4.1"
+      ],
+      "function": "fun",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "a",
+          "arg": {
+            "$OBJECT": "string",
+            "string": ""
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "b",
+          "arg": {
+            "$OBJECT": "string",
+            "string": ""
+          }
+        }
+      ],
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-4.1"
+          ]
+        }
+      ],
+      "src": "fun(a: \"\""
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "fun": "1"
+  }
+}
