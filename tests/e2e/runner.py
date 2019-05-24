@@ -24,7 +24,7 @@ def run_test_story(source, expected_story):
     s.check_success()
     result = _clean_dict(s.result())
     del result['version']
-    assert result == expected_story
+    assert expected_story == result
 
 
 # compile a story which should fail and compare its output text with the
@@ -35,7 +35,7 @@ def run_fail_story(source, expected_output):
     if len(errors) > 0:
         assert len(errors) == 1, 'Only one error supported for now'
         result = unstyle(errors[0].message())
-        assert result == expected_output
+        assert expected_output == result
         return
 
     assert 0, 'The story was expected to fail, but did not fail.'
