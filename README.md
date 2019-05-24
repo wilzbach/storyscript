@@ -12,7 +12,7 @@
 ## 👋 Meet Storyscript
 The [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) for **Application Storytelling**.
 Develop rapidly, deploy natively to the cloud and focus on what matters most: business-logic.
-Designed with :heart: by [@StoryscriptIO](https://storyscript.io) on a mission to bring application development to the next level.
+Designed with :heart: by [Storyscript](https://storyscript.io) on a mission to bring application development to the next level.
 
 ```coffee
 # Applications are stories of data.
