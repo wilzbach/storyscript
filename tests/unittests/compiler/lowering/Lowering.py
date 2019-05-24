@@ -11,7 +11,7 @@ from storyscript.parser import Tree
 def preprocessor(patch):
     patch.init(FakeTree)
     patch.object(Lowering, 'fake_tree', return_value=FakeTree(None))
-    return Lowering(parser=None)
+    return Lowering(parser=None, features=None)
 
 
 @fixture

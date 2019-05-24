@@ -54,7 +54,10 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.path_resolver = PathResolver(self.path_symbol_resolver)
         self.in_service_block = False
         self.in_when_block = False
-        self.storage_class_scope = StorageClass.read
+        if self.features.globals:
+            self.storage_class_scope = StorageClass.write
+        else:
+            self.storage_class_scope = StorageClass.read
 
     def assignment(self, tree, scope):
         target_symbol = self.path_resolver.path(tree.path)

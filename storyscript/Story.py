@@ -26,10 +26,11 @@ class Story:
     compiling it.
     """
 
-    def __init__(self, story, path=None):
+    def __init__(self, story, features, path=None):
         self.story = story
         self.path = path
         self.lines = story.splitlines(keepends=False)
+        self.features = features
 
     @classmethod
     def read(cls, path):
@@ -50,18 +51,18 @@ class Story:
                                           abspath=abspath)
 
     @classmethod
-    def from_file(cls, path):
+    def from_file(cls, path, features):
         """
         Creates a story from a file source
         """
-        return Story(cls.read(path), path=path)
+        return Story(cls.read(path), features, path=path)
 
     @classmethod
-    def from_stream(cls, stream):
+    def from_stream(cls, stream, features):
         """
         Creates a story from a stream source
         """
-        return Story(stream.read())
+        return Story(stream.read(), features)
 
     def error(self, error):
         """
@@ -78,7 +79,7 @@ class Story:
         try:
             self.tree = parser.parse(self.story)
             if lower:
-                proc = Lowering(parser)
+                proc = Lowering(parser, features=self.features)
                 self.tree = proc.process(self.tree)
         except (CompilerError, StorySyntaxError) as error:
             raise self.error(error) from error
@@ -104,7 +105,8 @@ class Story:
         Compiles the story and stores the result.
         """
         try:
-            self.compiled = Compiler.compile(self.tree, story=self)
+            self.compiled = Compiler.compile(self.tree, story=self,
+                                             features=self.features)
         except (CompilerError, StorySyntaxError) as error:
             raise self.error(error) from error
 

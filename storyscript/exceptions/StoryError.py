@@ -220,7 +220,7 @@ class StoryError(SyntaxError):
                     self.error_code(), self.hint())
             return '{}\n\n{}\n\n{}: {}'.format(*args)
         else:
-            return self.hint()
+            return f'{self.error_code()}: {self.hint()}'
 
     def short_message(self):
         """

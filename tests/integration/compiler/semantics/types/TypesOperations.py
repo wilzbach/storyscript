@@ -76,7 +76,7 @@ def runner(source, op=None, allowed=None, pre=''):
     if not isinstance(allowed, list):
         allowed = [allowed]
 
-    s = Api.loads(in_source)
+    s = Api.loads(in_source, features={'globals': True})
     if any(allowed_fn(op) for allowed_fn in allowed):
         s.check_success()
     else:

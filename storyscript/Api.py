@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from .Bundle import Bundle
+from .Features import Features
 from .Story import Story
 from .exceptions import StoryError
 
@@ -73,52 +74,55 @@ class Api:
     Exposes functionalities for external use
     """
     @staticmethod
-    def loads(string, debug=False):
+    def loads(string, features=None):
         """
         Load story from a string.
         """
+        features = Features(features)
         try:
-            s = Story(string).process()
+            s = Story(string, features).process()
             return StoryscriptCompilationResult.from_result(s)
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)
         except Exception as e:
-            if debug:
+            if features.debug:
                 raise e
             else:
                 e = StoryError.internal_error(e)
                 return StoryscriptCompilationResult.from_error(e)
 
     @staticmethod
-    def load(stream, debug=False):
+    def load(stream, features=None):
         """
         Load story from a file stream.
         """
+        features = Features(features)
         try:
-            story = Story.from_stream(stream).process()
+            story = Story.from_stream(stream, features).process()
             s = {stream.name: story, 'services': story['services']}
             return StoryscriptCompilationResult.from_result(s)
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)
         except Exception as e:
-            if debug:
+            if features.debug:
                 raise e
             else:
                 e = StoryError.internal_error(e)
                 return StoryscriptCompilationResult.from_error(e)
 
     @staticmethod
-    def load_map(files, debug=False):
+    def load_map(files, features=None):
         """
         Load multiple stories from a file mapping
         """
+        features = Features(features)
         try:
-            s = Bundle(story_files=files).bundle()
+            s = Bundle(story_files=files, features=features).bundle()
             return StoryscriptCompilationResult.from_result(s)
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)
         except Exception as e:
-            if debug:
+            if features.debug:
                 raise e
             else:
                 e = StoryError.internal_error(e)

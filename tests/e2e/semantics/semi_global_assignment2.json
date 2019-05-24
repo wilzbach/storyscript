@@ -1,0 +1,48 @@
+{
+  "tree": {
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "src": "a = 1",
+      "next": "3"
+    },
+    "3": {
+      "method": "while",
+      "ln": "3",
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
+      ],
+      "enter": "4",
+      "src": "while true",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
+      "parent": "3",
+      "src": "\ta = 2"
+    }
+  },
+  "entrypoint": "2"
+}

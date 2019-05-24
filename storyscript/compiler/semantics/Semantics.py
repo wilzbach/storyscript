@@ -11,6 +11,9 @@ class Semantics:
     Performs semantic analysis on the AST
     """
 
+    def __init__(self, features):
+        self.features = features
+
     visitors = [FunctionResolver, TypeResolver]
 
     def process(self, tree):
@@ -18,6 +21,7 @@ class Semantics:
         self.mutation_table = MutationTable.init()
         for visitor in self.visitors:
             v = visitor(function_table=self.function_table,
-                        mutation_table=self.mutation_table)
+                        mutation_table=self.mutation_table,
+                        features=self.features)
             v.visit(tree)
         return tree

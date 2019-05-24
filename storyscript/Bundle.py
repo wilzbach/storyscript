@@ -2,6 +2,7 @@
 import os
 import subprocess
 
+from .Features import Features
 from .Story import Story
 from .parser import Parser
 
@@ -11,8 +12,12 @@ class Bundle:
     Bundles all stories that must be compiled together.
     """
 
-    def __init__(self, story_files=None):
+    def __init__(self, story_files=None, features=None):
         self.stories = {}
+        if isinstance(features, Features):
+            self.features = features
+        else:
+            self.features = Features(features)
         if story_files is None:
             story_files = {}
         self.story_files = story_files
@@ -69,13 +74,13 @@ class Bundle:
         return paths
 
     @classmethod
-    def from_path(cls, path, ignored_path=None):
+    def from_path(cls, path, ignored_path=None, features=None):
         """
         Load a bundle of stories from the filesystem.
         If a directory is given. all `.story` files in the directory will be
         loaded.
         """
-        bundle = Bundle()
+        bundle = Bundle(features=features)
         if os.path.isdir(path):
             for story in cls.parse_directory(path, ignored_path=ignored_path):
                 bundle.load_story(story)
@@ -89,7 +94,7 @@ class Bundle:
         """
         if path not in self.story_files:
             self.story_files[path] = Story.read(path)
-        return Story(self.story_files[path])
+        return Story(self.story_files[path], features=self.features)
 
     def find_stories(self):
         """
@@ -158,5 +163,6 @@ class Bundle:
         parser = self.parser(ebnf)
         results = {}
         for story in stories:
-            results[story] = Story.from_file(story).lex(parser=parser)
+            results[story] = Story.from_file(story, features=self.features) \
+                                  .lex(parser=parser)
         return results

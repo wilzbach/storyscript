@@ -12,20 +12,22 @@ class App:
     """
 
     @staticmethod
-    def parse(path, ignored_path=None, ebnf=None, lower=False):
+    def parse(path, ignored_path=None, ebnf=None, lower=False, features=None):
         """
         Parses stories found in path, returning their trees
         """
-        bundle = Bundle.from_path(path, ignored_path=ignored_path)
+        bundle = Bundle.from_path(path, ignored_path=ignored_path,
+                                  features=features)
         return bundle.bundle_trees(ebnf=ebnf, lower=lower)
 
     @staticmethod
     def compile(path, ignored_path=None, ebnf=None, concise=False,
-                first=False):
+                first=False, features=None):
         """
         Parses and compiles stories found in path, returning JSON
         """
-        bundle = Bundle.from_path(path, ignored_path=ignored_path)
+        bundle = Bundle.from_path(path, ignored_path=ignored_path,
+                                  features=features)
         result = bundle.bundle(ebnf=ebnf)
         if concise:
             result = _clean_dict(result)
@@ -36,11 +38,11 @@ class App:
         return json.dumps(result, indent=2)
 
     @staticmethod
-    def lex(path, ebnf=None):
+    def lex(path, features, ebnf=None):
         """
         Lex stories, producing the list of used tokens
         """
-        return Bundle.from_path(path).lex(ebnf=ebnf)
+        return Bundle.from_path(path, features=features).lex(ebnf=ebnf)
 
     @staticmethod
     def grammar():
