@@ -107,6 +107,9 @@ class ErrorCodes:
         'Unexpected end of line. Maybe close a `}}` or `]` expression?')
     indentation_error = (
         'E0077', 'Invalid indentation detected. Did you mix tabs and spaces?')
+    invalid_preview_flag = (
+        'E0078',
+        'Invalid preview flag. `{flag}` is not a valid preview feature.')
     type_assignment_different = (
         'E0100', "Can't assign `{source}` to `{target}`")
     var_not_defined = (

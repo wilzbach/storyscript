@@ -1,0 +1,50 @@
+{
+  "tree": {
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "src": "a = 1",
+      "next": "3"
+    },
+    "3": {
+      "method": "execute",
+      "ln": "3",
+      "output": [
+        "server"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "4",
+      "src": "http server",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
+      "parent": "3",
+      "src": "\ta = 2"
+    }
+  },
+  "services": [
+    "http"
+  ],
+  "entrypoint": "2"
+}

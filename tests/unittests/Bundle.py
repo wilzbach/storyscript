@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 import subprocess
+from unittest.mock import ANY
 
 from pytest import fixture
 
 from storyscript.Bundle import Bundle
+from storyscript.Features import Features
 from storyscript.Story import Story
 from storyscript.parser import Parser
 
@@ -150,9 +152,11 @@ def test_bundle_load_story(patch, bundle):
     Ensures Bundle.load_story can load a story
     """
     patch.init(Story)
+    patch.init(Features)
     bundle.story_files['one.story'] = 'hello'
     result = bundle.load_story('one.story')
-    Story.__init__.assert_called_with('hello')
+    Story.__init__.assert_called_with('hello', features=ANY)
+    assert isinstance(Story.__init__.call_args[1]['features'], Features)
     assert isinstance(result, Story)
 
 
@@ -258,7 +262,7 @@ def test_bundle_lex(patch, bundle):
     patch.object(Bundle, 'find_stories', return_value=['story'])
     patch.object(Bundle, 'parser')
     result = bundle.lex()
-    Story.from_file.assert_called_with('story')
+    Story.from_file.assert_called_with('story', features=bundle.features)
     Bundle.parser.assert_called_with(None)
     Story.from_file().lex.assert_called_with(parser=Bundle.parser())
     assert result['story'] == Story.from_file().lex()

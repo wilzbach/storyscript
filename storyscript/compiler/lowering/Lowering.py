@@ -22,12 +22,13 @@ class Lowering:
     too complicated for the Transformer, before the tree is compiled.
     """
 
-    def __init__(self, parser):
+    def __init__(self, parser, features):
         """
         Saves the used parser as it might be used again for re-evaluation
         of new statements (e.g. for string interpolation)
         """
         self.parser = parser
+        self.features = features
 
     @staticmethod
     def fake_tree(block):
@@ -245,7 +246,7 @@ class Lowering:
         # add whitespace as padding to fixup the column location of the
         # resulting tokens.
         from storyscript.Story import Story
-        story = Story(' ' * column + code_string)
+        story = Story(' ' * column + code_string, features=self.features)
         story.parse(self.parser)
         new_node = story.tree
 

@@ -98,7 +98,7 @@ def test_cli_compile_with_ignore_option(runner, app):
                                 '--ignore', 'path/sub_dir/my_fake.story'])
     App.compile.assert_called_with('path/fake.story', ebnf=None,
                                    ignored_path='path/sub_dir/my_fake.story',
-                                   concise=False, first=False)
+                                   concise=False, first=False, features={})
 
 
 def test_cli_parse_with_ignore_option(runner, app):
@@ -109,7 +109,7 @@ def test_cli_parse_with_ignore_option(runner, app):
                               'path/sub_dir/my_fake.story'])
     App.parse.assert_called_with('path/fake.story', ebnf=None,
                                  ignored_path='path/sub_dir/my_fake.story',
-                                 lower=False)
+                                 lower=False, features={})
 
 
 def test_cli_parse(runner, echo, app, tree):
@@ -119,7 +119,7 @@ def test_cli_parse(runner, echo, app, tree):
     App.parse.return_value = {'path': tree}
     runner.invoke(Cli.parse, [])
     App.parse.assert_called_with(os.getcwd(), ebnf=None,
-                                 ignored_path=None, lower=False)
+                                 ignored_path=None, lower=False, features={})
     click.echo.assert_called_with(tree.pretty())
 
 
@@ -138,7 +138,7 @@ def test_cli_parse_path(runner, echo, app):
     """
     runner.invoke(Cli.parse, ['/path'])
     App.parse.assert_called_with('/path', ebnf=None,
-                                 ignored_path=None, lower=False)
+                                 ignored_path=None, lower=False, features={})
 
 
 def test_cli_parse_ebnf(runner, echo, app):
@@ -147,7 +147,7 @@ def test_cli_parse_ebnf(runner, echo, app):
     """
     runner.invoke(Cli.parse, ['--ebnf', 'test.ebnf'])
     App.parse.assert_called_with(os.getcwd(), ebnf='test.ebnf',
-                                 ignored_path=None, lower=False)
+                                 ignored_path=None, lower=False, features={})
 
 
 def test_cli_parse_lower(runner, echo, app):
@@ -156,7 +156,60 @@ def test_cli_parse_lower(runner, echo, app):
     """
     runner.invoke(Cli.parse, ['--lower'])
     App.parse.assert_called_with(os.getcwd(), ebnf=None,
-                                 ignored_path=None, lower=True)
+                                 ignored_path=None, lower=True, features={})
+
+
+def test_cli_parse_features(runner, echo, app):
+    """
+    Ensures the parse command accepts features
+    """
+    runner.invoke(Cli.parse, ['--preview=globals'])
+    App.parse.assert_called_with(os.getcwd(), ebnf=None,
+                                 ignored_path=None, lower=False,
+                                 features={'globals': True})
+
+
+def test_cli_parse_features_positive(runner, echo, app):
+    """
+    Ensures the parse command accepts positive features
+    """
+    runner.invoke(Cli.parse, ['--preview=+globals'])
+    App.parse.assert_called_with(os.getcwd(), ebnf=None,
+                                 ignored_path=None, lower=False,
+                                 features={'globals': True})
+
+
+def test_cli_parse_features_negative(runner, echo, app):
+    """
+    Ensures the parse command accepts negative features
+    """
+    runner.invoke(Cli.parse, ['--preview=-globals'])
+    App.parse.assert_called_with(os.getcwd(), ebnf=None,
+                                 ignored_path=None, lower=False,
+                                 features={'globals': False})
+
+
+def test_cli_parse_features_chain(runner, echo, app):
+    """
+    Ensures the parse command accepts feature chains
+    """
+    runner.invoke(Cli.parse, ['--preview=globals', '--preview=-globals'])
+    App.parse.assert_called_with(os.getcwd(), ebnf=None,
+                                 ignored_path=None, lower=False,
+                                 features={'globals': False})
+
+
+def test_cli_parse_features_unknown(runner, echo, app):
+    """
+    Ensures the parse command reacts to unknown features
+    """
+    e = runner.invoke(Cli.parse, ['--preview=unknown'])
+    App.parse.assert_not_called()
+    assert e.exit_code == 1
+    click.echo.assert_called_with(
+        'E0078: Invalid preview flag. '
+        '`unknown` is not a valid preview feature.'
+    )
 
 
 def test_cli_parse_debug(runner, echo, app):
@@ -180,7 +233,7 @@ def test_cli_parse_ice(runner, echo, app):
     e = runner.invoke(Cli.parse, ['/a/non/existent/file'])
     assert e.exit_code == 1
     click.echo.assert_called_with((
-        'Internal error occured: ICE\n'
+        'E0001: Internal error occured: ICE\n'
         'Please report at https://github.com/storyscript/storyscript/issues'))
 
 
@@ -195,15 +248,16 @@ def test_cli_parse_debug_ice(runner, echo, app):
     assert str(e.exception) == 'ICE'
 
 
-def test_cli_parse_not_found(runner, echo, app):
+def test_cli_parse_not_found(runner, echo, app, patch):
     """
     Ensures the parse command catches errors
     """
+    patch.object(StoryError, 'message')
     ce = CompilerError(None)
     app.parse.side_effect = StoryError(ce, None)
     e = runner.invoke(Cli.parse, ['/a/non/existent/file'])
     assert e.exit_code == 1
-    click.echo.assert_called_with(StoryError._internal_error(ce))
+    click.echo.assert_called_with(StoryError.message())
 
 
 def test_cli_compile(patch, runner, echo, app):
@@ -214,7 +268,7 @@ def test_cli_compile(patch, runner, echo, app):
     runner.invoke(Cli.compile, [])
     App.compile.assert_called_with(os.getcwd(), ebnf=None,
                                    ignored_path=None, concise=False,
-                                   first=False)
+                                   first=False, features={})
     click.style.assert_called_with('Script syntax passed!', fg='green')
     click.echo.assert_called_with(click.style())
 
@@ -226,7 +280,7 @@ def test_cli_compile_path(patch, runner, app):
     runner.invoke(Cli.compile, ['/path'])
     App.compile.assert_called_with('/path', ebnf=None,
                                    ignored_path=None, concise=False,
-                                   first=False)
+                                   first=False, features={})
 
 
 def test_cli_compile_output_file(patch, runner, app):
@@ -247,7 +301,7 @@ def test_cli_compile_silent(runner, echo, app, option):
     result = runner.invoke(Cli.compile, [option])
     App.compile.assert_called_with(os.getcwd(), ebnf=None,
                                    ignored_path=None, concise=False,
-                                   first=False)
+                                   first=False, features={})
     assert result.output == ''
     assert click.echo.call_count == 0
 
@@ -260,7 +314,7 @@ def test_cli_compile_concise(runner, echo, app, option):
     runner.invoke(Cli.compile, [option])
     App.compile.assert_called_with(os.getcwd(), ebnf=None,
                                    ignored_path=None, concise=True,
-                                   first=False)
+                                   first=False, features={})
 
 
 @mark.parametrize('option', ['--first', '-f'])
@@ -271,14 +325,21 @@ def test_cli_compile_first(runner, echo, app, option):
     runner.invoke(Cli.compile, [option])
     App.compile.assert_called_with(os.getcwd(), ebnf=None,
                                    ignored_path=None, concise=False,
-                                   first=True)
+                                   first=True, features={})
 
 
 def test_cli_compile_debug(runner, echo, app):
     runner.invoke(Cli.compile, ['--debug'])
     App.compile.assert_called_with(os.getcwd(), ebnf=None,
                                    ignored_path=None, concise=False,
-                                   first=False)
+                                   first=False, features={})
+
+
+def test_cli_compile_features(runner, echo, app):
+    runner.invoke(Cli.compile, ['--preview=globals'])
+    App.compile.assert_called_with(os.getcwd(), ebnf=None,
+                                   ignored_path=None, concise=False,
+                                   first=False, features={'globals': True})
 
 
 @mark.parametrize('option', ['--json', '-j'])
@@ -289,7 +350,7 @@ def test_cli_compile_json(runner, echo, app, option):
     runner.invoke(Cli.compile, [option])
     App.compile.assert_called_with(os.getcwd(), ebnf=None,
                                    ignored_path=None, concise=False,
-                                   first=False)
+                                   first=False, features={})
     click.echo.assert_called_with(App.compile())
 
 
@@ -297,7 +358,7 @@ def test_cli_compile_ebnf(runner, echo, app):
     runner.invoke(Cli.compile, ['--ebnf', 'test.ebnf'])
     App.compile.assert_called_with(os.getcwd(), ebnf='test.ebnf',
                                    ignored_path=None, concise=False,
-                                   first=False)
+                                   first=False, features={})
 
 
 def test_cli_compile_ice(runner, echo, app):
@@ -308,7 +369,7 @@ def test_cli_compile_ice(runner, echo, app):
     e = runner.invoke(Cli.compile, ['/a/non/existent/file'])
     assert e.exit_code == 1
     click.echo.assert_called_with((
-        'Internal error occured: ICE\n'
+        'E0001: Internal error occured: ICE\n'
         'Please report at https://github.com/storyscript/storyscript/issues'))
 
 
@@ -327,12 +388,11 @@ def test_cli_compile_not_found(patch, runner, echo, app):
     """
     Ensures the compile command catches errors
     """
-    patch.object(StoryError, '_internal_error')
     ce = CompilerError(None)
     app.compile.side_effect = StoryError(ce, None)
     e = runner.invoke(Cli.compile, ['/a/non/existent/file'])
     assert e.exit_code == 1
-    click.echo.assert_called_with(StoryError._internal_error())
+    click.echo.assert_called_with(f'E0001: {StoryError._internal_error(ce)}')
 
 
 def test_cli_compile_not_found_debug(runner, echo, app):
@@ -354,7 +414,7 @@ def test_cli_lex(patch, magic, runner, app, echo):
     token = magic(type='token', value='value')
     patch.object(App, 'lex', return_value={'one.story': [token]})
     runner.invoke(Cli.lex, [])
-    App.lex.assert_called_with(os.getcwd(), ebnf=None)
+    App.lex.assert_called_with(os.getcwd(), ebnf=None, features={})
     click.echo.assert_called_with('0 token value')
     assert click.echo.call_count == 2
 
@@ -365,7 +425,7 @@ def test_cli_lex_path(patch, magic, runner, app):
     """
     patch.object(App, 'lex', return_value={'one.story': [magic()]})
     runner.invoke(Cli.lex, ['/path'])
-    App.lex.assert_called_with('/path', ebnf=None)
+    App.lex.assert_called_with('/path', ebnf=None, features={})
 
 
 def test_cli_lex_ebnf(patch, runner):
@@ -374,7 +434,17 @@ def test_cli_lex_ebnf(patch, runner):
     """
     patch.object(App, 'lex')
     runner.invoke(Cli.lex, ['--ebnf', 'my.ebnf'])
-    App.lex.assert_called_with(os.getcwd(), ebnf='my.ebnf')
+    App.lex.assert_called_with(os.getcwd(), ebnf='my.ebnf', features={})
+
+
+def test_cli_lex_features(patch, runner):
+    """
+    Ensures the lex command allows specifying features
+    """
+    patch.object(App, 'lex')
+    runner.invoke(Cli.lex, ['--preview=globals'])
+    App.lex.assert_called_with(os.getcwd(), ebnf=None,
+                               features={'globals': True})
 
 
 def test_cli_lex_ice(patch, runner, echo, app):
@@ -385,7 +455,7 @@ def test_cli_lex_ice(patch, runner, echo, app):
     e = runner.invoke(Cli.lex, ['/a/non/existent/file'])
     assert e.exit_code == 1
     click.echo.assert_called_with((
-        'Internal error occured: ICE\n'
+        'E0001: Internal error occured: ICE\n'
         'Please report at https://github.com/storyscript/storyscript/issues'))
 
 
@@ -404,13 +474,13 @@ def test_cli_lex_not_found(patch, runner, echo, app):
     """
     Ensures the lex command catches errors
     """
-    patch.object(StoryError, '_internal_error')
+    patch.object(StoryError, 'message')
     ce = CompilerError(None)
     patch.object(App, 'lex')
     App.lex.side_effect = StoryError(ce, None)
     e = runner.invoke(Cli.lex, ['/a/non/existent/file'])
     assert e.exit_code == 1
-    click.echo.assert_called_with(StoryError._internal_error())
+    click.echo.assert_called_with(StoryError.message())
 
 
 def test_cli_lex_not_found_debug(patch, runner, echo, app):

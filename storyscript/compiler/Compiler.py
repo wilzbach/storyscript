@@ -7,16 +7,16 @@ from storyscript.compiler.semantics.Semantics import Semantics
 class Compiler:
 
     @classmethod
-    def generate(cls, tree, debug=False):
+    def generate(cls, tree, features):
         """
         Parses an AST and checks it.
         """
-        tree = Lowering(parser=tree.parser).process(tree)
-        return Semantics().process(tree)
+        tree = Lowering(parser=tree.parser, features=features).process(tree)
+        return Semantics(features=features).process(tree)
 
     @classmethod
-    def compile(cls, tree, story, debug=False, backend='json'):
+    def compile(cls, tree, story, features, backend='json'):
         assert backend == 'json'
         compiler = JSONCompiler(story)
-        tree = cls.generate(tree, debug=debug)
-        return compiler.compile(tree, debug=debug)
+        tree = cls.generate(tree, features)
+        return compiler.compile(tree)

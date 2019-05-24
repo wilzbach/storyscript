@@ -15,7 +15,7 @@ def parse(source, lower=False):
     tree = _parser().parse(source)
     if not lower:
         return tree
-    return Lowering(parser=tree.parser).process(tree)
+    return Lowering(parser=tree.parser, features={}).process(tree)
 
 
 def get_entity(obj):

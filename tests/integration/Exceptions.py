@@ -3,13 +3,19 @@ from click import unstyle
 
 from pytest import raises
 
+from storyscript.Features import Features
 from storyscript.Story import Story
 from storyscript.exceptions.StoryError import StoryError
 
 
+def run_story(text):
+    features = Features(None)
+    return Story(text, features).process()
+
+
 def test_exceptions_service_name(capsys):
     with raises(StoryError) as e:
-        Story('al.pine echo').process()
+        run_story('al.pine echo')
 
     message = e.value.message()
     # test with coloring once, but we representing ANSI color codes is tricky
@@ -21,7 +27,7 @@ def test_exceptions_service_name(capsys):
 
 def test_exceptions_arguments_noservice(capsys):
     with raises(StoryError) as e:
-        Story('length:10').process()
+        run_story('length:10')
     e.value.with_color = False
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 1'
@@ -31,7 +37,7 @@ def test_exceptions_arguments_noservice(capsys):
 
 def test_exceptions_variables_backslash(capsys):
     with raises(StoryError) as e:
-        Story('a/b = 0').process()
+        run_story('a/b = 0')
     e.value.with_color = False
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 1'
@@ -42,7 +48,7 @@ def test_exceptions_variables_backslash(capsys):
 
 def test_exceptions_variables_dash(capsys):
     with raises(StoryError) as e:
-        Story('a-b = 0').process()
+        run_story('a-b = 0')
     e.value.with_color = False
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 1'
@@ -53,7 +59,7 @@ def test_exceptions_variables_dash(capsys):
 
 def test_exceptions_return_outside(capsys):
     with raises(StoryError) as e:
-        Story('return 0').process()
+        run_story('return 0')
     e.value.with_color = False
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 1'
@@ -63,7 +69,7 @@ def test_exceptions_return_outside(capsys):
 
 def test_exceptions_missing_value(capsys):
     with raises(StoryError) as e:
-        Story('a = ').process()
+        run_story('a = ')
     e.value.with_color = False
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 5'
@@ -73,14 +79,14 @@ def test_exceptions_missing_value(capsys):
 
 def test_exceptions_file_not_found(capsys):
     with raises(StoryError) as e:
-        Story.from_file('this-file-does-not-exist')
+        Story.from_file('this-file-does-not-exist', Features(None))
     message = e.value.message()
     assert 'File `this-file-does-not-exist` not found at' in message
 
 
 def test_exceptions_dollar(capsys):
     with raises(StoryError) as e:
-        Story('x = $').process()
+        run_story('x = $')
     e.value.with_color = False
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 5'
@@ -90,8 +96,8 @@ def test_exceptions_dollar(capsys):
 
 def test_exceptions_function_redeclared(capsys):
     with raises(StoryError) as e:
-        Story('function f1 returns int\n\treturn 42\n'
-              'function f1 returns int\n\treturn 42\n').process()
+        run_story('function f1 returns int\n\treturn 42\n'
+                  'function f1 returns int\n\treturn 42\n')
     e.value.with_color = False
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 3, column 1'
@@ -101,7 +107,7 @@ def test_exceptions_function_redeclared(capsys):
 
 def test_exceptions_block_expected_before(capsys):
     with raises(StoryError) as e:
-        Story('while true').process()
+        run_story('while true')
     e.value.with_color = False
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 11'
@@ -111,7 +117,7 @@ def test_exceptions_block_expected_before(capsys):
 
 def test_exceptions_block_expected_after(capsys):
     with raises(StoryError) as e:
-        Story('while true\na = 2').process()
+        run_story('while true\na = 2')
     e.value.with_color = False
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 2, column 1'

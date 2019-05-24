@@ -20,7 +20,8 @@ def test_app_parse(bundle):
     Ensures App.parse returns the parsed bundle
     """
     result = App.parse('path')
-    Bundle.from_path.assert_called_with('path', ignored_path=None)
+    Bundle.from_path.assert_called_with('path', ignored_path=None,
+                                        features=None)
     bt = Bundle.from_path().bundle_trees
     bt.assert_called_with(ebnf=None, lower=False)
     assert result == Bundle.from_path().bundle_trees()
@@ -28,7 +29,8 @@ def test_app_parse(bundle):
 
 def test_app_parse_ignored_path(bundle):
     App.parse('path', ignored_path='ignored')
-    Bundle.from_path.assert_called_with('path', ignored_path='ignored')
+    Bundle.from_path.assert_called_with('path', ignored_path='ignored',
+                                        features=None)
 
 
 def test_app_parse_ebnf(bundle):
@@ -47,7 +49,8 @@ def test_app_parse_lower(patch, bundle, magic):
     story = magic()
     Bundle.from_path().bundle_trees.return_value = {'foo.story': story}
     result = App.parse('path', lower=True)
-    Bundle.from_path.assert_called_with('path', ignored_path=None)
+    Bundle.from_path.assert_called_with('path', ignored_path=None,
+                                        features=None)
     bt = Bundle.from_path().bundle_trees
     bt.assert_called_with(ebnf=None, lower=True)
     assert result == Bundle.from_path().bundle_trees(story)
@@ -56,7 +59,8 @@ def test_app_parse_lower(patch, bundle, magic):
 def test_app_compile(patch, bundle):
     patch.object(json, 'dumps')
     result = App.compile('path')
-    Bundle.from_path.assert_called_with('path', ignored_path=None)
+    Bundle.from_path.assert_called_with('path', ignored_path=None,
+                                        features=None)
     Bundle.from_path().bundle.assert_called_with(ebnf=None)
     json.dumps.assert_called_with(Bundle.from_path().bundle(), indent=2)
     assert result == json.dumps()
@@ -66,7 +70,8 @@ def test_app_compile_concise(patch, bundle):
     patch.object(json, 'dumps')
     patch.object(AppModule, '_clean_dict')
     result = App.compile('path', concise=True)
-    Bundle.from_path.assert_called_with('path', ignored_path=None)
+    Bundle.from_path.assert_called_with('path', ignored_path=None,
+                                        features=None)
     Bundle.from_path().bundle.assert_called_with(ebnf=None)
     AppModule._clean_dict.assert_called_with(Bundle.from_path().bundle())
     json.dumps.assert_called_with(AppModule._clean_dict(), indent=2)
@@ -76,7 +81,8 @@ def test_app_compile_concise(patch, bundle):
 def test_app_compile_ignored_path(patch, bundle):
     patch.object(json, 'dumps')
     App.compile('path', ignored_path='ignored')
-    Bundle.from_path.assert_called_with('path', ignored_path='ignored')
+    Bundle.from_path.assert_called_with('path', ignored_path='ignored',
+                                        features=None)
 
 
 def test_app_compile_ebnf(patch, bundle):
@@ -95,7 +101,8 @@ def test_app_compile_first(patch, bundle):
     Bundle.from_path().bundle.return_value = {'stories': {'my_story': 42}}
     patch.object(json, 'dumps')
     result = App.compile('path', first=True)
-    Bundle.from_path.assert_called_with('path', ignored_path=None)
+    Bundle.from_path.assert_called_with('path', ignored_path=None,
+                                        features=None)
     Bundle.from_path().bundle.assert_called_with(ebnf=None)
     json.dumps.assert_called_with(42, indent=2)
     assert result == json.dumps()
@@ -112,20 +119,22 @@ def test_app_compile_first_error(patch, bundle):
     with raises(StoryError) as e:
         App.compile('path', first=True)
     assert e.value.message() == \
-        'The option `--first`/-`f` can only be used if one story is complied.'
-    Bundle.from_path.assert_called_with('path', ignored_path=None)
+        'E0055: The option `--first`/-`f` can only be used ' \
+        'if one story is complied.'
+    Bundle.from_path.assert_called_with('path', ignored_path=None,
+                                        features=None)
     Bundle.from_path().bundle.assert_called_with(ebnf=None)
 
 
 def test_app_lex(bundle):
-    result = App.lex('/path')
-    Bundle.from_path.assert_called_with('/path')
+    result = App.lex('/path', features=None)
+    Bundle.from_path.assert_called_with('/path', features=None)
     Bundle.from_path().lex.assert_called_with(ebnf=None)
     assert result == Bundle.from_path().lex()
 
 
 def test_app_lex_ebnf(bundle):
-    App.lex('/path', ebnf='my.ebnf')
+    App.lex('/path', ebnf='my.ebnf', features=None)
     Bundle.from_path().lex.assert_called_with(ebnf='my.ebnf')
 
 

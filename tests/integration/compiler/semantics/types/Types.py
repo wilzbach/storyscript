@@ -3,19 +3,21 @@ from pytest import mark
 from storyscript.Api import Api
 from storyscript.exceptions import CompilerError
 
+features = {'globals': True}
+
 
 def succeed(source):
     """
     Expect the source code to pass.
     """
-    Api.loads(source).check_success()
+    Api.loads(source, features=features).check_success()
 
 
 def fail(source):
     """
     Expect the source code to error.
     """
-    s = Api.loads(source)
+    s = Api.loads(source, features=features)
     assert not s.success()
     e = s.errors()[0]
     assert isinstance(e.error, CompilerError)

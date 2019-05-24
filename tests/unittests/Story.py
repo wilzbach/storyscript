@@ -15,7 +15,7 @@ from storyscript.parser import Parser
 
 @fixture
 def story():
-    return Story('story')
+    return Story('story', features=None)
 
 
 @fixture
@@ -37,7 +37,7 @@ def test_story_init(story):
 
 
 def test_story_init_path():
-    story = Story('story', path='path')
+    story = Story('story', features=None, path='path')
     assert story.path == 'path'
 
 
@@ -62,17 +62,18 @@ def test_story_read_not_found(patch, capsys):
 def test_story_from_file(patch):
     patch.init(Story)
     patch.object(Story, 'read')
-    result = Story.from_file('hello.story')
+    result = Story.from_file('hello.story', features=None)
     Story.read.assert_called_with('hello.story')
-    Story.__init__.assert_called_with(Story.read(), path='hello.story')
+    Story.__init__.assert_called_with(Story.read(), None,
+                                      path='hello.story')
     assert isinstance(result, Story)
 
 
 def test_story_from_stream(patch, magic):
     patch.init(Story)
     stream = magic()
-    result = Story.from_stream(stream)
-    Story.__init__.assert_called_with(stream.read())
+    result = Story.from_stream(stream, features=None)
+    Story.__init__.assert_called_with(stream.read(), None)
     assert isinstance(result, Story)
 
 
@@ -137,7 +138,7 @@ def test_story_modules_no_extension(magic, story):
 
 def test_story_compile(patch, story, compiler):
     story.compile()
-    Compiler.compile.assert_called_with(story.tree, story=story)
+    Compiler.compile.assert_called_with(story.tree, story=story, features=None)
     assert story.compiled == Compiler.compile()
 
 

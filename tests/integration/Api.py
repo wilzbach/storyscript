@@ -65,7 +65,7 @@ def test_api_load_map_ice():
         s = Api.load_map({})
         e = s.errors()[0]
         assert e.message() == \
-            """Internal error occured: ICE
+            """E0001: Internal error occured: ICE
 Please report at https://github.com/storyscript/storyscript/issues"""
 
 
@@ -78,7 +78,7 @@ def test_api_loads_ice():
         with raises(StoryError) as e:
             Api.loads('foo').check_success()
         assert e.value.message() == \
-            """Internal error occured: ICE
+            """E0001: Internal error occured: ICE
 Please report at https://github.com/storyscript/storyscript/issues"""
 
 
@@ -91,7 +91,7 @@ def test_api_load_ice():
         s = Api.load('foo')
         e = s.errors()[0]
         assert e.message() == \
-            """Internal error occured: ICE
+            """E0001: Internal error occured: ICE
 Please report at https://github.com/storyscript/storyscript/issues"""
 
 

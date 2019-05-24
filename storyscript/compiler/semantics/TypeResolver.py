@@ -18,16 +18,22 @@ class ScopeBlock:
     This means that scopes are essentially a single-linked list up to the root
     scope.
     """
-    def __init__(self, type_resolver, scope):
+    def __init__(self, type_resolver, scope, storage_class):
         assert scope is not None
         self.type_resolver = type_resolver
         self.scope = scope
+        self.storage_class = storage_class
 
     def __enter__(self):
+        if self.storage_class is not None:
+            self.prev_storage_class = self.type_resolver.storage_class_scope
+            self.type_resolver.storage_class_scope = self.storage_class
         self.prev_scope = self.type_resolver.current_scope
         self.type_resolver.update_scope(self.scope)
 
     def __exit__(self, exc_type, exc_value, traceback):
+        if self.storage_class is not None:
+            self.type_resolver.storage_class_scope = self.prev_storage_class
         self.type_resolver.update_scope(self.prev_scope)
 
 
@@ -48,6 +54,10 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.path_resolver = PathResolver(self.path_symbol_resolver)
         self.in_service_block = False
         self.in_when_block = False
+        if self.features.globals:
+            self.storage_class_scope = StorageClass.write
+        else:
+            self.storage_class_scope = StorageClass.read
 
     def assignment(self, tree, scope):
         target_symbol = self.path_resolver.path(tree.path)
@@ -58,6 +68,9 @@ class TypeResolver(ScopeSelectiveVisitor):
         frag = tree.assignment_fragment
         expr_sym = self.resolver.base_expression(frag.base_expression)
         expr_type = expr_sym.type()
+        storage_class = expr_sym._storage_class
+        if expr_sym.can_write():
+            storage_class = self.storage_class_scope
 
         token = frag.child(0)
         tree.expect('/' not in token.value,
@@ -70,7 +83,7 @@ class TypeResolver(ScopeSelectiveVisitor):
                 frag.base_expression.expect(expr_type != NoneType.instance(),
                                             'assignment_type_none')
             sym = Symbol(target_symbol.name(), expr_type,
-                         storage_class=expr_sym._storage_class)
+                         storage_class=storage_class)
             scope.symbols().insert(sym)
         else:
             tree.expect(target_symbol.type().can_be_assigned(expr_type),
@@ -155,7 +168,7 @@ class TypeResolver(ScopeSelectiveVisitor):
 
     def when_block(self, tree, scope):
         tree.scope = Scope(parent=scope)
-        with self.create_scope(tree.scope):
+        with self.create_scope(tree.scope, storage_class=StorageClass.write):
             self.implicit_output(tree)
 
             output = tree.service.service_fragment.output
@@ -261,7 +274,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         tree.scope, return_type = self.function_statement(
             tree.function_statement, scope
         )
-        with self.create_scope(tree.scope):
+        with self.create_scope(tree.scope, storage_class=StorageClass.write):
             self.visit_children(tree.nested_block, scope=tree.scope)
             ReturnVisitor.check(tree, tree.scope, return_type,
                                 self.function_table, self.mutation_table)
@@ -286,8 +299,8 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.symbol_resolver.update_scope(scope)
         self.path_symbol_resolver.update_scope(scope)
 
-    def create_scope(self, scope):
-        return ScopeBlock(self, scope)
+    def create_scope(self, scope, storage_class=None):
+        return ScopeBlock(self, scope, storage_class)
 
     def start(self, tree, scope=None):
         # create the root scope
