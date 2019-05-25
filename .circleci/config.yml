@@ -108,6 +108,7 @@ jobs:
                     rm -rf tests # not needed in the released package
                     . venv/bin/activate
                     python setup.py sdist
+                    pip install wheel
                     python setup.py bdist_wheel
             - run:
                   name: upload to pypi
