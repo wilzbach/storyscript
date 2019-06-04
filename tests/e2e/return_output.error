@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2
 
-2|      return my_random_service get_integer
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2|      return http fetch
+        ^^^^^^^^^^^^^^^^^
 
 E0110: `return` expected. Did you miss to add `returns any`?

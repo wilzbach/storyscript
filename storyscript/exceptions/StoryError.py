@@ -57,11 +57,13 @@ class StoryError(SyntaxError):
         """
         Creates the header of the message
         """
-        template = 'Error: syntax error in {} at line {}, column {}'
         name = self.name()
         if self.with_color:
             name = click.style(self.name(), bold=True)
-        return template.format(name, self.int_line(), self.error.column)
+        text = f'Error: syntax error in {name} at line {self.int_line()}'
+        if self.error.column != 'None':
+            text += f', column {self.error.column}'
+        return text
 
     def symbols(self, line):
         """

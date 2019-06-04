@@ -77,6 +77,7 @@ class ReturnVisitor:
                 obj.expect(
                     ret_type == NoneType.instance(),
                     'function_without_output_return',
+                    return_type=ret_type
                 )
 
     @classmethod

@@ -1,4 +1,4 @@
-Error: syntax error in story at line 1, column None
+Error: syntax error in story at line 1
 
 1|    List[time] t = {}
       ^^^^^^^^^^^^^^^^^

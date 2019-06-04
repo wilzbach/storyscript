@@ -1,4 +1,4 @@
-Error: syntax error in story at line 4, column None
+Error: syntax error in story at line 4
 
 4|    b = {"a": "a", fn_none(): "bar"}
       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
