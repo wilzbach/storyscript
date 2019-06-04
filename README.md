@@ -59,7 +59,7 @@ storyscript compile -j hello.story
 
 ## Editor plugins
 
-- [VSCode](https://marketplace.visualstudio.com/items?itemName=story.script)
+- [VSCode](https://asyncy.click/vscode)
 - [Atom](https://github.com/storyscript/atom)
 
 ## Development documentation
