@@ -166,22 +166,25 @@ class TypeResolver(ScopeSelectiveVisitor):
         """
         self.resolver.base_expression(tree.base_expression)
 
+    def check_output(self, tree, output, target):
+        output.expect(len(output.children) == 1, 'output_type_only_one',
+                      target=target)
+
+        name = output.children[0]
+        resolved = tree.scope.resolve(name)
+        output.expect(resolved is None, 'output_unique',
+                      name=resolved.name() if resolved else None)
+        sym = Symbol.from_path(name, ObjectType.instance(),
+                               storage_class=StorageClass.read)
+        tree.scope.insert(sym)
+
     def when_block(self, tree, scope):
         tree.scope = Scope(parent=scope)
         with self.create_scope(tree.scope, storage_class=StorageClass.write):
             self.implicit_output(tree)
 
             output = tree.service.service_fragment.output
-            output.expect(len(output.children) == 1, 'output_type_only_one',
-                          target='when')
-
-            name = output.children[0]
-            resolved = tree.scope.resolve(name)
-            output.expect(resolved is None, 'output_unique',
-                          name=resolved.name() if resolved else None)
-            sym = Symbol.from_path(name, ObjectType.instance(),
-                                   storage_class=StorageClass.read)
-            tree.scope.insert(sym)
+            self.check_output(tree, output, target='when')
 
             tree.expect(not self.in_when_block, 'nested_when_block')
             self.in_when_block = True
@@ -207,16 +210,7 @@ class TypeResolver(ScopeSelectiveVisitor):
 
             output = tree.service.service_fragment.output
             if output is not None:
-                output.expect(len(output.children) == 1,
-                              'output_type_only_one', target='service')
-
-                name = output.children[0]
-                resolved = tree.scope.resolve(name)
-                output.expect(resolved is None, 'output_unique',
-                              name=resolved.name() if resolved else None)
-                sym = Symbol(name, ObjectType.instance(),
-                             storage_class=StorageClass.read)
-                tree.scope.insert(sym)
+                self.check_output(tree, output, target='service')
 
             if tree.nested_block:
                 tree.expect(not self.in_service_block, 'nested_service_block')
