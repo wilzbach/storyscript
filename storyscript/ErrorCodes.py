@@ -144,8 +144,7 @@ class ErrorCodes:
         'E0109', "Inline service calls can't define an output")
     function_without_output_return = (
         'E0110',
-        ('Function has no return output defined. '
-         'Only `return` is allowed.'))
+        ('`return` expected. Did you miss to add `returns {return_type}`?'))
     function_redeclaration = (
         'E0111', 'Function `{name}` has already been declared')
     function_not_found = (
