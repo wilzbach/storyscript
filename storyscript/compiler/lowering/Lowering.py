@@ -696,20 +696,18 @@ class Lowering:
             call_expr = node
             if len(call_expr.path.children) > 1:
                 path_fragments = call_expr.path.children
-                if len(path_fragments) == 2:
-                    # don't rewrite s.length.max() yet
-                    call_expr.children = [
-                        Tree('primary_expression', [
-                            Tree('entity', [
-                                Tree('path', [call_expr.path.children[0]])
-                            ])
-                        ]),
-                        Tree('mutation_fragment', [
-                            path_fragments[-1].children[0],
-                            *call_expr.children[1:]
+                call_expr.children = [
+                    Tree('primary_expression', [
+                        Tree('entity', [
+                            Tree('path', call_expr.path.children[:-1])
                         ])
-                    ]
-                    call_expr.data = 'mutation'
+                    ]),
+                    Tree('mutation_fragment', [
+                        path_fragments[-1].children[0],
+                        *call_expr.children[1:]
+                    ])
+                ]
+                call_expr.data = 'mutation'
 
         for c in node.children:
             self.visit_function_dot(c, block)
