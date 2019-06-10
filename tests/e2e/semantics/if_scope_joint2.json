@@ -1,0 +1,115 @@
+{
+  "tree": {
+    "1": {
+      "method": "if",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "enter": "2",
+      "exit": "3",
+      "src": "if 0",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "originalCount"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "1",
+      "src": "\toriginalCount = 0",
+      "next": "3"
+    },
+    "3": {
+      "method": "elif",
+      "ln": "3",
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "enter": "4",
+      "exit": "5",
+      "src": "else if 0",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "originalCount"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "3",
+      "src": "\toriginalCount = 0",
+      "next": "5"
+    },
+    "5": {
+      "method": "else",
+      "ln": "5",
+      "enter": "6",
+      "exit": "8",
+      "src": "else",
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "name": [
+        "originalCount"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "5",
+      "src": "\toriginalCount = 0",
+      "next": "8"
+    },
+    "8": {
+      "method": "expression",
+      "ln": "8",
+      "name": [
+        "newCount"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "originalCount"
+              ]
+            },
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        }
+      ],
+      "src": "newCount = originalCount + 1"
+    }
+  },
+  "entrypoint": "1"
+}

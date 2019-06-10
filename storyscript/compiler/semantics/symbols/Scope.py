@@ -59,3 +59,34 @@ class Scope:
                      storage_class=StorageClass.read)
         scope.insert(app)
         return scope
+
+
+class ScopeJoiner:
+    """
+    Manages a joint scope of one or more scopes.
+    The joint scope is the intersection of these scopes.
+    """
+
+    def __init__(self):
+        self.scope = None
+
+    def add(self, scope):
+        """
+        Performs the join operation on one or more scopes.
+        """
+        if self.scope is None:
+            self.scope = scope
+            self.symbols = scope._symbols._symbols
+        else:
+            # join symbols
+            symbols = scope._symbols._symbols
+            for k in [*self.symbols.keys()]:
+                if k not in symbols:
+                    del self.symbols[k]
+
+    def insert_to(self, scope):
+        """
+        Inserts the joined set of symbols into a scope.
+        """
+        for s in self.symbols.values():
+            scope.insert(s)

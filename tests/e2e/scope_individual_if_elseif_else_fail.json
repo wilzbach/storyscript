@@ -1,0 +1,87 @@
+{
+  "tree": {
+    "1": {
+      "method": "if",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
+      ],
+      "enter": "2",
+      "exit": "3",
+      "src": "if true",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "1",
+      "src": "\tc = 1",
+      "next": "3"
+    },
+    "3": {
+      "method": "elif",
+      "ln": "3",
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": false
+        }
+      ],
+      "enter": "4",
+      "exit": "5",
+      "src": "else if false",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": ""
+        }
+      ],
+      "parent": "3",
+      "src": "\tc = \"\"",
+      "next": "5"
+    },
+    "5": {
+      "method": "else",
+      "ln": "5",
+      "enter": "6",
+      "src": "else",
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "5",
+      "src": "\td = 0"
+    }
+  },
+  "entrypoint": "1"
+}

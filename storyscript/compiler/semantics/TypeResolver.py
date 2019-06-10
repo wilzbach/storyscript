@@ -7,7 +7,7 @@ from .PathResolver import PathResolver
 from .ReturnVisitor import ReturnVisitor
 from .SymbolResolver import SymbolResolver
 from .Visitors import ScopeSelectiveVisitor
-from .symbols.Scope import Scope
+from .symbols.Scope import Scope, ScopeJoiner
 from .symbols.Symbols import StorageClass, Symbol
 
 
@@ -30,6 +30,7 @@ class ScopeBlock:
             self.type_resolver.storage_class_scope = self.storage_class
         self.prev_scope = self.type_resolver.current_scope
         self.type_resolver.update_scope(self.scope)
+        return self.scope
 
     def __exit__(self, exc_type, exc_value, traceback):
         if self.storage_class is not None:
@@ -223,14 +224,19 @@ class TypeResolver(ScopeSelectiveVisitor):
         tree.expect(0, 'nested_when_block')
 
     def if_block(self, tree, scope):
-        tree.scope = Scope(parent=scope)
-        with self.create_scope(tree.scope):
-            self.if_statement(tree.if_statement, tree.scope)
+        self.if_statement(tree.if_statement, scope)
+        scope_joiner = ScopeJoiner()
 
-            self.visit_children(tree.nested_block, scope=tree.scope)
+        with self.create_scope(Scope(parent=scope)) as if_scope:
+            self.visit_children(tree.nested_block, scope=if_scope)
+            scope_joiner.add(if_scope)
 
-            for c in tree.children[2:]:
-                self.visit(c, tree.scope)
+        for c in tree.children[2:]:
+            with self.create_scope(Scope(parent=scope)) as if_scope:
+                self.visit(c, scope=if_scope)
+                scope_joiner.add(if_scope)
+
+        scope_joiner.insert_to(scope)
 
     def if_statement(self, tree, scope):
         """
