@@ -1,0 +1,127 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [
+        "any"
+      ],
+      "function": "build_jira_request_body",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "body",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "any"
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": "4",
+      "src": "function build_jira_request_body body:any returns any",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": []
+        }
+      ],
+      "parent": "1",
+      "src": "    return {}",
+      "next": "4"
+    },
+    "4": {
+      "method": "function",
+      "ln": "4",
+      "output": [
+        "any"
+      ],
+      "function": "create_jira_issue",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "body",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "any"
+          }
+        }
+      ],
+      "enter": "5.1",
+      "src": "function create_jira_issue body:any returns any",
+      "next": "5.1"
+    },
+    "5.1": {
+      "method": "call",
+      "ln": "5.1",
+      "name": [
+        "__p-5.1"
+      ],
+      "function": "build_jira_request_body",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "body",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "body"
+            ]
+          }
+        }
+      ],
+      "parent": "4",
+      "next": "5.2"
+    },
+    "5.2": {
+      "method": "execute",
+      "ln": "5.2",
+      "name": [
+        "__p-5.2"
+      ],
+      "service": "http",
+      "command": "fetch",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "body",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-5.1"
+            ]
+          }
+        }
+      ],
+      "parent": "4",
+      "next": "5"
+    },
+    "5": {
+      "method": "return",
+      "ln": "5",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-5.2"
+          ]
+        }
+      ],
+      "parent": "4",
+      "src": "    return http fetch body: build_jira_request_body(body:body)"
+    }
+  },
+  "services": [
+    "http"
+  ],
+  "entrypoint": "1",
+  "functions": {
+    "build_jira_request_body": "1",
+    "create_jira_issue": "4"
+  }
+}

@@ -79,6 +79,9 @@ class Lowering:
         elif node.data == 'service' and node.child(0).data == 'path':
             entity = node
 
+        for c in node.children:
+            cls.visit(c, block, entity, pred, fun, parent=node)
+
         # create fake lines for base_expressions too, but only when required:
         # 1) `expressions` are already allowed to be nested
         # 2) `assignment_fragments` are ignored to avoid two lines for simple
@@ -89,9 +92,6 @@ class Lowering:
             # replace base_expression too
             fun(node, block, node)
             node.children = [Tree('path', node.children)]
-
-        for c in node.children:
-            cls.visit(c, block, entity, pred, fun, parent=node)
 
         if pred(node):
             assert entity is not None
