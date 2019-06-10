@@ -1,6 +1,0 @@
-Error: syntax error in story at line 4, column 2
-
-4|      c = ""
-        ^^^
-
-E0100: Can't assign `string` to `int`

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 6, column 12
+
+6|    newCount = originalCount + 1
+                 ^^^^^^^^^^^^^
+
+E0101: Variable `originalCount` has not been defined.
