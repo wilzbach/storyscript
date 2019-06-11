@@ -63,7 +63,12 @@ class ReturnVisitor:
                 ret_type = ret_sym.type()
                 obj.expect(ret_sym.can_write(), 'return_type_readonly',
                            source=ret_type)
-                obj.expect(
+                node = obj
+                # obj might not have any tokens, e.g. {}
+                if obj.line() is None:
+                    node = ret
+
+                node.expect(
                     self.return_type.can_be_assigned(ret_type),
                     'return_type_differs',
                     target=self.return_type,
