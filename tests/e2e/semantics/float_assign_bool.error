@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = 1.5 + true
+          ^^^^^^^^^^
+
+E0103: `+` between `float` and `boolean` is not supported.

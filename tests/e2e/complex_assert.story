@@ -1,5 +1,6 @@
 foo = true
-if (foo == true) and foo == (1 + 2)
+bar = 2
+if (foo == true) and bar == (1 + 2)
   log info msg: "true"
 else
   log info msg: "false"

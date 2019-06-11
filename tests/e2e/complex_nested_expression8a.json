@@ -1,0 +1,86 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "and",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "equal",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "sum",
+                  "values": [
+                    {
+                      "$OBJECT": "int",
+                      "int": 1
+                    },
+                    {
+                      "$OBJECT": "int",
+                      "int": 2
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "expression",
+                  "expression": "subtraction",
+                  "values": [
+                    {
+                      "$OBJECT": "int",
+                      "int": 0
+                    },
+                    {
+                      "$OBJECT": "int",
+                      "int": -3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "equal",
+              "values": [
+                {
+                  "$OBJECT": "int",
+                  "int": 2
+                },
+                {
+                  "$OBJECT": "expression",
+                  "expression": "subtraction",
+                  "values": [
+                    {
+                      "$OBJECT": "int",
+                      "int": -4
+                    },
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "sum",
+                      "values": [
+                        {
+                          "$OBJECT": "int",
+                          "int": -5
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": -6
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "(1 + 2) == (0 - -3) and 2 == -4 - (-5 + -6)"
+    }
+  },
+  "entrypoint": "1"
+}

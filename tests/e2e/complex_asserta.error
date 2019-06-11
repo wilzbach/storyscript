@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 22
+
+2|    if (foo == true) and foo == (1 + 2)
+                           ^^^^^^^^^
+
+E0124: Equality comparison not supported between `boolean` and `int`.

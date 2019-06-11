@@ -1,0 +1,112 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "or",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "not",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "less_equal",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "sum",
+                      "values": [
+                        {
+                          "$OBJECT": "expression",
+                          "expression": "subtraction",
+                          "values": [
+                            {
+                              "$OBJECT": "expression",
+                              "expression": "sum",
+                              "values": [
+                                {
+                                  "$OBJECT": "int",
+                                  "int": 0
+                                },
+                                {
+                                  "$OBJECT": "expression",
+                                  "expression": "multiplication",
+                                  "values": [
+                                    {
+                                      "$OBJECT": "int",
+                                      "int": 1
+                                    },
+                                    {
+                                      "$OBJECT": "int",
+                                      "int": 2
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "$OBJECT": "expression",
+                              "expression": "modulus",
+                              "values": [
+                                {
+                                  "$OBJECT": "expression",
+                                  "expression": "division",
+                                  "values": [
+                                    {
+                                      "$OBJECT": "int",
+                                      "int": 3
+                                    },
+                                    {
+                                      "$OBJECT": "int",
+                                      "int": 4
+                                    }
+                                  ]
+                                },
+                                {
+                                  "$OBJECT": "int",
+                                  "int": 5
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "$OBJECT": "expression",
+                          "expression": "exponential",
+                          "values": [
+                            {
+                              "$OBJECT": "int",
+                              "int": 6
+                            },
+                            {
+                              "$OBJECT": "int",
+                              "int": 2
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$OBJECT": "int",
+                      "int": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "boolean",
+              "boolean": true
+            }
+          ]
+        }
+      ],
+      "src": "0 + 1 * 2 - 3 / 4 % 5 + 6 ^ 2 > 7 or true"
+    }
+  },
+  "entrypoint": "1"
+}

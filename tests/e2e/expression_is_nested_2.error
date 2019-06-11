@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = 1 == 2 < 3 or 4 > 0.5+5 == -6 and 7 == 8
+          ^^^^^^^^^^
+
+E0123: `boolean` can't be compared with `int`

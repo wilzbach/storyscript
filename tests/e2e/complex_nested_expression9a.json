@@ -1,0 +1,104 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "foo"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 10
+            },
+            {
+              "$OBJECT": "int",
+              "int": 20
+            }
+          ]
+        }
+      ],
+      "src": "foo = [10, 20]",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "and",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "not",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "less_equal",
+                  "values": [
+                    {
+                      "$OBJECT": "path",
+                      "paths": [
+                        "foo",
+                        {
+                          "$OBJECT": "int",
+                          "int": 0
+                        }
+                      ]
+                    },
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "sum",
+                      "values": [
+                        {
+                          "$OBJECT": "int",
+                          "int": 5
+                        },
+                        {
+                          "$OBJECT": "path",
+                          "paths": [
+                            "foo",
+                            {
+                              "$OBJECT": "int",
+                              "int": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "less",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "foo",
+                    {
+                      "$OBJECT": "int",
+                      "int": 1
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "int",
+                  "int": 0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "foo[0] > 5 + foo[1] and foo[1] < 0"
+    }
+  },
+  "entrypoint": "1"
+}

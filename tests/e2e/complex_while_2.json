@@ -114,16 +114,32 @@
               ]
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "d"
+              "$OBJECT": "expression",
+              "expression": "not",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "less_equal",
+                  "values": [
+                    {
+                      "$OBJECT": "path",
+                      "paths": [
+                        "d"
+                      ]
+                    },
+                    {
+                      "$OBJECT": "int",
+                      "int": 4
+                    }
+                  ]
+                }
               ]
             }
           ]
         }
       ],
       "enter": "7",
-      "src": "while a + b == c or d",
+      "src": "while a + b == c or d > 4",
       "next": "7"
     },
     "7": {

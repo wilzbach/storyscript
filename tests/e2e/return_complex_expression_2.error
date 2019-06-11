@@ -1,0 +1,6 @@
+Error: syntax error in story at line 6, column 9
+
+6|      return a / b + c or d > 2
+               ^^^^^^^^^^^^^^
+
+E0122: `int` can't be converted to `boolean`

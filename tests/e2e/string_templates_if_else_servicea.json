@@ -1,0 +1,425 @@
+{
+  "tree": {
+    "1.5": {
+      "method": "execute",
+      "ln": "1.5",
+      "name": [
+        "__p-1.5"
+      ],
+      "service": "serv1",
+      "command": "inline12",
+      "next": "1.1"
+    },
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "service": "serv1",
+      "command": "inline1",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "arg1",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.5"
+            ]
+          }
+        }
+      ],
+      "next": "1.6"
+    },
+    "1.6": {
+      "method": "execute",
+      "ln": "1.6",
+      "name": [
+        "__p-1.6"
+      ],
+      "service": "serv2",
+      "command": "inline22",
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "execute",
+      "ln": "1.2",
+      "name": [
+        "__p-1.2"
+      ],
+      "service": "serv2",
+      "command": "inline2",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "arg1",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.6"
+            ]
+          }
+        }
+      ],
+      "next": "1.7"
+    },
+    "1.7": {
+      "method": "execute",
+      "ln": "1.7",
+      "name": [
+        "__p-1.7"
+      ],
+      "service": "berv1",
+      "command": "inline12",
+      "next": "1.3"
+    },
+    "1.3": {
+      "method": "execute",
+      "ln": "1.3",
+      "name": [
+        "__p-1.3"
+      ],
+      "service": "berv1",
+      "command": "inline1",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "arg1",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.7"
+            ]
+          }
+        }
+      ],
+      "next": "1.8"
+    },
+    "1.8": {
+      "method": "execute",
+      "ln": "1.8",
+      "name": [
+        "__p-1.8"
+      ],
+      "service": "berv2",
+      "command": "inline22",
+      "next": "1.4"
+    },
+    "1.4": {
+      "method": "execute",
+      "ln": "1.4",
+      "name": [
+        "__p-1.4"
+      ],
+      "service": "berv2",
+      "command": "inline2",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "arg1",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.8"
+            ]
+          }
+        }
+      ],
+      "next": "1.9"
+    },
+    "1.9": {
+      "method": "execute",
+      "ln": "1.9",
+      "name": [
+        "__p-1.9"
+      ],
+      "service": "serv11",
+      "command": "call",
+      "next": "1.10"
+    },
+    "1.10": {
+      "method": "execute",
+      "ln": "1.10",
+      "name": [
+        "__p-1.10"
+      ],
+      "service": "serv1",
+      "command": "call",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "arg1",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.9"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "arg2",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "string"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.1"
+              ]
+            }
+          }
+        }
+      ],
+      "next": "1.11"
+    },
+    "1.11": {
+      "method": "execute",
+      "ln": "1.11",
+      "name": [
+        "__p-1.11"
+      ],
+      "service": "serv22",
+      "command": "call",
+      "next": "1.12"
+    },
+    "1.12": {
+      "method": "execute",
+      "ln": "1.12",
+      "name": [
+        "__p-1.12"
+      ],
+      "service": "serv2",
+      "command": "call",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "arg1",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.11"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "arg2",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "string"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.2"
+              ]
+            }
+          }
+        }
+      ],
+      "next": "1.13"
+    },
+    "1.13": {
+      "method": "execute",
+      "ln": "1.13",
+      "name": [
+        "__p-1.13"
+      ],
+      "service": "berv11",
+      "command": "call",
+      "next": "1.14"
+    },
+    "1.14": {
+      "method": "execute",
+      "ln": "1.14",
+      "name": [
+        "__p-1.14"
+      ],
+      "service": "berv1",
+      "command": "call",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "arg1",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.13"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "arg2",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "string"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.3"
+              ]
+            }
+          }
+        }
+      ],
+      "next": "1.15"
+    },
+    "1.15": {
+      "method": "execute",
+      "ln": "1.15",
+      "name": [
+        "__p-1.15"
+      ],
+      "service": "berv22",
+      "command": "call",
+      "next": "1.16"
+    },
+    "1.16": {
+      "method": "execute",
+      "ln": "1.16",
+      "name": [
+        "__p-1.16"
+      ],
+      "service": "berv2",
+      "command": "call",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "arg1",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-1.15"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "arg2",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "string"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.4"
+              ]
+            }
+          }
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "if",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "equal",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.10"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.12"
+              ]
+            }
+          ]
+        }
+      ],
+      "enter": "2",
+      "exit": "3",
+      "src": "if (serv1 call arg1: (serv11 call) arg2: \"{serv1 inline1 arg1: (serv1 inline12)}\") == (serv2 call arg1: (serv22 call) arg2: \"{serv2 inline2 arg1: (serv2 inline22)}\")",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "x"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "1",
+      "src": "\tx = 0",
+      "next": "3"
+    },
+    "3": {
+      "method": "elif",
+      "ln": "3",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "equal",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.14"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.16"
+              ]
+            }
+          ]
+        }
+      ],
+      "enter": "4",
+      "src": "else if (berv1 call arg1: (berv11 call) arg2: \"{berv1 inline1 arg1: (berv1 inline12)}\") == (berv2 call arg1: (berv22 call) arg2: \"{berv2 inline2 arg1: (berv2 inline22)}\")",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "name": [
+        "x"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "3",
+      "src": "\tx = 1"
+    }
+  },
+  "services": [
+    "berv1",
+    "berv11",
+    "berv2",
+    "berv22",
+    "serv1",
+    "serv11",
+    "serv2",
+    "serv22"
+  ],
+  "entrypoint": "1.5"
+}

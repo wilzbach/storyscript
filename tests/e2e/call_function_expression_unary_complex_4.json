@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "output": [
-        "int"
+        "boolean"
       ],
       "function": "my_function",
       "args": [
@@ -13,13 +13,13 @@
           "name": "k1",
           "arg": {
             "$OBJECT": "type",
-            "type": "int"
+            "type": "boolean"
           }
         }
       ],
       "enter": "2",
       "exit": "4",
-      "src": "function my_function k1:int returns int",
+      "src": "function my_function k1:boolean returns boolean",
       "next": "2"
     },
     "2": {
@@ -27,12 +27,12 @@
       "ln": "2",
       "args": [
         {
-          "$OBJECT": "int",
-          "int": 0
+          "$OBJECT": "boolean",
+          "boolean": true
         }
       ],
       "parent": "1",
-      "src": "\treturn 0",
+      "src": "\treturn true",
       "next": "4"
     },
     "4": {
@@ -78,8 +78,8 @@
                 ]
               },
               {
-                "$OBJECT": "int",
-                "int": 2
+                "$OBJECT": "boolean",
+                "boolean": true
               }
             ]
           }
@@ -101,7 +101,7 @@
           ]
         }
       ],
-      "src": "a = my_function(k1: !b or 2)"
+      "src": "a = my_function(k1: !b or true)"
     }
   },
   "entrypoint": "1",

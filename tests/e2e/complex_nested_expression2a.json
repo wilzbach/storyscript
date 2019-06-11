@@ -1,0 +1,56 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "or",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "and",
+              "values": [
+                {
+                  "$OBJECT": "boolean",
+                  "boolean": true
+                },
+                {
+                  "$OBJECT": "expression",
+                  "expression": "equal",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "sum",
+                      "values": [
+                        {
+                          "$OBJECT": "int",
+                          "int": 1
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": 1
+                        }
+                      ]
+                    },
+                    {
+                      "$OBJECT": "int",
+                      "int": 2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "boolean",
+              "boolean": false
+            }
+          ]
+        }
+      ],
+      "src": "true and 1 + 1 == 2 or false"
+    }
+  },
+  "entrypoint": "1"
+}

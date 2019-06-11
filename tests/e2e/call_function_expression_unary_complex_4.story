@@ -1,5 +1,5 @@
-function my_function k1:int returns int
-	return 0
+function my_function k1:boolean returns boolean
+	return true
 
 b = true
-a = my_function(k1: !b or 2)
+a = my_function(k1: !b or true)

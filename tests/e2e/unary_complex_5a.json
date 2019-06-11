@@ -1,0 +1,145 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "service": "my_service",
+      "command": "command",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "k1",
+          "arg": {
+            "$OBJECT": "expression",
+            "expression": "not",
+            "values": [
+              {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "execute",
+      "ln": "1.2",
+      "name": [
+        "__p-1.2"
+      ],
+      "service": "my_service2",
+      "command": "command",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "k2",
+          "arg": {
+            "$OBJECT": "expression",
+            "expression": "not",
+            "values": [
+              {
+                "$OBJECT": "expression",
+                "expression": "not",
+                "values": [
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "c"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "or",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "not",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "equal",
+                  "values": [
+                    {
+                      "$OBJECT": "type_cast",
+                      "type": {
+                        "$OBJECT": "type",
+                        "type": "int"
+                      },
+                      "value": {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "__p-1.1"
+                        ]
+                      }
+                    },
+                    {
+                      "$OBJECT": "int",
+                      "int": 2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "not",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "equal",
+                  "values": [
+                    {
+                      "$OBJECT": "type_cast",
+                      "type": {
+                        "$OBJECT": "type",
+                        "type": "int"
+                      },
+                      "value": {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "__p-1.2"
+                        ]
+                      }
+                    },
+                    {
+                      "$OBJECT": "int",
+                      "int": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "a = ! ((my_service command k1: !b) == 2) or !((my_service2 command k2: ! !c) == 3)"
+    }
+  },
+  "services": [
+    "my_service",
+    "my_service2"
+  ],
+  "entrypoint": "1.1"
+}

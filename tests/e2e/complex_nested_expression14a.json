@@ -1,0 +1,75 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "a"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "src": "d = {'a': 2}",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "int"
+              },
+              "value": {
+                "$OBJECT": "expression",
+                "expression": "equal",
+                "values": [
+                  {
+                    "$OBJECT": "int",
+                    "int": 0
+                  },
+                  {
+                    "$OBJECT": "int",
+                    "int": 1
+                  }
+                ]
+              }
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d",
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "(0 == 1) as int + (d['a'])"
+    }
+  },
+  "entrypoint": "1"
+}

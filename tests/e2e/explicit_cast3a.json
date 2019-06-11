@@ -1,0 +1,82 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "arr"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            }
+          ]
+        }
+      ],
+      "src": "arr = [1, 2]",
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "arr"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "length",
+          "args": []
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "not",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "less_equal",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "__p-2.1"
+                  ]
+                },
+                {
+                  "$OBJECT": "int",
+                  "int": 4
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "a = arr.length() > 4"
+    }
+  },
+  "entrypoint": "1"
+}

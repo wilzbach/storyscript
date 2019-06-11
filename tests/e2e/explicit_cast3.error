@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = [1, 2] as boolean
+          ^^^^^^^^^^^^^^^^^
+
+E0126: Type casting not supported from `List[int]` to `boolean`.

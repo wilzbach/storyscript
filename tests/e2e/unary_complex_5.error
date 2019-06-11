@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = ! (my_service command k1: !b) or !(my_service2 command k2: ! !c)
+          ^
+
+E0122: `any` can't be converted to `boolean`

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 1
+
+2|    foo[0] > 5 + foo[1] and foo[1]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+E0122: `int` can't be converted to `boolean`

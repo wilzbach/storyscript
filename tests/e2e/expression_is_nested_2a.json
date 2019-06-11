@@ -1,0 +1,126 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "or",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "less",
+              "values": [
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "int"
+                  },
+                  "value": {
+                    "$OBJECT": "expression",
+                    "expression": "equal",
+                    "values": [
+                      {
+                        "$OBJECT": "int",
+                        "int": 1
+                      },
+                      {
+                        "$OBJECT": "int",
+                        "int": 2
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$OBJECT": "int",
+                  "int": 3
+                }
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "and",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "equal",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "not",
+                      "values": [
+                        {
+                          "$OBJECT": "expression",
+                          "expression": "less_equal",
+                          "values": [
+                            {
+                              "$OBJECT": "type_cast",
+                              "type": {
+                                "$OBJECT": "type",
+                                "type": "float"
+                              },
+                              "value": {
+                                "$OBJECT": "int",
+                                "int": 4
+                              }
+                            },
+                            {
+                              "$OBJECT": "expression",
+                              "expression": "sum",
+                              "values": [
+                                {
+                                  "$OBJECT": "float",
+                                  "float": 0.5
+                                },
+                                {
+                                  "$OBJECT": "type_cast",
+                                  "type": {
+                                    "$OBJECT": "type",
+                                    "type": "float"
+                                  },
+                                  "value": {
+                                    "$OBJECT": "int",
+                                    "int": 5
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$OBJECT": "boolean",
+                      "boolean": true
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "expression",
+                  "expression": "equal",
+                  "values": [
+                    {
+                      "$OBJECT": "int",
+                      "int": 7
+                    },
+                    {
+                      "$OBJECT": "int",
+                      "int": 8
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "a = (1 == 2) as int < 3 or 4 > 0.5+5 == true and 7 == 8"
+    }
+  },
+  "entrypoint": "1"
+}
