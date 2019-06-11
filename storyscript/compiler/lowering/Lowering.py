@@ -686,7 +686,7 @@ class Lowering:
 
     def visit_function_dot(self, node, block):
         """
-        Visit function call with more than one path anme and lower
+        Visit function call with more than one path and lower
         them into mutations.
         """
         if not hasattr(node, 'children') or len(node.children) == 0:
@@ -712,6 +712,38 @@ class Lowering:
         for c in node.children:
             self.visit_function_dot(c, block)
 
+    def visit_dot_expression(self, node, block, parent):
+        """
+        Visit dot expression and lower them into mutation fragments.
+        """
+        if not hasattr(node, 'children') or len(node.children) == 0:
+            return
+
+        if node.data == 'block':
+            # only generate a fake_block once for every line
+            # node: block in which the fake assignments should be inserted
+            block = self.fake_tree(node)
+
+        if node.data == 'dot_expression':
+            dot_expr = node
+            expression = Tree('mutation', [
+                parent.primary_expression,
+                Tree('mutation_fragment', [
+                    dot_expr.child(0),  # name
+                    dot_expr.arguments
+                ])
+            ])
+            path = block.add_assignment(expression,
+                                        original_line=parent.line())
+            parent.children = [Tree('primary_expression', [
+                Tree('entity', [
+                    path
+                ])
+            ])]
+
+        for c in node.children:
+            self.visit_dot_expression(c, block, parent=node)
+
     def process(self, tree):
         """
         Applies several preprocessing steps to the existing AST.
@@ -725,6 +757,7 @@ class Lowering:
         self.visit_string_templates(tree, block=None, parent=None,
                                     cmp_expr=None)
         self.visit_function_dot(tree, block=None)
+        self.visit_dot_expression(tree, block=None, parent=None)
         self.visit(tree, None, None, pred,
                    self.replace_expression, parent=None)
         return tree
