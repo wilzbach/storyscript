@@ -1,0 +1,108 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "text"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": ""
+        }
+      ],
+      "src": "text = \"\"",
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "text"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "split",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "by",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "whitelist "
+              }
+            }
+          ]
+        }
+      ],
+      "next": "2.2"
+    },
+    "2.2": {
+      "method": "mutation",
+      "ln": "2.2",
+      "name": [
+        "__p-2.2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1",
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "replace",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "string",
+                "string": " "
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "by",
+              "arg": {
+                "$OBJECT": "string",
+                "string": ""
+              }
+            }
+          ]
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "username"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.2"
+          ]
+        }
+      ],
+      "src": "username = text.split(by: \"whitelist \")[1].replace(item: \" \" by: \"\")"
+    }
+  },
+  "entrypoint": "1"
+}
