@@ -82,6 +82,21 @@ class Transformer(LarkTransformer):
                 yield el
 
     @classmethod
+    def add_arguments(cls, args_block, base_match, init_args=None):
+        if init_args is None:
+            args = []
+        else:
+            args = init_args
+        args.extend(cls.filter_nested_block(
+            args_block,
+            ['rules', 'block', 'arguments']
+        ))
+        if len(args) > 0:
+            for arg in args:
+                base_match.service_fragment.children.append(arg)
+            return Tree('service_block', [base_match])
+
+    @classmethod
     def service_block(cls, matches):
         """
         Transforms service blocks, moving indented arguments back to the first
@@ -90,15 +105,18 @@ class Transformer(LarkTransformer):
         if len(matches) == 1:
             return Tree('service_block', matches)
 
-        if matches[1].block.rules:
-            args = [*cls.filter_nested_block(
-                matches[1],
-                ['rules', 'block', 'arguments']
-            )]
-            if len(args) > 0:
-                for arg in args:
-                    matches[0].service_fragment.children.append(arg)
-                return Tree('service_block', [matches[0]])
+        if matches[1].block.arguments:
+            args = cls.add_arguments(args_block=matches[1],
+                                     base_match=matches[0],
+                                     init_args=[matches[1].block.arguments])
+        elif matches[1].block.rules:
+            args = cls.add_arguments(args_block=matches[1],
+                                     base_match=matches[0])
+        else:
+            args = None
+
+        if args is not None:
+            return args
 
         return Tree('service_block', matches)
 

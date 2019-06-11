@@ -87,6 +87,7 @@ def test_transformer_service_block_when(patch, tree):
     Ensures service_block nodes with a when block are transformed correctly
     """
     tree.block.rules = None
+    tree.block.arguments = None
     matches = ['service_block', tree]
     result = Transformer.service_block(matches)
     assert result == Tree('service_block', matches)

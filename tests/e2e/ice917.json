@@ -1,0 +1,91 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "output": [
+        "any"
+      ],
+      "function": "foo",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "body",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "any"
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": "4",
+      "src": "function foo body:any returns any",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": []
+        }
+      ],
+      "parent": "1",
+      "src": "    return {}",
+      "next": "4"
+    },
+    "4": {
+      "method": "function",
+      "ln": "4",
+      "function": "bar",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "body",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "any"
+          }
+        }
+      ],
+      "enter": "5",
+      "src": "function bar body: any",
+      "next": "5"
+    },
+    "5": {
+      "method": "execute",
+      "ln": "5",
+      "service": "http",
+      "command": "fetch",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "headers",
+          "arg": {
+            "$OBJECT": "dict",
+            "items": []
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "body",
+          "arg": {
+            "$OBJECT": "string",
+            "string": ""
+          }
+        }
+      ],
+      "parent": "4",
+      "src": "    http fetch"
+    }
+  },
+  "services": [
+    "http"
+  ],
+  "entrypoint": "1",
+  "functions": {
+    "foo": "1",
+    "bar": "4"
+  }
+}
