@@ -1,0 +1,90 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
+      ],
+      "src": "a = true",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "arr"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            }
+          ]
+        }
+      ],
+      "src": "arr = [1, 2]",
+      "next": "3.1"
+    },
+    "3.1": {
+      "method": "mutation",
+      "ln": "3.1",
+      "name": [
+        "__p-3.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "arr"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "contains",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            }
+          ]
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-3.1"
+          ]
+        }
+      ],
+      "src": "a = arr.contains(item: 1)"
+    }
+  },
+  "entrypoint": "1"
+}

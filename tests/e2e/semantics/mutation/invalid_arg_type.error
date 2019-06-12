@@ -3,4 +3,4 @@ Error: syntax error in story at line 2, column 1
 2|    a = "foo"
       ^^^
 
-E0100: Can't assign `string` to `int`
+E0100: Can't assign `string` to `boolean`
