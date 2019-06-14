@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1
+
+1|    if (serv1 call arg1: (serv11 call) arg2: "{serv1 inline1 arg1: (serv1 inline12)}") or (serv2 call arg1: (serv22 call) arg2: "{serv2 inline2 arg1: (serv2 inline22)}")
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+E0122: `any` can't be converted to `boolean`

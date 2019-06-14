@@ -1,0 +1,93 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "or",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "not",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "not",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "less_equal",
+                      "values": [
+                        {
+                          "$OBJECT": "int",
+                          "int": -2
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "and",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "not",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "equal",
+                      "values": [
+                        {
+                          "$OBJECT": "int",
+                          "int": -3
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": 0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "expression",
+                  "expression": "not",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "less",
+                      "values": [
+                        {
+                          "$OBJECT": "int",
+                          "int": -4
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "a = !(-2 > 0) or ! (-3 == 0) and !(-4 < 0)"
+    }
+  },
+  "entrypoint": "1"
+}

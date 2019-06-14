@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 5
+
+3|    a = [b == 2, true] <= ! (t == t)
+          ^^^^^^^^^^^^^^^^^^^
+
+E0123: `List[boolean]` can't be compared with `boolean`

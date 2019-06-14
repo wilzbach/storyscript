@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 5
+
+3|    a = b and !c
+          ^^^^^^^
+
+E0122: `int` can't be converted to `boolean`

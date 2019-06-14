@@ -24,8 +24,6 @@ class Objects:
             if isinstance(child, Tree):
                 if child.data == 'string':
                     value = self.string(child)
-                elif child.data == 'boolean':
-                    value = self.boolean(child)
                 elif child.data == 'range':
                     value = self.range(child)
                 elif child.data == 'number':

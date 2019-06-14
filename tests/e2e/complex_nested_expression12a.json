@@ -1,0 +1,103 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "and",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "equal",
+              "values": [
+                {
+                  "$OBJECT": "int",
+                  "int": 1
+                },
+                {
+                  "$OBJECT": "int",
+                  "int": 2
+                }
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "equal",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "sum",
+                  "values": [
+                    {
+                      "$OBJECT": "int",
+                      "int": 3
+                    },
+                    {
+                      "$OBJECT": "int",
+                      "int": 4
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "expression",
+                  "expression": "subtraction",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "sum",
+                      "values": [
+                        {
+                          "$OBJECT": "type_cast",
+                          "type": {
+                            "$OBJECT": "type",
+                            "type": "int"
+                          },
+                          "value": {
+                            "$OBJECT": "expression",
+                            "expression": "less",
+                            "values": [
+                              {
+                                "$OBJECT": "int",
+                                "int": 2
+                              },
+                              {
+                                "$OBJECT": "int",
+                                "int": 5
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": 6
+                        }
+                      ]
+                    },
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "multiplication",
+                      "values": [
+                        {
+                          "$OBJECT": "int",
+                          "int": 7
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": 8
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "1 == 2 and 3 + 4 == (2 < 5) as int + 6 - 7 * 8"
+    }
+  },
+  "entrypoint": "1"
+}

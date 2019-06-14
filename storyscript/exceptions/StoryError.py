@@ -71,7 +71,8 @@ class StoryError(SyntaxError):
         """
         if self.error.column != 'None':
             end_column = int(self.error.column) + 1
-            if hasattr(self.error, 'end_column'):
+            if hasattr(self.error, 'end_column') and \
+                    self.error.end_column != 'None':
                 end_column = int(self.error.end_column)
             start_column = int(self.error.column)
         else:

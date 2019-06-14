@@ -188,10 +188,6 @@ class BooleanType(BaseType):
         s = super().implicit_to(other)
         if s is not None:
             return s
-        if other == IntType.instance():
-            return other
-        if other == FloatType.instance():
-            return other
         return None
 
     def explicit_from(self, other):
@@ -267,7 +263,7 @@ class IntType(BaseType):
         return IntType()
 
     def has_boolean(self):
-        return True
+        return False
 
     def implicit_to(self, other):
         s = super().implicit_to(other)
@@ -311,7 +307,7 @@ class FloatType(BaseType):
         return FloatType()
 
     def has_boolean(self):
-        return True
+        return False
 
     def explicit_from(self, other):
         if other == self:
@@ -357,7 +353,7 @@ class StringType(BaseType):
         return StringType()
 
     def has_boolean(self):
-        return True
+        return False
 
     def explicit_from(self, other):
         if other != NoneType.instance():
@@ -388,7 +384,7 @@ class TimeType(BaseType):
         return TimeType()
 
     def has_boolean(self):
-        return True
+        return False
 
     def explicit_from(self, other):
         if other == self:
@@ -501,7 +497,7 @@ class ListType(BaseType):
         return IntType.instance(), self.inner
 
     def has_boolean(self):
-        return True
+        return False
 
     def cmp(self, other):
         return None
@@ -566,7 +562,7 @@ class MapType(BaseType):
         return self.key, self.value
 
     def has_boolean(self):
-        return True
+        return False
 
     def cmp(self, other):
         return None
@@ -605,7 +601,7 @@ class ObjectType(BaseType):
         return None
 
     def has_boolean(self):
-        return True
+        return False
 
     def cmp(self, other):
         return None
@@ -657,7 +653,7 @@ class AnyType(BaseType):
         return AnyType.instance(), AnyType.instance()
 
     def has_boolean(self):
-        return True
+        return False
 
     def cmp(self, other):
         if self == other:

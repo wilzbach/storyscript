@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    b = 1 and (["opened", "labeled"] contains item: "a")
+          ^
+
+E0122: `int` can't be converted to `boolean`

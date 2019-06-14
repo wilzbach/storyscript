@@ -1,0 +1,92 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "or",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "or",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "and",
+                  "values": [
+                    {
+                      "$OBJECT": "boolean",
+                      "boolean": true
+                    },
+                    {
+                      "$OBJECT": "boolean",
+                      "boolean": false
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "expression",
+                  "expression": "and",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "not",
+                      "values": [
+                        {
+                          "$OBJECT": "expression",
+                          "expression": "less_equal",
+                          "values": [
+                            {
+                              "$OBJECT": "int",
+                              "int": 3
+                            },
+                            {
+                              "$OBJECT": "int",
+                              "int": 4
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "equal",
+                      "values": [
+                        {
+                          "$OBJECT": "int",
+                          "int": 4
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": 5
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "less",
+              "values": [
+                {
+                  "$OBJECT": "int",
+                  "int": 5
+                },
+                {
+                  "$OBJECT": "int",
+                  "int": 6
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "true and false or 3 > 4 and 4 == 5 or 5 < 6"
+    }
+  },
+  "entrypoint": "1"
+}

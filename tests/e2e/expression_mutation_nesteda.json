@@ -1,0 +1,68 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "mutation",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "string",
+              "string": "opened"
+            },
+            {
+              "$OBJECT": "string",
+              "string": "labeled"
+            }
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "contains",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "a"
+              }
+            }
+          ]
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "and",
+          "values": [
+            {
+              "$OBJECT": "boolean",
+              "boolean": true
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.1"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "b = true and ([\"opened\", \"labeled\"] contains item: \"a\")"
+    }
+  },
+  "entrypoint": "1.1"
+}

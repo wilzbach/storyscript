@@ -1,0 +1,105 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "or",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "equal",
+              "values": [
+                {
+                  "$OBJECT": "expression",
+                  "expression": "equal",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "sum",
+                      "values": [
+                        {
+                          "$OBJECT": "int",
+                          "int": 1
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": 2
+                        }
+                      ]
+                    },
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "division",
+                      "values": [
+                        {
+                          "$OBJECT": "int",
+                          "int": 3
+                        },
+                        {
+                          "$OBJECT": "int",
+                          "int": 4
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$OBJECT": "expression",
+                  "expression": "not",
+                  "values": [
+                    {
+                      "$OBJECT": "expression",
+                      "expression": "equal",
+                      "values": [
+                        {
+                          "$OBJECT": "expression",
+                          "expression": "multiplication",
+                          "values": [
+                            {
+                              "$OBJECT": "int",
+                              "int": 5
+                            },
+                            {
+                              "$OBJECT": "int",
+                              "int": 6
+                            }
+                          ]
+                        },
+                        {
+                          "$OBJECT": "expression",
+                          "expression": "modulus",
+                          "values": [
+                            {
+                              "$OBJECT": "int",
+                              "int": 7
+                            },
+                            {
+                              "$OBJECT": "int",
+                              "int": 8
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "boolean",
+              "boolean": false
+            }
+          ]
+        }
+      ],
+      "src": "a = 1 + 2 == 3/4 == (5*6 != 7%8) or false"
+    }
+  },
+  "entrypoint": "1"
+}

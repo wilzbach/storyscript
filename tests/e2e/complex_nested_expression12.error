@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 1
+
+1|    1 == 2 != 3 < 4 == 5 + 6 - 7 * 8 > 9 <= 10
+      ^^^^^^^^^^^
+
+E0124: Equality comparison not supported between `boolean` and `int`.

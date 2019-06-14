@@ -1,0 +1,79 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "src": "b = 1",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
+      ],
+      "src": "c = true",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "and",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "equal",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "b"
+                  ]
+                },
+                {
+                  "$OBJECT": "int",
+                  "int": 2
+                }
+              ]
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "not",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "c"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "a = b == 2 and !c"
+    }
+  },
+  "entrypoint": "1"
+}

@@ -3,4 +3,4 @@ function name key:int returns int
 	b = 0
 	c = 0
 	d = 0
-	return a / b + c or d
+	return a / b + c or d > 2

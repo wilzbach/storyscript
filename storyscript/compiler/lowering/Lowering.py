@@ -287,7 +287,7 @@ class Lowering:
 
     def concat_string_templates(self, fake_tree, orig_node, string_objs):
         """
-        Concatenes the to-be-inserted string templates.
+        Concatenates the to-be-inserted string templates.
         For example, a string template like "a{exp}b" gets flatten to:
             "a" + fake_path_to_exp as string + "b"
 
