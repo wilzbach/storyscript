@@ -16,16 +16,16 @@ Designed with :heart: by [Storyscript](https://storyscript.io) on a mission to b
 
 ```coffee
 # Applications are stories of data.
-when http server listen path: '/' as request     # Serverless
+when http server listen path: "/" as request     # Serverless
     result = anyMicroservice action key: value   # Written in any language wrapped in Docker or RKT
     result = anyFunction(key: value)             # Lambda, OpenFaaS, KNative or Storyscript
-    items = 'string' split by: ','               # Mutations == No middleware
+    items = "string".split(by: ",")              # Builtins == No middleware
     data = OpenAPI get users: users              # OpenAPI & AsyncAPI for legacy system support
-    sent = machinebox/textbox process input:data # Free/Paid Serivces
+    sent = machinebox/textbox process input:data # Free/Paid Services
     if sent.positive                             # Conditions
         foreach list as item                     # Turing complete
             # ...
-    request write content: 'Hello World!'
+    request write content: "Hello World!"
 
 # Next launch on the Storyscript Platform
 $ story deploy  # Zero-devop deployments into Kubernetes
@@ -34,6 +34,15 @@ $ story deploy  # Zero-devop deployments into Kubernetes
 💯Open Source for a delicious application development. :sparkles::cake::sparkles:
 
 > 🚀Choose: hosted **Storyscript Cloud** or `helm install story` for on-premises deployments.
+
+## Using Storyscript
+
+If you are interested in using Storyscript, please see the [Quick Start guide](https://docs.storyscript.io/cloud/quick-start/).
+
+## Editor plugins
+
+- [VSCode](https://asyncy.click/vscode)
+- [Atom](https://github.com/storyscript/atom)
 
 ## Installation
 
@@ -48,7 +57,7 @@ pip install storyscript
 Write a simple story:
 
 ```sh
-echo "alpine echo text:'hello world!'" > hello.story
+echo 'my-service message text:"hello world!"' > hello.story
 ```
 
 Compile a story to JSON:
@@ -56,11 +65,6 @@ Compile a story to JSON:
 ```sh
 storyscript compile -j hello.story
 ```
-
-## Editor plugins
-
-- [VSCode](https://asyncy.click/vscode)
-- [Atom](https://github.com/storyscript/atom)
 
 ## Development documentation
 
