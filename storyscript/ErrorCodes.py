@@ -203,6 +203,10 @@ class ErrorCodes:
         'E0129',
         'Single quotes are not allowed.'
     )
+    if_expression_boolean = (
+        'E0130',
+        'If expression must evaluate to a `boolean`, but is `{type}`'
+    )
 
     @staticmethod
     def is_error(error_name):
