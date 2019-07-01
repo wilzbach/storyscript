@@ -8,22 +8,11 @@
       ],
       "args": [
         {
-          "$OBJECT": "dict",
-          "items": [
-            [
-              {
-                "$OBJECT": "string",
-                "string": "text"
-              },
-              {
-                "$OBJECT": "string",
-                "string": "foo"
-              }
-            ]
-          ]
+          "$OBJECT": "string",
+          "string": "foo"
         }
       ],
-      "src": "message = {\"text\": \"foo\"}",
+      "src": "message = \"foo\"",
       "next": "2.1"
     },
     "2.1": {
@@ -36,11 +25,28 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "message",
-            {
-              "$OBJECT": "string",
-              "string": "text"
-            }
+            "message"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "trim",
+          "args": []
+        }
+      ],
+      "next": "2.2"
+    },
+    "2.2": {
+      "method": "mutation",
+      "ln": "2.2",
+      "name": [
+        "__p-2.2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
           ]
         },
         {
@@ -70,11 +76,11 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "__p-2.1"
+            "__p-2.2"
           ]
         }
       ],
-      "src": "username = (message[\"text\"]).split(by: \"whitelist \")"
+      "src": "username = message.trim().split(by: \"whitelist \")"
     }
   },
   "entrypoint": "1"

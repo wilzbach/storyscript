@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from storyscript.compiler.semantics.types.Indexing import IndexKind
 from storyscript.compiler.semantics.types.Types import BaseType
 
 
@@ -47,24 +48,30 @@ class Symbol:
     def is_internal(self):
         return self._name.startswith('__p-')
 
-    def index(self, paths, tree):
+    def index(self, tree, name, type_, kind):
         """
         Runs index operations on a resolved symbol.
         """
         symbol = self
-        for p in paths:
-            if isinstance(p, Symbol):
-                p = p.type()
-            else:
-                assert isinstance(p, BaseType)
-            new_type = symbol.type().index(p)
+        if isinstance(type_, Symbol):
+            type_ = type_.type()
+        else:
+            assert isinstance(type_, BaseType)
+        new_type = symbol.type().index(type_, kind)
+        if kind == IndexKind.DOT:
+            tree.expect(new_type is not None,
+                        'type_dot_incompatible',
+                        left=symbol.type(),
+                        name=name,
+                        right=type_)
+        else:
             tree.expect(new_type is not None,
                         'type_index_incompatible',
                         left=symbol.type(),
-                        right=p)
-            symbol = Symbol(name=symbol.name() + '[]', type_=new_type,
-                            storage_class=self._storage_class)
-        return symbol
+                        name=name,
+                        right=type_)
+        return Symbol(name=symbol.name() + '[]', type_=new_type,
+                      storage_class=self._storage_class)
 
     def can_write(self):
         return self._storage_class == StorageClass.write

@@ -1,2 +1,2 @@
 a = my_service call
-a.b = 100
+b = "foo{a.b}"
