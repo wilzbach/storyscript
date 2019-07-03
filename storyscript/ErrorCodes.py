@@ -199,6 +199,10 @@ class ErrorCodes:
         'E0128',
         '`{source}` is readonly and can not be returned.'
     )
+    single_quotes = (
+        'E0129',
+        'Single quotes are not allowed.'
+    )
 
     @staticmethod
     def is_error(error_name):
