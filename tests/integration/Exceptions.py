@@ -123,13 +123,3 @@ def test_exceptions_block_expected_after(capsys):
     assert lines[0] == 'Error: syntax error in story at line 2, column 1'
     assert lines[2] == '2|    a = 2'
     assert lines[5] == 'E0046: An indented block is required to be before here'
-
-
-def test_exceptions_single_quotes(capsys):
-    with raises(StoryError) as e:
-        run_story("s = 'string'")
-    e.value.with_color = False
-    lines = e.value.message().splitlines()
-    assert lines[0] == 'Error: syntax error in story at line 1, column 5'
-    assert lines[2] == "1|    s = 'string'"
-    assert lines[5] == 'E0129: Single quotes are not allowed.'
