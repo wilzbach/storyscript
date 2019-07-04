@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from storyscript.compiler.semantics.types.Types import NoneType, ObjectType
+from storyscript.compiler.semantics.types.Types import BooleanType, \
+    NoneType, ObjectType
 from storyscript.parser import Tree
 
 from .ExpressionResolver import ExpressionResolver
@@ -242,13 +243,17 @@ class TypeResolver(ScopeSelectiveVisitor):
         """
         If blocks don't create a new scope.
         """
-        self.resolver.base_expression(tree.base_expression)
+        self.ensure_boolean_expression
+        self.ensure_boolean_expression(tree, tree.base_expression)
 
     def elseif_block(self, tree, scope):
         """
         Else if blocks don't create a new scope.
         """
-        self.resolver.base_expression(tree.elseif_statement.base_expression)
+        self.ensure_boolean_expression(
+            tree,
+            tree.elseif_statement.base_expression,
+        )
         self.visit_children(tree.nested_block, scope=scope)
 
     def else_block(self, tree, scope):
@@ -256,6 +261,14 @@ class TypeResolver(ScopeSelectiveVisitor):
         Else blocks don't create a new scope.
         """
         self.visit_children(tree.nested_block, scope=scope)
+
+    def ensure_boolean_expression(self, tree, expr):
+        """
+        Ensures that the expression resolves to a boolean.
+        """
+        t = self.resolver.base_expression(expr).type()
+        expr.expect(t == BooleanType.instance(),
+                    'if_expression_boolean', type=t)
 
     def try_block(self, tree, scope):
         tree.scope = Scope(parent=scope)
