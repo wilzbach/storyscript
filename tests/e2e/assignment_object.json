@@ -1,18 +1,14 @@
 {
   "tree": {
     "1": {
-      "method": "expression",
+      "method": "execute",
       "ln": "1",
       "name": [
         "a"
       ],
-      "args": [
-        {
-          "$OBJECT": "dict",
-          "items": []
-        }
-      ],
-      "src": "a = {}",
+      "service": "my_service",
+      "command": "call",
+      "src": "a = my_service call",
       "next": "2"
     },
     "2": {
@@ -34,5 +30,8 @@
       "src": "a.b = \"bar\""
     }
   },
+  "services": [
+    "my_service"
+  ],
   "entrypoint": "1"
 }

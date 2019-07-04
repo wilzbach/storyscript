@@ -1,18 +1,14 @@
 {
   "tree": {
     "1": {
-      "method": "expression",
+      "method": "execute",
       "ln": "1",
       "name": [
         "a"
       ],
-      "args": [
-        {
-          "$OBJECT": "dict",
-          "items": []
-        }
-      ],
-      "src": "a = {}",
+      "service": "my_service",
+      "command": "call",
+      "src": "a = my_service call",
       "next": "2.1"
     },
     "2.1": {
@@ -27,8 +23,8 @@
           "paths": [
             "a",
             {
-              "$OBJECT": "string",
-              "string": "long"
+              "$OBJECT": "dot",
+              "dot": "b"
             }
           ]
         }
@@ -66,8 +62,11 @@
           ]
         }
       ],
-      "src": "b = \"foo{a[\\\"long\\\"]}\""
+      "src": "b = \"foo{a.b}\""
     }
   },
+  "services": [
+    "my_service"
+  ],
   "entrypoint": "1"
 }
