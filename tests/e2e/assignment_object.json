@@ -31,7 +31,7 @@
           "string": "bar"
         }
       ],
-      "src": "a.b = 'bar'"
+      "src": "a.b = \"bar\""
     }
   },
   "entrypoint": "1"
