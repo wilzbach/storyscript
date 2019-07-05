@@ -156,8 +156,12 @@ class Grammar:
                                      'mul_expression'
         self.ebnf.cmp_expression = '(cmp_expression cmp_operator)? ' \
                                    'arith_expression'
-        self.ebnf.and_expression = '(and_expression AND)? cmp_expression'
-        self.ebnf.or_expression = '(or_expression OR)? and_expression'
+        self.ebnf.and_operator = 'AND'
+        self.ebnf.and_expression = '(and_expression and_operator)? ' \
+                                   'cmp_expression'
+        self.ebnf.or_operator = 'OR'
+        self.ebnf.or_expression = '(or_expression or_operator)? ' \
+                                  'and_expression'
 
         self.ebnf.expression = 'or_expression'
         self.ebnf.absolute_expression = 'expression'

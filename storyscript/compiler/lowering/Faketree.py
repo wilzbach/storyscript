@@ -121,7 +121,8 @@ class FakeTree:
             *self.block.children[insert_pos:],
         ]
 
-        # we need a new node, s.t. already inserted fake node don't get changed
+        # we need a new node, s.t. already inserted
+        # fake nodes don't get changed
         name = Token('NAME', assignment.path.child(0), line=original_line)
         fake_path = Tree('path', [name])
         return fake_path

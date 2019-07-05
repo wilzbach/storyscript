@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3
+
+3|    d = "{b}" + "{a * 2}" / (foo_service call arg1: "^{another_service call}$")
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+E0103: `/` between `string` and `any` is not supported.

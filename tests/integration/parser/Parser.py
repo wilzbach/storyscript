@@ -22,17 +22,14 @@ def get_entity(obj):
     """
     Returns the entity for an expression
     """
-    if obj.mul_expression is not None:
-        obj = obj.mul_expression
-    return obj.unary_expression.pow_expression.primary_expression.entity
+    return obj.entity
 
 
 def arith_exp(exp):
     """
     Returns the binary expression for an expression
     """
-    return exp.expression.or_expression.and_expression.cmp_expression. \
-        arith_expression
+    return exp.expression
 
 
 def test_parser_sum():
@@ -267,5 +264,5 @@ def test_parser_string_double_quoted():
     result = result.block.rules.assignment.assignment_fragment
     result = result.base_expression
     ar_exp = arith_exp(result)
-    lhs = get_entity(ar_exp.child(0)).values.string.child(0)
+    lhs = get_entity(ar_exp).values.string.child(0)
     assert lhs == r'"b\n.\\.\".c"'

@@ -219,10 +219,7 @@ class Transformer(LarkTransformer):
         """
         if len(matches) == 1:
             path = matches[0].follow_node_chain([
-                'expression', 'or_expression', 'and_expression',
-                'cmp_expression', 'arith_expression', 'mul_expression',
-                'unary_expression', 'pow_expression', 'primary_expression',
-                'entity', 'path'
+                'expression', 'entity', 'path'
             ])
             if path is not None:
                 service_fragment = Tree('service_fragment', [])
@@ -295,14 +292,61 @@ class Transformer(LarkTransformer):
         assert tree.data == 'arguments'
         if len(tree.children) == 1:
             path = tree.child(0).follow_node_chain([
-                'expression', 'or_expression', 'and_expression',
-                'cmp_expression', 'arith_expression', 'mul_expression',
-                'unary_expression', 'pow_expression', 'primary_expression',
-                'entity', 'path'
+                'expression', 'entity', 'path'
             ])
             if path is not None:
                 # shorthand syntax for arguments (:name)
                 tree.children = [path.child(0), tree.children[0]]
+
+    @classmethod
+    def expression_rewrite(cls, expr, matches):
+        if len(matches) == 1:
+            return matches[0]
+        else:
+            t = Tree('expression', matches)
+            t.kind = expr
+            return t
+
+    @classmethod
+    def expression(cls, matches):
+        return cls.expression_rewrite('expression', matches)
+
+    @classmethod
+    def or_expression(cls, matches):
+        return cls.expression_rewrite('or_expression', matches)
+
+    @classmethod
+    def and_expression(cls, matches):
+        return cls.expression_rewrite('and_expression', matches)
+
+    @classmethod
+    def cmp_expression(cls, matches):
+        return cls.expression_rewrite('cmp_expression', matches)
+
+    @classmethod
+    def arith_expression(cls, matches):
+        return cls.expression_rewrite('arith_expression', matches)
+
+    @classmethod
+    def mul_expression(cls, matches):
+        return cls.expression_rewrite('mul_expression', matches)
+
+    @classmethod
+    def unary_expression(cls, matches):
+        return cls.expression_rewrite('unary_expression', matches)
+
+    @classmethod
+    def pow_expression(cls, matches):
+        return cls.expression_rewrite('pow_expression', matches)
+
+    @classmethod
+    def primary_expression(cls, matches):
+        if len(matches) == 1 and matches[0].data == 'entity':
+            # leave the separate expression only for leaf entities
+            t = Tree('expression', matches)
+            t.kind = 'primary_expression'
+            return t
+        return cls.expression_rewrite('primary_expression', matches)
 
     def __getattr__(self, attribute, *args):
         return lambda matches: Tree(attribute, matches)

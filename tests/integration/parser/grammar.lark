@@ -36,8 +36,10 @@ unary_expression: unary_operator unary_expression | pow_expression
 mul_expression: (mul_expression mul_operator)? unary_expression
 arith_expression: (arith_expression arith_operator)? mul_expression
 cmp_expression: (cmp_expression cmp_operator)? arith_expression
-and_expression: (and_expression AND)? cmp_expression
-or_expression: (or_expression OR)? and_expression
+and_operator: AND
+and_expression: (and_expression and_operator)? cmp_expression
+or_operator: OR
+or_expression: (or_expression or_operator)? and_expression
 expression: or_expression
 absolute_expression: expression
 base_expression: (expression| inline_service| mutation)

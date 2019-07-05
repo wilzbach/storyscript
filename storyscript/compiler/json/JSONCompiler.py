@@ -291,9 +291,9 @@ class JSONCompiler:
             ]
             args = args + self.chained_mutations(tree)
         else:
-            expr = tree.mutation.primary_expression
+            expr = tree.mutation.expression
             args = [
-                self.objects.primary_expression(expr),
+                self.objects.expression(expr),
                 self.objects.mutation_fragment(tree.mutation.mutation_fragment)
             ]
             args = args + self.chained_mutations(tree.mutation)
