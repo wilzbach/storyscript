@@ -1,0 +1,42 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "int"
+          },
+          "value": {
+            "$OBJECT": "expression",
+            "expression": "not",
+            "values": [
+              {
+                "$OBJECT": "expression",
+                "expression": "equal",
+                "values": [
+                  {
+                    "$OBJECT": "int",
+                    "int": 2
+                  },
+                  {
+                    "$OBJECT": "int",
+                    "int": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "src": "a = !(2 == 2) as int"
+    }
+  },
+  "entrypoint": "1"
+}
