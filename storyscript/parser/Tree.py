@@ -97,7 +97,9 @@ class Tree(LarkTree):
         """
         Finds the line number of a tree using _find_position
         """
-        return self._find_position('line')
+        line = self._find_position('line')
+        assert line != 'None', self
+        return line
 
     def column(self):
         """
