@@ -46,7 +46,7 @@ class Grammar:
         self.ebnf.types = 'list_type , map_type, base_type'
 
     def values(self):
-        self.ebnf._NL = r'/(\r?\n[\t ]*)+/'
+        self.ebnf._NL = r'/(\r?\n *)+/'
         self.ebnf._INDENT = '<INDENT>'
         self.ebnf._DEDENT = '<DEDENT>'
         self.ebnf.TRUE = 'true'

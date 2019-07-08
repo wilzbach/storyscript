@@ -106,7 +106,7 @@ class ErrorCodes:
         'E0076',
         'Unexpected end of line. Maybe close a `}}` or `]` expression?')
     indentation_error = (
-        'E0077', 'Invalid indentation detected. Did you mix tabs and spaces?')
+        'E0077', 'Invalid indentation detected.')
     invalid_preview_flag = (
         'E0078',
         'Invalid preview flag. `{flag}` is not a valid preview feature.')
@@ -210,6 +210,10 @@ class ErrorCodes:
     type_dot_incompatible = (
         'E0131',
         "`{left}` can't be dot-accessed with `{name}` of type `{right}`"
+    )
+    tabs = (
+        'E0132',
+        'Tabs are not allowed.'
     )
     continue_outside = ('E0132', '`continue` is allowed only inside loops')
 
