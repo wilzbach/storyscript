@@ -40,7 +40,7 @@
       "method": "return",
       "ln": "3",
       "parent": "2",
-      "src": "\treturn"
+      "src": "    return"
     }
   },
   "entrypoint": "1"

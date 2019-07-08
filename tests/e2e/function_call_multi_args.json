@@ -40,7 +40,7 @@
         }
       ],
       "parent": "1",
-      "src": "\treturn \"a\"",
+      "src": "    return \"a\"",
       "next": "4.1"
     },
     "4.1": {

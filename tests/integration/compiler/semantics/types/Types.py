@@ -31,7 +31,7 @@ def run(source, should_fail):
     if 'ANY' in source:
         pre = 'ANY = {}\n'
     elif 'fn_none' in source:
-        pre = 'function fn_none\n\treturn\n'
+        pre = 'function fn_none\n    return\n'
     else:
         pre = ''
     source = pre + source

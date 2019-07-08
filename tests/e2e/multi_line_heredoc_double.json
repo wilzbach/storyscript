@@ -9,7 +9,7 @@
       "args": [
         {
           "$OBJECT": "string",
-          "string": "aaa\n\tbbb\n\tcc"
+          "string": "aaa\n    bbb\n    cc"
         }
       ],
       "src": "a = \"\"\"aaa"

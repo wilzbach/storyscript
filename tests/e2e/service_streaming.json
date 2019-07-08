@@ -22,7 +22,7 @@
       "command": "event",
       "enter": "3",
       "parent": "1",
-      "src": "\twhen client event as e",
+      "src": "    when client event as e",
       "next": "3"
     },
     "3": {
@@ -38,7 +38,7 @@
         }
       ],
       "parent": "2",
-      "src": "\t\tx=0"
+      "src": "        x=0"
     }
   },
   "services": [

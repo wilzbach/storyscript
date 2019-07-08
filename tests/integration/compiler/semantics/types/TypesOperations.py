@@ -213,7 +213,7 @@ def test_object_string_ops(source, op):
 # No operations are allowed.
 ###############################################################################
 
-NONE = 'function none_fn\n\treturn\n'
+NONE = 'function none_fn\n    return\n'
 
 
 @mark.parametrize('source,op', op_builder('none_fn()', 'none_fn()'))

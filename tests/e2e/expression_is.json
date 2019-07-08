@@ -53,7 +53,7 @@
         }
       ],
       "parent": "2",
-      "src": "\tx = 0"
+      "src": "    x = 0"
     }
   },
   "entrypoint": "1"

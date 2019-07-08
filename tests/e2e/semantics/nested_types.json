@@ -42,7 +42,7 @@
         }
       ],
       "parent": "1",
-      "src": "\treturn {20: [\"foo\", \"bar\"]}",
+      "src": "    return {20: [\"foo\", \"bar\"]}",
       "next": "4"
     },
     "4": {

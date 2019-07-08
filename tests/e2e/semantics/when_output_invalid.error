@@ -1,6 +1,6 @@
-Error: syntax error in story at line 4, column 3
+Error: syntax error in story at line 4, column 9
 
-4|        a = req
-          ^^^
+4|            a = req
+              ^^^
 
 E0100: Can't assign `Object` to `int`

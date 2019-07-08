@@ -1,3 +1,3 @@
 function foo returns int
-	a = "f"
-	return a
+    a = "f"
+    return a

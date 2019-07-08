@@ -1,4 +1,4 @@
 function fn_none
-	return
+    return
 
 b = {"a": "a", fn_none(): "bar"}

@@ -1,6 +1,6 @@
-Error: syntax error in story at line 4, column 9
+Error: syntax error in story at line 4, column 12
 
-4|        when ws listen filter:foo as event
-               
+4|          when ws listen filter:foo as event
+                 ^^
 
 E0066: Nested when blocks are not allowed

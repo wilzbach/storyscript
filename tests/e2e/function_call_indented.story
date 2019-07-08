@@ -1,5 +1,5 @@
 function fun a: string b:string returns string
-	return "foo"
+    return "foo"
 
 fun(a: ""
     b: ""

@@ -1,2 +1,2 @@
 function my_function k1:int
-	return 0
+    return 0

@@ -18,7 +18,7 @@
       "method": "break",
       "ln": "2",
       "parent": "1",
-      "src": "\tbreak",
+      "src": "    break",
       "next": "4"
     },
     "4": {
@@ -55,7 +55,7 @@
       "method": "break",
       "ln": "5",
       "parent": "4",
-      "src": "\tbreak"
+      "src": "    break"
     }
   },
   "entrypoint": "1"

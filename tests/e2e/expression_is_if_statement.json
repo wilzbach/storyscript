@@ -68,7 +68,7 @@
         }
       ],
       "parent": "1",
-      "src": "\tlogger echo message:\"oh no!\""
+      "src": "    logger echo message:\"oh no!\""
     }
   },
   "services": [

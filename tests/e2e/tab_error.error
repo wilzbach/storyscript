@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 7
+Error: syntax error in story at line 2, column 13
 
-2|        a = $
-              ^
+2|            a = $
+                  ^
 
 E0041: `$` is not allowed here

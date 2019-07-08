@@ -43,7 +43,7 @@
         }
       ],
       "parent": "1",
-      "src": "\tx = item"
+      "src": "    x = item"
     }
   },
   "services": [

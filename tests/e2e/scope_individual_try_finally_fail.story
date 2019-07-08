@@ -1,4 +1,4 @@
 try
-	c = 1
+    c = 1
 finally
-	c = ""
+    c = ""

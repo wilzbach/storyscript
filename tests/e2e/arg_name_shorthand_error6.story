@@ -1,5 +1,5 @@
 function test arg:int
-	return
+    return
 
 arg = 0
 test(2 + arg:arg)

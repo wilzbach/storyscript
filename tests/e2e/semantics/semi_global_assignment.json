@@ -40,7 +40,7 @@
         }
       ],
       "parent": "3",
-      "src": "\ta = 2"
+      "src": "    a = 2"
     }
   },
   "services": [

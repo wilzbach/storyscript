@@ -68,7 +68,7 @@
         }
       ],
       "parent": "3",
-      "src": "\ta = a + k"
+      "src": "    a = a + k"
     }
   },
   "entrypoint": "1"

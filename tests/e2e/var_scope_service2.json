@@ -22,7 +22,7 @@
         }
       ],
       "parent": "1",
-      "src": "\tmy_service = 0",
+      "src": "    my_service = 0",
       "next": "4"
     },
     "4": {

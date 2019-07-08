@@ -8,14 +8,14 @@ _string = "cake"
 _list = [1, 2]
 list_empty = []
 list_multiline = [
-	1,
-	2
+    1,
+    2
 ]
 obj = {"x": 1, "y": 3}
 obj_empty = {}
 obj_multiline = {
-	"x": 1,
-	"y": 3
+    "x": 1,
+    "y": 3
 }
 regexp = /^foo/
 regexp_flags = /^foo/g

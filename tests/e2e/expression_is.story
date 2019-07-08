@@ -1,3 +1,3 @@
 colour = "green"
 if colour == "red"
-	x = 0
+    x = 0

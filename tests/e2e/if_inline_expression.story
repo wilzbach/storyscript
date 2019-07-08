@@ -1,2 +1,2 @@
 if (random numbers) == "foo"
-	x = 0
+    x = 0

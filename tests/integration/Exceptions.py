@@ -96,8 +96,8 @@ def test_exceptions_dollar(capsys):
 
 def test_exceptions_function_redeclared(capsys):
     with raises(StoryError) as e:
-        run_story('function f1 returns int\n\treturn 42\n'
-                  'function f1 returns int\n\treturn 42\n')
+        run_story('function f1 returns int\n    return 42\n'
+                  'function f1 returns int\n    return 42\n')
     e.value.with_color = False
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 3, column 1'

@@ -1,2 +1,2 @@
 function a returns int
-	return
+    return

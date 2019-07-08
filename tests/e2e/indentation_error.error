@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 15
+Error: syntax error in story at line 2, column 9
 
-2|      x = x + item1
-                     ^
+2|        x = x + item1
+              ^
 
-E0077: Invalid indentation detected. Did you mix tabs and spaces?
+E0101: Variable `x` has not been defined.

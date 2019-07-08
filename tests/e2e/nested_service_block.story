@@ -1,3 +1,3 @@
 logging default
-	http server
-		x = 1
+    http server
+        x = 1
