@@ -1,7 +1,7 @@
 a = 0
-if a.is_odd()
+if a.isOdd()
 	x = 0
-else if a.is_even()
+else if a.isEven()
 	x = 1
 else
 	x = 2

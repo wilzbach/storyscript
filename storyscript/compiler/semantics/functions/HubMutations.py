@@ -42,8 +42,8 @@ string substring start:int -> string
 string substring start:int end:int -> string
 string substring end:int -> string
 
-int is_odd -> boolean
-int is_even -> boolean
+int isOdd -> boolean
+int isEven -> boolean
 int absolute -> int
 int increment -> int
 int decrement -> int
@@ -62,9 +62,9 @@ float log2 -> float
 float log10 -> float
 float exp -> float
 float abs -> float
-float is_nan -> boolean
-float is_infinity -> boolean
-# approx_equal?
+float isNan -> boolean
+float isInfinity -> boolean
+# approxEqual?
 float sqrt -> float
 """
 

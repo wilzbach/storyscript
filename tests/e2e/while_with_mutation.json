@@ -30,7 +30,7 @@
         },
         {
           "$OBJECT": "mutation",
-          "mutation": "is_odd",
+          "mutation": "isOdd",
           "args": []
         }
       ],
@@ -48,7 +48,7 @@
         }
       ],
       "enter": "3",
-      "src": "while x is_odd",
+      "src": "while x isOdd",
       "next": "3"
     },
     "3": {
