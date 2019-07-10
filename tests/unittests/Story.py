@@ -6,6 +6,7 @@ from lark.exceptions import UnexpectedInput, UnexpectedToken
 
 from pytest import fixture, mark, raises
 
+import storyscript.Story as StoryModule
 from storyscript.Story import Story
 from storyscript.compiler import Compiler
 from storyscript.compiler.lowering.Lowering import Lowering
@@ -45,10 +46,9 @@ def test_story_read(patch):
     """
     Ensures Story.read can read a story
     """
-    patch.object(io, 'open')
-    result = Story.read('hello.story')
-    io.open.assert_called_with('hello.story', 'r')
-    assert result == io.open().__enter__().read()
+    patch.object(StoryModule, 'bom_open')
+    Story.read('hello.story')
+    StoryModule.bom_open.assert_called_with('hello.story', 'r')
 
 
 def test_story_read_not_found(patch, capsys):

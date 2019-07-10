@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-import io
 import os
 from functools import lru_cache
 
+from bom_open import bom_open
 
 from lark.exceptions import UnexpectedInput, UnexpectedToken
 
@@ -39,7 +39,7 @@ class Story:
         """
         has_error = False
         try:
-            with io.open(path, 'r') as file:
+            with bom_open(path, 'r') as file:
                 r = file.read()
                 return r
         except FileNotFoundError:

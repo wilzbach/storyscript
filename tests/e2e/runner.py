@@ -5,6 +5,8 @@ import json
 from glob import glob
 from os import path
 
+from bom_open import bom_open
+
 from click import unstyle
 
 from pytest import mark
@@ -48,7 +50,7 @@ def run_fail_story(source, expected_output, features):
 # load a story from the file system and load its expected result file (.json)
 def run_test(story_path):
     story_string = None
-    with io.open(story_path, 'r') as f:
+    with bom_open(story_path, 'r') as f:
         story_string = f.read()
 
     expected_path = path.splitext(story_path)[0]

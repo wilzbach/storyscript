@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-import io
 from unittest import mock
 
 from click.testing import CliRunner
 
 from pytest import fixture
 
+import storyscript.Story as StoryModule
 from storyscript.Cli import Cli
 
 
@@ -14,13 +14,18 @@ def runner():
     return CliRunner()
 
 
-def test_cli_exit_code(mocker):
+@fixture
+def open_mock(mocker):
+    m = mocker.patch.object(StoryModule, 'bom_open')
+    return m
+
+
+def test_cli_exit_code(open_mock):
     """
     Ensures that compiler exits with a non-zero exit code on errors
     """
     runner = CliRunner()
-    m = mock.mock_open(read_data='foo =')
-    mocker.patch.object(io, 'open', m)
+    mock.mock_open(open_mock, read_data='foo =')
     e = runner.invoke(Cli.compile, ['/compile/path'])
 
     assert e.exit_code == 1
@@ -73,12 +78,11 @@ def test_cli_lex_exit_file_not_found(runner):
         in e.output
 
 
-def test_cli_parse_file(mocker, runner):
+def test_cli_parse_file(open_mock, runner):
     """
     Ensures that parser command works properly
     """
-    m = mock.mock_open(read_data='foo')
-    mocker.patch.object(io, 'open', m)
+    mock.mock_open(open_mock, read_data='foo')
     e = runner.invoke(Cli.parse, ['/parse/path'])
 
     assert e.output == """File: /parse/path
@@ -94,12 +98,11 @@ start
     assert e.exit_code == 0
 
 
-def test_cli_parse_lower_file(mocker, runner):
+def test_cli_parse_lower_file(open_mock, runner):
     """
     Ensures that parser with --lower works properly
     """
-    m = mock.mock_open(read_data='".{a}"')
-    mocker.patch.object(io, 'open', m)
+    mock.mock_open(open_mock, read_data='".{a}"')
     e = runner.invoke(Cli.parse, ['--lower', '/parse/path'])
 
     assert e.output == """File: /parse/path
@@ -135,12 +138,11 @@ start
     assert e.exit_code == 0
 
 
-def test_cli_lex(mocker, runner):
+def test_cli_lex(open_mock, runner):
     """
     Ensures that lexer command works properly
     """
-    m = mock.mock_open(read_data='foo')
-    mocker.patch('io.open', m)
+    mock.mock_open(open_mock, read_data='foo')
     e = runner.invoke(Cli.lex, ['/lex/path'])
     assert e.output == """File: /lex/path
 0 NAME foo
