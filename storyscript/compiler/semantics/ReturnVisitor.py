@@ -79,6 +79,7 @@ class ReturnVisitor:
             for ret in tree.find_data('return_statement'):
                 ret_sym, obj = self.return_statement(ret, scope)
                 ret_type = ret_sym.type()
+                # obj might not have any tokens, e.g. {}
                 obj.expect(
                     ret_type == NoneType.instance(),
                     'function_without_output_return',

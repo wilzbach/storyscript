@@ -135,7 +135,7 @@ class Lowering:
             return base_tree.children[0]
 
         base_tree.children.append(
-            Tree('arith_operator', [Token('PLUS', '+')]),
+            Tree('arith_operator', [n1.create_token('PLUS', '+')]),
         )
 
         # Technically, the grammar only supports binary expressions, but
@@ -275,13 +275,14 @@ class Lowering:
         return fake_tree.add_assignment(new_node, original_line=line)
 
     @classmethod
-    def build_string_value(cls, text):
+    def build_string_value(cls, orig_node, text):
         """
         Returns the AST for a plain string AST node with 'text'
+        Uses a `orig_node` to determine the line and column of the new Token.
         """
         return Tree('values', [
             Tree('string', [
-                Token('DOUBLE_QUOTED', text)
+                orig_node.create_token('DOUBLE_QUOTED', text)
             ])
         ])
 
@@ -299,7 +300,8 @@ class Lowering:
         for s in string_objs:
             if s['$OBJECT'] == 'string':
                 # plain string -> insert directly
-                str_node = self.build_string_value(s['string'])
+                str_node = self.build_string_value(orig_node=orig_node,
+                                                   text=s['string'])
                 string_tree = Tree('pow_expression', [
                     Tree('primary_expression', [
                         Tree('entity', [

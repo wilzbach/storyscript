@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 12
+
+2|        return "Hello {firstName} {secondName}!"
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+E0110: `return` expected. Did you miss to add `returns string`?
