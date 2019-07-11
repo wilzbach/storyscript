@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import inspect
 import io
 import sys
 from os import getenv, path
@@ -78,7 +79,15 @@ def prepare_release(cwd, use_release):
 
 class Install(_install):
     def run(self):
-        _install.run(self)
+        if not _install._called_from_setup(inspect.currentframe()):
+            # The run function from setuptools.command.install doesn't detect
+            # install cmd properly in the current setting of sub classing
+            # Install and therefore we detect it here and do the right thing
+            # for install command otherwise fall back to super class run for
+            # the other cases.
+            _install.run(self)
+        else:
+            _install.do_egg_install(self)
         self.execute(prepare_release, (self.install_lib, False),
                      msg='Preparing the installation')
 
