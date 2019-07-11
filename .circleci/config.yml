@@ -33,6 +33,7 @@ jobs:
                     . venv/bin/activate
                     python3 setup.py install
                     pip install tox
+                    storyscript --version
 
             #- save_cache:
                 #paths:
