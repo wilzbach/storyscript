@@ -62,7 +62,7 @@ float log2 -> float
 float log10 -> float
 float exp -> float
 float abs -> float
-float isNan -> boolean
+float isNaN -> boolean
 float isInfinity -> boolean
 float approxEqual value: float -> boolean
 float approxEqual value: float maxRelDiff: float maxAbsDiff: float -> boolean
