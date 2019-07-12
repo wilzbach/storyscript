@@ -75,7 +75,7 @@ class Hub:
     A representation of a Storyscript Engine and Hub.
     Assumed to be Asyncy Engine for now.
     """
-    def __init__(self):
+    def __init__(self, mutations):
         self._mutations = []
         for m in mutations.split('\n'):
             if len(m.strip()) == 0 or m.startswith('#'):
@@ -89,4 +89,4 @@ class Hub:
         return self._mutations
 
 
-hub = Hub()
+hub = Hub(mutations)
