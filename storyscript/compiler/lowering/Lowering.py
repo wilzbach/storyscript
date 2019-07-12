@@ -118,16 +118,9 @@ class Lowering:
         Create an AST for concating two or more nodes.
         """
         # concatenation is currently defined as
-        # arith_expression = arith_expression arith_operator mul_expression
-        base_tree = Tree('arith_expression', [
-            Tree('arith_expression', [
-                Tree('mul_expression', [
-                    Tree('unary_expression', [
-                        n1
-                    ])
-                ])
-            ])
-        ])
+        # expression = expression arith_operator expression
+        base_tree = Tree('expression', [n1])
+        base_tree.kind = 'arith_expression'
 
         # if we only got one node, no concatenation is required. return
         # directly
@@ -141,27 +134,10 @@ class Lowering:
         # Technically, the grammar only supports binary expressions, but
         # the compiler and engine can handle n-ary expressions, so we can
         # directly flatten the tree and add all additional nodes as extra
-        # mul_expressions
+        # expressions
         for n2 in other_nodes:
-            base_tree.children.append(Tree('mul_expression', [
-                Tree('unary_expression', [
-                    n2
-                ])
-            ]))
+            base_tree.children.append(n2)
         return base_tree
-
-    @staticmethod
-    def make_full_tree_from_cmp(expr):
-        """
-        Builds a full tree from a cmp_expression node.
-        """
-        return Tree('expression', [
-            Tree('or_expression', [
-                Tree('and_expression', [
-                    Tree('cmp_expression', [expr])
-                ])
-            ])
-        ])
 
     @classmethod
     def flatten_template(cls, tree, text):
@@ -302,13 +278,12 @@ class Lowering:
                 # plain string -> insert directly
                 str_node = self.build_string_value(orig_node=orig_node,
                                                    text=s['string'])
-                string_tree = Tree('pow_expression', [
-                    Tree('primary_expression', [
-                        Tree('entity', [
-                            str_node
-                        ])
+                string_tree = Tree('expression', [
+                    Tree('entity', [
+                        str_node
                     ])
                 ])
+                string_tree.kind = 'primary_expression'
                 ks.append(string_tree)
             else:
                 assert s['$OBJECT'] == 'code'
@@ -327,83 +302,31 @@ class Lowering:
                         ])
                     ])
                 ])
-                as_tree = Tree('pow_expression', [
-                    Tree('primary_expression', [
+                as_tree = Tree('expression', [
+                    Tree('expression', [
                         Tree('entity', [
                             evaled_node
                         ]),
                     ]),
                     as_operator
                 ])
+                as_tree.kind = 'pow_expression'
+                as_tree.child(0).kind = 'primary_expression'
                 ks.append(as_tree)
 
         return ks
 
-    def insert_string_template_concat(self, fake_tree, new_node):
-        """
-        If the string concatenation has only one child, its returned directly.
-        Otherwise, the string template concatenation gets inserted into the
-        FakeTree.
-        Returns: a path reference to newly inserted assignment.
-        """
-        line = new_node.line()
-
-        # shortcut for single-child code like '${a}'
-        if len(new_node.children) == 1:
-            return new_node.mul_expression.unary_expression.pow_expression. \
-                primary_expression.entity.path
-
-        assert len(new_node.children) >= 2
-
-        # Otherwise we need to insert a new fake node with the concatenation
-        new_node = self.make_full_tree_from_cmp(new_node)
-        # The new concatenation node needs to be inserted below the
-        # evaluated line
-        return fake_tree.add_assignment(new_node, original_line=line)
-
-    @staticmethod
-    def resolve_cmp_expr_to_string(cmp_expr):
-        """
-        Checks whether cmp_expression has only a string as a child.
-        """
-        if cmp_expr is None:
-            return None
-
-        return cmp_expr.follow_node_chain([
-            'cmp_expression',
-            'arith_expression', 'mul_expression', 'unary_expression',
-            'pow_expression', 'primary_expression', 'entity', 'values',
-            'string'])
-
-    def resolve_string_nodes(self, node, cmp_expr):
-        """
-        Searches for string nodes in the cmp_expression and given node.
-        Cmp_expression has a higher priority than the given node, but
-        will only be used if the found string node is the only node
-        in cmp_expr.
-
-        Returns: [<found string node>, <search node>]
-            where <search node> is either `cmp_expr` (when the
-            string node was a single leaf) or `node` otherwise.
-        """
-        only_cmp_expr = self.resolve_cmp_expr_to_string(cmp_expr)
-        if only_cmp_expr is not None:
-            # cmp_expression has only one leaf (the string), so we
-            # can directly replace its children
-            return only_cmp_expr, cmp_expr
-
-        return node.follow_node_chain(['entity', 'values', 'string']), node
-
-    def inline_string_templates(self, node, block, parent, cmp_expr):
+    def inline_string_templates(self, node, block, parent):
         """
         String templates generate fake_nodes in the AST before their block
         and are replaced with a reference to their fake_nodes.
 
-        If the string expression is the only node in its cmp_expression, it
+        If the string expression is the only node in its expression, it
         will be directly inserted in the AST.
         Otherwise, the string concatenation will be inserted as a new AST node.
         """
-        string_node, node = self.resolve_string_nodes(node, cmp_expr)
+        entity = node.entity
+        string_node = entity.follow_node_chain(['entity', 'values', 'string'])
         if string_node is None:
             return
 
@@ -426,15 +349,11 @@ class Lowering:
                                                 string_objs)
         new_node = self.add_strings(*children)
 
-        # if there is more than one node in cmp_expression, node will point
-        # to the only the string entity and thus we can't insert string
-        # concatenation directly, but must insert it as a new fake node
-        # assignment.
-        if node.data != 'cmp_expression':
-            new_node = self.insert_string_template_concat(fake_tree, new_node)
-        node.children = [new_node]
+        assert len(node.children) == 1
+        node.children = new_node.children
+        node.kind = new_node.kind
 
-    def visit_string_templates(self, node, block, parent, cmp_expr):
+    def visit_string_templates(self, node, block, parent):
         """
         Iterates the AST and evaluates string templates.
         """
@@ -443,13 +362,14 @@ class Lowering:
 
         if node.data == 'block':
             block = node
-        if node.data == 'cmp_expression':
-            cmp_expr = node
-        elif node.data == 'entity':
-            self.inline_string_templates(node, block, parent, cmp_expr)
 
         for c in node.children:
-            self.visit_string_templates(c, block, node, cmp_expr=cmp_expr)
+            self.visit_string_templates(c, block, node)
+
+        # leaf-to-to to avoid double execution
+        if node.data == 'expression':
+            if node.entity is not None:
+                self.inline_string_templates(node, block, parent)
 
     def visit_concise_when(self, node):
         """
@@ -497,24 +417,8 @@ class Lowering:
         Create an entity expression
         """
         return Tree('expression', [
-            Tree('or_expression', [
-                Tree('and_expression', [
-                    Tree('cmp_expression', [
-                        Tree('arith_expression', [
-                            Tree('mul_expression', [
-                                Tree('unary_expression', [
-                                    Tree('pow_expression', [
-                                        Tree('primary_expression', [
-                                            Tree('entity', [
-                                                path
-                                            ])
-                                        ])
-                                    ])
-                                ])
-                            ])
-                        ])
-                    ])
-                ])
+            Tree('entity', [
+                path
             ])
         ])
 
@@ -539,10 +443,12 @@ class Lowering:
                 orig_obj = block.add_assignment(orig_node, original_line=line)
                 base_expr.children = [
                     Tree('expression', [
-                        Tree('as_expression', [
-                            orig_obj,
-                            Tree('as_operator', [c]),
-                        ])
+                        Tree('expression', [
+                            Tree('entity', [
+                                orig_obj
+                            ]),
+                        ]),
+                        Tree('as_operator', [c]),
                     ])
                 ]
                 # now process the rest of the assignment
@@ -584,24 +490,6 @@ class Lowering:
             for c in node.children:
                 self.visit_assignment(c, block, parent=node)
 
-    @staticmethod
-    def create_unary_operation(child):
-        op = Tree('unary_operator', [child.create_token('NOT', '!')])
-        return Tree('arith_expression', [
-                Tree('mul_expression', [
-                    Tree('unary_expression', [
-                        op,
-                        Tree('unary_expression', [
-                            Tree('pow_expression', [
-                                Tree('primary_expression', [
-                                    child
-                                ])
-                            ])
-                        ])
-                    ])
-                ])
-            ])
-
     @classmethod
     def rewrite_cmp_expr(cls, node):
         cmp_op = node.cmp_operator
@@ -620,12 +508,11 @@ class Lowering:
         # replace comparison token
         cmp_op.children = [cmp_tok]
         # create new comparison tree with 'NOT'
-        unary_op = cls.create_unary_operation(Tree('or_expression', [
-            Tree('and_expression', [
-                Tree('cmp_expression', node.children)
-            ])
-        ]))
-        node.children = [unary_op]
+        node.kind = 'unary_expression'
+        node.children = [
+            Tree('unary_operator', [node.create_token('NOT', '!')]),
+            Tree('expression', node.children),
+        ]
 
     def visit_cmp_expr(self, node):
         """
@@ -634,7 +521,8 @@ class Lowering:
         if not hasattr(node, 'children') or len(node.children) == 0:
             return
 
-        if node.data == 'cmp_expression' and len(node.children) == 3:
+        if node.data == 'expression' and node.kind == 'cmp_expression' and \
+                len(node.children) == 3:
             cmp_op = node.child(1)
             assert cmp_op.data == 'cmp_operator'
             cmp_tok = cmp_op.child(0)
@@ -675,13 +563,13 @@ class Lowering:
             block = node.service.service_fragment
             assert block is not None
 
-        if node.data == 'pow_expression':
+        if node.data == 'expression' and node.kind == 'pow_expression':
             as_op = node.as_operator
             if as_op is not None and as_op.output_names is not None:
                 output = Tree('output', as_op.output_names.children)
                 node.expect(block is not None, 'service_no_inline_output')
                 block.children.append(output)
-                node.children = [node.children[0]]
+                node.children = [node.children[0].children[0]]
 
         for c in node.children:
             self.visit_as_expr(c, block)
@@ -699,7 +587,7 @@ class Lowering:
             if len(call_expr.path.children) > 1:
                 path_fragments = call_expr.path.children
                 call_expr.children = [
-                    Tree('primary_expression', [
+                    Tree('expression', [
                         Tree('entity', [
                             Tree('path', call_expr.path.children[:-1])
                         ])
@@ -729,7 +617,7 @@ class Lowering:
         if node.data == 'dot_expression':
             dot_expr = node
             expression = Tree('mutation', [
-                parent.primary_expression,
+                parent.expression,
                 Tree('mutation_fragment', [
                     dot_expr.child(0),  # name
                     dot_expr.arguments
@@ -737,11 +625,7 @@ class Lowering:
             ])
             path = block.add_assignment(expression,
                                         original_line=parent.line())
-            parent.children = [Tree('primary_expression', [
-                Tree('entity', [
-                    path
-                ])
-            ])]
+            parent.children = [Tree('entity', [path])]
 
         for c in node.children:
             self.visit_dot_expression(c, block, parent=node)
@@ -756,8 +640,7 @@ class Lowering:
         self.visit_as_expr(tree, block=None)
         self.visit_arguments(tree)
         self.visit_assignment(tree, block=None, parent=None)
-        self.visit_string_templates(tree, block=None, parent=None,
-                                    cmp_expr=None)
+        self.visit_string_templates(tree, block=None, parent=None)
         self.visit_function_dot(tree, block=None)
         self.visit_dot_expression(tree, block=None, parent=None)
         self.visit(tree, None, None, pred,

@@ -61,8 +61,6 @@ class SymbolExpressionVisitor(ExpressionVisitor):
 
     def as_expression(self, tree, expr=None):
         assert tree.child(1).data == 'as_operator'
-        if expr is None:
-            expr = self.visitor.path(tree.path)
         # check for compatibility
         t = self.visitor.types(tree.child(1).types)
         tree.expect(explicit_cast(expr.type(), t.type()),
@@ -147,12 +145,12 @@ class SymbolExpressionVisitor(ExpressionVisitor):
                         left=val, right=v, op=op.value)
             val = new_val
         # add implicit casts
-        if tree.data == 'pow_expression':
+        if tree.kind == 'pow_expression':
             return base_symbol(val)
-        if tree.data == 'mul_expression':
+        if tree.kind == 'mul_expression':
             self.implicit_cast(tree, val, values)
         else:
-            assert tree.data == 'arith_expression'
+            assert tree.kind == 'arith_expression'
             self.implicit_cast(tree, val, values)
         return base_symbol(val)
 
@@ -166,7 +164,6 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         """
         if val == AnyType.instance():
             return
-        insert_tree_name = tree.data
         for i, v in enumerate(values):
             if i > 0:
                 # ignore the arith_operator tree child
@@ -175,39 +172,16 @@ class SymbolExpressionVisitor(ExpressionVisitor):
             if v != val:
                 element = tree.children[i]
                 casted_type = self.type_to_tree(element, val)
-                if i != 0:
-                    element = Tree(insert_tree_name, [element])
-                if element.data == 'mul_expression':
-                    element = Tree('arith_expression', [element])
-                if element.data == 'arith_expression':
-                    element = Tree('cmp_expression', [element])
-                tree.children[i] = Tree('unary_expression', [
-                    Tree('pow_expression', [
-                        Tree('primary_expression', [
-                            Tree('or_expression', [
-                                Tree('and_expression', [
-                                    element
-                                ]),
-                            ]),
-                        ]),
-                        Tree('as_operator', [
-                            Tree('types', [
-                                casted_type
-                            ])
+                element = Tree('expression', [
+                    element,
+                    Tree('as_operator', [
+                        Tree('types', [
+                            casted_type
                         ])
                     ])
                 ])
-                for e in ['mul_expression', 'arith_expression']:
-                    if e == insert_tree_name:
-                        break
-                    else:
-                        tree.children[i] = Tree(e, [
-                            tree.children[i]
-                        ])
-                if i == 0:
-                    tree.children[0] = Tree(insert_tree_name, [
-                        tree.children[0]
-                    ])
+                element.kind = 'as_expression'
+                tree.children[i] = element
 
 
 class ExpressionResolver:
@@ -530,9 +504,7 @@ class ExpressionResolver:
         if tree.path:
             s = self.path(tree.path)
         else:
-            s = self.expr_visitor.primary_expression(
-                tree.primary_expression
-            )
+            s = self.expression(tree.expression)
         return self.resolve_mutation(s, tree)
 
     def call_expression(self, tree):

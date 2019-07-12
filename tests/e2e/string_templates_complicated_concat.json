@@ -121,40 +121,54 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
-            },
-            {
               "$OBJECT": "expression",
-              "expression": "division",
+              "expression": "sum",
               "values": [
                 {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "__p-3.1"
-                  ]
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
                 },
                 {
                   "$OBJECT": "type_cast",
                   "type": {
                     "$OBJECT": "type",
-                    "type": "int"
+                    "type": "string"
                   },
                   "value": {
                     "$OBJECT": "path",
                     "paths": [
-                      "__p-3.3"
+                      "__p-3.1"
                     ]
                   }
                 }
               ]
+            },
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-3.3"
+                ]
+              }
             }
           ]
         }
       ],
-      "src": "d = \"{b}\" + \"{a * 2}\" / (foo_service call arg1: \"^{another_service call}$\")"
+      "src": "d = \"{b}\" + \"{a * 2}\" + (foo_service call arg1: \"^{another_service call}$\")"
     }
   },
   "services": [

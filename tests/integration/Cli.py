@@ -108,28 +108,18 @@ start
     rules
       absolute_expression
         expression
-          or_expression
-            and_expression
-              cmp_expression
-                arith_expression
-                  arith_expression
-                    mul_expression
-                      unary_expression
-                        pow_expression
-                          primary_expression
-                            entity
-                              values
-                                string	.
-                  arith_operator	+
-                  mul_expression
-                    unary_expression
-                      pow_expression
-                        primary_expression
-                          entity
-                            path	a
-                        as_operator
-                          types
-                            base_type	string
+          expression
+            entity
+              values
+                string	.
+          arith_operator	+
+          expression
+            expression
+              entity
+                path	a
+            as_operator
+              types
+                base_type	string
 
 """
     assert e.exit_code == 0
