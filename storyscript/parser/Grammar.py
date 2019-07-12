@@ -146,12 +146,12 @@ class Grammar:
         self.ebnf.dot_expression = 'dot name (op arguments cp)'
         self.ebnf.pow_expression = ('primary_expression ((pow_operator '
                                     'unary_expression) |'
-                                    'as_operator |'
                                     'dot_expression )?')
         self.ebnf.unary_expression = ('unary_operator unary_expression , '
                                       'pow_expression')
+        self.ebnf.as_expression = 'unary_expression (as_operator)?'
         self.ebnf.mul_expression = '(mul_expression mul_operator)? ' \
-                                   'unary_expression'
+                                   'as_expression'
         self.ebnf.arith_expression = '(arith_expression arith_operator)? ' \
                                      'mul_expression'
         self.ebnf.cmp_expression = '(cmp_expression cmp_operator)? ' \

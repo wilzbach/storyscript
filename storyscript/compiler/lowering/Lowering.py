@@ -545,7 +545,7 @@ class Lowering:
             block = node.service.service_fragment
             assert block is not None
 
-        if node.data == 'expression' and node.kind == 'pow_expression':
+        if node.data == 'expression' and node.kind == 'as_expression':
             as_op = node.as_operator
             if as_op is not None and as_op.output_names is not None:
                 output = Tree('output', as_op.output_names.children)

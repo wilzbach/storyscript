@@ -31,9 +31,10 @@ output_names: NAME (_COMMA NAME)*
 as_operator: _AS (types | output_names)
 pow_operator: POWER
 dot_expression: _DOT NAME (_OP arguments _CP)
-pow_expression: primary_expression ((pow_operator unary_expression) |as_operator |dot_expression )?
+pow_expression: primary_expression ((pow_operator unary_expression) |dot_expression )?
 unary_expression: unary_operator unary_expression | pow_expression
-mul_expression: (mul_expression mul_operator)? unary_expression
+as_expression: unary_expression (as_operator)?
+mul_expression: (mul_expression mul_operator)? as_expression
 arith_expression: (arith_expression arith_operator)? mul_expression
 cmp_expression: (cmp_expression cmp_operator)? arith_expression
 and_operator: AND
