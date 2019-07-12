@@ -21,7 +21,7 @@ path_fragment: _DOT NAME| _OSB (number | string | path | boolean | range) _CSB
 path: NAME (path_fragment)* | inline_expression (path_fragment)*
 assignment_fragment: EQUALS base_expression
 assignment_destructoring: _OCB (_NL _INDENT)? (path (_COMMA _NL? path)*)? (_NL _DEDENT)? _CCB
-assignment: types? (path | assignment_destructoring ) assignment_fragment
+assignment: (path | assignment_destructoring) assignment_fragment
 cmp_operator: GREATER| GREATER_EQUAL| LESSER| LESSER_EQUAL| NOT_EQUAL| EQUAL
 arith_operator: PLUS| DASH
 unary_operator: NOT

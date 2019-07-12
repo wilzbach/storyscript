@@ -74,8 +74,7 @@ class FakeTree:
         """
         line = self.get_line(value)
         first_token = value.find_first_token()
-        if first_token is not None:
-            first_token.line = line
+        first_token.line = line
         path = self.path(line=line)
         return self.assignment_path(path, value, line)
 

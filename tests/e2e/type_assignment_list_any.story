@@ -1,1 +1,1 @@
-List[any] a = []
+a = [] as List[any]

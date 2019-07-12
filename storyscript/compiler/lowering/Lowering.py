@@ -436,24 +436,6 @@ class Lowering:
 
         if node.data == 'assignment':
             c = node.children[0]
-            if c.data == 'types':
-                line = node.line()
-                base_expr = node.assignment_fragment.base_expression
-                orig_node = Tree('base_expression', base_expr.children)
-                orig_obj = block.add_assignment(orig_node, original_line=line)
-                base_expr.children = [
-                    Tree('expression', [
-                        Tree('expression', [
-                            Tree('entity', [
-                                orig_obj
-                            ]),
-                        ]),
-                        Tree('as_operator', [c]),
-                    ])
-                ]
-                # now process the rest of the assignment
-                node.children = node.children[1:]
-                c = node.children[0]
 
             if c.data == 'path':
                 # a path assignment -> no processing required

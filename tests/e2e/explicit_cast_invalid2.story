@@ -1,2 +1,2 @@
-List[time] t = {}
+t = {} as List[time]
 c = t as List[float]
