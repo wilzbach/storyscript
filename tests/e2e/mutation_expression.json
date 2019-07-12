@@ -3,6 +3,8 @@
     "1": {
       "method": "execute",
       "ln": "1",
+      "col_start": "7",
+      "col_end": "22",
       "name": [
         "req"
       ],
@@ -14,6 +16,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],
@@ -38,6 +42,8 @@
     "3": {
       "method": "mutation",
       "ln": "3",
+      "col_start": "1",
+      "col_end": "11",
       "args": [
         {
           "$OBJECT": "path",

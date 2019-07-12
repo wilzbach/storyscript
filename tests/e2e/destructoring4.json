@@ -48,6 +48,7 @@
     "1.3": {
       "method": "expression",
       "ln": "1.3",
+      "col_start": "7",
       "name": [
         "bar"
       ],
@@ -68,6 +69,7 @@
     "1.2": {
       "method": "expression",
       "ln": "1.2",
+      "col_start": "2",
       "name": [
         "foo"
       ],
@@ -88,6 +90,8 @@
     "1.4": {
       "method": "expression",
       "ln": "1.4",
+      "col_start": "12",
+      "col_end": "18",
       "name": [
         "car"
       ],

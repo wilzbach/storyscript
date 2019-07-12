@@ -3,6 +3,8 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "11",
       "function": "test",
       "args": [
         {
@@ -30,6 +32,8 @@
     "2": {
       "method": "return",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "11",
       "parent": "1",
       "src": "    return",
       "next": "4"
@@ -37,6 +41,8 @@
     "4": {
       "method": "expression",
       "ln": "4",
+      "col_start": "1",
+      "col_end": "5",
       "name": [
         "a1"
       ],
@@ -52,6 +58,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "1",
+      "col_end": "5",
       "name": [
         "a2"
       ],
@@ -67,6 +75,8 @@
     "6.1": {
       "method": "call",
       "ln": "6.1",
+      "col_start": "1",
+      "col_end": "13",
       "name": [
         "__p-6.1"
       ],

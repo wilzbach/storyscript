@@ -3,6 +3,8 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "y"
       ],
@@ -18,6 +20,8 @@
     "2.1": {
       "method": "mutation",
       "ln": "2.1",
+      "col_start": "9",
+      "col_end": "10",
       "name": [
         "__p-2.1"
       ],
@@ -39,6 +43,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],

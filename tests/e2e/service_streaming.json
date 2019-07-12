@@ -3,6 +3,8 @@
     "1": {
       "method": "execute",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "11",
       "output": [
         "client"
       ],
@@ -15,6 +17,8 @@
     "2": {
       "method": "when",
       "ln": "2",
+      "col_start": "10",
+      "col_end": "22",
       "output": [
         "e"
       ],
@@ -28,6 +32,8 @@
     "3": {
       "method": "expression",
       "ln": "3",
+      "col_start": "9",
+      "col_end": "11",
       "name": [
         "x"
       ],

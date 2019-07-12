@@ -3,6 +3,8 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "9",
       "name": [
         "labels"
       ],
@@ -34,6 +36,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "1",
+      "col_end": "8",
       "name": [
         "found"
       ],
@@ -49,6 +53,8 @@
     "3": {
       "method": "for",
       "ln": "3",
+      "col_start": "9",
+      "col_end": "13",
       "output": [
         "label"
       ],
@@ -68,6 +74,8 @@
     "4": {
       "method": "if",
       "ln": "4",
+      "col_start": "8",
+      "col_end": "9",
       "args": [
         {
           "$OBJECT": "expression",
@@ -125,6 +133,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "9",
+      "col_end": "16",
       "name": [
         "found"
       ],
@@ -141,6 +151,8 @@
     "6": {
       "method": "else",
       "ln": "6",
+      "col_start": "5",
+      "col_end": "14",
       "enter": "7",
       "exit": "8",
       "parent": "3",
@@ -150,6 +162,8 @@
     "7": {
       "method": "expression",
       "ln": "7",
+      "col_start": "9",
+      "col_end": "16",
       "name": [
         "found"
       ],
@@ -166,6 +180,8 @@
     "8": {
       "method": "if",
       "ln": "8",
+      "col_start": "8",
+      "col_end": "10",
       "args": [
         {
           "$OBJECT": "path",
@@ -183,6 +199,8 @@
     "9": {
       "method": "expression",
       "ln": "9",
+      "col_start": "9",
+      "col_end": "12",
       "name": [
         "x"
       ],
@@ -199,6 +217,8 @@
     "10": {
       "method": "expression",
       "ln": "10",
+      "col_start": "1",
+      "col_end": "10",
       "name": [
         "outside"
       ],

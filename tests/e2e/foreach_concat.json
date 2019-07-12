@@ -3,6 +3,8 @@
     "1": {
       "method": "for",
       "ln": "1",
+      "col_start": "9",
+      "col_end": "18",
       "output": [
         "item"
       ],
@@ -39,6 +41,8 @@
     "2": {
       "method": "execute",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "29",
       "service": "email_service",
       "command": "send_email",
       "parent": "1",

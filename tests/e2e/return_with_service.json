@@ -3,6 +3,7 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "col_start": "1",
       "output": [
         "any"
       ],
@@ -14,6 +15,8 @@
     "2.1": {
       "method": "execute",
       "ln": "2.1",
+      "col_start": "12",
+      "col_end": "41",
       "name": [
         "__p-2.1"
       ],
@@ -25,6 +28,7 @@
     "2": {
       "method": "return",
       "ln": "2",
+      "col_start": "5",
       "args": [
         {
           "$OBJECT": "path",

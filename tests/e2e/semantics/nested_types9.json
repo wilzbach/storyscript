@@ -3,6 +3,8 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "11",
       "output": [
         "List"
       ],
@@ -15,6 +17,8 @@
     "2": {
       "method": "return",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "13",
       "args": [
         {
           "$OBJECT": "list",
@@ -38,6 +42,8 @@
     "4": {
       "method": "expression",
       "ln": "4",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],
@@ -53,6 +59,8 @@
     "5.1": {
       "method": "call",
       "ln": "5.1",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "__p-5.1"
       ],
@@ -62,6 +70,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],

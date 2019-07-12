@@ -3,6 +3,8 @@
     "1": {
       "method": "execute",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "12",
       "output": [
         "s"
       ],
@@ -15,6 +17,8 @@
     "2": {
       "method": "when",
       "ln": "2",
+      "col_start": "10",
+      "col_end": "18",
       "output": [
         "req"
       ],
@@ -38,6 +42,8 @@
     "3.1": {
       "method": "execute",
       "ln": "3.1",
+      "col_start": "14",
+      "col_end": "32",
       "name": [
         "__p-3.1"
       ],
@@ -49,6 +55,8 @@
     "3": {
       "method": "expression",
       "ln": "3",
+      "col_start": "9",
+      "col_end": "12",
       "name": [
         "a"
       ],
@@ -67,6 +75,8 @@
     "4": {
       "method": "expression",
       "ln": "4",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "a"
       ],

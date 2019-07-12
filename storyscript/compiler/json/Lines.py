@@ -99,17 +99,21 @@ class Lines:
                 return self.is_output(scope['parent'], service)
         return False
 
-    def make(self, method, line, name=None, args=None, service=None,
+    def make(self, method, position, name=None, args=None, service=None,
              command=None, function=None, output=None, enter=None, exit=None,
              parent=None):
         """
         Creates the base dictionary for a given line.
         """
-        assert line not in self.lines, 'Line numbers must be unique'
-        raw_line = self.story.line(line)
-        self.lines[line] = {
+        assert position.line not in self.lines, 'Line numbers must be unique'
+        col_start = self.__as_none(position.column)
+        col_end = self.__as_none(position.end_column)
+        raw_line = self.story.line(position.line)
+        self.lines[position.line] = {
             'method': method,
-            'ln': line,
+            'ln': position.line,
+            'col_start': col_start,
+            'col_end': col_end,
             'output': output,
             'name': name,
             'service': service,
@@ -122,7 +126,7 @@ class Lines:
             'src': raw_line,
         }
         # save insertion order
-        self._lines.append(line)
+        self._lines.append(position.line)
 
     def check_service_name(self, service, line):
         """
@@ -131,26 +135,26 @@ class Lines:
         if '.' in service:
             raise StorySyntaxError('service_name')
 
-    def append(self, method, line, **kwargs):
+    def append(self, method, position, **kwargs):
         for scope in self.finished_scopes:
-            self.lines[scope]['exit'] = line
+            self.lines[scope]['exit'] = position.line
         self.finished_scopes = []
         if 'service' in kwargs:
-            self.check_service_name(kwargs['service'], line)
+            self.check_service_name(kwargs['service'], position.line)
 
         if method == 'function':
-            self.functions[kwargs['function']] = line
+            self.functions[kwargs['function']] = position.line
         elif method == 'execute':
             if self.is_output(kwargs['parent'], kwargs['service']) is False:
                 self.services.append(kwargs['service'])
-        self.set_next(line)
-        self.make(method, line, **kwargs)
+        self.set_next(position.line)
+        self.make(method, position, **kwargs)
 
-    def execute(self, line, service, command, arguments, output, enter,
+    def execute(self, position, service, command, arguments, output, enter,
                 parent):
         kwargs = {'service': service, 'command': command, 'args': arguments,
                   'output': output, 'enter': enter, 'parent': parent}
-        self.append('execute', line, **kwargs)
+        self.append('execute', position, **kwargs)
 
     def get_services(self):
         """
@@ -166,3 +170,6 @@ class Lines:
             if variable_name in vs:
                 return True
         return False
+
+    def __as_none(self, value):
+        return value if value != 'None' else None

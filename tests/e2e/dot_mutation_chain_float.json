@@ -3,6 +3,8 @@
     "1.1": {
       "method": "mutation",
       "ln": "1.1",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "__p-1.1"
       ],
@@ -43,6 +45,8 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],

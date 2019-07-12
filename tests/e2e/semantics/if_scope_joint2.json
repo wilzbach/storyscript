@@ -3,6 +3,8 @@
     "1": {
       "method": "if",
       "ln": "1",
+      "col_start": "4",
+      "col_end": "5",
       "args": [
         {
           "$OBJECT": "expression",
@@ -33,6 +35,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "20",
       "name": [
         "originalCount"
       ],
@@ -49,6 +53,8 @@
     "3": {
       "method": "elif",
       "ln": "3",
+      "col_start": "9",
+      "col_end": "18",
       "args": [
         {
           "$OBJECT": "expression",
@@ -73,6 +79,8 @@
     "4": {
       "method": "expression",
       "ln": "4",
+      "col_start": "5",
+      "col_end": "20",
       "name": [
         "originalCount"
       ],
@@ -89,6 +97,8 @@
     "5": {
       "method": "else",
       "ln": "5",
+      "col_start": "1",
+      "col_end": "18",
       "enter": "6",
       "exit": "8",
       "src": "else",
@@ -97,6 +107,8 @@
     "6": {
       "method": "expression",
       "ln": "6",
+      "col_start": "5",
+      "col_end": "20",
       "name": [
         "originalCount"
       ],
@@ -113,6 +125,8 @@
     "8": {
       "method": "expression",
       "ln": "8",
+      "col_start": "1",
+      "col_end": "11",
       "name": [
         "newCount"
       ],

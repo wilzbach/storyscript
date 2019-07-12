@@ -3,6 +3,8 @@
     "1": {
       "method": "while",
       "ln": "1",
+      "col_start": "7",
+      "col_end": "10",
       "args": [
         {
           "$OBJECT": "regexp",
@@ -17,6 +19,8 @@
     "2": {
       "method": "break",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "10",
       "parent": "1",
       "src": "    break",
       "next": "4"
@@ -24,6 +28,8 @@
     "4": {
       "method": "while",
       "ln": "4",
+      "col_start": "7",
+      "col_end": "10",
       "args": [
         {
           "$OBJECT": "expression",
@@ -54,6 +60,8 @@
     "5": {
       "method": "break",
       "ln": "5",
+      "col_start": "5",
+      "col_end": "10",
       "parent": "4",
       "src": "    break"
     }

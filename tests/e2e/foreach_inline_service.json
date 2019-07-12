@@ -3,6 +3,8 @@
     "1.1": {
       "method": "execute",
       "ln": "1.1",
+      "col_start": "10",
+      "col_end": "32",
       "name": [
         "__p-1.1"
       ],
@@ -13,6 +15,7 @@
     "1": {
       "method": "for",
       "ln": "1",
+      "col_end": "18",
       "output": [
         "item"
       ],
@@ -31,6 +34,8 @@
     "2": {
       "method": "execute",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "29",
       "service": "email_service",
       "command": "send_email",
       "parent": "1",

@@ -3,6 +3,8 @@
     "1": {
       "method": "execute",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "12",
       "output": [
         "client"
       ],
@@ -15,6 +17,8 @@
     "2": {
       "method": "when",
       "ln": "2",
+      "col_start": "10",
+      "col_end": "23",
       "output": [
         "request"
       ],
@@ -28,6 +32,8 @@
     "3": {
       "method": "execute",
       "ln": "3",
+      "col_start": "14",
+      "col_end": "24",
       "name": [
         "id"
       ],
@@ -61,6 +67,8 @@
     "4": {
       "method": "execute",
       "ln": "4",
+      "col_start": "9",
+      "col_end": "22",
       "service": "request",
       "command": "write",
       "args": [

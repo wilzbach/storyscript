@@ -3,6 +3,7 @@ from lark.lexer import Token
 from lark.tree import Tree as LarkTree
 
 from ..exceptions import CompilerError
+from .Position import Position
 
 
 class Tree(LarkTree):
@@ -112,6 +113,12 @@ class Tree(LarkTree):
         Finds the end column number of a tree using _find_position
         """
         return self._find_position('end_column', reverse=True)
+
+    def position(self):
+        """
+        Finds the position of a tree using _find_position
+        """
+        return Position(self.line(), self.column(), self.end_column())
 
     def insert(self, item):
         """

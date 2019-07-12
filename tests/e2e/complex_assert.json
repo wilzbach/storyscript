@@ -3,6 +3,8 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "6",
       "name": [
         "foo"
       ],
@@ -18,6 +20,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "1",
+      "col_end": "6",
       "name": [
         "bar"
       ],
@@ -33,6 +37,8 @@
     "3": {
       "method": "if",
       "ln": "3",
+      "col_start": "5",
+      "col_end": "5",
       "args": [
         {
           "$OBJECT": "expression",
@@ -91,6 +97,8 @@
     "4": {
       "method": "execute",
       "ln": "4",
+      "col_start": "3",
+      "col_end": "11",
       "service": "log",
       "command": "info",
       "args": [
@@ -110,6 +118,8 @@
     "5": {
       "method": "else",
       "ln": "5",
+      "col_start": "1",
+      "col_end": "6",
       "enter": "6",
       "exit": "7",
       "src": "else",
@@ -118,6 +128,8 @@
     "6": {
       "method": "execute",
       "ln": "6",
+      "col_start": "3",
+      "col_end": "11",
       "service": "log",
       "command": "info",
       "args": [
@@ -137,6 +149,8 @@
     "7": {
       "method": "execute",
       "ln": "7",
+      "col_start": "1",
+      "col_end": "9",
       "service": "log",
       "command": "info",
       "args": [

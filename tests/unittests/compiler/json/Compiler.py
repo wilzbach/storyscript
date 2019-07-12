@@ -6,7 +6,7 @@ from pytest import fixture, mark, raises
 from storyscript.Version import version
 from storyscript.compiler.json import JSONCompiler, Lines, Objects
 from storyscript.exceptions import StorySyntaxError
-from storyscript.parser import Tree
+from storyscript.parser import Tree, Position
 
 
 @fixture
@@ -100,7 +100,7 @@ def test_compiler_assignment_unary(patch, compiler, lines, tree):
     Objects.expression.assert_called_with(af.expression)
     kwargs = {'args': [Objects.expression()],
               'parent': '1'}
-    lines.append.assert_called_with('expression', tree.line(), **kwargs)
+    lines.append.assert_called_with('expression', tree.position(), **kwargs)
     lines.set_name.assert_called_with(Objects.names())
 
 
@@ -196,7 +196,7 @@ def test_compiler_call_expression(patch, compiler, lines, tree):
     Objects.names.return_values = ['.path.']
     compiler.call_expression(tree, 'parent')
     Objects.arguments.assert_called_with(tree)
-    lines.append.assert_called_with('call', tree.line(),
+    lines.append.assert_called_with('call', tree.position(),
                                     function=tree.path.extract_path(),
                                     args=Objects.arguments(), parent='parent',
                                     output=None)
@@ -249,12 +249,12 @@ def test_compiler_service(patch, compiler, lines, tree):
     tree.node.return_value = None
     tree.data = 'service'
     compiler.service(tree, None, 'parent')
-    line = tree.line()
+    position = tree.position()
     service = tree.path.extract_path()
     command = tree.service_fragment.command.child()
     Objects.arguments.assert_called_with(tree.service_fragment)
     JSONCompiler.output.assert_called_with(tree.service_fragment.output)
-    lines.execute.assert_called_with(line, service, command,
+    lines.execute.assert_called_with(position, service, command,
                                      Objects.arguments(), compiler.output(),
                                      None, 'parent')
 
@@ -264,11 +264,12 @@ def test_compiler_service_command(patch, compiler, lines, tree):
     patch.object(JSONCompiler, 'output')
     tree.data = 'service'
     compiler.service(tree, None, 'parent')
-    line = tree.line()
+    position = tree.position()
     service = tree.path.extract_path()
     command = tree.service_fragment.command.child()
-    lines.set_scope.assert_called_with(line, 'parent', compiler.output())
-    lines.execute.assert_called_with(line, service, command,
+    lines.set_scope.assert_called_with(position.line, 'parent',
+                                       compiler.output())
+    lines.execute.assert_called_with(position, service, command,
                                      Objects.arguments(), compiler.output(),
                                      None, 'parent')
 
@@ -280,10 +281,10 @@ def test_compiler_service_nested_block(patch, magic, compiler, lines, tree):
     nested_block = magic()
     tree.data = 'service'
     compiler.service(tree, nested_block, 'parent')
-    line = tree.line()
+    position = tree.position()
     service = tree.path.extract_path()
     command = tree.service_fragment.command.child()
-    lines.execute.assert_called_with(line, service, command,
+    lines.execute.assert_called_with(position, service, command,
                                      Objects.arguments(), compiler.output(),
                                      nested_block.line(), 'parent')
 
@@ -428,9 +429,9 @@ def test_compiler_return_statement(patch, compiler, lines, tree):
     """
     tree.base_expression = None
     compiler.return_statement(tree, '1')
-    line = tree.line()
+    position = tree.position()
     kwargs = {'args': None, 'parent': '1'}
-    lines.append.assert_called_with('return', line, **kwargs)
+    lines.append.assert_called_with('return', position, **kwargs)
 
 
 def test_compiler_return_statement_entity(patch, compiler, lines, tree):
@@ -440,12 +441,12 @@ def test_compiler_return_statement_entity(patch, compiler, lines, tree):
     """
     patch.object(JSONCompiler, 'fake_base_expression')
     compiler.return_statement(tree, '1')
-    line = tree.line()
+    position = tree.position()
     JSONCompiler.fake_base_expression.assert_called_with(
         tree.base_expression, '1'
     )
     kwargs = {'args': [JSONCompiler.fake_base_expression()], 'parent': '1'}
-    lines.append.assert_called_with('return', line, **kwargs)
+    lines.append.assert_called_with('return', position, **kwargs)
 
 
 def test_compiler_return_statement_error(patch, compiler, tree):
@@ -468,11 +469,12 @@ def test_compiler_if_block(patch, compiler, lines, tree):
     JSONCompiler.fake_base_expression.assert_called_with(exp, '1')
     nested_block = tree.nested_block
     args = [JSONCompiler.fake_base_expression()]
-    lines.set_scope.assert_called_with(tree.line(), '1')
-    lines.finish_scope.assert_called_with(tree.line())
-    lines.append.assert_called_with('if', tree.line(), args=args,
+    lines.set_scope.assert_called_with(tree.position().line, '1')
+    lines.finish_scope.assert_called_with(tree.position().line)
+    lines.append.assert_called_with('if', tree.position(), args=args,
                                     enter=nested_block.line(), parent='1')
-    compiler.subtree.assert_called_with(nested_block, parent=tree.line())
+    compiler.subtree.assert_called_with(nested_block,
+                                        parent=tree.position().line)
 
 
 def test_compiler_if_block_with_elseif(patch, compiler, tree):
@@ -494,27 +496,29 @@ def test_compiler_if_block_with_else(patch, compiler, tree):
 def test_compiler_elseif_block(patch, compiler, lines, tree):
     patch.many(JSONCompiler, ['subtree', 'fake_base_expression'])
     compiler.elseif_block(tree, '1')
-    lines.set_exit.assert_called_with(tree.line())
+    lines.set_exit.assert_called_with(tree.position().line)
     exp = tree.elseif_statement.base_expression
     JSONCompiler.fake_base_expression.assert_called_with(exp, '1')
     args = [JSONCompiler.fake_base_expression()]
-    lines.set_scope.assert_called_with(tree.line(), '1')
-    lines.finish_scope.assert_called_with(tree.line())
-    lines.append.assert_called_with('elif', tree.line(), args=args,
+    lines.set_scope.assert_called_with(tree.position().line, '1')
+    lines.finish_scope.assert_called_with(tree.position().line)
+    lines.append.assert_called_with('elif', tree.position(), args=args,
                                     enter=tree.nested_block.line(),
                                     parent='1')
-    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+    compiler.subtree.assert_called_with(tree.nested_block,
+                                        parent=tree.position().line)
 
 
 def test_compiler_else_block(patch, compiler, lines, tree):
     patch.object(JSONCompiler, 'subtree')
     compiler.else_block(tree, '1')
-    lines.set_exit.assert_called_with(tree.line())
-    lines.set_scope.assert_called_with(tree.line(), '1')
-    lines.finish_scope.assert_called_with(tree.line())
-    lines.append.assert_called_with('else', tree.line(), parent='1',
+    lines.set_exit.assert_called_with(tree.position().line)
+    lines.set_scope.assert_called_with(tree.position().line, '1')
+    lines.finish_scope.assert_called_with(tree.position().line)
+    lines.append.assert_called_with('else', tree.position(), parent='1',
                                     enter=tree.nested_block.line())
-    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+    compiler.subtree.assert_called_with(tree.nested_block,
+                                        parent=tree.position().line)
 
 
 def test_compiler_foreach_block(patch, compiler, lines, tree):
@@ -523,12 +527,14 @@ def test_compiler_foreach_block(patch, compiler, lines, tree):
     compiler.foreach_block(tree, '1')
     compiler.output.assert_called_with(tree.foreach_statement.output)
     args = [compiler.fake_base_expression()]
-    lines.set_scope.assert_called_with(tree.line(), '1', JSONCompiler.output())
-    lines.finish_scope.assert_called_with(tree.line())
-    lines.append.assert_called_with('for', tree.line(), args=args,
+    lines.set_scope.assert_called_with(tree.position().line, '1',
+                                       JSONCompiler.output())
+    lines.finish_scope.assert_called_with(tree.position().line)
+    lines.append.assert_called_with('for', tree.position(), args=args,
                                     enter=tree.nested_block.line(),
                                     output=JSONCompiler.output(), parent='1')
-    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+    compiler.subtree.assert_called_with(tree.nested_block,
+                                        parent=tree.position().line)
 
 
 def test_compiler_while_block(patch, compiler, lines, tree):
@@ -536,12 +542,13 @@ def test_compiler_while_block(patch, compiler, lines, tree):
     patch.many(JSONCompiler, ['subtree', 'fake_base_expression'])
     compiler.while_block(tree, '1')
     args = [compiler.fake_base_expression()]
-    lines.set_scope.assert_called_with(tree.line(), '1')
-    lines.finish_scope.assert_called_with(tree.line())
-    lines.append.assert_called_with('while', tree.line(), args=args,
+    lines.set_scope.assert_called_with(tree.position().line, '1')
+    lines.finish_scope.assert_called_with(tree.position().line)
+    lines.append.assert_called_with('while', tree.position(), args=args,
                                     enter=tree.nested_block.line(),
                                     parent='1')
-    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+    compiler.subtree.assert_called_with(tree.nested_block,
+                                        parent=tree.position().line)
 
 
 def test_compiler_function_block(patch, compiler, lines, tree):
@@ -551,13 +558,14 @@ def test_compiler_function_block(patch, compiler, lines, tree):
     statement = tree.function_statement
     Objects.function_arguments.assert_called_with(statement)
     compiler.function_output.assert_called_with(statement)
-    lines.append.assert_called_with('function', tree.line(),
+    lines.append.assert_called_with('function', tree.position(),
                                     function=statement.child().value,
                                     args=Objects.function_arguments(),
                                     output=compiler.function_output(),
                                     enter=tree.nested_block.line(),
                                     parent='1')
-    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+    compiler.subtree.assert_called_with(tree.nested_block,
+                                        parent=tree.position().line)
 
 
 def test_compiler_function_block_redeclared(patch, compiler, lines, tree):
@@ -572,7 +580,7 @@ def test_compiler_function_block_redeclared(patch, compiler, lines, tree):
 def test_compiler_throw_statement(patch, compiler, lines, tree):
     tree.children = [Token('RAISE', 'throw')]
     compiler.throw_statement(tree, '1')
-    lines.append.assert_called_with('throw', tree.line(), args=[],
+    lines.append.assert_called_with('throw', tree.position(), args=[],
                                     parent='1')
 
 
@@ -581,7 +589,7 @@ def test_compiler_throw_name_statement(patch, compiler, lines, tree):
     tree.children = [Token('RAISE', 'throw'), Token('NAME', 'error')]
     compiler.throw_statement(tree, '1')
     args = [Objects.entity()]
-    lines.append.assert_called_with('throw', tree.line(), args=args,
+    lines.append.assert_called_with('throw', tree.position(), args=args,
                                     parent='1')
 
 
@@ -598,7 +606,7 @@ def test_compiler_mutation_block(patch, compiler, lines, tree):
     JSONCompiler.chained_mutations.assert_called_with(tree.mutation)
     args = [Objects.expression(), Objects.mutation_fragment(), 'chained']
     kwargs = {'args': args, 'parent': None}
-    lines.append.assert_called_with('mutation', tree.line(), **kwargs)
+    lines.append.assert_called_with('mutation', tree.position(), **kwargs)
 
 
 def test_compiler_mutation_block_nested(patch, compiler, lines, tree):
@@ -610,7 +618,7 @@ def test_compiler_mutation_block_nested(patch, compiler, lines, tree):
     args = [Objects.expression(), Objects.mutation_fragment(),
             'chained', 'chained']
     kwargs = {'args': args, 'parent': None}
-    lines.append.assert_called_with('mutation', tree.line(), **kwargs)
+    lines.append.assert_called_with('mutation', tree.position(), **kwargs)
 
 
 def test_compiler_mutation_block_from_service(patch, compiler, lines, tree):
@@ -624,7 +632,7 @@ def test_compiler_mutation_block_from_service(patch, compiler, lines, tree):
     JSONCompiler.chained_mutations.assert_called_with(tree)
     args = [Objects.path(), Objects.mutation_fragment(), 'chained']
     kwargs = {'args': args, 'parent': None}
-    lines.append.assert_called_with('mutation', tree.line(), **kwargs)
+    lines.append.assert_called_with('mutation', tree.position(), **kwargs)
 
 
 def test_compiler_indented_chain(patch, compiler, lines, tree):
@@ -706,10 +714,11 @@ def test_compiler_try_block(patch, compiler, lines, tree):
     tree.finally_block = None
     compiler.try_block(tree, '1')
     kwargs = {'enter': tree.nested_block.line(), 'parent': '1'}
-    lines.set_scope.assert_called_with(tree.line(), '1')
-    lines.finish_scope.assert_called_with(tree.line())
-    lines.append.assert_called_with('try', tree.line(), **kwargs)
-    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+    lines.set_scope.assert_called_with(tree.position().line, '1')
+    lines.finish_scope.assert_called_with(tree.position().line)
+    lines.append.assert_called_with('try', tree.position(), **kwargs)
+    compiler.subtree.assert_called_with(tree.nested_block,
+                                        parent=tree.position().line)
 
 
 def test_compiler_try_block_catch(patch, compiler, lines, tree):
@@ -733,14 +742,16 @@ def test_compiler_catch_block(patch, compiler, lines, tree):
     patch.object(Objects, 'names')
     patch.object(JSONCompiler, 'subtree')
     compiler.catch_block(tree, '1')
-    lines.set_exit.assert_called_with(tree.line())
+    lines.set_exit.assert_called_with(tree.position().line)
     Objects.names.assert_called_with(tree.catch_statement)
-    lines.set_scope.assert_called_with(tree.line(), '1', Objects.names())
-    lines.finish_scope.assert_called_with(tree.line())
+    lines.set_scope.assert_called_with(tree.position().line, '1',
+                                       Objects.names())
+    lines.finish_scope.assert_called_with(tree.position().line)
     kwargs = {'enter': tree.nested_block.line(), 'output': Objects.names(),
               'parent': '1'}
-    lines.append.assert_called_with('catch', tree.line(), **kwargs)
-    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+    lines.append.assert_called_with('catch', tree.position(), **kwargs)
+    compiler.subtree.assert_called_with(tree.nested_block,
+                                        parent=tree.position().line)
 
 
 def test_compiler_finally_block(patch, compiler, lines, tree):
@@ -749,17 +760,18 @@ def test_compiler_finally_block(patch, compiler, lines, tree):
     """
     patch.object(JSONCompiler, 'subtree')
     compiler.finally_block(tree, '1')
-    lines.set_exit.assert_called_with(tree.line())
-    lines.set_scope.assert_called_with(tree.line(), '1')
-    lines.finish_scope.assert_called_with(tree.line())
+    lines.set_exit.assert_called_with(tree.position().line)
+    lines.set_scope.assert_called_with(tree.position().line, '1')
+    lines.finish_scope.assert_called_with(tree.position().line)
     kwargs = {'enter': tree.nested_block.line(), 'parent': '1'}
-    lines.append.assert_called_with('finally', tree.line(), **kwargs)
-    compiler.subtree.assert_called_with(tree.nested_block, parent=tree.line())
+    lines.append.assert_called_with('finally', tree.position(), **kwargs)
+    compiler.subtree.assert_called_with(tree.nested_block,
+                                        parent=tree.position().line)
 
 
 def test_compiler_break_statement(compiler, lines, tree):
     compiler.break_statement(tree, '1')
-    lines.append.assert_called_with('break', tree.line(), parent='1')
+    lines.append.assert_called_with('break', tree.position(), parent='1')
 
 
 def test_compiler_break_statement_outside(patch, compiler, lines, tree):

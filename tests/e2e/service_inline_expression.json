@@ -3,6 +3,8 @@
     "1.1": {
       "method": "execute",
       "ln": "1.1",
+      "col_start": "19",
+      "col_end": "33",
       "name": [
         "__p-1.1"
       ],
@@ -13,6 +15,8 @@
     "1": {
       "method": "execute",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "12",
       "service": "alpine",
       "command": "echo",
       "args": [

@@ -3,6 +3,8 @@
     "1": {
       "method": "for",
       "ln": "1",
+      "col_start": "9",
+      "col_end": "6",
       "output": [
         "a"
       ],
@@ -33,6 +35,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "b"
       ],
@@ -51,6 +55,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],
@@ -66,6 +72,8 @@
     "6": {
       "method": "expression",
       "ln": "6",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "b"
       ],
