@@ -1,0 +1,24 @@
+{
+  "tree": {
+    "1": {
+      "method": "while",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
+      ],
+      "enter": "2",
+      "src": "while true",
+      "next": "2"
+    },
+    "2": {
+      "method": "continue",
+      "ln": "2",
+      "parent": "1",
+      "src": "\tcontinue"
+    }
+  },
+  "entrypoint": "1"
+}

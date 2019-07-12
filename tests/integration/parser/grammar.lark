@@ -47,8 +47,9 @@ absolute_expression: expression
 base_expression: (expression| inline_service)
 return_statement: RETURN base_expression?
 break_statement: BREAK
+continue_statement: CONTINUE
 entity: values| path
-rules: absolute_expression| assignment| return_statement| throw_statement| break_statement| block
+rules: absolute_expression| assignment| return_statement| throw_statement| break_statement| continue_statement| block
 command: NAME
 arguments: NAME? _COLON expression
 output: (_AS NAME (_COMMA NAME)*)
@@ -142,6 +143,7 @@ PLUS.5: "+"
 DASH.5: "-"
 RETURN: "return"
 BREAK: "break"
+CONTINUE: "continue"
 _IF: "if"
 _ELSE: "else"
 _FOREACH: "foreach"
