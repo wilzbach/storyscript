@@ -235,7 +235,7 @@ Mutations
 ---------
 ::
 
-    1 is_odd
+    1 isOdd
 
 Mutations can have arguments::
 
