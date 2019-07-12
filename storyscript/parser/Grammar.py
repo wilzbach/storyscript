@@ -106,7 +106,7 @@ class Grammar:
         self.ebnf.assignment_fragment = assignment_fragment
         objects = self.ebnf.collection('ocb', 'path', 'path', 'ccb')
         self.ebnf.assignment_destructoring = objects
-        self.ebnf.assignment = ('types? (path | assignment_destructoring ) '
+        self.ebnf.assignment = ('(path | assignment_destructoring) '
                                 'assignment_fragment')
 
     def expressions(self):

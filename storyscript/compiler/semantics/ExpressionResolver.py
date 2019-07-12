@@ -59,7 +59,7 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         """
         return operator in cls._arithmetic_types
 
-    def as_expression(self, tree, expr=None):
+    def as_expression(self, tree, expr):
         assert tree.child(1).data == 'as_operator'
         # check for compatibility
         t = self.visitor.types(tree.child(1).types)

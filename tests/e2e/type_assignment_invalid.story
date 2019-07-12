@@ -1,1 +1,1 @@
-int a = []
+a = [] as int

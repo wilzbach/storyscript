@@ -1,19 +1,5 @@
 {
   "tree": {
-    "1.1": {
-      "method": "expression",
-      "ln": "1.1",
-      "name": [
-        "__p-1.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "list",
-          "items": []
-        }
-      ],
-      "next": "1"
-    },
     "1": {
       "method": "expression",
       "ln": "1",
@@ -40,15 +26,13 @@
             ]
           },
           "value": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.1"
-            ]
+            "$OBJECT": "list",
+            "items": []
           }
         }
       ],
-      "src": "List[List[string]] a = []"
+      "src": "a = [] as List[List[string]]"
     }
   },
-  "entrypoint": "1.1"
+  "entrypoint": "1"
 }
