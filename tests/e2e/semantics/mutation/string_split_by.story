@@ -1,1 +1,1 @@
-a = "aa" split by:"."
+a = "aa".split(by:".")

@@ -1,1 +1,1 @@
-b = [0] contains :1
+b = [0].contains(:1)

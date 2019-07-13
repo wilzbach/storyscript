@@ -84,8 +84,7 @@ class Grammar:
         self.ebnf.map = self.ebnf.collection(*map_)
         self.ebnf.regular_expression = 'regexp'
         self.ebnf.inline_expression = ('op inline_service cp, '
-                                       'call_expression, '
-                                       'op mutation cp')
+                                       'call_expression')
         values = ('number, string, boolean, void, list, map, '
                   'regular_expression, time')
         self.ebnf.values = values
@@ -165,9 +164,9 @@ class Grammar:
 
         self.ebnf.expression = 'or_expression'
         self.ebnf.absolute_expression = 'expression'
-        # service and mutation calls don't need parentheses when they are at
+        # service calls don't need parentheses when they are at
         # the base,e.g. `if my_service commmand`
-        self.ebnf.base_expression = '(expression, inline_service, mutation)'
+        self.ebnf.base_expression = '(expression, inline_service)'
 
     def throw_statement(self):
         self.ebnf.THROW = 'throw'
@@ -183,25 +182,15 @@ class Grammar:
                  'throw_statement, break_statement, block')
         self.ebnf.rules = rules
 
-    def mutation_block(self):
-        self.ebnf._THEN = 'then'
-        self.ebnf.mutation_fragment = 'name arguments*'
-        self.ebnf.chained_mutation = 'then mutation_fragment'
-        self.ebnf.mutation = ('primary_expression (mutation_fragment '
-                              '(chained_mutation)*)')
-        self.ebnf.mutation_block = 'mutation nl (nested_block)?'
-        self.ebnf.indented_chain = 'indent (chained_mutation nl)+ dedent'
-
     def service_block(self):
         self.ebnf.command = 'name'
         self.ebnf.arguments = 'name? colon expression'
         self.ebnf.output = '(as name (comma name)*)'
         self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
         self.ebnf.inline_service_fragment = '(command arguments*|arguments+)'
-        self.ebnf.service = 'path service_fragment chained_mutation*'
+        self.ebnf.service = 'path service_fragment'
         self.ebnf.service_block = 'service nl (nested_block)?'
-        self.ebnf.inline_service = ('path inline_service_fragment '
-                                    'chained_mutation*')
+        self.ebnf.inline_service = ('path inline_service_fragment')
 
     def call_expression(self):
         self.ebnf.call_expression = ('path op arguments* '
@@ -265,8 +254,7 @@ class Grammar:
         self.ebnf.when_block = self.ebnf.simple_block(when)
         self.ebnf.indented_arguments = 'indent (arguments nl)+ dedent'
         block = ('rules nl, if_block, foreach_block, function_block, '
-                 'arguments, indented_chain, chained_mutation, '
-                 'mutation_block, service_block, when_block, try_block, '
+                 'arguments, service_block, when_block, try_block, '
                  'indented_arguments, while_block')
         self.ebnf.block = block
         self.ebnf.nested_block = 'indent block+ dedent'
@@ -279,7 +267,6 @@ class Grammar:
         self.assignments()
         self.expressions()
         self.rules()
-        self.mutation_block()
         self.service_block()
         self.call_expression()
         self.if_block()

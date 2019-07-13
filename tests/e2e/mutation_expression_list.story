@@ -1,1 +1,1 @@
-["opened", "labeled"] contains item: "opened"
+["opened", "labeled"].contains(item: "opened")

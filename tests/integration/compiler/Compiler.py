@@ -5,20 +5,28 @@ from storyscript.Api import Api
 
 
 @mark.parametrize('source', [
-    '1 increment then format to:"string"',
-    '1 increment\n\tthen format to:"string"'
+    'a = "foo bar"\na.split(by: " ").contains(item: "foo")'
 ])
 def test_compiler_mutation_chained(source):
     """
     Ensures that chained mutations are compiled correctly
     """
     result = Api.loads(source).result()
-    args = [{'$OBJECT': 'int', 'int': 1},
-            {'$OBJECT': 'mutation', 'mutation': 'increment', 'args': []},
-            {'$OBJECT': 'mutation', 'mutation': 'format', 'args': [
-                {'$OBJECT': 'arg', 'name': 'to',
-                 'arg': {'$OBJECT': 'string', 'string': 'string'}}]}]
-    assert result['tree']['1']['args'] == args
+    args1 = [{'$OBJECT': 'string', 'string': 'foo bar'}]
+    args2_1 = [{'$OBJECT': 'path', 'paths': ['a']},
+               {'$OBJECT': 'mutation', 'mutation': 'split', 'args': [
+                   {'$OBJECT': 'arg', 'name': 'by',
+                    'arg': {'$OBJECT': 'string', 'string': ' '}}]}]
+    args2_2 = [{'$OBJECT': 'path', 'paths': ['__p-2.1']},
+               {'$OBJECT': 'mutation', 'mutation': 'contains', 'args': [
+                   {'$OBJECT': 'arg', 'name': 'item',
+                    'arg': {'$OBJECT': 'string', 'string': 'foo'}}]}]
+    args2 = [{'$OBJECT': 'path', 'paths': ['__p-2.2']}]
+
+    assert result['tree']['1']['args'] == args1
+    assert result['tree']['2.1']['args'] == args2_1
+    assert result['tree']['2.2']['args'] == args2_2
+    assert result['tree']['2']['args'] == args2
 
 
 def test_compiler_empty_files():

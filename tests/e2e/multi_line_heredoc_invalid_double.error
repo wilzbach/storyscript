@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 17
+Error: syntax error in story at line 1, column 14
 
 1|    a = """aaa"""bbb"""
-                      ^
+                   ^
 
 E0007: Missing value after `=`
