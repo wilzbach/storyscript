@@ -91,7 +91,7 @@ def test_indenter_double_indent():
 
 def test_increment_paren_level():
     indenter = CustomIndenter()
-    indenter.OPEN_PAREN_types = ["("]
+    indenter.OPEN_PAREN_types = ['(']
     assert indenter.paren_level == 0
 
     nl, indent = indent_token(4)
@@ -101,8 +101,8 @@ def test_increment_paren_level():
 
 def test_decrement_paren_level():
     indenter = CustomIndenter()
-    indenter.OPEN_PAREN_types = ["("]
-    indenter.CLOSE_PAREN_types = [")"]
+    indenter.OPEN_PAREN_types = ['(']
+    indenter.CLOSE_PAREN_types = [')']
     assert indenter.paren_level == 0
 
     nl, indent = indent_token(4)
@@ -112,7 +112,7 @@ def test_decrement_paren_level():
 
 def test_assert_always_zero_or_more_paren_level():
     indenter = CustomIndenter()
-    indenter.CLOSE_PAREN_types = [")"]
+    indenter.CLOSE_PAREN_types = [')']
     assert indenter.paren_level == 0
 
     nl, indent = indent_token(4)
