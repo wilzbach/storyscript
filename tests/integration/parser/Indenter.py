@@ -3,13 +3,14 @@ from lark.lexer import Token
 
 from storyscript.parser.Indenter import CustomIndenter
 
-
 A = Token('A', 'A')
 B = Token('B', 'B')
 C = Token('C', 'C')
 NL = Token('_NL', '\n')
 WHILE = Token('_WHILE', 'while')
 DEDENT = Token('_DEDENT', '')
+OPEN_PAREN = Token('(', '(')
+CLOSE_PAREN = Token(')', ')')
 
 
 def indent_token(level, ws_type=' '):
@@ -82,8 +83,43 @@ def test_indenter_double_indent():
                                A, nl2,
                                B,
                                NL, C]))
-    print(r)
     assert r == [WHILE, nl, indent,
                  A, nl2,
                  dedent, double_dedent, B, NL,
                  DEDENT, C]
+
+
+def test_increment_paren_level():
+    indenter = CustomIndenter()
+    indenter.OPEN_PAREN_types = ["("]
+    assert indenter.paren_level == 0
+
+    nl, indent = indent_token(4)
+    list(indenter.process([OPEN_PAREN]))
+    assert indenter.paren_level == 1
+
+
+def test_decrement_paren_level():
+    indenter = CustomIndenter()
+    indenter.OPEN_PAREN_types = ["("]
+    indenter.CLOSE_PAREN_types = [")"]
+    assert indenter.paren_level == 0
+
+    nl, indent = indent_token(4)
+    list(indenter.process([OPEN_PAREN, OPEN_PAREN, CLOSE_PAREN]))
+    assert indenter.paren_level == 1
+
+
+def test_assert_always_zero_or_more_paren_level():
+    indenter = CustomIndenter()
+    indenter.CLOSE_PAREN_types = [")"]
+    assert indenter.paren_level == 0
+
+    nl, indent = indent_token(4)
+    raised_exception = Exception()
+    try:
+        list(indenter.process([CLOSE_PAREN]))
+    except AssertionError as e:
+        raised_exception = e
+        pass
+    assert isinstance(raised_exception, AssertionError)
