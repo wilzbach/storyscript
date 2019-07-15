@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 28
+Error: syntax error in story at line 1, column 12
 
 1|    a = [1, 2].contains(item:1 bar:2)
-                                 ^
+                 ^^^^^^^^^^^^^^^^^^^
 
-E0075: Expected closing parenthesis: )
+E0114: Mutation `contains` does not accept argument `bar`

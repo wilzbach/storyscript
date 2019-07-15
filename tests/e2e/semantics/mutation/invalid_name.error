@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 34
+Error: syntax error in story at line 1, column 5
 
 1|    a = [1, 2].invalid_mutation_name()
-                                       ^
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-E0041: `)` is not allowed here
+E0117: Invalid mutation `invalid_mutation_name`

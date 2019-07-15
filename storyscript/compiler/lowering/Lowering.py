@@ -598,13 +598,16 @@ class Lowering:
 
         if node.data == 'dot_expression':
             dot_expr = node
+            mutation_fragments = [
+                dot_expr.children[0],  # name
+                *dot_expr.children[1:]
+            ]
+
             expression = Tree('mutation', [
                 parent.expression,
-                Tree('mutation_fragment', [
-                    dot_expr.child(0),  # name
-                    dot_expr.arguments
-                ])
+                Tree('mutation_fragment', mutation_fragments)
             ])
+
             path = block.add_assignment(expression,
                                         original_line=parent.line())
             parent.children = [Tree('entity', [path])]

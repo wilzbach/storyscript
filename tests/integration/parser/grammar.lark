@@ -30,7 +30,7 @@ primary_expression: entity | _OP or_expression _CP
 output_names: NAME (_COMMA NAME)*
 as_operator: _AS (types | output_names)
 pow_operator: POWER
-dot_expression: _DOT NAME (_OP arguments _CP)
+dot_expression: _DOT NAME (_OP (arguments)* _CP)
 pow_expression: primary_expression ((pow_operator unary_expression) |dot_expression )?
 unary_expression: unary_operator unary_expression | pow_expression
 as_expression: unary_expression (as_operator)?

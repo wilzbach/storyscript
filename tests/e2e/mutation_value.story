@@ -1,2 +1,1 @@
-s = "hello"
-s.length()
+"hello".length()
