@@ -11,27 +11,31 @@
           "$OBJECT": "type_cast",
           "type": {
             "$OBJECT": "type",
-            "type": "List",
+            "type": "int"
+          },
+          "value": {
+            "$OBJECT": "expression",
+            "expression": "not",
             "values": [
               {
-                "$OBJECT": "type",
-                "type": "List",
+                "$OBJECT": "expression",
+                "expression": "equal",
                 "values": [
                   {
-                    "$OBJECT": "type",
-                    "type": "string"
+                    "$OBJECT": "int",
+                    "int": 2
+                  },
+                  {
+                    "$OBJECT": "int",
+                    "int": 2
                   }
                 ]
               }
             ]
-          },
-          "value": {
-            "$OBJECT": "list",
-            "items": []
           }
         }
       ],
-      "src": "a = [] as List[List[string]]"
+      "src": "a = !(2 == 2) as int"
     }
   },
   "entrypoint": "1"

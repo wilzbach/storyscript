@@ -74,8 +74,7 @@ class FakeTree:
         """
         line = self.get_line(value)
         first_token = value.find_first_token()
-        if first_token is not None:
-            first_token.line = line
+        first_token.line = line
         path = self.path(line=line)
         return self.assignment_path(path, value, line)
 
@@ -121,7 +120,8 @@ class FakeTree:
             *self.block.children[insert_pos:],
         ]
 
-        # we need a new node, s.t. already inserted fake node don't get changed
+        # we need a new node, s.t. already inserted
+        # fake nodes don't get changed
         name = Token('NAME', assignment.path.child(0), line=original_line)
         fake_path = Tree('path', [name])
         return fake_path

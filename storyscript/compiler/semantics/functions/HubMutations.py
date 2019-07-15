@@ -42,8 +42,8 @@ string substring start:int -> string
 string substring start:int end:int -> string
 string substring end:int -> string
 
-int is_odd -> boolean
-int is_even -> boolean
+int isOdd -> boolean
+int isEven -> boolean
 int absolute -> int
 int increment -> int
 int decrement -> int
@@ -62,9 +62,10 @@ float log2 -> float
 float log10 -> float
 float exp -> float
 float abs -> float
-float is_nan -> boolean
-float is_infinity -> boolean
-# approx_equal?
+float isNaN -> boolean
+float isInfinity -> boolean
+float approxEqual value: float -> boolean
+float approxEqual value: float maxRelDiff: float maxAbsDiff: float -> boolean
 float sqrt -> float
 """
 
@@ -74,7 +75,7 @@ class Hub:
     A representation of a Storyscript Engine and Hub.
     Assumed to be Asyncy Engine for now.
     """
-    def __init__(self):
+    def __init__(self, mutations):
         self._mutations = []
         for m in mutations.split('\n'):
             if len(m.strip()) == 0 or m.startswith('#'):
@@ -88,4 +89,4 @@ class Hub:
         return self._mutations
 
 
-hub = Hub()
+hub = Hub(mutations)

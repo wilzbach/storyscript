@@ -28,56 +28,6 @@
         }
       ],
       "src": "d = 2",
-      "next": "3.1"
-    },
-    "3.1": {
-      "method": "expression",
-      "ln": "3.1",
-      "name": [
-        "__p-3.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "d"
-                ]
-              }
-            }
-          ]
-        }
-      ],
       "next": "3"
     },
     "3": {
@@ -103,65 +53,49 @@
               }
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-3.1"
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
+                },
+                {
+                  "$OBJECT": "string",
+                  "string": "c"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "d"
+                    ]
+                  }
+                }
               ]
             }
           ]
         }
       ],
       "src": "a1  = 0 + \"a{b}c{d}\"",
-      "next": "4.1"
-    },
-    "4.1": {
-      "method": "expression",
-      "ln": "4.1",
-      "name": [
-        "__p-4.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "d"
-                ]
-              }
-            }
-          ]
-        }
-      ],
       "next": "4"
     },
     "4": {
@@ -176,9 +110,43 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-4.1"
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
+                },
+                {
+                  "$OBJECT": "string",
+                  "string": "c"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "d"
+                    ]
+                  }
+                }
               ]
             },
             {
@@ -196,56 +164,6 @@
         }
       ],
       "src": "a2  = \"a{b}c{d}\" + 0",
-      "next": "5.1"
-    },
-    "5.1": {
-      "method": "expression",
-      "ln": "5.1",
-      "name": [
-        "__p-5.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "d"
-                ]
-              }
-            }
-          ]
-        }
-      ],
       "next": "5"
     },
     "5": {
@@ -275,9 +193,43 @@
                   }
                 },
                 {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "__p-5.1"
+                  "$OBJECT": "expression",
+                  "expression": "sum",
+                  "values": [
+                    {
+                      "$OBJECT": "string",
+                      "string": "a"
+                    },
+                    {
+                      "$OBJECT": "type_cast",
+                      "type": {
+                        "$OBJECT": "type",
+                        "type": "string"
+                      },
+                      "value": {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "b"
+                        ]
+                      }
+                    },
+                    {
+                      "$OBJECT": "string",
+                      "string": "c"
+                    },
+                    {
+                      "$OBJECT": "type_cast",
+                      "type": {
+                        "$OBJECT": "type",
+                        "type": "string"
+                      },
+                      "value": {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "d"
+                        ]
+                      }
+                    }
                   ]
                 }
               ]
@@ -315,20 +267,41 @@
               "expression": "sum",
               "values": [
                 {
-                  "$OBJECT": "int",
-                  "int": 0
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "int",
+                    "int": 0
+                  }
                 },
                 {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "b"
-                  ]
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
                 }
               ]
             },
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             }
           ]
         }
@@ -348,14 +321,28 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "int",
-              "int": 0
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "b"
+                ]
+              }
             }
           ]
         }
@@ -375,37 +362,6 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "b"
-              ]
-            },
-            {
-              "$OBJECT": "int",
-              "int": 0
-            }
-          ]
-        }
-      ],
-      "src": "a6  = \"{b}\" + 0",
-      "next": "9.1"
-    },
-    "9.1": {
-      "method": "expression",
-      "ln": "9.1",
-      "name": [
-        "__p-9.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
               "$OBJECT": "type_cast",
               "type": {
                 "$OBJECT": "type",
@@ -417,10 +373,22 @@
                   "b"
                 ]
               }
+            },
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
             }
           ]
         }
       ],
+      "src": "a6  = \"{b}\" + 0",
       "next": "9"
     },
     "9": {
@@ -446,48 +414,32 @@
               }
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-9.1"
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
+                }
               ]
             }
           ]
         }
       ],
       "src": "a7  = 0 + \"a{b}\"",
-      "next": "10.1"
-    },
-    "10.1": {
-      "method": "expression",
-      "ln": "10.1",
-      "name": [
-        "__p-10.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
-            }
-          ]
-        }
-      ],
       "next": "10"
     },
     "10": {
@@ -502,9 +454,26 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-10.1"
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
+                }
               ]
             },
             {
@@ -522,39 +491,6 @@
         }
       ],
       "src": "a7  = \"a{b}\" + 0",
-      "next": "11.1"
-    },
-    "11.1": {
-      "method": "expression",
-      "ln": "11.1",
-      "name": [
-        "__p-11.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
-            }
-          ]
-        }
-      ],
       "next": "11"
     },
     "11": {
@@ -584,9 +520,26 @@
                   }
                 },
                 {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "__p-11.1"
+                  "$OBJECT": "expression",
+                  "expression": "sum",
+                  "values": [
+                    {
+                      "$OBJECT": "string",
+                      "string": "a"
+                    },
+                    {
+                      "$OBJECT": "type_cast",
+                      "type": {
+                        "$OBJECT": "type",
+                        "type": "string"
+                      },
+                      "value": {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "b"
+                        ]
+                      }
+                    }
                   ]
                 }
               ]
@@ -606,43 +559,6 @@
         }
       ],
       "src": "a8  = 0 + \"a{b}\" + 0",
-      "next": "12.1"
-    },
-    "12.1": {
-      "method": "expression",
-      "ln": "12.1",
-      "name": [
-        "__p-12.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
-            }
-          ]
-        }
-      ],
       "next": "12"
     },
     "12": {
@@ -657,9 +573,30 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-12.1"
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
+                },
+                {
+                  "$OBJECT": "string",
+                  "string": "c"
+                }
               ]
             },
             {
@@ -677,43 +614,6 @@
         }
       ],
       "src": "a9  = \"a{b}c\" + 0",
-      "next": "13.1"
-    },
-    "13.1": {
-      "method": "expression",
-      "ln": "13.1",
-      "name": [
-        "__p-13.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
-            }
-          ]
-        }
-      ],
       "next": "13"
     },
     "13": {
@@ -739,52 +639,36 @@
               }
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-13.1"
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
+                },
+                {
+                  "$OBJECT": "string",
+                  "string": "c"
+                }
               ]
             }
           ]
         }
       ],
       "src": "a10 = 0 + \"a{b}c\"",
-      "next": "14.1"
-    },
-    "14.1": {
-      "method": "expression",
-      "ln": "14.1",
-      "name": [
-        "__p-14.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
-            }
-          ]
-        }
-      ],
       "next": "14"
     },
     "14": {
@@ -814,9 +698,30 @@
                   }
                 },
                 {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "__p-14.1"
+                  "$OBJECT": "expression",
+                  "expression": "sum",
+                  "values": [
+                    {
+                      "$OBJECT": "string",
+                      "string": "a"
+                    },
+                    {
+                      "$OBJECT": "type_cast",
+                      "type": {
+                        "$OBJECT": "type",
+                        "type": "string"
+                      },
+                      "value": {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "b"
+                        ]
+                      }
+                    },
+                    {
+                      "$OBJECT": "string",
+                      "string": "c"
+                    }
                   ]
                 }
               ]
@@ -836,56 +741,6 @@
         }
       ],
       "src": "a11 = 0 + \"a{b}c\" + 0",
-      "next": "15.1"
-    },
-    "15.1": {
-      "method": "expression",
-      "ln": "15.1",
-      "name": [
-        "__p-15.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "d"
-                ]
-              }
-            }
-          ]
-        }
-      ],
       "next": "15"
     },
     "15": {
@@ -900,9 +755,43 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-15.1"
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
+                },
+                {
+                  "$OBJECT": "string",
+                  "string": "c"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "d"
+                    ]
+                  }
+                }
               ]
             },
             {
@@ -920,56 +809,6 @@
         }
       ],
       "src": "a12 = \"a{b}c{d}\" + 0",
-      "next": "16.1"
-    },
-    "16.1": {
-      "method": "expression",
-      "ln": "16.1",
-      "name": [
-        "__p-16.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "d"
-                ]
-              }
-            }
-          ]
-        }
-      ],
       "next": "16"
     },
     "16": {
@@ -995,65 +834,49 @@
               }
             },
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-16.1"
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
+                },
+                {
+                  "$OBJECT": "string",
+                  "string": "c"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "d"
+                    ]
+                  }
+                }
               ]
             }
           ]
         }
       ],
       "src": "a13 = 0 + \"a{b}c{d}\"",
-      "next": "17.1"
-    },
-    "17.1": {
-      "method": "expression",
-      "ln": "17.1",
-      "name": [
-        "__p-17.1"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "string",
-              "string": "a"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
-            },
-            {
-              "$OBJECT": "string",
-              "string": "c"
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "d"
-                ]
-              }
-            }
-          ]
-        }
-      ],
       "next": "17"
     },
     "17": {
@@ -1083,9 +906,43 @@
                   }
                 },
                 {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "__p-17.1"
+                  "$OBJECT": "expression",
+                  "expression": "sum",
+                  "values": [
+                    {
+                      "$OBJECT": "string",
+                      "string": "a"
+                    },
+                    {
+                      "$OBJECT": "type_cast",
+                      "type": {
+                        "$OBJECT": "type",
+                        "type": "string"
+                      },
+                      "value": {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "b"
+                        ]
+                      }
+                    },
+                    {
+                      "$OBJECT": "string",
+                      "string": "c"
+                    },
+                    {
+                      "$OBJECT": "type_cast",
+                      "type": {
+                        "$OBJECT": "type",
+                        "type": "string"
+                      },
+                      "value": {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "d"
+                        ]
+                      }
+                    }
                   ]
                 }
               ]

@@ -586,29 +586,28 @@ def test_compiler_throw_name_statement(patch, compiler, lines, tree):
 
 
 def test_compiler_mutation_block(patch, compiler, lines, tree):
-    patch.many(Objects, ['primary_expression', 'mutation_fragment'])
+    patch.many(Objects, ['expression', 'mutation_fragment'])
     patch.object(JSONCompiler, 'chained_mutations', return_value=['chained'])
     tree.path = None
     tree.nested_block = None
     compiler.mutation_block(tree, None)
-    expr = tree.mutation.primary_expression
-    Objects.primary_expression.assert_called_with(expr)
+    expr = tree.mutation.expression
+    Objects.expression.assert_called_with(expr)
     Objects.mutation_fragment.assert_called_with(
         tree.mutation.mutation_fragment)
     JSONCompiler.chained_mutations.assert_called_with(tree.mutation)
-    args = [Objects.primary_expression(), Objects.mutation_fragment(),
-            'chained']
+    args = [Objects.expression(), Objects.mutation_fragment(), 'chained']
     kwargs = {'args': args, 'parent': None}
     lines.append.assert_called_with('mutation', tree.line(), **kwargs)
 
 
 def test_compiler_mutation_block_nested(patch, compiler, lines, tree):
-    patch.many(Objects, ['primary_expression', 'mutation_fragment'])
+    patch.many(Objects, ['expression', 'mutation_fragment'])
     patch.object(JSONCompiler, 'chained_mutations', return_value=['chained'])
     tree.path = None
     compiler.mutation_block(tree, None)
     JSONCompiler.chained_mutations.assert_called_with(tree.nested_block)
-    args = [Objects.primary_expression(), Objects.mutation_fragment(),
+    args = [Objects.expression(), Objects.mutation_fragment(),
             'chained', 'chained']
     kwargs = {'args': args, 'parent': None}
     lines.append.assert_called_with('mutation', tree.line(), **kwargs)

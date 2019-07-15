@@ -56,6 +56,7 @@ class Grammar:
         self.ebnf.set_token('INT.2', '("+"|"-")? RAW_INT')
         self.ebnf.set_token('FLOAT.2', '("+"|"-")? INT "." RAW_INT? | '
                             '"." RAW_INT')
+        self.ebnf.SINGLE_QUOTED = r"/'([^'\\]*(?:\\(.|\n)[^'\\]*)*)'/"
         self.ebnf.DOUBLE_QUOTED = r'/"([^"\\]*(?:\\(.|\n)[^"\\]*)*)"/'
         self.ebnf.set_token('DOUBLE_QUOTED_HEREDOC.2', r'/"""(.|\n)*?"""/')
         self.ebnf.set_token('REGEXP.10', r'/\/([^\/]*)\/g?i?m?s?u?y?/')
@@ -70,7 +71,10 @@ class Grammar:
         self.ebnf.void = 'null'
         self.ebnf.number = 'int, float'
         self.ebnf.time = 'raw_time'
-        self.ebnf.string = 'double_quoted, double_quoted_heredoc'
+
+        self.ebnf.string = ('single_quoted, double_quoted, '
+                            'double_quoted_heredoc')
+
         list = self.ebnf.collection('osb', 'base_expression',
                                     'base_expression', 'csb')
         self.ebnf.set_rule('!list', list)
@@ -102,7 +106,7 @@ class Grammar:
         self.ebnf.assignment_fragment = assignment_fragment
         objects = self.ebnf.collection('ocb', 'path', 'path', 'ccb')
         self.ebnf.assignment_destructoring = objects
-        self.ebnf.assignment = ('types? (path | assignment_destructoring ) '
+        self.ebnf.assignment = ('(path | assignment_destructoring) '
                                 'assignment_fragment')
 
     def expressions(self):
@@ -142,18 +146,22 @@ class Grammar:
         self.ebnf.dot_expression = 'dot name (op arguments cp)'
         self.ebnf.pow_expression = ('primary_expression ((pow_operator '
                                     'unary_expression) |'
-                                    'as_operator |'
                                     'dot_expression )?')
         self.ebnf.unary_expression = ('unary_operator unary_expression , '
                                       'pow_expression')
+        self.ebnf.as_expression = 'unary_expression (as_operator)?'
         self.ebnf.mul_expression = '(mul_expression mul_operator)? ' \
-                                   'unary_expression'
+                                   'as_expression'
         self.ebnf.arith_expression = '(arith_expression arith_operator)? ' \
                                      'mul_expression'
         self.ebnf.cmp_expression = '(cmp_expression cmp_operator)? ' \
                                    'arith_expression'
-        self.ebnf.and_expression = '(and_expression AND)? cmp_expression'
-        self.ebnf.or_expression = '(or_expression OR)? and_expression'
+        self.ebnf.and_operator = 'AND'
+        self.ebnf.and_expression = '(and_expression and_operator)? ' \
+                                   'cmp_expression'
+        self.ebnf.or_operator = 'OR'
+        self.ebnf.or_expression = '(or_expression or_operator)? ' \
+                                  'and_expression'
 
         self.ebnf.expression = 'or_expression'
         self.ebnf.absolute_expression = 'expression'

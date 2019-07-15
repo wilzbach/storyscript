@@ -6,7 +6,7 @@ boolean: TRUE| FALSE
 void: NULL
 number: INT| FLOAT
 time: RAW_TIME
-string: DOUBLE_QUOTED| DOUBLE_QUOTED_HEREDOC
+string: SINGLE_QUOTED| DOUBLE_QUOTED| DOUBLE_QUOTED_HEREDOC
 !list: _OSB (_NL _INDENT)? (base_expression (_COMMA _NL? base_expression)*)? (_NL _DEDENT)? _CSB
 key_value: (string| path| number| boolean) _COLON base_expression
 map: _OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)? (_NL _DEDENT)? _CCB
@@ -21,7 +21,7 @@ path_fragment: _DOT NAME| _OSB (number | string | path | boolean | range) _CSB
 path: NAME (path_fragment)* | inline_expression (path_fragment)*
 assignment_fragment: EQUALS base_expression
 assignment_destructoring: _OCB (_NL _INDENT)? (path (_COMMA _NL? path)*)? (_NL _DEDENT)? _CCB
-assignment: types? (path | assignment_destructoring ) assignment_fragment
+assignment: (path | assignment_destructoring) assignment_fragment
 cmp_operator: GREATER| GREATER_EQUAL| LESSER| LESSER_EQUAL| NOT_EQUAL| EQUAL
 arith_operator: PLUS| DASH
 unary_operator: NOT
@@ -31,13 +31,16 @@ output_names: NAME (_COMMA NAME)*
 as_operator: _AS (types | output_names)
 pow_operator: POWER
 dot_expression: _DOT NAME (_OP arguments _CP)
-pow_expression: primary_expression ((pow_operator unary_expression) |as_operator |dot_expression )?
+pow_expression: primary_expression ((pow_operator unary_expression) |dot_expression )?
 unary_expression: unary_operator unary_expression | pow_expression
-mul_expression: (mul_expression mul_operator)? unary_expression
+as_expression: unary_expression (as_operator)?
+mul_expression: (mul_expression mul_operator)? as_expression
 arith_expression: (arith_expression arith_operator)? mul_expression
 cmp_expression: (cmp_expression cmp_operator)? arith_expression
-and_expression: (and_expression AND)? cmp_expression
-or_expression: (or_expression OR)? and_expression
+and_operator: AND
+and_expression: (and_expression and_operator)? cmp_expression
+or_operator: OR
+or_expression: (or_expression or_operator)? and_expression
 expression: or_expression
 absolute_expression: expression
 base_expression: (expression| inline_service| mutation)
@@ -112,6 +115,7 @@ NULL: "null"
 RAW_INT.2: /[0-9]+/
 INT.2: ("+"|"-")? RAW_INT
 FLOAT.2: ("+"|"-")? INT "." RAW_INT? | "." RAW_INT
+SINGLE_QUOTED: /'([^'\\]*(?:\\(.|\n)[^'\\]*)*)'/
 DOUBLE_QUOTED: /"([^"\\]*(?:\\(.|\n)[^"\\]*)*)"/
 DOUBLE_QUOTED_HEREDOC.2: /"""(.|\n)*?"""/
 REGEXP.10: /\/([^\/]*)\/g?i?m?s?u?y?/

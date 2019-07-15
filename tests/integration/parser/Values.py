@@ -9,16 +9,14 @@ def parse(source):
     """
     Don't regenerate the parser on every call
     """
-    return _parser().parse(source)
+    return _parser().parse(source, allow_single_quotes=False)
 
 
 def get_entity(obj):
     """
     Returns the entity for an expression
     """
-    return obj.or_expression.and_expression.cmp_expression.arith_expression. \
-        mul_expression.unary_expression.pow_expression.primary_expression. \
-        entity
+    return obj.entity
 
 
 def test_values_true():

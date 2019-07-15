@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1
+Error: syntax error in story at line 1, column 5
 
-1|    int a = []
-      ^^^^^^^^^^
+1|    a = [] as int
+          ^^^^^^^^^
 
 E0126: Type casting not supported from `List[any]` to `int`.
