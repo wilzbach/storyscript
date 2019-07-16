@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import pytest
 from lark.lexer import Token
 
 from storyscript.parser.Indenter import CustomIndenter
@@ -116,10 +117,5 @@ def test_assert_always_zero_or_more_paren_level():
     assert indenter.paren_level == 0
 
     nl, indent = indent_token(4)
-    raised_exception = Exception()
-    try:
+    with pytest.raises(AssertionError):
         list(indenter.process([CLOSE_PAREN]))
-    except AssertionError as e:
-        raised_exception = e
-        pass
-    assert isinstance(raised_exception, AssertionError)
