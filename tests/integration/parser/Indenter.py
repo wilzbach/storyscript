@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-import pytest
+
 from lark.lexer import Token
+
+import pytest
 
 from storyscript.parser.Indenter import CustomIndenter
 
