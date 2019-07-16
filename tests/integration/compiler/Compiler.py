@@ -4,31 +4,6 @@ from pytest import mark
 from storyscript.Api import Api
 
 
-@mark.parametrize('source', [
-    'a = "foo bar"\na.split(by: " ").contains(item: "foo")'
-])
-def test_compiler_mutation_chained(source):
-    """
-    Ensures that chained mutations are compiled correctly
-    """
-    result = Api.loads(source).result()
-    args1 = [{'$OBJECT': 'string', 'string': 'foo bar'}]
-    args2_1 = [{'$OBJECT': 'path', 'paths': ['a']},
-               {'$OBJECT': 'mutation', 'mutation': 'split', 'args': [
-                   {'$OBJECT': 'arg', 'name': 'by',
-                    'arg': {'$OBJECT': 'string', 'string': ' '}}]}]
-    args2_2 = [{'$OBJECT': 'path', 'paths': ['__p-2.1']},
-               {'$OBJECT': 'mutation', 'mutation': 'contains', 'args': [
-                   {'$OBJECT': 'arg', 'name': 'item',
-                    'arg': {'$OBJECT': 'string', 'string': 'foo'}}]}]
-    args2 = [{'$OBJECT': 'path', 'paths': ['__p-2.2']}]
-
-    assert result['tree']['1']['args'] == args1
-    assert result['tree']['2.1']['args'] == args2_1
-    assert result['tree']['2.2']['args'] == args2_2
-    assert result['tree']['2']['args'] == args2
-
-
 def test_compiler_empty_files():
     result = Api.loads('\n\n').result()
     assert result['tree'] == {}
