@@ -13,11 +13,14 @@
         }
       ],
       "src": "item = 0",
-      "next": "2"
+      "next": "2.1"
     },
-    "2": {
+    "2.1": {
       "method": "mutation",
-      "ln": "2",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
       "args": [
         {
           "$OBJECT": "list",
@@ -49,7 +52,20 @@
           ]
         }
       ],
-      "src": "[0, 1] contains :item"
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
+          ]
+        }
+      ],
+      "src": "[0, 1].contains(:item)"
     }
   },
   "entrypoint": "1"

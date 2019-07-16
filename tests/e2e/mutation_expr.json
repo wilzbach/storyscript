@@ -1,10 +1,10 @@
 {
   "tree": {
-    "1": {
+    "1.1": {
       "method": "mutation",
-      "ln": "1",
+      "ln": "1.1",
       "name": [
-        "a"
+        "__p-1.1"
       ],
       "args": [
         {
@@ -36,8 +36,24 @@
           ]
         }
       ],
-      "src": "a = (\"a\" + \"b\") contains item: \"c\""
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1"
+          ]
+        }
+      ],
+      "src": "a = (\"a\" + \"b\").contains(item: \"c\")"
     }
   },
-  "entrypoint": "1"
+  "entrypoint": "1.1"
 }

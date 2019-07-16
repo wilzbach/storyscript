@@ -1,10 +1,10 @@
 {
   "tree": {
-    "1": {
+    "1.1": {
       "method": "mutation",
-      "ln": "1",
+      "ln": "1.1",
       "name": [
-        "arr"
+        "__p-1.1"
       ],
       "args": [
         {
@@ -26,7 +26,23 @@
           ]
         }
       ],
-      "src": "arr = [] append item: 42",
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "arr"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1"
+          ]
+        }
+      ],
+      "src": "arr = [].append(item: 42)",
       "next": "2"
     },
     "2": {
@@ -80,5 +96,5 @@
       "src": "c = b as List[int]"
     }
   },
-  "entrypoint": "1"
+  "entrypoint": "1.1"
 }

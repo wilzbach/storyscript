@@ -106,11 +106,6 @@ class TypeResolver(ScopeSelectiveVisitor):
     def nested_block(self, tree, scope):
         self.visit_children(tree, scope)
 
-    def mutation_block(self, tree, scope):
-        # resolve to perform checks
-        tree.scope = Scope(parent=scope)
-        self.resolver.mutation(tree.mutation)
-
     def absolute_expression(self, tree, scope):
         # resolve to perform checks
         self.resolver.expression(tree.expression)

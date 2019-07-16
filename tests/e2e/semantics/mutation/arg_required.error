@@ -1,6 +1,6 @@
 Error: syntax error in story at line 1, column 12
 
-1|    a = [1, 2] contains
+1|    a = [1, 2].contains()
                  ^^^^^^^^
 
 E0113: Mutation `contains` requires argument `item`

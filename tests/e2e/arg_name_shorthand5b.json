@@ -28,18 +28,35 @@
         }
       ],
       "src": "end = 5",
-      "next": "3.1"
+      "next": "3"
     },
-    "3.1": {
-      "method": "mutation",
-      "ln": "3.1",
+    "3": {
+      "method": "expression",
+      "ln": "3",
       "name": [
-        "__p-3.1"
+        "a"
       ],
       "args": [
         {
           "$OBJECT": "string",
           "string": "aa"
+        }
+      ],
+      "src": "a = \"aa\"",
+      "next": "4.1"
+    },
+    "4.1": {
+      "method": "mutation",
+      "ln": "4.1",
+      "name": [
+        "__p-4.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
         },
         {
           "$OBJECT": "mutation",
@@ -68,20 +85,20 @@
           ]
         }
       ],
-      "next": "3"
+      "next": "4"
     },
-    "3": {
+    "4": {
       "method": "expression",
-      "ln": "3",
+      "ln": "4",
       "args": [
         {
           "$OBJECT": "path",
           "paths": [
-            "__p-3.1"
+            "__p-4.1"
           ]
         }
       ],
-      "src": "\"aa\".substring(:start :end)"
+      "src": "a.substring(:start :end)"
     }
   },
   "entrypoint": "1"

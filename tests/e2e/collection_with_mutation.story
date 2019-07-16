@@ -1,1 +1,2 @@
-a = [1, 2 increment, 3]
+y = 2
+a = [1, y.increment(), 3]

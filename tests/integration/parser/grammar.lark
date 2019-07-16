@@ -11,7 +11,7 @@ string: SINGLE_QUOTED| DOUBLE_QUOTED| DOUBLE_QUOTED_HEREDOC
 key_value: (string| path| number| boolean) _COLON base_expression
 map: _OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)? (_NL _DEDENT)? _CCB
 regular_expression: REGEXP
-inline_expression: _OP inline_service _CP| call_expression| _OP mutation _CP
+inline_expression: _OP inline_service _CP| call_expression
 values: number| string| boolean| void| list| map| regular_expression| time
 range_start: (number | path) _COLON
 range_start_end: (number | path) _COLON (number | path)
@@ -30,7 +30,7 @@ primary_expression: entity | _OP or_expression _CP
 output_names: NAME (_COMMA NAME)*
 as_operator: _AS (types | output_names)
 pow_operator: POWER
-dot_expression: _DOT NAME (_OP arguments _CP)
+dot_expression: _DOT NAME (_OP arguments* _CP)
 pow_expression: primary_expression ((pow_operator unary_expression) |dot_expression )?
 unary_expression: unary_operator unary_expression | pow_expression
 as_expression: unary_expression (as_operator)?
@@ -43,24 +43,19 @@ or_operator: OR
 or_expression: (or_expression or_operator)? and_expression
 expression: or_expression
 absolute_expression: expression
-base_expression: (expression| inline_service| mutation)
+base_expression: (expression| inline_service)
 return_statement: RETURN base_expression?
 break_statement: BREAK
 entity: values| path
 rules: absolute_expression| assignment| return_statement| throw_statement| break_statement| block
-mutation_fragment: NAME arguments*
-chained_mutation: _THEN mutation_fragment
-mutation: primary_expression (mutation_fragment (chained_mutation)*)
-mutation_block: mutation _NL (nested_block)?
-indented_chain: _INDENT (chained_mutation _NL)+ _DEDENT
 command: NAME
 arguments: NAME? _COLON expression
 output: (_AS NAME (_COMMA NAME)*)
 service_fragment: (command arguments*|arguments+) output?
 inline_service_fragment: (command arguments*|arguments+)
-service: path service_fragment chained_mutation*
+service: path service_fragment
 service_block: service _NL (nested_block)?
-inline_service: path inline_service_fragment chained_mutation*
+inline_service: path inline_service_fragment
 call_expression: path _OP arguments* (_NL _INDENT (arguments _NL?)* _DEDENT)? _CP
 if_statement: _IF base_expression
 elseif_statement: _ELSE _IF base_expression
@@ -87,7 +82,7 @@ throw_statement: THROW entity?
 when_service: NAME path (service_fragment | output?)
 when_block: _WHEN (when_service | NAME output?) _NL nested_block
 indented_arguments: _INDENT (arguments _NL)+ _DEDENT
-block: rules _NL| if_block| foreach_block| function_block| arguments| indented_chain| chained_mutation| mutation_block| service_block| when_block| try_block| indented_arguments| while_block
+block: rules _NL| if_block| foreach_block| function_block| arguments| service_block| when_block| try_block| indented_arguments| while_block
 nested_block: _INDENT block+ _DEDENT
 start: _NL? block*
 
@@ -146,7 +141,6 @@ PLUS.5: "+"
 DASH.5: "-"
 RETURN: "return"
 BREAK: "break"
-_THEN: "then"
 _IF: "if"
 _ELSE: "else"
 _FOREACH: "foreach"

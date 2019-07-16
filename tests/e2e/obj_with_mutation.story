@@ -1,1 +1,2 @@
-a = {"my_key": 1 increment}
+num = 1
+a = {"my_key": num.increment()}

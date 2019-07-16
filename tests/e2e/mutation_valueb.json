@@ -9,21 +9,12 @@
       "args": [
         {
           "$OBJECT": "string",
-          "string": "aa"
+          "string": "hello"
         },
         {
           "$OBJECT": "mutation",
-          "mutation": "split",
-          "args": [
-            {
-              "$OBJECT": "arg",
-              "name": "by",
-              "arg": {
-                "$OBJECT": "string",
-                "string": "."
-              }
-            }
-          ]
+          "mutation": "length",
+          "args": []
         }
       ],
       "next": "1"
@@ -31,9 +22,6 @@
     "1": {
       "method": "expression",
       "ln": "1",
-      "name": [
-        "a"
-      ],
       "args": [
         {
           "$OBJECT": "path",
@@ -42,7 +30,7 @@
           ]
         }
       ],
-      "src": "a = \"aa\".split(by:\".\")"
+      "src": "\"hello\".length()"
     }
   },
   "entrypoint": "1.1"

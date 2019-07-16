@@ -1,8 +1,11 @@
 {
   "tree": {
-    "2": {
+    "2.1": {
       "method": "mutation",
-      "ln": "2",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
       "args": [
         {
           "$OBJECT": "list",
@@ -28,41 +31,70 @@
           ]
         }
       ],
-      "src": "[0] append item:1",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
+          ]
+        }
+      ],
+      "src": "[0].append(item:1)",
+      "next": "3.1"
+    },
+    "3.1": {
+      "method": "mutation",
+      "ln": "3.1",
+      "name": [
+        "__p-3.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 0
+            }
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "append",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            }
+          ]
+        }
+      ],
       "next": "3"
     },
     "3": {
-      "method": "mutation",
+      "method": "expression",
       "ln": "3",
       "name": [
         "mutation"
       ],
       "args": [
         {
-          "$OBJECT": "list",
-          "items": [
-            {
-              "$OBJECT": "int",
-              "int": 0
-            }
-          ]
-        },
-        {
-          "$OBJECT": "mutation",
-          "mutation": "append",
-          "args": [
-            {
-              "$OBJECT": "arg",
-              "name": "item",
-              "arg": {
-                "$OBJECT": "int",
-                "int": 1
-              }
-            }
+          "$OBJECT": "path",
+          "paths": [
+            "__p-3.1"
           ]
         }
       ],
-      "src": "mutation = [0] append item:1",
+      "src": "mutation = [0].append(item:1)",
       "next": "5"
     },
     "5": {
@@ -83,11 +115,14 @@
         }
       ],
       "src": "a = [0]",
-      "next": "6"
+      "next": "6.1"
     },
-    "6": {
+    "6.1": {
       "method": "mutation",
-      "ln": "6",
+      "ln": "6.1",
+      "name": [
+        "__p-6.1"
+      ],
       "args": [
         {
           "$OBJECT": "path",
@@ -110,11 +145,54 @@
           ]
         }
       ],
-      "src": "a append item:1",
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-6.1"
+          ]
+        }
+      ],
+      "src": "a.append(item:1)",
+      "next": "7.1"
+    },
+    "7.1": {
+      "method": "mutation",
+      "ln": "7.1",
+      "name": [
+        "__p-7.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "append",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            }
+          ]
+        }
+      ],
       "next": "7"
     },
     "7": {
-      "method": "mutation",
+      "method": "expression",
       "ln": "7",
       "name": [
         "mutation"
@@ -123,26 +201,12 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "a"
-          ]
-        },
-        {
-          "$OBJECT": "mutation",
-          "mutation": "append",
-          "args": [
-            {
-              "$OBJECT": "arg",
-              "name": "item",
-              "arg": {
-                "$OBJECT": "int",
-                "int": 1
-              }
-            }
+            "__p-7.1"
           ]
         }
       ],
-      "src": "mutation = a append item:1"
+      "src": "mutation = a.append(item:1)"
     }
   },
-  "entrypoint": "2"
+  "entrypoint": "2.1"
 }

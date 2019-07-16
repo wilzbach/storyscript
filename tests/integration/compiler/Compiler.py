@@ -4,23 +4,6 @@ from pytest import mark
 from storyscript.Api import Api
 
 
-@mark.parametrize('source', [
-    '1 increment then format to:"string"',
-    '1 increment\n\tthen format to:"string"'
-])
-def test_compiler_mutation_chained(source):
-    """
-    Ensures that chained mutations are compiled correctly
-    """
-    result = Api.loads(source).result()
-    args = [{'$OBJECT': 'int', 'int': 1},
-            {'$OBJECT': 'mutation', 'mutation': 'increment', 'args': []},
-            {'$OBJECT': 'mutation', 'mutation': 'format', 'args': [
-                {'$OBJECT': 'arg', 'name': 'to',
-                 'arg': {'$OBJECT': 'string', 'string': 'string'}}]}]
-    assert result['tree']['1']['args'] == args
-
-
 def test_compiler_empty_files():
     result = Api.loads('\n\n').result()
     assert result['tree'] == {}
