@@ -1,1 +1,2 @@
-"hello".length()
+s = "hello"
+s.length()
