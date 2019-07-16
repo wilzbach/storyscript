@@ -53,7 +53,7 @@
         }
       ],
       "enter": "2",
-      "src": "while [1, 2, 3] contains item:1",
+      "src": "while [1, 2, 3].contains(item:1)",
       "next": "2"
     },
     "2": {

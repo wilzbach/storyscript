@@ -1,15 +1,32 @@
 {
   "tree": {
-    "1.1": {
-      "method": "mutation",
-      "ln": "1.1",
+    "1": {
+      "method": "expression",
+      "ln": "1",
       "name": [
-        "__p-1.1"
+        "y"
       ],
       "args": [
         {
           "$OBJECT": "int",
           "int": 2
+        }
+      ],
+      "src": "y = 2",
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "y"
+          ]
         },
         {
           "$OBJECT": "mutation",
@@ -17,11 +34,11 @@
           "args": []
         }
       ],
-      "next": "1"
+      "next": "2"
     },
-    "1": {
+    "2": {
       "method": "expression",
-      "ln": "1",
+      "ln": "2",
       "name": [
         "a"
       ],
@@ -36,7 +53,7 @@
             {
               "$OBJECT": "path",
               "paths": [
-                "__p-1.1"
+                "__p-2.1"
               ]
             },
             {
@@ -46,8 +63,8 @@
           ]
         }
       ],
-      "src": "a = [1, 2 increment, 3]"
+      "src": "a = [1, y.increment(), 3]"
     }
   },
-  "entrypoint": "1.1"
+  "entrypoint": "1"
 }

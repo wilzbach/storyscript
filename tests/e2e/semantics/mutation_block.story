@@ -1,1 +1,1 @@
-{"a": 1} get key: "b"
+{"a": 1}.get(key: "b")

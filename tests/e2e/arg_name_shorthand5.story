@@ -1,3 +1,4 @@
 start = 0
 end = 5
-"aa" substring :start :end
+s = "aa"
+s.substring(:start :end)

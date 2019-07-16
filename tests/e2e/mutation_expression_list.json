@@ -1,8 +1,11 @@
 {
   "tree": {
-    "1": {
+    "1.1": {
       "method": "mutation",
-      "ln": "1",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
       "args": [
         {
           "$OBJECT": "list",
@@ -32,8 +35,21 @@
           ]
         }
       ],
-      "src": "[\"opened\", \"labeled\"] contains item: \"opened\""
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1"
+          ]
+        }
+      ],
+      "src": "[\"opened\", \"labeled\"].contains(item: \"opened\")"
     }
   },
-  "entrypoint": "1"
+  "entrypoint": "1.1"
 }

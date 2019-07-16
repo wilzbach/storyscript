@@ -1,1 +1,1 @@
-b = true and (["opened", "labeled"] contains item: "a")
+b = true and (["opened", "labeled"].contains(item: "a"))

@@ -1,0 +1,93 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "foo bar"
+        }
+      ],
+      "src": "a = \"foo bar\"",
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "split",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "by",
+              "arg": {
+                "$OBJECT": "string",
+                "string": " "
+              }
+            }
+          ]
+        }
+      ],
+      "next": "2.2"
+    },
+    "2.2": {
+      "method": "mutation",
+      "ln": "2.2",
+      "name": [
+        "__p-2.2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "contains",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "foo"
+              }
+            }
+          ]
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.2"
+          ]
+        }
+      ],
+      "src": "a.split(by: \" \").contains(item: \"foo\")"
+    }
+  },
+  "entrypoint": "1"
+}

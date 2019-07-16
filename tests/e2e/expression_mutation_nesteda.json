@@ -61,7 +61,7 @@
           ]
         }
       ],
-      "src": "b = true and ([\"opened\", \"labeled\"] contains item: \"a\")"
+      "src": "b = true and ([\"opened\", \"labeled\"].contains(item: \"a\"))"
     }
   },
   "entrypoint": "1.1"

@@ -31,12 +31,32 @@
       "next": "3"
     },
     "3": {
-      "method": "mutation",
+      "method": "expression",
       "ln": "3",
+      "name": [
+        "s"
+      ],
       "args": [
         {
           "$OBJECT": "string",
           "string": "aa"
+        }
+      ],
+      "src": "s = \"aa\"",
+      "next": "4.1"
+    },
+    "4.1": {
+      "method": "mutation",
+      "ln": "4.1",
+      "name": [
+        "__p-4.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "s"
+          ]
         },
         {
           "$OBJECT": "mutation",
@@ -65,7 +85,20 @@
           ]
         }
       ],
-      "src": "\"aa\" substring :start :end"
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-4.1"
+          ]
+        }
+      ],
+      "src": "s.substring(:start :end)"
     }
   },
   "entrypoint": "1"
