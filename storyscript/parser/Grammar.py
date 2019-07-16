@@ -142,7 +142,7 @@ class Grammar:
         self.ebnf.output_names = 'name (comma name)*'
         self.ebnf.as_operator = 'as (types | output_names)'
         self.ebnf.pow_operator = 'POWER'
-        self.ebnf.dot_expression = 'dot name (op arguments cp)'
+        self.ebnf.dot_expression = 'dot name (op arguments* cp)'
         self.ebnf.pow_expression = ('primary_expression ((pow_operator '
                                     'unary_expression) |'
                                     'dot_expression )?')
