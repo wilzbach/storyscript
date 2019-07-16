@@ -597,15 +597,9 @@ class Lowering:
             block = self.fake_tree(node)
 
         if node.data == 'dot_expression':
-            dot_expr = node
-            mutation_fragments = [
-                dot_expr.children[0],  # name
-                *dot_expr.children[1:]
-            ]
-
             expression = Tree('mutation', [
                 parent.expression,
-                Tree('mutation_fragment', mutation_fragments)
+                Tree('mutation_fragment', [*node.children])
             ])
 
             path = block.add_assignment(expression,
