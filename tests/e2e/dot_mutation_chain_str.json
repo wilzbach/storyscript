@@ -1,0 +1,95 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "mutation",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "abc"
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "replace",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "a"
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "by",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "+"
+              }
+            }
+          ]
+        }
+      ],
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "mutation",
+      "ln": "1.2",
+      "name": [
+        "__p-1.2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "replace",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "b"
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "by",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "-"
+              }
+            }
+          ]
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.2"
+          ]
+        }
+      ],
+      "src": "a = \"abc\".replace(item: \"a\" by: \"+\").replace(item: \"b\" by: \"-\")"
+    }
+  },
+  "entrypoint": "1.1"
+}

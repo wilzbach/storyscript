@@ -1,0 +1,104 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "mutation",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            }
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "replace",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "by",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 11
+              }
+            }
+          ]
+        }
+      ],
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "mutation",
+      "ln": "1.2",
+      "name": [
+        "__p-1.2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "replace",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 2
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "by",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 22
+              }
+            }
+          ]
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.2"
+          ]
+        }
+      ],
+      "src": "a = ([1, 2]).replace(item: 1 by: 11).replace(item: 2 by : 22)"
+    }
+  },
+  "entrypoint": "1.1"
+}

@@ -1,0 +1,49 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "mutation",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "float",
+          "float": 1.5
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "approxEqual",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "value",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            }
+          ]
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1"
+          ]
+        }
+      ],
+      "src": "a = 1.5.approxEqual(value: 1)"
+    }
+  },
+  "entrypoint": "1.1"
+}

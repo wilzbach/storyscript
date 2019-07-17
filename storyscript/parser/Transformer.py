@@ -344,6 +344,82 @@ class Transformer(LarkTransformer):
         return cls.expression_rewrite('pow_expression', matches)
 
     @classmethod
+    def dot_arguments(cls, matches):
+        return Tree('mutation', [
+            Tree('mutation_fragment', [
+                matches[0],
+                *matches[1:]
+            ])
+        ])
+
+    @staticmethod
+    def build_inline(node):
+        """
+        Build an inline_expression around `node`.
+        inline_expression will be lowered into new lines by the compiler.
+        """
+        return Tree('expression', [
+                Tree('entity', [
+                    Tree('path', [
+                        Tree('inline_expression', [
+                            node
+                        ])
+                    ])
+                ])
+            ])
+
+    @classmethod
+    def dot_expression(cls, matches):
+        if len(matches) == 1:
+            return matches[0]
+        elif isinstance(matches[0], Token) and matches[0].type == 'FLOAT':
+            # 1. is parsed as FLOAT token
+            # -> convert into a mutation
+            value = matches[0].value.split('.')[0]
+            matches[0] = Tree('dummy', [matches[0]]).create_token('INT', value)
+            # end_column is a string, but still an int :/
+            matches[0].end_column = str(int(matches[0].end_column) - 1)
+            tree = Tree('mutation', [
+                Tree('expression', [
+                    Tree('entity', [
+                        Tree('values', [
+                            Tree('number', [
+                                matches[0]
+                            ])
+                        ])
+                    ])
+                ]),
+                Tree('mutation_fragment', [matches[1]])
+            ])
+            # At the moment there are no int mutations with arguments
+            assert len(matches) < 3 or matches[2].data == 'mutation'
+
+            offset = 2
+            # if len(matches) >= 3 and matches[2].data != 'mutation':
+            #   # append its arguments (if available)
+            #   tree.children[1].append(matches[2])
+            #   offset += 1
+            for mutation in matches[offset:]:
+                tree = Tree('mutation', [
+                    cls.build_inline(tree),
+                    *mutation.children,
+                ])
+        else:
+            # normal dot_expressions like "a".mutation()
+            tree = Tree('mutation', [
+                    matches[0],
+                    *matches[1].children
+                ])
+            for mutation in matches[2:]:
+                expression = cls.build_inline(tree)
+                tree = Tree('mutation', [
+                    expression,
+                    *mutation.children,
+                ])
+        tree = cls.build_inline(tree)
+        return tree
+
+    @classmethod
     def primary_expression(cls, matches):
         if len(matches) == 1 and matches[0].data == 'entity':
             # leave the separate expression only for leaf entities

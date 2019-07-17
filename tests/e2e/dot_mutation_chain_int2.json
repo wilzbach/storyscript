@@ -1,0 +1,61 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "mutation",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": -1
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "increment",
+          "args": []
+        }
+      ],
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "mutation",
+      "ln": "1.2",
+      "name": [
+        "__p-1.2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "decrement",
+          "args": []
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.2"
+          ]
+        }
+      ],
+      "src": "a = -1.increment().decrement()"
+    }
+  },
+  "entrypoint": "1.1"
+}
