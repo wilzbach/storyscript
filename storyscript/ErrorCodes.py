@@ -211,6 +211,7 @@ class ErrorCodes:
         'E0131',
         "`{left}` can't be dot-accessed with `{name}` of type `{right}`"
     )
+    continue_outside = ('E0132', '`continue` is allowed only inside loops')
 
     @staticmethod
     def is_error(error_name):

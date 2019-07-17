@@ -388,6 +388,10 @@ class JSONCompiler:
         tree.expect(parent is not None, 'break_outside')
         self.lines.append('break', tree.line(), parent=parent)
 
+    def continue_statement(self, tree, parent):
+        tree.expect(parent is not None, 'continue_outside')
+        self.lines.append('continue', tree.line(), parent=parent)
+
     def subtrees(self, *trees, parent=None):
         """
         Parses many subtrees
@@ -405,7 +409,8 @@ class JSONCompiler:
                          'foreach_block', 'function_block', 'when_block',
                          'try_block', 'return_statement', 'arguments',
                          'while_block', 'throw_statement', 'break_statement',
-                         'mutation_block', 'indented_chain']
+                         'continue_statement', 'mutation_block',
+                         'indented_chain']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
         else:

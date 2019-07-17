@@ -178,11 +178,14 @@ class Grammar:
     def rules(self):
         self.ebnf.RETURN = 'return'
         self.ebnf.BREAK = 'break'
+        self.ebnf.CONTINUE = 'continue'
         self.ebnf.return_statement = 'return base_expression?'
         self.ebnf.break_statement = 'break'
+        self.ebnf.continue_statement = 'continue'
         self.ebnf.entity = 'values, path'
         rules = ('absolute_expression, assignment, return_statement, '
-                 'throw_statement, break_statement, block')
+                 'throw_statement, break_statement, continue_statement, '
+                 'block')
         self.ebnf.rules = rules
 
     def service_block(self):
