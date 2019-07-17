@@ -1,2 +1,2 @@
 function foo returns foo
-	return ""
+    return ""

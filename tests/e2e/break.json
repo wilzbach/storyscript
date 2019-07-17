@@ -17,7 +17,7 @@
       "method": "break",
       "ln": "2",
       "parent": "1",
-      "src": "\tbreak"
+      "src": "    break"
     }
   },
   "entrypoint": "1"

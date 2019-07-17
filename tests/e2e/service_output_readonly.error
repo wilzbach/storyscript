@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 2
+Error: syntax error in story at line 2, column 5
 
-2|      event = 2
-        ^^^^^^^
+2|        event = 2
+          ^^^^^^^
 
 E0100: Can't assign `int` to `Object`

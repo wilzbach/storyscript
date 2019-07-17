@@ -1,6 +1,6 @@
-Error: syntax error in story at line 8, column 2
+Error: syntax error in story at line 8, column 5
 
-8|      d = v
-        ^^^
+8|        d = v
+          ^^^
 
 E0100: Can't assign `any` to `int`

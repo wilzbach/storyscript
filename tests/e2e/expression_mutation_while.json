@@ -60,7 +60,7 @@
       "method": "return",
       "ln": "2",
       "parent": "1",
-      "src": "\treturn"
+      "src": "    return"
     }
   },
   "entrypoint": "1.1"

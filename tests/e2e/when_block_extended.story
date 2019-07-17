@@ -1,8 +1,8 @@
 when other_service command listen
-	break
+    break
 when other_service command listen as os
-	break
+    break
 when other_service command listen path:"/foo"
-	break
+    break
 when other_service command listen path:"/foo" as li
-	break
+    break

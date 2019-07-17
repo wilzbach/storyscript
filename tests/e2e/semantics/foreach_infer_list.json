@@ -56,7 +56,7 @@
         }
       ],
       "parent": "3",
-      "src": "\tb = v"
+      "src": "    b = v"
     }
   },
   "entrypoint": "1"

@@ -1,2 +1,2 @@
 when foo_service listen as event
-	event = 2
+    event = 2

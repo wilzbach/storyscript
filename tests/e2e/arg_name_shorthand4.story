@@ -1,5 +1,5 @@
 function test a1:int a2:int
-	return
+    return
 
 a1 = 0
 a2 = 0

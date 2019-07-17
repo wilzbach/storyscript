@@ -32,7 +32,7 @@
         }
       ],
       "parent": "1",
-      "src": "\treturn true",
+      "src": "    return true",
       "next": "4"
     },
     "4": {

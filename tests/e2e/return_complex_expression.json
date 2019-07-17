@@ -41,7 +41,7 @@
         }
       ],
       "parent": "1",
-      "src": "\treturn 2 + 2"
+      "src": "    return 2 + 2"
     }
   },
   "entrypoint": "1",

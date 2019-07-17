@@ -1,5 +1,5 @@
 while /regexp/
-	break
+    break
 
 while "2" + /regexp/
-	break
+    break

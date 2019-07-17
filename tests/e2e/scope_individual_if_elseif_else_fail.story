@@ -1,6 +1,6 @@
 if true
-	c = 1
+    c = 1
 else if false
-	c = ""
+    c = ""
 else
-	d = 0
+    d = 0

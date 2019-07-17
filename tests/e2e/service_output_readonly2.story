@@ -1,3 +1,3 @@
 http server
-	when server listen
-		server = 2
+    when server listen
+        server = 2

@@ -21,7 +21,7 @@
         }
       ],
       "parent": "1",
-      "src": "\tx=0",
+      "src": "    x=0",
       "next": "3"
     },
     "3": {
@@ -45,7 +45,7 @@
       ],
       "enter": "5",
       "parent": "3",
-      "src": "\tif true",
+      "src": "    if true",
       "next": "5"
     },
     "5": {
@@ -60,7 +60,7 @@
         }
       ],
       "parent": "4",
-      "src": "\t\tthrow error"
+      "src": "        throw error"
     }
   },
   "entrypoint": "1"

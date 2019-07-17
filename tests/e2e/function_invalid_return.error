@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 9
+Error: syntax error in story at line 2, column 12
 
-2|      return a / b + c or d
-               ^
+2|        return a / b + c or d
+                 ^
 
 E0101: Variable `a` has not been defined.

@@ -25,7 +25,7 @@
         }
       ],
       "parent": "1",
-      "src": "\ta = 1",
+      "src": "    a = 1",
       "next": "3"
     },
     "3": {
@@ -40,7 +40,7 @@
         }
       ],
       "parent": "1",
-      "src": "\treturn a",
+      "src": "    return a",
       "next": "5.2"
     },
     "5.2": {

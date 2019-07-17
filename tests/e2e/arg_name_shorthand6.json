@@ -74,7 +74,7 @@
       ],
       "enter": "5",
       "parent": "3",
-      "src": "\twhen server listen :path :method as client",
+      "src": "    when server listen :path :method as client",
       "next": "5"
     },
     "5": {
@@ -90,7 +90,7 @@
         }
       ],
       "parent": "4",
-      "src": "    \tx = 0"
+      "src": "        x = 0"
     }
   },
   "services": [

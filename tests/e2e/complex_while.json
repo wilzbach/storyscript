@@ -65,7 +65,7 @@
         }
       ],
       "parent": "2",
-      "src": "\ti = i + 1"
+      "src": "    i = i + 1"
     }
   },
   "entrypoint": "1"

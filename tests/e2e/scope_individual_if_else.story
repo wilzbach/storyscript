@@ -1,4 +1,4 @@
 if true
-	c = 1
+    c = 1
 else
-	c = ""
+    c = ""

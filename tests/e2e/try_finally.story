@@ -1,4 +1,4 @@
 try
-	x=0
+    x=0
 finally
-	x=1
+    x=1

@@ -1,5 +1,5 @@
 function foo a:int
-	x = 0
+    x = 0
 
 function foo a:int
-	x = 0
+    x = 0

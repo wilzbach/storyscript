@@ -1,4 +1,4 @@
 function name key:int
-	a = 0
+    a = 0
 
 nam (key: 2)

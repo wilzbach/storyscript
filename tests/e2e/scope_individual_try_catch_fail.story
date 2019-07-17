@@ -1,6 +1,6 @@
 try
-	c = 1
+    c = 1
 catch as e
-	c = ""
+    c = ""
 finally
-	d = 0
+    d = 0

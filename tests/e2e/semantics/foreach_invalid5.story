@@ -1,2 +1,2 @@
 foreach items as key, value
-	x = 0
+    x = 0

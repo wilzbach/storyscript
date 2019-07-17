@@ -23,7 +23,7 @@
       "method": "return",
       "ln": "2",
       "parent": "1",
-      "src": "\treturn",
+      "src": "    return",
       "next": "4"
     },
     "4": {

@@ -32,7 +32,7 @@
       ],
       "enter": "3",
       "parent": "1",
-      "src": "  \twhen log level: \"normal\" as logger",
+      "src": "      when log level: \"normal\" as logger",
       "next": "3"
     },
     "3": {
@@ -48,7 +48,7 @@
         }
       ],
       "parent": "2",
-      "src": "  \t\tx = 0",
+      "src": "          x = 0",
       "next": "4"
     },
     "4": {
@@ -71,7 +71,7 @@
       ],
       "enter": "5",
       "parent": "1",
-      "src": "  \twhen log level: \"normal\"",
+      "src": "      when log level: \"normal\"",
       "next": "5"
     },
     "5": {
@@ -87,7 +87,7 @@
         }
       ],
       "parent": "4",
-      "src": "  \t\tx = 1",
+      "src": "          x = 1",
       "next": "6"
     },
     "6": {
@@ -100,7 +100,7 @@
       "command": "log",
       "enter": "7",
       "parent": "1",
-      "src": "  \twhen log as logger",
+      "src": "      when log as logger",
       "next": "7"
     },
     "7": {
@@ -116,7 +116,7 @@
         }
       ],
       "parent": "6",
-      "src": "  \t\tx = 2",
+      "src": "          x = 2",
       "next": "8"
     },
     "8": {
@@ -129,7 +129,7 @@
       "command": "log",
       "enter": "9",
       "parent": "1",
-      "src": "  \twhen log",
+      "src": "      when log",
       "next": "9"
     },
     "9": {
@@ -145,7 +145,7 @@
         }
       ],
       "parent": "8",
-      "src": "  \t\tx = 3"
+      "src": "          x = 3"
     }
   },
   "services": [

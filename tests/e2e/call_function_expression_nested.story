@@ -1,5 +1,5 @@
 function my_function k1: int k2:int returns int
-	return 0
+    return 0
 
 a = 0
 b = 1

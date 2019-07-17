@@ -87,7 +87,7 @@
         }
       ],
       "parent": "3",
-      "src": "\tc = app.secrets.slack",
+      "src": "    c = app.secrets.slack",
       "next": "5"
     },
     "5": {
@@ -138,7 +138,7 @@
         }
       ],
       "parent": "5",
-      "src": "\tc = app.secrets.slack"
+      "src": "    c = app.secrets.slack"
     }
   },
   "entrypoint": "1"

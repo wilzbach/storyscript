@@ -31,7 +31,7 @@
         }
       ],
       "parent": "1",
-      "src": "\ta = app.secrets.slack",
+      "src": "    a = app.secrets.slack",
       "next": "3"
     },
     "3": {
@@ -57,7 +57,7 @@
         }
       ],
       "parent": "1",
-      "src": "\tb = app.environment.FOO"
+      "src": "    b = app.environment.FOO"
     }
   },
   "entrypoint": "1",

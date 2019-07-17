@@ -87,14 +87,14 @@ def test_parser_assignment_indented_arguments():
     Ensures that assignments to a service with indented arguments are parsed
     correctly
     """
-    result = parse('x = alpine echo\n\tmessage:"hello"')
+    result = parse('x = alpine echo\n    message:"hello"')
     exp = result.child(1).indented_arguments.arguments.expression
     values = get_entity(arith_exp(Tree('an_exp', [exp]))).values
     assert values.string.child(0) == Token('DOUBLE_QUOTED', '"hello"')
 
 
 def test_parser_foreach_block():
-    result = parse('foreach items as one, two\n\tx=3\n', lower=True)
+    result = parse('foreach items as one, two\n    x=3\n', lower=True)
     block = result.block.foreach_block
     foreach = block.foreach_statement
     exp = arith_exp(foreach.base_expression)
@@ -106,7 +106,7 @@ def test_parser_foreach_block():
 
 
 def test_parser_while_block():
-    result = parse('while cond\n\tx=3\n')
+    result = parse('while cond\n    x=3\n')
     block = result.block.while_block
     exp = arith_exp(block.while_statement.base_expression)
     entity = get_entity(exp)
@@ -137,7 +137,7 @@ def test_parser_service_output():
 
 
 def test_parser_if_block():
-    result = parse('if expr\n\tx=3\n')
+    result = parse('if expr\n    x=3\n')
     if_block = result.block.if_block
     ar_exp = arith_exp(if_block.if_statement.base_expression)
     entity = get_entity(ar_exp)
@@ -148,7 +148,7 @@ def test_parser_if_block():
 
 
 def test_parser_if_block_nested():
-    result = parse('if expr\n\tif things\n\t\tx=3\n')
+    result = parse('if expr\n    if things\n        x=3\n')
     if_block = result.block.if_block.nested_block.block.if_block
     ar_exp = arith_exp(if_block.if_statement.base_expression)
     entity = get_entity(ar_exp)
@@ -159,19 +159,19 @@ def test_parser_if_block_nested():
 
 
 def test_parser_if_block_else():
-    result = parse('if expr\n\tx=3\nelse\n\tx=4\n')
+    result = parse('if expr\n    x=3\nelse\n    x=4\n')
     node = result.block.if_block.else_block.nested_block.block.rules
     assert node.assignment.path.child(0) == Token('NAME', 'x')
 
 
 def test_parser_if_block_elseif():
-    result = parse('if expr\n\tx=3\nelse if magic\n\tx=4\n')
+    result = parse('if expr\n    x=3\nelse if magic\n    x=4\n')
     node = result.block.if_block.elseif_block.nested_block.block.rules
     assert node.assignment.path.child(0) == Token('NAME', 'x')
 
 
 def test_parser_function():
-    result = parse('function test\n\tx = 3\n')
+    result = parse('function test\n    x = 3\n')
     node = result.block.function_block
     path = node.nested_block.block.rules.assignment.path
     assert node.function_statement.child(1) == Token('NAME', 'test')
@@ -179,21 +179,21 @@ def test_parser_function():
 
 
 def test_parser_function_arguments():
-    result = parse('function test n:int\n\tx = 3\n')
+    result = parse('function test n:int\n    x = 3\n')
     typed_argument = result.block.function_block.find('typed_argument')[0]
     assert typed_argument.child(0) == Token('NAME', 'n')
     assert typed_argument.types.base_type.child(0) == Token('INT_TYPE', 'int')
 
 
 def test_parser_function_output():
-    result = parse('function test n:string returns int\n\tx = 1\n')
+    result = parse('function test n:string returns int\n    x = 1\n')
     statement = result.block.function_block.function_statement
     assert statement.function_output.types.base_type.child(0) == \
         Token('INT_TYPE', 'int')
 
 
 def test_parser_try():
-    result = parse('try\n\tx=0')
+    result = parse('try\n    x=0')
     try_block = result.block.try_block
     assert try_block.try_statement.child(0) == Token('TRY', 'try')
     path = try_block.nested_block.block.rules.assignment.path
@@ -201,7 +201,7 @@ def test_parser_try():
 
 
 def test_parser_try_catch():
-    result = parse('try\n\tx=0\ncatch as error\n\tx=1')
+    result = parse('try\n    x=0\ncatch as error\n    x=1')
     catch_block = result.block.try_block.catch_block
     assert catch_block.catch_statement.child(0) == Token('NAME', 'error')
     path = catch_block.nested_block.block.rules.assignment.path
@@ -209,7 +209,7 @@ def test_parser_try_catch():
 
 
 def test_parser_try_finally():
-    result = parse('try\n\tx=0\nfinally\n\tx=1')
+    result = parse('try\n    x=0\nfinally\n    x=1')
     finally_block = result.block.try_block.finally_block
     token = Token('FINALLY', 'finally')
     assert finally_block.finally_statement.child(0) == token
@@ -218,13 +218,13 @@ def test_parser_try_finally():
 
 
 def test_parser_try_throw():
-    result = parse('try\n\tx=0\ncatch as error\n\tthrow')
+    result = parse('try\n    x=0\ncatch as error\n    throw')
     nested_block = result.block.try_block.catch_block.nested_block
     assert nested_block.block.rules.throw_statement.child(0) == 'throw'
 
 
 def test_parser_try_throw_error():
-    result = parse('try\n\tx=0\ncatch as error\n\tthrow error')
+    result = parse('try\n    x=0\ncatch as error\n    throw error')
     nested_block = result.block.try_block.catch_block.nested_block
     throw_statement = nested_block.block.rules.throw_statement
     assert throw_statement.child(0) == 'throw'
@@ -232,7 +232,7 @@ def test_parser_try_throw_error():
 
 
 def test_parser_try_throw_error_message():
-    result = parse('try\n\tx=0\ncatch as error\n\tthrow "error"')
+    result = parse('try\n    x=0\ncatch as error\n    throw "error"')
     nested_block = result.block.try_block.catch_block.nested_block
     throw_statement = nested_block.block.rules.throw_statement
     print(throw_statement.pretty())

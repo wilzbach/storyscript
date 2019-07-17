@@ -103,7 +103,7 @@ _CSB: "]"
 _COMMA: ","
 _LIST_KEYWORD: "List"
 _MAP_KEYWORD: "Map"
-_NL: /(\r?\n[\t ]*)+/
+_NL: /(\r?\n *)+/
 _INDENT: "<INDENT>"
 _DEDENT: "<DEDENT>"
 TRUE: "true"

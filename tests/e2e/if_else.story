@@ -1,5 +1,5 @@
 colour = "blue"
 if colour == "red"
-	x = 0
+    x = 0
 else
-	x = 1
+    x = 1

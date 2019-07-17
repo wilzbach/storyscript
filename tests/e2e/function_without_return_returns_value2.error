@@ -1,6 +1,6 @@
-Error: syntax error in story at line 5, column 11
+Error: syntax error in story at line 5, column 20
 
-5|          return 0
-                   ^
+5|                return 0
+                         ^
 
 E0110: `return` expected. Did you miss to add `returns int`?

@@ -1,4 +1,4 @@
 function foo returns object
-	return app
+    return app
 
 b = foo()

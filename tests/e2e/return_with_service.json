@@ -34,7 +34,7 @@
         }
       ],
       "parent": "1",
-      "src": "\treturn my_random_service get_integer"
+      "src": "    return my_random_service get_integer"
     }
   },
   "services": [
