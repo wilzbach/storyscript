@@ -4,15 +4,24 @@
       "method": "expression",
       "ln": "1",
       "name": [
-        "message"
+        "l"
       ],
       "args": [
         {
-          "$OBJECT": "string",
-          "string": "foo"
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            }
+          ]
         }
       ],
-      "src": "message = \"foo\"",
+      "src": "l = [1, 2]",
       "next": "2.1"
     },
     "2.1": {
@@ -25,13 +34,30 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "message"
+            "l"
           ]
         },
         {
           "$OBJECT": "mutation",
-          "mutation": "trim",
-          "args": []
+          "mutation": "replace",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "by",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 11
+              }
+            }
+          ]
         }
       ],
       "next": "2.2"
@@ -51,14 +77,22 @@
         },
         {
           "$OBJECT": "mutation",
-          "mutation": "split",
+          "mutation": "replace",
           "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 2
+              }
+            },
             {
               "$OBJECT": "arg",
               "name": "by",
               "arg": {
-                "$OBJECT": "string",
-                "string": "whitelist "
+                "$OBJECT": "int",
+                "int": 22
               }
             }
           ]
@@ -70,7 +104,7 @@
       "method": "expression",
       "ln": "2",
       "name": [
-        "username"
+        "a"
       ],
       "args": [
         {
@@ -80,7 +114,7 @@
           ]
         }
       ],
-      "src": "username = (message.trim()).split(by: \"whitelist \")"
+      "src": "a = l.replace(item: 1 by: 11).replace(item: 2 by : 22)"
     }
   },
   "entrypoint": "1"

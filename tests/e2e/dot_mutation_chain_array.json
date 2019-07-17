@@ -4,15 +4,20 @@
       "method": "expression",
       "ln": "1",
       "name": [
-        "message"
+        "l"
       ],
       "args": [
         {
-          "$OBJECT": "string",
-          "string": "foo"
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 0
+            }
+          ]
         }
       ],
-      "src": "message = \"foo\"",
+      "src": "l = [0]",
       "next": "2.1"
     },
     "2.1": {
@@ -25,13 +30,22 @@
         {
           "$OBJECT": "path",
           "paths": [
-            "message"
+            "l"
           ]
         },
         {
           "$OBJECT": "mutation",
-          "mutation": "trim",
-          "args": []
+          "mutation": "append",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "item",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            }
+          ]
         }
       ],
       "next": "2.2"
@@ -51,14 +65,14 @@
         },
         {
           "$OBJECT": "mutation",
-          "mutation": "split",
+          "mutation": "contains",
           "args": [
             {
               "$OBJECT": "arg",
-              "name": "by",
+              "name": "item",
               "arg": {
-                "$OBJECT": "string",
-                "string": "whitelist "
+                "$OBJECT": "int",
+                "int": 2
               }
             }
           ]
@@ -70,7 +84,7 @@
       "method": "expression",
       "ln": "2",
       "name": [
-        "username"
+        "a"
       ],
       "args": [
         {
@@ -80,7 +94,7 @@
           ]
         }
       ],
-      "src": "username = (message.trim()).split(by: \"whitelist \")"
+      "src": "a = l.append(item: 1).contains(item: 2)"
     }
   },
   "entrypoint": "1"

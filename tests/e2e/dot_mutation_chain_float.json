@@ -1,0 +1,61 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "mutation",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "float",
+          "float": 1.5
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "log",
+          "args": []
+        }
+      ],
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "mutation",
+      "ln": "1.2",
+      "name": [
+        "__p-1.2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "log2",
+          "args": []
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.2"
+          ]
+        }
+      ],
+      "src": "a = 1.5.log().log2()"
+    }
+  },
+  "entrypoint": "1.1"
+}
