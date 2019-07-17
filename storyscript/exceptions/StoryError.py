@@ -146,8 +146,6 @@ class StoryError(SyntaxError):
             return ErrorCodes.block_expected_after
         elif self.error.expected == ['_DEDENT']:
             return ErrorCodes.expected_closing_block
-        elif token.type == '_DOUBLE_DEDENT':
-            return ErrorCodes.indentation_error
         elif self.error.expected == ['_COLON']:
             return ErrorCodes.arguments_expected
         elif intention.assignment():
