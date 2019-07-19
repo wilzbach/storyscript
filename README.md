@@ -37,7 +37,7 @@ $ story deploy  # Zero-devop deployments into Kubernetes
 
 ## Using Storyscript
 
-If you are interested in using Storyscript, please see the [Quick Start guide](https://docs.storyscript.io/cloud/quick-start/).
+If you are interested in using Storyscript, please see the [Quick Start guide](https://docs.storyscript.io/quick-start/).
 
 ## Editor plugins
 
