@@ -106,8 +106,8 @@ class Lines:
         Creates the base dictionary for a given line.
         """
         assert position.line not in self.lines, 'Line numbers must be unique'
-        col_start = self.__as_none(position.column)
-        col_end = self.__as_none(position.end_column)
+        col_start = self._as_none(position.column)
+        col_end = self._as_none(position.end_column)
         raw_line = self.story.line(position.line)
         self.lines[position.line] = {
             'method': method,
@@ -171,5 +171,5 @@ class Lines:
                 return True
         return False
 
-    def __as_none(self, value):
+    def _as_none(self, value):
         return value if value != 'None' else None
