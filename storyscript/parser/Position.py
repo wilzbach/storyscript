@@ -1,4 +1,7 @@
 class Position:
+    """
+    A position object consists of a `line`, (start) `column` and `end_column`.
+    """
     def __init__(self, line, column, end_column):
         self.line = line
         self.column = column
