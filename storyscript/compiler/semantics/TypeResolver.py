@@ -209,6 +209,12 @@ class TypeResolver(ScopeSelectiveVisitor):
         if output is not None:
             self.check_output(tree, output, target='service')
 
+        args = tree.service.service_fragment.arguments
+        if args is not None:
+            # only look at value nodes (argname, (2) expr, argname, (4) expr)
+            for arg in args.children[1::2]:
+                self.resolver.expression(arg)
+
         if tree.nested_block:
             with self.create_scope(tree.scope):
                 tree.expect(not self.in_service_block, 'nested_service_block')
