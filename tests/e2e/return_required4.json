@@ -3,6 +3,8 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "6",
       "output": [
         "string"
       ],
@@ -24,6 +26,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "6",
       "args": [
         {
           "$OBJECT": "expression",
@@ -47,6 +51,8 @@
     "3": {
       "method": "if",
       "ln": "3",
+      "col_start": "8",
+      "col_end": "9",
       "args": [
         {
           "$OBJECT": "boolean",
@@ -62,6 +68,8 @@
     "4": {
       "method": "return",
       "ln": "4",
+      "col_start": "9",
+      "col_end": "19",
       "args": [
         {
           "$OBJECT": "string",
@@ -75,6 +83,8 @@
     "5": {
       "method": "elif",
       "ln": "5",
+      "col_start": "13",
+      "col_end": "15",
       "args": [
         {
           "$OBJECT": "boolean",
@@ -90,6 +100,8 @@
     "6": {
       "method": "return",
       "ln": "6",
+      "col_start": "9",
+      "col_end": "19",
       "args": [
         {
           "$OBJECT": "string",
@@ -103,6 +115,8 @@
     "7": {
       "method": "else",
       "ln": "7",
+      "col_start": "5",
+      "col_end": "15",
       "enter": "8",
       "parent": "1",
       "src": "    else",
@@ -111,6 +125,8 @@
     "8": {
       "method": "return",
       "ln": "8",
+      "col_start": "9",
+      "col_end": "19",
       "args": [
         {
           "$OBJECT": "string",

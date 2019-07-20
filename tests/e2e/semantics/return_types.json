@@ -3,6 +3,8 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "11",
       "output": [
         "function"
       ],
@@ -15,6 +17,8 @@
     "2": {
       "method": "return",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "13",
       "args": [
         {
           "$OBJECT": "int",
@@ -28,6 +32,8 @@
     "3": {
       "method": "function",
       "ln": "3",
+      "col_start": "1",
+      "col_end": "11",
       "output": [
         "regex"
       ],
@@ -40,6 +46,8 @@
     "4": {
       "method": "return",
       "ln": "4",
+      "col_start": "5",
+      "col_end": "17",
       "args": [
         {
           "$OBJECT": "regexp",
@@ -53,6 +61,8 @@
     "5": {
       "method": "function",
       "ln": "5",
+      "col_start": "1",
+      "col_end": "11",
       "output": [
         "any"
       ],
@@ -65,6 +75,8 @@
     "6": {
       "method": "return",
       "ln": "6",
+      "col_start": "5",
+      "col_end": "13",
       "args": [
         {
           "$OBJECT": "int",
@@ -78,6 +90,8 @@
     "7": {
       "method": "function",
       "ln": "7",
+      "col_start": "1",
+      "col_end": "11",
       "output": [
         "Map"
       ],
@@ -90,6 +104,8 @@
     "8": {
       "method": "return",
       "ln": "8",
+      "col_start": "5",
+      "col_end": "11",
       "args": [
         {
           "$OBJECT": "dict",
@@ -103,6 +119,8 @@
     "9": {
       "method": "function",
       "ln": "9",
+      "col_start": "1",
+      "col_end": "11",
       "output": [
         "List"
       ],
@@ -114,6 +132,8 @@
     "10": {
       "method": "return",
       "ln": "10",
+      "col_start": "5",
+      "col_end": "13",
       "args": [
         {
           "$OBJECT": "list",

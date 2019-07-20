@@ -3,6 +3,8 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "11",
       "name": [
         "my_story"
       ],
@@ -18,6 +20,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],
@@ -33,6 +37,8 @@
     "3": {
       "method": "expression",
       "ln": "3",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "b"
       ],
@@ -48,6 +54,8 @@
     "4": {
       "method": "expression",
       "ln": "4",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "c"
       ],
@@ -63,6 +71,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "d"
       ],
@@ -78,6 +88,8 @@
     "6": {
       "method": "expression",
       "ln": "6",
+      "col_start": "1",
+      "col_end": "6",
       "name": [
         "obj"
       ],
@@ -93,6 +105,8 @@
     "7": {
       "method": "expression",
       "ln": "7",
+      "col_start": "1",
+      "col_end": "5",
       "name": [
         "t1"
       ],
@@ -131,6 +145,8 @@
     "8": {
       "method": "expression",
       "ln": "8",
+      "col_start": "1",
+      "col_end": "5",
       "name": [
         "t2"
       ],
@@ -204,6 +220,8 @@
     "9": {
       "method": "expression",
       "ln": "9",
+      "col_start": "1",
+      "col_end": "5",
       "name": [
         "t3"
       ],
@@ -256,6 +274,8 @@
     "10": {
       "method": "expression",
       "ln": "10",
+      "col_start": "1",
+      "col_end": "5",
       "name": [
         "t4"
       ],

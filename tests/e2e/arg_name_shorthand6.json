@@ -3,6 +3,8 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "7",
       "name": [
         "path"
       ],
@@ -18,6 +20,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "1",
+      "col_end": "9",
       "name": [
         "method"
       ],
@@ -33,6 +37,8 @@
     "3": {
       "method": "execute",
       "ln": "3",
+      "col_start": "1",
+      "col_end": "12",
       "output": [
         "server"
       ],
@@ -45,6 +51,8 @@
     "4": {
       "method": "when",
       "ln": "4",
+      "col_start": "10",
+      "col_end": "23",
       "output": [
         "client"
       ],
@@ -80,6 +88,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "9",
+      "col_end": "12",
       "name": [
         "x"
       ],

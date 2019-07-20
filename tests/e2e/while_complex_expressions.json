@@ -3,6 +3,8 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "l"
       ],
@@ -23,6 +25,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "i"
       ],
@@ -38,6 +42,8 @@
     "3.1": {
       "method": "mutation",
       "ln": "3.1",
+      "col_start": "7",
+      "col_end": "17",
       "name": [
         "__p-3.1"
       ],
@@ -68,6 +74,7 @@
     "3": {
       "method": "while",
       "ln": "3",
+      "col_end": "11",
       "args": [
         {
           "$OBJECT": "path",
@@ -83,6 +90,8 @@
     "4": {
       "method": "execute",
       "ln": "4",
+      "col_start": "5",
+      "col_end": "16",
       "service": "alpine",
       "command": "echo",
       "args": [

@@ -3,6 +3,8 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "15",
       "function": "random",
       "enter": "2",
       "exit": "4",
@@ -12,6 +14,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "17",
       "name": [
         "my_service"
       ],
@@ -28,6 +32,8 @@
     "4": {
       "method": "execute",
       "ln": "4",
+      "col_start": "1",
+      "col_end": "18",
       "service": "my_service",
       "command": "length",
       "src": "my_service length"

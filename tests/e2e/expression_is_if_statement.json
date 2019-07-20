@@ -3,6 +3,8 @@
     "1.1": {
       "method": "execute",
       "ln": "1.1",
+      "col_start": "5",
+      "col_end": "21",
       "name": [
         "__p-1.1"
       ],
@@ -23,6 +25,7 @@
     "1": {
       "method": "if",
       "ln": "1",
+      "col_end": "11",
       "args": [
         {
           "$OBJECT": "expression",
@@ -55,6 +58,8 @@
     "2": {
       "method": "execute",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "16",
       "service": "logger",
       "command": "echo",
       "args": [

@@ -3,6 +3,8 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],
@@ -15,6 +17,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "b"
       ],
@@ -27,6 +31,8 @@
     "3": {
       "method": "expression",
       "ln": "3",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "s"
       ],
@@ -42,6 +48,8 @@
     "4": {
       "method": "expression",
       "ln": "4",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "c"
       ],
@@ -71,6 +79,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "d"
       ],
@@ -100,6 +110,8 @@
     "6": {
       "method": "expression",
       "ln": "6",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "e"
       ],
@@ -129,6 +141,8 @@
     "7": {
       "method": "expression",
       "ln": "7",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "f"
       ],
@@ -165,6 +179,8 @@
     "8": {
       "method": "expression",
       "ln": "8",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "g"
       ],
@@ -201,6 +217,8 @@
     "9": {
       "method": "expression",
       "ln": "9",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "h"
       ],
@@ -229,6 +247,8 @@
     "10": {
       "method": "expression",
       "ln": "10",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],
@@ -244,6 +264,8 @@
     "11": {
       "method": "expression",
       "ln": "11",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "b"
       ],

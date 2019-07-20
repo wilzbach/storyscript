@@ -3,6 +3,8 @@
     "1": {
       "method": "execute",
       "ln": "1",
+      "col_start": "8",
+      "col_end": "16",
       "name": [
         "diff"
       ],
@@ -26,6 +28,8 @@
     "2": {
       "method": "mutation",
       "ln": "2",
+      "col_start": "9",
+      "col_end": "19",
       "name": [
         "lines"
       ],

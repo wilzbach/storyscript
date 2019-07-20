@@ -14,6 +14,8 @@
     "1": {
       "method": "when",
       "ln": "1",
+      "col_start": "20",
+      "col_end": "34",
       "output": [
         "listen"
       ],
@@ -27,6 +29,8 @@
     "2": {
       "method": "break",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "10",
       "parent": "1",
       "src": "    break",
       "next": "3.1"
@@ -45,6 +49,8 @@
     "3": {
       "method": "when",
       "ln": "3",
+      "col_start": "20",
+      "col_end": "34",
       "output": [
         "os"
       ],
@@ -58,6 +64,8 @@
     "4": {
       "method": "break",
       "ln": "4",
+      "col_start": "5",
+      "col_end": "10",
       "parent": "3",
       "src": "    break",
       "next": "5.1"
@@ -76,6 +84,8 @@
     "5": {
       "method": "when",
       "ln": "5",
+      "col_start": "20",
+      "col_end": "34",
       "output": [
         "listen"
       ],
@@ -99,6 +109,8 @@
     "6": {
       "method": "break",
       "ln": "6",
+      "col_start": "5",
+      "col_end": "10",
       "parent": "5",
       "src": "    break",
       "next": "7.1"
@@ -117,6 +129,8 @@
     "7": {
       "method": "when",
       "ln": "7",
+      "col_start": "20",
+      "col_end": "34",
       "output": [
         "li"
       ],
@@ -140,6 +154,8 @@
     "8": {
       "method": "break",
       "ln": "8",
+      "col_start": "5",
+      "col_end": "10",
       "parent": "7",
       "src": "    break"
     }

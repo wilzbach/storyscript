@@ -3,6 +3,8 @@
     "1": {
       "method": "execute",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "18",
       "service": "sendgrid",
       "command": "send_one",
       "args": [

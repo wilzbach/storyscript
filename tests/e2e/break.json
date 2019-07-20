@@ -3,6 +3,8 @@
     "1": {
       "method": "while",
       "ln": "1",
+      "col_start": "7",
+      "col_end": "10",
       "args": [
         {
           "$OBJECT": "boolean",
@@ -16,6 +18,8 @@
     "2": {
       "method": "break",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "10",
       "parent": "1",
       "src": "    break"
     }

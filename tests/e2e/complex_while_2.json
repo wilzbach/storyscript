@@ -3,6 +3,8 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],
@@ -18,6 +20,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "b"
       ],
@@ -33,6 +37,8 @@
     "3": {
       "method": "expression",
       "ln": "3",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "c"
       ],
@@ -48,6 +54,8 @@
     "4": {
       "method": "expression",
       "ln": "4",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "d"
       ],
@@ -63,6 +71,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "i"
       ],
@@ -78,6 +88,8 @@
     "6": {
       "method": "while",
       "ln": "6",
+      "col_start": "7",
+      "col_end": "6",
       "args": [
         {
           "$OBJECT": "expression",
@@ -145,6 +157,8 @@
     "7": {
       "method": "expression",
       "ln": "7",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "i"
       ],

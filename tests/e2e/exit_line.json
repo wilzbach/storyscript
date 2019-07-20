@@ -3,6 +3,8 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "8",
       "name": [
         "items"
       ],
@@ -27,6 +29,8 @@
     "2": {
       "method": "for",
       "ln": "2",
+      "col_start": "9",
+      "col_end": "6",
       "output": [
         "item"
       ],
@@ -46,6 +50,8 @@
     "3": {
       "method": "expression",
       "ln": "3",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "x"
       ],
@@ -64,6 +70,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],
@@ -79,6 +87,8 @@
     "7": {
       "method": "if",
       "ln": "7",
+      "col_start": "4",
+      "col_end": "5",
       "args": [
         {
           "$OBJECT": "expression",
@@ -111,6 +121,8 @@
     "8": {
       "method": "expression",
       "ln": "8",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "a"
       ],
@@ -127,6 +139,8 @@
     "9": {
       "method": "else",
       "ln": "9",
+      "col_start": "1",
+      "col_end": "6",
       "enter": "10",
       "exit": "12",
       "src": "else",
@@ -135,6 +149,8 @@
     "10": {
       "method": "expression",
       "ln": "10",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "b"
       ],
@@ -151,6 +167,8 @@
     "12": {
       "method": "while",
       "ln": "12",
+      "col_start": "7",
+      "col_end": "6",
       "args": [
         {
           "$OBJECT": "boolean",
@@ -165,6 +183,8 @@
     "13": {
       "method": "expression",
       "ln": "13",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "x"
       ],
@@ -181,6 +201,8 @@
     "15": {
       "method": "try",
       "ln": "15",
+      "col_start": "1",
+      "col_end": "11",
       "enter": "16",
       "exit": "17",
       "src": "try",
@@ -189,6 +211,8 @@
     "16": {
       "method": "expression",
       "ln": "16",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "a"
       ],
@@ -205,6 +229,8 @@
     "17": {
       "method": "catch",
       "ln": "17",
+      "col_start": "10",
+      "col_end": "6",
       "output": [
         "e"
       ],
@@ -216,6 +242,8 @@
     "18": {
       "method": "expression",
       "ln": "18",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "b"
       ],
@@ -232,6 +260,8 @@
     "20": {
       "method": "expression",
       "ln": "20",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "x"
       ],

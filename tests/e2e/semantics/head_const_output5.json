@@ -3,6 +3,8 @@
     "1": {
       "method": "when",
       "ln": "1",
+      "col_start": "6",
+      "col_end": "19",
       "output": [
         "res"
       ],
@@ -33,6 +35,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "8",
+      "col_end": "13",
       "name": [
         "foo"
       ],
@@ -59,6 +63,8 @@
     "3": {
       "method": "expression",
       "ln": "3",
+      "col_start": "8",
+      "col_end": "13",
       "name": [
         "foo"
       ],

@@ -3,6 +3,8 @@
     "1": {
       "method": "execute",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "12",
       "output": [
         "server"
       ],
@@ -15,6 +17,8 @@
     "2": {
       "method": "when",
       "ln": "2",
+      "col_start": "10",
+      "col_end": "23",
       "output": [
         "req"
       ],
@@ -38,6 +42,8 @@
     "3": {
       "method": "expression",
       "ln": "3",
+      "col_start": "9",
+      "col_end": "15",
       "name": [
         "text"
       ],
@@ -68,6 +74,8 @@
     "4": {
       "method": "if",
       "ln": "4",
+      "col_start": "12",
+      "col_end": "13",
       "args": [
         {
           "$OBJECT": "expression",
@@ -102,6 +110,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "13",
+      "col_end": "19",
       "name": [
         "text"
       ],
@@ -118,6 +128,8 @@
     "6": {
       "method": "else",
       "ln": "6",
+      "col_start": "9",
+      "col_end": "17",
       "enter": "7",
       "parent": "2",
       "src": "        else",
@@ -126,6 +138,8 @@
     "7": {
       "method": "expression",
       "ln": "7",
+      "col_start": "13",
+      "col_end": "19",
       "name": [
         "text"
       ],

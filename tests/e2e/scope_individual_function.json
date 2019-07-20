@@ -3,6 +3,8 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "6",
       "output": [
         "int"
       ],
@@ -15,6 +17,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "a"
       ],
@@ -31,6 +35,8 @@
     "3": {
       "method": "return",
       "ln": "3",
+      "col_start": "5",
+      "col_end": "13",
       "args": [
         {
           "$OBJECT": "path",
@@ -46,6 +52,8 @@
     "5.2": {
       "method": "call",
       "ln": "5.2",
+      "col_start": "7",
+      "col_end": "10",
       "name": [
         "__p-5.2"
       ],
@@ -71,6 +79,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],

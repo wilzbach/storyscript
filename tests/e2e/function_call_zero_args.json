@@ -3,6 +3,8 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "11",
       "output": [
         "int"
       ],
@@ -15,6 +17,8 @@
     "2": {
       "method": "return",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "13",
       "args": [
         {
           "$OBJECT": "int",
@@ -28,6 +32,8 @@
     "4.1": {
       "method": "call",
       "ln": "4.1",
+      "col_start": "5",
+      "col_end": "9",
       "name": [
         "__p-4.1"
       ],
@@ -37,6 +43,8 @@
     "4": {
       "method": "expression",
       "ln": "4",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "b"
       ],

@@ -3,6 +3,8 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "9",
       "name": [
         "colour"
       ],
@@ -18,6 +20,8 @@
     "2": {
       "method": "if",
       "ln": "2",
+      "col_start": "4",
+      "col_end": "5",
       "args": [
         {
           "$OBJECT": "expression",
@@ -44,6 +48,8 @@
     "3": {
       "method": "expression",
       "ln": "3",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "x"
       ],
@@ -60,6 +66,8 @@
     "4": {
       "method": "else",
       "ln": "4",
+      "col_start": "1",
+      "col_end": "6",
       "enter": "5",
       "src": "else",
       "next": "5"
@@ -67,6 +75,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "5",
+      "col_end": "8",
       "name": [
         "x"
       ],

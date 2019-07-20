@@ -3,6 +3,8 @@
     "2.1": {
       "method": "mutation",
       "ln": "2.1",
+      "col_start": "1",
+      "col_end": "2",
       "name": [
         "__p-2.1"
       ],
@@ -50,6 +52,8 @@
     "3.1": {
       "method": "mutation",
       "ln": "3.1",
+      "col_start": "12",
+      "col_end": "13",
       "name": [
         "__p-3.1"
       ],
@@ -83,6 +87,8 @@
     "3": {
       "method": "expression",
       "ln": "3",
+      "col_start": "1",
+      "col_end": "11",
       "name": [
         "mutation"
       ],
@@ -100,6 +106,8 @@
     "5": {
       "method": "expression",
       "ln": "5",
+      "col_start": "1",
+      "col_end": "4",
       "name": [
         "a"
       ],
@@ -120,6 +128,8 @@
     "6.1": {
       "method": "mutation",
       "ln": "6.1",
+      "col_start": "1",
+      "col_end": "2",
       "name": [
         "__p-6.1"
       ],
@@ -164,6 +174,8 @@
     "7.1": {
       "method": "mutation",
       "ln": "7.1",
+      "col_start": "12",
+      "col_end": "13",
       "name": [
         "__p-7.1"
       ],
@@ -194,6 +206,8 @@
     "7": {
       "method": "expression",
       "ln": "7",
+      "col_start": "1",
+      "col_end": "11",
       "name": [
         "mutation"
       ],

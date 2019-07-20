@@ -59,9 +59,12 @@ class JSONCompiler:
         Compiles an absolute expression using Compiler.expression
         """
         args = [self.objects.expression(tree.expression)]
-        self.lines.append('expression', tree.line(), args=args, parent=parent)
+        self.lines.append(
+            'expression', tree.position(),
+            args=args, parent=parent
+        )
 
-    def base_expression_assignment(self, tree, parent, line):
+    def base_expression_assignment(self, tree, parent, position):
         """
         Compiles a base expression into an expression, service or mutation
         """
@@ -78,7 +81,7 @@ class JSONCompiler:
             return
         elif tree.expression:
             args = [self.objects.expression(tree.expression)]
-            self.lines.append('expression', line, args=args, parent=parent)
+            self.lines.append('expression', position, args=args, parent=parent)
             return
         else:
             internal_assert(tree.call_expression)
@@ -102,9 +105,9 @@ class JSONCompiler:
         Compiles an assignment tree
         """
         name = self.objects.names(tree.path)
-        line = tree.line()
+        position = tree.position()
         fragment = tree.assignment_fragment.base_expression
-        self.base_expression_assignment(fragment, parent, line)
+        self.base_expression_assignment(fragment, parent, position)
         self.lines.set_name(name)
 
     def arguments(self, tree, parent):
@@ -124,7 +127,7 @@ class JSONCompiler:
         """
         Compiles a function call expression
         """
-        line = tree.line()
+        position = tree.position()
         tree.expect(tree.path.inline_expression is None,
                     'function_call_no_inline_expression')
         name = self.objects.names(tree.path)
@@ -132,15 +135,17 @@ class JSONCompiler:
                     name='.'.join(name))
         name = tree.path.extract_path()
         args = self.objects.arguments(tree)
-        self.lines.append('call', line, function=name,
-                          output=None, args=args, parent=parent)
+        self.lines.append(
+            'call', position,
+            function=name, output=None, args=args, parent=parent
+        )
 
     def service(self, tree, nested_block, parent):
         """
         Compiles a service tree.
         """
         assert tree.data == 'service'
-        line = tree.line()
+        position = tree.position()
         command = tree.service_fragment.command
         tree.expect(command is not None, 'service_without_command')
         command = command.child(0)
@@ -148,12 +153,15 @@ class JSONCompiler:
         service = tree.path.extract_path()
         output = self.output(tree.service_fragment.output)
         if output:
-            self.lines.set_scope(line, parent, output)
+            self.lines.set_scope(position.line, parent, output)
         enter = None
         if nested_block:
             enter = nested_block.line()
         try:
-            args = (line, service, command, arguments, output, enter, parent)
+            args = (
+                position, service, command, arguments,
+                output, enter, parent
+            )
             self.lines.execute(*args)
             return
         except StorySyntaxError as error:
@@ -190,95 +198,107 @@ class JSONCompiler:
         Compiles a return_statement tree
         """
         tree.expect(parent is not None, 'return_outside')
-        line = tree.line()
+        position = tree.position()
         args = None
         if tree.base_expression:
             args = [self.fake_base_expression(tree.base_expression, parent)]
-        self.lines.append('return', line, args=args, parent=parent)
+        self.lines.append('return', position, args=args, parent=parent)
 
     def if_block(self, tree, parent):
-        line = tree.line()
+        position = tree.position()
         nested_block = tree.nested_block
         args = [self.fake_base_expression(tree.if_statement.base_expression,
                                           parent)]
-        self.lines.set_scope(line, parent)
-        self.lines.append('if', line, args=args, enter=nested_block.line(),
-                          parent=parent)
-        self.subtree(nested_block, parent=line)
+        self.lines.set_scope(position.line, parent)
+        self.lines.append(
+            'if', position,
+            args=args, enter=nested_block.line(), parent=parent
+        )
+        self.subtree(nested_block, parent=position.line)
         trees = tree.extract('elseif_block')
         if tree.else_block:
             trees.append(tree.else_block)
         self.subtrees(*trees, parent=parent)
         if len(trees) == 0 and not tree.else_block:
-            self.lines.finish_scope(line)
+            self.lines.finish_scope(position.line)
 
     def elseif_block(self, tree, parent):
         """
         Compiles elseif_block trees
         """
-        line = tree.line()
-        self.lines.set_exit(line)
+        position = tree.position()
+        self.lines.set_exit(position.line)
         exp = tree.elseif_statement.base_expression
         args = [self.fake_base_expression(exp, parent)]
         nested_block = tree.nested_block
-        self.lines.set_scope(line, parent)
-        self.lines.append('elif', line, args=args, enter=nested_block.line(),
-                          parent=parent)
-        self.subtree(nested_block, parent=line)
-        self.lines.finish_scope(line)
+        self.lines.set_scope(position.line, parent)
+        self.lines.append(
+            'elif', position,
+            args=args, enter=nested_block.line(), parent=parent
+        )
+        self.subtree(nested_block, parent=position.line)
+        self.lines.finish_scope(position.line)
 
     def else_block(self, tree, parent):
         """
         Compiles else_block trees
         """
-        line = tree.line()
-        self.lines.set_exit(line)
+        position = tree.position()
+        self.lines.set_exit(position.line)
         nested_block = tree.nested_block
-        self.lines.set_scope(line, parent)
-        self.lines.append('else', line, enter=nested_block.line(),
-                          parent=parent)
-        self.subtree(nested_block, parent=line)
-        self.lines.finish_scope(line)
+        self.lines.set_scope(position.line, parent)
+        self.lines.append(
+            'else', position,
+            enter=nested_block.line(), parent=parent
+        )
+        self.subtree(nested_block, parent=position.line)
+        self.lines.finish_scope(position.line)
 
     def foreach_block(self, tree, parent):
-        line = tree.line()
+        position = tree.position()
         exp = tree.foreach_statement.base_expression
         args = [self.fake_base_expression(exp, parent)]
         output = self.output(tree.foreach_statement.output)
         nested_block = tree.nested_block
-        self.lines.set_scope(line, parent, output)
-        self.lines.append('for', line, args=args, enter=nested_block.line(),
-                          parent=parent, output=output)
-        self.subtree(nested_block, parent=line)
-        self.lines.finish_scope(line)
+        self.lines.set_scope(position.line, parent, output)
+        self.lines.append(
+            'for', position,
+            args=args, enter=nested_block.line(), parent=parent, output=output
+        )
+        self.subtree(nested_block, parent=position.line)
+        self.lines.finish_scope(position.line)
 
     def while_block(self, tree, parent):
-        line = tree.line()
+        position = tree.position()
         exp = tree.while_statement.base_expression
         args = [self.fake_base_expression(exp, parent)]
         nested_block = tree.nested_block
-        self.lines.set_scope(line, parent)
-        self.lines.append('while', line, args=args, enter=nested_block.line(),
-                          parent=parent)
-        self.subtree(nested_block, parent=line)
-        self.lines.finish_scope(line)
+        self.lines.set_scope(position.line, parent)
+        self.lines.append(
+            'while', position,
+            args=args, enter=nested_block.line(), parent=parent
+        )
+        self.subtree(nested_block, parent=position.line)
+        self.lines.finish_scope(position.line)
 
     def function_block(self, tree, parent):
         """
         Compiles a function and its nested block of code.
         """
-        line = tree.line()
+        position = tree.position()
         function = tree.function_statement
         args = self.objects.function_arguments(function)
         output = self.function_output(function)
         nested_block = tree.nested_block or tree.block
         function_name = function.child(1).value
-        self.lines.set_scope(line, parent)
-        self.lines.append('function', line, function=function_name,
-                          output=output, args=args, enter=nested_block.line(),
-                          parent=parent)
-        self.subtree(nested_block, parent=line)
-        self.lines.finish_scope(line)
+        self.lines.set_scope(position.line, parent)
+        self.lines.append(
+            'function', position,
+            function=function_name, output=output,
+            args=args, enter=nested_block.line(), parent=parent
+        )
+        self.subtree(nested_block, parent=position.line)
+        self.lines.finish_scope(position.line)
 
     def mutation_block(self, tree, parent):
         """
@@ -299,7 +319,10 @@ class JSONCompiler:
             args = args + self.chained_mutations(tree.mutation)
         if tree.nested_block:
             args = args + self.chained_mutations(tree.nested_block)
-        self.lines.append('mutation', tree.line(), args=args, parent=parent)
+        self.lines.append(
+            'mutation', tree.position(),
+            args=args, parent=parent
+        )
 
     def indented_chain(self, tree, parent):
         """
@@ -334,63 +357,69 @@ class JSONCompiler:
         """
         Compiles a try block
         """
-        line = tree.line()
+        position = tree.position()
         nested_block = tree.nested_block
-        self.lines.set_scope(line, parent)
-        self.lines.append('try', line, enter=nested_block.line(),
-                          parent=parent)
-        self.subtree(nested_block, parent=line)
+        self.lines.set_scope(position.line, parent)
+        self.lines.append(
+            'try', position,
+            enter=nested_block.line(), parent=parent
+        )
+        self.subtree(nested_block, parent=position.line)
         if tree.catch_block:
             self.catch_block(tree.catch_block, parent=parent)
         if tree.finally_block:
             self.finally_block(tree.finally_block, parent=parent)
         if not (tree.catch_block or tree.finally_block):
-            self.lines.finish_scope(line)
+            self.lines.finish_scope(position.line)
 
     def throw_statement(self, tree, parent):
         """
         Compiles a throw statement
         """
-        line = tree.line()
+        position = tree.position()
         args = []
         if len(tree.children) > 1:
             args = [self.objects.entity(tree.child(1))]
-        self.lines.append('throw', line, args=args, parent=parent)
+        self.lines.append('throw', position, args=args, parent=parent)
 
     def catch_block(self, tree, parent):
         """
         Compiles a catch block
         """
-        line = tree.line()
-        self.lines.set_exit(line)
+        position = tree.position()
+        self.lines.set_exit(position.line)
         nested_block = tree.nested_block
         output = self.objects.names(tree.catch_statement)
-        self.lines.set_scope(line, parent, output)
-        self.lines.append('catch', line, enter=nested_block.line(),
-                          output=output, parent=parent)
-        self.subtree(nested_block, parent=line)
-        self.lines.finish_scope(line)
+        self.lines.set_scope(position.line, parent, output)
+        self.lines.append(
+            'catch', position,
+            enter=nested_block.line(), output=output, parent=parent
+        )
+        self.subtree(nested_block, parent=position.line)
+        self.lines.finish_scope(position.line)
 
     def finally_block(self, tree, parent):
         """
         Compiles a finally block
         """
-        line = tree.line()
-        self.lines.set_exit(line)
+        position = tree.position()
+        self.lines.set_exit(position.line)
         nested_block = tree.nested_block
-        self.lines.set_scope(line, parent)
-        self.lines.append('finally', line, enter=nested_block.line(),
-                          parent=parent)
-        self.subtree(nested_block, parent=line)
-        self.lines.finish_scope(line)
+        self.lines.set_scope(position.line, parent)
+        self.lines.append(
+            'finally', position,
+            enter=nested_block.line(), parent=parent
+        )
+        self.subtree(nested_block, parent=position.line)
+        self.lines.finish_scope(position.line)
 
     def break_statement(self, tree, parent):
         tree.expect(parent is not None, 'break_outside')
-        self.lines.append('break', tree.line(), parent=parent)
+        self.lines.append('break', tree.position(), parent=parent)
 
     def continue_statement(self, tree, parent):
         tree.expect(parent is not None, 'continue_outside')
-        self.lines.append('continue', tree.line(), parent=parent)
+        self.lines.append('continue', tree.position(), parent=parent)
 
     def subtrees(self, *trees, parent=None):
         """

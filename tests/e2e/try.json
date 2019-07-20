@@ -3,6 +3,8 @@
     "1": {
       "method": "try",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "6",
       "enter": "2",
       "src": "try",
       "next": "2"
@@ -10,6 +12,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "7",
       "name": [
         "x"
       ],

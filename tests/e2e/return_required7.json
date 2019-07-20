@@ -3,6 +3,8 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "6",
       "output": [
         "int"
       ],
@@ -24,6 +26,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "6",
       "args": [
         {
           "$OBJECT": "expression",
@@ -47,6 +51,8 @@
     "3": {
       "method": "return",
       "ln": "3",
+      "col_start": "5",
+      "col_end": "13",
       "args": [
         {
           "$OBJECT": "int",

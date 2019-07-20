@@ -3,6 +3,9 @@ from pytest import fixture, mark, raises
 
 from storyscript.compiler.json import Lines
 from storyscript.exceptions import StorySyntaxError
+from storyscript.parser import Position
+
+position_fixed = Position('1', '2', '3')
 
 
 @fixture
@@ -98,12 +101,14 @@ def test_lines_is_output_false(lines):
 
 
 def test_lines_make(lines):
-    expected = {'1': {'method': 'method', 'ln': '1', 'output': None,
+    expected = {'1': {'method': 'method',
+                      'ln': '1', 'col_start': '2', 'col_end': '3',
+                      'output': None,
                       'name': None,
                       'function': None, 'service': None, 'command': None,
                       'enter': None, 'exit': None, 'args': None,
                       'parent': None, 'src': lines.story.line()}}
-    lines.make('method', '1')
+    lines.make('method', position_fixed)
     lines.story.line.assert_called_with('1')
     assert lines.lines == expected
 
@@ -111,7 +116,7 @@ def test_lines_make(lines):
 @mark.parametrize('keywords', ['service', 'command', 'function', 'output',
                                'args', 'enter', 'exit', 'parent', 'name'])
 def test_lines_make_keywords(lines, keywords):
-    lines.make('method', '1', **{keywords: keywords})
+    lines.make('method', position_fixed, **{keywords: keywords})
     assert lines.lines['1'][keywords] == keywords
 
 
@@ -132,9 +137,9 @@ def test_lines_check_service_name_error(patch, lines):
 
 def test_lines_append(patch, lines):
     patch.many(Lines, ['make', 'set_next'])
-    lines.append('method', 'line', extras='whatever')
-    lines.set_next.assert_called_with('line')
-    lines.make.assert_called_with('method', 'line', extras='whatever')
+    lines.append('method', position_fixed, extras='whatever')
+    lines.set_next.assert_called_with('1')
+    lines.make.assert_called_with('method', position_fixed, extras='whatever')
 
 
 def test_lines_append_function(patch, lines):
@@ -142,8 +147,8 @@ def test_lines_append_function(patch, lines):
     Ensures that a function is registered properly.
     """
     patch.many(Lines, ['make', 'set_next'])
-    lines.append('function', 'line', function='function')
-    assert lines.functions['function'] == 'line'
+    lines.append('function', position_fixed, function='function')
+    assert lines.functions['function'] == '1'
 
 
 def test_compiler_append_service(patch, lines):
@@ -152,8 +157,8 @@ def test_compiler_append_service(patch, lines):
     """
     patch.many(Lines, ['make', 'set_next', 'is_output', 'check_service_name'])
     Lines.is_output.return_value = False
-    lines.append('execute', 'line', service='service', parent='parent')
-    Lines.check_service_name.assert_called_with('service', 'line')
+    lines.append('execute', position_fixed, service='service', parent='parent')
+    Lines.check_service_name.assert_called_with('service', '1')
     lines.is_output.assert_called_with('parent', 'service')
     assert lines.services[0] == 'service'
 
@@ -164,7 +169,8 @@ def test_compiler_append_function_call(patch, lines):
     """
     patch.many(Lines, ['make', 'set_next', 'is_output', 'check_service_name'])
     Lines.is_output.return_value = False
-    lines.append('call', 'line', service='my_function', parent='parent')
+    lines.append('call', position_fixed, service='my_function',
+                 parent='parent')
     lines.is_output.assert_not_called()
     assert lines.services == []
 
@@ -176,7 +182,7 @@ def test_lines_append_service_block_output(patch, lines):
     """
     patch.many(Lines, ['make', 'set_next', 'is_output', 'check_service_name'])
     lines.outputs = {'line': ['service']}
-    lines.append('execute', 'line', service='service', parent='parent')
+    lines.append('execute', position_fixed, service='service', parent='parent')
     assert lines.services == []
 
 
@@ -186,8 +192,8 @@ def test_lines_append_function_call(patch, lines):
     """
     patch.many(Lines, ['make', 'set_next', 'check_service_name'])
     lines.functions['function'] = 1
-    lines.append('call', 'line', service='function')
-    lines.make.assert_called_with('call', 'line', service='function')
+    lines.append('call', position_fixed, service='function')
+    lines.make.assert_called_with('call', position_fixed, service='function')
 
 
 def test_lines_append_scope(patch, lines):
@@ -197,19 +203,21 @@ def test_lines_append_scope(patch, lines):
     patch.many(Lines, ['make', 'set_next'])
     lines.finished_scopes = ['1']
     lines.lines['1'] = {}
-    lines.append('method', 'line', extras='whatever')
-    lines.set_next.assert_called_with('line')
-    lines.make.assert_called_with('method', 'line', extras='whatever')
-    assert lines.lines['1']['exit'] == 'line'
+    lines.append('method', position_fixed, extras='whatever')
+    lines.set_next.assert_called_with('1')
+    lines.make.assert_called_with('method', position_fixed, extras='whatever')
+    assert lines.lines['1']['exit'] == '1'
 
 
 def test_lines_execute(patch, lines):
     patch.object(Lines, 'append')
-    lines.execute('line', 'service', 'command', 'args', 'output', 'enter',
-                  'parent')
+    lines.execute(
+        position_fixed,
+        'service', 'command', 'args', 'output', 'enter', 'parent'
+    )
     kwargs = {'service': 'service', 'command': 'command', 'args': 'args',
               'output': 'output', 'enter': 'enter', 'parent': 'parent'}
-    Lines.append.assert_called_with('execute', 'line', **kwargs)
+    Lines.append.assert_called_with('execute', position_fixed, **kwargs)
 
 
 def test_compiler_get_services(lines):

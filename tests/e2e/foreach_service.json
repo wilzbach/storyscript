@@ -3,6 +3,8 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "6",
       "name": [
         "obj"
       ],
@@ -29,6 +31,8 @@
     "2.1": {
       "method": "mutation",
       "ln": "2.1",
+      "col_start": "9",
+      "col_end": "17",
       "name": [
         "__p-2.1"
       ],
@@ -50,6 +54,7 @@
     "2": {
       "method": "for",
       "ln": "2",
+      "col_end": "18",
       "output": [
         "item"
       ],
@@ -68,6 +73,8 @@
     "3": {
       "method": "execute",
       "ln": "3",
+      "col_start": "5",
+      "col_end": "29",
       "service": "email_service",
       "command": "send_email",
       "parent": "2",

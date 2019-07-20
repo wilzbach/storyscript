@@ -3,6 +3,8 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "11",
       "output": [
         "any"
       ],
@@ -14,6 +16,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "13",
       "name": [
         "my_int"
       ],
@@ -30,6 +34,8 @@
     "3.1": {
       "method": "mutation",
       "ln": "3.1",
+      "col_start": "12",
+      "col_end": "28",
       "name": [
         "__p-3.1"
       ],
@@ -52,6 +58,7 @@
     "3": {
       "method": "return",
       "ln": "3",
+      "col_start": "5",
       "args": [
         {
           "$OBJECT": "path",

@@ -3,6 +3,8 @@
     "1": {
       "method": "if",
       "ln": "1",
+      "col_start": "4",
+      "col_end": "18",
       "args": [
         {
           "$OBJECT": "expression",
@@ -27,6 +29,8 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "5",
+      "col_end": "20",
       "name": [
         "originalCount"
       ],
@@ -43,6 +47,8 @@
     "4": {
       "method": "expression",
       "ln": "4",
+      "col_start": "1",
+      "col_end": "11",
       "name": [
         "newCount"
       ],

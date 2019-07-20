@@ -3,6 +3,8 @@
     "1": {
       "method": "function",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "9",
       "output": [
         "int"
       ],
@@ -15,6 +17,8 @@
     "2": {
       "method": "return",
       "ln": "2",
+      "col_start": "3",
+      "col_end": "12",
       "args": [
         {
           "$OBJECT": "int",
@@ -28,6 +32,8 @@
     "4": {
       "method": "function",
       "ln": "4",
+      "col_start": "1",
+      "col_end": "9",
       "output": [
         "int"
       ],
@@ -58,6 +64,8 @@
     "5": {
       "method": "return",
       "ln": "5",
+      "col_start": "3",
+      "col_end": "12",
       "args": [
         {
           "$OBJECT": "int",
@@ -71,6 +79,8 @@
     "7.1": {
       "method": "call",
       "ln": "7.1",
+      "col_start": "69",
+      "col_end": "75",
       "name": [
         "__p-7.1"
       ],
@@ -80,6 +90,8 @@
     "7.2": {
       "method": "execute",
       "ln": "7.2",
+      "col_start": "41",
+      "col_end": "64",
       "name": [
         "__p-7.2"
       ],
@@ -102,6 +114,8 @@
     "7.3": {
       "method": "call",
       "ln": "7.3",
+      "col_start": "28",
+      "col_end": "81",
       "name": [
         "__p-7.3"
       ],
@@ -131,6 +145,8 @@
     "7": {
       "method": "execute",
       "ln": "7",
+      "col_start": "5",
+      "col_end": "23",
       "name": [
         "b"
       ],
