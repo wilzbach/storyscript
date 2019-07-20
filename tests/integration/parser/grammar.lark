@@ -31,7 +31,7 @@ output_names: NAME (_COMMA NAME)*
 as_operator: _AS (types | output_names)
 pow_operator: POWER
 dot_arguments: _DOT NAME _OP arguments* _CP
-dot_expression: primary_expression dot_arguments*| FLOAT NAME _OP arguments* _CP dot_arguments*
+dot_expression: primary_expression dot_arguments*| FLOAT_MUT arguments* _CP dot_arguments*
 pow_expression: dot_expression (pow_operator unary_expression)?| dot_expression
 unary_expression: unary_operator unary_expression | pow_expression
 as_expression: unary_expression (as_operator)?
@@ -141,6 +141,7 @@ MULTIPLIER: "*"
 MODULUS.5: "%"
 PLUS.5: "+"
 DASH.5: "-"
+FLOAT_MUT.5: FLOAT NAME "("
 RETURN: "return"
 BREAK: "break"
 CONTINUE: "continue"

@@ -202,6 +202,15 @@ class Tree(LarkTree):
         tok.end_column = end_column
         return tok
 
+    @classmethod
+    def create_token_from_tok(cls,  token, name, data):
+        """
+        Create a token from another token and use this token
+        for the position of the to-be-created token (line, column, end_column).
+        """
+        tree = cls('dummy', [token])
+        return tree.create_token(name, data)
+
     def follow(self, nodes):
         """
         Checks whether all expected nodes can be seen in the tree.

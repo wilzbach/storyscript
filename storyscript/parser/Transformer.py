@@ -370,40 +370,50 @@ class Transformer(LarkTransformer):
 
     @classmethod
     def dot_expression(cls, matches):
-        if len(matches) == 1:
-            return matches[0]
-        elif isinstance(matches[0], Token) and matches[0].type == 'FLOAT':
-            # 1. is parsed as FLOAT token
+        if isinstance(matches[0], Token) and matches[0].type == 'FLOAT_MUT':
+            # 1.increment( is parsed as FLOAT_MUT token
+            # FLOAT_MUT consists of a FLOAT NAME and '('
             # -> convert into a mutation
-            value = matches[0].value.split('.')[0]
-            matches[0] = Tree('dummy', [matches[0]]).create_token('INT', value)
-            # end_column is a string, but still an int :/
-            matches[0].end_column = str(int(matches[0].end_column) - 1)
+            value, name = matches[0].value.split('.')
+
+            int_tok = Tree.create_token_from_tok(matches[0], 'INT', value)
+            # column is a string, but still an int :/
+            int_tok.end_column = str(int(matches[0].column) + len(value))
+
+            name = name[:-1]  # remove suffix '('
+            name_tok = Tree.create_token_from_tok(matches[0], 'NAME', name)
+            # column is a string, but still an int :/
+            name_tok.end_column = str(int(matches[0].end_column) - 1)
+
             tree = Tree('mutation', [
                 Tree('expression', [
                     Tree('entity', [
                         Tree('values', [
                             Tree('number', [
-                                matches[0]
+                                int_tok
                             ])
                         ])
                     ])
                 ]),
-                Tree('mutation_fragment', [matches[1]])
+                Tree('mutation_fragment', [name_tok])
             ])
-            # At the moment there are no int mutations with arguments
-            assert len(matches) < 3 or matches[2].data == 'mutation'
 
-            offset = 2
-            # if len(matches) >= 3 and matches[2].data != 'mutation':
-            #   # append its arguments (if available)
-            #   tree.children[1].append(matches[2])
-            #   offset += 1
-            for mutation in matches[offset:]:
-                tree = Tree('mutation', [
-                    cls.build_inline(tree),
-                    *mutation.children,
-                ])
+            if len(matches) >= 2:
+                offset = 1
+                if matches[1].data == 'arguments':
+                    # append its arguments (if available)
+                    tree.children[1].children.append(matches[1])
+                    offset += 1
+                else:
+                    assert matches[1].data == 'mutation'
+
+                for mutation in matches[offset:]:
+                    tree = Tree('mutation', [
+                        cls.build_inline(tree),
+                        *mutation.children,
+                    ])
+        elif len(matches) == 1:
+            return matches[0]
         else:
             # normal dot_expressions like "a".mutation()
             tree = Tree('mutation', [

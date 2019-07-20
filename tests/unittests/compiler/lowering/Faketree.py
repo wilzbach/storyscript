@@ -141,13 +141,19 @@ def test_faketree_assignment(patch, tree, fake_tree):
 
 def test_faketree_add_assignment(patch, fake_tree, block):
     patch.object(FakeTree, 'assignment')
+    patch.object(Tree, 'create_token_from_tok')
     patch.object(FakeTree, 'find_insert_pos', return_value=0)
     block.children = [1]
     block.child.return_value = None
     result = fake_tree.add_assignment('value', original_line=10)
     FakeTree.assignment.assert_called_with('value')
     assert block.children == [FakeTree.assignment(), 1]
-    name = Token('NAME', FakeTree.assignment().path.child(0), line=10)
+    path_tok = FakeTree.assignment().path.child(0)
+    Tree.create_token_from_tok.assert_called_with(
+        path_tok, 'NAME', path_tok.value
+    )
+    name = Tree.create_token_from_tok()
+    name.line = 10
     assert result.data == 'path'
     assert result.children == [name]
 

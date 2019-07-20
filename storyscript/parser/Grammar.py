@@ -132,6 +132,10 @@ class Grammar:
         self.ebnf.set_token('PLUS.5', '+')
         self.ebnf.set_token('DASH.5', '-')
 
+        # create a special token for integer mutations (e.g. 1.mutation)
+        # s.t. the lexer prefers this over a FLOAT (1.)
+        self.ebnf.set_token('FLOAT_MUT.5', 'FLOAT NAME "("')
+
         self.ebnf.cmp_operator = ('GREATER, GREATER_EQUAL, LESSER, '
                                   'LESSER_EQUAL, NOT_EQUAL, EQUAL')
         self.ebnf.arith_operator = 'PLUS, DASH'
@@ -146,7 +150,7 @@ class Grammar:
         args = 'name op arguments* cp'
         self.ebnf.dot_arguments = f'dot {args}'
         self.ebnf.dot_expression = f'primary_expression dot_arguments*, ' \
-                                   f'float {args} dot_arguments*'
+                                   f'float_mut arguments* cp dot_arguments*'
         self.ebnf.pow_expression = 'dot_expression (pow_operator ' \
                                    'unary_expression)?, dot_expression'
         self.ebnf.unary_expression = ('unary_operator unary_expression , '

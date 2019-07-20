@@ -1,0 +1,88 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "float",
+          "float": 1.1
+        }
+      ],
+      "src": "a = 1.1",
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "col_start": "5",
+      "col_end": "6",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "approxEqual",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "value",
+              "arg": {
+                "$OBJECT": "float",
+                "float": 1.2
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "maxRelDiff",
+              "arg": {
+                "$OBJECT": "float",
+                "float": 0.1
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "maxAbsDiff",
+              "arg": {
+                "$OBJECT": "int",
+                "int": 0
+              }
+            }
+          ]
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
+          ]
+        }
+      ],
+      "src": "b = a.approxEqual(value: 1.2 maxRelDiff: 0.1 maxAbsDiff: 0)"
+    }
+  },
+  "entrypoint": "1"
+}
