@@ -1,0 +1,31 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "float",
+              "float": 1.1
+            },
+            {
+              "$OBJECT": "float",
+              "float": 2.5
+            }
+          ]
+        }
+      ],
+      "src": "a = 1.1 + 2.5"
+    }
+  },
+  "entrypoint": "1"
+}

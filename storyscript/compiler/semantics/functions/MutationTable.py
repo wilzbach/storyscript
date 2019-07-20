@@ -1,6 +1,6 @@
 from itertools import chain
 
-from storyscript.compiler.semantics.functions.HubMutations import hub
+from storyscript.compiler.semantics.functions.HubMutations import Hub
 from storyscript.compiler.semantics.functions.Mutation import Mutation
 from storyscript.compiler.semantics.types.Types import AnyType
 
@@ -140,6 +140,6 @@ class MutationTable:
         Builds a list of all mutations of the Hub.
         """
         mi = cls()
-        for m in hub.mutations():
+        for m in Hub.instance().mutations():
             mi.insert(m)
         return mi

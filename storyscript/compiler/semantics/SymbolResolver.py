@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from lark.lexer import Token
-
 from storyscript.compiler.semantics.types.Types import NoneType
 
 from .symbols.Symbols import Symbol
@@ -23,8 +21,6 @@ class SymbolResolver:
         self.scope = scope
 
     def resolve(self, tree, val, paths):
-        if isinstance(val, Token):
-            val = val.value
         assert isinstance(val, str)
         symbol = self.scope.resolve(val)
 

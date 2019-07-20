@@ -1,0 +1,44 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "mutation",
+      "ln": "1.1",
+      "col_start": "5",
+      "col_end": "6",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "increment",
+          "args": []
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1"
+          ]
+        }
+      ],
+      "src": "a = 1.increment()"
+    }
+  },
+  "entrypoint": "1.1"
+}
