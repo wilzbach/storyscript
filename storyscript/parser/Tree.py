@@ -2,8 +2,8 @@
 from lark.lexer import Token
 from lark.tree import Tree as LarkTree
 
-from ..exceptions import CompilerError
 from .Position import Position
+from ..exceptions import CompilerError
 
 
 class Tree(LarkTree):
