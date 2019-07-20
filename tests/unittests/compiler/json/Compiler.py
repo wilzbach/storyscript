@@ -6,7 +6,7 @@ from pytest import fixture, mark, raises
 from storyscript.Version import version
 from storyscript.compiler.json import JSONCompiler, Lines, Objects
 from storyscript.exceptions import StorySyntaxError
-from storyscript.parser import Tree, Position
+from storyscript.parser import Tree
 
 
 @fixture
