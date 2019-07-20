@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 26
+
+3|            r write content: msg
+                               ^^^
+
+E0101: Variable `msg` has not been defined.

@@ -179,13 +179,13 @@ class TypeResolver(ScopeSelectiveVisitor):
 
     def when_block(self, tree, scope):
         tree.scope = Scope(parent=scope)
+        self.implicit_output(tree)
+
+        output = tree.service.service_fragment.output
+        self.check_output(tree, output, target='when')
+        tree.expect(not self.in_when_block, 'nested_when_block')
+
         with self.create_scope(tree.scope, storage_class=StorageClass.write()):
-            self.implicit_output(tree)
-
-            output = tree.service.service_fragment.output
-            self.check_output(tree, output, target='when')
-
-            tree.expect(not self.in_when_block, 'nested_when_block')
             self.in_when_block = True
             for c in tree.nested_block.children:
                 self.visit_children(c, scope=tree.scope)
@@ -203,15 +203,20 @@ class TypeResolver(ScopeSelectiveVisitor):
             return
 
         tree.scope = Scope(parent=scope)
-        with self.create_scope(tree.scope):
 
-            self.implicit_output(tree)
+        self.implicit_output(tree)
+        output = tree.service.service_fragment.output
+        if output is not None:
+            self.check_output(tree, output, target='service')
 
-            output = tree.service.service_fragment.output
-            if output is not None:
-                self.check_output(tree, output, target='service')
+        args = tree.service.service_fragment.arguments
+        if args is not None:
+            # only look at value nodes (argname, (2) expr, argname, (4) expr)
+            for arg in args.children[1::2]:
+                self.resolver.expression(arg)
 
-            if tree.nested_block:
+        if tree.nested_block:
+            with self.create_scope(tree.scope):
                 tree.expect(not self.in_service_block, 'nested_service_block')
                 self.in_service_block = True
                 for c in tree.nested_block.children:
