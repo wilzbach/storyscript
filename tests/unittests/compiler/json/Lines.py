@@ -2,8 +2,8 @@
 from pytest import fixture, mark, raises
 
 from storyscript.compiler.json import Lines
-from storyscript.parser import Position
 from storyscript.exceptions import StorySyntaxError
+from storyscript.parser import Position
 
 position_fixed = Position('1', '2', '3')
 
