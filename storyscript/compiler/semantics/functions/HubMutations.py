@@ -21,5 +21,11 @@ class Hub:
         """
         return self._mutations
 
+    def instance():
+        """
+        Return the current Hub instance
+        """
+        return hub
+
 
 hub = Hub(builtins)

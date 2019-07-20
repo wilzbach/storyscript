@@ -122,6 +122,7 @@ class FakeTree:
 
         # we need a new node, s.t. already inserted
         # fake nodes don't get changed
-        name = Token('NAME', assignment.path.child(0), line=original_line)
-        fake_path = Tree('path', [name])
-        return fake_path
+        path_tok = assignment.path.child(0)
+        name = Tree.create_token_from_tok(path_tok, 'NAME', path_tok.value)
+        name.line = original_line
+        return Tree('path', [name])

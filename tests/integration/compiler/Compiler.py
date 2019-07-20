@@ -2,6 +2,7 @@
 from pytest import mark
 
 from storyscript.Api import Api
+from storyscript.compiler.semantics.functions.HubMutations import Hub
 
 
 def test_compiler_empty_files():
@@ -86,3 +87,36 @@ def test_compiler_expression_whitespace(source_pair):
         args = result['tree'][index]['args'][0]['values'][0]
         assert args['expression'] == expression[1]
         assert args['values'] == values
+
+
+def test_compiler_int_mutation_arguments(mocker):
+    """
+    Test integer mutation with arguments (through mocked fake mutations)
+    """
+    hub = Hub('int increment a:int -> int\n'
+              'int decrement b:int -> int')
+    mocker.patch.object(Hub, 'instance', return_value=hub)
+    source = 'a = 0.increment(a: 1).decrement(b:2)'
+    result = Api.loads(source, features={'debug': True})
+    result.check_success()
+    result = result.result()
+    assert result['tree']['1.1']['method'] == 'mutation'
+    assert result['tree']['1.1']['args'] == [
+        {'$OBJECT': 'int', 'int': 0},
+        {
+            '$OBJECT': 'mutation',
+            'mutation': 'increment',
+            'args': [{'$OBJECT': 'arg', 'name': 'a',
+                       'arg': {'$OBJECT': 'int', 'int': 1}}]
+        }
+    ]
+    assert result['tree']['1.2']['method'] == 'mutation'
+    assert result['tree']['1.2']['args'] == [
+        {'$OBJECT': 'path', 'paths': ['__p-1.1']},
+        {
+            '$OBJECT': 'mutation',
+            'mutation': 'decrement',
+            'args': [{'$OBJECT': 'arg', 'name': 'b',
+                       'arg': {'$OBJECT': 'int', 'int': 2}}]
+        }
+    ]

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = 1.increment(a: 1)
+          ^^^^^^^^^^^^^
+
+E0114: Mutation `increment` does not accept argument `a`
