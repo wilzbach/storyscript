@@ -24,6 +24,28 @@ class Transformer(LarkTransformer):
         'static', 'none', 'await', 'service', 'in', 'has', 'not', 'is', 'inf',
         'nan', 'unknown', 'import'
     ]
+    operator_assignments = {
+        'ADD_EQUALS': {
+            'name': 'PLUS',
+            'op_type': 'arith_operator'
+        },
+        'SUB_EQUALS': {
+            'name': 'DASH',
+            'op_type': 'arith_operator'
+        },
+        'MUL_EQUALS': {
+            'name': 'MULTIPLIER',
+            'op_type': 'mul_operator'
+        },
+        'DIV_EQUALS': {
+            'name': 'BSLASH',
+            'op_type': 'mul_operator'
+        },
+        'MOD_EQUALS': {
+            'name': 'MODULUS',
+            'op_type': 'mul_operator'
+        },
+    }
 
     def __init__(self, allow_single_quotes=False):
         self.allow_single_quotes = allow_single_quotes
@@ -44,8 +66,8 @@ class Transformer(LarkTransformer):
         if keyword.startswith('__'):
             raise StorySyntaxError('path_name_internal', token=token)
 
-    @staticmethod
-    def assignment(matches):
+    @classmethod
+    def assignment(cls, matches):
         """
         Transforms an assignment tree and checks for invalid characters in the
         variable name.
@@ -56,6 +78,55 @@ class Transformer(LarkTransformer):
         if isinstance(token, Tree):
             matches[0].expect(token.data != 'inline_expression',
                               'assignment_inline_expression')
+
+        c = matches[1]
+        if isinstance(c.children[0], Tree):
+            # c.children[0] first child of assignment fragment maybe one of:
+            # c.children[0] is a Token (represents EQUALS token, nothing to do)
+            # c.children[0] is a Tree (represents operator assignment)
+            # Operator assignments are shorthands for doing some basic
+            # arithmetic operations and assignments using a single operator.
+            # In case of a operator assignment we need to transform it into a
+            # normal assignment. Eg. a += b  ---> a = a + b
+            assert c.children[0].data == 'operator_assignment'
+
+            assignment_node = c.children[0]
+            c.children[0] = assignment_node.create_token('EQUALS', '=')
+
+            assert matches[0].data == 'path'
+            # We will use the path on the left hand side and wrap it inside an
+            # expression so that we can add it to the right hand side
+            # expression's AST. Resulting AST will look similar to an AST of a
+            # normal expanded version of the assignment.
+            lvalue_path = matches[0]
+            expr = Tree('expression', [
+                Tree('entity', [
+                    lvalue_path
+                ])
+            ])
+
+            op_token = assignment_node.children[0]
+            assert op_token.type in cls.operator_assignments
+            # Construct the operator node to be used in the RHS expression's
+            # AST construction.
+            op_node = Tree(
+                cls.operator_assignments[op_token.type]['op_type'],
+                [Token(cls.operator_assignments[op_token.type]['name'],
+                       op_token.value[0])])
+
+            # Construct the RHS expression's AST by adding the LHS path
+            # expression node and the operator node to RHS AST.
+            base_expr = matches[1].base_expression
+            base_expr_children = Tree(
+                'expression',
+                [expr, op_node, *base_expr.children]
+            )
+            if op_node.children[0].value in ('+', '-'):
+                base_expr_children.kind = 'arith_expression'
+            else:
+                assert op_node.children[0].value in ('*', '/', '%')
+                base_expr_children.kind = 'mul_expression'
+            base_expr.children = [base_expr_children]
         return Tree('assignment', matches)
 
     @classmethod

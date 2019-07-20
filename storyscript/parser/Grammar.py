@@ -92,6 +92,11 @@ class Grammar:
     def assignments(self):
         self.ebnf.EQUALS = '='
         self.ebnf._DOT = '.'
+        self.ebnf.set_token('ADD_EQUALS.5', '+=')
+        self.ebnf.set_token('SUB_EQUALS.5', '-=')
+        self.ebnf.set_token('DIV_EQUALS.5', '/=')
+        self.ebnf.set_token('MUL_EQUALS.5', '*=')
+        self.ebnf.set_token('MOD_EQUALS.5', '%=')
         self.ebnf.range_start = '(number | path) colon'
         self.ebnf.range_start_end = '(number | path) colon (number | path)'
         self.ebnf.range_end = 'colon (number | path)'
@@ -101,7 +106,9 @@ class Grammar:
         self.ebnf.path_fragment = path_fragment
         self.ebnf.path = ('name (path_fragment)* | '
                           'inline_expression (path_fragment)*')
-        assignment_fragment = 'equals base_expression'
+        self.ebnf.operator_assignment = ('ADD_EQUALS, SUB_EQUALS, DIV_EQUALS, '
+                                         'MUL_EQUALS, MOD_EQUALS')
+        assignment_fragment = '(operator_assignment | equals) base_expression'
         self.ebnf.assignment_fragment = assignment_fragment
         objects = self.ebnf.collection('ocb', 'path', 'path', 'ccb')
         self.ebnf.assignment_destructoring = objects
