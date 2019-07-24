@@ -125,10 +125,17 @@
           "$OBJECT": "arg",
           "name": "k1",
           "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-7.2"
-            ]
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "int"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-7.2"
+              ]
+            }
           }
         },
         {

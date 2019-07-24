@@ -10,18 +10,27 @@
       ],
       "args": [
         {
-          "$OBJECT": "float",
-          "float": 1.1
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "float",
+              "float": 2.3
+            },
+            {
+              "$OBJECT": "float",
+              "float": 5.8
+            }
+          ]
         }
       ],
-      "src": "a = 1.1",
+      "src": "a = [2.3, 5.8]",
       "next": "2.1"
     },
     "2.1": {
       "method": "mutation",
       "ln": "2.1",
-      "col_start": "5",
-      "col_end": "6",
+      "col_start": "1",
+      "col_end": "2",
       "name": [
         "__p-2.1"
       ],
@@ -34,27 +43,11 @@
         },
         {
           "$OBJECT": "mutation",
-          "mutation": "approxEqual",
+          "mutation": "contains",
           "args": [
             {
               "$OBJECT": "arg",
-              "name": "value",
-              "arg": {
-                "$OBJECT": "float",
-                "float": 1.2
-              }
-            },
-            {
-              "$OBJECT": "arg",
-              "name": "maxRelDiff",
-              "arg": {
-                "$OBJECT": "float",
-                "float": 0.1
-              }
-            },
-            {
-              "$OBJECT": "arg",
-              "name": "maxAbsDiff",
+              "name": "item",
               "arg": {
                 "$OBJECT": "type_cast",
                 "type": {
@@ -63,7 +56,7 @@
                 },
                 "value": {
                   "$OBJECT": "int",
-                  "int": 0
+                  "int": 1
                 }
               }
             }
@@ -75,11 +68,6 @@
     "2": {
       "method": "expression",
       "ln": "2",
-      "col_start": "1",
-      "col_end": "4",
-      "name": [
-        "b"
-      ],
       "args": [
         {
           "$OBJECT": "path",
@@ -88,7 +76,7 @@
           ]
         }
       ],
-      "src": "b = a.approxEqual(value: 1.2 maxRelDiff: 0.1 maxAbsDiff: 0)"
+      "src": "a.contains(item: 1)"
     }
   },
   "entrypoint": "1"

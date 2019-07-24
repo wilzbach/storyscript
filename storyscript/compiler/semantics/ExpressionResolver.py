@@ -154,6 +154,41 @@ class SymbolExpressionVisitor(ExpressionVisitor):
             self.implicit_cast(tree, val, values)
         return base_symbol(val)
 
+    @staticmethod
+    def type_cast_expression(expr_node, target_type):
+        """
+        Type casts the given expr_node with an entity to the target_type.
+        This is done by creating a new AST for the expr_node with an
+        `as_operator`.
+
+        Args:
+            expr_node (Tree): Tree node representing an expression. This is the
+                expression for which this function will generate a new
+                expression node which also contains an `as_operator` to
+                represent the type cast.
+            target_type (Union[str, MapType, ListType]): The type to type cast
+                given expression (expr_node) into.
+
+        Note: This does not perform any checks around feasibility of performing
+        the type cast operation and depends upon the caller to have had
+        performed these checks before making the call.
+        """
+        assert expr_node.data == 'expression'
+        cast_type = SymbolExpressionVisitor.type_to_tree(
+            expr_node,
+            target_type
+        )
+        element = Tree('expression', [
+            expr_node,
+            Tree('as_operator', [
+                Tree('types', [
+                    cast_type
+                ])
+            ])
+        ])
+        element.kind = 'as_expression'
+        return element
+
     def implicit_cast(self, tree, val, values):
         """
         Creates an AST with the cast.
@@ -170,18 +205,8 @@ class SymbolExpressionVisitor(ExpressionVisitor):
                 i += 1
             # check whether a tree child needs casting
             if v != val:
-                element = tree.children[i]
-                casted_type = self.type_to_tree(element, val)
-                element = Tree('expression', [
-                    element,
-                    Tree('as_operator', [
-                        Tree('types', [
-                            casted_type
-                        ])
-                    ])
-                ])
-                element.kind = 'as_expression'
-                tree.children[i] = element
+                tree.children[i] = self.type_cast_expression(
+                    tree.children[i], val)
 
 
 class ExpressionResolver:
