@@ -80,26 +80,26 @@ class Transformer(LarkTransformer):
                               'assignment_inline_expression')
 
         c = matches[1]
+
+        # c.children[0] first child of assignment fragment maybe one of:
+        # - Token (represents EQUALS token, nothing to do)
+        # - Tree (represents operator assignment)
         if isinstance(c.children[0], Tree):
-            # c.children[0] first child of assignment fragment maybe one of:
-            # c.children[0] is a Token (represents EQUALS token, nothing to do)
-            # c.children[0] is a Tree (represents operator assignment)
             # Operator assignments are shorthands for doing some basic
             # arithmetic operations and assignments using a single operator.
             # In case of a operator assignment we need to transform it into a
             # normal assignment. Eg. a += b  ---> a = a + b
-            assert c.children[0].data == 'operator_assignment'
-
             assignment_node = c.children[0]
+            assert assignment_node.data == 'operator_assignment'
+            assert matches[0].data == 'path', \
+                'Operator assignment is only allowed on variables'
+
+            # Replace `<op>=` with `=`
             c.children[0] = assignment_node.create_token('EQUALS', '=')
 
-            assert matches[0].data == 'path'
-            # We will use the path on the left hand side and wrap it inside an
-            # expression so that we can add it to the right hand side
-            # expression's AST. Resulting AST will look similar to an AST of a
-            # normal expanded version of the assignment.
+            # Prepare LHS as an expression:
             lvalue_path = matches[0]
-            expr = Tree('expression', [
+            lvalue_expr = Tree('expression', [
                 Tree('entity', [
                     lvalue_path
                 ])
@@ -107,26 +107,29 @@ class Transformer(LarkTransformer):
 
             op_token = assignment_node.children[0]
             assert op_token.type in cls.operator_assignments
-            # Construct the operator node to be used in the RHS expression's
-            # AST construction.
-            op_node = Tree(
-                cls.operator_assignments[op_token.type]['op_type'],
-                [Token(cls.operator_assignments[op_token.type]['name'],
-                       op_token.value[0])])
+            # Construct the expression operator from the assignment operator.
+            op_assignment = cls.operator_assignments[op_token.type]
+            op_node = Tree(op_assignment['op_type'], [
+                assignment_node.create_token(op_assignment['name'],
+                                             op_token.value[0])
+            ])
 
-            # Construct the RHS expression's AST by adding the LHS path
-            # expression node and the operator node to RHS AST.
+            # Insert new expression:
+            # <LHS> <op> <RHS>
+            # where RHS is the previous expression
             base_expr = matches[1].base_expression
-            base_expr_children = Tree(
+            assert len(base_expr.children) == 1
+            expr = Tree(
                 'expression',
-                [expr, op_node, *base_expr.children]
+                [lvalue_expr, op_node, base_expr.children[0]]
             )
             if op_node.children[0].value in ('+', '-'):
-                base_expr_children.kind = 'arith_expression'
+                expr.kind = 'arith_expression'
             else:
                 assert op_node.children[0].value in ('*', '/', '%')
-                base_expr_children.kind = 'mul_expression'
-            base_expr.children = [base_expr_children]
+                expr.kind = 'mul_expression'
+            matches[1].base_expression.children = [expr]
+
         return Tree('assignment', matches)
 
     @classmethod
