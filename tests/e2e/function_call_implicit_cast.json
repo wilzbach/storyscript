@@ -1,0 +1,148 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "9",
+      "output": [
+        "float"
+      ],
+      "function": "boomrang",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "k1",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "Map",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              {
+                "$OBJECT": "type",
+                "type": "float"
+              }
+            ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "k2",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "float"
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": "4.1",
+      "src": "function boomrang k1: Map[string, float] k2: float returns float",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "col_start": "3",
+      "col_end": "12",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "k1",
+            {
+              "$OBJECT": "string",
+              "string": "foo"
+            }
+          ]
+        }
+      ],
+      "parent": "1",
+      "src": "  return k1[\"foo\"]",
+      "next": "4.1"
+    },
+    "4.1": {
+      "method": "call",
+      "ln": "4.1",
+      "col_start": "1",
+      "col_end": "27",
+      "name": [
+        "__p-4.1"
+      ],
+      "function": "boomrang",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "k1",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "Map",
+              "values": [
+                {
+                  "$OBJECT": "type",
+                  "type": "string"
+                },
+                {
+                  "$OBJECT": "type",
+                  "type": "float"
+                }
+              ]
+            },
+            "value": {
+              "$OBJECT": "dict",
+              "items": [
+                [
+                  {
+                    "$OBJECT": "string",
+                    "string": "foo"
+                  },
+                  {
+                    "$OBJECT": "int",
+                    "int": 2
+                  }
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "k2",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "float"
+            },
+            "value": {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          }
+        }
+      ],
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-4.1"
+          ]
+        }
+      ],
+      "src": "boomrang(k1: {\"foo\": 2} k2: 1)"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "boomrang": "1"
+  }
+}

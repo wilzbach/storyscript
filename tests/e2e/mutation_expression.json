@@ -59,18 +59,25 @@
               "$OBJECT": "arg",
               "name": "item",
               "arg": {
-                "$OBJECT": "path",
-                "paths": [
-                  "req",
-                  {
-                    "$OBJECT": "dot",
-                    "dot": "body"
-                  },
-                  {
-                    "$OBJECT": "string",
-                    "string": "action"
-                  }
-                ]
+                "$OBJECT": "type_cast",
+                "type": {
+                  "$OBJECT": "type",
+                  "type": "string"
+                },
+                "value": {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "req",
+                    {
+                      "$OBJECT": "dot",
+                      "dot": "body"
+                    },
+                    {
+                      "$OBJECT": "string",
+                      "string": "action"
+                    }
+                  ]
+                }
               }
             }
           ]
