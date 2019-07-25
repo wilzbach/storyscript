@@ -50,6 +50,7 @@ classifiers = [
 ]
 
 requirements = [
+    'bom-open==0.3.6',
     'click==7.0',
     'lark-parser==0.6.5',
     'click-alias==0.1.1a2',
