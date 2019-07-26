@@ -19,7 +19,8 @@ range_end: _COLON (number | path)
 range: range_start_end | range_start | range_end
 path_fragment: _DOT NAME| _OSB (number | string | path | boolean | range) _CSB
 path: NAME (path_fragment)* | inline_expression (path_fragment)*
-assignment_fragment: EQUALS base_expression
+operator_assignment: ADD_EQUALS| SUB_EQUALS| DIV_EQUALS| MUL_EQUALS| MOD_EQUALS
+assignment_fragment: (operator_assignment | EQUALS) base_expression
 assignment_destructoring: _OCB (_NL _INDENT)? (path (_COMMA _NL? path)*)? (_NL _DEDENT)? _CCB
 assignment: (path | assignment_destructoring) assignment_fragment
 cmp_operator: GREATER| GREATER_EQUAL| LESSER| LESSER_EQUAL| NOT_EQUAL| EQUAL
@@ -125,6 +126,11 @@ _OP: "("
 _CP: ")"
 EQUALS: "="
 _DOT: "."
+ADD_EQUALS.5: "+="
+SUB_EQUALS.5: "-="
+DIV_EQUALS.5: "/="
+MUL_EQUALS.5: "*="
+MOD_EQUALS.5: "%="
 POWER: "^"
 NOT: "!"
 OR: "or"
