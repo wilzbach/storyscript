@@ -1,0 +1,415 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "foo"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 1
+              }
+            ],
+            [
+              {
+                "$OBJECT": "string",
+                "string": "bar"
+              },
+              {
+                "$OBJECT": "int",
+                "int": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "src": "a = {\"foo\": 1, \"bar\": 2}",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "src": "b = 1",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 8
+        }
+      ],
+      "src": "c = 8",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "float",
+          "float": 1.0
+        }
+      ],
+      "src": "d = 1.0",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "col_start": "1",
+      "col_end": "5",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d"
+              ]
+            },
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "float"
+              },
+              "value": {
+                "$OBJECT": "expression",
+                "expression": "subtraction",
+                "values": [
+                  {
+                    "$OBJECT": "expression",
+                    "expression": "multiplication",
+                    "values": [
+                      {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "a",
+                          {
+                            "$OBJECT": "string",
+                            "string": "foo"
+                          }
+                        ]
+                      },
+                      {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "b"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "c"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "src": "d += a[\"foo\"] * b - c",
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "col_start": "1",
+      "col_end": "5",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "subtraction",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d"
+              ]
+            },
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "float"
+              },
+              "value": {
+                "$OBJECT": "expression",
+                "expression": "modulus",
+                "values": [
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "a",
+                      {
+                        "$OBJECT": "string",
+                        "string": "bar"
+                      }
+                    ]
+                  },
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "c"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "src": "d -= a[\"bar\"] % c",
+      "next": "7"
+    },
+    "7": {
+      "method": "expression",
+      "ln": "7",
+      "col_start": "1",
+      "col_end": "5",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "multiplication",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d"
+              ]
+            },
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "float"
+              },
+              "value": {
+                "$OBJECT": "expression",
+                "expression": "sum",
+                "values": [
+                  {
+                    "$OBJECT": "expression",
+                    "expression": "subtraction",
+                    "values": [
+                      {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "c"
+                        ]
+                      },
+                      {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "b"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "a",
+                      {
+                        "$OBJECT": "string",
+                        "string": "bar"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "src": "d *= c - b + a[\"bar\"]",
+      "next": "8"
+    },
+    "8": {
+      "method": "expression",
+      "ln": "8",
+      "col_start": "1",
+      "col_end": "5",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "division",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d"
+              ]
+            },
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "float"
+              },
+              "value": {
+                "$OBJECT": "expression",
+                "expression": "subtraction",
+                "values": [
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "a",
+                      {
+                        "$OBJECT": "string",
+                        "string": "bar"
+                      }
+                    ]
+                  },
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "src": "d /= a[\"bar\"] - b",
+      "next": "9"
+    },
+    "9": {
+      "method": "expression",
+      "ln": "9",
+      "col_start": "1",
+      "col_end": "5",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "modulus",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "d"
+              ]
+            },
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "float"
+              },
+              "value": {
+                "$OBJECT": "expression",
+                "expression": "subtraction",
+                "values": [
+                  {
+                    "$OBJECT": "expression",
+                    "expression": "sum",
+                    "values": [
+                      {
+                        "$OBJECT": "expression",
+                        "expression": "multiplication",
+                        "values": [
+                          {
+                            "$OBJECT": "path",
+                            "paths": [
+                              "a",
+                              {
+                                "$OBJECT": "string",
+                                "string": "foo"
+                              }
+                            ]
+                          },
+                          {
+                            "$OBJECT": "path",
+                            "paths": [
+                              "a",
+                              {
+                                "$OBJECT": "string",
+                                "string": "bar"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "$OBJECT": "path",
+                        "paths": [
+                          "c"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "b"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "src": "d %= a[\"foo\"] * a[\"bar\"] + c - b"
+    }
+  },
+  "entrypoint": "1"
+}

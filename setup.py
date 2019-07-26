@@ -50,8 +50,9 @@ classifiers = [
 ]
 
 requirements = [
+    'bom-open==0.3.6',
     'click==7.0',
-    'lark-parser==0.6.5',
+    'lark-parser==0.7.1',
     'click-alias==0.1.1a2',
     'story-hub~=0.0.5'
 ]

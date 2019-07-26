@@ -1,0 +1,9 @@
+a = {"foo": 1, "bar": 2}
+b = 1
+c = 8
+d = 1.0
+d += a["foo"] * b - c
+d -= a["bar"] % c
+d *= c - b + a["bar"]
+d /= a["bar"] - b
+d %= a["foo"] * a["bar"] + c - b

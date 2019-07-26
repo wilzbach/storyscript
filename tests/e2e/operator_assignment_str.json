@@ -1,0 +1,50 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "foo"
+        }
+      ],
+      "src": "a = \"foo\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "5",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": "bar"
+            }
+          ]
+        }
+      ],
+      "src": "a += \"bar\""
+    }
+  },
+  "entrypoint": "1"
+}
