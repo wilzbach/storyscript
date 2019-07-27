@@ -1,4 +1,4 @@
 # FEAT: globals=False
-a = 1
+a = 0
 while true
-    a = 2
+    a += 1

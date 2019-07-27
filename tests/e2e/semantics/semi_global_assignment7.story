@@ -1,4 +1,4 @@
 # FEAT: globals=False
-a = 1
+a = {}
 while true
-    a = 2
+    a["a"] = "b"
