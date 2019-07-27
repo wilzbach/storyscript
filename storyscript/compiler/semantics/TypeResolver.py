@@ -222,6 +222,9 @@ class TypeResolver(ScopeSelectiveVisitor):
                 for c in tree.nested_block.children:
                     self.visit_children(c, scope=tree.scope)
                 self.in_service_block = False
+        else:
+            tree.service.service_fragment.expect(output is None,
+                                                 'service_no_inline_output')
 
     def concise_when_block(self, tree, scope):
         tree.expect(0, 'nested_when_block')

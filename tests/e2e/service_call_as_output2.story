@@ -1,0 +1,1 @@
+(uuid generate) as t
