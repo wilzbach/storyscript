@@ -20,9 +20,9 @@ class FakeTree:
     def _check_existing_fake_lines(self, block):
         for child in block.children:
             if child.path:
-                tok = child.path.find_first_token().value
-                if tok.startswith(self.prefix):
-                    self.new_lines[tok] = False
+                tok = child.path.find_first_token()
+                if isinstance(tok.line, str) and '.' in tok.line:
+                    self.new_lines[tok.value] = False
 
     def line(self):
         """

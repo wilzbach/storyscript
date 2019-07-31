@@ -43,8 +43,9 @@ def test_faketree_check_existing_with_fake(block, fake_tree):
     Checks checking for fake lines with a fake path
     """
     block.children = [
-        Tree('assignment', [Tree('path', [Token('NAME', 'foo')])]),
-        Tree('assignment', [Tree('path', [Token('NAME', '__p-bar')])]),
+        Tree('assignment', [Tree('path', [Token('NAME', 'foo', line='1')])]),
+        Tree('assignment', [Tree('path',
+             [Token('NAME', '__p-bar', line='1.1')])]),
     ]
     fake_tree._check_existing_fake_lines(block)
     assert fake_tree.new_lines == {'__p-bar': False}
@@ -55,11 +56,14 @@ def test_faketree_check_existing_multiple_fake(block, fake_tree):
     Checks checking for fake lines with multiple fake paths
     """
     block.children = [
-        Tree('assignment', [Tree('path', [Token('NAME', '__p-bar1')])]),
-        Tree('assignment', [Tree('path', [Token('NAME', 'foo')])]),
-        Tree('assignment', [Tree('path', [Token('NAME', '__p-bar2')])]),
-        Tree('assignment', [Tree('path', [Token('NAME', 'foo')])]),
-        Tree('assignment', [Tree('path', [Token('NAME', '__p-bar3')])]),
+        Tree('assignment', [Tree('path',
+             [Token('NAME', '__p-bar1', line='1.1')])]),
+        Tree('assignment', [Tree('path', [Token('NAME', 'foo', line='1')])]),
+        Tree('assignment', [Tree('path',
+             [Token('NAME', '__p-bar2', line='2.1')])]),
+        Tree('assignment', [Tree('path', [Token('NAME', 'foo', line='2')])]),
+        Tree('assignment', [Tree('path',
+             [Token('NAME', '__p-bar3', line='3.1')])]),
     ]
     fake_tree._check_existing_fake_lines(block)
     assert fake_tree.new_lines == {
