@@ -104,6 +104,17 @@ class FakeTree:
         # this inserts the new assignment node _before_ the last node
         return -1
 
+    def insert_node(self, node, line):
+        """
+        Adds a node to the current block at the target line position
+        """
+        insert_pos = self.find_insert_pos(line)
+        self.block.children = [
+            *self.block.children[:insert_pos],
+            node,
+            *self.block.children[insert_pos:],
+        ]
+
     def add_assignment(self, value, original_line):
         """
         Creates an assignments and adds it to the current block
@@ -111,14 +122,9 @@ class FakeTree:
         """
         assert len(self.block.children) >= 1
 
-        insert_pos = self.find_insert_pos(original_line)
         assignment = self.assignment(value)
 
-        self.block.children = [
-            *self.block.children[:insert_pos],
-            assignment,
-            *self.block.children[insert_pos:],
-        ]
+        self.insert_node(assignment, original_line)
 
         # we need a new node, s.t. already inserted
         # fake nodes don't get changed
