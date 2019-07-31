@@ -584,6 +584,58 @@ class Lowering:
         for c in node.children:
             self.visit_function_dot(c, block)
 
+    def visit_path(self, node, block):
+        """
+        Visit path's with expression and lower these expressions to path's.
+        """
+        if not hasattr(node, 'children') or len(node.children) == 0:
+            return
+
+        if node.data == 'block':
+            # only generate a fake_block once for every line
+            # node: block in which the fake assignments should be inserted
+            block = self.fake_tree(node)
+
+        if node.data == 'path':
+            for child in node.children:
+                if not (isinstance(child, Tree) and
+                        child.data == 'path_fragment'):
+                    continue
+
+                path_fragment = child
+                expression = path_fragment.child(0)
+
+                if not (isinstance(expression, Tree) and
+                        expression.data == 'expression'):
+                    # Don't do anything if the first child of path_fragment
+                    # isn't actually an expression
+                    continue
+
+                # First lower path's deep inside the expression,
+                # before lowering current expression.
+                self.visit_path(expression, block)
+
+                if len(expression.children) > 1:
+                    # Generate an fake path for current expression and
+                    # make path fragment point to this fake path.
+                    fake_path = block.add_assignment(
+                        expression,
+                        original_line=node.line())
+                    path_fragment.children = [fake_path]
+                else:
+                    # Remove the expression construct and make entity a
+                    # direct descendant. This saves us from adding fake
+                    # lines in some common use cases.
+                    path_or_values = expression.child(0).child(0)
+                    if path_or_values.data == 'values':
+                        path_or_values = path_or_values.child(0)
+                    else:
+                        assert path_or_values.data == 'path'
+                    path_fragment.children = [path_or_values]
+        else:
+            for c in node.children:
+                self.visit_path(c, block)
+
     def process(self, tree):
         """
         Applies several preprocessing steps to the existing AST.
@@ -598,4 +650,5 @@ class Lowering:
         self.visit_function_dot(tree, block=None)
         self.visit(tree, None, None, pred,
                    self.replace_expression, parent=None)
+        self.visit_path(tree, None)
         return tree
