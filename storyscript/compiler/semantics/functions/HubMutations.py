@@ -1,6 +1,7 @@
+from storyhub.engine.Builtins import builtins
+
 from storyscript.compiler.semantics.functions.MutationBuilder import \
     mutation_builder
-from storyscript.hub.engine.Builtins import builtins
 
 
 class Hub:
