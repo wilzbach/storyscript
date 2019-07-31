@@ -444,6 +444,7 @@ class Lowering:
                 assert c.data == 'assignment_destructoring'
                 line = node.line()
                 base_expr = node.assignment_fragment.base_expression
+                eq_tok = node.assignment_fragment.child(0)
                 orig_node = Tree('base_expression', base_expr.children)
                 orig_obj = block.add_assignment(orig_node, original_line=line)
                 for i, n in enumerate(c.children):
@@ -459,18 +460,15 @@ class Lowering:
                             Tree('string', [name])
                         ])
                     ]))
-                    if i + 1 == len(c.children):
-                        # for the last entry, we can recycle the existing node
-                        node.children[0] = n
-                        node.assignment_fragment.base_expression.children = \
-                            [val]
-                    else:
-                        # insert new fake line
-                        a = block.assignment_path(n, val, new_line)
-                        parent.children.insert(0, a)
+                    a = block.assignment_path(n, val, new_line, eq_tok=eq_tok)
+                    block.insert_node(a, name.line)
+                return True
         else:
             for c in node.children:
-                self.visit_assignment(c, block, parent=node)
+                performed_destructuring = self.visit_assignment(
+                    c, block, parent=node)
+                if performed_destructuring:
+                    parent.children.remove(node)
 
     @classmethod
     def rewrite_cmp_expr(cls, node):
