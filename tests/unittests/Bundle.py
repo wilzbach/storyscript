@@ -53,6 +53,15 @@ def test_bundle_gitignores_failed(patch):
     assert result == []
 
 
+def test_bundle_gitignores_command_not_found(patch):
+    """
+    Test what happens when there's no git command available.
+    """
+    patch.object(subprocess, 'run', side_effect=FileNotFoundError())
+    result = Bundle.gitignores()
+    assert result == []
+
+
 def test_bundle_ignores(patch):
     patch.object(os.path, 'isdir')
     patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])
