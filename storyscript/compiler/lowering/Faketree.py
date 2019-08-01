@@ -78,13 +78,18 @@ class FakeTree:
         path = self.path(line=line)
         return self.assignment_path(path, value, line)
 
-    def assignment_path(self, path, value, line):
+    def assignment_path(self, path, value, line, eq_tok=None):
         """
         Adds a new assignment: `path` = `value`
         """
         # updates all tokens
         self.mark_line(value, line)
         equals = Token('EQUALS', '=', line=line)
+        if eq_tok:
+            # We accept and use the equals token from original expression
+            # to copy over the token meta data which helps with error messages.
+            equals.column = eq_tok.column
+            equals.end_column = eq_tok.end_column
         if value.data == 'base_expression':
             expr = value
         else:
