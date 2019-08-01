@@ -62,6 +62,15 @@ def test_bundle_gitignores_command_not_found(patch):
     assert result == []
 
 
+def test_bundle_gitignores_command_not_found_oserror(patch):
+    """
+    Test what happens when executing the git command failed.
+    """
+    patch.object(subprocess, 'run', side_effect=OSError())
+    result = Bundle.gitignores()
+    assert result == []
+
+
 def test_bundle_ignores(patch):
     patch.object(os.path, 'isdir')
     patch.object(os, 'walk', return_value=[('root', [], ['one.story', 'two'])])

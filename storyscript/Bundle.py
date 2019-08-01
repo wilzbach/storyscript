@@ -34,7 +34,7 @@ class Bundle:
                                stdout=subprocess.PIPE,
                                stderr=subprocess.DEVNULL,
                                encoding='utf8')
-        except FileNotFoundError:  # Occurs when there's no git executable.
+        except Exception:  # Graceful fallback when there's no git executable.
             return []
 
         if p.returncode != 0:
