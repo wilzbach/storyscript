@@ -116,7 +116,7 @@ FLOAT.2: ("+"|"-")? INT "." RAW_INT? | "." RAW_INT
 SINGLE_QUOTED: /'([^'\\]*(?:\\(.|\n)[^'\\]*)*)'/
 DOUBLE_QUOTED: /"([^"\\]*(?:\\(.|\n)[^"\\]*)*)"/
 DOUBLE_QUOTED_HEREDOC.2: /"""(.|\n)*?"""/
-REGEXP.10: /\/([^\/]*)\/g?i?m?s?u?y?/
+REGEXP.10: /\/([^\/\n]*)\/g?i?m?s?u?y?/
 NAME.1: /[a-zA-Z_][a-zA-Z-\/_0-9]*/
 RAW_TIME.3: /([0-9]+(ms|[smhdw]))+/
 _OCB: "{"
