@@ -55,7 +55,12 @@ def run_test(story_path):
 
     expected_path = path.splitext(story_path)[0]
     parsed_features = parse_features(features, story_string)
+    print(expected_path)
     if path.isfile(expected_path + '.json'):
+        # check for duplicate results
+        assert not path.isfile(expected_path + '.error'), \
+            f'{expected_path} must either be a JSON result or an ERROR.'
+
         expected_story = None
         with io.open(expected_path + '.json', 'r') as f:
             expected_story = f.read()
