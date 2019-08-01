@@ -82,7 +82,10 @@ class TypeResolver(ScopeSelectiveVisitor):
                     'variables_dash', token=token)
 
         if target_symbol.type() == NoneType.instance():
-            storage_class = storage_class.declaration_from_symbol()
+            can_assign = self.storage_class_scope.can_assign()
+            storage_class = storage_class.declaration_from_symbol(
+                rebindable=can_assign
+            )
             if not target_symbol.is_internal():
                 frag.base_expression.expect(expr_type != NoneType.instance(),
                                             'assignment_type_none')

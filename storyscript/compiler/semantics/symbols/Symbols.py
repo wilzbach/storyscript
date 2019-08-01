@@ -64,15 +64,19 @@ class StorageClass:
         sc = StorageClass(write=write, rebindable=rebindable)
         return sc
 
-    def declaration_from_symbol(self):
+    def declaration_from_symbol(self, rebindable):
         """
         Create a new storage class from an existing one.
         Copy over the existing read permission.
         """
         write = self._write
-        rebindable = True
         sc = StorageClass(write=write, rebindable=rebindable)
         return sc
+
+    def __str__(self):
+        read_write = 'w' if self.can_write() else 'r'
+        assign = 'a' if self.can_assign() else '-'
+        return f'{read_write}{assign}'
 
 
 def base_symbol(type_):
@@ -103,9 +107,7 @@ class Symbol:
         return f'{self._type}'
 
     def __str__(self):
-        base = f"'{self._name}', {self._type}"
-        if not self.can_write():
-            base += ', ro'
+        base = f"'{self._name}', {self._type}, {self._storage_class}"
         return f'Symbol({base})'
 
     @classmethod

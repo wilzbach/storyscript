@@ -1,0 +1,6 @@
+Error: syntax error in story at line 5, column 5
+
+5|        a = el
+          ^^^
+
+E0127: `a` is readonly and can not be assigned to.
