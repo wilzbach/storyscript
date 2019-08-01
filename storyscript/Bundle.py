@@ -29,10 +29,14 @@ class Bundle:
         """
         command = ['git', 'ls-files', '--others', '--ignored',
                    '--exclude-standard']
-        p = subprocess.run(command,
-                           stdout=subprocess.PIPE,
-                           stderr=subprocess.DEVNULL,
-                           encoding='utf8')
+        try:
+            p = subprocess.run(command,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.DEVNULL,
+                               encoding='utf8')
+        except Exception:  # Graceful fallback when there's no git executable.
+            return []
+
         if p.returncode != 0:
             return []
         return p.stdout.split('\n')
