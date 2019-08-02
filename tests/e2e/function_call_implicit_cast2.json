@@ -1,0 +1,149 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "9",
+      "output": [
+        "int"
+      ],
+      "function": "foobar",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "stuff",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "Map",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              }
+            ]
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": "4.1",
+      "src": "function foobar stuff : Map[string, any] returns int",
+      "next": "2"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "col_start": "3",
+      "col_end": "15",
+      "args": [
+        {
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "int"
+          },
+          "value": {
+            "$OBJECT": "path",
+            "paths": [
+              "stuff",
+              {
+                "$OBJECT": "string",
+                "string": "a"
+              }
+            ]
+          }
+        }
+      ],
+      "parent": "1",
+      "src": "  return stuff[\"a\"] as int",
+      "next": "4.1"
+    },
+    "4.1": {
+      "method": "call",
+      "ln": "4.1",
+      "col_start": "1",
+      "col_end": "13",
+      "name": [
+        "__p-4.1"
+      ],
+      "function": "foobar",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "stuff",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "Map",
+              "values": [
+                {
+                  "$OBJECT": "type",
+                  "type": "string"
+                },
+                {
+                  "$OBJECT": "type",
+                  "type": "any"
+                }
+              ]
+            },
+            "value": {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "any"
+              },
+              "value": {
+                "$OBJECT": "dict",
+                "items": [
+                  [
+                    {
+                      "$OBJECT": "string",
+                      "string": "a"
+                    },
+                    {
+                      "$OBJECT": "int",
+                      "int": 1
+                    }
+                  ],
+                  [
+                    {
+                      "$OBJECT": "string",
+                      "string": "b"
+                    },
+                    {
+                      "$OBJECT": "string",
+                      "string": "a"
+                    }
+                  ]
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-4.1"
+          ]
+        }
+      ],
+      "src": "foobar(stuff: {\"a\":1, \"b\": \"a\"} as any)"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "foobar": "1"
+  }
+}
