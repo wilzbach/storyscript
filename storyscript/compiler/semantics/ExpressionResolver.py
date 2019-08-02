@@ -98,9 +98,11 @@ class SymbolExpressionVisitor(ExpressionVisitor):
             base_type = tree.create_token('STRING_TYPE', 'string')
         elif t == TimeType.instance():
             base_type = tree.create_token('TIME_TYPE', 'time')
-        else:
-            assert t == RegExpType.instance()
+        elif t == RegExpType.instance():
             base_type = tree.create_token('REGEXP_TYPE', 'regex')
+        else:
+            assert t == AnyType.instance()
+            base_type = tree.create_token('ANY_TYPE', 'any')
 
         return Tree('base_type', [base_type])
 
