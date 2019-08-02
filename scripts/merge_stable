@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+################################################################################
+# Merge stable back into master and opens a PR
+################################################################################
+
+set -ueo pipefail -o xtrace
+trap "echo 'Fix the merge conflicts.'" ERR
+
+################################################################################
+# Branch variables (configurable)
+################################################################################
+
+ORIGIN="${ORIGIN:-origin}"
+UPSTREAM="${UPSTREAM:-upstream}"
+MASTER="${MASTER:-master}"
+STABLE="${STABLE:-stable}"
+
+################################################################################
+# Script variables
+################################################################################
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+DIR=${1:-$(pwd)}
+pushd "$DIR"
+
+################################################################################
+# Prepare sources:
+# - fetch latest
+# - checkout master (and fast-forward to upstream)
+# - remove previous merge branch
+################################################################################
+
+git fetch --multiple "$ORIGIN" "$UPSTREAM"
+git checkout "$MASTER"
+git merge --ff-only "$UPSTREAM/$MASTER"
+
+# in case `merge_stable` already exists -> remove
+git branch -D "merge_$STABLE" || true
+
+################################################################################
+# Merge stable into merge_stable
+################################################################################
+
+git checkout -b "merge_$STABLE"
+git merge "$UPSTREAM/$STABLE"
+# <- Solve merge conflicts (if any occurred)
+
+################################################################################
+# Open PR
+################################################################################
+
+"${SCRIPT_DIR}/pr_send"
+
+################################################################################
+# Go back to default state (master)
+################################################################################
+git checkout "$MASTER"
+
+popd > /dev/null

@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+################################################################################
+# Submit a PR to an upstream repo from the CLI
+# Execute from any git repository or pass the directory as first argument
+################################################################################
+set -ueo pipefail -o xtrace
+
+# which editor to use for interactive edits
+EDITOR=${EDITOR:-vim}
+# whether to use an editor to allow interactive editing of the PR description
+INTERACTIVE=${INTERACTIVE:-0}
+# force-push the branch to origin
+FORCE_PUSH=${FORCE_PUSH:-0}
+# HUB allows to provide a different path to the `hub` binary
+HUB_BIN=${HUB:-hub}
+
+################################################################################
+# Generated variables
+################################################################################
+
+# allow origin and upstream to be fully configurable
+ORIGIN="${ORIGIN:-origin}"
+UPSTREAM="${UPSTREAM:-upstream}"
+UPSTREAM_BRANCH="${1:-master}"
+
+# detect upstream from git remote config
+UPSTREAM_REPO=$(git remote -v | grep "^$UPSTREAM" | head -n1 | perl -lne 's/github.com:?\/?(.*)\/(.*?)([.]git| )// or next; print $1,"/",$2')
+UPSTREAM_ORIGIN=$(git remote -v | grep "^$ORIGIN" | head -n1 | perl -lne 's/github.com:?\/?(.*)\/(.*?)([.]git| )// or next; print $1,"/",$2')
+UPSTREAM_REPO=${UPSTREAM_REPO:-$UPSTREAM_ORIGIN}
+
+DIR="$(pwd)"
+pushd "$DIR" > /dev/null
+
+################################################################################
+# Push branch to origin
+################################################################################
+
+branch=$(git rev-parse --abbrev-ref HEAD)
+echo "-- Pushing ${branch} to GitHub"
+push_args=("--set-upstream" "$ORIGIN" "${branch}")
+if [ "$FORCE_PUSH" -eq 1 ] ; then
+    push_args+=("--force")
+fi
+
+git push "${push_args[@]}"
+
+################################################################################
+# Open PR on GitHub (with `hub`)
+# Fallback: show GitHub URL
+################################################################################
+
+if command -v "$HUB_BIN" > /dev/null ; then
+    tmpfile=$(mktemp)
+    trap '{ rm -f $tmpfile; }' EXIT
+    # use last commit message as PR title
+    git log -1 --pretty=%B > "$tmpfile"
+    # allow interactive editing (if not disabled)
+    if [ "$INTERACTIVE" -eq 0 ]; then
+        "${EDITOR}" "$tmpfile"
+    fi
+    base="${UPSTREAM_REPO/#/-b}"
+    base="${base/%/:$UPSTREAM_BRANCH}"
+    prLink=$("$HUB_BIN" pull-request "$base" -F - < "$tmpfile")
+else
+    gitUser=$(git remote -v | grep "$ORIGIN" | grep fetch | head -1 | sed -E 's!^.*github.com:?/?(.*)/.*!\1!')
+    prLink="https://github.com/$UPSTREAM_REPO/compare/$UPSTREAM_BRANCH...$gitUser:$branch"
+fi
+
+################################################################################
+# Open PR URL
+################################################################################
+
+echo "$prLink"
+xdg-open "$prLink"
+popd > /dev/null
