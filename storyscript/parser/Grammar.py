@@ -102,7 +102,7 @@ class Grammar:
         self.ebnf.range_end = 'colon (number | path)'
         self.ebnf.range = 'range_start_end | range_start | range_end'
         path_fragment = ('dot name, osb '
-                         '(number | string | path | boolean | range) csb')
+                         '(expression | range) csb')
         self.ebnf.path_fragment = path_fragment
         self.ebnf.path = ('name (path_fragment)* | '
                           'inline_expression (path_fragment)*')

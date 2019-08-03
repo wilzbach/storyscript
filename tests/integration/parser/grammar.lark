@@ -17,7 +17,7 @@ range_start: (number | path) _COLON
 range_start_end: (number | path) _COLON (number | path)
 range_end: _COLON (number | path)
 range: range_start_end | range_start | range_end
-path_fragment: _DOT NAME| _OSB (number | string | path | boolean | range) _CSB
+path_fragment: _DOT NAME| _OSB (expression | range) _CSB
 path: NAME (path_fragment)* | inline_expression (path_fragment)*
 operator_assignment: ADD_EQUALS| SUB_EQUALS| DIV_EQUALS| MUL_EQUALS| MOD_EQUALS
 assignment_fragment: (operator_assignment | EQUALS) base_expression
