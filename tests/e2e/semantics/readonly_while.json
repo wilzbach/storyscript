@@ -1,0 +1,72 @@
+{
+  "tree": {
+    "2": {
+      "method": "while",
+      "ln": "2",
+      "col_start": "7",
+      "col_end": "6",
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
+      ],
+      "enter": "3",
+      "src": "while true",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "col_start": "5",
+      "col_end": "8",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            },
+            {
+              "$OBJECT": "int",
+              "int": 3
+            }
+          ]
+        }
+      ],
+      "parent": "2",
+      "src": "    a = [1, 2, 3]",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "col_start": "5",
+      "col_end": "11",
+      "name": [
+        "a",
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
+      "parent": "2",
+      "src": "    a[1] = 2"
+    }
+  },
+  "entrypoint": "2"
+}
