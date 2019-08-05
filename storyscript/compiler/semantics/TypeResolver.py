@@ -133,7 +133,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         Create a new scope and add output variables to it
         """
         tree.scope = Scope(parent=scope)
-        with self.create_scope(tree.scope):
+        with self.create_scope(tree.scope, storage_class=StorageClass.write()):
             stmt = tree.foreach_statement
             output_expr = self.resolver.base_expression(stmt.base_expression)
             output_type = output_expr.type()
@@ -159,7 +159,7 @@ class TypeResolver(ScopeSelectiveVisitor):
     def while_block(self, tree, scope):
         self.while_statement(tree.while_statement, scope)
         tree.scope = Scope(parent=scope)
-        with self.create_scope(tree.scope):
+        with self.create_scope(tree.scope, storage_class=StorageClass.write()):
             self.visit_children(tree.nested_block, scope=tree.scope)
 
     def while_statement(self, tree, scope):
