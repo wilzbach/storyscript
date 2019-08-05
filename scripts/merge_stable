@@ -17,7 +17,7 @@ MASTER="${MASTER:-master}"
 STABLE="${STABLE:-stable}"
 
 # whether to checkout with a merge (default) or directly checkout the master branch
-CHECKOUT_WITH_MERGE="${CHECKOUT_WITH_MERGE:-0}"
+CHECKOUT_WITH_MERGE="${CHECKOUT_WITH_MERGE:-1}"
 
 ################################################################################
 # Script variables
@@ -36,7 +36,7 @@ pushd "$DIR"
 ################################################################################
 
 git fetch --multiple "$ORIGIN" "$UPSTREAM"
-if [ "$CHECKOUT_WITH_MERGE" -eq 0 ] ; then
+if [ "$CHECKOUT_WITH_MERGE" -eq 1 ] ; then
     git checkout "$MASTER"
     git merge --ff-only "$UPSTREAM/$MASTER"
 else
