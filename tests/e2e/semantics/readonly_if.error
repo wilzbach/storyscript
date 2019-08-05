@@ -1,0 +1,6 @@
+Error: syntax error in story at line 4, column 5
+
+4|        a[1] = 2
+          ^^^^^^
+
+E0127: `a[]` is readonly and can not be assigned to.
