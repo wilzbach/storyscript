@@ -118,6 +118,9 @@ jobs:
             - image: circleci/python:3.6.8
         steps:
             - checkout
+            - add_ssh_keys:
+                fingerprints:
+                  - "2a:d0:2a:b6:84:11:a9:0a:09:a0:59:f7:0c:72:2d:6d"
             - run:
                 name: Configure storyscript infra account
                 command: |
@@ -137,5 +140,7 @@ jobs:
                 name: Create PR to master (with stable fixes)
                 command: |
                   export HUB="$PWD/hub-linux-amd64/bin/hub"
+                  # disable automatic merge commit message editing
+                  export GIT_MERGE_AUTOEDIT=no
                   # Run merge script
-                  FORCE_PUSH=1 INTERACTIVE=0 ./scripts/merge_stable
+                  FORCE_PUSH=1 INTERACTIVE=0 CHECKOUT_WITH_MERGE=0 ./scripts/merge_stable
