@@ -20,11 +20,34 @@ workflows:
           filters:
             branches:
               only: stable
+      - version_prs:
+          requires:
+            - deploy
+commands:
+  setup_github_pr:
+    description: "Sets up repo for submitting PRs"
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "2a:d0:2a:b6:84:11:a9:0a:09:a0:59:f7:0c:72:2d:6d"
+      - run:
+          name: Configure storyscript infra account
+          command: |
+            git config --global user.name "Storyscript Infrastructure"
+            git config --global user.email infra@storyscript.io
+      - run:
+          name: Install GitHub hub client
+          command: |
+            wget https://github.com/github/hub/releases/download/v2.12.3/hub-linux-amd64-2.12.3.tgz
+            tar xfz hub-linux-amd64-2.12.3.tgz
+            mv hub-linux-amd64-2.12.3 hub-linux-amd64
+executors:
+  python-default:
+    docker:
+      - image: circleci/python:3.6.8
 jobs:
     build:
-        working_directory: ~/repo
-        docker:
-            - image: circleci/python:3.6.8
+        executor: python-default
         steps:
             - checkout
             #- restore_cache:
@@ -78,8 +101,7 @@ jobs:
                 path: test-reports
                 destination: test-reports
     deploy:
-        docker:
-            - image: circleci/python:3.6.8
+        executor: python-default
         steps:
             - checkout
             - run:
@@ -114,24 +136,10 @@ jobs:
                     pip install twine==1.13.0
                     twine upload dist/*
     stable:
-        docker:
-            - image: circleci/python:3.6.8
+        executor: python-default
         steps:
             - checkout
-            - add_ssh_keys:
-                fingerprints:
-                  - "2a:d0:2a:b6:84:11:a9:0a:09:a0:59:f7:0c:72:2d:6d"
-            - run:
-                name: Configure storyscript infra account
-                command: |
-                  git config --global user.name "Storyscript Infrastructure"
-                  git config --global user.email infra@storyscript.io
-            - run:
-                name: Install GitHub hub client
-                command: |
-                  wget https://github.com/github/hub/releases/download/v2.12.3/hub-linux-amd64-2.12.3.tgz
-                  tar xfz hub-linux-amd64-2.12.3.tgz
-                  mv hub-linux-amd64-2.12.3 hub-linux-amd64
+            - setup_github_pr
             - run:
                 name: Add upstream branch
                 command: |
@@ -144,3 +152,14 @@ jobs:
                   export GIT_MERGE_AUTOEDIT=no
                   # Run merge script
                   FORCE_PUSH=1 INTERACTIVE=0 CHECKOUT_WITH_MERGE=0 ./scripts/merge_stable
+    version_prs:
+        executor: python-default
+        steps:
+            - checkout
+            - setup_github_pr
+            - run:
+                name: Create upgrade PRs
+                command: |
+                  export HUB="$PWD/hub-linux-amd64/bin/hub"
+                  # Run merge script
+                  ./scripts/merge_stable
