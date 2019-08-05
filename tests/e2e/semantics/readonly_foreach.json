@@ -1,0 +1,107 @@
+{
+  "tree": {
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "l"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            },
+            {
+              "$OBJECT": "int",
+              "int": 3
+            }
+          ]
+        }
+      ],
+      "src": "l = [1, 2, 3]",
+      "next": "3"
+    },
+    "3": {
+      "method": "for",
+      "ln": "3",
+      "col_start": "9",
+      "col_end": "6",
+      "output": [
+        "el"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "l"
+          ]
+        }
+      ],
+      "enter": "4",
+      "src": "foreach l as el",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "col_start": "5",
+      "col_end": "8",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            },
+            {
+              "$OBJECT": "int",
+              "int": 3
+            }
+          ]
+        }
+      ],
+      "parent": "3",
+      "src": "    a = [1, 2, 3]",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "col_start": "5",
+      "col_end": "11",
+      "name": [
+        "a",
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
+      "parent": "3",
+      "src": "    a[1] = 2"
+    }
+  },
+  "entrypoint": "2"
+}
