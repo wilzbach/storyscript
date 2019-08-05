@@ -8,7 +8,7 @@ set -ueo pipefail -o xtrace
 # which editor to use for interactive edits
 EDITOR=${EDITOR:-vim}
 # whether to use an editor to allow interactive editing of the PR description
-INTERACTIVE=${INTERACTIVE:-0}
+INTERACTIVE=${INTERACTIVE:-1}
 # force-push the branch to origin
 FORCE_PUSH=${FORCE_PUSH:-0}
 # HUB allows to provide a different path to the `hub` binary
@@ -55,7 +55,7 @@ if command -v "$HUB_BIN" > /dev/null ; then
     # use last commit message as PR title
     git log -1 --pretty=%B > "$tmpfile"
     # allow interactive editing (if not disabled)
-    if [ "$INTERACTIVE" -eq 0 ]; then
+    if [ "$INTERACTIVE" -eq 1 ]; then
         "${EDITOR}" "$tmpfile"
     fi
     base="${UPSTREAM_REPO/#/-b}"
@@ -71,5 +71,9 @@ fi
 ################################################################################
 
 echo "$prLink"
-xdg-open "$prLink"
+
+# On desktops -> open link
+if command -v xdg-open > /dev/null ; then
+    xdg-open "$prLink"
+fi
 popd > /dev/null
