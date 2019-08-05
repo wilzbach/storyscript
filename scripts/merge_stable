@@ -16,6 +16,9 @@ UPSTREAM="${UPSTREAM:-upstream}"
 MASTER="${MASTER:-master}"
 STABLE="${STABLE:-stable}"
 
+# whether to checkout with a merge (default) or directly checkout the master branch
+CHECKOUT_WITH_MERGE="${CHECKOUT_WITH_MERGE:-0}"
+
 ################################################################################
 # Script variables
 ################################################################################
@@ -33,8 +36,12 @@ pushd "$DIR"
 ################################################################################
 
 git fetch --multiple "$ORIGIN" "$UPSTREAM"
-git checkout "$MASTER"
-git merge --ff-only "$UPSTREAM/$MASTER"
+if [ "$CHECKOUT_WITH_MERGE" -eq 0 ] ; then
+    git checkout "$MASTER"
+    git merge --ff-only "$UPSTREAM/$MASTER"
+else
+    git checkout "$UPSTREAM/$MASTER"
+fi
 
 # in case `merge_stable` already exists -> remove
 git branch -D "merge_$STABLE" || true
