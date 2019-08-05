@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -ueo pipefail -o xtrace
+
+################################################################################
+# Open update PRs for new Storyscript releases
+################################################################################
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+VERSION="$(git describe --abbrev=0 --tags)"
+
+DIR=$(mktemp -d)
+pushd "$DIR"
+
+trap "echo 'Fix the conflicts at ${DIR}.'" ERR
+
+################################################################################
+# Bump Version
+################################################################################
+
+for repo in cli sls runtime ; do
+    git clone "git@github.com:storyscript/${repo}"
+    pushd "${repo}"
+
+    git remote add upstream "https://github.com/storyscript/${repo}"
+
+    sed "s/'storyscript==.*',/'storyscript==${VERSION}',/" -i setup.py
+
+    git checkout -b "upgrade-ss-${VERSION}"
+    git add -u
+
+    git commit -m "Upgrade Storyscript to ${VERSION}" \
+    -m "Details: https://github.com/storyscript/storyscript/releases/tag/${VERSION}"
+
+    # send PR
+    INTERACTIVE=0 "${SCRIPT_DIR}/pr_send"
+    popd
+done
