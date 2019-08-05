@@ -3,7 +3,7 @@
 set -ueo pipefail -o xtrace
 
 ################################################################################
-# Open update PRs for new Storyscript releases
+# Create update PRs for new Storyscript releases
 ################################################################################
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -16,7 +16,12 @@ pushd "$DIR"
 trap "echo 'Fix the conflicts at ${DIR}.'" ERR
 
 ################################################################################
-# Bump Version
+# Steps:
+# - clone repository (master)
+# - bump Version
+# - create new merge-branch
+# - commit changes
+# - open PR
 ################################################################################
 
 for repo in cli sls runtime ; do
