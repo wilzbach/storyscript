@@ -41,11 +41,13 @@ commands:
             wget https://github.com/github/hub/releases/download/v2.12.3/hub-linux-amd64-2.12.3.tgz
             tar xfz hub-linux-amd64-2.12.3.tgz
             mv hub-linux-amd64-2.12.3 hub-linux-amd64
+executors:
+  python-default:
+    docker:
+      - image: circleci/python:3.6.8
 jobs:
     build:
-        working_directory: ~/repo
-        docker:
-            - image: circleci/python:3.6.8
+        executor: python-default
         steps:
             - checkout
             #- restore_cache:
@@ -99,8 +101,7 @@ jobs:
                 path: test-reports
                 destination: test-reports
     deploy:
-        docker:
-            - image: circleci/python:3.6.8
+        executor: python-default
         steps:
             - checkout
             - run:
@@ -135,8 +136,7 @@ jobs:
                     pip install twine==1.13.0
                     twine upload dist/*
     stable:
-        docker:
-            - image: circleci/python:3.6.8
+        executor: python-default
         steps:
             - checkout
             - setup_github_pr
@@ -153,8 +153,7 @@ jobs:
                   # Run merge script
                   FORCE_PUSH=1 INTERACTIVE=0 CHECKOUT_WITH_MERGE=0 ./scripts/merge_stable
     version_prs:
-        docker:
-            - image: circleci/python:3.6.8
+        executor: python-default
         steps:
             - checkout
             - setup_github_pr
