@@ -235,6 +235,22 @@ class ErrorCodes:
         'E0138',
         'Output must be unique. Can not use existing `{var}`.',
     )
+    service_not_found = (
+        'E0139', 'Service `{name}` does not exist on the hub.'
+    )
+    service_action_not_found = (
+        'E0140', 'Service `{name}` has no action `{action}`.'
+    )
+    service_arg_invalid = (
+        'E0141',
+        '{service} action `{action}` does not accept argument `{arg}`.')
+    service_arg_type_mismatch = (
+        'E0142',
+        '{service} action `{action}` requires argument `{arg}` to be of '
+        '`{target}`, not `{source}`')
+    service_event_not_found = (
+        'E0143', 'Event action `{name}` has no event `{event}`.'
+    )
 
     @staticmethod
     def is_error(error_name):

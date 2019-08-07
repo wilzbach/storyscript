@@ -8,6 +8,7 @@ from storyscript.exceptions import CompilerError
 from storyscript.parser import Tree
 
 from .PathResolver import PathResolver
+from .ServiceTyping import ServiceTyping
 from .symbols.Symbols import Symbol, base_symbol
 
 
@@ -213,6 +214,10 @@ class ExpressionResolver:
 
     def __init__(self, module):
         self.expr_visitor = SymbolExpressionVisitor(self)
+        if module.features.service_typing:
+            self.service_typing = ServiceTyping()
+        else:
+            self.service_typing = None
         # how to resolve existing symbols
         self.path_resolver = PathResolver(
             symbol_resolver=module.symbol_resolver
@@ -427,7 +432,7 @@ class ExpressionResolver:
 
     def build_arguments(self, tree, name, fn_type):
         args = {}
-        for c in tree.children[1:]:
+        for c in tree.extract('arguments'):
             tree.expect(len(c.children) >= 2, 'arg_name_required',
                         fn_type=fn_type, name=name)
             name = c.child(0)
@@ -515,6 +520,22 @@ class ExpressionResolver:
         fn.check_call(tree, args)
         return base_symbol(fn.output())
 
+    def resolve_service(self, tree):
+        if self.service_typing is None:
+            return AnyType.instance()
+
+        service_name = tree.path.child(0).value
+        action_node = tree.service_fragment.command
+        tree.expect(action_node is not None, 'service_without_command')
+        action_name = action_node.child(0).value
+        args = self.build_arguments(
+            tree.service_fragment,
+            service_name,
+            action_name
+        )
+        return self.service_typing.resolve_service(
+            tree, service_name, action_name, args)
+
     def service(self, tree):
         # unknown for now
         if tree.service_fragment.output is not None:
@@ -527,7 +548,7 @@ class ExpressionResolver:
         except CompilerError:
             # ignore invalid variables (not existent or invalid)
             # -> must be a service
-            return base_symbol(AnyType.instance())
+            return base_symbol(self.resolve_service(tree))
 
         # variable exists -> mutation
         service_to_mutation(tree)
