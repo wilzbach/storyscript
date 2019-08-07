@@ -39,8 +39,6 @@ class ErrorCodes:
     unnecessary_colon = (
         'E0045',
         'There is an unnecessary colon at the end of the line')
-    block_expected_after = ('E0045',
-                            'An indented block is required to follow here')
     block_expected_before = ('E0046',
                              'An indented block is required to be before here')
     file_not_found = ('E0047',
@@ -215,7 +213,9 @@ class ErrorCodes:
         'E0132',
         'Tabs are not allowed.'
     )
-    continue_outside = ('E0132', '`continue` is allowed only inside loops')
+    continue_outside = ('E0133', '`continue` is allowed only inside loops')
+    block_expected_after = ('E0134',
+                            'An indented block is required to follow here')
 
     @staticmethod
     def is_error(error_name):
