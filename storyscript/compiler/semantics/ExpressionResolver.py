@@ -410,6 +410,13 @@ class ExpressionResolver:
         assert subtree.type == 'NAME'
         return self.path(tree)
 
+    def entity(self, tree):
+        """
+        Parses a entity subtree
+        """
+        assert tree.data == 'entity'
+        return self.expr_visitor.entity(tree)
+
     def expression(self, tree):
         """
         Compiles an expression object with the given tree.

@@ -1,0 +1,37 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "42"
+        }
+      ],
+      "src": "a = \"42\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "throw",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "8",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
+      "src": "throw a"
+    }
+  },
+  "entrypoint": "1"
+}

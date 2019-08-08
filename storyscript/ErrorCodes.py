@@ -214,8 +214,14 @@ class ErrorCodes:
         'Tabs are not allowed.'
     )
     continue_outside = ('E0133', '`continue` is allowed only inside loops')
-    block_expected_after = ('E0134',
-                            'An indented block is required to follow here')
+    block_expected_after = (
+        'E0134',
+        'An indented block is required to follow here'
+    )
+    throw_only_string = (
+        'E0135',
+        'Only strings can be thrown.'
+    )
 
     @staticmethod
     def is_error(error_name):

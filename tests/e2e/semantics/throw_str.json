@@ -1,0 +1,18 @@
+{
+  "tree": {
+    "1": {
+      "method": "throw",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "11",
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "42"
+        }
+      ],
+      "src": "throw \"42\""
+    }
+  },
+  "entrypoint": "1"
+}
