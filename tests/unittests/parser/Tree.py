@@ -217,7 +217,8 @@ def test_tree_find_first_token_none():
 
 def test_tree_extract():
     target = Tree('target', [])
-    tree = Tree('tree', [target, Tree('more', [target])])
+    tree = Tree('tree', [
+        target, Tree('more', [target], Token('test', 'test'))])
     assert tree.extract('target') == [target]
 
 
