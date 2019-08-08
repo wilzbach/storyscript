@@ -389,14 +389,24 @@ class JSONCompiler:
         position = tree.position()
         self.lines.set_exit(position.line)
         nested_block = tree.nested_block
-        output = self.objects.names(tree.catch_statement)
-        self.lines.set_scope(position.line, parent, output)
+        output = None
+        # catch (as name)?
+        # catch is counted part of children
+        if len(tree.catch_statement.children) > 1:
+            # we need to ignore the catch token when looking at the catch
+            # output name
+            ct = Tree('catch_statement', tree.catch_statement.children[1:])
+            assert len(ct.children) == 1, 'There can only be one output'
+            output = self.objects.names(ct)
+            self.lines.set_scope(position.line, parent, output)
+
         self.lines.append(
             'catch', position,
             enter=nested_block.line(), output=output, parent=parent
         )
         self.subtree(nested_block, parent=position.line)
-        self.lines.finish_scope(position.line)
+        if output is not None:
+            self.lines.finish_scope(position.line)
 
     def finally_block(self, tree, parent):
         """

@@ -75,7 +75,7 @@ function_output: _RETURNS types
 function_statement: FUNCTION_TYPE NAME typed_argument* function_output?
 indented_typed_arguments: _INDENT (typed_argument+ _NL)+ _DEDENT _DOUBLE_DEDENT
 function_block: function_statement _NL (indented_typed_arguments? block+ _DEDENT | nested_block)
-catch_statement: _CATCH _AS NAME
+catch_statement: CATCH (_AS NAME)?
 catch_block: catch_statement _NL nested_block
 finally_statement: FINALLY
 finally_block: finally_statement _NL nested_block
@@ -158,7 +158,7 @@ _WHILE: "while"
 _RETURNS: "returns"
 _DOUBLE_DEDENT: "<DOUBLE_DEDENT>"
 TRY: "try"
-_CATCH: "catch"
+CATCH: "catch"
 FINALLY: "finally"
 THROW: "throw"
 _WHEN: "when"

@@ -203,7 +203,7 @@ def test_parser_try():
 def test_parser_try_catch():
     result = parse('try\n    x=0\ncatch as error\n    x=1')
     catch_block = result.block.try_block.catch_block
-    assert catch_block.catch_statement.child(0) == Token('NAME', 'error')
+    assert catch_block.catch_statement.child(1) == Token('NAME', 'error')
     path = catch_block.nested_block.block.rules.assignment.path
     assert path.child(0) == Token('NAME', 'x')
 

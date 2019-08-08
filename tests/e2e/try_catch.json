@@ -4,7 +4,7 @@
       "method": "try",
       "ln": "1",
       "col_start": "1",
-      "col_end": "15",
+      "col_end": "6",
       "enter": "2",
       "exit": "3",
       "src": "try",
@@ -31,7 +31,7 @@
     "3": {
       "method": "catch",
       "ln": "3",
-      "col_start": "10",
+      "col_start": "1",
       "col_end": "6",
       "output": [
         "error"
