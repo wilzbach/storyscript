@@ -69,6 +69,7 @@ class ScopeJoiner:
 
     def __init__(self):
         self.scope = None
+        self.invalid_symbols = {}
 
     def add(self, scope):
         """
@@ -79,14 +80,36 @@ class ScopeJoiner:
             self.symbols = scope._symbols._symbols
         else:
             # join symbols
-            symbols = scope._symbols._symbols
+            new_symbols = scope._symbols._symbols
             for k in [*self.symbols.keys()]:
-                if k not in symbols:
+                if k not in new_symbols:
                     del self.symbols[k]
+                    self.invalid_symbols.pop(k, None)
+                else:
+                    # check for type compatibility
+                    t1 = self.symbols[k]
+                    t2 = new_symbols[k]
+                    if t1.type() != t2.type():
+                        # it is possible that a symbol doesn't appear in
+                        # all scopes, so we must save it for later and check
+                        # for such invalid symbols at the end
+                        self.invalid_symbols[k] = {
+                            't1name': t1.name(),
+                            't1type': t1.type(),
+                            't2name': t2.name(),
+                            't2type': t2.type(),
+                        }
 
-    def insert_to(self, scope):
+    def insert_to(self, tree, scope):
         """
         Inserts the joined set of symbols into a scope.
+        Enforces that such inserted symbols have the same type.
         """
+        # It is possible that the symbol doesn't appear in all scopes and
+        # wouldn't be hoisted. However, all scopes have been added now and
+        # we can check if any symbols had type mismatches.
+        for v in self.invalid_symbols.values():
+            tree.expect(False, 'scope_join_incompatible', **v)
+
         for s in self.symbols.values():
             scope.insert(s)

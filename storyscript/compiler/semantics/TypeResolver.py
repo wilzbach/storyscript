@@ -245,7 +245,7 @@ class TypeResolver(ScopeSelectiveVisitor):
                 self.visit(c, scope=if_scope)
                 scope_joiner.add(if_scope)
 
-        scope_joiner.insert_to(scope)
+        scope_joiner.insert_to(tree, scope)
 
     def if_statement(self, tree, scope):
         """
@@ -279,11 +279,23 @@ class TypeResolver(ScopeSelectiveVisitor):
                     'if_expression_boolean', type=t)
 
     def try_block(self, tree, scope):
-        tree.scope = Scope(parent=scope)
-        with self.create_scope(tree.scope):
-            self.visit_children(tree.nested_block, scope=tree.scope)
-            for c in tree.children[2:]:
-                self.visit(c, tree.scope)
+        scope_joiner = ScopeJoiner()
+        with self.create_scope(Scope(parent=scope)) as try_scope:
+            self.visit_children(tree.nested_block, scope=try_scope)
+            scope_joiner.add(try_scope)
+
+        if tree.catch_block is not None:
+            with self.create_scope(Scope(parent=scope)) as try_scope:
+                self.catch_block(tree.catch_block, try_scope)
+                scope_joiner.add(try_scope)
+
+            # only variables declared in both try/catch should be moved in the
+            # parent scope
+            scope_joiner.insert_to(tree, scope)
+
+        # finally block operates on the parent scope
+        if tree.finally_block is not None:
+            self.finally_block(tree.finally_block, scope)
 
     def catch_block(self, tree, scope):
         catch_stmt = tree.catch_statement
