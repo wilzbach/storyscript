@@ -1,4 +1,4 @@
 try
     x=0
-catch as error
+catch
     x=1

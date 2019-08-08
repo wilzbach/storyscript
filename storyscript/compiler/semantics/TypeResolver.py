@@ -286,6 +286,10 @@ class TypeResolver(ScopeSelectiveVisitor):
                 self.visit(c, tree.scope)
 
     def catch_block(self, tree, scope):
+        catch_stmt = tree.catch_statement
+        tree.catch_statement.expect(
+            len(catch_stmt.children) == 1,
+            'catch_no_output')
         self.visit_children(tree, scope=scope)
 
     def finally_block(self, tree, scope):
