@@ -611,11 +611,17 @@ class ObjectType(BaseType):
     """
     Represents an object
     """
+    def __init__(self, object=None):
+        self._object = object
+
     def __str__(self):
         return f'Object'
 
     def __eq__(self, other):
         return isinstance(other, ObjectType)
+
+    def object(self):
+        return self._object
 
     def op(self, op):
         return None
