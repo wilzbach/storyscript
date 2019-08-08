@@ -9,6 +9,7 @@ class Features:
     defaults = {
         'globals': False,  # makes global variables writable
         'debug': False,    # enable debug output
+        'service_typing': True,
     }
 
     def __init__(self, features):
