@@ -1,2 +1,2 @@
-while my_service my_command p1: 42
+while random list length:42
     x = 0
