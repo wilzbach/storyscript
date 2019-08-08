@@ -202,7 +202,7 @@
       "method": "try",
       "ln": "15",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "6",
       "enter": "16",
       "exit": "17",
       "src": "try",
@@ -229,7 +229,7 @@
     "17": {
       "method": "catch",
       "ln": "17",
-      "col_start": "10",
+      "col_start": "1",
       "col_end": "6",
       "output": [
         "e"
