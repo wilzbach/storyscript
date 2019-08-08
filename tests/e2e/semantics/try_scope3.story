@@ -1,6 +1,6 @@
 try
     a = 1
-catch as e
+catch
     b = 1
 finally
     c = 1

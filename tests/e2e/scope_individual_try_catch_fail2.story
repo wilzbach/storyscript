@@ -1,4 +1,4 @@
 try
     c = 1
-catch as e
+catch
     c = ""

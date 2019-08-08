@@ -1,6 +1,6 @@
-Error: syntax error in story at line 4, column 11
+Error: syntax error in story at line 3, column 1
 
-4|        throw error
-                ^^^^^
+3|    catch as error
+      ^^^^^^^^^^^^^^
 
-E0101: Variable `error` has not been defined.
+E0136: Access to the exception object is currently disallowed.

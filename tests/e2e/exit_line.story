@@ -14,7 +14,7 @@ while true
 
 try
     a = 0
-catch as e
+catch
     b = 0
 
 x = 0

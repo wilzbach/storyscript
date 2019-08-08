@@ -222,6 +222,10 @@ class ErrorCodes:
         'E0135',
         'Only strings can be thrown.'
     )
+    catch_no_output = (
+        'E0136',
+        'Access to the exception object is currently disallowed.'
+    )
 
     @staticmethod
     def is_error(error_name):
