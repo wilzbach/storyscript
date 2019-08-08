@@ -245,13 +245,14 @@ class TypeResolver(ScopeSelectiveVisitor):
                 self.visit(c, scope=if_scope)
                 scope_joiner.add(if_scope)
 
-        scope_joiner.insert_to(tree, scope)
+        # An if without 'else' won't cover all codepaths
+        if tree.else_block is not None:
+            scope_joiner.insert_to(tree, scope)
 
     def if_statement(self, tree, scope):
         """
         If blocks don't create a new scope.
         """
-        self.ensure_boolean_expression
         self.ensure_boolean_expression(tree, tree.base_expression)
 
     def elseif_block(self, tree, scope):
@@ -286,7 +287,7 @@ class TypeResolver(ScopeSelectiveVisitor):
 
         if tree.catch_block is not None:
             with self.create_scope(Scope(parent=scope)) as try_scope:
-                self.catch_block(tree.catch_block, try_scope)
+                self.visit(tree.catch_block, try_scope)
                 scope_joiner.add(try_scope)
 
             # only variables declared in both try/catch should be moved in the
@@ -295,7 +296,7 @@ class TypeResolver(ScopeSelectiveVisitor):
 
         # finally block operates on the parent scope
         if tree.finally_block is not None:
-            self.finally_block(tree.finally_block, scope)
+            self.visit(tree.finally_block, scope)
 
     def catch_block(self, tree, scope):
         catch_stmt = tree.catch_statement
