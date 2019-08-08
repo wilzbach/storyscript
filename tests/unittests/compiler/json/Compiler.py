@@ -741,9 +741,13 @@ def test_compiler_catch_block(patch, compiler, lines, tree):
     """
     patch.object(Objects, 'names')
     patch.object(JSONCompiler, 'subtree')
+    tree.catch_statement.children = ['catch', 'output']
     compiler.catch_block(tree, '1')
+
     lines.set_exit.assert_called_with(tree.position().line)
-    Objects.names.assert_called_with(tree.catch_statement)
+    Objects.names.assert_called_with(
+        Tree('catch_statement', tree.catch_statement.children[1:])
+    )
     lines.set_scope.assert_called_with(tree.position().line, '1',
                                        Objects.names())
     lines.finish_scope.assert_called_with(tree.position().line)

@@ -1,0 +1,93 @@
+{
+  "tree": {
+    "1": {
+      "method": "try",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "8",
+      "enter": "2",
+      "exit": "3",
+      "src": "try",
+      "next": "2"
+    },
+    "2": {
+      "method": "throw",
+      "ln": "2",
+      "col_start": "6",
+      "col_end": "19",
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "error"
+        }
+      ],
+      "parent": "1",
+      "src": "     throw \"error\"",
+      "next": "3"
+    },
+    "3": {
+      "method": "catch",
+      "ln": "3",
+      "col_start": "1",
+      "col_end": "8",
+      "enter": "4",
+      "exit": "5",
+      "src": "catch",
+      "next": "4"
+    },
+    "4": {
+      "method": "execute",
+      "ln": "4",
+      "col_start": "5",
+      "col_end": "13",
+      "service": "log",
+      "command": "info",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "Error Happened"
+          }
+        }
+      ],
+      "parent": "3",
+      "src": "    log info msg: \"Error Happened\"",
+      "next": "5"
+    },
+    "5": {
+      "method": "finally",
+      "ln": "5",
+      "col_start": "1",
+      "col_end": "9",
+      "enter": "6",
+      "src": "finally",
+      "next": "6"
+    },
+    "6": {
+      "method": "execute",
+      "ln": "6",
+      "col_start": "6",
+      "col_end": "14",
+      "service": "log",
+      "command": "info",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "Finally"
+          }
+        }
+      ],
+      "parent": "5",
+      "src": "     log info msg: \"Finally\""
+    }
+  },
+  "services": [
+    "log"
+  ],
+  "entrypoint": "1"
+}

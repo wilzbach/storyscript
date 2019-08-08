@@ -105,7 +105,8 @@ class Lines:
         """
         Creates the base dictionary for a given line.
         """
-        assert position.line not in self.lines, 'Line numbers must be unique'
+        assert position.line not in self.lines, \
+            f'Line {position.line} is not unique'
         col_start = self._as_none(position.column)
         col_end = self._as_none(position.end_column)
         raw_line = self.story.line(position.line)
