@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from storyscript.compiler.semantics.types.Types import BooleanType, \
-    NoneType, ObjectType
+    NoneType, ObjectType, StringType
 from storyscript.parser import Tree
 
 from .ExpressionResolver import ExpressionResolver
@@ -290,6 +290,13 @@ class TypeResolver(ScopeSelectiveVisitor):
 
     def finally_block(self, tree, scope):
         self.visit_children(tree, scope=scope)
+
+    def throw_statement(self, tree, scope):
+        tree.expect(tree.entity is not None,
+                    'throw_only_string')
+        sym = self.resolver.entity(tree.entity)
+        tree.entity.expect(sym.type() == StringType.instance(),
+                           'throw_only_string')
 
     def function_block(self, tree, scope):
         tree.scope, return_type = self.function_statement(

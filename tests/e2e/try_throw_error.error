@@ -1,0 +1,6 @@
+Error: syntax error in story at line 4, column 11
+
+4|        throw error
+                ^^^^^
+
+E0101: Variable `error` has not been defined.

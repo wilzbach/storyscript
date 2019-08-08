@@ -60,17 +60,15 @@
       "method": "throw",
       "ln": "5",
       "col_start": "9",
-      "col_end": "20",
+      "col_end": "22",
       "args": [
         {
-          "$OBJECT": "path",
-          "paths": [
-            "error"
-          ]
+          "$OBJECT": "string",
+          "string": "error"
         }
       ],
       "parent": "4",
-      "src": "        throw error"
+      "src": "        throw \"error\""
     }
   },
   "entrypoint": "1"
