@@ -226,6 +226,11 @@ class ErrorCodes:
         'E0136',
         'Access to the exception object is currently disallowed.'
     )
+    scope_join_incompatible = (
+        'E0137',
+        'Scope variable type mismatch: `{t1name}` of {t1type} is not '
+        'compatible with `{t2name}` of {t2type}.'
+    )
 
     @staticmethod
     def is_error(error_name):

@@ -1,6 +1,0 @@
-Error: syntax error in story at line 7, column 5
-
-7|    d = c
-          ^
-
-E0101: Variable `c` has not been defined.

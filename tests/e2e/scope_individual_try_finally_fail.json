@@ -1,19 +1,13 @@
 {
   "tree": {
     "1": {
-      "method": "if",
+      "method": "try",
       "ln": "1",
-      "col_start": "4",
-      "col_end": "5",
-      "args": [
-        {
-          "$OBJECT": "boolean",
-          "boolean": true
-        }
-      ],
+      "col_start": "1",
+      "col_end": "8",
       "enter": "2",
       "exit": "3",
-      "src": "if true",
+      "src": "try",
       "next": "2"
     },
     "2": {
@@ -35,12 +29,12 @@
       "next": "3"
     },
     "3": {
-      "method": "else",
+      "method": "finally",
       "ln": "3",
       "col_start": "1",
       "col_end": "6",
       "enter": "4",
-      "src": "else",
+      "src": "finally",
       "next": "4"
     },
     "4": {
@@ -53,12 +47,12 @@
       ],
       "args": [
         {
-          "$OBJECT": "int",
-          "int": 2
+          "$OBJECT": "string",
+          "string": ""
         }
       ],
       "parent": "3",
-      "src": "    c = 2"
+      "src": "    c = \"\""
     }
   },
   "entrypoint": "1"
