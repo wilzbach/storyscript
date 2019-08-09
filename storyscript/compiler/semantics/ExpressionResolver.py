@@ -433,7 +433,7 @@ class ExpressionResolver:
             name = c.child(0)
             type_ = self.expression(c.child(1)).type()
             sym = Symbol.from_path(name, type_)
-            args[sym.name()] = sym
+            args[sym.name()] = (sym, c)
         return args
 
     def path_resolve_only_name(self, tree, fn_type):

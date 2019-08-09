@@ -33,7 +33,7 @@ class ServiceTyping:
             tree.expect(args.get(arg_name, False), 'service_arg_required',
                         service=service_name, action=action_name, arg=arg_name)
 
-        for arg, sym in args.items():
+        for arg, (sym, arg_node) in args.items():
             action_arg = action.arg(arg)
             tree.expect(action_arg is not None, 'service_arg_invalid',
                         service=service_name, action=action_name, arg=arg)

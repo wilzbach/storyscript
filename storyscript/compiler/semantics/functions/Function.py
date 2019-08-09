@@ -50,9 +50,9 @@ class BaseFunction:
         Checks that for each argument its type can be implicitly converted to
         the respective function argument.
         """
-        for k, argument in zip(args.keys(), tree.children[1:]):
+        for k, (sym, argument) in args.items():
             target = self._args[k].type()
-            t = args[k].type()
+            t = sym.type()
             type_cast_result = target.can_be_assigned(t)
             tree.expect(type_cast_result or t == AnyType.instance(),
                         'function_arg_type_mismatch',
