@@ -2,6 +2,7 @@
 
 from .FunctionResolver import FunctionResolver
 from .Module import Module
+from .ServiceTyping import ServiceTyping
 from .SymbolResolver import SymbolResolver
 from .TypeResolver import TypeResolver
 from .functions.FunctionTable import FunctionTable
@@ -16,12 +17,17 @@ class Semantics:
 
     def __init__(self, features):
         root_scope = Scope.root()
+        service_typing = None
+        if features and features.service_typing:
+            service_typing = ServiceTyping()
+
         self.module = Module(
             symbol_resolver=SymbolResolver(scope=root_scope),
             function_table=FunctionTable(),
             mutation_table=MutationTable.init(),
             root_scope=root_scope,
-            features=features
+            features=features,
+            service_typing=service_typing,
         )
 
     visitors = [FunctionResolver, TypeResolver]

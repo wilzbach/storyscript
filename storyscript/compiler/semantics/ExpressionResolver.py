@@ -8,7 +8,6 @@ from storyscript.exceptions import CompilerError
 from storyscript.parser import Tree
 
 from .PathResolver import PathResolver
-from .ServiceTyping import ServiceTyping
 from .symbols.Symbols import Symbol, base_symbol
 
 
@@ -214,10 +213,6 @@ class ExpressionResolver:
 
     def __init__(self, module):
         self.expr_visitor = SymbolExpressionVisitor(self)
-        if module.features.service_typing:
-            self.service_typing = ServiceTyping()
-        else:
-            self.service_typing = None
         # how to resolve existing symbols
         self.path_resolver = PathResolver(
             symbol_resolver=module.symbol_resolver
@@ -521,7 +516,7 @@ class ExpressionResolver:
         return base_symbol(fn.output())
 
     def resolve_service(self, tree):
-        if self.service_typing is None:
+        if self.module.service_typing is None:
             return AnyType.instance()
 
         service_name = tree.path.child(0).value
@@ -533,7 +528,7 @@ class ExpressionResolver:
             service_name,
             action_name
         )
-        return self.service_typing.resolve_service(
+        return self.module.service_typing.resolve_service(
             tree, service_name, action_name, args)
 
     def service(self, tree):

@@ -7,7 +7,6 @@ from storyscript.parser import Tree
 from .ExpressionResolver import ExpressionResolver
 from .PathResolver import PathResolver
 from .ReturnVisitor import ReturnVisitor
-from .ServiceTyping import ServiceTyping
 from .SymbolResolver import SymbolResolver
 from .Visitors import ScopeSelectiveVisitor
 from .symbols.Scope import Scope, ScopeJoiner
@@ -48,10 +47,6 @@ class TypeResolver(ScopeSelectiveVisitor):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.resolver = ExpressionResolver(module=self.module)
-        if self.module.features.service_typing:
-            self.service_typing = ServiceTyping()
-        else:
-            self.service_typing = None
         self.path_symbol_resolver = SymbolResolver(
             scope=None, check_variable_existence=False)
         self.path_resolver = PathResolver(self.path_symbol_resolver)
@@ -191,7 +186,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.implicit_output(tree)
 
         output_type = ObjectType.instance()
-        if self.service_typing:
+        if self.module.service_typing:
             listener_name = tree.service.path.child(0).value
             event_node = tree.service.service_fragment.command
             tree.expect(event_node is not None, 'service_without_command')
@@ -203,7 +198,7 @@ class TypeResolver(ScopeSelectiveVisitor):
                 listener_name,
                 event_name
             )
-            output_type = self.service_typing.resolve_service_event(
+            output_type = self.module.service_typing.resolve_service_event(
                 tree,
                 listener,
                 event_name,
@@ -241,9 +236,9 @@ class TypeResolver(ScopeSelectiveVisitor):
         )
 
         output_type = ObjectType.instance()
-        if self.service_typing:
+        if self.module.service_typing:
             if name is None:
-                output_type = self.service_typing.resolve_service(
+                output_type = self.module.service_typing.resolve_service(
                     tree.service,
                     service_name,
                     action_name,
@@ -251,13 +246,14 @@ class TypeResolver(ScopeSelectiveVisitor):
                     nested_block=True
                 )
             else:
-                output_type = self.service_typing.resolve_service_output(
-                    tree,
-                    service_name,
-                    action_name,
-                    args,
-                    name.type().object()
-                )
+                output_type = self.module.service_typing. \
+                    resolve_service_output(
+                        tree,
+                        service_name,
+                        action_name,
+                        args,
+                        name.type().object()
+                    )
 
         tree.scope = Scope(parent=scope)
 
