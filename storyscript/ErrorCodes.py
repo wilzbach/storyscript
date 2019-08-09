@@ -251,6 +251,8 @@ class ErrorCodes:
     service_event_not_found = (
         'E0143', 'Event action `{name}` has no event `{event}`.'
     )
+    service_arg_required = (
+        'E0144', '{service} `{action}` requires argument `{arg}`')
 
     @staticmethod
     def is_error(error_name):
