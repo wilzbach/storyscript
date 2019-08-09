@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from storyscript.Hub import story_hub, type_class_mapping
+from storyscript.compiler.semantics.helpers import do_check_type_cast
 
 from .types.Types import AnyType, BooleanType, FloatType, IntType, ListType, \
     MapType, NoneType, ObjectType, StringType
@@ -26,6 +27,21 @@ class ServiceTyping:
         action = service_config.action(action_name)
         return action
 
+    def get_type_instance(self, var, object=None):
+        type_class = type_class_mapping(var.type())
+        output_type = None
+        if type_class == ObjectType:
+            output_type = ObjectType(object=object)
+        elif type_class == ListType:
+            output_type = ListType(AnyType.instance())
+        elif type_class == MapType:
+            output_type = MapType(AnyType.instance(), AnyType.instance())
+        else:
+            assert type_class in (
+                AnyType, BooleanType, FloatType, IntType, StringType)
+            output_type = type_class.instance()
+        return output_type
+
     def check_action_args(self, tree, action, args, service_name, action_name):
         required_args = [arg for arg in action.args() if arg.required()]
         for arg in required_args:
@@ -37,13 +53,11 @@ class ServiceTyping:
             action_arg = action.arg(arg)
             tree.expect(action_arg is not None, 'service_arg_invalid',
                         service=service_name, action=action_name, arg=arg)
-            target_type = action_arg.type()
+            target_type = self.get_type_instance(var=action_arg)
             source_type = sym.type()
-            action_arg_type_class = type_class_mapping(target_type)
-            tree.expect(isinstance(source_type, action_arg_type_class),
-                        'service_arg_type_mismatch', service=service_name,
-                        action=action_name, arg=arg, target=target_type,
-                        source=source_type)
+
+            do_check_type_cast(tree, source_type, target_type,
+                               service_name, action_name, arg, arg_node)
 
     def resolve_service(self, tree,
                         service_name, action_name,
@@ -66,17 +80,7 @@ class ServiceTyping:
         output = action.output()
         output_type = None
         if output is not None:
-            type_class = type_class_mapping(output.type())
-            if type_class == ObjectType:
-                output_type = ObjectType(object=output)
-            elif type_class == ListType:
-                output_type = ListType(AnyType.instance())
-            elif type_class == MapType:
-                output_type = MapType(AnyType.instance(), AnyType.instance())
-            else:
-                assert type_class in (
-                    AnyType, BooleanType, FloatType, IntType, StringType)
-                output_type = type_class.instance()
+            output_type = self.get_type_instance(var=output, object=output)
         else:
             output_type = NoneType.instance()
         return output_type
