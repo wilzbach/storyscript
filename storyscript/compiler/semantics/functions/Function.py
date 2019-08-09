@@ -1,6 +1,5 @@
-from storyscript.compiler.semantics.ExpressionResolver import \
-    SymbolExpressionVisitor
-from storyscript.compiler.semantics.types.Types import AnyType, BaseType
+from storyscript.compiler.semantics.helpers import do_check_type_cast
+from storyscript.compiler.semantics.types.Types import BaseType
 
 
 class BaseFunction:
@@ -50,23 +49,11 @@ class BaseFunction:
         Checks that for each argument its type can be implicitly converted to
         the respective function argument.
         """
-        for k, (sym, argument) in args.items():
+        for k, (sym, arg_node) in args.items():
             target = self._args[k].type()
             t = sym.type()
-            type_cast_result = target.can_be_assigned(t)
-            tree.expect(type_cast_result or t == AnyType.instance(),
-                        'function_arg_type_mismatch',
-                        fn_type=self.fn_type,
-                        name=self._name,
-                        arg_name=k,
-                        target=target,
-                        source=t)
-            if target != AnyType.instance() and type_cast_result != t:
-                # We don't emit a type cast if:
-                # * Target type is AnyType (AnyType can represent anything)
-                # * Target and Source type are the same.
-                argument.children[1] = SymbolExpressionVisitor.\
-                    type_cast_expression(argument.children[1], target)
+            do_check_type_cast(tree, t, target,
+                               self.fn_type, self._name, k, arg_node)
 
     def output(self):
         return self._output
