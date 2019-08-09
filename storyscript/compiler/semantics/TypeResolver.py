@@ -50,7 +50,8 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.path_symbol_resolver = SymbolResolver(
             scope=None, check_variable_existence=False)
         self.path_resolver = PathResolver(self.path_symbol_resolver)
-        self.in_service_block = False
+        # Helpful in linking service output to condensed when block
+        self.service_block_output = None
         self.in_when_block = False
         if self.module.features.globals:
             self.storage_class_scope = StorageClass.write()
@@ -182,6 +183,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         tree.scope.insert(sym)
 
     def when_block(self, tree, scope):
+        tree.expect(not self.in_when_block, 'nested_when_block')
         tree.scope = Scope(parent=scope)
         self.implicit_output(tree)
 
@@ -189,7 +191,11 @@ class TypeResolver(ScopeSelectiveVisitor):
         if self.module.service_typing:
             listener_name = tree.service.path.child(0).value
             event_node = tree.service.service_fragment.command
-            tree.expect(event_node is not None, 'service_without_command')
+            if event_node is None:
+                tree.expect(self.service_block_output is not None,
+                            'when_no_output_parent')
+                event_node = tree.service.path
+                listener_name = self.service_block_output.child(0).value
             event_name = event_node.child(0).value
             listener_sym = scope.resolve(listener_name)
             listener = listener_sym.type().object()
@@ -207,7 +213,6 @@ class TypeResolver(ScopeSelectiveVisitor):
 
         output = tree.service.service_fragment.output
         self.check_output(tree, output, output_type, target='when')
-        tree.expect(not self.in_when_block, 'nested_when_block')
 
         with self.create_scope(tree.scope, storage_class=StorageClass.write()):
             self.in_when_block = True
@@ -264,11 +269,13 @@ class TypeResolver(ScopeSelectiveVisitor):
 
         if tree.nested_block:
             with self.create_scope(tree.scope):
-                tree.expect(not self.in_service_block, 'nested_service_block')
-                self.in_service_block = True
+                tree.expect(self.service_block_output is None,
+                            'nested_service_block')
+                # In case of nested_block, we will always have output
+                self.service_block_output = output
                 for c in tree.nested_block.children:
                     self.visit_children(c, scope=tree.scope)
-                self.in_service_block = False
+                self.service_block_output = None
         else:
             tree.service.service_fragment.expect(output is None,
                                                  'service_no_inline_output')
