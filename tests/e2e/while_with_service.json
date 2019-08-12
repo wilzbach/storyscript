@@ -18,6 +18,14 @@
             "$OBJECT": "int",
             "int": 42
           }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "type",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "int"
+          }
         }
       ],
       "next": "1"
@@ -35,7 +43,7 @@
         }
       ],
       "enter": "2",
-      "src": "while random list length:42",
+      "src": "while random list length:42 type:\"int\"",
       "next": "2"
     },
     "2": {

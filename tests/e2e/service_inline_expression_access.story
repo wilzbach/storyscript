@@ -1,1 +1,1 @@
-x = (random array)[0]
+x = (random list type: "string" length: 10)[0]

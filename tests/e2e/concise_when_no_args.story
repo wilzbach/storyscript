@@ -1,2 +1,2 @@
-when http server listen
+when twitter stream tweet
     x = 0

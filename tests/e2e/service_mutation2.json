@@ -1,15 +1,32 @@
 {
   "tree": {
     "1": {
-      "method": "execute",
+      "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "col_end": "11",
+      "name": [
+        "diff_url"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "foobar"
+        }
+      ],
+      "src": "diff_url = \"foobar\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
       "col_start": "8",
-      "col_end": "16",
+      "col_end": "18",
       "name": [
         "diff"
       ],
       "service": "http",
-      "command": "get",
+      "command": "fetch",
       "args": [
         {
           "$OBJECT": "arg",
@@ -22,16 +39,16 @@
           }
         }
       ],
-      "src": "diff = http get url: diff_url",
-      "next": "2"
+      "src": "diff = http fetch url: diff_url",
+      "next": "3.1"
     },
-    "2": {
+    "3.1": {
       "method": "mutation",
-      "ln": "2",
+      "ln": "3.1",
       "col_start": "9",
-      "col_end": "19",
+      "col_end": "13",
       "name": [
-        "lines"
+        "__p-3.1"
       ],
       "args": [
         {
@@ -55,7 +72,25 @@
           ]
         }
       ],
-      "src": "lines = diff split by: \"\\n\""
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "col_start": "1",
+      "col_end": "8",
+      "name": [
+        "lines"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-3.1"
+          ]
+        }
+      ],
+      "src": "lines = diff.split(by: \"\\n\")"
     }
   },
   "services": [

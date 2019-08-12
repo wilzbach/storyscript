@@ -1,8 +1,8 @@
-function random returns int
-  return 28  # Assume some RNG here
+function random returns string
+  return "abc@xyz.com"  # Assume some RNG here
 
-function my_func k1: int k2: int returns int
-  return 28  # Assume some RNG here
+function my_func k1: int k2: int returns string
+  return k1+k2 as string  # Assume some RNG here
 
 a = random()
-b = my_service command param1: random() param2: my_func(k1: 1 k2:2) param3: random()
+mailgun send to: random() subject: my_func(k1: 1 k2:2) from: random()

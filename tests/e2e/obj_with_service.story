@@ -1,1 +1,1 @@
-a = {"my_key": my_service command p1: 1, "k2": 2}
+a = {"my_key": random integer low:10 high:100, "k2": 2}

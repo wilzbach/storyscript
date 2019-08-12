@@ -1,3 +1,3 @@
-my_service command
-    my_service2 command
+http server
+    http server
         a = 0

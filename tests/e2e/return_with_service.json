@@ -16,12 +16,30 @@
       "method": "execute",
       "ln": "2.1",
       "col_start": "12",
-      "col_end": "41",
+      "col_end": "26",
       "name": [
         "__p-2.1"
       ],
-      "service": "my_random_service",
-      "command": "get_integer",
+      "service": "random",
+      "command": "integer",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "low",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 100
+          }
+        }
+      ],
       "parent": "1",
       "next": "2"
     },
@@ -38,11 +56,11 @@
         }
       ],
       "parent": "1",
-      "src": "    return my_random_service get_integer"
+      "src": "    return random integer low: 10 high: 100"
     }
   },
   "services": [
-    "my_random_service"
+    "random"
   ],
   "entrypoint": "1",
   "functions": {

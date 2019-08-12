@@ -4,9 +4,9 @@
       "method": "execute",
       "ln": "1",
       "col_start": "1",
-      "col_end": "18",
+      "col_end": "17",
       "service": "sendgrid",
-      "command": "send_one",
+      "command": "sendOne",
       "args": [
         {
           "$OBJECT": "arg",
@@ -39,9 +39,17 @@
             "$OBJECT": "string",
             "string": "Hello world"
           }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "content_type",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "string"
+          }
         }
       ],
-      "src": "sendgrid send_one"
+      "src": "sendgrid sendOne"
     }
   },
   "services": [

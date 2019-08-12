@@ -1,3 +1,3 @@
-when other_service command listen
-    http server
+when http server listen path:"/"
+    http server as client
         break

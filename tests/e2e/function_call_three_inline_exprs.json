@@ -1,91 +1,191 @@
 {
   "tree": {
-    "1.1": {
-      "method": "execute",
-      "ln": "1.1",
-      "col_start": "29",
-      "col_end": "37",
-      "name": [
-        "__p-1.1"
-      ],
-      "service": "serv1",
-      "command": "f1",
-      "next": "1.2"
-    },
-    "1.2": {
-      "method": "execute",
-      "ln": "1.2",
-      "col_start": "44",
-      "col_end": "52",
-      "name": [
-        "__p-1.2"
-      ],
-      "service": "serv2",
-      "command": "f2",
-      "next": "1.3"
-    },
-    "1.3": {
-      "method": "execute",
-      "ln": "1.3",
-      "col_start": "59",
-      "col_end": "67",
-      "name": [
-        "__p-1.3"
-      ],
-      "service": "serv3",
-      "command": "f3",
-      "next": "1"
-    },
     "1": {
       "method": "execute",
       "ln": "1",
-      "col_start": "5",
-      "col_end": "23",
+      "col_start": "6",
+      "col_end": "16",
       "name": [
-        "b"
+        "p1"
       ],
-      "service": "my_service",
-      "command": "command",
+      "service": "yaml",
+      "command": "parse",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "p1",
+          "name": "data",
           "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.1"
-            ]
+            "$OBJECT": "string",
+            "string": "abc@xyz.com"
           }
-        },
+        }
+      ],
+      "src": "p1 = yaml parse data: \"abc@xyz.com\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "col_start": "6",
+      "col_end": "16",
+      "name": [
+        "p2"
+      ],
+      "service": "yaml",
+      "command": "parse",
+      "args": [
         {
           "$OBJECT": "arg",
-          "name": "p2",
+          "name": "data",
           "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.2"
-            ]
+            "$OBJECT": "string",
+            "string": "ss@storyscript.com"
           }
-        },
+        }
+      ],
+      "src": "p2 = yaml parse data: \"ss@storyscript.com\"",
+      "next": "3"
+    },
+    "3": {
+      "method": "execute",
+      "ln": "3",
+      "col_start": "6",
+      "col_end": "16",
+      "name": [
+        "p3"
+      ],
+      "service": "yaml",
+      "command": "parse",
+      "args": [
         {
           "$OBJECT": "arg",
-          "name": "p3",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "Testing"
+          }
+        }
+      ],
+      "src": "p3 = yaml parse data: \"Testing\"",
+      "next": "4.1"
+    },
+    "4.1": {
+      "method": "execute",
+      "ln": "4.1",
+      "col_start": "19",
+      "col_end": "30",
+      "name": [
+        "__p-4.1"
+      ],
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
           "arg": {
             "$OBJECT": "path",
             "paths": [
-              "__p-1.3"
+              "p1"
             ]
           }
         }
       ],
-      "src": "b = my_service command p1: (serv1 f1) p2: (serv2 f2) p3: (serv3 f3)"
+      "next": "4.2"
+    },
+    "4.2": {
+      "method": "execute",
+      "ln": "4.2",
+      "col_start": "48",
+      "col_end": "59",
+      "name": [
+        "__p-4.2"
+      ],
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "p2"
+            ]
+          }
+        }
+      ],
+      "next": "4.3"
+    },
+    "4.3": {
+      "method": "execute",
+      "ln": "4.3",
+      "col_start": "80",
+      "col_end": "91",
+      "name": [
+        "__p-4.3"
+      ],
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "p3"
+            ]
+          }
+        }
+      ],
+      "next": "4"
+    },
+    "4": {
+      "method": "execute",
+      "ln": "4",
+      "col_start": "1",
+      "col_end": "13",
+      "service": "mailgun",
+      "command": "send",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "to",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-4.1"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "from",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-4.2"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "subject",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-4.3"
+            ]
+          }
+        }
+      ],
+      "src": "mailgun send to: (yaml format data: p1) from: (yaml format data: p2) subject: (yaml format data: p3)"
     }
   },
   "services": [
-    "my_service",
-    "serv1",
-    "serv2",
-    "serv3"
+    "mailgun",
+    "yaml"
   ],
-  "entrypoint": "1.1"
+  "entrypoint": "1"
 }

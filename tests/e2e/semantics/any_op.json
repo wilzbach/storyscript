@@ -4,13 +4,23 @@
       "method": "execute",
       "ln": "1",
       "col_start": "5",
-      "col_end": "21",
+      "col_end": "18",
       "name": [
         "a"
       ],
-      "service": "any_service",
-      "command": "call",
-      "src": "a = any_service call",
+      "service": "random",
+      "command": "string",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "length",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
+          }
+        }
+      ],
+      "src": "a = random string length: 10",
       "next": "2"
     },
     "2": {
@@ -31,17 +41,10 @@
               "string": "."
             },
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "a"
-                ]
-              }
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
             }
           ]
         }
@@ -53,13 +56,23 @@
       "method": "execute",
       "ln": "3",
       "col_start": "5",
-      "col_end": "21",
+      "col_end": "18",
       "name": [
         "b"
       ],
-      "service": "any_service",
-      "command": "call",
-      "src": "b = any_service call",
+      "service": "random",
+      "command": "string",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "length",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
+          }
+        }
+      ],
+      "src": "b = random string length: 10",
       "next": "4"
     },
     "4": {
@@ -76,17 +89,10 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
             },
             {
               "$OBJECT": "string",
@@ -99,7 +105,7 @@
     }
   },
   "services": [
-    "any_service"
+    "random"
   ],
   "entrypoint": "1"
 }

@@ -4,19 +4,19 @@
       "method": "execute",
       "ln": "1.1",
       "col_start": "15",
-      "col_end": "29",
+      "col_end": "28",
       "name": [
         "__p-1.1"
       ],
-      "service": "my_service",
-      "command": "ask",
+      "service": "random",
+      "command": "string",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "q",
+          "name": "length",
           "arg": {
-            "$OBJECT": "string",
-            "string": "question"
+            "$OBJECT": "int",
+            "int": 10
           }
         }
       ],
@@ -55,11 +55,11 @@
           ]
         }
       ],
-      "src": "my_string = \"Answer: {my_service ask q:\\\"question\\\"}\""
+      "src": "my_string = \"Answer: {random string length:10}\""
     }
   },
   "services": [
-    "my_service"
+    "random"
   ],
   "entrypoint": "1.1"
 }

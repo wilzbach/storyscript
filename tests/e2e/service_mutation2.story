@@ -1,2 +1,3 @@
-diff = http get url: diff_url
-lines = diff split by: "\n"
+diff_url = "foobar"
+diff = http fetch url: diff_url
+lines = diff.split(by: "\n")

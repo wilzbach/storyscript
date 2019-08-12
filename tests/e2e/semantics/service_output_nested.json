@@ -4,29 +4,39 @@
       "method": "execute",
       "ln": "1",
       "col_start": "1",
-      "col_end": "19",
+      "col_end": "12",
       "output": [
         "a"
       ],
-      "service": "my_service",
-      "command": "command",
+      "service": "http",
+      "command": "server",
       "enter": "2",
-      "src": "my_service command as a",
+      "src": "http server as a",
       "next": "2"
     },
     "2": {
       "method": "when",
       "ln": "2",
       "col_start": "10",
-      "col_end": "19",
+      "col_end": "18",
       "output": [
         "b"
       ],
       "service": "a",
-      "command": "command",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "path",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "/"
+          }
+        }
+      ],
       "enter": "3",
       "parent": "1",
-      "src": "    when a command as b",
+      "src": "    when a listen path:\"/\" as b",
       "next": "3"
     },
     "3": {
@@ -39,7 +49,7 @@
     }
   },
   "services": [
-    "my_service"
+    "http"
   ],
   "entrypoint": "1"
 }

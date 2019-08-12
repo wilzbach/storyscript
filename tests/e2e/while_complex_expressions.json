@@ -43,7 +43,7 @@
       "method": "mutation",
       "ln": "3.1",
       "col_start": "7",
-      "col_end": "17",
+      "col_end": "8",
       "name": [
         "__p-3.1"
       ],
@@ -74,7 +74,7 @@
     "3": {
       "method": "while",
       "ln": "3",
-      "col_end": "11",
+      "col_end": "8",
       "args": [
         {
           "$OBJECT": "path",
@@ -84,34 +84,41 @@
         }
       ],
       "enter": "4",
-      "src": "while l contains item:0",
+      "src": "while l.contains(item:0)",
       "next": "4"
     },
     "4": {
       "method": "execute",
       "ln": "4",
       "col_start": "5",
-      "col_end": "16",
-      "service": "alpine",
-      "command": "echo",
+      "col_end": "13",
+      "service": "log",
+      "command": "info",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "message",
+          "name": "msg",
           "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "i"
-            ]
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "string"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "i"
+              ]
+            }
           }
         }
       ],
       "parent": "3",
-      "src": "    alpine echo message:i"
+      "src": "    log info msg:i as string"
     }
   },
   "services": [
-    "alpine"
+    "log"
   ],
   "entrypoint": "1"
 }

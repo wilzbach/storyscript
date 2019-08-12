@@ -1,32 +1,77 @@
 {
   "tree": {
-    "1.1": {
-      "method": "execute",
-      "ln": "1.1",
-      "col_start": "7",
-      "col_end": "15",
-      "name": [
-        "__p-1.1"
-      ],
-      "service": "serv1",
-      "command": "c1",
-      "next": "1.2"
-    },
-    "1.2": {
-      "method": "execute",
-      "ln": "1.2",
-      "col_start": "7",
-      "col_end": "15",
-      "name": [
-        "__p-1.2"
-      ],
-      "service": "serv2",
-      "command": "c2",
-      "next": "1"
-    },
     "1": {
-      "method": "expression",
+      "method": "execute",
       "ln": "1",
+      "col_start": "6",
+      "col_end": "16",
+      "name": [
+        "c2"
+      ],
+      "service": "yaml",
+      "command": "parse",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "c"
+          }
+        }
+      ],
+      "src": "c2 = yaml parse data:\"c\"",
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "execute",
+      "ln": "2.1",
+      "col_start": "7",
+      "col_end": "20",
+      "name": [
+        "__p-2.1"
+      ],
+      "service": "random",
+      "command": "string",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "length",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
+          }
+        }
+      ],
+      "next": "2.2"
+    },
+    "2.2": {
+      "method": "execute",
+      "ln": "2.2",
+      "col_start": "7",
+      "col_end": "18",
+      "name": [
+        "__p-2.2"
+      ],
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "c2"
+            ]
+          }
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
       "col_start": "1",
       "col_end": "4",
       "name": [
@@ -50,7 +95,7 @@
               "value": {
                 "$OBJECT": "path",
                 "paths": [
-                  "__p-1.1"
+                  "__p-2.1"
                 ]
               }
             },
@@ -67,19 +112,19 @@
               "value": {
                 "$OBJECT": "path",
                 "paths": [
-                  "__p-1.2"
+                  "__p-2.2"
                 ]
               }
             }
           ]
         }
       ],
-      "src": "a = \"foo {serv1 c1} {serv2 c2}\""
+      "src": "a = \"foo {random string length: 10} {yaml format data:c2}\""
     }
   },
   "services": [
-    "serv1",
-    "serv2"
+    "random",
+    "yaml"
   ],
-  "entrypoint": "1.1"
+  "entrypoint": "1"
 }

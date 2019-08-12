@@ -79,8 +79,8 @@
     "7.1": {
       "method": "call",
       "ln": "7.1",
-      "col_start": "69",
-      "col_end": "75",
+      "col_start": "58",
+      "col_end": "64",
       "name": [
         "__p-7.1"
       ],
@@ -88,36 +88,57 @@
       "next": "7.2"
     },
     "7.2": {
-      "method": "execute",
+      "method": "call",
       "ln": "7.2",
-      "col_start": "41",
-      "col_end": "64",
+      "col_start": "73",
+      "col_end": "79",
       "name": [
         "__p-7.2"
       ],
-      "service": "another_service",
-      "command": "command",
+      "function": "random",
+      "next": "7.3"
+    },
+    "7.3": {
+      "method": "execute",
+      "ln": "7.3",
+      "col_start": "38",
+      "col_end": "52",
+      "name": [
+        "__p-7.3"
+      ],
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "p1",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
               "__p-7.1"
             ]
           }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "__p-7.2"
+            ]
+          }
         }
       ],
-      "next": "7.3"
+      "next": "7.4"
     },
-    "7.3": {
+    "7.4": {
       "method": "call",
-      "ln": "7.3",
-      "col_start": "28",
-      "col_end": "81",
+      "ln": "7.4",
+      "col_start": "25",
+      "col_end": "85",
       "name": [
-        "__p-7.3"
+        "__p-7.4"
       ],
       "function": "my_func",
       "args": [
@@ -125,17 +146,10 @@
           "$OBJECT": "arg",
           "name": "k1",
           "arg": {
-            "$OBJECT": "type_cast",
-            "type": {
-              "$OBJECT": "type",
-              "type": "int"
-            },
-            "value": {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-7.2"
-              ]
-            }
+            "$OBJECT": "path",
+            "paths": [
+              "__p-7.3"
+            ]
           }
         },
         {
@@ -153,38 +167,37 @@
       "method": "execute",
       "ln": "7",
       "col_start": "5",
-      "col_end": "23",
+      "col_end": "19",
       "name": [
         "b"
       ],
-      "service": "my_service",
-      "command": "command",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "p0",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
-              "__p-7.3"
+              "__p-7.4"
             ]
           }
         },
         {
           "$OBJECT": "arg",
-          "name": "p2",
+          "name": "high",
           "arg": {
             "$OBJECT": "int",
             "int": 2
           }
         }
       ],
-      "src": "b = my_service command p0: my_func(k1: (another_service command p1: random()) k2: 2) p2: 2"
+      "src": "b = random integer low: my_func(k1: (random integer low: random() high: random()) k2: 2) high: 2"
     }
   },
   "services": [
-    "another_service",
-    "my_service"
+    "random"
   ],
   "entrypoint": "1",
   "functions": {

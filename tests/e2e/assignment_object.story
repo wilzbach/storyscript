@@ -1,2 +1,2 @@
-a = my_service call
+a = gmaps geocode address:"Venice"
 a.b = "bar"

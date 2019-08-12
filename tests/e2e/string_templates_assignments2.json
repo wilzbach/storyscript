@@ -1,32 +1,102 @@
 {
   "tree": {
-    "1.1": {
-      "method": "execute",
-      "ln": "1.1",
-      "col_start": "13",
-      "col_end": "23",
-      "name": [
-        "__p-1.1"
-      ],
-      "service": "servb",
-      "command": "call",
-      "next": "1.2"
-    },
-    "1.2": {
-      "method": "execute",
-      "ln": "1.2",
-      "col_start": "13",
-      "col_end": "23",
-      "name": [
-        "__p-1.2"
-      ],
-      "service": "servd",
-      "command": "call",
-      "next": "1"
-    },
     "1": {
-      "method": "expression",
+      "method": "execute",
       "ln": "1",
+      "col_start": "5",
+      "col_end": "15",
+      "name": [
+        "b"
+      ],
+      "service": "yaml",
+      "command": "parse",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "b"
+          }
+        }
+      ],
+      "src": "b = yaml parse data:\"b\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "col_start": "5",
+      "col_end": "15",
+      "name": [
+        "d"
+      ],
+      "service": "yaml",
+      "command": "parse",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "d"
+          }
+        }
+      ],
+      "src": "d = yaml parse data:\"d\"",
+      "next": "3.1"
+    },
+    "3.1": {
+      "method": "execute",
+      "ln": "3.1",
+      "col_start": "13",
+      "col_end": "24",
+      "name": [
+        "__p-3.1"
+      ],
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "3.2"
+    },
+    "3.2": {
+      "method": "execute",
+      "ln": "3.2",
+      "col_start": "13",
+      "col_end": "24",
+      "name": [
+        "__p-3.2"
+      ],
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "d"
+            ]
+          }
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -65,7 +135,7 @@
                   "value": {
                     "$OBJECT": "path",
                     "paths": [
-                      "__p-1.1"
+                      "__p-3.1"
                     ]
                   }
                 },
@@ -82,7 +152,7 @@
                   "value": {
                     "$OBJECT": "path",
                     "paths": [
-                      "__p-1.2"
+                      "__p-3.2"
                     ]
                   }
                 }
@@ -91,36 +161,60 @@
           ]
         }
       ],
-      "src": "a1  = 0 + \"a{servb call}c{servd call}\"",
-      "next": "2.1"
+      "src": "a1  = 0 + \"a{yaml format data:b}c{yaml format data: d}\"",
+      "next": "4.1"
     },
-    "2.1": {
+    "4.1": {
       "method": "execute",
-      "ln": "2.1",
+      "ln": "4.1",
       "col_start": "9",
-      "col_end": "19",
+      "col_end": "20",
       "name": [
-        "__p-2.1"
+        "__p-4.1"
       ],
-      "service": "servb",
-      "command": "call",
-      "next": "2.2"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "4.2"
     },
-    "2.2": {
+    "4.2": {
       "method": "execute",
-      "ln": "2.2",
+      "ln": "4.2",
       "col_start": "9",
-      "col_end": "19",
+      "col_end": "20",
       "name": [
-        "__p-2.2"
+        "__p-4.2"
       ],
-      "service": "servd",
-      "command": "call",
-      "next": "2"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "4"
     },
-    "2": {
+    "4": {
       "method": "expression",
-      "ln": "2",
+      "ln": "4",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -148,7 +242,7 @@
                   "value": {
                     "$OBJECT": "path",
                     "paths": [
-                      "__p-2.1"
+                      "__p-4.1"
                     ]
                   }
                 },
@@ -165,7 +259,7 @@
                   "value": {
                     "$OBJECT": "path",
                     "paths": [
-                      "__p-2.2"
+                      "__p-4.2"
                     ]
                   }
                 }
@@ -185,36 +279,60 @@
           ]
         }
       ],
-      "src": "a2  = \"a{servb call}c{servd call}\" + 0",
-      "next": "3.1"
+      "src": "a2  = \"a{yaml format data:b}c{yaml format data:b}\" + 0",
+      "next": "5.1"
     },
-    "3.1": {
+    "5.1": {
       "method": "execute",
-      "ln": "3.1",
+      "ln": "5.1",
       "col_start": "13",
-      "col_end": "23",
+      "col_end": "24",
       "name": [
-        "__p-3.1"
+        "__p-5.1"
       ],
-      "service": "servb",
-      "command": "call",
-      "next": "3.2"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "5.2"
     },
-    "3.2": {
+    "5.2": {
       "method": "execute",
-      "ln": "3.2",
+      "ln": "5.2",
       "col_start": "13",
-      "col_end": "23",
+      "col_end": "24",
       "name": [
-        "__p-3.2"
+        "__p-5.2"
       ],
-      "service": "servd",
-      "command": "call",
-      "next": "3"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "5"
     },
-    "3": {
+    "5": {
       "method": "expression",
-      "ln": "3",
+      "ln": "5",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -257,7 +375,7 @@
                       "value": {
                         "$OBJECT": "path",
                         "paths": [
-                          "__p-3.1"
+                          "__p-5.1"
                         ]
                       }
                     },
@@ -274,7 +392,7 @@
                       "value": {
                         "$OBJECT": "path",
                         "paths": [
-                          "__p-3.2"
+                          "__p-5.2"
                         ]
                       }
                     }
@@ -296,24 +414,36 @@
           ]
         }
       ],
-      "src": "a3  = 0 + \"a{servb call}c{servd call}\" + 0",
-      "next": "4.1"
+      "src": "a3  = 0 + \"a{yaml format data:b}c{yaml format data:b}\" + 0",
+      "next": "6.1"
     },
-    "4.1": {
+    "6.1": {
       "method": "execute",
-      "ln": "4.1",
+      "ln": "6.1",
       "col_start": "13",
-      "col_end": "23",
+      "col_end": "24",
       "name": [
-        "__p-4.1"
+        "__p-6.1"
       ],
-      "service": "servb",
-      "command": "call",
-      "next": "4"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "6"
     },
-    "4": {
+    "6": {
       "method": "expression",
-      "ln": "4",
+      "ln": "6",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -348,7 +478,7 @@
                   "value": {
                     "$OBJECT": "path",
                     "paths": [
-                      "__p-4.1"
+                      "__p-6.1"
                     ]
                   }
                 }
@@ -368,24 +498,36 @@
           ]
         }
       ],
-      "src": "a4  = 0 + \"{servb call}\" + 0",
-      "next": "5.1"
+      "src": "a4  = 0 + \"{yaml format data:b}\" + 0",
+      "next": "7.1"
     },
-    "5.1": {
+    "7.1": {
       "method": "execute",
-      "ln": "5.1",
+      "ln": "7.1",
       "col_start": "13",
-      "col_end": "23",
+      "col_end": "24",
       "name": [
-        "__p-5.1"
+        "__p-7.1"
       ],
-      "service": "servb",
-      "command": "call",
-      "next": "5"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "7"
     },
-    "5": {
+    "7": {
       "method": "expression",
-      "ln": "5",
+      "ln": "7",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -416,31 +558,43 @@
               "value": {
                 "$OBJECT": "path",
                 "paths": [
-                  "__p-5.1"
+                  "__p-7.1"
                 ]
               }
             }
           ]
         }
       ],
-      "src": "a5  = 0 + \"{servb call}\"",
-      "next": "6.1"
+      "src": "a5  = 0 + \"{yaml format data:b}\"",
+      "next": "8.1"
     },
-    "6.1": {
+    "8.1": {
       "method": "execute",
-      "ln": "6.1",
+      "ln": "8.1",
       "col_start": "9",
-      "col_end": "19",
+      "col_end": "20",
       "name": [
-        "__p-6.1"
+        "__p-8.1"
       ],
-      "service": "servb",
-      "command": "call",
-      "next": "6"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "8"
     },
-    "6": {
+    "8": {
       "method": "expression",
-      "ln": "6",
+      "ln": "8",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -460,7 +614,7 @@
               "value": {
                 "$OBJECT": "path",
                 "paths": [
-                  "__p-6.1"
+                  "__p-8.1"
                 ]
               }
             },
@@ -478,154 +632,190 @@
           ]
         }
       ],
-      "src": "a6  = \"{servb call}\" + 0",
-      "next": "7.1"
-    },
-    "7.1": {
-      "method": "execute",
-      "ln": "7.1",
-      "col_start": "13",
-      "col_end": "23",
-      "name": [
-        "__p-7.1"
-      ],
-      "service": "servb",
-      "command": "call",
-      "next": "7"
-    },
-    "7": {
-      "method": "expression",
-      "ln": "7",
-      "col_start": "1",
-      "col_end": "6",
-      "name": [
-        "a7"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
-            },
-            {
-              "$OBJECT": "expression",
-              "expression": "sum",
-              "values": [
-                {
-                  "$OBJECT": "string",
-                  "string": "a"
-                },
-                {
-                  "$OBJECT": "type_cast",
-                  "type": {
-                    "$OBJECT": "type",
-                    "type": "string"
-                  },
-                  "value": {
-                    "$OBJECT": "path",
-                    "paths": [
-                      "__p-7.1"
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "src": "a7  = 0 + \"a{servb call}\"",
-      "next": "8.1"
-    },
-    "8.1": {
-      "method": "execute",
-      "ln": "8.1",
-      "col_start": "9",
-      "col_end": "19",
-      "name": [
-        "__p-8.1"
-      ],
-      "service": "servb",
-      "command": "call",
-      "next": "8"
-    },
-    "8": {
-      "method": "expression",
-      "ln": "8",
-      "col_start": "1",
-      "col_end": "6",
-      "name": [
-        "a7"
-      ],
-      "args": [
-        {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "expression",
-              "expression": "sum",
-              "values": [
-                {
-                  "$OBJECT": "string",
-                  "string": "a"
-                },
-                {
-                  "$OBJECT": "type_cast",
-                  "type": {
-                    "$OBJECT": "type",
-                    "type": "string"
-                  },
-                  "value": {
-                    "$OBJECT": "path",
-                    "paths": [
-                      "__p-8.1"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
-            }
-          ]
-        }
-      ],
-      "src": "a7  = \"a{servb call}\" + 0",
+      "src": "a6  = \"{yaml format data:b}\" + 0",
       "next": "9.1"
     },
     "9.1": {
       "method": "execute",
       "ln": "9.1",
       "col_start": "13",
-      "col_end": "23",
+      "col_end": "24",
       "name": [
         "__p-9.1"
       ],
-      "service": "servb",
-      "command": "call",
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
       "next": "9"
     },
     "9": {
       "method": "expression",
       "ln": "9",
+      "col_start": "1",
+      "col_end": "6",
+      "name": [
+        "a7"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
+            },
+            {
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "__p-9.1"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "a7  = 0 + \"a{yaml format data:b}\"",
+      "next": "10.1"
+    },
+    "10.1": {
+      "method": "execute",
+      "ln": "10.1",
+      "col_start": "9",
+      "col_end": "20",
+      "name": [
+        "__p-10.1"
+      ],
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "10"
+    },
+    "10": {
+      "method": "expression",
+      "ln": "10",
+      "col_start": "1",
+      "col_end": "6",
+      "name": [
+        "a7"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "string",
+                  "string": "a"
+                },
+                {
+                  "$OBJECT": "type_cast",
+                  "type": {
+                    "$OBJECT": "type",
+                    "type": "string"
+                  },
+                  "value": {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "__p-10.1"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "int",
+                "int": 0
+              }
+            }
+          ]
+        }
+      ],
+      "src": "a7  = \"a{yaml format data:b}\" + 0",
+      "next": "11.1"
+    },
+    "11.1": {
+      "method": "execute",
+      "ln": "11.1",
+      "col_start": "13",
+      "col_end": "24",
+      "name": [
+        "__p-11.1"
+      ],
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "11"
+    },
+    "11": {
+      "method": "expression",
+      "ln": "11",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -668,7 +858,7 @@
                       "value": {
                         "$OBJECT": "path",
                         "paths": [
-                          "__p-9.1"
+                          "__p-11.1"
                         ]
                       }
                     }
@@ -690,24 +880,36 @@
           ]
         }
       ],
-      "src": "a8  = 0 + \"a{servb call}\" + 0",
-      "next": "10.1"
+      "src": "a8  = 0 + \"a{yaml format data:b}\" + 0",
+      "next": "12.1"
     },
-    "10.1": {
+    "12.1": {
       "method": "execute",
-      "ln": "10.1",
+      "ln": "12.1",
       "col_start": "9",
-      "col_end": "19",
+      "col_end": "20",
       "name": [
-        "__p-10.1"
+        "__p-12.1"
       ],
-      "service": "servb",
-      "command": "call",
-      "next": "10"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "12"
     },
-    "10": {
+    "12": {
       "method": "expression",
-      "ln": "10",
+      "ln": "12",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -735,7 +937,7 @@
                   "value": {
                     "$OBJECT": "path",
                     "paths": [
-                      "__p-10.1"
+                      "__p-12.1"
                     ]
                   }
                 },
@@ -759,24 +961,36 @@
           ]
         }
       ],
-      "src": "a9  = \"a{servb call}c\" + 0",
-      "next": "11.1"
+      "src": "a9  = \"a{yaml format data:b}c\" + 0",
+      "next": "13.1"
     },
-    "11.1": {
+    "13.1": {
       "method": "execute",
-      "ln": "11.1",
+      "ln": "13.1",
       "col_start": "13",
-      "col_end": "23",
+      "col_end": "24",
       "name": [
-        "__p-11.1"
+        "__p-13.1"
       ],
-      "service": "servb",
-      "command": "call",
-      "next": "11"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "13"
     },
-    "11": {
+    "13": {
       "method": "expression",
-      "ln": "11",
+      "ln": "13",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -815,7 +1029,7 @@
                   "value": {
                     "$OBJECT": "path",
                     "paths": [
-                      "__p-11.1"
+                      "__p-13.1"
                     ]
                   }
                 },
@@ -828,24 +1042,36 @@
           ]
         }
       ],
-      "src": "a10 = 0 + \"a{servb call}c\"",
-      "next": "12.1"
+      "src": "a10 = 0 + \"a{yaml format data:b}c\"",
+      "next": "14.1"
     },
-    "12.1": {
+    "14.1": {
       "method": "execute",
-      "ln": "12.1",
+      "ln": "14.1",
       "col_start": "13",
-      "col_end": "23",
+      "col_end": "24",
       "name": [
-        "__p-12.1"
+        "__p-14.1"
       ],
-      "service": "servb",
-      "command": "call",
-      "next": "12"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "14"
     },
-    "12": {
+    "14": {
       "method": "expression",
-      "ln": "12",
+      "ln": "14",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -888,7 +1114,7 @@
                       "value": {
                         "$OBJECT": "path",
                         "paths": [
-                          "__p-12.1"
+                          "__p-14.1"
                         ]
                       }
                     },
@@ -914,36 +1140,60 @@
           ]
         }
       ],
-      "src": "a11 = 0 + \"a{servb call}c\" + 0",
-      "next": "13.1"
+      "src": "a11 = 0 + \"a{yaml format data:b}c\" + 0",
+      "next": "15.1"
     },
-    "13.1": {
+    "15.1": {
       "method": "execute",
-      "ln": "13.1",
+      "ln": "15.1",
       "col_start": "9",
-      "col_end": "19",
+      "col_end": "20",
       "name": [
-        "__p-13.1"
+        "__p-15.1"
       ],
-      "service": "servb",
-      "command": "call",
-      "next": "13.2"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "15.2"
     },
-    "13.2": {
+    "15.2": {
       "method": "execute",
-      "ln": "13.2",
+      "ln": "15.2",
       "col_start": "9",
-      "col_end": "19",
+      "col_end": "20",
       "name": [
-        "__p-13.2"
+        "__p-15.2"
       ],
-      "service": "servd",
-      "command": "call",
-      "next": "13"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "15"
     },
-    "13": {
+    "15": {
       "method": "expression",
-      "ln": "13",
+      "ln": "15",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -971,7 +1221,7 @@
                   "value": {
                     "$OBJECT": "path",
                     "paths": [
-                      "__p-13.1"
+                      "__p-15.1"
                     ]
                   }
                 },
@@ -988,7 +1238,7 @@
                   "value": {
                     "$OBJECT": "path",
                     "paths": [
-                      "__p-13.2"
+                      "__p-15.2"
                     ]
                   }
                 }
@@ -1008,36 +1258,60 @@
           ]
         }
       ],
-      "src": "a12 = \"a{servb call}c{servd call}\" + 0",
-      "next": "14.1"
+      "src": "a12 = \"a{yaml format data:b}c{yaml format data:b}\" + 0",
+      "next": "16.1"
     },
-    "14.1": {
+    "16.1": {
       "method": "execute",
-      "ln": "14.1",
+      "ln": "16.1",
       "col_start": "13",
-      "col_end": "23",
+      "col_end": "24",
       "name": [
-        "__p-14.1"
+        "__p-16.1"
       ],
-      "service": "servb",
-      "command": "call",
-      "next": "14.2"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "16.2"
     },
-    "14.2": {
+    "16.2": {
       "method": "execute",
-      "ln": "14.2",
+      "ln": "16.2",
       "col_start": "13",
-      "col_end": "23",
+      "col_end": "24",
       "name": [
-        "__p-14.2"
+        "__p-16.2"
       ],
-      "service": "servd",
-      "command": "call",
-      "next": "14"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "16"
     },
-    "14": {
+    "16": {
       "method": "expression",
-      "ln": "14",
+      "ln": "16",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -1076,7 +1350,7 @@
                   "value": {
                     "$OBJECT": "path",
                     "paths": [
-                      "__p-14.1"
+                      "__p-16.1"
                     ]
                   }
                 },
@@ -1093,7 +1367,7 @@
                   "value": {
                     "$OBJECT": "path",
                     "paths": [
-                      "__p-14.2"
+                      "__p-16.2"
                     ]
                   }
                 }
@@ -1102,36 +1376,60 @@
           ]
         }
       ],
-      "src": "a13 = 0 + \"a{servb call}c{servd call}\"",
-      "next": "15.1"
+      "src": "a13 = 0 + \"a{yaml format data:b}c{yaml format data:b}\"",
+      "next": "17.1"
     },
-    "15.1": {
+    "17.1": {
       "method": "execute",
-      "ln": "15.1",
+      "ln": "17.1",
       "col_start": "13",
-      "col_end": "23",
+      "col_end": "24",
       "name": [
-        "__p-15.1"
+        "__p-17.1"
       ],
-      "service": "servb",
-      "command": "call",
-      "next": "15.2"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "17.2"
     },
-    "15.2": {
+    "17.2": {
       "method": "execute",
-      "ln": "15.2",
+      "ln": "17.2",
       "col_start": "13",
-      "col_end": "23",
+      "col_end": "24",
       "name": [
-        "__p-15.2"
+        "__p-17.2"
       ],
-      "service": "servd",
-      "command": "call",
-      "next": "15"
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "b"
+            ]
+          }
+        }
+      ],
+      "next": "17"
     },
-    "15": {
+    "17": {
       "method": "expression",
-      "ln": "15",
+      "ln": "17",
       "col_start": "1",
       "col_end": "6",
       "name": [
@@ -1174,7 +1472,7 @@
                       "value": {
                         "$OBJECT": "path",
                         "paths": [
-                          "__p-15.1"
+                          "__p-17.1"
                         ]
                       }
                     },
@@ -1191,7 +1489,7 @@
                       "value": {
                         "$OBJECT": "path",
                         "paths": [
-                          "__p-15.2"
+                          "__p-17.2"
                         ]
                       }
                     }
@@ -1213,12 +1511,11 @@
           ]
         }
       ],
-      "src": "a14 = 0 + \"a{servb call}c{servd call}\" + 0"
+      "src": "a14 = 0 + \"a{yaml format data:b}c{yaml format data:b}\" + 0"
     }
   },
   "services": [
-    "servb",
-    "servd"
+    "yaml"
   ],
-  "entrypoint": "1.1"
+  "entrypoint": "1"
 }

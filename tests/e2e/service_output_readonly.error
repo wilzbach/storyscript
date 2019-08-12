@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 5
+Error: syntax error in story at line 1, column 11
 
-2|        event = 2
-          ^^^^^^^
+1|    when http server listen as client
+                
 
-E0100: Can't assign `int` to `Object`
+E0143: server `listen` requires argument `path`.

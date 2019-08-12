@@ -1,3 +1,3 @@
 http server
-    when server listen as req
+    when server listen path: "/" as req
         req = 2

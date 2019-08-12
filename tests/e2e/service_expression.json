@@ -38,13 +38,13 @@
       "method": "execute",
       "ln": "3",
       "col_start": "1",
-      "col_end": "22",
-      "service": "my_service",
-      "command": "my_command",
+      "col_end": "15",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "k1",
+          "name": "low",
           "arg": {
             "$OBJECT": "expression",
             "expression": "sum",
@@ -62,32 +62,39 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "k2",
+          "name": "high",
           "arg": {
-            "$OBJECT": "expression",
-            "expression": "equal",
-            "values": [
-              {
-                "$OBJECT": "path",
-                "paths": [
-                  "a"
-                ]
-              },
-              {
-                "$OBJECT": "path",
-                "paths": [
-                  "b"
-                ]
-              }
-            ]
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "int"
+            },
+            "value": {
+              "$OBJECT": "expression",
+              "expression": "equal",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "a"
+                  ]
+                },
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "b"
+                  ]
+                }
+              ]
+            }
           }
         }
       ],
-      "src": "my_service my_command k1: 2 + 2 k2: a == b"
+      "src": "random integer low: 2 + 2 high: (a == b) as int"
     }
   },
   "services": [
-    "my_service"
+    "random"
   ],
   "entrypoint": "1"
 }

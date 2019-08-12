@@ -4,26 +4,26 @@
       "method": "execute",
       "ln": "1.1",
       "output": [
-        "command"
+        "stream"
       ],
-      "service": "other_service",
-      "command": "command",
+      "service": "twitter",
+      "command": "stream",
       "enter": "1",
       "next": "1"
     },
     "1": {
       "method": "when",
       "ln": "1",
-      "col_start": "20",
-      "col_end": "34",
+      "col_start": "14",
+      "col_end": "26",
       "output": [
-        "listen"
+        "tweet"
       ],
-      "service": "command",
-      "command": "listen",
+      "service": "stream",
+      "command": "tweet",
       "enter": "2",
       "parent": "1.1",
-      "src": "when other_service command listen",
+      "src": "when twitter stream tweet",
       "next": "2"
     },
     "2": {
@@ -39,26 +39,26 @@
       "method": "execute",
       "ln": "3.1",
       "output": [
-        "command"
+        "stream"
       ],
-      "service": "other_service",
-      "command": "command",
+      "service": "twitter",
+      "command": "stream",
       "enter": "3",
       "next": "3"
     },
     "3": {
       "method": "when",
       "ln": "3",
-      "col_start": "20",
-      "col_end": "34",
+      "col_start": "14",
+      "col_end": "26",
       "output": [
         "os"
       ],
-      "service": "command",
-      "command": "listen",
+      "service": "stream",
+      "command": "tweet",
       "enter": "4",
       "parent": "3.1",
-      "src": "when other_service command listen as os",
+      "src": "when twitter stream tweet as os",
       "next": "4"
     },
     "4": {
@@ -74,36 +74,36 @@
       "method": "execute",
       "ln": "5.1",
       "output": [
-        "command"
+        "stream"
       ],
-      "service": "other_service",
-      "command": "command",
+      "service": "twitter",
+      "command": "stream",
       "enter": "5",
       "next": "5"
     },
     "5": {
       "method": "when",
       "ln": "5",
-      "col_start": "20",
-      "col_end": "34",
+      "col_start": "14",
+      "col_end": "26",
       "output": [
-        "listen"
+        "tweet"
       ],
-      "service": "command",
-      "command": "listen",
+      "service": "stream",
+      "command": "tweet",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "path",
+          "name": "track",
           "arg": {
             "$OBJECT": "string",
-            "string": "/foo"
+            "string": "storyscript"
           }
         }
       ],
       "enter": "6",
       "parent": "5.1",
-      "src": "when other_service command listen path:\"/foo\"",
+      "src": "when twitter stream tweet track:\"storyscript\"",
       "next": "6"
     },
     "6": {
@@ -119,36 +119,36 @@
       "method": "execute",
       "ln": "7.1",
       "output": [
-        "command"
+        "stream"
       ],
-      "service": "other_service",
-      "command": "command",
+      "service": "twitter",
+      "command": "stream",
       "enter": "7",
       "next": "7"
     },
     "7": {
       "method": "when",
       "ln": "7",
-      "col_start": "20",
-      "col_end": "34",
+      "col_start": "14",
+      "col_end": "26",
       "output": [
         "li"
       ],
-      "service": "command",
-      "command": "listen",
+      "service": "stream",
+      "command": "tweet",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "path",
+          "name": "track",
           "arg": {
             "$OBJECT": "string",
-            "string": "/foo"
+            "string": "storyscript"
           }
         }
       ],
       "enter": "8",
       "parent": "7.1",
-      "src": "when other_service command listen path:\"/foo\" as li",
+      "src": "when twitter stream tweet track:\"storyscript\" as li",
       "next": "8"
     },
     "8": {
@@ -161,7 +161,7 @@
     }
   },
   "services": [
-    "other_service"
+    "twitter"
   ],
   "entrypoint": "1.1"
 }

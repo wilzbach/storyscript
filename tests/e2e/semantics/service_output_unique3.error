@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 6
+Error: syntax error in story at line 2, column 19
 
-2|    when log
-           ^^^
+2|        when tweet as client
+                        ^^^^^^
 
-E0108: Service output `log` must be unique. Use `as outputName`
+E0108: Service output `client` must be unique. Use `as outputName`

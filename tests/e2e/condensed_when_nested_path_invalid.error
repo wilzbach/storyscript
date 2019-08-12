@@ -1,6 +1,6 @@
-Error: syntax error in story at line 3, column 12
+Error: syntax error in story at line 2, column 40
 
-3|          when log level: "normal"
-                 ^^^
+2|        when tweet track: "storyscript" as tweet
+                                             ^^^^^
 
-E0108: Service output `log` must be unique. Use `as outputName`
+E0108: Service output `tweet` must be unique. Use `as outputName`

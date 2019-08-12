@@ -4,24 +4,24 @@
       "method": "execute",
       "ln": "1",
       "col_start": "1",
-      "col_end": "12",
-      "service": "alpine",
-      "command": "echo",
+      "col_end": "9",
+      "service": "log",
+      "command": "info",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "message",
+          "name": "msg",
           "arg": {
             "$OBJECT": "string",
-            "string": "hello"
+            "string": "Hello"
           }
         }
       ],
-      "src": "alpine echo message:\"hello\""
+      "src": "log info msg: \"Hello\""
     }
   },
   "services": [
-    "alpine"
+    "log"
   ],
   "entrypoint": "1"
 }

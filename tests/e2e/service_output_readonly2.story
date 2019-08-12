@@ -1,3 +1,3 @@
 http server
-    when server listen
+    when server listen path: "/"
         server = 2

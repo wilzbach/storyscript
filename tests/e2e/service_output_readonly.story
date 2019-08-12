@@ -1,2 +1,2 @@
-when foo_service listen as event
-    event = 2
+when http server listen as client
+    client = 2

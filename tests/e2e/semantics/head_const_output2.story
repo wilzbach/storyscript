@@ -1,3 +1,3 @@
-when client listen method:"post" path:"/foo" as res
+when http server listen method:"post" path:"/foo" as res
        comment = res.body
        comment = "test"

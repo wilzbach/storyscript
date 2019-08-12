@@ -4,12 +4,22 @@
       "method": "execute",
       "ln": "1.1",
       "col_start": "5",
-      "col_end": "19",
+      "col_end": "18",
       "name": [
         "__p-1.1"
       ],
       "service": "random",
-      "command": "numbers",
+      "command": "string",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "length",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 3
+          }
+        }
+      ],
       "next": "1"
     },
     "1": {
@@ -22,17 +32,10 @@
           "expression": "equal",
           "values": [
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "__p-1.1"
-                ]
-              }
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.1"
+              ]
             },
             {
               "$OBJECT": "string",
@@ -42,7 +45,7 @@
         }
       ],
       "enter": "2",
-      "src": "if (random numbers) == \"foo\"",
+      "src": "if (random string length: 3) == \"foo\"",
       "next": "2"
     },
     "2": {
