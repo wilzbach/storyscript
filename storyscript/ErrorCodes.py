@@ -244,15 +244,11 @@ class ErrorCodes:
     service_arg_invalid = (
         'E0141',
         '{service} action `{action}` does not accept argument `{arg}`.')
-    service_arg_type_mismatch = (
-        'E0142',
-        '{service} action `{action}` requires argument `{arg}` to be of '
-        '`{target}`, not `{source}`')
     service_event_not_found = (
-        'E0143', 'Event action `{name}` has no event `{event}`.'
+        'E0142', 'Event action `{name}` has no event `{event}`.'
     )
     service_arg_required = (
-        'E0144', '{service} `{action}` requires argument `{arg}`')
+        'E0143', '{service} `{action}` requires argument `{arg}`.')
 
     @staticmethod
     def is_error(error_name):
