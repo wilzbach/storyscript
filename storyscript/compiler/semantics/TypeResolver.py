@@ -198,6 +198,9 @@ class TypeResolver(ScopeSelectiveVisitor):
                 listener_name = self.service_block_output.child(0).value
             event_name = event_node.child(0).value
             listener_sym = scope.resolve(listener_name)
+            tree.expect(listener_sym is not None,
+                        'event_not_defined',
+                        event=event_name, output=listener_name)
             listener = listener_sym.type().object()
             args = self.resolver.build_arguments(
                 tree.service.service_fragment,
