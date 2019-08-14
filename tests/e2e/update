@@ -22,7 +22,7 @@ from utils import parse_features
 test_dir = path.dirname(path.realpath(__file__))
 Result = namedtuple('Result', ['status', 'updated'])
 
-features = {'globals': True, 'service_typing': False}
+features = {'globals': True}
 
 
 def parse_args():

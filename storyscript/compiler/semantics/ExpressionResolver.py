@@ -516,9 +516,6 @@ class ExpressionResolver:
         return base_symbol(fn.output())
 
     def resolve_service(self, tree):
-        if self.module.service_typing is None:
-            return AnyType.instance()
-
         service_name = tree.path.child(0).value
         action_node = tree.service_fragment.command
         tree.expect(action_node is not None, 'service_without_command')

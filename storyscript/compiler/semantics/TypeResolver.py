@@ -187,32 +187,30 @@ class TypeResolver(ScopeSelectiveVisitor):
         tree.scope = Scope(parent=scope)
         self.implicit_output(tree)
 
-        output_type = ObjectType.instance()
-        if self.module.service_typing:
-            listener_name = tree.service.path.child(0).value
-            event_node = tree.service.service_fragment.command
-            if event_node is None:
-                tree.expect(self.service_block_output is not None,
-                            'when_no_output_parent')
-                event_node = tree.service.path
-                listener_name = self.service_block_output.child(0).value
-            event_name = event_node.child(0).value
-            listener_sym = scope.resolve(listener_name)
-            tree.expect(listener_sym is not None,
-                        'event_not_defined',
-                        event=event_name, output=listener_name)
-            listener = listener_sym.type().object()
-            args = self.resolver.build_arguments(
-                tree.service.service_fragment,
-                listener_name,
-                event_name
-            )
-            output_type = self.module.service_typing.resolve_service_event(
-                tree,
-                listener,
-                event_name,
-                args
-            )
+        listener_name = tree.service.path.child(0).value
+        event_node = tree.service.service_fragment.command
+        if event_node is None:
+            tree.expect(self.service_block_output is not None,
+                        'when_no_output_parent')
+            event_node = tree.service.path
+            listener_name = self.service_block_output.child(0).value
+        event_name = event_node.child(0).value
+        listener_sym = scope.resolve(listener_name)
+        tree.expect(listener_sym is not None,
+                    'event_not_defined',
+                    event=event_name, output=listener_name)
+        listener = listener_sym.type().object()
+        args = self.resolver.build_arguments(
+            tree.service.service_fragment,
+            listener_name,
+            event_name
+        )
+        output_type = self.module.service_typing.resolve_service_event(
+            tree,
+            listener,
+            event_name,
+            args
+        )
 
         output = tree.service.service_fragment.output
         self.check_output(tree, output, output_type, target='when')
@@ -243,25 +241,22 @@ class TypeResolver(ScopeSelectiveVisitor):
             action_name
         )
 
-        output_type = ObjectType.instance()
-        if self.module.service_typing:
-            if name is None:
-                output_type = self.module.service_typing.resolve_service(
-                    tree.service,
-                    service_name,
-                    action_name,
-                    args,
-                    nested_block=True
-                )
-            else:
-                output_type = self.module.service_typing. \
-                    resolve_service_output(
-                        tree,
-                        service_name,
-                        action_name,
-                        args,
-                        name.type().object()
-                    )
+        if name is None:
+            output_type = self.module.service_typing.resolve_service(
+                tree.service,
+                service_name,
+                action_name,
+                args,
+                nested_block=True
+            )
+        else:
+            output_type = self.module.service_typing.resolve_service_output(
+                tree,
+                service_name,
+                action_name,
+                args,
+                name.type().object()
+            )
 
         tree.scope = Scope(parent=scope)
 

@@ -17,9 +17,7 @@ class Semantics:
 
     def __init__(self, features):
         root_scope = Scope.root()
-        service_typing = None
-        if features and features.service_typing:
-            service_typing = ServiceTyping()
+        service_typing = ServiceTyping()
 
         self.module = Module(
             symbol_resolver=SymbolResolver(scope=root_scope),

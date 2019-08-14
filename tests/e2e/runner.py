@@ -23,7 +23,7 @@ test_dir = path.dirname(path.realpath(__file__))
 test_files = list(map(lambda e: path.relpath(e, test_dir),
                   glob(path.join(test_dir, '**', '*.story'), recursive=True)))
 
-features = {'globals': True, 'service_typing': False}
+features = {'globals': True}
 
 
 # compile a story and compare its tree with the expected tree
