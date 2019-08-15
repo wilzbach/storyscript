@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from storyscript.compiler.semantics.types.Types import BooleanType, \
     NoneType, ObjectType, StringType
+from storyscript.exceptions import expect
 from storyscript.parser import Tree
 
 from .ExpressionResolver import ExpressionResolver
@@ -149,8 +150,13 @@ class TypeResolver(ScopeSelectiveVisitor):
             stmt.output.expect(nr_children <= 2,
                                'foreach_output_children')
 
-            for type_, output in zip(iterable_types, outputs):
+            for i, type_, output in zip(range(nr_children), iterable_types,
+                                        outputs):
                 sym = Symbol.from_path(output, type_)
+                s = tree.scope.resolve(output)
+                expect(s is None, 'output_assignment_existing_var',
+                       token=outputs[i],
+                       var=output)
                 tree.scope.insert(sym)
 
             for c in tree.nested_block.children:
