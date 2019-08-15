@@ -1,0 +1,117 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "8",
+      "name": [
+        "hello"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "hello"
+        }
+      ],
+      "src": "hello = \"hello\"",
+      "next": "3"
+    },
+    "3": {
+      "method": "function",
+      "ln": "3",
+      "col_start": "1",
+      "col_end": "11",
+      "output": [
+        "string"
+      ],
+      "function": "sayHello",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "name",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "string"
+          }
+        }
+      ],
+      "enter": "4",
+      "exit": "6.1",
+      "src": "function sayHello name: string returns string",
+      "next": "4"
+    },
+    "4": {
+      "method": "return",
+      "ln": "4",
+      "col_start": "5",
+      "col_end": "26",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "hello"
+                ]
+              }
+            },
+            {
+              "$OBJECT": "string",
+              "string": " name!"
+            }
+          ]
+        }
+      ],
+      "parent": "3",
+      "src": "    return \"{hello} name!\"",
+      "next": "6.1"
+    },
+    "6.1": {
+      "method": "call",
+      "ln": "6.1",
+      "col_start": "1",
+      "col_end": "14",
+      "name": [
+        "__p-6.1"
+      ],
+      "function": "sayHello",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "name",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "world"
+          }
+        }
+      ],
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-6.1"
+          ]
+        }
+      ],
+      "src": "sayHello(name: \"world\")"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "sayHello": "3"
+  }
+}
