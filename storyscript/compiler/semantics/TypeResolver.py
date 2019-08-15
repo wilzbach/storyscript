@@ -329,7 +329,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         Create a new scope _without_ a parent scope for this function.
         Prepopulate the scope with symbols from the function arguments.
         """
-        scope = Scope.root()
+        scope = Scope(parent=scope)
         function_name = tree.child(1).value
         function = self.function_table.resolve(function_name)
         for arg, sym in function._args.items():
