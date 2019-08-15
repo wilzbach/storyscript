@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 16
+
+2|    http server as x
+                     ^
+
+E0108: Service output `x` must be unique. Use `as outputName`

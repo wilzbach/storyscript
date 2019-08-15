@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 25
+
+2|    foreach [1, 2, 3] as i, x
+                              ^
+
+E0138: Output must be unique. Can not use existing `x`.

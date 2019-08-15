@@ -231,6 +231,10 @@ class ErrorCodes:
         'Scope variable type mismatch: `{t1name}` of {t1type} is not '
         'compatible with `{t2name}` of {t2type}.'
     )
+    output_assignment_existing_var = (
+        'E0138',
+        'Output must be unique. Can not use existing `{var}`.',
+    )
 
     @staticmethod
     def is_error(error_name):
