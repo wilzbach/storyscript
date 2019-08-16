@@ -14,10 +14,18 @@ class Objects:
 
     def names(self, tree):
         """
-        Extracts names from a path tree
+        Extracts names from a path tree.
         """
         names = [tree.child(0).value]
-        for fragment in tree.children[1:]:
+        names.extend(self.fragments(tree.children[1:]))
+        return names
+
+    def fragments(self, fragments):
+        """
+        Extracts names from a path tree fragments.
+        """
+        names = []
+        for fragment in fragments:
             assert fragment.data == 'path_fragment'
             child = fragment.child(0)
             if isinstance(child, Tree):
@@ -35,10 +43,12 @@ class Objects:
     def path(self, tree):
         child = tree.child(0)
         if isinstance(child, Tree) and child.data == 'inline_expression':
-            return self.visitor.inline_expression(child, tree)
+            name = self.visitor.inline_expression(child, tree)
+        else:
+            name = tree.child(0).value
 
-        paths = self.names(tree)
-        return ''.join(paths)
+        paths = self.fragments(tree.children[1:])
+        return ''.join([name, *paths])
 
     def mutation(self, tree):
         expr = self.expression(tree.expression)

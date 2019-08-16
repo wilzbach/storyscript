@@ -66,14 +66,17 @@ class PrettyPrinter:
         """
         Compiles a function call expression.
         """
-        name = ''.join(self.objects.names(tree.path))
-        args = self.objects.arguments(tree)
+        name = self.objects.path(tree.path)
+        # create temporary tree to exclude arguments from the first path
+        arg_tree = Tree('arg_tree', tree.children[1:])
+        args = self.objects.arguments(arg_tree)
         return f'{name}({args})'
 
     def inline_expression(self, tree, parent):
         """
         Compiles an inline expression.
         """
+        assert tree.data == 'inline_expression'
         child = tree.child(0)
         assert len(tree.children) == 1
         if child.data == 'call_expression':
