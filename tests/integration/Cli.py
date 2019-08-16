@@ -222,3 +222,22 @@ def test_cli_format_exit_file_not_found(runner):
     # the error message contains the absolute path too
     assert 'File `this-path-will-never-ever-exist-123456` not found' \
         in e.output
+
+
+@mark.parametrize('inplace_argument', [
+    '-i', '--inplace'
+])
+def test_cli_format_inplace(inplace_argument):
+    """
+    Ensures that in-place format works.
+    """
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        with open('a.story', 'w') as f:
+            f.write('a=1')
+        e = runner.invoke(Cli.format, [inplace_argument, 'a.story'])
+        assert e.exit_code == 0
+        story = ''
+        with open('a.story', 'r') as f:
+            story = f.read()
+        assert story == 'a = 1'

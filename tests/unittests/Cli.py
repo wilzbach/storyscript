@@ -529,7 +529,8 @@ def test_cli_format(runner, echo, app):
     """
     App.format.return_value = '.format.'
     runner.invoke(Cli.format, ['foo-path'])
-    App.format.assert_called_with('foo-path', ebnf=None, features={})
+    App.format.assert_called_with('foo-path', ebnf=None, features={},
+                                  inplace=False)
     click.echo.assert_called_with('.format.')
 
 
@@ -549,7 +550,8 @@ def test_cli_format_ebnf(runner, echo, app):
     Ensures the format command supports specifying an ebnf file.
     """
     runner.invoke(Cli.format, ['foo-path', '--ebnf', 'test.ebnf'])
-    App.format.assert_called_with('foo-path', ebnf='test.ebnf', features={})
+    App.format.assert_called_with('foo-path', ebnf='test.ebnf', features={},
+                                  inplace=False)
 
 
 def test_cli_format_ice(patch, runner, echo, app):
@@ -607,5 +609,15 @@ def test_cli_format_features(patch, runner):
     """
     patch.object(App, 'format')
     runner.invoke(Cli.format, ['--preview=globals', '/a/file'])
-    App.format.assert_called_with('/a/file', ebnf=None,
+    App.format.assert_called_with('/a/file', ebnf=None, inplace=False,
                                   features={'globals': True})
+
+
+@mark.parametrize('option', ['--inplace', '-i'])
+def test_cli_format_inplace(runner, echo, app, option):
+    """
+    Ensures the format command supports inplace updates.
+    """
+    runner.invoke(Cli.format, ['foo-path', option, '--ebnf', 'test.ebnf'])
+    App.format.assert_called_with('foo-path', ebnf='test.ebnf', features={},
+                                  inplace=True)
