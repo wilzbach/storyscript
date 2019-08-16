@@ -42,13 +42,13 @@ def test_api_load_map_syntax_error():
     """
     Ensures Api.load functions return errors
     """
-    files = {'asd': 'foo ='}
+    files = {'abc.story': 'foo ='}
     s = Api.load_map(files)
     e = s.errors()[0]
     assert e.short_message() == 'E0007: Missing value after `=`'
     e.with_color = False
     assert e.message() == \
-        """Error: syntax error in story at line 1, column 6
+        """Error: syntax error in abc.story at line 1, column 6
 
 1|    foo =
            ^

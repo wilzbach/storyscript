@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import io
-import os
 
 import click
 
@@ -65,7 +64,7 @@ class Cli:
 
     @staticmethod
     @main.command(aliases=['p'])
-    @click.argument('path', default=os.getcwd())
+    @click.argument('path', default='.')
     @click.option('--debug', is_flag=True)
     @click.option('--ebnf', help=ebnf_help)
     @click.option('--raw', is_flag=True)
@@ -102,7 +101,7 @@ class Cli:
 
     @staticmethod
     @main.command(aliases=['c'])
-    @click.argument('path', default=os.getcwd())
+    @click.argument('path', default='.')
     @click.argument('output', required=False)
     @click.option('--json', '-j', is_flag=True)
     @click.option('--silent', '-s', is_flag=True, help=silent_help)
@@ -148,7 +147,7 @@ class Cli:
 
     @staticmethod
     @main.command(aliases=['l'])
-    @click.argument('path', default=os.getcwd())
+    @click.argument('path', default='.')
     @click.option('--ebnf', help=ebnf_help)
     @click.option('--debug', is_flag=True)
     @click.option('--preview', callback=preview_cb, is_eager=True,
