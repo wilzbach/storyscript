@@ -3,7 +3,7 @@ from unittest import mock
 
 from click.testing import CliRunner
 
-from pytest import fixture
+from pytest import fixture, mark
 
 import storyscript.Story as StoryModule
 from storyscript.Cli import Cli
@@ -26,16 +26,56 @@ def test_cli_exit_code(open_mock):
     """
     runner = CliRunner()
     mock.mock_open(open_mock, read_data='foo =')
-    e = runner.invoke(Cli.compile, ['/compile/path'])
+    e = runner.invoke(Cli.compile, ['/path/a.story'])
 
     assert e.exit_code == 1
     assert e.output == \
-        """Error: syntax error in story at line 1, column 6
+        """Error: syntax error in /path/a.story at line 1, column 6
 
 1|    foo =
            ^
 
 E0007: Missing value after `=`
+"""
+
+
+@mark.parametrize('path', [
+    [], ['.']
+])
+def test_cli_multiple_files(path):
+    """
+    Ensures that compiler works correctly with multiple stories.
+    """
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        with open('a.story', 'w') as f:
+            f.write('a = 1')
+        with open('b.story', 'w') as f:
+            f.write('a = 1')
+        e = runner.invoke(Cli.compile, path)
+        assert e.exit_code == 0
+
+
+def test_cli_multiple_files_filename():
+    """
+    Ensures that compiler errors with the correct filename when parsing
+    multiple stories.
+    """
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        with open('a.story', 'w') as f:
+            f.write('a = 1')
+        with open('b.story', 'w') as f:
+            f.write('a = $')
+        e = runner.invoke(Cli.compile, [])
+        assert e.exit_code == 1
+        assert e.output == \
+            """Error: syntax error in b.story at line 1, column 5
+
+1|    a = $
+          ^
+
+E0041: `$` is not allowed here
 """
 
 

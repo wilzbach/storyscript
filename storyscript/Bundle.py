@@ -98,7 +98,7 @@ class Bundle:
         """
         if path not in self.story_files:
             self.story_files[path] = Story.read(path)
-        return Story(self.story_files[path], features=self.features)
+        return Story(self.story_files[path], features=self.features, path=path)
 
     def find_stories(self):
         """

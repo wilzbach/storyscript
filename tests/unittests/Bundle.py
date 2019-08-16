@@ -173,7 +173,7 @@ def test_bundle_load_story(patch, bundle):
     patch.init(Features)
     bundle.story_files['one.story'] = 'hello'
     result = bundle.load_story('one.story')
-    Story.__init__.assert_called_with('hello', features=ANY)
+    Story.__init__.assert_called_with('hello', features=ANY, path='one.story')
     assert isinstance(Story.__init__.call_args[1]['features'], Features)
     assert isinstance(result, Story)
 
