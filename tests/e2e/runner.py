@@ -28,7 +28,7 @@ features = {'globals': True}
 def run_test_story(source, expected_story, features):
     s = Api.loads(source, features)
     s.check_success()
-    result = _clean_dict(s.result())
+    result = _clean_dict(s.result().output())
     del result['version']
     assert expected_story == result
 

@@ -16,14 +16,16 @@ def test_compiler_generate(patch, magic):
     Lowering.__init__.assert_called_with(parser=tree.parser, features=None)
     Lowering.process.assert_called_with(tree)
     Semantics.process.assert_called_with(Lowering.process())
-    assert result == Semantics.process()
+    assert result == (Lowering.process(), Semantics.process())
 
 
 def test_compiler_compile(patch, magic):
-    patch.object(Compiler, 'generate')
+    patch.object(Compiler, 'generate', return_value=('tree', 'sem'))
     patch.object(JSONCompiler, 'compile')
     tree = magic()
     result = Compiler.compile(tree, story=None, features=None)
     Compiler.generate.assert_called_with(tree, None)
-    JSONCompiler.compile.assert_called_with(Compiler.generate())
-    assert result == JSONCompiler.compile()
+    JSONCompiler.compile.assert_called_with('tree')
+    assert result.output() == JSONCompiler.compile()
+    assert result.module() == 'sem'
+    assert result.backend == 'json'

@@ -46,18 +46,13 @@ class TypeResolver(ScopeSelectiveVisitor):
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.symbol_resolver = SymbolResolver(scope=None)
-        self.resolver = ExpressionResolver(
-            symbol_resolver=self.symbol_resolver,
-            function_table=self.function_table,
-            mutation_table=self.mutation_table,
-        )
+        self.resolver = ExpressionResolver(module=self.module)
         self.path_symbol_resolver = SymbolResolver(
             scope=None, check_variable_existence=False)
         self.path_resolver = PathResolver(self.path_symbol_resolver)
         self.in_service_block = False
         self.in_when_block = False
-        if self.features.globals:
+        if self.module.features.globals:
             self.storage_class_scope = StorageClass.write()
         else:
             self.storage_class_scope = StorageClass.read()
@@ -327,8 +322,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         )
         with self.create_scope(tree.scope, storage_class=StorageClass.write()):
             self.visit_children(tree.nested_block, scope=tree.scope)
-            ReturnVisitor.check(tree, tree.scope, return_type,
-                                self.function_table, self.mutation_table)
+            ReturnVisitor.check(tree, tree.scope, return_type, self.module)
 
     def function_statement(self, tree, scope):
         """
@@ -337,7 +331,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         """
         scope = Scope(parent=scope)
         function_name = tree.child(1).value
-        function = self.function_table.resolve(function_name)
+        function = self.module.function_table.resolve(function_name)
         for arg, sym in function._args.items():
             scope.insert(sym)
         return scope, function._output
@@ -347,7 +341,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         Updates the current scope for the respective resolvers.
         """
         self.current_scope = scope
-        self.symbol_resolver.update_scope(scope)
+        self.module.symbol_resolver.update_scope(scope)
         self.path_symbol_resolver.update_scope(scope)
 
     def create_scope(self, scope, storage_class=None):

@@ -211,12 +211,13 @@ class SymbolExpressionVisitor(ExpressionVisitor):
 
 class ExpressionResolver:
 
-    def __init__(self, symbol_resolver, function_table, mutation_table):
+    def __init__(self, module):
         self.expr_visitor = SymbolExpressionVisitor(self)
         # how to resolve existing symbols
-        self.path_resolver = PathResolver(symbol_resolver=symbol_resolver)
-        self.function_table = function_table
-        self.mutation_table = mutation_table
+        self.path_resolver = PathResolver(
+            symbol_resolver=module.symbol_resolver
+        )
+        self.module = module
 
     def path(self, tree):
         assert tree.data == 'path'
@@ -478,7 +479,7 @@ class ExpressionResolver:
                                     fn_type='Mutation')
 
         # a mutation on 'any' returns 'any'
-        overloads = self.mutation_table.resolve(t, name)
+        overloads = self.module.mutation_table.resolve(t, name)
         tree.expect(overloads is not None, 'mutation_invalid_name', name=name)
         ms = overloads.match(args.keys())
         if ms is None:
@@ -508,7 +509,7 @@ class ExpressionResolver:
         tree.expect(tree.path.inline_expression is None,
                     'function_call_no_inline_expression')
         name = self.path_resolve_only_name(tree.path, fn_type='Function')
-        fn = self.function_table.resolve(name)
+        fn = self.module.function_table.resolve(name)
         tree.expect(fn is not None, 'function_not_found', name=name)
         args = self.build_arguments(tree, name, fn_type='Function')
         fn.check_call(tree, args)
