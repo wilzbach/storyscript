@@ -137,7 +137,7 @@ class Bundle:
             story = self.load_story(storypath)
             story.parse(parser=parser)
             story.compile()
-            self.stories[storypath] = story.compiled
+            self.stories[storypath] = story.compiled.output()
 
     def bundle(self, ebnf=None):
         """

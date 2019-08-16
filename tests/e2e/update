@@ -46,7 +46,7 @@ class StoryRunner():
             source = f.read()
         s = Api.loads(source, features=parse_features(features, source))
         if s.success():
-            result = _clean_dict(s.result())
+            result = _clean_dict(s.result().output())
             del result['version']
             self.update_success(result)
             return Result(status=True, updated=self.updated)

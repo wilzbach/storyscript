@@ -12,14 +12,10 @@ class ReturnVisitor:
     """
     Checks the return type of functions.
     """
-    def __init__(self, return_type, function_table, mutation_table):
+    def __init__(self, return_type, module):
         self.return_type = return_type
         self.symbol_resolver = SymbolResolver(scope=None)
-        self.resolver = ExpressionResolver(
-            symbol_resolver=self.symbol_resolver,
-            function_table=function_table,
-            mutation_table=mutation_table,
-        )
+        self.resolver = ExpressionResolver(module=module)
 
     def has_return(self, tree):
         if tree.rules and tree.rules.return_statement:
@@ -87,6 +83,6 @@ class ReturnVisitor:
                 )
 
     @classmethod
-    def check(cls, tree, scope, return_type, function_table, mutation_table):
-        rv = ReturnVisitor(return_type, function_table, mutation_table)
+    def check(cls, tree, scope, return_type, module):
+        rv = ReturnVisitor(return_type, module)
         rv.function_block(tree, scope)
