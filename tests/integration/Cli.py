@@ -178,3 +178,47 @@ def test_cli_lex(open_mock, runner):
 0 NAME foo
 """
     assert e.exit_code == 0
+
+
+def test_cli_format(open_mock):
+    """
+    Ensures that compiler calls format properly
+    """
+    runner = CliRunner()
+    mock.mock_open(open_mock, read_data='foo=1')
+    e = runner.invoke(Cli.format, ['/path/a.story'])
+
+    assert e.exit_code == 0
+    assert e.output == 'foo = 1\n'
+
+
+def test_cli_format_error(open_mock):
+    """
+    Ensures that compiler handles format errors properly.
+    """
+    runner = CliRunner()
+    mock.mock_open(open_mock, read_data='a = $')
+    e = runner.invoke(Cli.format, ['/path/b.story'])
+
+    assert e.exit_code == 1
+    assert e.output == \
+        """Error: syntax error in /path/b.story at line 1, column 5
+
+1|    a = $
+          ^
+
+E0041: `$` is not allowed here
+"""
+
+
+def test_cli_format_exit_file_not_found(runner):
+    """
+    Ensures that compiler exits with a non-zero exit code
+    on a file not found error
+    """
+    e = runner.invoke(Cli.format, ['this-path-will-never-ever-exist-123456'])
+
+    assert e.exit_code == 1
+    # the error message contains the absolute path too
+    assert 'File `this-path-will-never-ever-exist-123456` not found' \
+        in e.output

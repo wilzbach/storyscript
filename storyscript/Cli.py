@@ -100,6 +100,33 @@ class Cli:
                 exit(1)
 
     @staticmethod
+    @main.command(aliases=['f'])
+    @click.argument('path')
+    @click.option('--debug', is_flag=True)
+    @click.option('--ebnf', help=ebnf_help)
+    @click.option('--preview', callback=preview_cb, is_eager=True,
+                  multiple=True, help=preview_help)
+    def format(path, debug, ebnf, preview):
+        """
+        Format a story.
+        """
+        try:
+            output = App.format(path, ebnf=ebnf, features=preview)
+            click.echo(output)
+        except StoryError as e:
+            if debug:
+                raise e.error
+            else:
+                e.echo()
+                exit(1)
+        except Exception as e:
+            if debug:
+                raise e
+            else:
+                StoryError.internal_error(e).echo()
+                exit(1)
+
+    @staticmethod
     @main.command(aliases=['c'])
     @click.argument('path', default='.')
     @click.argument('output', required=False)
