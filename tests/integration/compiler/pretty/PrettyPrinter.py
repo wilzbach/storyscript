@@ -82,6 +82,8 @@ def story_format(source):
     ('a=b.mutation(a:1)', 'a = b.mutation(a:1)'),
     ('a=b.mutation(a:1  b:2)', 'a = b.mutation(a:1 b:2)'),
     ('a=1.mutation(a:1)', 'a = 1.mutation(a:1)'),
+    ('a=1.mutation(a:1  b:2)', 'a = 1.mutation(a:1 b:2)'),
+    ('a=1.mutation(a:1  b:2  c: 3)', 'a = 1.mutation(a:1 b:2 c:3)'),
     ('a=fun(a:"1")', 'a = fun(a:"1")'),
     ('a=fun(a:1  b:"b")', 'a = fun(a:1 b:"b")'),
     ('a="5" as  boolean', 'a = "5" as boolean'),
