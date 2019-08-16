@@ -472,19 +472,16 @@ class Transformer(LarkTransformer):
                 Tree('mutation_fragment', [name_tok])
             ])
 
-            if len(matches) >= 2:
-                offset = 1
-                if matches[1].data == 'arguments':
+            # add additional args or rewrap for chained mutations
+            for match in matches[1:]:
+                if match.data == 'arguments':
                     # append its arguments (if available)
-                    tree.children[1].children.append(matches[1])
-                    offset += 1
+                    tree.children[1].children.append(match)
                 else:
-                    assert matches[1].data == 'mutation'
-
-                for mutation in matches[offset:]:
+                    assert match.data == 'mutation'
                     tree = Tree('mutation', [
                         cls.build_inline(tree),
-                        *mutation.children,
+                        *match.children,
                     ])
         elif len(matches) == 1:
             return matches[0]
