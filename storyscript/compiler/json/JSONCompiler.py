@@ -147,7 +147,6 @@ class JSONCompiler:
         assert tree.data == 'service'
         position = tree.position()
         command = tree.service_fragment.command
-        tree.expect(command is not None, 'service_without_command')
         command = command.child(0)
         arguments = self.objects.arguments(tree.service_fragment)
         service = tree.path.extract_path()

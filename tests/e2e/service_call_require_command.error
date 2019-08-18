@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 1
+Error: syntax error in story at line 1, column 6
 
 1|    echo message:"hello"
-      ^^^^
+           ^^^^^^^^^^^^^^^
 
 E0052: Service calls require a command.

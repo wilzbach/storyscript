@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 10
+
+1|    a = echo message:"hello"
+               ^^^^^^^^^^^^^^^
+
+E0052: Service calls require a command.

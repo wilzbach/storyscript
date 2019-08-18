@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from contextlib import contextmanager
 
+
+from lark.lexer import Token
+
 from storyscript.compiler.lowering.utils import service_to_mutation
 from storyscript.compiler.semantics.types.Types import AnyType, BaseType, \
     BooleanType, FloatType, IntType, ListType, MapType, ObjectType, \
@@ -548,11 +551,26 @@ class ExpressionResolver:
         return self.module.service_typing.resolve_service(
             tree, service_name, action_name, args)
 
+    def check_service_fragment_arguments(self, tree):
+        if tree.arguments:
+            # if arguments are malformed (don't start with name)
+            # then the user didn't specify a command
+            first_arg_name = tree.arguments.children[0]
+            tree.expect(isinstance(first_arg_name, Token) and
+                        first_arg_name.type == 'NAME',
+                        'service_without_command')
+
     def service(self, tree):
         # unknown for now
         if tree.service_fragment.output is not None:
             tree.service_fragment.output.expect(
                 0, 'service_no_inline_output')
+
+        command = tree.service_fragment.command
+        tree.expect(command is not None, 'service_without_command')
+
+        self.check_service_fragment_arguments(tree.service_fragment)
+
         t = None
         try:
             # check whether variable exists

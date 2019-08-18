@@ -54,8 +54,9 @@ rules: absolute_expression| assignment| return_statement| throw_statement| break
 command: NAME
 arguments: NAME? _COLON expression
 output: (_AS NAME (_COMMA NAME)*)
-service_fragment: (command arguments*|arguments+) output?
-inline_service_fragment: (command arguments*|arguments+)
+service_fragment: command arguments* output?
+when_service_fragment: (command arguments*|arguments+) output?
+inline_service_fragment: command arguments*
 service: path service_fragment
 service_block: service _NL (nested_block)?
 inline_service: path inline_service_fragment
@@ -82,7 +83,7 @@ finally_block: finally_statement _NL nested_block
 try_statement: TRY
 try_block: try_statement _NL nested_block catch_block? finally_block?
 throw_statement: THROW entity?
-when_service: NAME path (service_fragment | output?)
+when_service: NAME path (when_service_fragment | output?)
 when_block: _WHEN (when_service | NAME output?) _NL nested_block
 indented_arguments: _INDENT (arguments _NL)+ _DEDENT
 block: rules _NL| if_block| foreach_block| function_block| arguments| service_block| when_block| try_block| indented_arguments| while_block

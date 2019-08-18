@@ -203,8 +203,10 @@ class Grammar:
         self.ebnf.command = 'name'
         self.ebnf.arguments = 'name? colon expression'
         self.ebnf.output = '(as name (comma name)*)'
-        self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
-        self.ebnf.inline_service_fragment = '(command arguments*|arguments+)'
+        self.ebnf.service_fragment = 'command arguments* output?'
+        self.ebnf.when_service_fragment = '(command arguments*|arguments+) ' \
+                                          'output?'
+        self.ebnf.inline_service_fragment = 'command arguments*'
         self.ebnf.service = 'path service_fragment'
         self.ebnf.service_block = 'service nl (nested_block)?'
         self.ebnf.inline_service = ('path inline_service_fragment')
@@ -266,7 +268,7 @@ class Grammar:
 
     def block(self):
         self.ebnf._WHEN = 'when'
-        self.ebnf.when_service = 'name path (service_fragment | output?)'
+        self.ebnf.when_service = 'name path (when_service_fragment | output?)'
         when = 'when (when_service | name output?)'
         self.ebnf.when_block = self.ebnf.simple_block(when)
         self.ebnf.indented_arguments = 'indent (arguments nl)+ dedent'

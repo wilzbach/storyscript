@@ -203,8 +203,8 @@ class TypeResolver(ScopeSelectiveVisitor):
         listener = listener_sym.type().object()
         args = self.resolver.build_arguments(
             tree.service.service_fragment,
-            listener_name,
-            event_name
+            name=listener_name,
+            fn_type=event_name,
         )
         output_type = self.module.service_typing.resolve_service_event(
             tree,
@@ -236,10 +236,16 @@ class TypeResolver(ScopeSelectiveVisitor):
         action_node = tree.service.service_fragment.command
         tree.expect(action_node is not None, 'service_without_command')
         action_name = action_node.child(0).value
+
+        # check for malformed arguments
+        self.resolver.check_service_fragment_arguments(
+            tree.service.service_fragment
+        )
+
         args = self.resolver.build_arguments(
             tree.service.service_fragment,
-            service_name,
-            action_name
+            fn_type='Service',
+            name=service_name,
         )
 
         if name is None:

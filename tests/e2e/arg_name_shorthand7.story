@@ -1,0 +1,2 @@
+msg = ""
+log info :msg
