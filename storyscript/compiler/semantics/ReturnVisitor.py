@@ -14,7 +14,7 @@ class ReturnVisitor:
     """
     def __init__(self, return_type, module):
         self.return_type = return_type
-        self.symbol_resolver = SymbolResolver(scope=None)
+        self.symbol_resolver = SymbolResolver(scope=None, module=module)
         self.resolver = ExpressionResolver(module=module)
 
     def has_return(self, tree):

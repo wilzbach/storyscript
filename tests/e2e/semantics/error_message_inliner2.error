@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 5
+
+2|    b = a[(myService call) + true]
+          ^
+
+E0104: `Map[string,string]` can't be indexed with `(myService call) as int + true as int` of type `int`

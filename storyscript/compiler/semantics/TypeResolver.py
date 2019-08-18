@@ -48,7 +48,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         super().__init__(**kwargs)
         self.resolver = ExpressionResolver(module=self.module)
         self.path_symbol_resolver = SymbolResolver(
-            scope=None, check_variable_existence=False)
+            scope=None, check_variable_existence=False, module=self.module)
         self.path_resolver = PathResolver(self.path_symbol_resolver)
         self.in_service_block = False
         self.in_when_block = False
@@ -88,6 +88,7 @@ class TypeResolver(ScopeSelectiveVisitor):
             sym = Symbol(target_symbol.name(), expr_type,
                          storage_class=storage_class)
             scope.symbols().insert(sym)
+            self.module.add_tmp_assignment(sym, frag.base_expression)
         else:
             tree.expect(target_symbol.type().can_be_assigned(expr_type),
                         'type_assignment_different',

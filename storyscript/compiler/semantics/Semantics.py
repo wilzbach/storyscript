@@ -23,6 +23,7 @@ class Semantics:
             root_scope=root_scope,
             features=features
         )
+        self.module.symbol_resolver.module = self.module
 
     visitors = [FunctionResolver, TypeResolver]
 

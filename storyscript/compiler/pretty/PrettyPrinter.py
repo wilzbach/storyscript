@@ -34,7 +34,7 @@ class PrettyPrinter:
         # end scope
         self.current_indent = indent_before
 
-    def base_expression_assignment(self, tree, parent, line):
+    def base_expression_assignment(self, tree, parent):
         """
         Compiles a base expression into an expression, service or mutation
         """
@@ -57,9 +57,8 @@ class PrettyPrinter:
         Compiles an assignment tree.
         """
         name = self.objects.names(tree.path)[0]
-        line = tree.line()
         fragment = tree.assignment_fragment.base_expression
-        e = self.base_expression_assignment(fragment, parent, line)
+        e = self.base_expression_assignment(fragment, parent)
         self.add_line(f'{name} = {e}')
 
     def call_expression(self, tree, parent):
@@ -252,6 +251,10 @@ class PrettyPrinter:
     def break_statement(self, tree, parent):
         self.add_line(f'break')
 
+    def base_expression(self, tree, parent):
+        assert tree.data == 'base_expression'
+        self.add_line(self.base_expression_assignment(tree, parent))
+
     def subtrees(self, *trees, parent=None):
         """
         Parses all subtrees.
@@ -270,7 +273,8 @@ class PrettyPrinter:
                          'try_block', 'return_statement', 'arguments',
                          'call_expression',
                          'imports', 'while_block', 'throw_statement',
-                         'break_statement', 'mutation_block', 'indented_chain']
+                         'break_statement', 'mutation_block', 'indented_chain',
+                         'base_expression']
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
         else:
@@ -281,8 +285,16 @@ class PrettyPrinter:
         Parses a tree looking for subtrees.
         """
         for item in tree.children:
-            assert isinstance(item, Tree)
-            self.subtree(item, parent=parent)
+            if isinstance(item, Tree):
+                self.subtree(item, parent=parent)
+
+    def print(self, tree, debug=False):
+        """
+        Compile an AST to JSON. Allows an partial AST.
+        """
+        self.buf = ''
+        self.subtree(tree)
+        return self.buf.strip()
 
     def compile(self, tree, debug=False):
         """
