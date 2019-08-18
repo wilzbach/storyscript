@@ -19,6 +19,9 @@ class ConstDict:
     def keys(self):
         return self._data.keys()
 
+    def __str__(self):
+        return str(self._data)
+
 
 class ProcessingError(Exception):
     """

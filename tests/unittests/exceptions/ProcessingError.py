@@ -78,3 +78,11 @@ def test_const_dict():
     assert d.f2 == 'b2'
     with raises(Exception):
         d.bar
+
+
+def test_const_dict_str():
+    """
+    Ensures that the const dictionary can be serialized to string.
+    """
+    d = ConstDict({'foo': 'bar', 'f2': 'b2'})
+    assert str(d) == "{'foo': 'bar', 'f2': 'b2'}"
