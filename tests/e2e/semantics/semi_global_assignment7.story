@@ -1,4 +1,4 @@
 # FEAT: globals=False
-a = {}
+a = {} as Map[any,any]
 while true
     a["a"] = "b"

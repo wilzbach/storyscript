@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 7
+
+1|    arr = {}
+            ^^
+
+E0145: Map initialization without elements must be typed. Use `as ...`

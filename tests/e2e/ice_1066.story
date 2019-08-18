@@ -1,2 +1,2 @@
-a = {}
-{ b, c } = a.get(key:"foo" default:{})
+a = {"foo": {"bar": ""}}
+{ b, c } = a.get(key:"foo" default:{} as Map[string,string])

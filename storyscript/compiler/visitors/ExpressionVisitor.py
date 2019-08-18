@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from contextlib import contextmanager
 
 
 class ExpressionVisitor:
@@ -21,6 +22,13 @@ class ExpressionVisitor:
         """
         return self.values(tree.child(0))
 
+    @contextmanager
+    def with_as_cast(self):
+        """
+        Context manager during as cast expression handling.
+        """
+        yield
+
     def expression(self, tree):
         """
         Compiles an expression object with the given tree.
@@ -32,8 +40,9 @@ class ExpressionVisitor:
         elif len(tree.children) == 2:
             second_child = tree.child(1)
             if second_child.data == 'as_operator':
-                expr = self.expression(first_child)
-                return self.as_expression(tree, expr)
+                with self.with_as_cast():
+                    expr = self.expression(first_child)
+                    return self.as_expression(tree, expr)
             # unary_expression
             op = first_child.child(0)  # unary_operator
             values = [self.expression(second_child)]

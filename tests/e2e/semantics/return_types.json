@@ -108,12 +108,29 @@
       "col_end": "14",
       "args": [
         {
-          "$OBJECT": "dict",
-          "items": []
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "Map",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              },
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "dict",
+            "items": []
+          }
         }
       ],
       "parent": "7",
-      "src": "    return {}",
+      "src": "    return {} as Map[any,any]",
       "next": "9"
     },
     "9": {

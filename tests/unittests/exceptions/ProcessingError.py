@@ -52,14 +52,14 @@ def test_processingerror_token_position_none(error):
     error.token_position(None)
 
 
-def test_processingerror_tree_position(error, tree):
+def test_processingerror_tree_position(patch, error, tree):
     """
     Ensures tree_position can extract the position from a tree
     """
     error.tree_position(tree)
-    assert error.line == tree.line()
-    assert error.column == tree.column()
-    assert error.end_column == tree.end_column()
+    assert error.line == tree.position().line
+    assert error.column == tree.position().column
+    assert error.end_column == tree.position().end_column
 
 
 def test_processingerror_tree_position_none(error):

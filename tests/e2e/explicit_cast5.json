@@ -11,7 +11,17 @@
       "args": [
         {
           "$OBJECT": "list",
-          "items": []
+          "items": [
+            {
+              "$OBJECT": "list",
+              "items": [
+                {
+                  "$OBJECT": "int",
+                  "int": 0
+                }
+              ]
+            }
+          ]
         },
         {
           "$OBJECT": "mutation",
@@ -21,8 +31,13 @@
               "$OBJECT": "arg",
               "name": "item",
               "arg": {
-                "$OBJECT": "int",
-                "int": 42
+                "$OBJECT": "list",
+                "items": [
+                  {
+                    "$OBJECT": "int",
+                    "int": 42
+                  }
+                ]
               }
             }
           ]
@@ -46,7 +61,7 @@
           ]
         }
       ],
-      "src": "arr = [].append(item: 42)",
+      "src": "arr = [[0]].append(item: [42])",
       "next": "2"
     },
     "2": {

@@ -11,7 +11,23 @@
       "args": [
         {
           "$OBJECT": "list",
-          "items": []
+          "items": [
+            {
+              "$OBJECT": "dict",
+              "items": [
+                [
+                  {
+                    "$OBJECT": "int",
+                    "int": 1
+                  },
+                  {
+                    "$OBJECT": "string",
+                    "string": "a"
+                  }
+                ]
+              ]
+            }
+          ]
         },
         {
           "$OBJECT": "mutation",
@@ -21,8 +37,19 @@
               "$OBJECT": "arg",
               "name": "item",
               "arg": {
-                "$OBJECT": "int",
-                "int": 42
+                "$OBJECT": "dict",
+                "items": [
+                  [
+                    {
+                      "$OBJECT": "int",
+                      "int": 2
+                    },
+                    {
+                      "$OBJECT": "string",
+                      "string": "b"
+                    }
+                  ]
+                ]
               }
             }
           ]
@@ -46,7 +73,7 @@
           ]
         }
       ],
-      "src": "arr = [].append(item: 42)",
+      "src": "arr = [{1: \"a\"}].append(item: {2: \"b\"})",
       "next": "2"
     },
     "2": {

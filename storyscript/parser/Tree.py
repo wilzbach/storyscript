@@ -128,7 +128,10 @@ class Tree(LarkTree):
         """
         Finds the position of a tree using _find_position
         """
-        return Position(self.line(), self.column(), self.end_column())
+        line = self.line()
+        column = self.column()
+        end_column = self.end_column()
+        return Position(line, column, end_column)
 
     def insert(self, item):
         """

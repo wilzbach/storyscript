@@ -11,10 +11,32 @@
       "args": [
         {
           "$OBJECT": "dict",
-          "items": []
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "foo"
+              },
+              {
+                "$OBJECT": "dict",
+                "items": [
+                  [
+                    {
+                      "$OBJECT": "string",
+                      "string": "bar"
+                    },
+                    {
+                      "$OBJECT": "string",
+                      "string": ""
+                    }
+                  ]
+                ]
+              }
+            ]
+          ]
         }
       ],
-      "src": "a = {}",
+      "src": "a = {\"foo\": {\"bar\": \"\"}}",
       "next": "2.4"
     },
     "2.4": {
@@ -48,8 +70,25 @@
               "$OBJECT": "arg",
               "name": "default",
               "arg": {
-                "$OBJECT": "dict",
-                "items": []
+                "$OBJECT": "type_cast",
+                "type": {
+                  "$OBJECT": "type",
+                  "type": "Map",
+                  "values": [
+                    {
+                      "$OBJECT": "type",
+                      "type": "string"
+                    },
+                    {
+                      "$OBJECT": "type",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "value": {
+                  "$OBJECT": "dict",
+                  "items": []
+                }
               }
             }
           ]

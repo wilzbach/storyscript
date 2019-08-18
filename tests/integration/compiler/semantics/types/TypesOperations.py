@@ -309,7 +309,7 @@ def test_string_string_ops(source, op):
 # Test operations on AnyType
 ###############################################################################
 
-ANY = 'any_obj = {}\nany_var=any_obj[0]\n'
+ANY = 'any_obj = {} as Map[any,any]\nany_var=any_obj[0]\n'
 
 
 @mark.parametrize('source,op', op_builder('any_var', 'any_var'))

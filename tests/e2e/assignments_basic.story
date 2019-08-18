@@ -6,13 +6,13 @@ _int = +3
 _float = 3.14
 _string = "cake"
 _list = [1, 2]
-list_empty = []
+list_empty = [] as List[any]
 list_multiline = [
     1,
     2
 ]
 obj = {"x": 1, "y": 3}
-obj_empty = {}
+obj_empty = {} as Map[any,any]
 obj_multiline = {
     "x": 1,
     "y": 3

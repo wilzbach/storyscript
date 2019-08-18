@@ -49,9 +49,10 @@ class ProcessingError(Exception):
         Extracts the position from a tree.
         """
         if tree:
-            self.line = tree.line()
-            self.column = tree.column()
-            self.end_column = tree.end_column()
+            pos = tree.position()
+            self.line = pos.line
+            self.column = pos.column
+            self.end_column = pos.end_column
 
     def message(self):
         if ErrorCodes.is_error(self.error):

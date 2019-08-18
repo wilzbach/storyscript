@@ -1,0 +1,34 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "6",
+      "name": [
+        "arr"
+      ],
+      "args": [
+        {
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "List",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "int"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "list",
+            "items": []
+          }
+        }
+      ],
+      "src": "arr = [] as List[int]"
+    }
+  },
+  "entrypoint": "1"
+}

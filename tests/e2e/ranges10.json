@@ -10,11 +10,28 @@
       ],
       "args": [
         {
-          "$OBJECT": "dict",
-          "items": []
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "Map",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              },
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "dict",
+            "items": []
+          }
         }
       ],
-      "src": "b = {}",
+      "src": "b = {} as Map[any,any]",
       "next": "2"
     },
     "2": {
