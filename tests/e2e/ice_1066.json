@@ -1,0 +1,121 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": []
+        }
+      ],
+      "src": "a = {}",
+      "next": "2.4"
+    },
+    "2.4": {
+      "method": "mutation",
+      "ln": "2.4",
+      "col_start": "12",
+      "col_end": "13",
+      "name": [
+        "__p-2.4"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "get",
+          "args": [
+            {
+              "$OBJECT": "arg",
+              "name": "key",
+              "arg": {
+                "$OBJECT": "string",
+                "string": "foo"
+              }
+            },
+            {
+              "$OBJECT": "arg",
+              "name": "default",
+              "arg": {
+                "$OBJECT": "dict",
+                "items": []
+              }
+            }
+          ]
+        }
+      ],
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "expression",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.4"
+          ]
+        }
+      ],
+      "next": "2.2"
+    },
+    "2.2": {
+      "method": "expression",
+      "ln": "2.2",
+      "col_start": "3",
+      "col_end": "11",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1",
+            {
+              "$OBJECT": "string",
+              "string": "b"
+            }
+          ]
+        }
+      ],
+      "next": "2.3"
+    },
+    "2.3": {
+      "method": "expression",
+      "ln": "2.3",
+      "col_start": "6",
+      "col_end": "11",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1",
+            {
+              "$OBJECT": "string",
+              "string": "c"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1"
+}
