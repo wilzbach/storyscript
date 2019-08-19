@@ -240,15 +240,17 @@ def test_none_string_ops(source, op):
 # Test operations on FloatType
 ###############################################################################
 
+all_except_equal = [lambda op: not is_equal(op) and all_ops[0](op)]
+
 
 @mark.parametrize('source,op', op_builder('1.5', '2.5'))
 def test_float_float_ops(source, op):
-    runner(source, op, allowed=all_ops)
+    runner(source, op, allowed=all_except_equal)
 
 
 @mark.parametrize('source,op', op_builder('1.5', '2', swapped=True))
 def test_float_int_ops(source, op):
-    runner(source, op, allowed=all_ops)
+    runner(source, op, allowed=all_except_equal)
 
 
 @mark.parametrize('source,op', op_builder('1.5', 'true', swapped=True))
@@ -327,7 +329,7 @@ def test_any_int_ops(source, op):
 
 @mark.parametrize('source,op', op_builder('any_var', '2.5', swapped=True))
 def test_any_float_ops(source, op):
-    runner(source, op, allowed=all_ops, pre=ANY)
+    runner(source, op, allowed=all_except_equal, pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '"."', swapped=True))
