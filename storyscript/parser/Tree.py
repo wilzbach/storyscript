@@ -98,6 +98,8 @@ class Tree(LarkTree):
         """
         Finds the line number of a tree using _find_position
         """
+        if self._line:
+            return self._line
         line = self._find_position('line')
         assert line != 'None', self
         return line
@@ -106,12 +108,16 @@ class Tree(LarkTree):
         """
         Finds the column number of a tree using _find_position
         """
+        if self._column:
+            return self._column
         return self._find_position('column')
 
     def end_column(self):
         """
         Finds the end column number of a tree using _find_position
         """
+        if self._end_column:
+            return self._end_column
         return self._find_position('end_column', reverse=True)
 
     def position(self):
