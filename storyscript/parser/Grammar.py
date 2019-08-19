@@ -36,8 +36,8 @@ class Grammar:
         self.ebnf.base_type = ('int_type, float_type, string_type, '
                                'object_type, regexp_type, function_type, '
                                'any_type, boolean_type, time_type')
-        self.ebnf._OSB = '['
-        self.ebnf._CSB = ']'
+        self.ebnf.OSB = '['
+        self.ebnf.CSB = ']'
         self.ebnf._COMMA = ','
         self.ebnf._LIST_KEYWORD = 'List'
         self.ebnf._MAP_KEYWORD = 'Map'
@@ -62,8 +62,8 @@ class Grammar:
         self.ebnf.set_token('REGEXP.10', r'/\/([^\/\n]*)\/g?i?m?s?u?y?/')
         self.ebnf.set_token('NAME.1', r'/[a-zA-Z_][a-zA-Z-\/_0-9]*/')
         self.ebnf.set_token('RAW_TIME.3', r'/([0-9]+(ms|[smhdw]))+/')
-        self.ebnf._OCB = '{'
-        self.ebnf._CCB = '}'
+        self.ebnf.OCB = '{'
+        self.ebnf.CCB = '}'
         self.ebnf._COLON = ':'
         self.ebnf._OP = '('
         self.ebnf._CP = ')'

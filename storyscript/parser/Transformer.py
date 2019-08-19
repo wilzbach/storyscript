@@ -511,5 +511,68 @@ class Transformer(LarkTransformer):
         m.needs_parentheses = True
         return m
 
+    @classmethod
+    def path_fragment(cls, matches):
+        """
+        Remove OSB `[` and CSB `]` from map, but save their line/column
+        information.
+        """
+        if len(matches) > 1:
+            assert matches[0].type == 'OSB'
+            t = Tree('path_fragment', matches[1:-1])
+            return t
+        else:
+            assert matches[0].type == 'NAME'
+            return Tree('path_fragment', matches)
+
+    @classmethod
+    def add_line_info(cls, t, matches):
+        """
+        Save line/column information from OSB `[` or OCB `{` tokens.
+        """
+        t._line = matches[0].line
+        t._column = matches[0].column
+        t._end_column = matches[-1].end_column
+
+    @classmethod
+    def list_type(cls, matches):
+        """
+        Remove OSB `[` and CSB `]` from map, but save their line/column
+        information.
+        """
+        t = Tree('list_type', matches[1:-1])
+        cls.add_line_info(t, matches)
+        return t
+
+    @classmethod
+    def map_type(cls, matches):
+        """
+        Remove OSB `[` and CSB `]` from map, but save their line/column
+        information.
+        """
+        t = Tree('map_type', matches[1:-1])
+        cls.add_line_info(t, matches)
+        return t
+
+    @classmethod
+    def map(cls, matches):
+        """
+        Remove OCB `{` and CCB `}` from map, but save their line/column
+        information.
+        """
+        t = Tree('map', matches[1:-1])
+        cls.add_line_info(t, matches)
+        return t
+
+    @classmethod
+    def assignment_destructoring(cls, matches):
+        """
+        Remove OCB `{` and CCB `}` from map, but save their line/column
+        information.
+        """
+        t = Tree('assignment_destructoring', matches[1:-1])
+        cls.add_line_info(t, matches)
+        return t
+
     def __getattr__(self, attribute, *args):
         return lambda matches: Tree(attribute, matches)

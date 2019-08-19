@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 16
+Error: syntax error in story at line 1, column 5
 
 1|    t = {} as List[time]
-                     ^^^^
+          ^^^^^^^^^^^^^^^
 
 E0126: Type casting not supported from `Map[any,any]` to `List[time]`.

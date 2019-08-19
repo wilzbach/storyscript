@@ -105,7 +105,7 @@
       "method": "return",
       "ln": "8",
       "col_start": "5",
-      "col_end": "11",
+      "col_end": "14",
       "args": [
         {
           "$OBJECT": "dict",
