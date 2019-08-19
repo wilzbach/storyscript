@@ -1,10 +1,11 @@
-import os
+from os import path
 
 from storyhub.sdk.ServiceWrapper import ServiceWrapper
 
 
-cur_dir = os.path.dirname(__file__)
-hub_fixtures_file = os.path.join(cur_dir, 'fixtures', 'hub_fixture.json.fixed')
+tests_dir = path.dirname(path.dirname(path.dirname(path.realpath(__file__))))
+hub_fixtures_file = path.join(tests_dir,
+                              'fixtures', 'hub_fixture.json.fixed')
 
 
 class StoryscriptHubFixture:

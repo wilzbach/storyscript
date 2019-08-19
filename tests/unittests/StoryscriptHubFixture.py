@@ -1,4 +1,12 @@
-from tests.test_helpers import ServiceWrapper, StoryscriptHubFixture
+import sys
+from os import path
+
+
+sys.path.insert(
+    0, path.dirname(path.dirname(path.dirname(path.realpath(__file__)))))
+
+from tests.e2e.helpers.StoryscriptHubFixture import ServiceWrapper, \
+    StoryscriptHubFixture   # noqa: E402
 
 
 def test_update_hub_fixtures(patch):

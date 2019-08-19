@@ -9,12 +9,12 @@ from bom_open import bom_open
 
 from click import unstyle
 
+from helpers.StoryscriptHubFixture import StoryscriptHubFixture
+
 from pytest import fixture, mark
 
 from storyscript.Api import Api
 from storyscript.App import _clean_dict
-
-from tests.test_helpers import StoryscriptHubFixture
 
 from utils import parse_features
 

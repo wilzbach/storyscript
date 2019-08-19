@@ -2,6 +2,231 @@
     {
         "configuration": {
             "actions": {
+                "validate": {
+                    "arguments": {
+                        "file": {
+                            "help": "The content of the microservice.yml you want to validate (in a multipart/form-data)",
+                            "in": "requestBody",
+                            "type": "string"
+                        }
+                    },
+                    "help": "Validates the provided microservice.yml content",
+                    "http": {
+                        "method": "post",
+                        "path": "/validate",
+                        "port": 5000
+                    },
+                    "output": {
+                        "type": "string"
+                    }
+                }
+            },
+            "health": {
+                "http": {
+                    "path": "/health",
+                    "port": 5000
+                }
+            },
+            "info": {
+                "contact": {
+                    "email": "aurelien@storyscript.io",
+                    "name": "Aurelien ARINO",
+                    "url": "https://storyscript.io"
+                },
+                "description": "One microservice to rule them all",
+                "license": {
+                    "name": "ISC",
+                    "url": "https://opensource.org/licenses/MIT"
+                },
+                "title": "microservice-validates",
+                "version": "1.1.0"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "node",
+                        "validate"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# microservice-validate\n",
+        "service": {
+            "alias": null,
+            "description": "One microservice to rule them all",
+            "isCertified": false,
+            "name": "microservice-validate",
+            "owner": {
+                "username": "Arinono"
+            },
+            "public": true,
+            "topics": [
+                "microservice",
+                "omg",
+                "validation"
+            ]
+        },
+        "serviceUuid": "9d1161dd-3105-4393-a852-7de19faa0fc6",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "id": {
+                    "help": "Generate an awesome id. It is really cool.\n",
+                    "http": {
+                        "method": "get",
+                        "path": "/",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "string"
+                    }
+                }
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "python3",
+                        "/app/server.py"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# Awesome Microservice\n\nCreate Random Awesome Stuff!\n\n![Microservice](https://img.shields.io/badge/microservice-ready-brightgreen.svg?style=for-the-badge)\n[![Docker Build Status](https://img.shields.io/docker/build/microservices/awesome.svg?style=for-the-badge)](https://hub.docker.com/r/microservices/awesome/)\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n```coffee\n>>> awesome id\nflamboyant-einstein-0101\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n",
+        "service": {
+            "alias": "awesome",
+            "description": null,
+            "isCertified": true,
+            "name": "awesome",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "omg",
+                "microservice",
+                "slug",
+                "slug-generator"
+            ]
+        },
+        "serviceUuid": "0e8d89f4-2493-49a7-adb2-e995b4ae347a",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "geocode": {
+                    "arguments": {
+                        "address": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "http": {
+                        "method": "post",
+                        "path": "/geocode",
+                        "port": 8000
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "properties": {
+                            "lat": {
+                                "type": "float"
+                            },
+                            "lon": {
+                                "type": "float"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "reverse_geocode": {
+                    "arguments": {
+                        "lat": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "float"
+                        },
+                        "lon": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "float"
+                        }
+                    },
+                    "http": {
+                        "method": "post",
+                        "path": "/reverse_geocode",
+                        "port": 8000
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "properties": {
+                            "city": {
+                                "type": "string"
+                            },
+                            "country": {
+                                "type": "string"
+                            },
+                            "full_response": {
+                                "type": "array"
+                            },
+                            "state": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                }
+            },
+            "environment": {
+                "API_KEY": {
+                    "help": "Create an API key for using the Google Maps API from\nhttps://console.developers.google.com/apis/credentials\n",
+                    "type": "string"
+                }
+            },
+            "info": {
+                "description": "This is a gmaps service",
+                "title": "gmaps",
+                "version": "1.0.0"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "python",
+                        "/app/app.py"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# _Google Maps_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nThis service is a wrapper around the official Python SDK for Google Maps API Web Services.\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Google Maps\n```coffee\nresult = gmaps geocode address: \"Amsterdam, Netherlands\"\nresult = gmaps reverse_geocode lat: 52.36015 lon: 4.89571\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Geocode\n```shell\n$ omg run geocode -a address=<ADDRESS> -e API_KEY=<API_KEY>\n```\n##### Reverse Geocode\n```shell\n$ omg run reverse_geocode -a lat=<LATITUDE> -a lon=<LONGITUDE> -e API_KEY=<API_KEY>\n```\n\n### TODOs\nThis is a WIP service, and as such, only a few APIs from the Google Maps SDK have\nbeen exposed.\n\nPRs are welcome.\n\nThe following APIs are yet to be implemented:\n1. Directions API\n2. Distance Matrix API\n3. Elevation API\n4. Time Zone API\n5. Geolocation API\n6. Places API\n7. Roads API\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/gmaps/blob/master/LICENSE).\n",
+        "service": {
+            "alias": "gmaps",
+            "description": "Google Maps API exposed as an OMG service",
+            "isCertified": true,
+            "name": "gmaps",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "google-maps-api",
+                "google-maps-geocoding-api",
+                "google-maps",
+                "microservice",
+                "omg"
+            ]
+        },
+        "serviceUuid": "692c8c3e-821d-410a-9b98-3bb94dda2c81",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
                 "fetch": {
                     "arguments": {
                         "body": {
@@ -228,6 +453,248 @@
     {
         "configuration": {
             "actions": {
+                "is_valid": {
+                    "arguments": {
+                        "uri": {
+                            "in": "query",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Is the given URI valid?\n",
+                    "http": {
+                        "method": "get",
+                        "path": "/validate",
+                        "port": 8080
+                    },
+                    "output": {
+                        "type": "boolean"
+                    }
+                },
+                "parse": {
+                    "arguments": {
+                        "uri": {
+                            "in": "query",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Parse a given URI into its parts.\n",
+                    "http": {
+                        "method": "get",
+                        "path": "/parse",
+                        "port": 8080
+                    },
+                    "output": {
+                        "type": "map"
+                    }
+                },
+                "query": {
+                    "arguments": {
+                        "uri": {
+                            "in": "query",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Parse a given URI's query fragment.\n",
+                    "http": {
+                        "method": "get",
+                        "path": "/query",
+                        "port": 8080
+                    },
+                    "output": {
+                        "type": "map"
+                    }
+                }
+            },
+            "info": {
+                "contact": {
+                    "email": "me@kennethreitz.org",
+                    "name": "Kenneth Reitz",
+                    "url": "https://kennethreitz.org/"
+                },
+                "description": "URI Tools",
+                "license": {
+                    "name": "MIT",
+                    "url": "https://opensource.org/licenses/MIT"
+                },
+                "title": "URI Tools",
+                "version": "0.1.3"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "python3",
+                        "/app/service.py"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# URITool Microservice\n\nThis microservice exists to provide utilities for dealing with URIs:\n\n![Microservice](https://img.shields.io/badge/microservice-ready-brightgreen.svg?style=for-the-badge)\n[![Docker Build Status](https://img.shields.io/docker/build/microservices/uritool.svg?style=for-the-badge)](https://hub.docker.com/r/microservices/uritool/)\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n```coffee\n>>> uritool parse uri:'https://github.com/'\n{\"uri\": \"https://github.com/\", \"scheme\": \"https\", \"userinfo\": null, \"host\": \"github.com\", \"path\": \"/\", \"query\": null, \"?\": {}, \"fragment\": null, \"netloc\": \"github.com\"}\n\n>>> uritool query uri:'https://httpbin.org/get?hello=world'\n{\"hello\": \"world\"}\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n",
+        "service": {
+            "alias": "uritool",
+            "description": null,
+            "isCertified": false,
+            "name": "uritool",
+            "owner": {
+                "username": "kennethreitz"
+            },
+            "public": true,
+            "topics": [
+                "microservice",
+                "omg"
+            ]
+        },
+        "serviceUuid": "2ca50510-7964-4efe-89aa-b9ea63b5e4c8",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "debug": {
+                    "arguments": {
+                        "msg": {
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Log a message with the DEBUG level"
+                },
+                "error": {
+                    "arguments": {
+                        "msg": {
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Log a message with the ERROR level"
+                },
+                "info": {
+                    "arguments": {
+                        "msg": {
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Log a message with the INFO level"
+                },
+                "warn": {
+                    "arguments": {
+                        "msg": {
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Log a message with the WARN level"
+                }
+            },
+            "info": {
+                "contact": {
+                    "email": "support@asyncy.com",
+                    "name": "Asyncy",
+                    "url": "https://asyncy.com"
+                },
+                "description": "This is the microservice.yml which corresponds to the native implementation of the log service",
+                "license": {
+                    "name": "MIT",
+                    "url": "https://opensource.org/licenses/MIT"
+                },
+                "title": "Simple logger for the Asyncy platform",
+                "version": "1.0.1"
+            },
+            "omg": 1
+        },
+        "readme": "# log\nThe microservice yaml for `log` -- An internal Asyncy service\n\n## Usage\n```coffee\nlog debug msg:\"This is a debug message\"\nlog info msg:\"This is an info message\"\nlog warn msg:\"This is a warn message\"\nlog error msg:\"This is an error message\"\n```\n",
+        "service": {
+            "alias": "log",
+            "description": "The microservice yaml for `log` -- An internal Asyncy service",
+            "isCertified": true,
+            "name": "log",
+            "owner": {
+                "username": "storyscript"
+            },
+            "public": true,
+            "topics": [
+                "logging",
+                "logger"
+            ]
+        },
+        "serviceUuid": "12a33ef9-e4bc-403e-ac94-dcb15a9b5d3b",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "send": {
+                    "arguments": {
+                        "attachment_path": {
+                            "type": "string"
+                        },
+                        "bcc": {
+                            "type": "string"
+                        },
+                        "cc": {
+                            "type": "string"
+                        },
+                        "from": {
+                            "required": true,
+                            "type": "string"
+                        },
+                        "html": {
+                            "type": "string"
+                        },
+                        "inline_attatchment_path": {
+                            "type": "string"
+                        },
+                        "subject": {
+                            "required": true,
+                            "type": "string"
+                        },
+                        "text": {
+                            "type": "string"
+                        },
+                        "to": {
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Send an email"
+                }
+            },
+            "environment": {
+                "API_KEY": {
+                    "type": "string"
+                },
+                "DOMAIN": {
+                    "type": "string"
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# Mailgun as a microservice\n\nSend emails with Mailgun\n\n```coffee\nmicroserive.guide exec -e API_KEY=<KEY> microservice/mailgun send \\\n  to:'no-reply@domain.com' \\\n  from:'no-reply@domain.com' \\\n  subject:'Hello world' \\\n  text:'Congratulations, you just sent an email with Mailgun! You are truly awesome!'\n\n{\n  \"id\": \"<20180327151234.1.B3090E27FAE9FFC8@sandbox13bee1ec0d79497ba1c13733deef6fc2.mailgun.org>\",\n  \"message\": \"Queued. Thank you.\"\n}\n```\n",
+        "service": {
+            "alias": "mailgun",
+            "description": "Send emails with Mailgun as a microservice",
+            "isCertified": false,
+            "name": "mailgun",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "mailgun",
+                "email-sender",
+                "microservice"
+            ]
+        },
+        "serviceUuid": "9c63568f-ae03-46f3-a9c8-f782877595bc",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
                 "boolean": {
                     "format": {
                         "command": [
@@ -350,6 +817,184 @@
             ]
         },
         "serviceUuid": "1295d4b0-c747-49d3-bd0b-0c213bd45b4d",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "sendMany": {
+                    "arguments": {
+                        "asm": {
+                            "in": "requestBody",
+                            "type": "object"
+                        },
+                        "attachments": {
+                            "in": "requestBody",
+                            "type": "list"
+                        },
+                        "batch_id": {
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "categories": {
+                            "in": "requestBody",
+                            "type": "list"
+                        },
+                        "content": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "list"
+                        },
+                        "custom_args": {
+                            "in": "requestBody",
+                            "type": "object"
+                        },
+                        "from": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "object"
+                        },
+                        "headers": {
+                            "in": "requestBody",
+                            "type": "object"
+                        },
+                        "ip_pool_name": {
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "mail_settings": {
+                            "in": "requestBody",
+                            "type": "object"
+                        },
+                        "personalizations": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "object"
+                        },
+                        "reply_to": {
+                            "in": "requestBody",
+                            "type": "object"
+                        },
+                        "sections": {
+                            "in": "requestBody",
+                            "type": "object"
+                        },
+                        "send_at": {
+                            "in": "requestBody",
+                            "type": "int"
+                        },
+                        "subject": {
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "template_id": {
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "tracking_settings": {
+                            "in": "requestBody",
+                            "type": "object"
+                        }
+                    },
+                    "http": {
+                        "method": "post",
+                        "path": "/send_many",
+                        "port": 8080
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "properties": {
+                            "message_id": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "sendOne": {
+                    "arguments": {
+                        "content": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "content_type": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "from": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "subject": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "to": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "http": {
+                        "method": "post",
+                        "path": "/send_one",
+                        "port": 8080
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "properties": {
+                            "message_id": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                }
+            },
+            "environment": {
+                "SENDGRID_API_TOKEN": {
+                    "help": "Create a Sendgrid account and register an API key at https://app.sendgrid.com/settings/api_keys\n",
+                    "required": true,
+                    "type": "string"
+                }
+            },
+            "info": {
+                "description": "This is a sendgrid service",
+                "title": "Sendgrid",
+                "version": "1.0.0"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "/app/bin/omg-sendgrid"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# _Sendgrid_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nAn OMG service to access the Sendgrid email API\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Send One\n```coffee\nsendgrid sendOne from: \"sender@dummy.com\" to: \"recipient@dummy.com\" subject: \"Hello\" content: \"\u2026\"\n```\n##### Send Many\n```coffee\nsendgrid sendMany\n  personalizations: [{\n    \"to\": [{\"email\": \"recipient1@dummy.com\", \"name\": \"Mister Dummy\"}],\n    \"subject\": \"Dear Mr. Dummy\",\n    \"dynamic_template_data\": {\n      \"dynamic_parameter\": \"set with a value\"\n    }\n  }]\n  from: {\"email\": \"sender@dummy.com\", \"name\": \"My sender name\"}\n  content: [{\n    \"type\": \"text/plain\",\n    \"value\": \"Hello World!\"\n  }]\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Send One\n```shell\n$ omg run sendOne -a from=<SENDER_EMAIL> -a to=<RECEIVER_EMAIL> -a subject=<EMAIL_SUBJECT> -a content=<CONTENT> -e SENDGRID_API_TOKEN=<SENDGRID_API_TOKEN>\n```\n##### Send Many\n```shell\n$ omg run sendMany -a personalizations=<PERSONALIZATION_OBJECT> -a from=<FROM_DETAILS_OBJECT> -a subject=<EMAIL_SUBJECT> -a content=<CONTENT_LIST> -e SENDGRID_API_TOKEN=<SENDGRID_API_TOKEN>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/sendgrid/blob/master/LICENSE).\n",
+        "service": {
+            "alias": "sendgrid",
+            "description": "An OMG service to access the Sendgrid email API",
+            "isCertified": true,
+            "name": "sendgrid",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "omg",
+                "microservice",
+                "sendgrid",
+                "sendgrid-api",
+                "sendgrid-api-wrapper"
+            ]
+        },
+        "serviceUuid": "e9175cb5-c925-460b-b4cd-d4248a6a7cd7",
         "state": "BETA"
     },
     {
@@ -638,92 +1283,6 @@
     {
         "configuration": {
             "actions": {
-                "format": {
-                    "arguments": {
-                        "data": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "any"
-                        }
-                    },
-                    "http": {
-                        "method": "post",
-                        "path": "/format",
-                        "port": 8080
-                    },
-                    "output": {
-                        "contentType": "application/json",
-                        "type": "string"
-                    }
-                },
-                "parse": {
-                    "arguments": {
-                        "data": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "string"
-                        }
-                    },
-                    "http": {
-                        "method": "post",
-                        "path": "/parse",
-                        "port": 8080
-                    },
-                    "output": {
-                        "contentType": "application/json",
-                        "type": "any"
-                    }
-                }
-            },
-            "health": {
-                "http": {
-                    "path": "/health",
-                    "port": 8080
-                }
-            },
-            "info": {
-                "description": "YAML parser and formatting service",
-                "license": {
-                    "name": "Apache 2.0",
-                    "url": "https://opensource.org/licenses/Apache-2.0"
-                },
-                "title": "YAML",
-                "version": "1.0.0"
-            },
-            "lifecycle": {
-                "startup": {
-                    "command": [
-                        "ruby",
-                        "/app/app.rb"
-                    ]
-                }
-            },
-            "omg": 1
-        },
-        "readme": "# _YAML_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nIt is commonly used for configuration files, but could be used in many applications where data is being stored or transmitted.\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Parse\n```coffee\n>>> yaml parse data:'- item'\n# [\"item\", \"foo\"]\n```\n##### Format\n```coffee\n>>> yaml format data: [1, 2]\n# \"---\\n- 1\\n- 2\\n\"\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Parse\n```shell\n$ omg run parse -a data=<DATA>\n```\n##### Format\n```shell\n$ omg run format -a data=<DATA>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/yaml/blob/master/LICENSE).\n",
-        "service": {
-            "alias": "yaml",
-            "description": "Yaml, parse, validate, return json",
-            "isCertified": false,
-            "name": "yaml",
-            "owner": {
-                "username": "omg-services"
-            },
-            "public": true,
-            "topics": [
-                "yaml",
-                "yaml-parser",
-                "yaml-validator",
-                "microservice",
-                "omg"
-            ]
-        },
-        "serviceUuid": "ef6459ed-79e4-4806-8eb3-c3b39c13a07f",
-        "state": "BETA"
-    },
-    {
-        "configuration": {
-            "actions": {
                 "follow": {
                     "arguments": {
                         "follow": {
@@ -949,435 +1508,6 @@
     {
         "configuration": {
             "actions": {
-                "geocode": {
-                    "arguments": {
-                        "address": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "string"
-                        }
-                    },
-                    "http": {
-                        "method": "post",
-                        "path": "/geocode",
-                        "port": 8000
-                    },
-                    "output": {
-                        "contentType": "application/json",
-                        "properties": {
-                            "lat": {
-                                "type": "float"
-                            },
-                            "lon": {
-                                "type": "float"
-                            }
-                        },
-                        "type": "object"
-                    }
-                },
-                "reverse_geocode": {
-                    "arguments": {
-                        "lat": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "float"
-                        },
-                        "lon": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "float"
-                        }
-                    },
-                    "http": {
-                        "method": "post",
-                        "path": "/reverse_geocode",
-                        "port": 8000
-                    },
-                    "output": {
-                        "contentType": "application/json",
-                        "properties": {
-                            "city": {
-                                "type": "string"
-                            },
-                            "country": {
-                                "type": "string"
-                            },
-                            "full_response": {
-                                "type": "array"
-                            },
-                            "state": {
-                                "type": "string"
-                            }
-                        },
-                        "type": "object"
-                    }
-                }
-            },
-            "environment": {
-                "API_KEY": {
-                    "help": "Create an API key for using the Google Maps API from\nhttps://console.developers.google.com/apis/credentials\n",
-                    "type": "string"
-                }
-            },
-            "info": {
-                "description": "This is a gmaps service",
-                "title": "gmaps",
-                "version": "1.0.0"
-            },
-            "lifecycle": {
-                "startup": {
-                    "command": [
-                        "python",
-                        "/app/app.py"
-                    ]
-                }
-            },
-            "omg": 1
-        },
-        "readme": "# _Google Maps_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nThis service is a wrapper around the official Python SDK for Google Maps API Web Services.\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Google Maps\n```coffee\nresult = gmaps geocode address: \"Amsterdam, Netherlands\"\nresult = gmaps reverse_geocode lat: 52.36015 lon: 4.89571\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Geocode\n```shell\n$ omg run geocode -a address=<ADDRESS> -e API_KEY=<API_KEY>\n```\n##### Reverse Geocode\n```shell\n$ omg run reverse_geocode -a lat=<LATITUDE> -a lon=<LONGITUDE> -e API_KEY=<API_KEY>\n```\n\n### TODOs\nThis is a WIP service, and as such, only a few APIs from the Google Maps SDK have\nbeen exposed.\n\nPRs are welcome.\n\nThe following APIs are yet to be implemented:\n1. Directions API\n2. Distance Matrix API\n3. Elevation API\n4. Time Zone API\n5. Geolocation API\n6. Places API\n7. Roads API\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/gmaps/blob/master/LICENSE).\n",
-        "service": {
-            "alias": "gmaps",
-            "description": "Google Maps API exposed as an OMG service",
-            "isCertified": true,
-            "name": "gmaps",
-            "owner": {
-                "username": "omg-services"
-            },
-            "public": true,
-            "topics": [
-                "google-maps-api",
-                "google-maps-geocoding-api",
-                "google-maps",
-                "microservice",
-                "omg"
-            ]
-        },
-        "serviceUuid": "692c8c3e-821d-410a-9b98-3bb94dda2c81",
-        "state": "BETA"
-    },
-    {
-        "configuration": {
-            "actions": {
-                "send": {
-                    "arguments": {
-                        "attachment_path": {
-                            "type": "string"
-                        },
-                        "bcc": {
-                            "type": "string"
-                        },
-                        "cc": {
-                            "type": "string"
-                        },
-                        "from": {
-                            "required": true,
-                            "type": "string"
-                        },
-                        "html": {
-                            "type": "string"
-                        },
-                        "inline_attatchment_path": {
-                            "type": "string"
-                        },
-                        "subject": {
-                            "required": true,
-                            "type": "string"
-                        },
-                        "text": {
-                            "type": "string"
-                        },
-                        "to": {
-                            "required": true,
-                            "type": "string"
-                        }
-                    },
-                    "help": "Send an email"
-                }
-            },
-            "environment": {
-                "API_KEY": {
-                    "type": "string"
-                },
-                "DOMAIN": {
-                    "type": "string"
-                }
-            },
-            "omg": 1
-        },
-        "readme": "# Mailgun as a microservice\n\nSend emails with Mailgun\n\n```coffee\nmicroserive.guide exec -e API_KEY=<KEY> microservice/mailgun send \\\n  to:'no-reply@domain.com' \\\n  from:'no-reply@domain.com' \\\n  subject:'Hello world' \\\n  text:'Congratulations, you just sent an email with Mailgun! You are truly awesome!'\n\n{\n  \"id\": \"<20180327151234.1.B3090E27FAE9FFC8@sandbox13bee1ec0d79497ba1c13733deef6fc2.mailgun.org>\",\n  \"message\": \"Queued. Thank you.\"\n}\n```\n",
-        "service": {
-            "alias": "mailgun",
-            "description": "Send emails with Mailgun as a microservice",
-            "isCertified": false,
-            "name": "mailgun",
-            "owner": {
-                "username": "omg-services"
-            },
-            "public": true,
-            "topics": [
-                "mailgun",
-                "email-sender",
-                "microservice"
-            ]
-        },
-        "serviceUuid": "9c63568f-ae03-46f3-a9c8-f782877595bc",
-        "state": "BETA"
-    },
-    {
-        "configuration": {
-            "actions": {
-                "sendMany": {
-                    "arguments": {
-                        "asm": {
-                            "in": "requestBody",
-                            "type": "object"
-                        },
-                        "attachments": {
-                            "in": "requestBody",
-                            "type": "list"
-                        },
-                        "batch_id": {
-                            "in": "requestBody",
-                            "type": "string"
-                        },
-                        "categories": {
-                            "in": "requestBody",
-                            "type": "list"
-                        },
-                        "content": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "list"
-                        },
-                        "custom_args": {
-                            "in": "requestBody",
-                            "type": "object"
-                        },
-                        "from": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "object"
-                        },
-                        "headers": {
-                            "in": "requestBody",
-                            "type": "object"
-                        },
-                        "ip_pool_name": {
-                            "in": "requestBody",
-                            "type": "string"
-                        },
-                        "mail_settings": {
-                            "in": "requestBody",
-                            "type": "object"
-                        },
-                        "personalizations": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "object"
-                        },
-                        "reply_to": {
-                            "in": "requestBody",
-                            "type": "object"
-                        },
-                        "sections": {
-                            "in": "requestBody",
-                            "type": "object"
-                        },
-                        "send_at": {
-                            "in": "requestBody",
-                            "type": "int"
-                        },
-                        "subject": {
-                            "in": "requestBody",
-                            "type": "string"
-                        },
-                        "template_id": {
-                            "in": "requestBody",
-                            "type": "string"
-                        },
-                        "tracking_settings": {
-                            "in": "requestBody",
-                            "type": "object"
-                        }
-                    },
-                    "http": {
-                        "method": "post",
-                        "path": "/send_many",
-                        "port": 8080
-                    },
-                    "output": {
-                        "contentType": "application/json",
-                        "properties": {
-                            "message_id": {
-                                "type": "string"
-                            }
-                        },
-                        "type": "object"
-                    }
-                },
-                "sendOne": {
-                    "arguments": {
-                        "content": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "string"
-                        },
-                        "content_type": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "string"
-                        },
-                        "from": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "string"
-                        },
-                        "subject": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "string"
-                        },
-                        "to": {
-                            "in": "requestBody",
-                            "required": true,
-                            "type": "string"
-                        }
-                    },
-                    "http": {
-                        "method": "post",
-                        "path": "/send_one",
-                        "port": 8080
-                    },
-                    "output": {
-                        "contentType": "application/json",
-                        "properties": {
-                            "message_id": {
-                                "type": "string"
-                            }
-                        },
-                        "type": "object"
-                    }
-                }
-            },
-            "environment": {
-                "SENDGRID_API_TOKEN": {
-                    "help": "Create a Sendgrid account and register an API key at https://app.sendgrid.com/settings/api_keys\n",
-                    "required": true,
-                    "type": "string"
-                }
-            },
-            "info": {
-                "description": "This is a sendgrid service",
-                "title": "Sendgrid",
-                "version": "1.0.0"
-            },
-            "lifecycle": {
-                "startup": {
-                    "command": [
-                        "/app/bin/omg-sendgrid"
-                    ]
-                }
-            },
-            "omg": 1
-        },
-        "readme": "# _Sendgrid_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nAn OMG service to access the Sendgrid email API\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Send One\n```coffee\nsendgrid sendOne from: \"sender@dummy.com\" to: \"recipient@dummy.com\" subject: \"Hello\" content: \"\u2026\"\n```\n##### Send Many\n```coffee\nsendgrid sendMany\n  personalizations: [{\n    \"to\": [{\"email\": \"recipient1@dummy.com\", \"name\": \"Mister Dummy\"}],\n    \"subject\": \"Dear Mr. Dummy\",\n    \"dynamic_template_data\": {\n      \"dynamic_parameter\": \"set with a value\"\n    }\n  }]\n  from: {\"email\": \"sender@dummy.com\", \"name\": \"My sender name\"}\n  content: [{\n    \"type\": \"text/plain\",\n    \"value\": \"Hello World!\"\n  }]\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Send One\n```shell\n$ omg run sendOne -a from=<SENDER_EMAIL> -a to=<RECEIVER_EMAIL> -a subject=<EMAIL_SUBJECT> -a content=<CONTENT> -e SENDGRID_API_TOKEN=<SENDGRID_API_TOKEN>\n```\n##### Send Many\n```shell\n$ omg run sendMany -a personalizations=<PERSONALIZATION_OBJECT> -a from=<FROM_DETAILS_OBJECT> -a subject=<EMAIL_SUBJECT> -a content=<CONTENT_LIST> -e SENDGRID_API_TOKEN=<SENDGRID_API_TOKEN>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/sendgrid/blob/master/LICENSE).\n",
-        "service": {
-            "alias": "sendgrid",
-            "description": "An OMG service to access the Sendgrid email API",
-            "isCertified": true,
-            "name": "sendgrid",
-            "owner": {
-                "username": "omg-services"
-            },
-            "public": true,
-            "topics": [
-                "omg",
-                "microservice",
-                "sendgrid",
-                "sendgrid-api",
-                "sendgrid-api-wrapper"
-            ]
-        },
-        "serviceUuid": "e9175cb5-c925-460b-b4cd-d4248a6a7cd7",
-        "state": "BETA"
-    },
-    {
-        "configuration": {
-            "actions": {
-                "debug": {
-                    "arguments": {
-                        "msg": {
-                            "required": true,
-                            "type": "string"
-                        }
-                    },
-                    "help": "Log a message with the DEBUG level"
-                },
-                "error": {
-                    "arguments": {
-                        "msg": {
-                            "required": true,
-                            "type": "string"
-                        }
-                    },
-                    "help": "Log a message with the ERROR level"
-                },
-                "info": {
-                    "arguments": {
-                        "msg": {
-                            "required": true,
-                            "type": "string"
-                        }
-                    },
-                    "help": "Log a message with the INFO level"
-                },
-                "warn": {
-                    "arguments": {
-                        "msg": {
-                            "required": true,
-                            "type": "string"
-                        }
-                    },
-                    "help": "Log a message with the WARN level"
-                }
-            },
-            "info": {
-                "contact": {
-                    "email": "support@asyncy.com",
-                    "name": "Asyncy",
-                    "url": "https://asyncy.com"
-                },
-                "description": "This is the microservice.yml which corresponds to the native implementation of the log service",
-                "license": {
-                    "name": "MIT",
-                    "url": "https://opensource.org/licenses/MIT"
-                },
-                "title": "Simple logger for the Asyncy platform",
-                "version": "1.0.1"
-            },
-            "omg": 1
-        },
-        "readme": "# log\nThe microservice yaml for `log` -- An internal Asyncy service\n\n## Usage\n```coffee\nlog debug msg:\"This is a debug message\"\nlog info msg:\"This is an info message\"\nlog warn msg:\"This is a warn message\"\nlog error msg:\"This is an error message\"\n```\n",
-        "service": {
-            "alias": "log",
-            "description": "The microservice yaml for `log` -- An internal Asyncy service",
-            "isCertified": true,
-            "name": "log",
-            "owner": {
-                "username": "storyscript"
-            },
-            "public": true,
-            "topics": [
-                "logging",
-                "logger"
-            ]
-        },
-        "serviceUuid": "12a33ef9-e4bc-403e-ac94-dcb15a9b5d3b",
-        "state": "BETA"
-    },
-    {
-        "configuration": {
-            "actions": {
                 "generate": {
                     "help": "Generate a UUID v4 like 38788d28-6526-45c5-acf9-bb179160c7d7\n",
                     "http": {
@@ -1427,217 +1557,87 @@
     {
         "configuration": {
             "actions": {
-                "is_valid": {
+                "format": {
                     "arguments": {
-                        "uri": {
-                            "in": "query",
+                        "data": {
+                            "in": "requestBody",
                             "required": true,
-                            "type": "string"
+                            "type": "any"
                         }
                     },
-                    "help": "Is the given URI valid?\n",
                     "http": {
-                        "method": "get",
-                        "path": "/validate",
+                        "method": "post",
+                        "path": "/format",
                         "port": 8080
                     },
                     "output": {
-                        "type": "boolean"
+                        "contentType": "application/json",
+                        "type": "string"
                     }
                 },
                 "parse": {
                     "arguments": {
-                        "uri": {
-                            "in": "query",
+                        "data": {
+                            "in": "requestBody",
                             "required": true,
                             "type": "string"
                         }
                     },
-                    "help": "Parse a given URI into its parts.\n",
                     "http": {
-                        "method": "get",
+                        "method": "post",
                         "path": "/parse",
                         "port": 8080
                     },
                     "output": {
-                        "type": "map"
-                    }
-                },
-                "query": {
-                    "arguments": {
-                        "uri": {
-                            "in": "query",
-                            "required": true,
-                            "type": "string"
-                        }
-                    },
-                    "help": "Parse a given URI's query fragment.\n",
-                    "http": {
-                        "method": "get",
-                        "path": "/query",
-                        "port": 8080
-                    },
-                    "output": {
-                        "type": "map"
-                    }
-                }
-            },
-            "info": {
-                "contact": {
-                    "email": "me@kennethreitz.org",
-                    "name": "Kenneth Reitz",
-                    "url": "https://kennethreitz.org/"
-                },
-                "description": "URI Tools",
-                "license": {
-                    "name": "MIT",
-                    "url": "https://opensource.org/licenses/MIT"
-                },
-                "title": "URI Tools",
-                "version": "0.1.3"
-            },
-            "lifecycle": {
-                "startup": {
-                    "command": [
-                        "python3",
-                        "/app/service.py"
-                    ]
-                }
-            },
-            "omg": 1
-        },
-        "readme": "# URITool Microservice\n\nThis microservice exists to provide utilities for dealing with URIs:\n\n![Microservice](https://img.shields.io/badge/microservice-ready-brightgreen.svg?style=for-the-badge)\n[![Docker Build Status](https://img.shields.io/docker/build/microservices/uritool.svg?style=for-the-badge)](https://hub.docker.com/r/microservices/uritool/)\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n```coffee\n>>> uritool parse uri:'https://github.com/'\n{\"uri\": \"https://github.com/\", \"scheme\": \"https\", \"userinfo\": null, \"host\": \"github.com\", \"path\": \"/\", \"query\": null, \"?\": {}, \"fragment\": null, \"netloc\": \"github.com\"}\n\n>>> uritool query uri:'https://httpbin.org/get?hello=world'\n{\"hello\": \"world\"}\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n",
-        "service": {
-            "alias": "uritool",
-            "description": null,
-            "isCertified": false,
-            "name": "uritool",
-            "owner": {
-                "username": "kennethreitz"
-            },
-            "public": true,
-            "topics": [
-                "microservice",
-                "omg"
-            ]
-        },
-        "serviceUuid": "2ca50510-7964-4efe-89aa-b9ea63b5e4c8",
-        "state": "BETA"
-    },
-    {
-        "configuration": {
-            "actions": {
-                "validate": {
-                    "arguments": {
-                        "file": {
-                            "help": "The content of the microservice.yml you want to validate (in a multipart/form-data)",
-                            "in": "requestBody",
-                            "type": "string"
-                        }
-                    },
-                    "help": "Validates the provided microservice.yml content",
-                    "http": {
-                        "method": "post",
-                        "path": "/validate",
-                        "port": 5000
-                    },
-                    "output": {
-                        "type": "string"
+                        "contentType": "application/json",
+                        "type": "any"
                     }
                 }
             },
             "health": {
                 "http": {
                     "path": "/health",
-                    "port": 5000
+                    "port": 8080
                 }
             },
             "info": {
-                "contact": {
-                    "email": "aurelien@storyscript.io",
-                    "name": "Aurelien ARINO",
-                    "url": "https://storyscript.io"
-                },
-                "description": "One microservice to rule them all",
+                "description": "YAML parser and formatting service",
                 "license": {
-                    "name": "ISC",
-                    "url": "https://opensource.org/licenses/MIT"
+                    "name": "Apache 2.0",
+                    "url": "https://opensource.org/licenses/Apache-2.0"
                 },
-                "title": "microservice-validates",
-                "version": "1.1.0"
+                "title": "YAML",
+                "version": "1.0.0"
             },
             "lifecycle": {
                 "startup": {
                     "command": [
-                        "node",
-                        "validate"
+                        "ruby",
+                        "/app/app.rb"
                     ]
                 }
             },
             "omg": 1
         },
-        "readme": "# microservice-validate\n",
+        "readme": "# _YAML_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nIt is commonly used for configuration files, but could be used in many applications where data is being stored or transmitted.\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Parse\n```coffee\n>>> yaml parse data:'- item'\n# [\"item\", \"foo\"]\n```\n##### Format\n```coffee\n>>> yaml format data: [1, 2]\n# \"---\\n- 1\\n- 2\\n\"\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Parse\n```shell\n$ omg run parse -a data=<DATA>\n```\n##### Format\n```shell\n$ omg run format -a data=<DATA>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/yaml/blob/master/LICENSE).\n",
         "service": {
-            "alias": null,
-            "description": "One microservice to rule them all",
+            "alias": "yaml",
+            "description": "Yaml, parse, validate, return json",
             "isCertified": false,
-            "name": "microservice-validate",
-            "owner": {
-                "username": "Arinono"
-            },
-            "public": true,
-            "topics": [
-                "microservice",
-                "omg",
-                "validation"
-            ]
-        },
-        "serviceUuid": "9d1161dd-3105-4393-a852-7de19faa0fc6",
-        "state": "BETA"
-    },
-    {
-        "configuration": {
-            "actions": {
-                "id": {
-                    "help": "Generate an awesome id. It is really cool.\n",
-                    "http": {
-                        "method": "get",
-                        "path": "/",
-                        "port": 8000
-                    },
-                    "output": {
-                        "type": "string"
-                    }
-                }
-            },
-            "lifecycle": {
-                "startup": {
-                    "command": [
-                        "python3",
-                        "/app/server.py"
-                    ]
-                }
-            },
-            "omg": 1
-        },
-        "readme": "# Awesome Microservice\n\nCreate Random Awesome Stuff!\n\n![Microservice](https://img.shields.io/badge/microservice-ready-brightgreen.svg?style=for-the-badge)\n[![Docker Build Status](https://img.shields.io/docker/build/microservices/awesome.svg?style=for-the-badge)](https://hub.docker.com/r/microservices/awesome/)\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n```coffee\n>>> awesome id\nflamboyant-einstein-0101\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n",
-        "service": {
-            "alias": "awesome",
-            "description": null,
-            "isCertified": true,
-            "name": "awesome",
+            "name": "yaml",
             "owner": {
                 "username": "omg-services"
             },
             "public": true,
             "topics": [
-                "omg",
+                "yaml",
+                "yaml-parser",
+                "yaml-validator",
                 "microservice",
-                "slug",
-                "slug-generator"
+                "omg"
             ]
         },
-        "serviceUuid": "0e8d89f4-2493-49a7-adb2-e995b4ae347a",
+        "serviceUuid": "ef6459ed-79e4-4806-8eb3-c3b39c13a07f",
         "state": "BETA"
     }
 ]
