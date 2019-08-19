@@ -37,7 +37,7 @@
           }
         }
       ],
-      "src": "a = !(2 == 2) as int"
+      "src": "a = not(2 == 2) as int"
     }
   },
   "entrypoint": "1"

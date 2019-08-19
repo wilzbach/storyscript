@@ -118,7 +118,7 @@ class Grammar:
     def expressions(self):
 
         self.ebnf.POWER = '^'
-        self.ebnf.NOT = '!'
+        self.ebnf.NOT = 'not'
 
         self.ebnf.OR = 'or'
         self.ebnf.AND = 'and'

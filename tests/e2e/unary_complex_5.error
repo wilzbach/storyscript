@@ -1,6 +1,6 @@
 Error: syntax error in story at line 1, column 5
 
-1|    a = ! (my_service command k1: !b) or !(my_service2 command k2: ! !c)
+1|    a = not (my_service command k1: not b) or not(my_service2 command k2: not not c)
           ^
 
 E0122: `any` can't be converted to `boolean`

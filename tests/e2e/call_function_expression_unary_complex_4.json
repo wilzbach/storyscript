@@ -111,7 +111,7 @@
           ]
         }
       ],
-      "src": "a = my_function(k1: !b or true)"
+      "src": "a = my_function(k1: not b or true)"
     }
   },
   "entrypoint": "1",

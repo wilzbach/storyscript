@@ -78,7 +78,7 @@
           ]
         }
       ],
-      "src": "a = b == 2 and !c"
+      "src": "a = b == 2 and not c"
     }
   },
   "entrypoint": "1"

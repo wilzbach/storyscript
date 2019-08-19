@@ -14,7 +14,7 @@ class PrettyExpressionVisitor(ExpressionVisitor):
     _types = {
         'PLUS': '+', 'DASH': '-', 'POWER': '^',
         'MULTIPLIER': '*', 'BSLASH': '/', 'MODULUS': '%',
-        'AND': 'and', 'OR': 'or', 'NOT': '!', 'EQUAL': '==',
+        'AND': 'and', 'OR': 'or', 'NOT': 'not', 'EQUAL': '==',
         'GREATER': '>', 'LESSER': '<',
         'NOT_EQUAL': '!=',
         'GREATER_EQUAL': '>=',

@@ -18,7 +18,7 @@ def story_format(source):
     ('a=-1.5', 'a = -1.5'),
     ('a=true', 'a = true'),
     ('a=false', 'a = false'),
-    ('a=!true', 'a = ! true'),
+    ('a=not true', 'a = not true'),
     ('a=1+2', 'a = 1 + 2'),
     ('a=1-2', 'a = 1 - 2'),
     ('a=1*2', 'a = 1 * 2'),
