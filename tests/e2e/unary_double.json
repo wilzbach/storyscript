@@ -45,7 +45,7 @@
           ]
         }
       ],
-      "src": "a = !!b"
+      "src": "a = not not b"
     }
   },
   "entrypoint": "1"

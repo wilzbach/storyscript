@@ -1,2 +1,2 @@
 b = false
-a = !!b
+a = not not b

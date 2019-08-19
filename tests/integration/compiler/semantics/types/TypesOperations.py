@@ -8,7 +8,7 @@ def is_boolean(op):
     """
     Tests whether an operation requires conversion to boolean.
     """
-    return op in ['or', 'and', '!']
+    return op in ['or', 'and', 'not']
 
 
 def is_cmp(op):
@@ -64,7 +64,7 @@ def op_builder(a, b, swapped=False):
             res.append((f'{b} {op} {a}', op))
 
     if not swapped:
-        res.append((f'! {a}', '!'))
+        res.append((f'not {a}', 'not'))
     return res
 
 

@@ -1,3 +1,3 @@
 b = 42
 t = 21
-a = [! b, !2] <= ! (t + t)
+a = [not b, not 2] <= not (t + t)

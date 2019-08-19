@@ -3,8 +3,8 @@
     "1.1": {
       "method": "execute",
       "ln": "1.1",
-      "col_start": "9",
-      "col_end": "27",
+      "col_start": "11",
+      "col_end": "29",
       "name": [
         "__p-1.1"
       ],
@@ -33,8 +33,8 @@
     "1.2": {
       "method": "execute",
       "ln": "1.2",
-      "col_start": "48",
-      "col_end": "67",
+      "col_start": "55",
+      "col_end": "74",
       "name": [
         "__p-1.2"
       ],
@@ -140,7 +140,7 @@
           ]
         }
       ],
-      "src": "a = ! ((my_service command k1: !b) == 2) or !((my_service2 command k2: ! !c) == 3)"
+      "src": "a = not ((my_service command k1: not b) == 2) or not((my_service2 command k2: not not c) == 3)"
     }
   },
   "services": [

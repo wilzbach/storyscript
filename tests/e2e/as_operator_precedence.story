@@ -1,1 +1,1 @@
-a = !(2 == 2) as int
+a = not(2 == 2) as int

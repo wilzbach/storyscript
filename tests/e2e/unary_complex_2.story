@@ -1,1 +1,1 @@
-a = ! 2 == !3 or ! 4
+a = not 2 == not 3 or not 4
