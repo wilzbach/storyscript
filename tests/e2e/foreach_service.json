@@ -15,24 +15,24 @@
             [
               {
                 "$OBJECT": "string",
-                "string": "f"
+                "string": "abc@xyz.com"
               },
               {
-                "$OBJECT": "int",
-                "int": 1
+                "$OBJECT": "string",
+                "string": "Hello Mr. Abc"
               }
             ]
           ]
         }
       ],
-      "src": "obj = {\"f\": 1}",
+      "src": "obj = {\"abc@xyz.com\": \"Hello Mr. Abc\"}",
       "next": "2.1"
     },
     "2.1": {
       "method": "mutation",
       "ln": "2.1",
       "col_start": "9",
-      "col_end": "17",
+      "col_end": "12",
       "name": [
         "__p-2.1"
       ],
@@ -54,7 +54,7 @@
     "2": {
       "method": "for",
       "ln": "2",
-      "col_end": "18",
+      "col_end": "12",
       "output": [
         "item"
       ],
@@ -67,22 +67,66 @@
         }
       ],
       "enter": "3",
-      "src": "foreach obj keys as item",
+      "src": "foreach obj.keys() as item",
       "next": "3"
     },
     "3": {
       "method": "execute",
       "ln": "3",
       "col_start": "5",
-      "col_end": "29",
-      "service": "email_service",
-      "command": "send_email",
+      "col_end": "17",
+      "service": "mailgun",
+      "command": "send",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "to",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "item"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "from",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foo@bar.com"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "subject",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "Spam"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "text",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "obj",
+              {
+                "$OBJECT": "path",
+                "paths": [
+                  "item"
+                ]
+              }
+            ]
+          }
+        }
+      ],
       "parent": "2",
-      "src": "    email_service send_email"
+      "src": "    mailgun send to: item from: \"foo@bar.com\" subject: \"Spam\" text: obj[item]"
     }
   },
   "services": [
-    "email_service"
+    "mailgun"
   ],
   "entrypoint": "1"
 }

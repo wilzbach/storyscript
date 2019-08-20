@@ -1,1 +1,1 @@
-﻿alpine echo message:"hello"
+﻿log info msg:"hello"

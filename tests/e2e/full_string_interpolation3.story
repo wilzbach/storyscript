@@ -1,1 +1,1 @@
-a = "foo{my_service command}"
+a = "foo{random string length: 10}"

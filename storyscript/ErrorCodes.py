@@ -151,7 +151,7 @@ class ErrorCodes:
         'E0113', '{fn_type} `{name}` requires argument `{arg}`')
     function_arg_invalid = (
         'E0114', '{fn_type} `{name}` does not accept argument `{arg}`')
-    function_arg_type_mismatch = (
+    param_arg_type_mismatch = (
         'E0115',
         '{fn_type} `{name}` requires argument `{arg_name}` to be of '
         '`{target}`, not `{source}`')
@@ -234,6 +234,25 @@ class ErrorCodes:
     output_assignment_existing_var = (
         'E0138',
         'Output must be unique. Can not use existing `{var}`.',
+    )
+    service_not_found = (
+        'E0139', 'Service `{name}` does not exist on the hub.'
+    )
+    service_action_not_found = (
+        'E0140', 'Service `{name}` has no action `{action}`.'
+    )
+    service_arg_invalid = (
+        'E0141',
+        '{service} action `{action}` does not accept argument `{arg}`.')
+    service_event_not_found = (
+        'E0142', 'Event action `{name}` has no event `{event}`.'
+    )
+    service_arg_required = (
+        'E0143', '{service} `{action}` requires argument `{arg}`.')
+
+    event_not_defined = (
+        'E0144',
+        'No event listener with output `{output}` for event `{event}`.'
     )
 
     @staticmethod

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 5
+
+1|    a = log info msg:"foobar"
+          ^^^
+
+E0116: Assignments with the type `None` are not allowed

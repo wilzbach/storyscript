@@ -4,12 +4,22 @@
       "method": "execute",
       "ln": "1.1",
       "col_start": "7",
-      "col_end": "25",
+      "col_end": "20",
       "name": [
         "__p-1.1"
       ],
-      "service": "my_service",
-      "command": "command",
+      "service": "random",
+      "command": "string",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "length",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
+          }
+        }
+      ],
       "next": "1"
     },
     "1": {
@@ -45,11 +55,11 @@
           ]
         }
       ],
-      "src": "a = \"foo{my_service command}\""
+      "src": "a = \"foo{random string length: 10}\""
     }
   },
   "services": [
-    "my_service"
+    "random"
   ],
   "entrypoint": "1.1"
 }

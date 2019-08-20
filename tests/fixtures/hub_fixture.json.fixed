@@ -1,0 +1,1643 @@
+[
+    {
+        "configuration": {
+            "actions": {
+                "validate": {
+                    "arguments": {
+                        "file": {
+                            "help": "The content of the microservice.yml you want to validate (in a multipart/form-data)",
+                            "in": "requestBody",
+                            "type": "string"
+                        }
+                    },
+                    "help": "Validates the provided microservice.yml content",
+                    "http": {
+                        "method": "post",
+                        "path": "/validate",
+                        "port": 5000
+                    },
+                    "output": {
+                        "type": "string"
+                    }
+                }
+            },
+            "health": {
+                "http": {
+                    "path": "/health",
+                    "port": 5000
+                }
+            },
+            "info": {
+                "contact": {
+                    "email": "aurelien@storyscript.io",
+                    "name": "Aurelien ARINO",
+                    "url": "https://storyscript.io"
+                },
+                "description": "One microservice to rule them all",
+                "license": {
+                    "name": "ISC",
+                    "url": "https://opensource.org/licenses/MIT"
+                },
+                "title": "microservice-validates",
+                "version": "1.1.0"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "node",
+                        "validate"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# microservice-validate\n",
+        "service": {
+            "alias": null,
+            "description": "One microservice to rule them all",
+            "isCertified": false,
+            "name": "microservice-validate",
+            "owner": {
+                "username": "Arinono"
+            },
+            "public": true,
+            "topics": [
+                "microservice",
+                "omg",
+                "validation"
+            ]
+        },
+        "serviceUuid": "9d1161dd-3105-4393-a852-7de19faa0fc6",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "id": {
+                    "help": "Generate an awesome id. It is really cool.\n",
+                    "http": {
+                        "method": "get",
+                        "path": "/",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "string"
+                    }
+                }
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "python3",
+                        "/app/server.py"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# Awesome Microservice\n\nCreate Random Awesome Stuff!\n\n![Microservice](https://img.shields.io/badge/microservice-ready-brightgreen.svg?style=for-the-badge)\n[![Docker Build Status](https://img.shields.io/docker/build/microservices/awesome.svg?style=for-the-badge)](https://hub.docker.com/r/microservices/awesome/)\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n```coffee\n>>> awesome id\nflamboyant-einstein-0101\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n",
+        "service": {
+            "alias": "awesome",
+            "description": null,
+            "isCertified": true,
+            "name": "awesome",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "omg",
+                "microservice",
+                "slug",
+                "slug-generator"
+            ]
+        },
+        "serviceUuid": "0e8d89f4-2493-49a7-adb2-e995b4ae347a",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "geocode": {
+                    "arguments": {
+                        "address": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "http": {
+                        "method": "post",
+                        "path": "/geocode",
+                        "port": 8000
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "properties": {
+                            "lat": {
+                                "type": "float"
+                            },
+                            "lon": {
+                                "type": "float"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "reverse_geocode": {
+                    "arguments": {
+                        "lat": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "float"
+                        },
+                        "lon": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "float"
+                        }
+                    },
+                    "http": {
+                        "method": "post",
+                        "path": "/reverse_geocode",
+                        "port": 8000
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "properties": {
+                            "city": {
+                                "type": "string"
+                            },
+                            "country": {
+                                "type": "string"
+                            },
+                            "full_response": {
+                                "type": "array"
+                            },
+                            "state": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                }
+            },
+            "environment": {
+                "API_KEY": {
+                    "help": "Create an API key for using the Google Maps API from\nhttps://console.developers.google.com/apis/credentials\n",
+                    "type": "string"
+                }
+            },
+            "info": {
+                "description": "This is a gmaps service",
+                "title": "gmaps",
+                "version": "1.0.0"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "python",
+                        "/app/app.py"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# _Google Maps_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nThis service is a wrapper around the official Python SDK for Google Maps API Web Services.\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Google Maps\n```coffee\nresult = gmaps geocode address: \"Amsterdam, Netherlands\"\nresult = gmaps reverse_geocode lat: 52.36015 lon: 4.89571\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Geocode\n```shell\n$ omg run geocode -a address=<ADDRESS> -e API_KEY=<API_KEY>\n```\n##### Reverse Geocode\n```shell\n$ omg run reverse_geocode -a lat=<LATITUDE> -a lon=<LONGITUDE> -e API_KEY=<API_KEY>\n```\n\n### TODOs\nThis is a WIP service, and as such, only a few APIs from the Google Maps SDK have\nbeen exposed.\n\nPRs are welcome.\n\nThe following APIs are yet to be implemented:\n1. Directions API\n2. Distance Matrix API\n3. Elevation API\n4. Time Zone API\n5. Geolocation API\n6. Places API\n7. Roads API\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/gmaps/blob/master/LICENSE).\n",
+        "service": {
+            "alias": "gmaps",
+            "description": "Google Maps API exposed as an OMG service",
+            "isCertified": true,
+            "name": "gmaps",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "google-maps-api",
+                "google-maps-geocoding-api",
+                "google-maps",
+                "microservice",
+                "omg"
+            ]
+        },
+        "serviceUuid": "692c8c3e-821d-410a-9b98-3bb94dda2c81",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "fetch": {
+                    "arguments": {
+                        "body": {
+                            "in": "requestBody",
+                            "type": "any"
+                        },
+                        "headers": {
+                            "in": "requestBody",
+                            "type": "map"
+                        },
+                        "method": {
+                            "default": "get",
+                            "enum": [
+                                "get",
+                                "post",
+                                "patch",
+                                "delete",
+                                "put",
+                                "options"
+                            ],
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "query": {
+                            "help": "Set an optional map of query parameters.\nQuery parameters are automatically appended to the url specified (/url?foo=bar&john=doe)\n",
+                            "in": "requestBody",
+                            "type": "map"
+                        },
+                        "url": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Make a HTTP request to the outside world.\nThis command is native to the platform for performance reasons.\n",
+                    "output": {
+                        "type": "any"
+                    }
+                },
+                "help": "Make http calls and listen for http connections through the Asyncy Gateway\nresulting in serverless http endpoints.\n",
+                "server": {
+                    "events": {
+                        "listen": {
+                            "arguments": {
+                                "method": {
+                                    "default": "get",
+                                    "enum": [
+                                        "get",
+                                        "post",
+                                        "patch",
+                                        "delete",
+                                        "put",
+                                        "options"
+                                    ],
+                                    "in": "requestBody",
+                                    "type": "string"
+                                },
+                                "path": {
+                                    "in": "requestBody",
+                                    "required": true,
+                                    "type": "string"
+                                }
+                            },
+                            "help": "Listen and respond to http connections by\nregistering with the Asyncy Gateway resulting in a serverless function.\n",
+                            "http": {
+                                "port": 8889,
+                                "subscribe": {
+                                    "contentType": "application/json",
+                                    "method": "post",
+                                    "path": "/register"
+                                },
+                                "unsubscribe": {
+                                    "contentType": "application/json",
+                                    "method": "post",
+                                    "path": "/unregister"
+                                }
+                            },
+                            "output": {
+                                "actions": {
+                                    "finish": {
+                                        "http": {
+                                            "contentType": "application/json",
+                                            "use_event_conn": true
+                                        }
+                                    },
+                                    "flush": {
+                                        "http": {
+                                            "contentType": "application/json",
+                                            "use_event_conn": true
+                                        }
+                                    },
+                                    "get_header": {
+                                        "arguments": {
+                                            "key": {
+                                                "in": "responseBody",
+                                                "required": true,
+                                                "type": "string"
+                                            }
+                                        },
+                                        "http": {
+                                            "contentType": "application/json",
+                                            "use_event_conn": true
+                                        }
+                                    },
+                                    "redirect": {
+                                        "arguments": {
+                                            "query": {
+                                                "help": "These query parameters are appended to the URL specified.",
+                                                "in": "responseBody",
+                                                "type": "map"
+                                            },
+                                            "url": {
+                                                "in": "responseBody",
+                                                "required": true,
+                                                "type": "string"
+                                            }
+                                        },
+                                        "help": "Redirect the incoming URL. No additional actions may be used after executing this command.",
+                                        "http": {
+                                            "contentType": "application/json",
+                                            "use_event_conn": true
+                                        }
+                                    },
+                                    "set_header": {
+                                        "arguments": {
+                                            "key": {
+                                                "in": "responseBody",
+                                                "required": true,
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "in": "responseBody",
+                                                "required": true,
+                                                "type": "string"
+                                            }
+                                        },
+                                        "http": {
+                                            "contentType": "application/json",
+                                            "use_event_conn": true
+                                        }
+                                    },
+                                    "set_status": {
+                                        "arguments": {
+                                            "code": {
+                                                "in": "responseBody",
+                                                "required": true,
+                                                "type": "int"
+                                            }
+                                        },
+                                        "http": {
+                                            "contentType": "application/json",
+                                            "use_event_conn": true
+                                        }
+                                    },
+                                    "write": {
+                                        "arguments": {
+                                            "content": {
+                                                "in": "responseBody",
+                                                "required": true,
+                                                "type": "string"
+                                            },
+                                            "flush": {
+                                                "in": "responseBody",
+                                                "required": false,
+                                                "type": "boolean"
+                                            }
+                                        },
+                                        "http": {
+                                            "contentType": "application/json",
+                                            "use_event_conn": true
+                                        }
+                                    }
+                                },
+                                "contentType": "application/json",
+                                "properties": {
+                                    "body": {
+                                        "help": "The JSON body of the incoming HTTP request",
+                                        "type": "map"
+                                    },
+                                    "headers": {
+                                        "help": "The HTTP headers of the incoming HTTP request",
+                                        "type": "map"
+                                    },
+                                    "path": {
+                                        "help": "The path portion of th URI of the incoming HTTP request",
+                                        "type": "string"
+                                    },
+                                    "query_params": {
+                                        "help": "The parsed query parameters of the HTTP request",
+                                        "type": "map"
+                                    },
+                                    "uri": {
+                                        "help": "The URI of the incoming HTTP request",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# Asyncy HTTP Gateway\n\nAPI gateway server for executing Stories via HTTP.\n\n```coffee\nhttp server as server\n  when server listen method:'get' path:'/' as r\n    log info msg:r.body\n    log info msg:r.headers\n    log info msg:r.headers['Host']\n    r write data:'Hello World'\n    r status code:200\n    r finish\n```\n\n```sh\n$ curl https://foobar.storyscriptapp.com/\nHello World\n```\n\n\n## Development\n\nSetup virtual environment and install dependencies\n```\nvirtualenv -p python3.6 venv\nsource venv/bin/activate\npip install -r requirements.txt\n```\n\nYou may need to tell pycurl the path to your openssl installation\n```\npip install --install-option=\"--with-openssl\" --install-option=\"--openssl-dir=/usr/local/opt/openssl\" pycurl\n```\nSee https://github.com/nahamsec/JSParser/issues/22\n\n\nRun locally by calling\n\n```\npython -m app.main --logging=debug --debug\n```\n\n### Register an endpoint\n\n```shell\ncurl --data '{\"endpoint\": \"http://localhost:9000/story/foo\", \"data\":{\"path\":\"/ping\", \"method\": \"post\", \"host\": \"a\"}}' \\\n     -H \"Content-Type: application/json\" \\\n     localhost:8889/register\n```\n\nNow access that endpoint\n\n```shell\ncurl -X POST -d 'foobar' -H \"Host: a.storyscriptapp.com\" http://localhost:8888/ping\n```\n\n\n### Unregister an endpoint\n\n```shell\ncurl --data '{\"endpoint\": \"http://localhost:9000/story/foo\", \"data\":{\"path\":\"/ping\", \"method\": \"post\", \"host\": \"a\"}}' \\\n     -H \"Content-Type: application/json\" \\\n     localhost:8889/unregister\n```\n",
+        "service": {
+            "alias": "http",
+            "description": "The Asyncy API gateway server for executing Stories via HTTP.",
+            "isCertified": true,
+            "name": "http",
+            "owner": {
+                "username": "storyscript"
+            },
+            "public": true,
+            "topics": [
+                "omg",
+                "storyscript",
+                "microservice"
+            ]
+        },
+        "serviceUuid": "18564840-7551-4bb7-9ba7-bb9c9e2d92b4",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "is_valid": {
+                    "arguments": {
+                        "uri": {
+                            "in": "query",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Is the given URI valid?\n",
+                    "http": {
+                        "method": "get",
+                        "path": "/validate",
+                        "port": 8080
+                    },
+                    "output": {
+                        "type": "boolean"
+                    }
+                },
+                "parse": {
+                    "arguments": {
+                        "uri": {
+                            "in": "query",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Parse a given URI into its parts.\n",
+                    "http": {
+                        "method": "get",
+                        "path": "/parse",
+                        "port": 8080
+                    },
+                    "output": {
+                        "type": "map"
+                    }
+                },
+                "query": {
+                    "arguments": {
+                        "uri": {
+                            "in": "query",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Parse a given URI's query fragment.\n",
+                    "http": {
+                        "method": "get",
+                        "path": "/query",
+                        "port": 8080
+                    },
+                    "output": {
+                        "type": "map"
+                    }
+                }
+            },
+            "info": {
+                "contact": {
+                    "email": "me@kennethreitz.org",
+                    "name": "Kenneth Reitz",
+                    "url": "https://kennethreitz.org/"
+                },
+                "description": "URI Tools",
+                "license": {
+                    "name": "MIT",
+                    "url": "https://opensource.org/licenses/MIT"
+                },
+                "title": "URI Tools",
+                "version": "0.1.3"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "python3",
+                        "/app/service.py"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# URITool Microservice\n\nThis microservice exists to provide utilities for dealing with URIs:\n\n![Microservice](https://img.shields.io/badge/microservice-ready-brightgreen.svg?style=for-the-badge)\n[![Docker Build Status](https://img.shields.io/docker/build/microservices/uritool.svg?style=for-the-badge)](https://hub.docker.com/r/microservices/uritool/)\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n```coffee\n>>> uritool parse uri:'https://github.com/'\n{\"uri\": \"https://github.com/\", \"scheme\": \"https\", \"userinfo\": null, \"host\": \"github.com\", \"path\": \"/\", \"query\": null, \"?\": {}, \"fragment\": null, \"netloc\": \"github.com\"}\n\n>>> uritool query uri:'https://httpbin.org/get?hello=world'\n{\"hello\": \"world\"}\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n",
+        "service": {
+            "alias": "uritool",
+            "description": null,
+            "isCertified": false,
+            "name": "uritool",
+            "owner": {
+                "username": "kennethreitz"
+            },
+            "public": true,
+            "topics": [
+                "microservice",
+                "omg"
+            ]
+        },
+        "serviceUuid": "2ca50510-7964-4efe-89aa-b9ea63b5e4c8",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "debug": {
+                    "arguments": {
+                        "msg": {
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Log a message with the DEBUG level"
+                },
+                "error": {
+                    "arguments": {
+                        "msg": {
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Log a message with the ERROR level"
+                },
+                "info": {
+                    "arguments": {
+                        "msg": {
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Log a message with the INFO level"
+                },
+                "warn": {
+                    "arguments": {
+                        "msg": {
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Log a message with the WARN level"
+                }
+            },
+            "info": {
+                "contact": {
+                    "email": "support@asyncy.com",
+                    "name": "Asyncy",
+                    "url": "https://asyncy.com"
+                },
+                "description": "This is the microservice.yml which corresponds to the native implementation of the log service",
+                "license": {
+                    "name": "MIT",
+                    "url": "https://opensource.org/licenses/MIT"
+                },
+                "title": "Simple logger for the Asyncy platform",
+                "version": "1.0.1"
+            },
+            "omg": 1
+        },
+        "readme": "# log\nThe microservice yaml for `log` -- An internal Asyncy service\n\n## Usage\n```coffee\nlog debug msg:\"This is a debug message\"\nlog info msg:\"This is an info message\"\nlog warn msg:\"This is a warn message\"\nlog error msg:\"This is an error message\"\n```\n",
+        "service": {
+            "alias": "log",
+            "description": "The microservice yaml for `log` -- An internal Asyncy service",
+            "isCertified": true,
+            "name": "log",
+            "owner": {
+                "username": "storyscript"
+            },
+            "public": true,
+            "topics": [
+                "logging",
+                "logger"
+            ]
+        },
+        "serviceUuid": "12a33ef9-e4bc-403e-ac94-dcb15a9b5d3b",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "send": {
+                    "arguments": {
+                        "attachment_path": {
+                            "type": "string"
+                        },
+                        "bcc": {
+                            "type": "string"
+                        },
+                        "cc": {
+                            "type": "string"
+                        },
+                        "from": {
+                            "required": true,
+                            "type": "string"
+                        },
+                        "html": {
+                            "type": "string"
+                        },
+                        "inline_attatchment_path": {
+                            "type": "string"
+                        },
+                        "subject": {
+                            "required": true,
+                            "type": "string"
+                        },
+                        "text": {
+                            "type": "string"
+                        },
+                        "to": {
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Send an email"
+                }
+            },
+            "environment": {
+                "API_KEY": {
+                    "type": "string"
+                },
+                "DOMAIN": {
+                    "type": "string"
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# Mailgun as a microservice\n\nSend emails with Mailgun\n\n```coffee\nmicroserive.guide exec -e API_KEY=<KEY> microservice/mailgun send \\\n  to:'no-reply@domain.com' \\\n  from:'no-reply@domain.com' \\\n  subject:'Hello world' \\\n  text:'Congratulations, you just sent an email with Mailgun! You are truly awesome!'\n\n{\n  \"id\": \"<20180327151234.1.B3090E27FAE9FFC8@sandbox13bee1ec0d79497ba1c13733deef6fc2.mailgun.org>\",\n  \"message\": \"Queued. Thank you.\"\n}\n```\n",
+        "service": {
+            "alias": "mailgun",
+            "description": "Send emails with Mailgun as a microservice",
+            "isCertified": false,
+            "name": "mailgun",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "mailgun",
+                "email-sender",
+                "microservice"
+            ]
+        },
+        "serviceUuid": "9c63568f-ae03-46f3-a9c8-f782877595bc",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "boolean": {
+                    "format": {
+                        "command": [
+                            "node",
+                            "cli.js",
+                            "boolean"
+                        ]
+                    },
+                    "help": "Generates a random boolean",
+                    "output": {
+                        "type": "boolean"
+                    }
+                },
+                "integer": {
+                    "arguments": {
+                        "high": {
+                            "help": "Highest possible integer value",
+                            "required": true,
+                            "type": "int"
+                        },
+                        "low": {
+                            "help": "Lowest possible integer value",
+                            "required": true,
+                            "type": "int"
+                        }
+                    },
+                    "format": {
+                        "command": [
+                            "node",
+                            "cli.js",
+                            "integer"
+                        ]
+                    },
+                    "help": "Generates a random integer",
+                    "output": {
+                        "type": "int"
+                    }
+                },
+                "list": {
+                    "arguments": {
+                        "integer_high": {
+                            "default": 100,
+                            "help": "Highest possible integer value in the list (used if type is integer)",
+                            "type": "int"
+                        },
+                        "integer_low": {
+                            "default": 0,
+                            "help": "Lowest possible integer value in the list (used if type is integer)",
+                            "type": "int"
+                        },
+                        "length": {
+                            "help": "The length of the list",
+                            "required": true,
+                            "type": "int"
+                        },
+                        "string_length": {
+                            "default": 10,
+                            "help": "Length of the strings in the list (used if type is string)",
+                            "type": "int"
+                        },
+                        "type": {
+                            "enum": [
+                                "boolean",
+                                "string",
+                                "integer"
+                            ],
+                            "help": "The type of list you want to generate",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "format": {
+                        "command": [
+                            "node",
+                            "cli.js",
+                            "list"
+                        ]
+                    },
+                    "help": "Generates a random list of given type",
+                    "output": {
+                        "type": "list"
+                    }
+                },
+                "string": {
+                    "arguments": {
+                        "length": {
+                            "help": "Length of string",
+                            "required": true,
+                            "type": "int"
+                        }
+                    },
+                    "format": {
+                        "command": [
+                            "node",
+                            "cli.js",
+                            "string"
+                        ]
+                    },
+                    "help": "Generates a random string",
+                    "output": {
+                        "type": "string"
+                    }
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# Random generation as a microservice\n\n```sh\nomg exec string length:5\n\nomg exec integer low:0 high:100\n\nomg exec list type:string length:50 string_length:4\n```\n",
+        "service": {
+            "alias": "random",
+            "description": "Generate random strings, numbers, and lists.",
+            "isCertified": false,
+            "name": "random",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "random",
+                "microservice"
+            ]
+        },
+        "serviceUuid": "1295d4b0-c747-49d3-bd0b-0c213bd45b4d",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "sendMany": {
+                    "arguments": {
+                        "asm": {
+                            "in": "requestBody",
+                            "type": "object"
+                        },
+                        "attachments": {
+                            "in": "requestBody",
+                            "type": "list"
+                        },
+                        "batch_id": {
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "categories": {
+                            "in": "requestBody",
+                            "type": "list"
+                        },
+                        "content": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "list"
+                        },
+                        "custom_args": {
+                            "in": "requestBody",
+                            "type": "object"
+                        },
+                        "from": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "object"
+                        },
+                        "headers": {
+                            "in": "requestBody",
+                            "type": "object"
+                        },
+                        "ip_pool_name": {
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "mail_settings": {
+                            "in": "requestBody",
+                            "type": "object"
+                        },
+                        "personalizations": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "object"
+                        },
+                        "reply_to": {
+                            "in": "requestBody",
+                            "type": "object"
+                        },
+                        "sections": {
+                            "in": "requestBody",
+                            "type": "object"
+                        },
+                        "send_at": {
+                            "in": "requestBody",
+                            "type": "int"
+                        },
+                        "subject": {
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "template_id": {
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "tracking_settings": {
+                            "in": "requestBody",
+                            "type": "object"
+                        }
+                    },
+                    "http": {
+                        "method": "post",
+                        "path": "/send_many",
+                        "port": 8080
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "properties": {
+                            "message_id": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "sendOne": {
+                    "arguments": {
+                        "content": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "content_type": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "from": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "subject": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "to": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "http": {
+                        "method": "post",
+                        "path": "/send_one",
+                        "port": 8080
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "properties": {
+                            "message_id": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                }
+            },
+            "environment": {
+                "SENDGRID_API_TOKEN": {
+                    "help": "Create a Sendgrid account and register an API key at https://app.sendgrid.com/settings/api_keys\n",
+                    "required": true,
+                    "type": "string"
+                }
+            },
+            "info": {
+                "description": "This is a sendgrid service",
+                "title": "Sendgrid",
+                "version": "1.0.0"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "/app/bin/omg-sendgrid"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# _Sendgrid_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nAn OMG service to access the Sendgrid email API\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Send One\n```coffee\nsendgrid sendOne from: \"sender@dummy.com\" to: \"recipient@dummy.com\" subject: \"Hello\" content: \"\u2026\"\n```\n##### Send Many\n```coffee\nsendgrid sendMany\n  personalizations: [{\n    \"to\": [{\"email\": \"recipient1@dummy.com\", \"name\": \"Mister Dummy\"}],\n    \"subject\": \"Dear Mr. Dummy\",\n    \"dynamic_template_data\": {\n      \"dynamic_parameter\": \"set with a value\"\n    }\n  }]\n  from: {\"email\": \"sender@dummy.com\", \"name\": \"My sender name\"}\n  content: [{\n    \"type\": \"text/plain\",\n    \"value\": \"Hello World!\"\n  }]\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Send One\n```shell\n$ omg run sendOne -a from=<SENDER_EMAIL> -a to=<RECEIVER_EMAIL> -a subject=<EMAIL_SUBJECT> -a content=<CONTENT> -e SENDGRID_API_TOKEN=<SENDGRID_API_TOKEN>\n```\n##### Send Many\n```shell\n$ omg run sendMany -a personalizations=<PERSONALIZATION_OBJECT> -a from=<FROM_DETAILS_OBJECT> -a subject=<EMAIL_SUBJECT> -a content=<CONTENT_LIST> -e SENDGRID_API_TOKEN=<SENDGRID_API_TOKEN>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/sendgrid/blob/master/LICENSE).\n",
+        "service": {
+            "alias": "sendgrid",
+            "description": "An OMG service to access the Sendgrid email API",
+            "isCertified": true,
+            "name": "sendgrid",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "omg",
+                "microservice",
+                "sendgrid",
+                "sendgrid-api",
+                "sendgrid-api-wrapper"
+            ]
+        },
+        "serviceUuid": "e9175cb5-c925-460b-b4cd-d4248a6a7cd7",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "bot": {
+                    "events": {
+                        "hears": {
+                            "arguments": {
+                                "channel": {
+                                    "help": "Only listen in a specific channel",
+                                    "in": "requestBody",
+                                    "required": true,
+                                    "type": "string"
+                                },
+                                "pattern": {
+                                    "help": "A regexp pattern to filter messages",
+                                    "in": "requestBody",
+                                    "type": "string"
+                                }
+                            },
+                            "help": "Triggered anytime a messages matches the pattern",
+                            "http": {
+                                "port": 8000,
+                                "subscribe": {
+                                    "contentType": "application/json",
+                                    "method": "post",
+                                    "path": "/subscribe"
+                                },
+                                "unsubscribe": {
+                                    "contentType": "application/json",
+                                    "method": "post",
+                                    "path": "/unsubscribe"
+                                }
+                            },
+                            "output": {
+                                "contentType": "application/json",
+                                "properties": {
+                                    "channel": {
+                                        "help": "The channel ID",
+                                        "type": "string"
+                                    },
+                                    "client_msg_id": {
+                                        "help": "The message ID",
+                                        "type": "string"
+                                    },
+                                    "text": {
+                                        "help": "The message text",
+                                        "type": "string"
+                                    },
+                                    "ts": {
+                                        "help": "The message timestamp (eg: \"1535474523.000100\")",
+                                        "type": "string"
+                                    },
+                                    "user": {
+                                        "help": "The user ID",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    },
+                    "help": "Start a Slack bot"
+                },
+                "channels": {
+                    "arguments": {
+                        "exclude_archived": {
+                            "default": false,
+                            "help": "Set to true to exclude archived channels from the list",
+                            "in": "requestBody",
+                            "type": "boolean"
+                        },
+                        "limit": {
+                            "default": 100,
+                            "help": "Limit the number of channels to return. Must be less than 1000.",
+                            "in": "requestBody",
+                            "type": "int"
+                        },
+                        "token": {
+                            "help": "Authentication token bearing required scopes.\nEnvironment variable BOT_TOKEN used by default.\n",
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "types": {
+                            "help": "Mix and match channel types: public_channel, private_channel, mpim, im\nDefault is public_channel only.\n",
+                            "in": "requestBody",
+                            "type": "list"
+                        }
+                    },
+                    "help": "Get a list of channels",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/api/channels.list",
+                        "port": 8000
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "type": "map"
+                    }
+                },
+                "directChannels": {
+                    "arguments": {
+                        "limit": {
+                            "default": 100,
+                            "help": "Limit the number of channels to return. Must be less than 1000.",
+                            "in": "requestBody",
+                            "type": "int"
+                        },
+                        "token": {
+                            "help": "Authentication token bearing required scopes.\nEnvironment variable BOT_TOKEN used by default.\n",
+                            "in": "requestBody",
+                            "type": "string"
+                        }
+                    },
+                    "help": "Lists direct message channels for the calling user.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/api/im.list",
+                        "port": 8000
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "type": "map"
+                    }
+                },
+                "responds": {
+                    "arguments": {
+                        "pattern": {
+                            "help": "A regexp pattern to filter messages",
+                            "in": "requestBody",
+                            "type": "string"
+                        }
+                    },
+                    "help": "Triggered by direct messages to the bot",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/api/chat.postMessage",
+                        "port": 8000
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "properties": {
+                            "channel": {
+                                "help": "The channel ID",
+                                "type": "string"
+                            },
+                            "client_msg_id": {
+                                "help": "The message ID",
+                                "type": "string"
+                            },
+                            "text": {
+                                "help": "The message text",
+                                "type": "string"
+                            },
+                            "ts": {
+                                "help": "The message timestamp (eg: \"1535474523.000100\")",
+                                "type": "string"
+                            },
+                            "user": {
+                                "help": "The user ID",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "send": {
+                    "arguments": {
+                        "attachments": {
+                            "in": "requestBody",
+                            "type": "list"
+                        },
+                        "channel": {
+                            "help": "What channel to send message in.\nThis can be a \"#channel\" \"@user\" or a channel id.\n",
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "text": {
+                            "help": "Text of the message to send.",
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "token": {
+                            "help": "Authentication token bearing required scopes.\nEnvironment variable BOT_TOKEN used by default.\n",
+                            "in": "requestBody",
+                            "type": "string"
+                        }
+                    },
+                    "help": "Sends a message to a channel.\nhttps://api.slack.com/methods/chat.postMessage\n",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/api/chat.postMessage",
+                        "port": 8000
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "type": "map"
+                    }
+                },
+                "users": {
+                    "arguments": {
+                        "cursor": {
+                            "help": "Paginate through collections of data by setting the cursor parameter to a next_cursor attribute returned by a previous request's response_metadata. Default value fetches the first \"page\" of the collection. See pagination for more detail.\n",
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "include_locale": {
+                            "help": "Set this to true to receive the locale for users. Defaults to false\n",
+                            "in": "requestBody",
+                            "type": "boolean"
+                        },
+                        "limit": {
+                            "default": 0,
+                            "help": "The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the users list hasn't been reached.\n",
+                            "in": "requestBody",
+                            "range": {
+                                "min": 0
+                            },
+                            "type": "int"
+                        },
+                        "token": {
+                            "help": "Authentication token bearing required scopes.\nEnvironment variable BOT_TOKEN used by default.\n",
+                            "in": "requestBody",
+                            "type": "string"
+                        }
+                    },
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/api/users.list",
+                        "port": 8000
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "type": "map"
+                    }
+                }
+            },
+            "environment": {
+                "BOT_TOKEN": {
+                    "help": "The Slack bot token",
+                    "type": "string"
+                }
+            },
+            "info": {
+                "description": "This is a microservice for Slack",
+                "title": "Slack Microservice",
+                "version": "0.2.0"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "python",
+                        "app/main.py"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# _Slack_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nThis microservice's goal is to fully utilise the Slack API.\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Send\n```coffee\n>>> slack send text:'messageText' channel:'channelName' attachments:'attachmentsList' token:'token'\n```\n##### Responds\n```coffee\n>>> slack responds pattern:'pattern'\n```\n##### Users\n```coffee\n>>> slack users token:'token' limit:'limit' cursor:'cursor'\n```\n##### Channels\n```coffee\n>>> slack channels token:'token' limit:'limit' types:'listOfTypes'\n```\n##### Direct Channels\n```coffee\n>>> slack directChannels token:'token' limit:'limit'\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Send\n```shell\n$ omg run send -a text=<MESSAGE_TEXT> -a channel=<ID/NAME> -a attachments=<ATTACHMENT_LIST> -a token=<TOKEN> -e BOT_TOKEN=<BOT_TOKEN>\n```\n##### Responds\n```shell\n$ omg run responds -a pattern=<PATTERN> -e BOT_TOKEN=<BOT_TOKEN>\n```\n##### Users\n```shell\n$ omg run users -a token=<TOKEN> -a limit=<LIMIT> -a cursor=<CURSOR> -e BOT_TOKEN=<BOT_TOKEN>\n```\n##### Channels\n```shell\n$ omg run channels -a token=<TOKEN> -a limit=<LIMIT> -a types=<LIST_OF_TYPES> -e BOT_TOKEN=<BOT_TOKEN>\n```\n##### Direct Channels\n```shell\n$ omg run directChannels -a token=<TOKEN> -a limit=<LIMIT> -e BOT_TOKEN=<BOT_TOKEN>\n```\n##### Bot\n```shell\n$ omg subscribe bot hears -a pattern=<PATTERN> -a channel=<ID/NAME> -e BOT_TOKEN=<BOT_TOKEN>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/slack/blob/master/LICENSE).\n\n\n<!-- ## [Asyncy](https://asyncy.com) Example\n\nThe `slack` service is published in the [Asyncy Hub](https://hub.asyncy.com/service/slack)\n\n```storyscript\nslack bot as client\n    when client hears channel:'general' pattern:/^welcome/ as msg\n        msg emoji key:'thumbs_up'\n        msg reply message:'Nice to have you here'\n\n    when client responds pattern:/foo/ as msg\n        # respond to direct messages\n        msg reply message:'bar'\n\n    when client slash pattern:/deploy/ as msg\n        # when user does /deploy do something awesome\n\n# send a post\nslack send text:'Hello world!' to:'general'\n``` -->\n",
+        "service": {
+            "alias": "slack",
+            "description": "Slack bot microservice",
+            "isCertified": true,
+            "name": "slack",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "slack-bot",
+                "slack",
+                "microservice"
+            ]
+        },
+        "serviceUuid": "f7f099d5-da2c-45eb-b56a-84d1f7756a42",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "follow": {
+                    "arguments": {
+                        "follow": {
+                            "help": "Enable notifications for the target user.",
+                            "in": "requestBody",
+                            "type": "boolean"
+                        },
+                        "handle": {
+                            "help": "The screen name of the user to follow.",
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "user": {
+                            "help": "The ID of the user to follow.",
+                            "in": "requestBody",
+                            "type": "int"
+                        }
+                    },
+                    "help": "Follow an user",
+                    "http": {
+                        "method": "post",
+                        "path": "/follow",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "map"
+                    }
+                },
+                "followers": {
+                    "arguments": {
+                        "count": {
+                            "help": "The number of users to return per page, up to a maximum of 200. Defaults to 20.",
+                            "in": "requestBody",
+                            "range": {
+                                "max": 200,
+                                "min": 1
+                            },
+                            "type": "int"
+                        },
+                        "cursor": {
+                            "help": "Causes the results to be broken into pages. If no cursor is provided, a value of -1 will be assumed, which is the first \u201cpage.\u201d",
+                            "in": "requestBody",
+                            "range": {
+                                "min": -1
+                            },
+                            "type": "int"
+                        },
+                        "handle": {
+                            "help": "The screen name of the user for whom to return results.",
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "skip_status": {
+                            "help": "When set to either true, statuses will not be included in the returned user objects. If set to any other value, statuses will be included.",
+                            "in": "requestBody",
+                            "type": "boolean"
+                        },
+                        "user": {
+                            "help": "The ID of the user for whom to return results.",
+                            "in": "requestBody",
+                            "type": "int"
+                        }
+                    },
+                    "help": "Returns a cursored collection of user objects for users following the specified user.\n\nAt this time, results are ordered with the most recent following first \u2014 however, this ordering is subject to unannounced change and eventual consistency issues. Results are given in groups of 20 users and multiple \u201cpages\u201d of results can be navigated through using the `next_cursor` value in subsequent requests.\n",
+                    "http": {
+                        "method": "post",
+                        "path": "/followers",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "map"
+                    }
+                },
+                "retweet": {
+                    "arguments": {
+                        "tweet": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "int"
+                        }
+                    },
+                    "help": "Retweet a tweet",
+                    "http": {
+                        "method": "post",
+                        "path": "/retweet",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "map"
+                    }
+                },
+                "stream": {
+                    "events": {
+                        "tweet": {
+                            "arguments": {
+                                "track": {
+                                    "help": "A single string or list of phrases to track.\nhttps://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters#track\n",
+                                    "in": "requestBody",
+                                    "type": "any"
+                                }
+                            },
+                            "http": {
+                                "port": 8000,
+                                "subscribe": {
+                                    "contentType": "application/json",
+                                    "method": "post",
+                                    "path": "/stream/subscribe"
+                                },
+                                "unsubscribe": {
+                                    "method": "post",
+                                    "path": "/stream/unsubscribe"
+                                }
+                            },
+                            "output": {
+                                "type": "map"
+                            }
+                        }
+                    },
+                    "help": "Stream tweets"
+                },
+                "tweet": {
+                    "arguments": {
+                        "status": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Tweet a message",
+                    "http": {
+                        "method": "post",
+                        "path": "/tweet",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "map"
+                    }
+                },
+                "unfollow": {
+                    "arguments": {
+                        "handle": {
+                            "help": "The screen name of the user to unfollow.",
+                            "in": "requestBody",
+                            "type": "string"
+                        },
+                        "user": {
+                            "help": "The ID of the user to unfollow.",
+                            "in": "requestBody",
+                            "type": "int"
+                        }
+                    },
+                    "help": "Unfollow an user",
+                    "http": {
+                        "method": "post",
+                        "path": "/unfollow",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "map"
+                    }
+                }
+            },
+            "environment": {
+                "ACCESS_TOKEN": {
+                    "required": true,
+                    "type": "string"
+                },
+                "ACCESS_TOKEN_SECRET": {
+                    "required": true,
+                    "type": "string"
+                },
+                "CONSUMER_KEY": {
+                    "required": true,
+                    "type": "string"
+                },
+                "CONSUMER_SECRET": {
+                    "required": true,
+                    "type": "string"
+                }
+            },
+            "info": {
+                "contact": {
+                    "email": "hello@asyncy.com",
+                    "name": "Asyncy",
+                    "url": "https://asyncy.com"
+                },
+                "description": "Twitter as a microservice",
+                "license": {
+                    "name": "MIT",
+                    "url": "https://opensource.org/licenses/MIT"
+                },
+                "title": "Twitter",
+                "version": "1.0.0"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "python",
+                        "/app/app.py"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# _Twitter_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nDo Twitter stuff in a microservice.\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Follow\n```coffee\n>>> twitter follow handle:'screenName' user:'userID' follow:'true'\n```\n##### Unfollow\n```coffee\n>>> twitter unfollow handle:'screenName' user:'userID'\n```\n##### Followers\n```coffee\n>>> twitter followers handle:'screenName' user:'userID' cursor:'2' count:'50'\n```\n##### Retweet\n```coffee\n>>> twitter retweet tweet:'tweetID'\n```\n##### Tweet\n```coffee\n>>> twitter tweet status:'status'\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Follow\n```shell\n$ omg run follow -a handle=<SCREEN_NAME> -a user=<USER_ID> -a follow=<TRUE/FALSE> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Unfollow\n```shell\n$ omg run unfollow -a handle=<SCREEN_NAME> -a user=<USER_ID> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Followers\n```shell\n$ omg run followers -a handle=<SCREEN_NAME> -a user=<USER_ID> -a cursor=<RANGE_OF_PAGE> -a count=<MAX_USER_RANGE_PER_PAGE> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Retweet\n```shell\n$ omg run retweet -a tweet=<TWEET_ID> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Tweet\n```shell\n$ omg run tweet -a status=<STATUS> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Stream\n```shell\n$ omg subscribe stream tweet -a track=<STRING/PHRASES_LIST_TO_TRACK> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/twitter/blob/master/LICENSE).\n",
+        "service": {
+            "alias": "twitter",
+            "description": "Twitter as a microservice",
+            "isCertified": false,
+            "name": "twitter",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "twitter",
+                "microservice"
+            ]
+        },
+        "serviceUuid": "1885036e-b647-49aa-8ce3-45d9a11a7d4d",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "generate": {
+                    "help": "Generate a UUID v4 like 38788d28-6526-45c5-acf9-bb179160c7d7\n",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "get",
+                        "path": "/generate",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "string"
+                    }
+                }
+            },
+            "info": {
+                "description": "This is a UUID service",
+                "title": "UUID",
+                "version": "1.0.0"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "python",
+                        "/app/app.py"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# _UUID_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nAn OMG service to generate a UUID v4.\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Generate \n```coffee\nuuid generate\n#result 38788d28-6526-45c5-acf9-bb179160c7d7\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Generate\n```shell\n$ omg run generate\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/uuid/blob/master/LICENSE).\n",
+        "service": {
+            "alias": "uuid",
+            "description": "UUID generator",
+            "isCertified": true,
+            "name": "uuid",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "uuid-generator",
+                "microservice"
+            ]
+        },
+        "serviceUuid": "f156707b-594c-4cff-8e09-45c196024364",
+        "state": "BETA"
+    },
+    {
+        "configuration": {
+            "actions": {
+                "format": {
+                    "arguments": {
+                        "data": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "any"
+                        }
+                    },
+                    "http": {
+                        "method": "post",
+                        "path": "/format",
+                        "port": 8080
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "type": "string"
+                    }
+                },
+                "parse": {
+                    "arguments": {
+                        "data": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "http": {
+                        "method": "post",
+                        "path": "/parse",
+                        "port": 8080
+                    },
+                    "output": {
+                        "contentType": "application/json",
+                        "type": "any"
+                    }
+                }
+            },
+            "health": {
+                "http": {
+                    "path": "/health",
+                    "port": 8080
+                }
+            },
+            "info": {
+                "description": "YAML parser and formatting service",
+                "license": {
+                    "name": "Apache 2.0",
+                    "url": "https://opensource.org/licenses/Apache-2.0"
+                },
+                "title": "YAML",
+                "version": "1.0.0"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "ruby",
+                        "/app/app.rb"
+                    ]
+                }
+            },
+            "omg": 1
+        },
+        "readme": "# _YAML_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nIt is commonly used for configuration files, but could be used in many applications where data is being stored or transmitted.\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Parse\n```coffee\n>>> yaml parse data:'- item'\n# [\"item\", \"foo\"]\n```\n##### Format\n```coffee\n>>> yaml format data: [1, 2]\n# \"---\\n- 1\\n- 2\\n\"\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Parse\n```shell\n$ omg run parse -a data=<DATA>\n```\n##### Format\n```shell\n$ omg run format -a data=<DATA>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/yaml/blob/master/LICENSE).\n",
+        "service": {
+            "alias": "yaml",
+            "description": "Yaml, parse, validate, return json",
+            "isCertified": false,
+            "name": "yaml",
+            "owner": {
+                "username": "omg-services"
+            },
+            "public": true,
+            "topics": [
+                "yaml",
+                "yaml-parser",
+                "yaml-validator",
+                "microservice",
+                "omg"
+            ]
+        },
+        "serviceUuid": "ef6459ed-79e4-4806-8eb3-c3b39c13a07f",
+        "state": "BETA"
+    }
+]

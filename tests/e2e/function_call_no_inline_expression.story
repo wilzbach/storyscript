@@ -1,1 +1,1 @@
-(my_service foo) (key: 2)
+(random string length: 10) (key: 2)

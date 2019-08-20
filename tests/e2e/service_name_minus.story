@@ -1,1 +1,1 @@
-a = kennethreitz-uritool parse uri:"https://github.com/"
+a = Arinono/microservice-validate validate

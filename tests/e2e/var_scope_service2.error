@@ -1,0 +1,6 @@
+Error: syntax error in story at line 4, column 5
+
+4|    a = my_service.length()
+          ^^^^^^^^^^
+
+E0101: Variable `my_service` has not been defined.

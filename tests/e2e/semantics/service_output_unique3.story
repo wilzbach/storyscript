@@ -1,3 +1,3 @@
-log = logging error
-when log
-      x = 3
+twitter stream as client
+    when tweet as client
+        x = 3

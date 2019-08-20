@@ -1,1 +1,2 @@
-a = "foo {serv1 c1} {serv2 c2}"
+c2 = yaml parse data:"c"
+a = "foo {random string length: 10} {yaml format data:c2}"

@@ -63,55 +63,51 @@
     "3.2": {
       "method": "execute",
       "ln": "3.2",
-      "col_start": "51",
-      "col_end": "71",
+      "col_start": "46",
+      "col_end": "59",
       "name": [
         "__p-3.2"
       ],
-      "service": "another_service",
-      "command": "call",
+      "service": "random",
+      "command": "string",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "length",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
+          }
+        }
+      ],
       "next": "3.3"
     },
     "3.3": {
       "method": "execute",
       "ln": "3.3",
       "col_start": "26",
-      "col_end": "42",
+      "col_end": "37",
       "name": [
         "__p-3.3"
       ],
-      "service": "foo_service",
-      "command": "call",
+      "service": "yaml",
+      "command": "format",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg1",
+          "name": "data",
           "arg": {
-            "$OBJECT": "expression",
-            "expression": "sum",
-            "values": [
-              {
-                "$OBJECT": "string",
-                "string": "^"
-              },
-              {
-                "$OBJECT": "type_cast",
-                "type": {
-                  "$OBJECT": "type",
-                  "type": "string"
-                },
-                "value": {
-                  "$OBJECT": "path",
-                  "paths": [
-                    "__p-3.2"
-                  ]
-                }
-              },
-              {
-                "$OBJECT": "string",
-                "string": "$"
-              }
-            ]
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "string"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-3.2"
+              ]
+            }
           }
         }
       ],
@@ -163,27 +159,20 @@
               ]
             },
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "__p-3.3"
-                ]
-              }
+              "$OBJECT": "path",
+              "paths": [
+                "__p-3.3"
+              ]
             }
           ]
         }
       ],
-      "src": "d = \"{b}\" + \"{a * 2}\" + (foo_service call arg1: \"^{another_service call}$\")"
+      "src": "d = \"{b}\" + \"{a * 2}\" + (yaml format data: \"{random string length: 10}\")"
     }
   },
   "services": [
-    "another_service",
-    "foo_service"
+    "random",
+    "yaml"
   ],
   "entrypoint": "1"
 }

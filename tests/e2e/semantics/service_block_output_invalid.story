@@ -1,4 +1,4 @@
 a = 0
 http server as b
-    when server listen as req
+    when b listen path: "/" as req
         a = b

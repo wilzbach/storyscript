@@ -4,24 +4,24 @@
       "method": "execute",
       "ln": "1",
       "col_start": "1",
-      "col_end": "19",
-      "service": "my_service",
-      "command": "command",
+      "col_end": "12",
+      "service": "yaml",
+      "command": "format",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "item",
+          "name": "data",
           "arg": {
             "$OBJECT": "regexp",
             "regexp": "regexp"
           }
         }
       ],
-      "src": "my_service command item:/regexp/"
+      "src": "yaml format data:/regexp/"
     }
   },
   "services": [
-    "my_service"
+    "yaml"
   ],
   "entrypoint": "1"
 }

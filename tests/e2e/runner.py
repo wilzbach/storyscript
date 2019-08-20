@@ -9,12 +9,14 @@ from bom_open import bom_open
 
 from click import unstyle
 
-from pytest import mark
+from pytest import fixture, mark
 
+import storyscript.Hub as StoryHub
 from storyscript.Api import Api
 from storyscript.App import _clean_dict
 
-from utils import parse_features
+from tests.e2e.utils.Features import parse_features
+from tests.e2e.utils.StoryscriptHubFixture import StoryscriptHubFixture
 
 test_dir = path.dirname(path.realpath(__file__))
 # make the test_file paths relative, s.t. test paths are nice to read
@@ -87,6 +89,13 @@ def run_test(story_path):
     assert 0, f'{story_path} has no expected result file.'
 
 
+@fixture
+def patched_storyhub(mocker, scope='module'):
+    hub = StoryscriptHubFixture()
+    mocker.patch.object(StoryHub, 'StoryscriptHub', return_value=hub)
+
+
+@mark.usefixtures('patched_storyhub')
 @mark.parametrize('test_file', test_files)
 def test_story(test_file):
     test_file = path.join(test_dir, test_file)

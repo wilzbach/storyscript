@@ -3,29 +3,47 @@
     "1.1": {
       "method": "execute",
       "ln": "1.1",
-      "col_start": "37",
-      "col_end": "47",
+      "col_start": "38",
+      "col_end": "52",
       "name": [
         "__p-1.1"
       ],
-      "service": "sql",
-      "command": "select",
+      "service": "random",
+      "command": "integer",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "low",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 100
+          }
+        }
+      ],
       "next": "1.2"
     },
     "1.2": {
       "method": "execute",
       "ln": "1.2",
-      "col_start": "21",
-      "col_end": "32",
+      "col_start": "15",
+      "col_end": "30",
       "name": [
         "__p-1.2"
       ],
       "service": "twitter",
-      "command": "get",
+      "command": "retweet",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "id",
+          "name": "tweet",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -40,27 +58,38 @@
       "method": "execute",
       "ln": "1",
       "col_start": "1",
-      "col_end": "14",
-      "service": "slack",
-      "command": "message",
+      "col_end": "9",
+      "service": "log",
+      "command": "info",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "text",
+          "name": "msg",
           "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.2"
-            ]
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "string"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.2",
+                {
+                  "$OBJECT": "string",
+                  "string": "tweet"
+                }
+              ]
+            }
           }
         }
       ],
-      "src": "slack message text:(twitter get id:(sql select))"
+      "src": "log info msg:(twitter retweet tweet:(random integer low: 10 high: 100))[\"tweet\"]"
     }
   },
   "services": [
-    "slack",
-    "sql",
+    "log",
+    "random",
     "twitter"
   ],
   "entrypoint": "1.1"

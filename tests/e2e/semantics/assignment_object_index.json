@@ -4,13 +4,23 @@
       "method": "execute",
       "ln": "1",
       "col_start": "5",
-      "col_end": "20",
+      "col_end": "18",
       "name": [
         "a"
       ],
-      "service": "my_service",
-      "command": "call",
-      "src": "a = my_service call",
+      "service": "gmaps",
+      "command": "geocode",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "address",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foobar"
+          }
+        }
+      ],
+      "src": "a = gmaps geocode address:\"foobar\"",
       "next": "2"
     },
     "2": {
@@ -35,7 +45,7 @@
     }
   },
   "services": [
-    "my_service"
+    "gmaps"
   ],
   "entrypoint": "1"
 }

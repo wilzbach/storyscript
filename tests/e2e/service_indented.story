@@ -1,2 +1,2 @@
-alpine echo message:"hello"
-    colour:"red"
+random list type :"string"
+    length:10

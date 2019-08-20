@@ -3,20 +3,28 @@
     "1.1": {
       "method": "execute",
       "ln": "1.1",
-      "col_start": "29",
-      "col_end": "46",
+      "col_start": "26",
+      "col_end": "40",
       "name": [
         "__p-1.1"
       ],
-      "service": "if_service11",
-      "command": "call",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg",
+          "name": "low",
           "arg": {
             "$OBJECT": "int",
             "int": 1
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
           }
         }
       ],
@@ -25,20 +33,28 @@
     "1.2": {
       "method": "execute",
       "ln": "1.2",
-      "col_start": "59",
-      "col_end": "76",
+      "col_start": "65",
+      "col_end": "79",
       "name": [
         "__p-1.2"
       ],
-      "service": "if_service12",
-      "command": "call",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg",
+          "name": "low",
           "arg": {
             "$OBJECT": "int",
-            "int": 2
+            "int": 10
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 20
           }
         }
       ],
@@ -48,16 +64,16 @@
       "method": "execute",
       "ln": "1.3",
       "col_start": "5",
-      "col_end": "24",
+      "col_end": "19",
       "name": [
         "__p-1.3"
       ],
-      "service": "if_service1",
-      "command": "command",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "p1",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -67,7 +83,7 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "p2",
+          "name": "high",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -81,20 +97,28 @@
     "1.4": {
       "method": "execute",
       "ln": "1.4",
-      "col_start": "113",
-      "col_end": "130",
+      "col_start": "124",
+      "col_end": "138",
       "name": [
         "__p-1.4"
       ],
-      "service": "if_service21",
-      "command": "call",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg",
+          "name": "low",
           "arg": {
             "$OBJECT": "int",
             "int": 1
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
           }
         }
       ],
@@ -103,20 +127,28 @@
     "1.5": {
       "method": "execute",
       "ln": "1.5",
-      "col_start": "143",
-      "col_end": "160",
+      "col_start": "163",
+      "col_end": "177",
       "name": [
         "__p-1.5"
       ],
-      "service": "if_service22",
-      "command": "call",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg",
+          "name": "low",
           "arg": {
             "$OBJECT": "int",
-            "int": 2
+            "int": 10
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 20
           }
         }
       ],
@@ -125,17 +157,17 @@
     "1.6": {
       "method": "execute",
       "ln": "1.6",
-      "col_start": "89",
-      "col_end": "108",
+      "col_start": "103",
+      "col_end": "117",
       "name": [
         "__p-1.6"
       ],
-      "service": "if_service2",
-      "command": "command",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "p1",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -145,7 +177,7 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "p2",
+          "name": "high",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -159,20 +191,28 @@
     "1.7": {
       "method": "execute",
       "ln": "1.7",
-      "col_start": "36",
-      "col_end": "55",
+      "col_start": "31",
+      "col_end": "45",
       "name": [
         "__p-1.7"
       ],
-      "service": "else_service11",
-      "command": "call",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg",
+          "name": "low",
           "arg": {
             "$OBJECT": "int",
             "int": 1
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
           }
         }
       ],
@@ -181,20 +221,28 @@
     "1.8": {
       "method": "execute",
       "ln": "1.8",
-      "col_start": "68",
-      "col_end": "87",
+      "col_start": "70",
+      "col_end": "84",
       "name": [
         "__p-1.8"
       ],
-      "service": "else_service12",
-      "command": "call",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg",
+          "name": "low",
           "arg": {
             "$OBJECT": "int",
-            "int": 2
+            "int": 10
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 20
           }
         }
       ],
@@ -204,16 +252,16 @@
       "method": "execute",
       "ln": "1.9",
       "col_start": "10",
-      "col_end": "31",
+      "col_end": "24",
       "name": [
         "__p-1.9"
       ],
-      "service": "else_service1",
-      "command": "command",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "p1",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -223,7 +271,7 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "p2",
+          "name": "high",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -237,20 +285,28 @@
     "1.10": {
       "method": "execute",
       "ln": "1.10",
-      "col_start": "126",
-      "col_end": "145",
+      "col_start": "129",
+      "col_end": "143",
       "name": [
         "__p-1.10"
       ],
-      "service": "else_service21",
-      "command": "call",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg",
+          "name": "low",
           "arg": {
             "$OBJECT": "int",
             "int": 1
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
           }
         }
       ],
@@ -259,20 +315,28 @@
     "1.11": {
       "method": "execute",
       "ln": "1.11",
-      "col_start": "158",
-      "col_end": "177",
+      "col_start": "168",
+      "col_end": "182",
       "name": [
         "__p-1.11"
       ],
-      "service": "else_service22",
-      "command": "call",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg",
+          "name": "low",
           "arg": {
             "$OBJECT": "int",
-            "int": 2
+            "int": 10
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 20
           }
         }
       ],
@@ -281,17 +345,17 @@
     "1.12": {
       "method": "execute",
       "ln": "1.12",
-      "col_start": "100",
-      "col_end": "121",
+      "col_start": "108",
+      "col_end": "122",
       "name": [
         "__p-1.12"
       ],
-      "service": "else_service2",
-      "command": "command",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "p1",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -301,7 +365,7 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "p2",
+          "name": "high",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -338,7 +402,7 @@
       ],
       "enter": "2",
       "exit": "3",
-      "src": "if (if_service1 command p1:(if_service11 call arg:1) p2: (if_service12 call arg:2)) == (if_service2 command p1:(if_service21 call arg:1) p2: (if_service22 call arg:2))",
+      "src": "if (random integer low: (random integer low: 1 high: 10) high: (random integer low: 10 high: 20)) == (random integer low: (random integer low: 1 high: 10) high: (random integer low: 10 high: 20))",
       "next": "2"
     },
     "2": {
@@ -385,7 +449,7 @@
       ],
       "enter": "4",
       "exit": "5",
-      "src": "else if (else_service1 command p1:(else_service11 call arg:1) p2: (else_service12 call arg:2)) == (else_service2 command p1:(else_service21 call arg:1) p2: (else_service22 call arg:2))",
+      "src": "else if (random integer low: (random integer low: 1 high: 10) high: (random integer low: 10 high: 20)) == (random integer low: (random integer low: 1 high: 10) high: (random integer low: 10 high: 20))",
       "next": "4"
     },
     "4": {
@@ -452,18 +516,7 @@
     }
   },
   "services": [
-    "else_service1",
-    "else_service11",
-    "else_service12",
-    "else_service2",
-    "else_service21",
-    "else_service22",
-    "if_service1",
-    "if_service11",
-    "if_service12",
-    "if_service2",
-    "if_service21",
-    "if_service22"
+    "random"
   ],
   "entrypoint": "1.1"
 }

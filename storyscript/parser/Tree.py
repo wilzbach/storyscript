@@ -65,7 +65,7 @@ class Tree(LarkTree):
         """
         children = []
         for child in self.children:
-            if child.data == node_name:
+            if isinstance(child, Tree) and child.data == node_name:
                 children.append(child)
         return children
 

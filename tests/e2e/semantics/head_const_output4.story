@@ -1,2 +1,2 @@
-when client listen method:"post" path:"/foo" as res
+when http server listen method:"post" path:"/foo" as res
        res["body"] = "foo"

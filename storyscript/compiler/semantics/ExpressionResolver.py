@@ -427,13 +427,13 @@ class ExpressionResolver:
 
     def build_arguments(self, tree, name, fn_type):
         args = {}
-        for c in tree.children[1:]:
+        for c in tree.extract('arguments'):
             tree.expect(len(c.children) >= 2, 'arg_name_required',
                         fn_type=fn_type, name=name)
             name = c.child(0)
             type_ = self.expression(c.child(1)).type()
             sym = Symbol.from_path(name, type_)
-            args[sym.name()] = sym
+            args[sym.name()] = (sym, c)
         return args
 
     def path_resolve_only_name(self, tree, fn_type):
@@ -515,6 +515,19 @@ class ExpressionResolver:
         fn.check_call(tree, args)
         return base_symbol(fn.output())
 
+    def resolve_service(self, tree):
+        service_name = tree.path.child(0).value
+        action_node = tree.service_fragment.command
+        tree.expect(action_node is not None, 'service_without_command')
+        action_name = action_node.child(0).value
+        args = self.build_arguments(
+            tree.service_fragment,
+            service_name,
+            action_name
+        )
+        return self.module.service_typing.resolve_service(
+            tree, service_name, action_name, args)
+
     def service(self, tree):
         # unknown for now
         if tree.service_fragment.output is not None:
@@ -527,7 +540,7 @@ class ExpressionResolver:
         except CompilerError:
             # ignore invalid variables (not existent or invalid)
             # -> must be a service
-            return base_symbol(AnyType.instance())
+            return base_symbol(self.resolve_service(tree))
 
         # variable exists -> mutation
         service_to_mutation(tree)

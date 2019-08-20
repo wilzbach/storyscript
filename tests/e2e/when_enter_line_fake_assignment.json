@@ -43,12 +43,22 @@
       "method": "execute",
       "ln": "3.1",
       "col_start": "14",
-      "col_end": "32",
+      "col_end": "27",
       "name": [
         "__p-3.1"
       ],
-      "service": "fullcontact",
-      "command": "person",
+      "service": "gmaps",
+      "command": "geocode",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "address",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "Chandigarh"
+          }
+        }
+      ],
       "parent": "2",
       "next": "3"
     },
@@ -69,7 +79,7 @@
         }
       ],
       "parent": "2",
-      "src": "        a = (fullcontact person)",
+      "src": "        a = (gmaps geocode address:\"Chandigarh\")",
       "next": "4"
     },
     "4": {
@@ -91,7 +101,7 @@
     }
   },
   "services": [
-    "fullcontact",
+    "gmaps",
     "http"
   ],
   "entrypoint": "1"

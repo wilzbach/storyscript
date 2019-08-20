@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from os import path
+import sys
+
+
+sys.path.insert(
+    0, path.dirname(path.dirname(path.dirname(path.realpath(__file__)))))
+
+from tests.e2e.utils.StoryscriptHubFixture import StoryscriptHubFixture
+
+
+services = [
+    'Arinono/microservice-validate',
+    'awesome',
+    'gmaps',
+    'http',
+    'kennethreitz/uritool',
+    'log',
+    'mailgun',
+    'random',
+    'sendgrid',
+    'slack',
+    'twitter',
+    'uuid',
+    'yaml'
+]
+
+StoryscriptHubFixture.update_hub_fixtures(services)

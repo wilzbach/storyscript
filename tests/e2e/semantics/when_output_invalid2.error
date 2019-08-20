@@ -1,6 +1,6 @@
-Error: syntax error in story at line 3, column 27
+Error: syntax error in story at line 3, column 31
 
-3|        when server listen as req, b
-                                ^^^^^^
+3|        when b listen path:"/" as req, b
+                                    ^^^^^^
 
 E0107: Only one output is allowed for `when` blocks.

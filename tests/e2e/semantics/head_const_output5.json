@@ -1,14 +1,25 @@
 {
   "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "output": [
+        "server"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "1",
+      "next": "1"
+    },
     "1": {
       "method": "when",
       "ln": "1",
-      "col_start": "6",
-      "col_end": "19",
+      "col_start": "11",
+      "col_end": "24",
       "output": [
         "res"
       ],
-      "service": "client",
+      "service": "server",
       "command": "listen",
       "args": [
         {
@@ -29,7 +40,8 @@
         }
       ],
       "enter": "2",
-      "src": "when client listen method:\"post\" path:\"/foo\" as res",
+      "parent": "1.1",
+      "src": "when http server listen method:\"post\" path:\"/foo\" as res",
       "next": "2"
     },
     "2": {
@@ -79,7 +91,7 @@
     }
   },
   "services": [
-    "client"
+    "http"
   ],
-  "entrypoint": "1"
+  "entrypoint": "1.1"
 }

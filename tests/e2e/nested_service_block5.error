@@ -1,6 +1,6 @@
-Error: syntax error in story at line 4, column 12
+Error: syntax error in story at line 4, column 14
 
-4|          when ws listen filter:foo as event
-                 ^^
+4|            when tweet track: foo as omg
+                   ^^^^
 
 E0066: Nested when blocks are not allowed

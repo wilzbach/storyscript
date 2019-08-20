@@ -1,1 +1,3 @@
-a = "foo {(serv1 c1) + (serv2 c2)}"
+slack bot
+    when hears channel: "foobar" as msg
+        a = "foo {(random string length:10) + msg}"

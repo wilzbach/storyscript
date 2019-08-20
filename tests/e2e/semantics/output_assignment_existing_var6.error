@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 27
+Error: syntax error in story at line 2, column 32
 
-2|        when server listen as s
-                                ^
+2|        when s listen path: "/" as s
+                                     ^
 
 E0108: Service output `s` must be unique. Use `as outputName`

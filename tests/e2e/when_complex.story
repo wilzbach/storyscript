@@ -1,17 +1,17 @@
-http server
-    when listen as li
+twitter stream
+    when tweet as t
         break
-    when listen path:"/foo"
+    when tweet track: "storyscript"
         break
-    when listen path:"/foo" as li
+    when tweet track: "storyscript" as t
         break
 
-http server as serv
-    when serv listen
+twitter stream as s
+    when s tweet
         break
-    when serv listen as sa
+    when s tweet as t
         break
-    when serv listen path:"/foo"
+    when s tweet track: "storyscript"
         break
-    when serv listen path:"/foo" as li
+    when s tweet track: "storyscript" as t
         break

@@ -105,6 +105,14 @@
               "__p-5.1"
             ]
           }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "url",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foobar"
+          }
         }
       ],
       "parent": "4",
@@ -123,7 +131,7 @@
         }
       ],
       "parent": "4",
-      "src": "    return http fetch body: build_jira_request_body(body:body)"
+      "src": "    return http fetch body: build_jira_request_body(body:body) url: \"foobar\""
     }
   },
   "services": [

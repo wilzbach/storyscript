@@ -4,19 +4,27 @@
       "method": "execute",
       "ln": "1.1",
       "col_start": "16",
-      "col_end": "34",
+      "col_end": "30",
       "name": [
         "__p-1.1"
       ],
-      "service": "my_service",
-      "command": "command",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "p1",
+          "name": "low",
           "arg": {
             "$OBJECT": "int",
-            "int": 1
+            "int": 10
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 100
           }
         }
       ],
@@ -59,11 +67,11 @@
           ]
         }
       ],
-      "src": "a = {\"my_key\": my_service command p1: 1, \"k2\": 2}"
+      "src": "a = {\"my_key\": random integer low:10 high:100, \"k2\": 2}"
     }
   },
   "services": [
-    "my_service"
+    "random"
   ],
   "entrypoint": "1.1"
 }

@@ -1,2 +1,3 @@
-body = ""
-my_service command msg:"" :body
+from = "ss@storyscript.io"
+subject = "foobar"
+mailgun send to: "abc@xyz.com" :from :subject
