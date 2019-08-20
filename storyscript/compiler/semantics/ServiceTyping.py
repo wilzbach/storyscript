@@ -61,8 +61,8 @@ class ServiceTyping:
             do_type_cast_check(tree, source_type, target_type,
                                service_name, action_name, arg, arg_node)
 
-    def resolve_service(
-            self, tree, service_name, action_name, args, nested_block=False):
+    def resolve_service(self, tree, service_name, action_name, args,
+                        nested_block=False):
         tree.expect(len(tree.path.children) == 1, 'service_name')
         service_data = self.enforce_service_data(tree, service_name)
         config = service_data.configuration()
@@ -94,8 +94,8 @@ class ServiceTyping:
                                action_listener_name, event_name)
         return self.get_service_output(event)
 
-    def resolve_service_output_object(
-            self, tree, output_name, action_name, args, service_symbol):
+    def resolve_service_output_object(self, tree, output_name, action_name,
+                                      args, service_symbol):
         """
         This handles event based service output objects which define actions.
         The object output typically is inside a when block
