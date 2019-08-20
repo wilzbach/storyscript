@@ -14,6 +14,7 @@ from helpers.StoryscriptHubFixture import StoryscriptHubFixture
 from pytest import fixture, mark
 
 from storyscript.Api import Api
+import storyscript.Hub as StoryHub
 from storyscript.App import _clean_dict
 
 from utils import parse_features
@@ -92,7 +93,7 @@ def run_test(story_path):
 @fixture
 def patched_storyhub(mocker, scope='module'):
     hub = StoryscriptHubFixture()
-    mocker.patch('storyscript.Hub.StoryscriptHub', return_value=hub)
+    mocker.patch.object(StoryHub, 'StoryscriptHub', return_value=hub)
 
 
 @mark.usefixtures('patched_storyhub')
