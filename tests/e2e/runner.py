@@ -17,7 +17,7 @@ from storyscript.Api import Api
 import storyscript.Hub as StoryHub
 from storyscript.App import _clean_dict
 
-from utils import parse_features
+from tests.e2e.helpers.Features import parse_features
 
 test_dir = path.dirname(path.realpath(__file__))
 # make the test_file paths relative, s.t. test paths are nice to read
