@@ -1,5 +1,9 @@
 a = "foo {
-(random integer low: (random integer low: 1 high: 10)
-          high: (random integer low: 10 high: 20)) +
-(random integer low: (random integer low: 20 high: 30)
-          high: (random integer low: 30 high: 40))}"
+(random integer low: (random integer low: (random integer low:1 high:11)
+                                     high: (random integer low:1 high:12))
+                high: (random integer low: (random integer low:1 high:21)
+                                      high: (random integer low:1 high:22))) +
+(random integer low: (random integer low: (random integer low:2 high:11)
+                                     high: (random integer low:2 high:12))
+                high: (random integer low: (random integer low:2 high:21)
+                                      high: (random integer low:2 high:22)))}"
