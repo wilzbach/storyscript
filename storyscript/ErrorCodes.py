@@ -151,7 +151,7 @@ class ErrorCodes:
         'E0113', '{fn_type} `{name}` requires argument `{arg}`')
     function_arg_invalid = (
         'E0114', '{fn_type} `{name}` does not accept argument `{arg}`')
-    function_arg_type_mismatch = (
+    param_arg_type_mismatch = (
         'E0115',
         '{fn_type} `{name}` requires argument `{arg_name}` to be of '
         '`{target}`, not `{source}`')

@@ -250,13 +250,14 @@ class TypeResolver(ScopeSelectiveVisitor):
                 nested_block=True
             )
         else:
-            output_type = self.module.service_typing.resolve_service_output(
-                tree,
-                service_name,
-                action_name,
-                args,
-                name.type().object()
-            )
+            output_type = self.module.service_typing. \
+                resolve_service_output_object(
+                    tree,
+                    service_name,
+                    action_name,
+                    args,
+                    name
+                )
 
         tree.scope = Scope(parent=scope)
 
