@@ -1,4 +1,4 @@
-from storyscript.compiler.semantics.helpers import do_type_cast_check
+from storyscript.compiler.semantics.types.Casting import implicit_type_cast
 from storyscript.compiler.semantics.types.Types import BaseType
 
 
@@ -52,7 +52,7 @@ class BaseFunction:
         for k, (sym, arg_node) in args.items():
             target = self._args[k].type()
             t = sym.type()
-            do_type_cast_check(tree, t, target,
+            implicit_type_cast(tree, t, target,
                                self.fn_type, self._name, k, arg_node)
 
     def output(self):

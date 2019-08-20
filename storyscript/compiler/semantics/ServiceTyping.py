@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from storyscript.Hub import story_hub, type_class_mapping
-from storyscript.compiler.semantics.helpers import do_type_cast_check
+from storyscript.compiler.semantics.types.Casting import implicit_type_cast
 
 from .types.Types import AnyType, BooleanType, FloatType, IntType, ListType, \
     MapType, NoneType, ObjectType, StringType
@@ -58,7 +58,7 @@ class ServiceTyping:
             target_type = self.get_type_instance(var=action_arg)
             source_type = sym.type()
 
-            do_type_cast_check(tree, source_type, target_type,
+            implicit_type_cast(tree, source_type, target_type,
                                service_name, action_name, arg, arg_node)
 
     def resolve_service(self, tree, service_name, action_name, args,

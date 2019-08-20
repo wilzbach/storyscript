@@ -3,7 +3,7 @@ from storyscript.compiler.semantics.ExpressionResolver import \
 from storyscript.compiler.semantics.types.Types import AnyType
 
 
-def do_type_cast_check(tree, source_type, target_type,
+def implicit_type_cast(tree, source_type, target_type,
                        fn_type, fn_name, arg_name, arg_node):
     """
     Checks whether an implicit cast from source_type to
