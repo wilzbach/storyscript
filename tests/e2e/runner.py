@@ -11,12 +11,12 @@ from click import unstyle
 
 from pytest import fixture, mark
 
-from storyscript.Api import Api
 import storyscript.Hub as StoryHub
+from storyscript.Api import Api
 from storyscript.App import _clean_dict
 
-from tests.e2e.utils.StoryscriptHubFixture import StoryscriptHubFixture
 from tests.e2e.utils.Features import parse_features
+from tests.e2e.utils.StoryscriptHubFixture import StoryscriptHubFixture
 
 test_dir = path.dirname(path.realpath(__file__))
 # make the test_file paths relative, s.t. test paths are nice to read
