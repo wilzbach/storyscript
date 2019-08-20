@@ -97,9 +97,8 @@ class ServiceTyping:
     def resolve_service_output_object(self, tree, output_name, action_name,
                                       args, service_symbol):
         """
-        This handles event based service output objects which define actions.
-        The object output typically is inside a when block
-        listening on an event.
+        Handles event based service output objects which define actions.
+        The object output originates from when block listening on an event.
         """
         service_output = service_symbol.type().object()
         action = service_output.action(action_name)
