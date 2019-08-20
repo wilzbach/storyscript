@@ -194,6 +194,7 @@ class TypeResolver(ScopeSelectiveVisitor):
                         'when_no_output_parent')
             event_node = tree.service.path
             listener_name = self.service_block_output.child(0).value
+
         event_name = event_node.child(0).value
         listener_sym = scope.resolve(listener_name)
         tree.expect(listener_sym is not None,
