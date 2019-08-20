@@ -17,7 +17,7 @@ from click import unstyle
 from storyscript.Api import Api
 from storyscript.App import _clean_dict
 
-from tests.e2e.helpers.Features import parse_features
+from utils.Features import parse_features
 
 test_dir = path.dirname(path.realpath(__file__))
 Result = namedtuple('Result', ['status', 'updated'])
