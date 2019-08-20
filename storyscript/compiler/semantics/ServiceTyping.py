@@ -45,7 +45,7 @@ class ServiceTyping:
         return output_type
 
     def check_action_args(self, tree, action, args, service_name, action_name):
-        required_args = [arg for arg in action.args() if arg.required()]
+        required_args = (arg for arg in action.args() if arg.required())
         for arg in required_args:
             arg_name = arg.name()
             tree.expect(args.get(arg_name) is not None, 'service_arg_required',
