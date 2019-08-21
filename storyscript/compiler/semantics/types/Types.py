@@ -286,6 +286,14 @@ class IntType(BaseType):
             return self
         return None
 
+    def equal(self, other):
+        """
+        Returns True if the type can perform equality comparison with `other`,
+        """
+        if other == FloatType.instance():
+            return False
+        return super().equal(other)
+
 
 class FloatType(BaseType):
     """
@@ -321,6 +329,12 @@ class FloatType(BaseType):
         if other == StringType.instance():
             return self
         return None
+
+    def equal(self, other):
+        """
+        Returns True if the type can perform equality comparison with `other`,
+        """
+        return False
 
 
 class StringType(BaseType):
@@ -597,11 +611,17 @@ class ObjectType(BaseType):
     """
     Represents an object
     """
+    def __init__(self, object=None):
+        self._object = object
+
     def __str__(self):
         return f'Object'
 
     def __eq__(self, other):
         return isinstance(other, ObjectType)
+
+    def object(self):
+        return self._object
 
     def op(self, op):
         return None

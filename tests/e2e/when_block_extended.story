@@ -1,8 +1,8 @@
-when other_service command listen
+when twitter stream tweet
     break
-when other_service command listen as os
+when twitter stream tweet as os
     break
-when other_service command listen path:"/foo"
+when twitter stream tweet track:"storyscript"
     break
-when other_service command listen path:"/foo" as li
+when twitter stream tweet track:"storyscript" as li
     break

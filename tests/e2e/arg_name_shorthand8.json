@@ -1,0 +1,46 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "6",
+      "name": [
+        "msg"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": ""
+        }
+      ],
+      "src": "msg = \"\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "9",
+      "service": "log",
+      "command": "info",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "msg"
+            ]
+          }
+        }
+      ],
+      "src": "log info :msg"
+    }
+  },
+  "services": [
+    "log"
+  ],
+  "entrypoint": "1"
+}

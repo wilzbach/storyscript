@@ -1,1 +1,2 @@
-a = ! (my_service command k1: !b) or !(my_service2 command k2: ! !c)
+url = "foobar"
+a = not (not (http fetch url:url)) or not (random boolean)

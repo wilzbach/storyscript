@@ -4,19 +4,19 @@
       "method": "execute",
       "ln": "1.1",
       "col_start": "5",
-      "col_end": "21",
+      "col_end": "18",
       "name": [
         "__p-1.1"
       ],
-      "service": "weather",
-      "command": "tommorow",
+      "service": "random",
+      "command": "string",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "where",
+          "name": "length",
           "arg": {
-            "$OBJECT": "string",
-            "string": "Amsterdam"
+            "$OBJECT": "int",
+            "int": 8
           }
         }
       ],
@@ -25,24 +25,17 @@
     "1": {
       "method": "if",
       "ln": "1",
-      "col_end": "11",
+      "col_end": "8",
       "args": [
         {
           "$OBJECT": "expression",
           "expression": "equal",
           "values": [
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "__p-1.1"
-                ]
-              }
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.1"
+              ]
             },
             {
               "$OBJECT": "string",
@@ -52,20 +45,20 @@
         }
       ],
       "enter": "2",
-      "src": "if (weather tommorow where:\"Amsterdam\") == \"horrible\"",
+      "src": "if (random string length:8) == \"horrible\"",
       "next": "2"
     },
     "2": {
       "method": "execute",
       "ln": "2",
       "col_start": "5",
-      "col_end": "16",
-      "service": "logger",
-      "command": "echo",
+      "col_end": "13",
+      "service": "log",
+      "command": "info",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "message",
+          "name": "msg",
           "arg": {
             "$OBJECT": "string",
             "string": "oh no!"
@@ -73,12 +66,12 @@
         }
       ],
       "parent": "1",
-      "src": "    logger echo message:\"oh no!\""
+      "src": "    log info msg:\"oh no!\""
     }
   },
   "services": [
-    "logger",
-    "weather"
+    "log",
+    "random"
   ],
   "entrypoint": "1.1"
 }

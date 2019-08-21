@@ -4,27 +4,27 @@
       "method": "execute",
       "ln": "1.1",
       "col_start": "5",
-      "col_end": "23",
+      "col_end": "19",
       "name": [
         "__p-1.1"
       ],
-      "service": "my_service",
-      "command": "command",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "p1",
+          "name": "low",
           "arg": {
             "$OBJECT": "int",
-            "int": 1
+            "int": 0
           }
         },
         {
           "$OBJECT": "arg",
-          "name": "p2",
+          "name": "high",
           "arg": {
             "$OBJECT": "int",
-            "int": 2
+            "int": 10
           }
         }
       ],
@@ -34,27 +34,27 @@
       "method": "execute",
       "ln": "1.2",
       "col_start": "10",
-      "col_end": "29",
+      "col_end": "24",
       "name": [
         "__p-1.2"
       ],
-      "service": "my_service2",
-      "command": "command",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "p3",
+          "name": "low",
           "arg": {
             "$OBJECT": "int",
-            "int": 3
+            "int": 1
           }
         },
         {
           "$OBJECT": "arg",
-          "name": "p4",
+          "name": "high",
           "arg": {
             "$OBJECT": "int",
-            "int": 4
+            "int": 20
           }
         }
       ],
@@ -70,17 +70,10 @@
           "expression": "equal",
           "values": [
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "int"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "__p-1.1"
-                ]
-              }
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.1"
+              ]
             },
             {
               "$OBJECT": "int",
@@ -91,7 +84,7 @@
       ],
       "enter": "2",
       "exit": "3",
-      "src": "if (my_service command p1:1 p2: 2) == 1",
+      "src": "if (random integer low: 0 high: 10) == 1",
       "next": "2"
     },
     "2": {
@@ -122,17 +115,10 @@
           "expression": "equal",
           "values": [
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "int"
-              },
-              "value": {
-                "$OBJECT": "path",
-                "paths": [
-                  "__p-1.2"
-                ]
-              }
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.2"
+              ]
             },
             {
               "$OBJECT": "int",
@@ -143,7 +129,7 @@
       ],
       "enter": "4",
       "exit": "5",
-      "src": "else if (my_service2 command p3:3 p4:4) == 2",
+      "src": "else if (random integer low: 1 high: 20) == 2",
       "next": "4"
     },
     "4": {
@@ -210,8 +196,7 @@
     }
   },
   "services": [
-    "my_service",
-    "my_service2"
+    "random"
   ],
   "entrypoint": "1.1"
 }

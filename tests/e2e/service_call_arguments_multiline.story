@@ -1,3 +1,3 @@
-foo command
-            a1: (json stringify content: {"a": 1})
-            a2: 2
+slack send
+            text: (random string length: 10)
+            channel: "foobar"

@@ -20,9 +20,9 @@ class FakeTree:
     def _check_existing_fake_lines(self, block):
         for child in block.children:
             if child.path:
-                tok = child.path.find_first_token().value
-                if tok.startswith(self.prefix):
-                    self.new_lines[tok] = False
+                tok = child.path.find_first_token()
+                if isinstance(tok.line, str) and '.' in tok.line:
+                    self.new_lines[tok.value] = False
 
     def line(self):
         """
@@ -78,13 +78,18 @@ class FakeTree:
         path = self.path(line=line)
         return self.assignment_path(path, value, line)
 
-    def assignment_path(self, path, value, line):
+    def assignment_path(self, path, value, line, eq_tok=None):
         """
         Adds a new assignment: `path` = `value`
         """
         # updates all tokens
         self.mark_line(value, line)
         equals = Token('EQUALS', '=', line=line)
+        if eq_tok:
+            # We accept and use the equals token from original expression
+            # to copy over the token meta data which helps with error messages.
+            equals.column = eq_tok.column
+            equals.end_column = eq_tok.end_column
         if value.data == 'base_expression':
             expr = value
         else:
@@ -104,6 +109,17 @@ class FakeTree:
         # this inserts the new assignment node _before_ the last node
         return -1
 
+    def insert_node(self, node, line):
+        """
+        Adds a node to the current block at the target line position
+        """
+        insert_pos = self.find_insert_pos(line)
+        self.block.children = [
+            *self.block.children[:insert_pos],
+            node,
+            *self.block.children[insert_pos:],
+        ]
+
     def add_assignment(self, value, original_line):
         """
         Creates an assignments and adds it to the current block
@@ -111,14 +127,9 @@ class FakeTree:
         """
         assert len(self.block.children) >= 1
 
-        insert_pos = self.find_insert_pos(original_line)
         assignment = self.assignment(value)
 
-        self.block.children = [
-            *self.block.children[:insert_pos],
-            assignment,
-            *self.block.children[insert_pos:],
-        ]
+        self.insert_node(assignment, original_line)
 
         # we need a new node, s.t. already inserted
         # fake nodes don't get changed

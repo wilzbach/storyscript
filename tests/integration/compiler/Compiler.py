@@ -6,7 +6,7 @@ from storyscript.compiler.semantics.functions.HubMutations import Hub
 
 
 def test_compiler_empty_files():
-    result = Api.loads('\n\n').result()
+    result = Api.loads('\n\n').result().output()
     assert result['tree'] == {}
     assert result['entrypoint'] is None
 
@@ -73,7 +73,7 @@ def test_compiler_expression_whitespace(source_pair):
     if source.startswith('b'):
         full_source = 'b=0\nc=0\n' + full_source
         index = '3'
-    result = Api.loads(full_source).result()
+    result = Api.loads(full_source).result().output()
     assert result['tree'][index]['method'] == 'expression'
     assert result['tree'][index]['name'] == ['a']
     assert len(result['tree'][index]['args']) == 1
@@ -99,7 +99,7 @@ def test_compiler_int_mutation_arguments(mocker):
     source = 'a = 0.increment(a: 1).decrement(b:2)'
     result = Api.loads(source, features={'debug': True})
     result.check_success()
-    result = result.result()
+    result = result.result().output()
     assert result['tree']['1.1']['method'] == 'mutation'
     assert result['tree']['1.1']['args'] == [
         {'$OBJECT': 'int', 'int': 0},

@@ -3,31 +3,20 @@
     "1.1": {
       "method": "execute",
       "ln": "1.1",
-      "col_start": "18",
-      "col_end": "32",
+      "col_start": "20",
+      "col_end": "33",
       "name": [
         "__p-1.1"
       ],
-      "service": "json",
-      "command": "stringify",
+      "service": "random",
+      "command": "string",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "content",
+          "name": "length",
           "arg": {
-            "$OBJECT": "dict",
-            "items": [
-              [
-                {
-                  "$OBJECT": "string",
-                  "string": "a"
-                },
-                {
-                  "$OBJECT": "int",
-                  "int": 1
-                }
-              ]
-            ]
+            "$OBJECT": "int",
+            "int": 10
           }
         }
       ],
@@ -37,13 +26,13 @@
       "method": "execute",
       "ln": "1",
       "col_start": "1",
-      "col_end": "12",
-      "service": "foo",
-      "command": "command",
+      "col_end": "11",
+      "service": "slack",
+      "command": "send",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "a1",
+          "name": "text",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -53,19 +42,19 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "a2",
+          "name": "channel",
           "arg": {
-            "$OBJECT": "int",
-            "int": 2
+            "$OBJECT": "string",
+            "string": "foobar"
           }
         }
       ],
-      "src": "foo command"
+      "src": "slack send"
     }
   },
   "services": [
-    "foo",
-    "json"
+    "random",
+    "slack"
   ],
   "entrypoint": "1.1"
 }

@@ -1,1 +1,1 @@
-a = [1, my_service command p1:2, 3]
+a = [1, random integer low:10 high:100, 3]

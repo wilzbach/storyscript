@@ -4,18 +4,37 @@
       "method": "execute",
       "ln": "1.1",
       "col_start": "12",
-      "col_end": "30",
+      "col_end": "22",
       "name": [
         "__p-1.1"
       ],
-      "service": "my_service",
-      "command": "command",
+      "service": "slack",
+      "command": "send",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "text",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foobar"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "channel",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "Storyscript"
+          }
+        }
+      ],
       "next": "1.2"
     },
     "1.2": {
       "method": "expression",
       "ln": "1.2",
       "col_start": "3",
+      "col_end": "11",
       "name": [
         "a"
       ],
@@ -56,7 +75,7 @@
     }
   },
   "services": [
-    "my_service"
+    "slack"
   ],
   "entrypoint": "1.1"
 }

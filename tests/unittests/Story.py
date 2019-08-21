@@ -10,6 +10,7 @@ import storyscript.Story as StoryModule
 from storyscript.Story import Story
 from storyscript.compiler import Compiler
 from storyscript.compiler.lowering.Lowering import Lowering
+from storyscript.compiler.pretty.PrettyPrinter import PrettyPrinter
 from storyscript.exceptions import CompilerError, StoryError, StorySyntaxError
 from storyscript.parser import Parser
 
@@ -139,6 +140,27 @@ def test_story_compiler_error(patch, story, compiler, error):
     patch.object(Story, 'error', return_value=Exception('error'))
     with raises(Exception):
         story.compile()
+    Story.error.assert_called_with(error)
+
+
+def test_story_format(patch, story):
+    patch.object(PrettyPrinter, 'compile')
+    story.tree = 'tree'
+    r = story.format()
+    PrettyPrinter.compile.assert_called_with(story.tree)
+    assert r == PrettyPrinter.compile()
+
+
+@mark.parametrize('error', [StorySyntaxError('error'), CompilerError('error')])
+def test_format_story_compiler_error(patch, story, compiler, error):
+    """
+    Ensures Story.format uses Story.error in case of StorySyntaxError.
+    """
+    patch.object(PrettyPrinter, 'compile')
+    PrettyPrinter.compile.side_effect = error
+    patch.object(Story, 'error', return_value=Exception('error'))
+    with raises(Exception):
+        story.format()
     Story.error.assert_called_with(error)
 
 

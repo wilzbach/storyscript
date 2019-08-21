@@ -1,1 +1,1 @@
-my_service command item:/regexp/
+yaml format data:/regexp/

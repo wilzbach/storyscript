@@ -4,10 +4,8 @@ from storyscript.parser import Tree
 
 
 class BaseVisitor:
-    def __init__(self, function_table, mutation_table, features):
-        self.function_table = function_table
-        self.mutation_table = mutation_table
-        self.features = features
+    def __init__(self, module):
+        self.module = module
 
 
 class SelectiveVisitor(BaseVisitor):

@@ -46,6 +46,7 @@ class Cli:
     silent_help = 'Silent mode. Return syntax errors only.'
     ebnf_help = 'Load the grammar from a file. Useful for development'
     preview_help = 'Activate upcoming Storyscript features'
+    inplace_help = 'Perform operation directly on the source file.'
 
     @click.group(invoke_without_command=True, cls=ClickAliasedGroup)
     @click.option('--version', '-v', is_flag=True, help=version_help)
@@ -86,6 +87,36 @@ class Cli:
                     click.echo(tree)
                 else:
                     click.echo(tree.pretty())
+        except StoryError as e:
+            if debug:
+                raise e.error
+            else:
+                e.echo()
+                exit(1)
+        except Exception as e:
+            if debug:
+                raise e
+            else:
+                StoryError.internal_error(e).echo()
+                exit(1)
+
+    @staticmethod
+    @main.command(aliases=['f'])
+    @click.argument('path')
+    @click.option('--debug', is_flag=True)
+    @click.option('--inplace', '-i', is_flag=True, help=inplace_help)
+    @click.option('--ebnf', help=ebnf_help)
+    @click.option('--preview', callback=preview_cb, is_eager=True,
+                  multiple=True, help=preview_help)
+    def format(path, debug, ebnf, preview, inplace):
+        """
+        Format a story.
+        """
+        try:
+            output = App.format(path, ebnf=ebnf, features=preview,
+                                inplace=inplace)
+            if not inplace:
+                click.echo(output)
         except StoryError as e:
             if debug:
                 raise e.error

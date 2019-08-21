@@ -53,12 +53,12 @@
       ],
       "args": [
         {
-          "$OBJECT": "string",
-          "string": ""
+          "$OBJECT": "int",
+          "int": 2
         }
       ],
       "parent": "3",
-      "src": "    c = \"\""
+      "src": "    c = 2"
     }
   },
   "entrypoint": "1"

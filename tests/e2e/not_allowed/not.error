@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 1
+Error: syntax error in story at line 1, column 5
 
 1|    not = 1
-      ^^^
+          ^
 
-E0030: `not` is reserved for future use
+E0041: `=` is not allowed here

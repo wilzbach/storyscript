@@ -114,7 +114,8 @@ class Bundle:
         services.sort()
         return services
 
-    def parser(self, ebnf):
+    @staticmethod
+    def parser(ebnf):
         if ebnf is not None:
             return Parser(ebnf=ebnf)
         return None
@@ -136,7 +137,7 @@ class Bundle:
             story = self.load_story(storypath)
             story.parse(parser=parser)
             story.compile()
-            self.stories[storypath] = story.compiled
+            self.stories[storypath] = story.compiled.output()
 
     def bundle(self, ebnf=None):
         """

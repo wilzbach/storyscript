@@ -1,5 +1,5 @@
-websocket accept path:"/" as ws
-  when ws message as client
-      foo = client.data.foo
-      when ws listen filter:foo as event
-        break
+twitter stream
+    when tweet track: "Storyscript" as ss
+        foo = ss["foobar"]
+        when tweet track: foo as omg
+            break

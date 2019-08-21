@@ -78,8 +78,10 @@ def test_parser_assignment_path():
     path = result.block.rules.assignment.path
     assert path.child(0) == Token('NAME', 'rainbow')
     assert path.path_fragment.child(0) == Token('NAME', 'colors')
-    assert path.child(2).child(0).data == 'number'
-    assert path.child(2).child(0).child(0) == Token('INT', 0)
+    assert path.child(2).child(0).data == 'expression'
+    expr = path.child(2).child(0)
+    assert expr.child(0).child(0).child(0).data == 'number'
+    assert expr.child(0).child(0).child(0).child(0) == Token('INT', 0)
 
 
 def test_parser_assignment_indented_arguments():

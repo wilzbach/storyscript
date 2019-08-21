@@ -1,1 +1,1 @@
-a = "foo {(serv1 c1 arg1: (serv11 c11) arg2: (serv12 c12)) + (serv2 c2 arg1: (serv11_c21) arg2: (serv21 c21))}"
+a = "foo {(random integer low: ((random integer low:11 high:11) as int) high: ((random integer low:12 high:12) as int)) + (random integer low: ((random boolean) as int) high: (random integer low:22 high:22))}"

@@ -1,4 +1,4 @@
-if (serv1 call arg1: (serv11 call) arg2: "{serv1 inline1 arg1: (serv1 inline12)}") or (serv2 call arg1: (serv22 call) arg2: "{serv2 inline2 arg1: (serv2 inline22)}")
+if (random integer low: 1 high: "{random integer low: 10 high: 20}" as int) or (random integer low: 10 high: "{random integer low: 20 high: 30}" as int)
     x = 0
-else if (berv1 call arg1: (berv11 call) arg2: "{berv1 inline1 arg1: (berv1 inline12)}") or (berv2 call arg1: (berv22 call) arg2: "{berv2 inline2 arg1: (berv2 inline22)}")
+else if (random integer low: 30 high: "{random integer low: 40 high: 50}" as int) or (random integer low: 40 high: "{random integer low: 50 high: 60}" as int)
     x = 1

@@ -17,7 +17,7 @@ from click import unstyle
 from storyscript.Api import Api
 from storyscript.App import _clean_dict
 
-from utils import parse_features
+from utils.Features import parse_features
 
 test_dir = path.dirname(path.realpath(__file__))
 Result = namedtuple('Result', ['status', 'updated'])
@@ -31,6 +31,8 @@ def parse_args():
                         help='stories to updates')
     parser.add_argument('-a', '--all', dest='all', action='store_true',
                         help='Update all tests')
+    parser.add_argument('-s', '--single', dest='single', action='store_true',
+                        help='Run with a single thread')
     return parser.parse_args()
 
 
@@ -46,7 +48,7 @@ class StoryRunner():
             source = f.read()
         s = Api.loads(source, features=parse_features(features, source))
         if s.success():
-            result = _clean_dict(s.result())
+            result = _clean_dict(s.result().output())
             del result['version']
             self.update_success(result)
             return Result(status=True, updated=self.updated)
@@ -98,8 +100,13 @@ def main():
         stories = args.stories
     plural = 'ies' if len(stories) != 1 else 'y'
     print(f'Updating {len(stories)} stor{plural}')
-    with mp.Pool() as pool:
-        results = pool.map(run, stories, 1)
+    if args.single:
+        for story in stories:
+            print(story)
+            run(story)
+    else:
+        with mp.Pool() as pool:
+            results = pool.map(run, stories, 1)
 
     for story, result in results:
         if result.updated:

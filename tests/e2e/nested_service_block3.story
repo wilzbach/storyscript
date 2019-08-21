@@ -1,3 +1,3 @@
 http server
-    when other_service command listen
+    when tweet stream tweet
         break

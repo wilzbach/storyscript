@@ -1,0 +1,151 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            },
+            {
+              "$OBJECT": "int",
+              "int": 3
+            }
+          ]
+        }
+      ],
+      "src": "a = [1, 2, 3]",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
+      "src": "b = 2",
+      "next": "3.1"
+    },
+    "3.1": {
+      "method": "expression",
+      "ln": "3.1",
+      "name": [
+        "__p-3.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "subtraction",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        }
+      ],
+      "next": "3.2"
+    },
+    "3.2": {
+      "method": "expression",
+      "ln": "3.2",
+      "name": [
+        "__p-3.2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "subtraction",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "b"
+                  ]
+                },
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "a",
+                    {
+                      "$OBJECT": "path",
+                      "paths": [
+                        "b"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a",
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "__p-3.1"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "col_start": "1",
+      "col_end": "2",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a",
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-3.2"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "a[b + a[b] - a[b - 1]]"
+    }
+  },
+  "entrypoint": "1"
+}

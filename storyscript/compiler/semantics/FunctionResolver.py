@@ -15,11 +15,7 @@ class FunctionResolver(ScopeSelectiveVisitor):
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.resolver = ExpressionResolver(
-            symbol_resolver=None,
-            function_table=self.function_table,
-            mutation_table=self.mutation_table,
-        )
+        self.resolver = ExpressionResolver(module=self.module)
 
     def block(self, tree, scope):
         self.visit_children(tree, scope)
@@ -46,12 +42,12 @@ class FunctionResolver(ScopeSelectiveVisitor):
                 args[sym.name()] = sym
         # add function to the function table
         function_name = tree.child(1).value
-        tree.expect(self.function_table.resolve(function_name) is None,
+        tree.expect(self.module.function_table.resolve(function_name) is None,
                     'function_redeclaration', name=function_name)
         output = tree.function_output
         if output is not None:
             return_type = self.resolver.types(output.types).type()
-        self.function_table.insert(function_name, args, return_type)
+        self.module.function_table.insert(function_name, args, return_type)
         return scope, return_type
 
     def start(self, tree, scope=None):

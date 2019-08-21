@@ -1,6 +1,6 @@
 Error: syntax error in story at line 1, column 5
 
-1|    a = !-2 or ! -3 - !-4
-          ^^^
+1|    a = not -2 or not -3 - not -4
+          ^^^^^^
 
 E0122: `int` can't be converted to `boolean`

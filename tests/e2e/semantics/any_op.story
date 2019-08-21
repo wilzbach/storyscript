@@ -1,4 +1,4 @@
-a = any_service call
+a = random string length: 10
 a = "." + a
-b = any_service call
+b = random string length: 10
 c = b + "."

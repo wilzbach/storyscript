@@ -115,24 +115,7 @@
           "string": "2"
         }
       ],
-      "src": "d = \"2\"",
-      "next": "9"
-    },
-    "9": {
-      "method": "expression",
-      "ln": "9",
-      "col_start": "1",
-      "col_end": "4",
-      "name": [
-        "e"
-      ],
-      "args": [
-        {
-          "$OBJECT": "string",
-          "string": "2"
-        }
-      ],
-      "src": "e = \"2\""
+      "src": "d = \"2\""
     }
   },
   "entrypoint": "1"

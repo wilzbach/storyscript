@@ -1,1 +1,1 @@
-alpine echo text:(random strings)
+log info msg:(random string length: 10)

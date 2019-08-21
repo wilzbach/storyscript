@@ -229,7 +229,7 @@ def test_bundle_compile(mocker, patch, bundle):
 
     story = Bundle.load_story()
     story.compile.assert_called()
-    assert bundle.stories['one.story'] == story.compiled
+    assert bundle.stories['one.story'] == story.compiled.output()
 
 
 def test_bundle_bundle(patch, bundle):

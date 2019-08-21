@@ -52,3 +52,12 @@ def test_errorcodes_is_error_string():
 def test_errorcodes_get_error():
     ErrorCodes.mock = 'value'
     assert ErrorCodes.get_error('mock') == 'value'
+
+
+def test_error_codes_unique():
+    attribs = ErrorCodes.__dict__
+    codes = set()
+    for a in attribs:
+        if isinstance(attribs[a], tuple) and isinstance(attribs[a][0], str):
+            assert attribs[a][0] not in codes, attribs[a][0]
+            codes.add(attribs[a][0])

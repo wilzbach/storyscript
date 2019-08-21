@@ -231,12 +231,8 @@
       "ln": "17",
       "col_start": "1",
       "col_end": "6",
-      "output": [
-        "e"
-      ],
       "enter": "18",
-      "exit": "20",
-      "src": "catch as e",
+      "src": "catch",
       "next": "18"
     },
     "18": {

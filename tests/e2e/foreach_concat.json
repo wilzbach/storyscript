@@ -4,7 +4,7 @@
       "method": "for",
       "ln": "1",
       "col_start": "9",
-      "col_end": "18",
+      "col_end": "12",
       "output": [
         "item"
       ],
@@ -42,15 +42,50 @@
       "method": "execute",
       "ln": "2",
       "col_start": "5",
-      "col_end": "29",
-      "service": "email_service",
-      "command": "send_email",
+      "col_end": "17",
+      "service": "mailgun",
+      "command": "send",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "to",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foo@bar.com"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "from",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "ss@ss.com"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "subject",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "string"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "item"
+              ]
+            }
+          }
+        }
+      ],
       "parent": "1",
-      "src": "    email_service send_email"
+      "src": "    mailgun send to: \"foo@bar.com\" from: \"ss@ss.com\" subject: item as string"
     }
   },
   "services": [
-    "email_service"
+    "mailgun"
   ],
   "entrypoint": "1"
 }

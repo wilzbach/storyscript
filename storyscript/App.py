@@ -2,6 +2,7 @@
 import json
 
 from .Bundle import Bundle
+from .Story import Story
 from .exceptions import StoryError
 from .parser import Grammar
 
@@ -19,6 +20,21 @@ class App:
         bundle = Bundle.from_path(path, ignored_path=ignored_path,
                                   features=features)
         return bundle.bundle_trees(ebnf=ebnf, lower=lower)
+
+    @staticmethod
+    def format(path, ebnf=None, features=None, inplace=False):
+        """
+        Parses stories found in path, returning the formatted source
+        """
+        parser = Bundle.parser(ebnf=ebnf)
+        story = Story.from_file(path, features=features)
+        output = story.parse(parser=parser).format()
+        if inplace:
+            with open(path, 'w') as w:
+                w.write(output)
+            return None
+
+        return output
 
     @staticmethod
     def compile(path, ignored_path=None, ebnf=None, concise=False,

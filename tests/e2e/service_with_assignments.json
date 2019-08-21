@@ -1,0 +1,328 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "src": "a = 0",
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "12",
+      "output": [
+        "s"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "3",
+      "src": "http server as s",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "col_start": "5",
+      "col_end": "8",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "2",
+      "src": "    b = 1",
+      "next": "4"
+    },
+    "4": {
+      "method": "when",
+      "ln": "4",
+      "col_start": "10",
+      "col_end": "18",
+      "output": [
+        "req"
+      ],
+      "service": "s",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "path",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "/"
+          }
+        }
+      ],
+      "enter": "5",
+      "parent": "2",
+      "src": "    when s listen path: \"/\" as req",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "col_start": "9",
+      "col_end": "12",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
+      "parent": "4",
+      "src": "        c = 2",
+      "next": "6.1"
+    },
+    "6.1": {
+      "method": "execute",
+      "ln": "6.1",
+      "col_start": "16",
+      "col_end": "29",
+      "name": [
+        "__p-6.1"
+      ],
+      "service": "gmaps",
+      "command": "geocode",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "address",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "string"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "req",
+                {
+                  "$OBJECT": "dot",
+                  "dot": "query_params"
+                },
+                {
+                  "$OBJECT": "string",
+                  "string": "city"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "parent": "4",
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "col_start": "9",
+      "col_end": "14",
+      "name": [
+        "geo"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-6.1"
+          ]
+        }
+      ],
+      "parent": "4",
+      "src": "        geo = (gmaps geocode address: req.query_params[\"city\"])",
+      "next": "7.1"
+    },
+    "7.1": {
+      "method": "expression",
+      "ln": "7.1",
+      "name": [
+        "__p-7.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "geo",
+            {
+              "$OBJECT": "dot",
+              "dot": "lat"
+            }
+          ]
+        }
+      ],
+      "parent": "4",
+      "next": "7.2"
+    },
+    "7.2": {
+      "method": "expression",
+      "ln": "7.2",
+      "name": [
+        "__p-7.2"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "geo",
+            {
+              "$OBJECT": "dot",
+              "dot": "lon"
+            }
+          ]
+        }
+      ],
+      "parent": "4",
+      "next": "7"
+    },
+    "7": {
+      "method": "expression",
+      "ln": "7",
+      "col_start": "9",
+      "col_end": "14",
+      "name": [
+        "loc"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-7.1"
+                ]
+              }
+            },
+            {
+              "$OBJECT": "string",
+              "string": " "
+            },
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-7.2"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "parent": "4",
+      "src": "        loc = \"{geo.lat} {geo.lon}\"",
+      "next": "8"
+    },
+    "8": {
+      "method": "execute",
+      "ln": "8",
+      "col_start": "9",
+      "col_end": "18",
+      "service": "req",
+      "command": "write",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "content",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "loc"
+            ]
+          }
+        }
+      ],
+      "parent": "4",
+      "src": "        req write content: loc",
+      "next": "9"
+    },
+    "9": {
+      "method": "expression",
+      "ln": "9",
+      "col_start": "9",
+      "col_end": "12",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 3
+        }
+      ],
+      "parent": "4",
+      "src": "        d = 3",
+      "next": "10"
+    },
+    "10": {
+      "method": "expression",
+      "ln": "10",
+      "col_start": "5",
+      "col_end": "8",
+      "name": [
+        "e"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 4
+        }
+      ],
+      "parent": "2",
+      "src": "    e = 4",
+      "next": "11"
+    },
+    "11": {
+      "method": "expression",
+      "ln": "11",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 5
+        }
+      ],
+      "src": "d = 5"
+    }
+  },
+  "services": [
+    "gmaps",
+    "http"
+  ],
+  "entrypoint": "1"
+}

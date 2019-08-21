@@ -24,9 +24,19 @@
       ],
       "service": "client",
       "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "path",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "/"
+          }
+        }
+      ],
       "enter": "3",
       "parent": "1",
-      "src": "    when client listen as request",
+      "src": "    when client listen path: \"/\" as request",
       "next": "3"
     },
     "3": {

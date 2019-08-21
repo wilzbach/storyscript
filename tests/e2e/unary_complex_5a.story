@@ -1,1 +1,3 @@
-a = ! ((my_service command k1: !b) == 2) or !((my_service2 command k2: ! !c) == 3)
+b = true
+c = false
+a = not ((random boolean) == not b) or not ((random boolean) == not not c)

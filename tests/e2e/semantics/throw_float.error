@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 7
+
+2|    throw a
+            ^
+
+E0135: Only strings can be thrown.
