@@ -243,7 +243,7 @@ class Transformer(LarkTransformer):
         path_token = when.path.child_token(0, 'NAME')
         nested_block = matches[1]
 
-        if not when.service_fragment:
+        if not when.when_service_fragment:
             # workaround for LARK's parser limitations (no look-ahead)
             # it parses: when <service> <path> <output>?
             # but it's actually: when <service> <command> <output>?
@@ -256,6 +256,8 @@ class Transformer(LarkTransformer):
                 output=when.output,
                 block=nested_block
             )
+
+        when.when_service_fragment.data = 'service_fragment'
 
         # workaround for LARK's parser. It parses the first service_fragment
         # argument wrongly, because arguments without names are still allowed
