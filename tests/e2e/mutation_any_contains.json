@@ -10,11 +10,24 @@
       ],
       "args": [
         {
-          "$OBJECT": "list",
-          "items": []
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "List",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "list",
+            "items": []
+          }
         }
       ],
-      "src": "a = []",
+      "src": "a = [] as List[any]",
       "next": "2"
     },
     "2": {

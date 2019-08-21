@@ -39,8 +39,6 @@ class ErrorCodes:
     unnecessary_colon = (
         'E0045',
         'There is an unnecessary colon at the end of the line')
-    block_expected_after = ('E0045',
-                            'An indented block is required to follow here')
     block_expected_before = ('E0046',
                              'An indented block is required to be before here')
     file_not_found = ('E0047',
@@ -153,7 +151,7 @@ class ErrorCodes:
         'E0113', '{fn_type} `{name}` requires argument `{arg}`')
     function_arg_invalid = (
         'E0114', '{fn_type} `{name}` does not accept argument `{arg}`')
-    function_arg_type_mismatch = (
+    param_arg_type_mismatch = (
         'E0115',
         '{fn_type} `{name}` requires argument `{arg_name}` to be of '
         '`{target}`, not `{source}`')
@@ -215,7 +213,59 @@ class ErrorCodes:
         'E0132',
         'Tabs are not allowed.'
     )
-    continue_outside = ('E0132', '`continue` is allowed only inside loops')
+    continue_outside = ('E0133', '`continue` is allowed only inside loops')
+    block_expected_after = (
+        'E0134',
+        'An indented block is required to follow here'
+    )
+    throw_only_string = (
+        'E0135',
+        'Only strings can be thrown.'
+    )
+    catch_no_output = (
+        'E0136',
+        'Access to the exception object is currently disallowed.'
+    )
+    scope_join_incompatible = (
+        'E0137',
+        'Scope variable type mismatch: `{t1name}` of {t1type} is not '
+        'compatible with `{t2name}` of {t2type}.'
+    )
+    output_assignment_existing_var = (
+        'E0138',
+        'Output must be unique. Can not use existing `{var}`.',
+    )
+    service_not_found = (
+        'E0139', 'Service `{name}` does not exist on the hub.'
+    )
+    service_action_not_found = (
+        'E0140', 'Service `{name}` has no action `{action}`.'
+    )
+    service_arg_invalid = (
+        'E0141',
+        '{service} action `{action}` does not accept argument `{arg}`.')
+    service_event_not_found = (
+        'E0142', 'Event action `{name}` has no event `{event}`.'
+    )
+    service_arg_required = (
+        'E0143', '{service} `{action}` requires argument `{arg}`.')
+
+    event_not_defined = (
+        'E0144',
+        'No event listener with output `{output}` for event `{event}`.'
+    )
+    map_type_no_any = (
+        'E0145',
+        'Map initialization without elements must be typed. Use `as ...`'
+    )
+    list_type_no_any = (
+        'E0146',
+        'List initialization without elements must be typed. Use `as ...`'
+    )
+    service_action_without_output = (
+        'E0147',
+        'Service object `{object}` only support events, no actions.'
+    )
 
     @staticmethod
     def is_error(error_name):

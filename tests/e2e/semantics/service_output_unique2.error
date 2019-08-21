@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 28
+Error: syntax error in story at line 2, column 20
 
-2|        my_service2 command as a
-                                 ^
+2|        http server as a
+                         ^
 
 E0108: Service output `a` must be unique. Use `as outputName`

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 19
+
+1|    a = uuid generate as t
+                        ^
+
+E0007: Missing value after `=`

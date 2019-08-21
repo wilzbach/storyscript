@@ -1,4 +1,3 @@
-log = logging error
-logging default
-      when log level: "normal"
-          x = 1
+twitter stream as tweet
+    when tweet track: "storyscript" as tweet
+        x = 1

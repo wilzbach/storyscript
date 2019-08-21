@@ -1,4 +1,4 @@
-if (serv1 call arg1: (serv11 call) arg2: "{serv1 inline1 arg1: (serv1 inline12)}") == (serv2 call arg1: (serv22 call) arg2: "{serv2 inline2 arg1: (serv2 inline22)}")
+if (random list length: 10 type: "string") == (random list length: (random integer low:1 high:10) type: "{random string length: ((random boolean) as int)}")
     x = 0
-else if (berv1 call arg1: (berv11 call) arg2: "{berv1 inline1 arg1: (berv1 inline12)}") == (berv2 call arg1: (berv22 call) arg2: "{berv2 inline2 arg1: (berv2 inline22)}")
+else if (random integer low: 10 high: ("20" as int)) == (random integer low: (random integer low: 10 high:20+10) high: ("{random string length: ((random boolean) as int)}" as int))
     x = 1

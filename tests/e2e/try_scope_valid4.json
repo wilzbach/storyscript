@@ -1,0 +1,170 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "src": "a = 0",
+      "next": "2"
+    },
+    "2": {
+      "method": "try",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "8",
+      "enter": "3",
+      "exit": "4",
+      "src": "try",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "col_start": "3",
+      "col_end": "7",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        }
+      ],
+      "parent": "2",
+      "src": "  a += 1",
+      "next": "4"
+    },
+    "4": {
+      "method": "catch",
+      "ln": "4",
+      "col_start": "1",
+      "col_end": "4",
+      "enter": "5",
+      "exit": "6",
+      "src": "catch",
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "col_start": "3",
+      "col_end": "7",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        }
+      ],
+      "parent": "4",
+      "src": "  a += 1",
+      "next": "6"
+    },
+    "6": {
+      "method": "finally",
+      "ln": "6",
+      "col_start": "1",
+      "col_end": "4",
+      "enter": "7",
+      "exit": "9",
+      "src": "finally",
+      "next": "7"
+    },
+    "7": {
+      "method": "expression",
+      "ln": "7",
+      "col_start": "3",
+      "col_end": "7",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        }
+      ],
+      "parent": "6",
+      "src": "  a += 1",
+      "next": "9"
+    },
+    "9": {
+      "method": "expression",
+      "ln": "9",
+      "col_start": "1",
+      "col_end": "5",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        }
+      ],
+      "src": "a += 1"
+    }
+  },
+  "entrypoint": "1"
+}

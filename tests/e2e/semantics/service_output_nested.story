@@ -1,3 +1,3 @@
-my_service command as a
-    when a command as b
+http server as a
+    when a listen path:"/" as b
         break

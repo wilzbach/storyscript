@@ -1,9 +1,9 @@
-logging default
-      when log level: "normal" as logger
+twitter stream
+      when tweet track: "storyscript" as ss
           x = 0
-      when log level: "normal"
+      when tweet track: "omg"
           x = 1
-      when log as logger
+      when tweet as t
           x = 2
-      when log
+      when tweet
           x = 3

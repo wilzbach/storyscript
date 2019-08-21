@@ -1,3 +1,3 @@
 b = false
-if !b
+if not b
     return

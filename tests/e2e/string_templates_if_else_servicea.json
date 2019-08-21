@@ -1,36 +1,116 @@
 {
   "tree": {
-    "1.5": {
+    "1.3": {
       "method": "execute",
-      "ln": "1.5",
-      "col_start": "65",
-      "col_end": "79",
+      "ln": "1.3",
+      "col_start": "131",
+      "col_end": "145",
       "name": [
-        "__p-1.5"
+        "__p-1.3"
       ],
-      "service": "serv1",
-      "command": "inline12",
+      "service": "random",
+      "command": "boolean",
       "next": "1.1"
     },
     "1.1": {
       "method": "execute",
       "ln": "1.1",
-      "col_start": "44",
-      "col_end": "57",
+      "col_start": "107",
+      "col_end": "120",
       "name": [
         "__p-1.1"
       ],
-      "service": "serv1",
-      "command": "inline1",
+      "service": "random",
+      "command": "string",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg1",
+          "name": "length",
           "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.5"
-            ]
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "int"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.3"
+              ]
+            }
+          }
+        }
+      ],
+      "next": "1.4"
+    },
+    "1.4": {
+      "method": "execute",
+      "ln": "1.4",
+      "col_start": "147",
+      "col_end": "161",
+      "name": [
+        "__p-1.4"
+      ],
+      "service": "random",
+      "command": "boolean",
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "execute",
+      "ln": "1.2",
+      "col_start": "123",
+      "col_end": "136",
+      "name": [
+        "__p-1.2"
+      ],
+      "service": "random",
+      "command": "string",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "length",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "int"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.4"
+              ]
+            }
+          }
+        }
+      ],
+      "next": "1.5"
+    },
+    "1.5": {
+      "method": "execute",
+      "ln": "1.5",
+      "col_start": "5",
+      "col_end": "16",
+      "name": [
+        "__p-1.5"
+      ],
+      "service": "random",
+      "command": "list",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "length",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "type",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "string"
           }
         }
       ],
@@ -39,34 +119,28 @@
     "1.6": {
       "method": "execute",
       "ln": "1.6",
-      "col_start": "148",
-      "col_end": "162",
+      "col_start": "69",
+      "col_end": "83",
       "name": [
         "__p-1.6"
       ],
-      "service": "serv2",
-      "command": "inline22",
-      "next": "1.2"
-    },
-    "1.2": {
-      "method": "execute",
-      "ln": "1.2",
-      "col_start": "127",
-      "col_end": "140",
-      "name": [
-        "__p-1.2"
-      ],
-      "service": "serv2",
-      "command": "inline2",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg1",
+          "name": "low",
           "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.6"
-            ]
+            "$OBJECT": "int",
+            "int": 1
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
           }
         }
       ],
@@ -75,111 +149,27 @@
     "1.7": {
       "method": "execute",
       "ln": "1.7",
-      "col_start": "70",
-      "col_end": "84",
+      "col_start": "48",
+      "col_end": "59",
       "name": [
         "__p-1.7"
       ],
-      "service": "berv1",
-      "command": "inline12",
-      "next": "1.3"
-    },
-    "1.3": {
-      "method": "execute",
-      "ln": "1.3",
-      "col_start": "49",
-      "col_end": "62",
-      "name": [
-        "__p-1.3"
-      ],
-      "service": "berv1",
-      "command": "inline1",
+      "service": "random",
+      "command": "list",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg1",
+          "name": "length",
           "arg": {
             "$OBJECT": "path",
             "paths": [
-              "__p-1.7"
-            ]
-          }
-        }
-      ],
-      "next": "1.8"
-    },
-    "1.8": {
-      "method": "execute",
-      "ln": "1.8",
-      "col_start": "153",
-      "col_end": "167",
-      "name": [
-        "__p-1.8"
-      ],
-      "service": "berv2",
-      "command": "inline22",
-      "next": "1.4"
-    },
-    "1.4": {
-      "method": "execute",
-      "ln": "1.4",
-      "col_start": "132",
-      "col_end": "145",
-      "name": [
-        "__p-1.4"
-      ],
-      "service": "berv2",
-      "command": "inline2",
-      "args": [
-        {
-          "$OBJECT": "arg",
-          "name": "arg1",
-          "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.8"
-            ]
-          }
-        }
-      ],
-      "next": "1.9"
-    },
-    "1.9": {
-      "method": "execute",
-      "ln": "1.9",
-      "col_start": "23",
-      "col_end": "34",
-      "name": [
-        "__p-1.9"
-      ],
-      "service": "serv11",
-      "command": "call",
-      "next": "1.10"
-    },
-    "1.10": {
-      "method": "execute",
-      "ln": "1.10",
-      "col_start": "5",
-      "col_end": "15",
-      "name": [
-        "__p-1.10"
-      ],
-      "service": "serv1",
-      "command": "call",
-      "args": [
-        {
-          "$OBJECT": "arg",
-          "name": "arg1",
-          "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.9"
+              "__p-1.6"
             ]
           }
         },
         {
           "$OBJECT": "arg",
-          "name": "arg2",
+          "name": "type",
           "arg": {
             "$OBJECT": "type_cast",
             "type": {
@@ -195,161 +185,127 @@
           }
         }
       ],
-      "next": "1.11"
+      "next": "1.8"
     },
-    "1.11": {
+    "1.8": {
       "method": "execute",
-      "ln": "1.11",
-      "col_start": "106",
-      "col_end": "117",
-      "name": [
-        "__p-1.11"
-      ],
-      "service": "serv22",
-      "command": "call",
-      "next": "1.12"
-    },
-    "1.12": {
-      "method": "execute",
-      "ln": "1.12",
-      "col_start": "88",
-      "col_end": "98",
-      "name": [
-        "__p-1.12"
-      ],
-      "service": "serv2",
-      "command": "call",
-      "args": [
-        {
-          "$OBJECT": "arg",
-          "name": "arg1",
-          "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.11"
-            ]
-          }
-        },
-        {
-          "$OBJECT": "arg",
-          "name": "arg2",
-          "arg": {
-            "$OBJECT": "type_cast",
-            "type": {
-              "$OBJECT": "type",
-              "type": "string"
-            },
-            "value": {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-1.2"
-              ]
-            }
-          }
-        }
-      ],
-      "next": "1.13"
-    },
-    "1.13": {
-      "method": "execute",
-      "ln": "1.13",
-      "col_start": "28",
-      "col_end": "39",
-      "name": [
-        "__p-1.13"
-      ],
-      "service": "berv11",
-      "command": "call",
-      "next": "1.14"
-    },
-    "1.14": {
-      "method": "execute",
-      "ln": "1.14",
+      "ln": "1.8",
       "col_start": "10",
-      "col_end": "20",
+      "col_end": "24",
       "name": [
-        "__p-1.14"
+        "__p-1.8"
       ],
-      "service": "berv1",
-      "command": "call",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg1",
+          "name": "low",
           "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.13"
-            ]
+            "$OBJECT": "int",
+            "int": 10
           }
         },
         {
           "$OBJECT": "arg",
-          "name": "arg2",
+          "name": "high",
           "arg": {
             "$OBJECT": "type_cast",
             "type": {
               "$OBJECT": "type",
-              "type": "string"
+              "type": "int"
             },
             "value": {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-1.3"
-              ]
+              "$OBJECT": "string",
+              "string": "20"
             }
           }
         }
       ],
-      "next": "1.15"
+      "next": "1.9"
     },
-    "1.15": {
+    "1.9": {
       "method": "execute",
-      "ln": "1.15",
-      "col_start": "111",
-      "col_end": "122",
+      "ln": "1.9",
+      "col_start": "79",
+      "col_end": "93",
       "name": [
-        "__p-1.15"
+        "__p-1.9"
       ],
-      "service": "berv22",
-      "command": "call",
-      "next": "1.16"
-    },
-    "1.16": {
-      "method": "execute",
-      "ln": "1.16",
-      "col_start": "93",
-      "col_end": "103",
-      "name": [
-        "__p-1.16"
-      ],
-      "service": "berv2",
-      "command": "call",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg1",
+          "name": "low",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "expression",
+            "expression": "sum",
+            "values": [
+              {
+                "$OBJECT": "int",
+                "int": 20
+              },
+              {
+                "$OBJECT": "int",
+                "int": 10
+              }
+            ]
+          }
+        }
+      ],
+      "next": "1.10"
+    },
+    "1.10": {
+      "method": "execute",
+      "ln": "1.10",
+      "col_start": "58",
+      "col_end": "72",
+      "name": [
+        "__p-1.10"
+      ],
+      "service": "random",
+      "command": "integer",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
-              "__p-1.15"
+              "__p-1.9"
             ]
           }
         },
         {
           "$OBJECT": "arg",
-          "name": "arg2",
+          "name": "high",
           "arg": {
             "$OBJECT": "type_cast",
             "type": {
               "$OBJECT": "type",
-              "type": "string"
+              "type": "int"
             },
             "value": {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-1.4"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-1.2"
+                ]
+              }
             }
           }
         }
@@ -367,13 +323,13 @@
             {
               "$OBJECT": "path",
               "paths": [
-                "__p-1.10"
+                "__p-1.5"
               ]
             },
             {
               "$OBJECT": "path",
               "paths": [
-                "__p-1.12"
+                "__p-1.7"
               ]
             }
           ]
@@ -381,7 +337,7 @@
       ],
       "enter": "2",
       "exit": "3",
-      "src": "if (serv1 call arg1: (serv11 call) arg2: \"{serv1 inline1 arg1: (serv1 inline12)}\") == (serv2 call arg1: (serv22 call) arg2: \"{serv2 inline2 arg1: (serv2 inline22)}\")",
+      "src": "if (random list length: 10 type: \"string\") == (random list length: (random integer low:1 high:10) type: \"{random string length: ((random boolean) as int)}\")",
       "next": "2"
     },
     "2": {
@@ -414,20 +370,20 @@
             {
               "$OBJECT": "path",
               "paths": [
-                "__p-1.14"
+                "__p-1.8"
               ]
             },
             {
               "$OBJECT": "path",
               "paths": [
-                "__p-1.16"
+                "__p-1.10"
               ]
             }
           ]
         }
       ],
       "enter": "4",
-      "src": "else if (berv1 call arg1: (berv11 call) arg2: \"{berv1 inline1 arg1: (berv1 inline12)}\") == (berv2 call arg1: (berv22 call) arg2: \"{berv2 inline2 arg1: (berv2 inline22)}\")",
+      "src": "else if (random integer low: 10 high: (\"20\" as int)) == (random integer low: (random integer low: 10 high:20+10) high: (\"{random string length: ((random boolean) as int)}\" as int))",
       "next": "4"
     },
     "4": {
@@ -449,14 +405,7 @@
     }
   },
   "services": [
-    "berv1",
-    "berv11",
-    "berv2",
-    "berv22",
-    "serv1",
-    "serv11",
-    "serv2",
-    "serv22"
+    "random"
   ],
-  "entrypoint": "1.5"
+  "entrypoint": "1.3"
 }

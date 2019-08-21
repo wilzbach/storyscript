@@ -1,3 +1,3 @@
-obj = {"f": 1}
-foreach obj keys as item
-    email_service send_email
+obj = {"abc@xyz.com": "Hello Mr. Abc"}
+foreach obj.keys() as item
+    mailgun send to: item from: "foo@bar.com" subject: "Spam" text: obj[item]

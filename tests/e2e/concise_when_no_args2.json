@@ -4,26 +4,26 @@
       "method": "execute",
       "ln": "1.1",
       "output": [
-        "server"
+        "stream"
       ],
-      "service": "http",
-      "command": "server",
+      "service": "twitter",
+      "command": "stream",
       "enter": "1",
       "next": "1"
     },
     "1": {
       "method": "when",
       "ln": "1",
-      "col_start": "11",
-      "col_end": "24",
+      "col_start": "14",
+      "col_end": "26",
       "output": [
         "client"
       ],
-      "service": "server",
-      "command": "listen",
+      "service": "stream",
+      "command": "tweet",
       "enter": "2",
       "parent": "1.1",
-      "src": "when http server listen as client",
+      "src": "when twitter stream tweet as client",
       "next": "2"
     },
     "2": {
@@ -45,7 +45,7 @@
     }
   },
   "services": [
-    "http"
+    "twitter"
   ],
   "entrypoint": "1.1"
 }

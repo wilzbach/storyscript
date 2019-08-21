@@ -152,11 +152,24 @@
       ],
       "args": [
         {
-          "$OBJECT": "list",
-          "items": []
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "List",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "list",
+            "items": []
+          }
         }
       ],
-      "src": "list_empty = []",
+      "src": "list_empty = [] as List[any]",
       "next": "10"
     },
     "10": {
@@ -233,11 +246,28 @@
       ],
       "args": [
         {
-          "$OBJECT": "dict",
-          "items": []
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "Map",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              },
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "dict",
+            "items": []
+          }
         }
       ],
-      "src": "obj_empty = {}",
+      "src": "obj_empty = {} as Map[any,any]",
       "next": "16"
     },
     "16": {
@@ -371,13 +401,23 @@
       "method": "execute",
       "ln": "24",
       "col_start": "14",
-      "col_end": "25",
+      "col_end": "24",
       "name": [
         "my_service"
       ],
-      "service": "alpine",
-      "command": "echo",
-      "src": "my_service = alpine echo",
+      "service": "yaml",
+      "command": "parse",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foobar"
+          }
+        }
+      ],
+      "src": "my_service = yaml parse data:\"foobar\"",
       "next": "25.1"
     },
     "25.1": {
@@ -388,8 +428,20 @@
       "name": [
         "__p-25.1"
       ],
-      "service": "alpine",
-      "command": "echo",
+      "service": "yaml",
+      "command": "format",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "data",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "my_service"
+            ]
+          }
+        }
+      ],
       "next": "25"
     },
     "25": {
@@ -408,11 +460,11 @@
           ]
         }
       ],
-      "src": "service_inline = (alpine echo)"
+      "src": "service_inline = (yaml format data: my_service)"
     }
   },
   "services": [
-    "alpine"
+    "yaml"
   ],
   "entrypoint": "1"
 }

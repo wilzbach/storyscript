@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 5
+Error: syntax error in story at line 2, column 10
 
-1|    a = ! (my_service command k1: !b) or !(my_service2 command k2: ! !c)
-          ^
+2|    a = not (not (http fetch url:url)) or not (random boolean)
+               ^
 
 E0122: `any` can't be converted to `boolean`

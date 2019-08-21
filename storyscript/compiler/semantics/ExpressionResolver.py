@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+from contextlib import contextmanager
+
+
+from lark.lexer import Token
+
 from storyscript.compiler.lowering.utils import service_to_mutation
 from storyscript.compiler.semantics.types.Types import AnyType, BaseType, \
     BooleanType, FloatType, IntType, ListType, MapType, ObjectType, \
@@ -18,6 +23,7 @@ class SymbolExpressionVisitor(ExpressionVisitor):
 
     def __init__(self, visitor):
         self.visitor = visitor
+        super().__init__()
 
     @classmethod
     def is_cmp(cls, op):
@@ -58,6 +64,16 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         Checks whether a given operator is arithmetic.
         """
         return operator in cls._arithmetic_types
+
+    @contextmanager
+    def with_as_cast(self):
+        """
+        Context manager during as cast expression handling.
+        """
+        prev = self.visitor.with_as
+        self.visitor.with_as = True
+        yield
+        self.visitor.with_as = prev
 
     def as_expression(self, tree, expr):
         assert tree.child(1).data == 'as_operator'
@@ -211,12 +227,14 @@ class SymbolExpressionVisitor(ExpressionVisitor):
 
 class ExpressionResolver:
 
-    def __init__(self, symbol_resolver, function_table, mutation_table):
+    def __init__(self, module):
         self.expr_visitor = SymbolExpressionVisitor(self)
         # how to resolve existing symbols
-        self.path_resolver = PathResolver(symbol_resolver=symbol_resolver)
-        self.function_table = function_table
-        self.mutation_table = mutation_table
+        self.path_resolver = PathResolver(
+            symbol_resolver=module.symbol_resolver
+        )
+        self.module = module
+        self.with_as = False
 
     def path(self, tree):
         assert tree.data == 'path'
@@ -269,6 +287,8 @@ class ExpressionResolver:
                     break
             else:
                 value = val
+        if not self.with_as:
+            tree.expect(value is not None, 'list_type_no_any')
         if value is None:
             value = AnyType.instance()
         return base_symbol(ListType(value))
@@ -312,6 +332,10 @@ class ExpressionResolver:
             else:
                 key = new_key
                 value = new_value
+
+        if not self.with_as:
+            tree.expect(key is not None, 'map_type_no_any')
+            tree.expect(value is not None, 'map_type_no_any')
         if key is None:
             key = AnyType.instance()
         if value is None:
@@ -410,6 +434,13 @@ class ExpressionResolver:
         assert subtree.type == 'NAME'
         return self.path(tree)
 
+    def entity(self, tree):
+        """
+        Parses a entity subtree
+        """
+        assert tree.data == 'entity'
+        return self.expr_visitor.entity(tree)
+
     def expression(self, tree):
         """
         Compiles an expression object with the given tree.
@@ -419,13 +450,13 @@ class ExpressionResolver:
 
     def build_arguments(self, tree, name, fn_type):
         args = {}
-        for c in tree.children[1:]:
+        for c in tree.extract('arguments'):
             tree.expect(len(c.children) >= 2, 'arg_name_required',
                         fn_type=fn_type, name=name)
             name = c.child(0)
             type_ = self.expression(c.child(1)).type()
             sym = Symbol.from_path(name, type_)
-            args[sym.name()] = sym
+            args[sym.name()] = (sym, c)
         return args
 
     def path_resolve_only_name(self, tree, fn_type):
@@ -471,7 +502,7 @@ class ExpressionResolver:
                                     fn_type='Mutation')
 
         # a mutation on 'any' returns 'any'
-        overloads = self.mutation_table.resolve(t, name)
+        overloads = self.module.mutation_table.resolve(t, name)
         tree.expect(overloads is not None, 'mutation_invalid_name', name=name)
         ms = overloads.match(args.keys())
         if ms is None:
@@ -501,17 +532,45 @@ class ExpressionResolver:
         tree.expect(tree.path.inline_expression is None,
                     'function_call_no_inline_expression')
         name = self.path_resolve_only_name(tree.path, fn_type='Function')
-        fn = self.function_table.resolve(name)
+        fn = self.module.function_table.resolve(name)
         tree.expect(fn is not None, 'function_not_found', name=name)
         args = self.build_arguments(tree, name, fn_type='Function')
         fn.check_call(tree, args)
         return base_symbol(fn.output())
+
+    def resolve_service(self, tree):
+        service_name = tree.path.child(0).value
+        action_node = tree.service_fragment.command
+        tree.expect(action_node is not None, 'service_without_command')
+        action_name = action_node.child(0).value
+        args = self.build_arguments(
+            tree.service_fragment,
+            service_name,
+            action_name
+        )
+        return self.module.service_typing.resolve_service(
+            tree, service_name, action_name, args)
+
+    def check_service_fragment_arguments(self, tree):
+        if tree.arguments:
+            # if arguments are malformed (don't start with name)
+            # then the user didn't specify a command
+            first_arg_name = tree.arguments.children[0]
+            tree.expect(isinstance(first_arg_name, Token) and
+                        first_arg_name.type == 'NAME',
+                        'service_without_command')
 
     def service(self, tree):
         # unknown for now
         if tree.service_fragment.output is not None:
             tree.service_fragment.output.expect(
                 0, 'service_no_inline_output')
+
+        command = tree.service_fragment.command
+        tree.expect(command is not None, 'service_without_command')
+
+        self.check_service_fragment_arguments(tree.service_fragment)
+
         t = None
         try:
             # check whether variable exists
@@ -519,7 +578,7 @@ class ExpressionResolver:
         except CompilerError:
             # ignore invalid variables (not existent or invalid)
             # -> must be a service
-            return base_symbol(AnyType.instance())
+            return base_symbol(self.resolve_service(tree))
 
         # variable exists -> mutation
         service_to_mutation(tree)

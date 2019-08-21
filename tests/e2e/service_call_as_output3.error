@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 6
+
+1|    a = (uuid generate) as t
+           ^^^^^^^^^^^^^^^^^^^
+
+E0109: Inline service calls can't define an output

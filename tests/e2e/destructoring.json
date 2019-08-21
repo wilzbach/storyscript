@@ -39,6 +39,7 @@
       "method": "expression",
       "ln": "1.2",
       "col_start": "3",
+      "col_end": "11",
       "name": [
         "a"
       ],

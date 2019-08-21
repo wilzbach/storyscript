@@ -26,7 +26,7 @@ def echo(patch):
 
 @fixture
 def app(patch):
-    patch.many(App, ['compile', 'parse'])
+    patch.many(App, ['compile', 'parse', 'format'])
     return App
 
 
@@ -521,3 +521,103 @@ def test_cli_help(patch, runner, echo):
 def test_cli_version(patch, runner, echo):
     runner.invoke(Cli.version, [])
     click.echo.assert_called_with(version)
+
+
+def test_cli_format(runner, echo, app):
+    """
+    Ensures the format command produces a formatted tree.
+    """
+    App.format.return_value = '.format.'
+    runner.invoke(Cli.format, ['foo-path'])
+    App.format.assert_called_with('foo-path', ebnf=None, features={},
+                                  inplace=False)
+    click.echo.assert_called_with('.format.')
+
+
+def test_cli_format_no_file(runner, echo, app):
+    """
+    Ensures the format command receives a file.
+    """
+    App.format.return_value = '.format.'
+    e = runner.invoke(Cli.format, [])
+    App.format.assert_not_called()
+    assert e.exit_code == 2
+    click.echo.assert_not_called()
+
+
+def test_cli_format_ebnf(runner, echo, app):
+    """
+    Ensures the format command supports specifying an ebnf file.
+    """
+    runner.invoke(Cli.format, ['foo-path', '--ebnf', 'test.ebnf'])
+    App.format.assert_called_with('foo-path', ebnf='test.ebnf', features={},
+                                  inplace=False)
+
+
+def test_cli_format_ice(patch, runner, echo, app):
+    """
+    Ensures the format command prints unknown errors
+    """
+    patch.object(App, 'format', side_effect=Exception('ICE'))
+    e = runner.invoke(Cli.format, ['/a/non/existent/file'])
+    assert e.exit_code == 1
+    click.echo.assert_called_with((
+        'E0001: Internal error occured: ICE\n'
+        'Please report at https://github.com/storyscript/storyscript/issues'))
+
+
+def test_cli_format_debug_ice(patch, runner, echo, app):
+    """
+    Ensures the format command supports raises unknown errors with debug=True
+    """
+    patch.object(App, 'format', side_effect=Exception('ICE'))
+    e = runner.invoke(Cli.format, ['--debug', '/a/non/existent/file'])
+    assert e.exit_code == 1
+    assert isinstance(e.exception, Exception)
+    assert str(e.exception) == 'ICE'
+
+
+def test_cli_format_not_found(patch, runner, echo, app):
+    """
+    Ensures the format command catches errors
+    """
+    patch.object(StoryError, 'message')
+    ce = CompilerError(None)
+    patch.object(App, 'format')
+    App.format.side_effect = StoryError(ce, None)
+    e = runner.invoke(Cli.format, ['/a/non/existent/file'])
+    assert e.exit_code == 1
+    click.echo.assert_called_with(StoryError.message())
+
+
+def test_cli_format_not_found_debug(patch, runner, echo, app):
+    """
+    Ensures the format command raises errors with debug=True
+    """
+    ce = CompilerError(None)
+    patch.object(App, 'format')
+    App.format.side_effect = StoryError(ce, None)
+    e = runner.invoke(Cli.format, ['--debug', '/a/non/existent/file'])
+    assert e.exit_code == 1
+    assert isinstance(e.exception, CompilerError)
+    assert e.exception.message() == 'Unknown compiler error'
+
+
+def test_cli_format_features(patch, runner):
+    """
+    Ensures the format command allows specifying features
+    """
+    patch.object(App, 'format')
+    runner.invoke(Cli.format, ['--preview=globals', '/a/file'])
+    App.format.assert_called_with('/a/file', ebnf=None, inplace=False,
+                                  features={'globals': True})
+
+
+@mark.parametrize('option', ['--inplace', '-i'])
+def test_cli_format_inplace(runner, echo, app, option):
+    """
+    Ensures the format command supports inplace updates.
+    """
+    runner.invoke(Cli.format, ['foo-path', option, '--ebnf', 'test.ebnf'])
+    App.format.assert_called_with('foo-path', ebnf='test.ebnf', features={},
+                                  inplace=True)

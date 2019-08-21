@@ -36,8 +36,8 @@ class Grammar:
         self.ebnf.base_type = ('int_type, float_type, string_type, '
                                'object_type, regexp_type, function_type, '
                                'any_type, boolean_type, time_type')
-        self.ebnf._OSB = '['
-        self.ebnf._CSB = ']'
+        self.ebnf.OSB = '['
+        self.ebnf.CSB = ']'
         self.ebnf._COMMA = ','
         self.ebnf._LIST_KEYWORD = 'List'
         self.ebnf._MAP_KEYWORD = 'Map'
@@ -62,8 +62,8 @@ class Grammar:
         self.ebnf.set_token('REGEXP.10', r'/\/([^\/\n]*)\/g?i?m?s?u?y?/')
         self.ebnf.set_token('NAME.1', r'/[a-zA-Z_][a-zA-Z-\/_0-9]*/')
         self.ebnf.set_token('RAW_TIME.3', r'/([0-9]+(ms|[smhdw]))+/')
-        self.ebnf._OCB = '{'
-        self.ebnf._CCB = '}'
+        self.ebnf.OCB = '{'
+        self.ebnf.CCB = '}'
         self.ebnf._COLON = ':'
         self.ebnf._OP = '('
         self.ebnf._CP = ')'
@@ -102,7 +102,7 @@ class Grammar:
         self.ebnf.range_end = 'colon (number | path)'
         self.ebnf.range = 'range_start_end | range_start | range_end'
         path_fragment = ('dot name, osb '
-                         '(number | string | path | boolean | range) csb')
+                         '(expression | range) csb')
         self.ebnf.path_fragment = path_fragment
         self.ebnf.path = ('name (path_fragment)* | '
                           'inline_expression (path_fragment)*')
@@ -118,7 +118,7 @@ class Grammar:
     def expressions(self):
 
         self.ebnf.POWER = '^'
-        self.ebnf.NOT = '!'
+        self.ebnf.NOT = 'not'
 
         self.ebnf.OR = 'or'
         self.ebnf.AND = 'and'
@@ -203,8 +203,10 @@ class Grammar:
         self.ebnf.command = 'name'
         self.ebnf.arguments = 'name? colon expression'
         self.ebnf.output = '(as name (comma name)*)'
-        self.ebnf.service_fragment = '(command arguments*|arguments+) output?'
-        self.ebnf.inline_service_fragment = '(command arguments*|arguments+)'
+        self.ebnf.service_fragment = 'command arguments* output?'
+        self.ebnf.when_service_fragment = '(command arguments*|arguments+) ' \
+                                          'output?'
+        self.ebnf.inline_service_fragment = 'command arguments*'
         self.ebnf.service = 'path service_fragment'
         self.ebnf.service_block = 'service nl (nested_block)?'
         self.ebnf.inline_service = ('path inline_service_fragment')
@@ -266,7 +268,7 @@ class Grammar:
 
     def block(self):
         self.ebnf._WHEN = 'when'
-        self.ebnf.when_service = 'name path (service_fragment | output?)'
+        self.ebnf.when_service = 'name path (when_service_fragment | output?)'
         when = 'when (when_service | name output?)'
         self.ebnf.when_block = self.ebnf.simple_block(when)
         self.ebnf.indented_arguments = 'indent (arguments nl)+ dedent'

@@ -1,0 +1,83 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "7",
+      "name": [
+        "path"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "a"
+        }
+      ],
+      "src": "path = \"a\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "12",
+      "output": [
+        "server"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "3",
+      "src": "http server",
+      "next": "3"
+    },
+    "3": {
+      "method": "when",
+      "ln": "3",
+      "col_start": "10",
+      "col_end": "23",
+      "output": [
+        "listen"
+      ],
+      "service": "server",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "path",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "path"
+            ]
+          }
+        }
+      ],
+      "enter": "4",
+      "parent": "2",
+      "src": "    when server listen :path",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "col_start": "9",
+      "col_end": "12",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "3",
+      "src": "        a = 1"
+    }
+  },
+  "services": [
+    "http"
+  ],
+  "entrypoint": "1"
+}

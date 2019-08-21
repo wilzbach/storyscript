@@ -4,29 +4,29 @@
       "method": "execute",
       "ln": "1",
       "col_start": "1",
-      "col_end": "12",
+      "col_end": "15",
       "output": [
-        "server"
+        "stream"
       ],
-      "service": "http",
-      "command": "server",
+      "service": "twitter",
+      "command": "stream",
       "enter": "2",
-      "src": "http server",
+      "src": "twitter stream",
       "next": "2"
     },
     "2": {
       "method": "when",
       "ln": "2",
       "col_start": "10",
-      "col_end": "22",
+      "col_end": "20",
       "output": [
-        "li"
+        "t"
       ],
-      "service": "server",
-      "command": "listen",
+      "service": "stream",
+      "command": "tweet",
       "enter": "3",
       "parent": "1",
-      "src": "    when listen as li",
+      "src": "    when tweet as t",
       "next": "3"
     },
     "3": {
@@ -44,23 +44,23 @@
       "col_start": "10",
       "col_end": "21",
       "output": [
-        "listen"
+        "tweet"
       ],
-      "service": "server",
-      "command": "listen",
+      "service": "stream",
+      "command": "tweet",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "path",
+          "name": "track",
           "arg": {
             "$OBJECT": "string",
-            "string": "/foo"
+            "string": "storyscript"
           }
         }
       ],
       "enter": "5",
       "parent": "1",
-      "src": "    when listen path:\"/foo\"",
+      "src": "    when tweet track: \"storyscript\"",
       "next": "5"
     },
     "5": {
@@ -78,23 +78,23 @@
       "col_start": "10",
       "col_end": "21",
       "output": [
-        "li"
+        "t"
       ],
-      "service": "server",
-      "command": "listen",
+      "service": "stream",
+      "command": "tweet",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "path",
+          "name": "track",
           "arg": {
             "$OBJECT": "string",
-            "string": "/foo"
+            "string": "storyscript"
           }
         }
       ],
       "enter": "7",
       "parent": "1",
-      "src": "    when listen path:\"/foo\" as li",
+      "src": "    when tweet track: \"storyscript\" as t",
       "next": "7"
     },
     "7": {
@@ -110,29 +110,29 @@
       "method": "execute",
       "ln": "9",
       "col_start": "1",
-      "col_end": "12",
+      "col_end": "15",
       "output": [
-        "serv"
+        "s"
       ],
-      "service": "http",
-      "command": "server",
+      "service": "twitter",
+      "command": "stream",
       "enter": "10",
-      "src": "http server as serv",
+      "src": "twitter stream as s",
       "next": "10"
     },
     "10": {
       "method": "when",
       "ln": "10",
       "col_start": "10",
-      "col_end": "21",
+      "col_end": "17",
       "output": [
-        "listen"
+        "tweet"
       ],
-      "service": "serv",
-      "command": "listen",
+      "service": "s",
+      "command": "tweet",
       "enter": "11",
       "parent": "9",
-      "src": "    when serv listen",
+      "src": "    when s tweet",
       "next": "11"
     },
     "11": {
@@ -148,15 +148,15 @@
       "method": "when",
       "ln": "12",
       "col_start": "10",
-      "col_end": "21",
+      "col_end": "17",
       "output": [
-        "sa"
+        "t"
       ],
-      "service": "serv",
-      "command": "listen",
+      "service": "s",
+      "command": "tweet",
       "enter": "13",
       "parent": "9",
-      "src": "    when serv listen as sa",
+      "src": "    when s tweet as t",
       "next": "13"
     },
     "13": {
@@ -172,25 +172,25 @@
       "method": "when",
       "ln": "14",
       "col_start": "10",
-      "col_end": "21",
+      "col_end": "17",
       "output": [
-        "listen"
+        "tweet"
       ],
-      "service": "serv",
-      "command": "listen",
+      "service": "s",
+      "command": "tweet",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "path",
+          "name": "track",
           "arg": {
             "$OBJECT": "string",
-            "string": "/foo"
+            "string": "storyscript"
           }
         }
       ],
       "enter": "15",
       "parent": "9",
-      "src": "    when serv listen path:\"/foo\"",
+      "src": "    when s tweet track: \"storyscript\"",
       "next": "15"
     },
     "15": {
@@ -206,25 +206,25 @@
       "method": "when",
       "ln": "16",
       "col_start": "10",
-      "col_end": "21",
+      "col_end": "17",
       "output": [
-        "li"
+        "t"
       ],
-      "service": "serv",
-      "command": "listen",
+      "service": "s",
+      "command": "tweet",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "path",
+          "name": "track",
           "arg": {
             "$OBJECT": "string",
-            "string": "/foo"
+            "string": "storyscript"
           }
         }
       ],
       "enter": "17",
       "parent": "9",
-      "src": "    when serv listen path:\"/foo\" as li",
+      "src": "    when s tweet track: \"storyscript\" as t",
       "next": "17"
     },
     "17": {
@@ -237,7 +237,7 @@
     }
   },
   "services": [
-    "http"
+    "twitter"
   ],
   "entrypoint": "1"
 }

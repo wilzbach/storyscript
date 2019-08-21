@@ -10,7 +10,8 @@ def succeed(source):
     """
     Expect the source code to pass.
     """
-    Api.loads(source, features=features).check_success()
+    s = Api.loads(source, features=features)
+    assert s.success(), s.errors()[0]
 
 
 def fail(source):
@@ -29,12 +30,13 @@ def run(source, should_fail):
     Otherwise, expect it to pass.
     """
     if 'ANY' in source:
-        pre = 'ANY = {}\n'
+        pre = 'ANY = {} as Map[any,any]\n'
     elif 'fn_none' in source:
         pre = 'function fn_none\n    return\n'
     else:
         pre = ''
     source = pre + source
+    print(source)
     if should_fail:
         fail(source)
     else:

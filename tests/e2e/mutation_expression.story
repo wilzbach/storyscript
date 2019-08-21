@@ -1,3 +1,3 @@
-req = my_service call
+req = http fetch url: "foobar"
 a = ["opened", "labeled"]
-a contains item: req.body["action"]
+a.contains(item: req.body["action"])

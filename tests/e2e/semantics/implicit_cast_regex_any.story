@@ -1,2 +1,2 @@
-any_var = my_service call
+any_var = yaml parse data:"foobar"
 a = any_var == /fo/

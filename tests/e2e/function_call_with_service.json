@@ -6,27 +6,27 @@
       "col_start": "1",
       "col_end": "9",
       "output": [
-        "int"
+        "string"
       ],
       "function": "random",
       "enter": "2",
       "exit": "4",
-      "src": "function random returns int",
+      "src": "function random returns string",
       "next": "2"
     },
     "2": {
       "method": "return",
       "ln": "2",
       "col_start": "3",
-      "col_end": "12",
+      "col_end": "23",
       "args": [
         {
-          "$OBJECT": "int",
-          "int": 28
+          "$OBJECT": "string",
+          "string": "abc@xyz.com"
         }
       ],
       "parent": "1",
-      "src": "  return 28  # Assume some RNG here",
+      "src": "  return \"abc@xyz.com\"  # Assume some RNG here",
       "next": "4"
     },
     "4": {
@@ -35,7 +35,7 @@
       "col_start": "1",
       "col_end": "9",
       "output": [
-        "int"
+        "string"
       ],
       "function": "my_func",
       "args": [
@@ -58,7 +58,7 @@
       ],
       "enter": "5",
       "exit": "7.1",
-      "src": "function my_func k1: int k2: int returns int",
+      "src": "function my_func k1: int k2: int returns string",
       "next": "5"
     },
     "5": {
@@ -68,12 +68,40 @@
       "col_end": "12",
       "args": [
         {
-          "$OBJECT": "int",
-          "int": 28
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "k1"
+                ]
+              }
+            },
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "k2"
+                ]
+              }
+            }
+          ]
         }
       ],
       "parent": "4",
-      "src": "  return 28  # Assume some RNG here",
+      "src": "  return k1+k2 as string  # Assume some RNG here",
       "next": "7.1"
     },
     "7.1": {
@@ -109,8 +137,8 @@
     "8.1": {
       "method": "call",
       "ln": "8.1",
-      "col_start": "32",
-      "col_end": "38",
+      "col_start": "18",
+      "col_end": "24",
       "name": [
         "__p-8.1"
       ],
@@ -120,8 +148,8 @@
     "8.2": {
       "method": "call",
       "ln": "8.2",
-      "col_start": "49",
-      "col_end": "65",
+      "col_start": "36",
+      "col_end": "52",
       "name": [
         "__p-8.2"
       ],
@@ -149,8 +177,8 @@
     "8.3": {
       "method": "call",
       "ln": "8.3",
-      "col_start": "77",
-      "col_end": "83",
+      "col_start": "62",
+      "col_end": "68",
       "name": [
         "__p-8.3"
       ],
@@ -160,17 +188,14 @@
     "8": {
       "method": "execute",
       "ln": "8",
-      "col_start": "5",
-      "col_end": "23",
-      "name": [
-        "b"
-      ],
-      "service": "my_service",
-      "command": "command",
+      "col_start": "1",
+      "col_end": "13",
+      "service": "mailgun",
+      "command": "send",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "param1",
+          "name": "to",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -180,7 +205,7 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "param2",
+          "name": "subject",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -190,7 +215,7 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "param3",
+          "name": "from",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -199,11 +224,11 @@
           }
         }
       ],
-      "src": "b = my_service command param1: random() param2: my_func(k1: 1 k2:2) param3: random()"
+      "src": "mailgun send to: random() subject: my_func(k1: 1 k2:2) from: random()"
     }
   },
   "services": [
-    "my_service"
+    "mailgun"
   ],
   "entrypoint": "1",
   "functions": {

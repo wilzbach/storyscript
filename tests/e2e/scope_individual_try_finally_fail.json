@@ -1,0 +1,59 @@
+{
+  "tree": {
+    "1": {
+      "method": "try",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "8",
+      "enter": "2",
+      "exit": "3",
+      "src": "try",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "5",
+      "col_end": "8",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "1",
+      "src": "    c = 1",
+      "next": "3"
+    },
+    "3": {
+      "method": "finally",
+      "ln": "3",
+      "col_start": "1",
+      "col_end": "6",
+      "enter": "4",
+      "src": "finally",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "col_start": "5",
+      "col_end": "8",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": ""
+        }
+      ],
+      "parent": "3",
+      "src": "    c = \"\""
+    }
+  },
+  "entrypoint": "1"
+}

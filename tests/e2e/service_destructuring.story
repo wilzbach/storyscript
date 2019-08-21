@@ -1,1 +1,1 @@
-{ a, b } = my_service command
+{ a, b } = slack send text: "foobar" channel: "Storyscript"

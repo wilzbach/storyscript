@@ -5,31 +5,31 @@
       "ln": "1",
       "col_start": "1",
       "col_end": "12",
-      "service": "alpine",
-      "command": "echo",
+      "service": "random",
+      "command": "list",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "message",
+          "name": "type",
           "arg": {
             "$OBJECT": "string",
-            "string": "hello"
+            "string": "string"
           }
         },
         {
           "$OBJECT": "arg",
-          "name": "colour",
+          "name": "length",
           "arg": {
-            "$OBJECT": "string",
-            "string": "red"
+            "$OBJECT": "int",
+            "int": 10
           }
         }
       ],
-      "src": "alpine echo message:\"hello\""
+      "src": "random list type :\"string\""
     }
   },
   "services": [
-    "alpine"
+    "random"
   ],
   "entrypoint": "1"
 }

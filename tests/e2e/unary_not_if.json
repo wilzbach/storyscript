@@ -37,7 +37,7 @@
         }
       ],
       "enter": "3",
-      "src": "if !b",
+      "src": "if not b",
       "next": "3"
     },
     "3": {

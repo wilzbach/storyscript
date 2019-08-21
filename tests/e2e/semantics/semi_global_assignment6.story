@@ -1,3 +1,3 @@
 # FEAT: globals=False
-a = {}
+a = {} as Map[any,any]
 a["a"] = "b"

@@ -6,49 +6,76 @@
       "col_start": "1",
       "col_end": "7",
       "name": [
-        "body"
+        "from"
       ],
       "args": [
         {
           "$OBJECT": "string",
-          "string": ""
+          "string": "ss@storyscript.io"
         }
       ],
-      "src": "body = \"\"",
+      "src": "from = \"ss@storyscript.io\"",
       "next": "2"
     },
     "2": {
-      "method": "execute",
+      "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "19",
-      "service": "my_service",
-      "command": "command",
+      "col_end": "10",
+      "name": [
+        "subject"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "foobar"
+        }
+      ],
+      "src": "subject = \"foobar\"",
+      "next": "3"
+    },
+    "3": {
+      "method": "execute",
+      "ln": "3",
+      "col_start": "1",
+      "col_end": "13",
+      "service": "mailgun",
+      "command": "send",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "msg",
+          "name": "to",
           "arg": {
             "$OBJECT": "string",
-            "string": ""
+            "string": "abc@xyz.com"
           }
         },
         {
           "$OBJECT": "arg",
-          "name": "body",
+          "name": "from",
           "arg": {
             "$OBJECT": "path",
             "paths": [
-              "body"
+              "from"
+            ]
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "subject",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "subject"
             ]
           }
         }
       ],
-      "src": "my_service command msg:\"\" :body"
+      "src": "mailgun send to: \"abc@xyz.com\" :from :subject"
     }
   },
   "services": [
-    "my_service"
+    "mailgun"
   ],
   "entrypoint": "1"
 }

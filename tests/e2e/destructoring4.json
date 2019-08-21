@@ -43,33 +43,13 @@
           ]
         }
       ],
-      "next": "1.3"
-    },
-    "1.3": {
-      "method": "expression",
-      "ln": "1.3",
-      "col_start": "7",
-      "name": [
-        "bar"
-      ],
-      "args": [
-        {
-          "$OBJECT": "path",
-          "paths": [
-            "__p-1.1",
-            {
-              "$OBJECT": "string",
-              "string": "bar"
-            }
-          ]
-        }
-      ],
       "next": "1.2"
     },
     "1.2": {
       "method": "expression",
       "ln": "1.2",
       "col_start": "2",
+      "col_end": "18",
       "name": [
         "foo"
       ],
@@ -81,6 +61,28 @@
             {
               "$OBJECT": "string",
               "string": "foo"
+            }
+          ]
+        }
+      ],
+      "next": "1.3"
+    },
+    "1.3": {
+      "method": "expression",
+      "ln": "1.3",
+      "col_start": "7",
+      "col_end": "18",
+      "name": [
+        "bar"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1",
+            {
+              "$OBJECT": "string",
+              "string": "bar"
             }
           ]
         }

@@ -1,4 +1,4 @@
-b = {}
+b = {} as Map[any,any]
 a = b[0]
 c = b[0]
 d = 0

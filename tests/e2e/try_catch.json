@@ -33,11 +33,8 @@
       "ln": "3",
       "col_start": "1",
       "col_end": "6",
-      "output": [
-        "error"
-      ],
       "enter": "4",
-      "src": "catch as error",
+      "src": "catch",
       "next": "4"
     },
     "4": {

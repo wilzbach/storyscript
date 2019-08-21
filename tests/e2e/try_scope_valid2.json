@@ -1,0 +1,148 @@
+{
+  "tree": {
+    "1": {
+      "method": "try",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "8",
+      "enter": "2",
+      "exit": "3",
+      "src": "try",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "3",
+      "col_end": "6",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "1",
+      "src": "  a = 0",
+      "next": "3"
+    },
+    "3": {
+      "method": "catch",
+      "ln": "3",
+      "col_start": "1",
+      "col_end": "4",
+      "enter": "4",
+      "exit": "5",
+      "src": "catch",
+      "next": "4"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "col_start": "3",
+      "col_end": "6",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "3",
+      "src": "  a = 0",
+      "next": "5"
+    },
+    "5": {
+      "method": "finally",
+      "ln": "5",
+      "col_start": "1",
+      "col_end": "4",
+      "enter": "6",
+      "exit": "8",
+      "src": "finally",
+      "next": "6"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "col_start": "3",
+      "col_end": "6",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
+      "parent": "5",
+      "src": "  b = a",
+      "next": "8"
+    },
+    "8": {
+      "method": "expression",
+      "ln": "8",
+      "col_start": "1",
+      "col_end": "5",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            },
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        }
+      ],
+      "src": "a += 1",
+      "next": "9"
+    },
+    "9": {
+      "method": "expression",
+      "ln": "9",
+      "col_start": "1",
+      "col_end": "5",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "int",
+              "int": 1
+            }
+          ]
+        }
+      ],
+      "src": "b += 1"
+    }
+  },
+  "entrypoint": "1"
+}

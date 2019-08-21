@@ -3,41 +3,77 @@
     "1.2": {
       "method": "execute",
       "ln": "1.2",
-      "col_start": "43",
-      "col_end": "55",
+      "col_start": "51",
+      "col_end": "65",
       "name": [
         "__p-1.2"
       ],
-      "service": "serv111",
-      "command": "c111",
+      "service": "random",
+      "command": "integer",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "low",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 1
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 11
+          }
+        }
+      ],
       "next": "1.3"
     },
     "1.3": {
       "method": "execute",
       "ln": "1.3",
-      "col_start": "64",
-      "col_end": "76",
+      "col_start": "88",
+      "col_end": "102",
       "name": [
         "__p-1.3"
       ],
-      "service": "serv112",
-      "command": "c112",
+      "service": "random",
+      "command": "integer",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "low",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 1
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 12
+          }
+        }
+      ],
       "next": "1.4"
     },
     "1.4": {
       "method": "execute",
       "ln": "1.4",
-      "col_start": "25",
-      "col_end": "35",
+      "col_start": "30",
+      "col_end": "44",
       "name": [
         "__p-1.4"
       ],
-      "service": "serv11",
-      "command": "c11",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg1",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -47,7 +83,7 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "arg2",
+          "name": "high",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -61,41 +97,77 @@
     "1.5": {
       "method": "execute",
       "ln": "1.5",
-      "col_start": "104",
-      "col_end": "116",
+      "col_start": "147",
+      "col_end": "161",
       "name": [
         "__p-1.5"
       ],
-      "service": "serv121",
-      "command": "c121",
+      "service": "random",
+      "command": "integer",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "low",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 1
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 21
+          }
+        }
+      ],
       "next": "1.6"
     },
     "1.6": {
       "method": "execute",
       "ln": "1.6",
-      "col_start": "125",
-      "col_end": "137",
+      "col_start": "184",
+      "col_end": "198",
       "name": [
         "__p-1.6"
       ],
-      "service": "serv122",
-      "command": "c122",
+      "service": "random",
+      "command": "integer",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "low",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 1
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 22
+          }
+        }
+      ],
       "next": "1.7"
     },
     "1.7": {
       "method": "execute",
       "ln": "1.7",
-      "col_start": "86",
-      "col_end": "96",
+      "col_start": "126",
+      "col_end": "140",
       "name": [
         "__p-1.7"
       ],
-      "service": "serv12",
-      "command": "c12",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg1",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -105,7 +177,7 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "arg2",
+          "name": "high",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -120,16 +192,16 @@
       "method": "execute",
       "ln": "1.8",
       "col_start": "9",
-      "col_end": "17",
+      "col_end": "23",
       "name": [
         "__p-1.8"
       ],
-      "service": "serv1",
-      "command": "c1",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg1",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -139,7 +211,7 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "arg2",
+          "name": "high",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -153,41 +225,77 @@
     "1.9": {
       "method": "execute",
       "ln": "1.9",
-      "col_start": "178",
-      "col_end": "190",
+      "col_start": "261",
+      "col_end": "275",
       "name": [
         "__p-1.9"
       ],
-      "service": "serv211",
-      "command": "c211",
+      "service": "random",
+      "command": "integer",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "low",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 2
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 11
+          }
+        }
+      ],
       "next": "1.10"
     },
     "1.10": {
       "method": "execute",
       "ln": "1.10",
-      "col_start": "199",
-      "col_end": "211",
+      "col_start": "298",
+      "col_end": "312",
       "name": [
         "__p-1.10"
       ],
-      "service": "serv212",
-      "command": "c212",
+      "service": "random",
+      "command": "integer",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "low",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 2
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 12
+          }
+        }
+      ],
       "next": "1.11"
     },
     "1.11": {
       "method": "execute",
       "ln": "1.11",
-      "col_start": "160",
-      "col_end": "170",
+      "col_start": "240",
+      "col_end": "254",
       "name": [
         "__p-1.11"
       ],
-      "service": "serv11",
-      "command": "c21",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg1",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -197,7 +305,7 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "arg2",
+          "name": "high",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -211,41 +319,77 @@
     "1.12": {
       "method": "execute",
       "ln": "1.12",
-      "col_start": "239",
-      "col_end": "251",
+      "col_start": "357",
+      "col_end": "371",
       "name": [
         "__p-1.12"
       ],
-      "service": "serv221",
-      "command": "c221",
+      "service": "random",
+      "command": "integer",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "low",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 2
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 21
+          }
+        }
+      ],
       "next": "1.13"
     },
     "1.13": {
       "method": "execute",
       "ln": "1.13",
-      "col_start": "260",
-      "col_end": "272",
+      "col_start": "394",
+      "col_end": "408",
       "name": [
         "__p-1.13"
       ],
-      "service": "serv222",
-      "command": "c222",
+      "service": "random",
+      "command": "integer",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "low",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 2
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 22
+          }
+        }
+      ],
       "next": "1.14"
     },
     "1.14": {
       "method": "execute",
       "ln": "1.14",
-      "col_start": "221",
-      "col_end": "231",
+      "col_start": "336",
+      "col_end": "350",
       "name": [
         "__p-1.14"
       ],
-      "service": "serv21",
-      "command": "c21",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg1",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -255,7 +399,7 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "arg2",
+          "name": "high",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -269,17 +413,17 @@
     "1.15": {
       "method": "execute",
       "ln": "1.15",
-      "col_start": "144",
-      "col_end": "152",
+      "col_start": "219",
+      "col_end": "233",
       "name": [
         "__p-1.15"
       ],
-      "service": "serv2",
-      "command": "c2",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "arg1",
+          "name": "low",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -289,7 +433,7 @@
         },
         {
           "$OBJECT": "arg",
-          "name": "arg2",
+          "name": "high",
           "arg": {
             "$OBJECT": "path",
             "paths": [
@@ -365,19 +509,7 @@
     }
   },
   "services": [
-    "serv1",
-    "serv11",
-    "serv111",
-    "serv112",
-    "serv12",
-    "serv121",
-    "serv122",
-    "serv2",
-    "serv21",
-    "serv211",
-    "serv212",
-    "serv221",
-    "serv222"
+    "random"
   ],
   "entrypoint": "1.2"
 }

@@ -8,7 +8,7 @@ def is_boolean(op):
     """
     Tests whether an operation requires conversion to boolean.
     """
-    return op in ['or', 'and', '!']
+    return op in ['or', 'and', 'not']
 
 
 def is_cmp(op):
@@ -64,7 +64,7 @@ def op_builder(a, b, swapped=False):
             res.append((f'{b} {op} {a}', op))
 
     if not swapped:
-        res.append((f'! {a}', '!'))
+        res.append((f'not {a}', 'not'))
     return res
 
 
@@ -240,15 +240,17 @@ def test_none_string_ops(source, op):
 # Test operations on FloatType
 ###############################################################################
 
+all_except_equal = [lambda op: not is_equal(op) and all_ops[0](op)]
+
 
 @mark.parametrize('source,op', op_builder('1.5', '2.5'))
 def test_float_float_ops(source, op):
-    runner(source, op, allowed=all_ops)
+    runner(source, op, allowed=all_except_equal)
 
 
 @mark.parametrize('source,op', op_builder('1.5', '2', swapped=True))
 def test_float_int_ops(source, op):
-    runner(source, op, allowed=all_ops)
+    runner(source, op, allowed=all_except_equal)
 
 
 @mark.parametrize('source,op', op_builder('1.5', 'true', swapped=True))
@@ -307,7 +309,7 @@ def test_string_string_ops(source, op):
 # Test operations on AnyType
 ###############################################################################
 
-ANY = 'any_obj = {}\nany_var=any_obj[0]\n'
+ANY = 'any_obj = {} as Map[any,any]\nany_var=any_obj[0]\n'
 
 
 @mark.parametrize('source,op', op_builder('any_var', 'any_var'))
@@ -327,7 +329,7 @@ def test_any_int_ops(source, op):
 
 @mark.parametrize('source,op', op_builder('any_var', '2.5', swapped=True))
 def test_any_float_ops(source, op):
-    runner(source, op, allowed=all_ops, pre=ANY)
+    runner(source, op, allowed=all_except_equal, pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '"."', swapped=True))

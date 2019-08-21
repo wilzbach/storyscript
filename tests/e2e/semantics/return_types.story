@@ -5,6 +5,6 @@ function b returns regex
 function c returns any
     return 1
 function d returns Map[any,any]
-    return {}
+    return {} as Map[any,any]
 function e returns List[int]
     return [1]

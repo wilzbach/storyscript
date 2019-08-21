@@ -6,3 +6,7 @@ class Position:
         self.line = line
         self.column = column
         self.end_column = end_column
+
+    def __str__(self):
+        return f'Pos(line:{self.line}, start:{self.column}, ' \
+            f'end:{self.end_column})'

@@ -1,1 +1,4 @@
-b = my_service command p1: (serv1 f1) p2: (serv2 f2) p3: (serv3 f3)
+p1 = yaml parse data: "abc@xyz.com"
+p2 = yaml parse data: "ss@storyscript.com"
+p3 = yaml parse data: "Testing"
+mailgun send to: (yaml format data: p1) from: (yaml format data: p2) subject: (yaml format data: p3)

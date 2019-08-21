@@ -1,6 +1,0 @@
-Error: syntax error in story at line 2, column 1
-
-2|    my_service command :body
-      ^^^^^^^^^^^^^^^^^^
-
-E0052: Service calls require a command.

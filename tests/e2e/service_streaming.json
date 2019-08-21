@@ -4,14 +4,14 @@
       "method": "execute",
       "ln": "1",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "15",
       "output": [
         "client"
       ],
-      "service": "api",
+      "service": "twitter",
       "command": "stream",
       "enter": "2",
-      "src": "api stream as client",
+      "src": "twitter stream as client",
       "next": "2"
     },
     "2": {
@@ -23,10 +23,20 @@
         "e"
       ],
       "service": "client",
-      "command": "event",
+      "command": "tweet",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "track",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "storyscript"
+          }
+        }
+      ],
       "enter": "3",
       "parent": "1",
-      "src": "    when client event as e",
+      "src": "    when client tweet track: \"storyscript\" as e",
       "next": "3"
     },
     "3": {
@@ -48,7 +58,7 @@
     }
   },
   "services": [
-    "api"
+    "twitter"
   ],
   "entrypoint": "1"
 }

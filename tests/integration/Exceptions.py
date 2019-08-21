@@ -112,7 +112,7 @@ def test_exceptions_block_expected_before(capsys):
     lines = e.value.message().splitlines()
     assert lines[0] == 'Error: syntax error in story at line 1, column 11'
     assert lines[2] == '1|    while true'
-    assert lines[5] == 'E0045: An indented block is required to follow here'
+    assert lines[5] == 'E0134: An indented block is required to follow here'
 
 
 def test_exceptions_block_expected_after(capsys):
