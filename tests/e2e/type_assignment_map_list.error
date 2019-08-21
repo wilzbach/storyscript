@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 21
+Error: syntax error in story at line 1, column 5
 
 1|    a = {} as List[List[string]]
-                          ^^^^^^
+          ^^^^^^^^^^^^^^^^^^^^^^
 
 E0126: Type casting not supported from `Map[any,any]` to `List[List[string]]`.

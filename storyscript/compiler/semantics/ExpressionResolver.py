@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from contextlib import contextmanager
+
 from storyscript.compiler.lowering.utils import service_to_mutation
 from storyscript.compiler.semantics.types.Types import AnyType, BaseType, \
     BooleanType, FloatType, IntType, ListType, MapType, ObjectType, \
@@ -18,6 +20,7 @@ class SymbolExpressionVisitor(ExpressionVisitor):
 
     def __init__(self, visitor):
         self.visitor = visitor
+        super().__init__()
 
     @classmethod
     def is_cmp(cls, op):
@@ -58,6 +61,16 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         Checks whether a given operator is arithmetic.
         """
         return operator in cls._arithmetic_types
+
+    @contextmanager
+    def with_as_cast(self):
+        """
+        Context manager during as cast expression handling.
+        """
+        prev = self.visitor.with_as
+        self.visitor.with_as = True
+        yield
+        self.visitor.with_as = prev
 
     def as_expression(self, tree, expr):
         assert tree.child(1).data == 'as_operator'
@@ -218,6 +231,7 @@ class ExpressionResolver:
             symbol_resolver=module.symbol_resolver
         )
         self.module = module
+        self.with_as = False
 
     def path(self, tree):
         assert tree.data == 'path'
@@ -270,6 +284,8 @@ class ExpressionResolver:
                     break
             else:
                 value = val
+        if not self.with_as:
+            tree.expect(value is not None, 'list_type_no_any')
         if value is None:
             value = AnyType.instance()
         return base_symbol(ListType(value))
@@ -313,6 +329,10 @@ class ExpressionResolver:
             else:
                 key = new_key
                 value = new_value
+
+        if not self.with_as:
+            tree.expect(key is not None, 'map_type_no_any')
+            tree.expect(value is not None, 'map_type_no_any')
         if key is None:
             key = AnyType.instance()
         if value is None:

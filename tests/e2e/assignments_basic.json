@@ -152,11 +152,24 @@
       ],
       "args": [
         {
-          "$OBJECT": "list",
-          "items": []
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "List",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "list",
+            "items": []
+          }
         }
       ],
-      "src": "list_empty = []",
+      "src": "list_empty = [] as List[any]",
       "next": "10"
     },
     "10": {
@@ -233,11 +246,28 @@
       ],
       "args": [
         {
-          "$OBJECT": "dict",
-          "items": []
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "Map",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              },
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "dict",
+            "items": []
+          }
         }
       ],
-      "src": "obj_empty = {}",
+      "src": "obj_empty = {} as Map[any,any]",
       "next": "16"
     },
     "16": {

@@ -1,0 +1,38 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "6",
+      "name": [
+        "arr"
+      ],
+      "args": [
+        {
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "Map",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "int"
+              },
+              {
+                "$OBJECT": "type",
+                "type": "int"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "dict",
+            "items": []
+          }
+        }
+      ],
+      "src": "arr = {} as Map[int, int]"
+    }
+  },
+  "entrypoint": "1"
+}

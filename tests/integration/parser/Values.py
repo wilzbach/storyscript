@@ -102,7 +102,7 @@ def test_values_list():
 
 def test_values_list_empty():
     result = parse('[]\n')
-    expected = Tree('list', [Token('_OSB', '['), Token('_CSB', ']')])
+    expected = Tree('list', [Token('OSB', '['), Token('CSB', ']')])
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
     assert entity.values.list == expected

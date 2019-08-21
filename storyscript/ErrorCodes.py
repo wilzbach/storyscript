@@ -254,6 +254,14 @@ class ErrorCodes:
         'E0144',
         'No event listener with output `{output}` for event `{event}`.'
     )
+    map_type_no_any = (
+        'E0145',
+        'Map initialization without elements must be typed. Use `as ...`'
+    )
+    list_type_no_any = (
+        'E0146',
+        'List initialization without elements must be typed. Use `as ...`'
+    )
 
     @staticmethod
     def is_error(error_name):
