@@ -262,6 +262,10 @@ class ErrorCodes:
         'E0146',
         'List initialization without elements must be typed. Use `as ...`'
     )
+    service_action_without_output = (
+        'E0147',
+        'Service object `{object}` only support events, no actions.'
+    )
 
     @staticmethod
     def is_error(error_name):
