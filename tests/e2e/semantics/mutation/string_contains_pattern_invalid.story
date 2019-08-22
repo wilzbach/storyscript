@@ -1,2 +1,2 @@
 a = ""
-b = a contains pattern: 2
+b = a.contains(pattern: 2)

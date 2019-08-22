@@ -1,6 +1,6 @@
 Error: syntax error in story at line 3
 
-3|        return my_int decrement
-          ^^^^^^^^^^^^^^^^^^^^^^^
+3|        return my_int.decrement()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 E0110: `return` expected. Did you miss to add `returns int`?

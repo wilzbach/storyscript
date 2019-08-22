@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 9
 
-2|    foreach b my_mutation as e
+2|    foreach b.my_mutation() as e
               ^^^^^^^^^^^^^
 
 E0117: Invalid mutation `my_mutation`

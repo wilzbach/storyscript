@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 7
 
-2|    b = a increment item:1
+2|    b = a.increment(item:1)
             ^^^^^^^^^^^^^^
 
 E0114: Mutation `increment` does not accept argument `item`

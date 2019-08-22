@@ -1,2 +1,2 @@
 a = ""
-b = a substring start: 1 end: "foo"
+b = a.substring(start: 1 end: "foo")

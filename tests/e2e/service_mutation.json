@@ -39,14 +39,13 @@
           }
         }
       ],
-      "next": "2"
+      "next": "2.2"
     },
-    "2": {
+    "2.2": {
       "method": "mutation",
-      "ln": "2",
-      "col_end": "41",
+      "ln": "2.2",
       "name": [
-        "lines"
+        "__p-2.2"
       ],
       "args": [
         {
@@ -70,7 +69,25 @@
           ]
         }
       ],
-      "src": "lines = (http fetch url: diff_url) split by: \"\\n\""
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "8",
+      "name": [
+        "lines"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.2"
+          ]
+        }
+      ],
+      "src": "lines = (http fetch url: diff_url).split(by: \"\\n\")"
     }
   },
   "services": [
