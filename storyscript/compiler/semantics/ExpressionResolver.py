@@ -585,10 +585,8 @@ class ExpressionResolver:
         return self.resolve_mutation(t, tree)
 
     def mutation(self, tree):
-        if tree.path:
-            s = self.path(tree.path)
-        else:
-            s = self.expression(tree.expression)
+        assert tree.expression is not None
+        s = self.expression(tree.expression)
         return self.resolve_mutation(s, tree)
 
     def call_expression(self, tree):
