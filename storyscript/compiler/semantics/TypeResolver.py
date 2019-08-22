@@ -225,12 +225,10 @@ class TypeResolver(ScopeSelectiveVisitor):
     def service_block(self, tree, scope):
         service_name = tree.service.path.child(0).value
         name = scope.resolve(service_name)
-        if name is not None and not isinstance(name.type(), ObjectType):
-            tree.expect(tree.service.service_fragment.output is None,
-                        'mutation_nested')
-            tree.expect(tree.nested_block is None, 'mutation_nested')
-            # Whitespace syntax for mutations is not allowed anymore.
-            tree.expect(0, 'service_name_expected', found='variable')
+
+        # Whitespace syntax for mutations is not allowed anymore.
+        tree.expect(name is None or isinstance(name.type(), ObjectType),
+                    'service_name_expected', found='variable')
 
         action_node = tree.service.service_fragment.command
         tree.expect(action_node is not None, 'service_without_command')
