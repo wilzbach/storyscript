@@ -229,9 +229,8 @@ class TypeResolver(ScopeSelectiveVisitor):
             tree.expect(tree.service.service_fragment.output is None,
                         'mutation_nested')
             tree.expect(tree.nested_block is None, 'mutation_nested')
-            # resolve to perform checks
-            self.resolver.service(tree.service)
-            return
+            # Whitespace syntax for mutations is not allowed anymore.
+            tree.expect(0, 'service_name_expected', found='variable')
 
         action_node = tree.service.service_fragment.command
         tree.expect(action_node is not None, 'service_without_command')

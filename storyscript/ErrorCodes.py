@@ -266,6 +266,10 @@ class ErrorCodes:
         'E0147',
         'Service object `{object}` only support events, no actions.'
     )
+    service_name_expected = (
+        'E0148',
+        'Service expected but {found} found.'
+    )
 
     @staticmethod
     def is_error(error_name):

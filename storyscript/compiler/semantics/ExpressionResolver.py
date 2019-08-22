@@ -4,7 +4,6 @@ from contextlib import contextmanager
 
 from lark.lexer import Token
 
-from storyscript.compiler.lowering.utils import service_to_mutation
 from storyscript.compiler.semantics.types.Types import AnyType, BaseType, \
     BooleanType, FloatType, IntType, ListType, MapType, ObjectType, \
     RegExpType, StringType, TimeType, explicit_cast
@@ -580,9 +579,12 @@ class ExpressionResolver:
             # -> must be a service
             return base_symbol(self.resolve_service(tree))
 
-        # variable exists -> mutation
-        service_to_mutation(tree)
-        return self.resolve_mutation(t, tree)
+        # variable exists -> mutation/event-based service
+        if t.type() == ObjectType.instance():
+            # In case of event-based service return Anytype for now.
+            return base_symbol(AnyType.instance())
+
+        tree.expect(0, 'service_name_expected', found='variable')
 
     def mutation(self, tree):
         assert tree.expression is not None
