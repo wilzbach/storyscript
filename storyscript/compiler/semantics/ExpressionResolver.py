@@ -584,7 +584,8 @@ class ExpressionResolver:
             # In case of event-based service return Anytype for now.
             return base_symbol(AnyType.instance())
 
-        tree.expect(0, 'service_name_expected', found='variable')
+        var_name = tree.path.child(0).value
+        tree.path.expect(0, 'service_name_not_var', var=var_name)
 
     def mutation(self, tree):
         assert tree.expression is not None

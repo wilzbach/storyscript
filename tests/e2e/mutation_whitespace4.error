@@ -3,4 +3,4 @@ Error: syntax error in story at line 2, column 1
 2|    a split by: "\n"
       ^
 
-E0148: Service expected but variable found.
+E0148: Service name expected but existing variable `a` found.

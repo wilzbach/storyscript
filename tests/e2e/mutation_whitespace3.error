@@ -3,4 +3,4 @@ Error: syntax error in story at line 1
 1|    (http fetch url:diff_url) split by: "\n"
       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-E0148: Service expected but inline service found.
+E0149: Service name expected but inline service expression found.

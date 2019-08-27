@@ -264,9 +264,13 @@ class ErrorCodes:
         'E0147',
         'Service object `{object}` only support events, no actions.'
     )
-    service_name_expected = (
+    service_name_not_var = (
         'E0148',
-        'Service expected but {found} found.'
+        'Service name expected but existing variable `{var}` found.'
+    )
+    service_name_not_inline_service = (
+        'E0149',
+        'Service name expected but inline service expression found.'
     )
 
     @staticmethod

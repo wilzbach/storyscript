@@ -103,8 +103,7 @@ class Lowering:
             fun(node, fake_tree, entity.path)
 
             entity.path.expect(entity.data != 'service',
-                               'service_name_expected',
-                               found='inline service')
+                               'service_name_not_inline_service')
 
     @staticmethod
     def is_inline_expression(n):
