@@ -1,2 +1,6 @@
-E0001: Internal error occured: 
-Please report at https://github.com/storyscript/storyscript/issues
+Error: syntax error in story at line 1, column 10
+
+1|    {a, b} = {}
+               ^^
+
+E0145: Map initialization without elements must be typed. Use `as ...`

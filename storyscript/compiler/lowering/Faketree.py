@@ -68,14 +68,24 @@ class FakeTree:
             else:
                 self.mark_line(child, line)
 
+    def set_line(self, node, line):
+        """
+        Sets the given `line` on the first token in node's subtree or
+        on the node itself if its subtree doesn't contain tokens.
+        """
+        assert isinstance(node, Tree)
+        first_token = node.find_first_token()
+        if first_token is not None:
+            first_token.line = line
+        else:
+            node._line = line
+
     def assignment(self, value):
         """
         Creates a fake assignment tree, equivalent to "$fake = value"
         """
         line = self.get_line(value)
-        first_token = value.find_first_token()
-        assert first_token is not None
-        first_token.line = line
+        self.set_line(value, line)
         path = self.path(line=line)
         return self.assignment_path(path, value, line)
 

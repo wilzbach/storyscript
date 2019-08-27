@@ -128,14 +128,27 @@ def test_faketree_path_line(fake_tree):
     assert fake_tree.path(line=1).child(0).line == 1
 
 
+def test_faketree_set_line(patch, fake_tree):
+    tok = Token('NAME', 'foo')
+    tree = Tree('path', [tok])
+    patch.object(tree, 'find_first_token', return_value=tok)
+    fake_tree.set_line(tree, '1')
+    tree.find_first_token.assert_called()
+    assert tok.line == '1'
+
+    patch.object(tree, 'find_first_token', return_value=None)
+    fake_tree.set_line(tree, '2')
+    tree.find_first_token.assert_called()
+    assert tree._line == '2'
+
+
 def test_faketree_assignment(patch, tree, fake_tree):
-    patch.many(FakeTree, ['path', 'get_line'])
+    patch.many(FakeTree, ['path', 'get_line', 'set_line'])
     result = fake_tree.assignment(tree)
     FakeTree.get_line.assert_called_with(tree)
     line = FakeTree.get_line()
+    FakeTree.set_line.assert_called_with(tree, line)
     FakeTree.path.assert_called_with(line=line)
-    tree.find_first_token.assert_called()
-    assert tree.find_first_token().line == line
     assert result.children[0] == FakeTree.path()
     tree = Tree('base_expression', [tree])
     subtree = [Token('EQUALS', '=', line=line), tree]
