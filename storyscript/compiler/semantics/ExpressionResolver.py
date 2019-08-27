@@ -447,11 +447,11 @@ class ExpressionResolver:
         assert tree.data == 'expression'
         return self.expr_visitor.expression(tree)
 
-    def build_arguments(self, tree, name, fn_type):
+    def build_arguments(self, tree, fname, fn_type):
         args = {}
         for c in tree.extract('arguments'):
             tree.expect(len(c.children) >= 2, 'arg_name_required',
-                        fn_type=fn_type, name=name)
+                        fn_type=fn_type, name=fname)
             name = c.child(0)
             type_ = self.expression(c.child(1)).type()
             sym = Symbol.from_path(name, type_)
