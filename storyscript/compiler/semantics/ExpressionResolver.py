@@ -544,8 +544,8 @@ class ExpressionResolver:
         action_name = action_node.child(0).value
         args = self.build_arguments(
             tree.service_fragment,
-            service_name,
-            action_name
+            fname=service_name,
+            fn_type='Service'
         )
         return self.module.service_typing.resolve_service(
             tree, service_name, action_name, args)
