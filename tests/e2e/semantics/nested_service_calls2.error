@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3
+
+3|            a = (request get_header key:"foo-url") + (request get_header key:"bar-url")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+E0103: `+` between `none` and `none` is not supported.
