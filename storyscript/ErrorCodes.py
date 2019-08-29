@@ -161,8 +161,6 @@ class ErrorCodes:
         'E0117', 'Invalid mutation `{name}`')
     arg_name_required = (
         'E0118', '{fn_type} `{name}` requires arguments to be named')
-    mutation_nested = (
-        'E0119', "Mutations can't have nested blocks.")
     mutation_output = (
         'E0120', "Mutations can't have outputs.")
     mutation_overload_mismatch = (
@@ -265,6 +263,14 @@ class ErrorCodes:
     service_action_without_output = (
         'E0147',
         'Service object `{object}` only support events, no actions.'
+    )
+    service_name_not_var = (
+        'E0148',
+        'Service name expected but existing variable `{var}` found.'
+    )
+    service_name_not_inline_service = (
+        'E0149',
+        'Service name expected but inline service expression found.'
     )
 
     @staticmethod

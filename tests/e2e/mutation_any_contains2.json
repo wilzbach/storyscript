@@ -55,15 +55,15 @@
         }
       ],
       "src": "b = a[0]",
-      "next": "3"
+      "next": "3.1"
     },
-    "3": {
+    "3.1": {
       "method": "mutation",
-      "ln": "3",
+      "ln": "3.1",
       "col_start": "5",
-      "col_end": "15",
+      "col_end": "6",
       "name": [
-        "c"
+        "__p-3.1"
       ],
       "args": [
         {
@@ -87,7 +87,25 @@
           ]
         }
       ],
-      "src": "c = b contains item:0"
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-3.1"
+          ]
+        }
+      ],
+      "src": "c = b.contains(item:0)"
     }
   },
   "entrypoint": "1"

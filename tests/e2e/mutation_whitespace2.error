@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2
+
+2|    a = (http fetch url:diff_url) split by: "\n"
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+E0149: Service name expected but inline service expression found.

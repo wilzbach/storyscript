@@ -1,6 +1,6 @@
 Error: syntax error in story at line 3, column 7
 
-3|    c = b substring foo:2
+3|    c = b.substring(foo:2)
             ^^^^^^^^^^^^^
 
 E0121: Multiple mutation overloads for `substring` found:

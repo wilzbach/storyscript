@@ -1,2 +1,2 @@
 a = ""
-b = a contains start:1
+b = a.contains(start:1)

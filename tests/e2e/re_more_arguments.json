@@ -15,15 +15,15 @@
         }
       ],
       "src": "str = \"hello.\"",
-      "next": "2"
+      "next": "2.1"
     },
-    "2": {
+    "2.1": {
       "method": "mutation",
-      "ln": "2",
+      "ln": "2.1",
       "col_start": "5",
-      "col_end": "16",
+      "col_end": "8",
       "name": [
-        "r"
+        "__p-2.1"
       ],
       "args": [
         {
@@ -56,7 +56,25 @@
           ]
         }
       ],
-      "src": "r = str replace pattern:/hello/i by:\"foo\""
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "r"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
+          ]
+        }
+      ],
+      "src": "r = str.replace(pattern:/hello/i by:\"foo\")"
     }
   },
   "entrypoint": "1"

@@ -15,15 +15,15 @@
         }
       ],
       "src": "a = \"aa\"",
-      "next": "2"
+      "next": "2.1"
     },
-    "2": {
+    "2.1": {
       "method": "mutation",
-      "ln": "2",
+      "ln": "2.1",
       "col_start": "5",
-      "col_end": "12",
+      "col_end": "6",
       "name": [
-        "b"
+        "__p-2.1"
       ],
       "args": [
         {
@@ -47,7 +47,25 @@
           ]
         }
       ],
-      "src": "b = a split by:\".\""
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
+          ]
+        }
+      ],
+      "src": "b = a.split(by:\".\")"
     }
   },
   "entrypoint": "1"

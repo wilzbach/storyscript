@@ -1,2 +1,2 @@
 a = ""
-b = a contains
+b = a.contains()

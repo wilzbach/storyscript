@@ -1,2 +1,2 @@
 a = [1]
-b = a substring
+b = a.substring()

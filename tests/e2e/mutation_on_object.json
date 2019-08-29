@@ -1,0 +1,67 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "col_start": "5",
+      "col_end": "18",
+      "name": [
+        "a"
+      ],
+      "service": "gmaps",
+      "command": "geocode",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "address",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foobar"
+          }
+        }
+      ],
+      "src": "a = gmaps geocode address: \"foobar\"",
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "mutation",
+      "ln": "2.1",
+      "col_start": "1",
+      "col_end": "2",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        },
+        {
+          "$OBJECT": "mutation",
+          "mutation": "round",
+          "args": []
+        }
+      ],
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
+          ]
+        }
+      ],
+      "src": "a.round()"
+    }
+  },
+  "services": [
+    "gmaps"
+  ],
+  "entrypoint": "1"
+}

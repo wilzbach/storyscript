@@ -35,7 +35,7 @@
       "method": "mutation",
       "ln": "3.1",
       "col_start": "12",
-      "col_end": "28",
+      "col_end": "18",
       "name": [
         "__p-3.1"
       ],
@@ -68,7 +68,7 @@
         }
       ],
       "parent": "1",
-      "src": "    return my_int decrement"
+      "src": "    return my_int.decrement()"
     }
   },
   "entrypoint": "1",

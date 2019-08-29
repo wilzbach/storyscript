@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 7
 
-2|    b = a contains item: "a" pattern: 42
+2|    b = a.contains(item: "a" pattern: 42)
             ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 E0121: Multiple mutation overloads for `contains` found:

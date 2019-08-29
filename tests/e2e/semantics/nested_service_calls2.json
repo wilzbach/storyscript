@@ -48,66 +48,46 @@
       "next": "3.1"
     },
     "3.1": {
-      "method": "mutation",
+      "method": "execute",
       "ln": "3.1",
       "col_start": "14",
       "col_end": "27",
       "name": [
         "__p-3.1"
       ],
+      "service": "request",
+      "command": "fetch",
       "args": [
         {
-          "$OBJECT": "path",
-          "paths": [
-            "request"
-          ]
-        },
-        {
-          "$OBJECT": "mutation",
-          "mutation": "fetch",
-          "args": [
-            {
-              "$OBJECT": "arg",
-              "name": "url",
-              "arg": {
-                "$OBJECT": "string",
-                "string": "foo-url"
-              }
-            }
-          ]
+          "$OBJECT": "arg",
+          "name": "url",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foo-url"
+          }
         }
       ],
       "parent": "2",
       "next": "3.2"
     },
     "3.2": {
-      "method": "mutation",
+      "method": "execute",
       "ln": "3.2",
       "col_start": "46",
       "col_end": "59",
       "name": [
         "__p-3.2"
       ],
+      "service": "request",
+      "command": "fetch",
       "args": [
         {
-          "$OBJECT": "path",
-          "paths": [
-            "request"
-          ]
-        },
-        {
-          "$OBJECT": "mutation",
-          "mutation": "fetch",
-          "args": [
-            {
-              "$OBJECT": "arg",
-              "name": "url",
-              "arg": {
-                "$OBJECT": "string",
-                "string": "bar-url"
-              }
-            }
-          ]
+          "$OBJECT": "arg",
+          "name": "url",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "bar-url"
+          }
         }
       ],
       "parent": "2",
