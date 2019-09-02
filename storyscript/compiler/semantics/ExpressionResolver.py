@@ -538,6 +538,13 @@ class ExpressionResolver:
         return base_symbol(fn.output())
 
     def resolve_service(self, tree, output_sym=None):
+        """
+        Resolve a service using hub-sdk API and check the caller arguments.
+        Params:
+            tree: Service tree root node.
+            output_sym: Symbol of the object output from when block
+                in case of event based service.
+        """
         service_name = tree.path.child(0).value
         action_node = tree.service_fragment.command
         tree.expect(action_node is not None, 'service_without_command')
