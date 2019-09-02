@@ -686,8 +686,6 @@ class ObjectType(BaseType):
             # if the object isn't a service output object, do no checks on
             # property existence for now.
             return AnyType.instance()
-        if other.implicit_to(StringType.instance()) is not None:
-            return AnyType.instance()
         return None
 
     def has_boolean(self):

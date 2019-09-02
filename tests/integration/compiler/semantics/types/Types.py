@@ -122,7 +122,7 @@ index_types = {
     'Map[int,string]': ['int', 'any'],
     'none': [],
     'any': ['boolean', 'int', 'float', 'time', 'string', 'any'],
-    'object': ['string', 'any'],
+    'object': [],
 }
 
 

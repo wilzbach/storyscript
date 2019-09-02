@@ -1,3 +1,3 @@
 http server as client
     when client listen method:"post" path:"/foo" as res
-        res["foo"] = 2
+        res.body = 2
