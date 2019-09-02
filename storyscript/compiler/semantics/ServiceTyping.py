@@ -4,8 +4,7 @@ from storyhub.sdk.service.Output import Output as ServiceOutput
 from storyscript.Hub import story_hub
 from storyscript.compiler.semantics.types.Casting import implicit_type_cast
 
-from .types.Types import AnyType, BooleanType, FloatType, IntType, ListType, \
-    MapType, NoneType, ObjectType, StringType, type_class_mapping
+from .types.Types import NoneType, ObjectType, get_type_instance
 
 
 class ServiceTyping:
@@ -31,20 +30,6 @@ class ServiceTyping:
         action = service_config.action(action_name)
         return action
 
-    def get_type_instance(self, var, object=None):
-        type_class = type_class_mapping(var.type())
-        if type_class == ObjectType:
-            output_type = ObjectType(object=object)
-        elif type_class == ListType:
-            output_type = ListType(AnyType.instance())
-        elif type_class == MapType:
-            output_type = MapType(AnyType.instance(), AnyType.instance())
-        else:
-            assert type_class in (
-                AnyType, BooleanType, FloatType, IntType, StringType)
-            output_type = type_class.instance()
-        return output_type
-
     def check_action_args(self, tree, action, args, service_name, action_name):
         required_args = (arg for arg in action.args() if arg.required())
         for arg in required_args:
@@ -56,7 +41,7 @@ class ServiceTyping:
             action_arg = action.arg(arg)
             tree.expect(action_arg is not None, 'service_arg_invalid',
                         service=service_name, action=action_name, arg=arg)
-            target_type = self.get_type_instance(var=action_arg)
+            target_type = get_type_instance(var=action_arg)
             source_type = sym.type()
 
             implicit_type_cast(tree, source_type, target_type,
@@ -89,7 +74,7 @@ class ServiceTyping:
     def get_service_output(self, action):
         output = action.output()
         if output is not None:
-            output_type = self.get_type_instance(var=output, object=output)
+            output_type = get_type_instance(var=output, object=output)
         else:
             output_type = NoneType.instance()
         return output_type

@@ -99,6 +99,28 @@ def type_class_mapping(type_string):
         return MapType
 
 
+def get_type_instance(var, object=None):
+    """
+    Returns the correctly mapped type class instance of the given type
+    Params:
+        var: A Symbol from which type could be retrieved.
+        object: In case the Symbol is of type Object, the object that
+            should be wrapped inside the ObjectType instance.
+    """
+    type_class = type_class_mapping(var.type())
+    if type_class == ObjectType:
+        output_type = ObjectType(object=object)
+    elif type_class == ListType:
+        output_type = ListType(AnyType.instance())
+    elif type_class == MapType:
+        output_type = MapType(AnyType.instance(), AnyType.instance())
+    else:
+        assert type_class in (
+            AnyType, BooleanType, FloatType, IntType, StringType)
+        output_type = type_class.instance()
+    return output_type
+
+
 class BaseType:
     """
     Base class of a type.
