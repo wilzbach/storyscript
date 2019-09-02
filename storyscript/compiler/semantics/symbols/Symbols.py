@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from storyscript.compiler.semantics.types.Indexing import IndexKind
-from storyscript.compiler.semantics.types.Types import BaseType
+from storyscript.compiler.semantics.types.Types import BaseType, ObjectType
 
 
 class StorageClass:
@@ -128,7 +128,13 @@ class Symbol:
             type_ = type_.type()
         else:
             assert isinstance(type_, BaseType)
-        new_type = symbol.type().index(type_, kind)
+
+        cur_type = symbol.type()
+        if isinstance(cur_type, ObjectType):
+            new_type = cur_type.index(tree, symbol, name, type_, kind)
+        else:
+            new_type = cur_type.index(type_, kind)
+
         if kind == IndexKind.DOT:
             tree.expect(new_type is not None,
                         'type_dot_incompatible',

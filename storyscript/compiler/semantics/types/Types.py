@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from storyhub.sdk.service.Output import Output as ServiceOutput
+
 from storyscript.compiler.semantics.types.Indexing import IndexKind
 
 
@@ -673,8 +675,16 @@ class ObjectType(BaseType):
     def op(self, op):
         return None
 
-    def index(self, other, kind):
+    def index(self, tree, symbol, name, other, kind):
         if kind == IndexKind.DOT:
+            assert isinstance(other, StringType)
+            if isinstance(self._object, ServiceOutput):
+                prop = self._object.property(name)
+                tree.expect(prop is not None, 'service_output_invalid_prop',
+                            object=symbol.name(), prop=name)
+                return get_type_instance(var=prop)
+            # if the object isn't a service output object, do no checks on
+            # property existence for now.
             return AnyType.instance()
         if other.implicit_to(StringType.instance()) is not None:
             return AnyType.instance()

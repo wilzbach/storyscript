@@ -27,21 +27,21 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "8",
       "name": [
         "a",
         {
           "$OBJECT": "dot",
-          "dot": "b"
+          "dot": "lon"
         }
       ],
       "args": [
         {
-          "$OBJECT": "string",
-          "string": "bar"
+          "$OBJECT": "int",
+          "int": 100
         }
       ],
-      "src": "a.b = \"bar\""
+      "src": "a.lon = 100"
     }
   },
   "services": [
