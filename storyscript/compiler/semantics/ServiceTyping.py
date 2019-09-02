@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from storyhub.sdk.service.Output import Output as ServiceOutput
 
-from storyscript.Hub import story_hub, type_class_mapping
+from storyscript.Hub import story_hub
 from storyscript.compiler.semantics.types.Casting import implicit_type_cast
 
 from .types.Types import AnyType, BooleanType, FloatType, IntType, ListType, \
-    MapType, NoneType, ObjectType, StringType
+    MapType, NoneType, ObjectType, StringType, type_class_mapping
 
 
 class ServiceTyping:

@@ -74,6 +74,31 @@ def implicit_cast(t1, t2):
     return None
 
 
+def type_class_mapping(type_string):
+    """
+    Maps a given string (holding type information, from hub sdk)
+    to its corresponding TypeClass in the compiler
+    """
+    assert type(type_string) == str
+    if type_string == 'boolean':
+        return BooleanType
+    elif type_string == 'int':
+        return IntType
+    elif type_string == 'float':
+        return FloatType
+    elif type_string == 'string':
+        return StringType
+    elif type_string == 'any':
+        return AnyType
+    elif type_string == 'object':
+        return ObjectType
+    elif type_string == 'list':
+        return ListType
+    else:
+        assert type_string == 'map'
+        return MapType
+
+
 class BaseType:
     """
     Base class of a type.
