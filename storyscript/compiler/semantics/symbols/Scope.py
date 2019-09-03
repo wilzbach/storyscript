@@ -1,8 +1,23 @@
 # -*- coding: utf-8 -*-
 
-from storyscript.compiler.semantics.types.Types import ObjectType
+from storyscript.compiler.semantics.types.Types import MapType, ObjectType, \
+    StringType
 
 from .Symbols import StorageClass, Symbol, Symbols
+
+
+app_props = {
+    'secrets': Symbol(name='secrets',
+                      type_=ObjectType(object=MapType(StringType.instance(),
+                                       StringType.instance())),
+                      storage_class=StorageClass.read()),
+    'hostname': Symbol(name='hostname', type_=StringType.instance(),
+                       storage_class=StorageClass.read()),
+    'version': Symbol(name='version', type_=StringType.instance(),
+                      storage_class=StorageClass.read()),
+}
+app_keyword = Symbol(name='app', type_=ObjectType(object=app_props),
+                     storage_class=StorageClass.read())
 
 
 class Scope:
@@ -55,9 +70,7 @@ class Scope:
         """
         scope = cls(parent=None)
         # insert global symbols
-        app = Symbol(name='app', type_=ObjectType.instance(),
-                     storage_class=StorageClass.read())
-        scope.insert(app)
+        scope.insert(app_keyword)
         return scope
 
 

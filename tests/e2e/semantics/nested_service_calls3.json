@@ -115,27 +115,27 @@
           "expression": "sum",
           "values": [
             {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-3.1",
+                {
+                  "$OBJECT": "dot",
+                  "dot": "lat"
+                }
+              ]
+            },
+            {
               "$OBJECT": "type_cast",
               "type": {
                 "$OBJECT": "type",
-                "type": "int"
+                "type": "float"
               },
               "value": {
                 "$OBJECT": "path",
                 "paths": [
-                  "__p-3.1",
-                  {
-                    "$OBJECT": "dot",
-                    "dot": "lat"
-                  }
+                  "__p-3.2"
                 ]
               }
-            },
-            {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-3.2"
-              ]
             }
           ]
         }

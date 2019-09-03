@@ -683,6 +683,19 @@ class ObjectType(BaseType):
                 tree.expect(prop is not None, 'service_output_invalid_prop',
                             object=symbol.name(), prop=name)
                 return get_type_instance(var=prop)
+            if isinstance(self._object, dict):
+                # right now we are only storing a dict as the wrapped
+                # value inside a ObjectType instance for the special case
+                # of `app` keyword.
+                assert symbol.name() == 'app'
+                prop = self._object.get(name, None)
+                tree.expect(prop is not None, 'object_invalid_prop',
+                            object=symbol.name(), prop=name)
+                # for the app we already store the correct TypeClass in Symbol
+                # type therefore no need to perform mapping.
+                return prop.type()
+            if isinstance(self._object, MapType):
+                return self._object.index(other, IndexKind.INDEX)
             # if the object isn't a service output object, do no checks on
             # property existence for now.
             return AnyType.instance()

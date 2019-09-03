@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 12
 
-2|        return app.var
+2|        return app.secrets
                  ^^^
 
-E0128: `any` is readonly and can not be returned.
+E0128: `Object` is readonly and can not be returned.
