@@ -35,8 +35,25 @@
       "next": "3"
     },
     "3": {
-      "method": "execute",
+      "method": "expression",
       "ln": "3",
+      "col_start": "1",
+      "col_end": "7",
+      "name": [
+        "text"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "foobar"
+        }
+      ],
+      "src": "text = \"foobar\"",
+      "next": "4"
+    },
+    "4": {
+      "method": "execute",
+      "ln": "4",
       "col_start": "1",
       "col_end": "13",
       "service": "mailgun",
@@ -46,8 +63,26 @@
           "$OBJECT": "arg",
           "name": "to",
           "arg": {
-            "$OBJECT": "string",
-            "string": "abc@xyz.com"
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "List",
+              "values": [
+                {
+                  "$OBJECT": "type",
+                  "type": "any"
+                }
+              ]
+            },
+            "value": {
+              "$OBJECT": "list",
+              "items": [
+                {
+                  "$OBJECT": "string",
+                  "string": "abc@xyz.com"
+                }
+              ]
+            }
           }
         },
         {
@@ -69,9 +104,19 @@
               "subject"
             ]
           }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "text",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "text"
+            ]
+          }
         }
       ],
-      "src": "mailgun send to: \"abc@xyz.com\" :from :subject"
+      "src": "mailgun send to: [\"abc@xyz.com\"] :from :subject :text"
     }
   },
   "services": [

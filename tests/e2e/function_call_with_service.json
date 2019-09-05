@@ -137,8 +137,8 @@
     "8.1": {
       "method": "call",
       "ln": "8.1",
-      "col_start": "18",
-      "col_end": "24",
+      "col_start": "19",
+      "col_end": "25",
       "name": [
         "__p-8.1"
       ],
@@ -148,8 +148,8 @@
     "8.2": {
       "method": "call",
       "ln": "8.2",
-      "col_start": "36",
-      "col_end": "52",
+      "col_start": "38",
+      "col_end": "54",
       "name": [
         "__p-8.2"
       ],
@@ -177,8 +177,8 @@
     "8.3": {
       "method": "call",
       "ln": "8.3",
-      "col_start": "62",
-      "col_end": "68",
+      "col_start": "64",
+      "col_end": "70",
       "name": [
         "__p-8.3"
       ],
@@ -197,10 +197,28 @@
           "$OBJECT": "arg",
           "name": "to",
           "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-8.1"
-            ]
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "List",
+              "values": [
+                {
+                  "$OBJECT": "type",
+                  "type": "any"
+                }
+              ]
+            },
+            "value": {
+              "$OBJECT": "list",
+              "items": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "__p-8.1"
+                  ]
+                }
+              ]
+            }
           }
         },
         {
@@ -222,9 +240,17 @@
               "__p-8.3"
             ]
           }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "text",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foobar"
+          }
         }
       ],
-      "src": "mailgun send to: random() subject: my_func(k1: 1 k2:2) from: random()"
+      "src": "mailgun send to: [random()] subject: my_func(k1: 1 k2:2) from: random() text: \"foobar\""
     }
   },
   "services": [
