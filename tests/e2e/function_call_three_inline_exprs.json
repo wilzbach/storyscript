@@ -72,8 +72,8 @@
     "4.1": {
       "method": "execute",
       "ln": "4.1",
-      "col_start": "19",
-      "col_end": "30",
+      "col_start": "20",
+      "col_end": "31",
       "name": [
         "__p-4.1"
       ],
@@ -96,8 +96,8 @@
     "4.2": {
       "method": "execute",
       "ln": "4.2",
-      "col_start": "48",
-      "col_end": "59",
+      "col_start": "50",
+      "col_end": "61",
       "name": [
         "__p-4.2"
       ],
@@ -120,8 +120,8 @@
     "4.3": {
       "method": "execute",
       "ln": "4.3",
-      "col_start": "80",
-      "col_end": "91",
+      "col_start": "82",
+      "col_end": "93",
       "name": [
         "__p-4.3"
       ],
@@ -153,10 +153,28 @@
           "$OBJECT": "arg",
           "name": "to",
           "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-4.1"
-            ]
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "List",
+              "values": [
+                {
+                  "$OBJECT": "type",
+                  "type": "any"
+                }
+              ]
+            },
+            "value": {
+              "$OBJECT": "list",
+              "items": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "__p-4.1"
+                  ]
+                }
+              ]
+            }
           }
         },
         {
@@ -178,9 +196,17 @@
               "__p-4.3"
             ]
           }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "text",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foobar"
+          }
         }
       ],
-      "src": "mailgun send to: (yaml format data: p1) from: (yaml format data: p2) subject: (yaml format data: p3)"
+      "src": "mailgun send to: [(yaml format data: p1)] from: (yaml format data: p2) subject: (yaml format data: p3) text: \"foobar\""
     }
   },
   "services": [

@@ -85,6 +85,15 @@
                     }
                 }
             },
+            "info": {
+                "description": "This is a awesome service",
+                "license": {
+                    "name": "MIT",
+                    "url": "https://opensource.org/licenses/MIT"
+                },
+                "title": "Awesome",
+                "version": "1.0.0"
+            },
             "lifecycle": {
                 "startup": {
                     "command": [
@@ -95,7 +104,7 @@
             },
             "omg": 1
         },
-        "readme": "# Awesome Microservice\n\nCreate Random Awesome Stuff!\n\n![Microservice](https://img.shields.io/badge/microservice-ready-brightgreen.svg?style=for-the-badge)\n[![Docker Build Status](https://img.shields.io/docker/build/microservices/awesome.svg?style=for-the-badge)](https://hub.docker.com/r/microservices/awesome/)\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n```coffee\n>>> awesome id\nflamboyant-einstein-0101\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n",
+        "readme": "# _Awesome_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n[![Docker Build Status](https://img.shields.io/docker/build/microservices/awesome.svg?style=for-the-badge)](https://hub.docker.com/r/microservices/awesome/)\n\nCreate Random Awesome Stuff!\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n```coffee\n>>> awesome id\nflamboyant-einstein-0101\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n##### Awesome ID\n```shell\n$ omg run id\n```\n\n**Note**: the OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/awesome/blob/master/LICENSE).\n",
         "service": {
             "alias": "awesome",
             "description": null,
@@ -453,7 +462,7 @@
     {
         "configuration": {
             "actions": {
-                "is_valid": {
+                "isValid": {
                     "arguments": {
                         "uri": {
                             "in": "query",
@@ -532,7 +541,7 @@
             },
             "omg": 1
         },
-        "readme": "# URITool Microservice\n\nThis microservice exists to provide utilities for dealing with URIs:\n\n![Microservice](https://img.shields.io/badge/microservice-ready-brightgreen.svg?style=for-the-badge)\n[![Docker Build Status](https://img.shields.io/docker/build/microservices/uritool.svg?style=for-the-badge)](https://hub.docker.com/r/microservices/uritool/)\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n```coffee\n>>> uritool parse uri:'https://github.com/'\n{\"uri\": \"https://github.com/\", \"scheme\": \"https\", \"userinfo\": null, \"host\": \"github.com\", \"path\": \"/\", \"query\": null, \"?\": {}, \"fragment\": null, \"netloc\": \"github.com\"}\n\n>>> uritool query uri:'https://httpbin.org/get?hello=world'\n{\"hello\": \"world\"}\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n",
+        "readme": "# _URITool_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n<!-- [![Docker Build Status](https://img.shields.io/docker/build/microservices/uritool.svg?style=for-the-badge)](https://hub.docker.com/r/microservices/uritool/) -->\n\nThis microservice exists to provide utilities for dealing with URIs:\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Parse\n```coffee\n>>> uritool parse uri:'https://github.com/'\n{\"uri\": \"https://github.com/\", \"scheme\": \"https\", \"userinfo\": null, \"host\": \"github.com\", \"path\": \"/\", \"query\": null, \"?\": {}, \"fragment\": null, \"netloc\": \"github.com\"}\n```\n##### Query\n```coffee\n>>> uritool query uri:'https://httpbin.org/get?hello=world'\n{\"hello\": \"world\"}\n```\n##### IsValid\n```coffee\n>>> uritool isValid uri:'https://github.com/'\ntrue\n```\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Parse\n```shell\n$ omg run parse -a uri=<URI_TO_PARSE>\n```\n##### Query\n```shell\n$ omg run query -a uri=<URI>\n```\n##### Is Valid\n```shell\n$ omg run isValid -a uri=<URI>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/uritool/blob/master/LICENSE).\n",
         "service": {
             "alias": "uritool",
             "description": null,
@@ -630,37 +639,56 @@
                 "send": {
                     "arguments": {
                         "attachment_path": {
+                            "in": "requestBody",
                             "type": "string"
                         },
                         "bcc": {
+                            "in": "requestBody",
                             "type": "string"
                         },
                         "cc": {
+                            "in": "requestBody",
                             "type": "string"
                         },
                         "from": {
+                            "in": "requestBody",
                             "required": true,
                             "type": "string"
                         },
                         "html": {
+                            "in": "requestBody",
                             "type": "string"
                         },
                         "inline_attatchment_path": {
+                            "in": "requestBody",
                             "type": "string"
                         },
                         "subject": {
+                            "in": "requestBody",
                             "required": true,
                             "type": "string"
                         },
                         "text": {
+                            "in": "requestBody",
+                            "required": true,
                             "type": "string"
                         },
                         "to": {
+                            "in": "requestBody",
                             "required": true,
-                            "type": "string"
+                            "type": "list"
                         }
                     },
-                    "help": "Send an email"
+                    "help": "Send an email",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/send",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "map"
+                    }
                 }
             },
             "environment": {
@@ -671,9 +699,32 @@
                     "type": "string"
                 }
             },
+            "info": {
+                "contact": {
+                    "email": "hello@asyncy.com",
+                    "name": "Asyncy",
+                    "url": "https://asyncy.com"
+                },
+                "description": "Mailgun as a microservice",
+                "license": {
+                    "name": "MIT",
+                    "url": "https://opensource.org/licenses/MIT"
+                },
+                "title": "Mailgun",
+                "version": "1.0.0"
+            },
+            "lifecycle": {
+                "startup": {
+                    "command": [
+                        "python",
+                        "-u",
+                        "/app/app.py"
+                    ]
+                }
+            },
             "omg": 1
         },
-        "readme": "# Mailgun as a microservice\n\nSend emails with Mailgun\n\n```coffee\nmicroserive.guide exec -e API_KEY=<KEY> microservice/mailgun send \\\n  to:'no-reply@domain.com' \\\n  from:'no-reply@domain.com' \\\n  subject:'Hello world' \\\n  text:'Congratulations, you just sent an email with Mailgun! You are truly awesome!'\n\n{\n  \"id\": \"<20180327151234.1.B3090E27FAE9FFC8@sandbox13bee1ec0d79497ba1c13733deef6fc2.mailgun.org>\",\n  \"message\": \"Queued. Thank you.\"\n}\n```\n",
+        "readme": "# _Mailgun_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n[![Build Status](https://travis-ci.com/omg-services/mailgun.svg?branch=master)](https://travis-ci.com/omg-services/mailgun)\n[![codecov](https://codecov.io/gh/omg-services/mailgun/branch/master/graph/badge.svg)](https://codecov.io/gh/omg-services/mailgun)\nSend emails with Mailgun\n\n```coffee\nmicroserive.guide exec -e API_KEY=<KEY> microservice/mailgun send \\\n  to:'no-reply@domain.com' \\\n  from:'no-reply@domain.com' \\\n  subject:'Hello world' \\\n  text:'Congratulations, you just sent an email with Mailgun! You are truly awesome!'\n\n{\n  \"id\": \"<20180327151234.1.B3090E27FAE9FFC8@sandbox13bee1ec0d79497ba1c13733deef6fc2.mailgun.org>\",\n  \"message\": \"Queued. Thank you.\"\n}\n```\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Send Mail\n```coffee\n>>> mailgun send to:'receiverEmail' from:'senderEmail' subject:'emailSubject' text:'messageBody'\n{\"id\": \"operationID\",\"message\": \"Queued. Thank you.\"}\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Send Mail\n```shell\n$ omg run send -a to=<RECEIVER_EMAIL> -a from=<SENDER_EMAIL> -a subject=<EMAIL_SUBJECT> -a text=<MESSAGE_BODY> -e API_KEY=<API_KEY> -e DOMAIN=<DOMAIN>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/mailgun/blob/master/LICENSE).\n\n",
         "service": {
             "alias": "mailgun",
             "description": "Send emails with Mailgun as a microservice",
@@ -735,12 +786,12 @@
                 },
                 "list": {
                     "arguments": {
-                        "integer_high": {
+                        "integerHigh": {
                             "default": 100,
                             "help": "Highest possible integer value in the list (used if type is integer)",
                             "type": "int"
                         },
-                        "integer_low": {
+                        "integerLow": {
                             "default": 0,
                             "help": "Lowest possible integer value in the list (used if type is integer)",
                             "type": "int"
@@ -750,7 +801,7 @@
                             "required": true,
                             "type": "int"
                         },
-                        "string_length": {
+                        "stringLength": {
                             "default": 10,
                             "help": "Length of the strings in the list (used if type is string)",
                             "type": "int"
@@ -799,9 +850,14 @@
                     }
                 }
             },
+            "info": {
+                "description": "This is a random service",
+                "title": "Random",
+                "version": "1.0.0"
+            },
             "omg": 1
         },
-        "readme": "# Random generation as a microservice\n\n```sh\nomg exec string length:5\n\nomg exec integer low:0 high:100\n\nomg exec list type:string length:50 string_length:4\n```\n",
+        "readme": "# _Random Generation_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nRandom generation of boolean, string, integer and list\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Boolean\n```coffee\n>>> random boolean\n# result: true\n```\n##### String\n```coffee\n>>> random string length:'2'\n# result: Kw\n```\n##### Integer\n```coffee\n>>> random integer low:'2' high:'50'\n# result: 39\n```\n##### List\n```coffee\n>>> random list type:'string' length:'5'\n# result: [\"77FFXXiWP4\",\"yrq8o8xtdt\",\"q5fsCt99LA\",\"s5W4uPqOFY\",\"CYWTdA5xQC\"]\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Boolean\n```shell\n$ omg run boolean\n```\n##### String\n```shell\n$ omg run string -a length=<LENGTH_OF_STRING>\n```\n##### Integer\n```shell\n$ omg run integer -a low=<LOWEST_NUMBER> -a high=<HIGHEST_NUMBER>\n```\n##### List\n```shell\n$ omg run list -a type=<STRING/BOOLEAN/INTEGER> -a length=<LENGTH_OF_LIST> -a stringLength=<LENGTH_OF_STRING> -a integerLow=<LOWEST_NUMBER> -a integerHigh=<HIGHEST_NUMBER>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/random/blob/master/LICENSE).\n\n",
         "service": {
             "alias": "random",
             "description": "Generate random strings, numbers, and lists.",
@@ -1353,7 +1409,7 @@
                         "port": 8000
                     },
                     "output": {
-                        "type": "map"
+                        "type": "list"
                     }
                 },
                 "retweet": {
@@ -1361,7 +1417,7 @@
                         "tweet": {
                             "in": "requestBody",
                             "required": true,
-                            "type": "int"
+                            "type": "string"
                         }
                     },
                     "help": "Retweet a tweet",
@@ -1487,7 +1543,7 @@
             },
             "omg": 1
         },
-        "readme": "# _Twitter_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n\nDo Twitter stuff in a microservice.\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Follow\n```coffee\n>>> twitter follow handle:'screenName' user:'userID' follow:'true'\n```\n##### Unfollow\n```coffee\n>>> twitter unfollow handle:'screenName' user:'userID'\n```\n##### Followers\n```coffee\n>>> twitter followers handle:'screenName' user:'userID' cursor:'2' count:'50'\n```\n##### Retweet\n```coffee\n>>> twitter retweet tweet:'tweetID'\n```\n##### Tweet\n```coffee\n>>> twitter tweet status:'status'\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Follow\n```shell\n$ omg run follow -a handle=<SCREEN_NAME> -a user=<USER_ID> -a follow=<TRUE/FALSE> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Unfollow\n```shell\n$ omg run unfollow -a handle=<SCREEN_NAME> -a user=<USER_ID> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Followers\n```shell\n$ omg run followers -a handle=<SCREEN_NAME> -a user=<USER_ID> -a cursor=<RANGE_OF_PAGE> -a count=<MAX_USER_RANGE_PER_PAGE> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Retweet\n```shell\n$ omg run retweet -a tweet=<TWEET_ID> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Tweet\n```shell\n$ omg run tweet -a status=<STATUS> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Stream\n```shell\n$ omg subscribe stream tweet -a track=<STRING/PHRASES_LIST_TO_TRACK> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/twitter/blob/master/LICENSE).\n",
+        "readme": "# _Twitter_ OMG Microservice\n\n[![Open Microservice Guide](https://img.shields.io/badge/OMG%20Enabled-\ud83d\udc4d-green.svg?)](https://microservice.guide)\n[![Build Status](https://travis-ci.com/omg-services/twitter.svg?branch=master)](https://travis-ci.com/omg-services/twitter)\n[![codecov](https://codecov.io/gh/omg-services/twitter/branch/master/graph/badge.svg)](https://codecov.io/gh/omg-services/twitter)\n\nDo Twitter stuff in a microservice.\n\n## Direct usage in [Storyscript](https://storyscript.io/):\n\n##### Follow\n```coffee\n>>> twitter follow handle:'screenName' user:'userID' follow:'true'\n```\n##### Unfollow\n```coffee\n>>> twitter unfollow handle:'screenName' user:'userID'\n```\n##### Followers\n```coffee\n>>> twitter followers handle:'screenName' user:'userID' cursor:'2' count:'50'\n```\n##### Retweet\n```coffee\n>>> twitter retweet tweet:'tweetID'\n```\n##### Tweet\n```coffee\n>>> twitter tweet status:'status'\n```\n\nCurious to [learn more](https://docs.storyscript.io/)?\n\n\u2728\ud83c\udf70\u2728\n\n## Usage with [OMG CLI](https://www.npmjs.com/package/omg)\n\n##### Follow\n```shell\n$ omg run follow -a handle=<SCREEN_NAME> -a user=<USER_ID> -a follow=<TRUE/FALSE> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Unfollow\n```shell\n$ omg run unfollow -a handle=<SCREEN_NAME> -a user=<USER_ID> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Followers\n```shell\n$ omg run followers -a handle=<SCREEN_NAME> -a user=<USER_ID> -a cursor=<RANGE_OF_PAGE> -a count=<MAX_USER_RANGE_PER_PAGE> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Retweet\n```shell\n$ omg run retweet -a tweet=<TWEET_ID> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Tweet\n```shell\n$ omg run tweet -a status=<STATUS> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n##### Stream\n```shell\n$ omg subscribe stream tweet -a track=<STRING/PHRASES_LIST_TO_TRACK> -e CONSUMER_KEY=<CONSUMER_KEY> -e CONSUMER_SECRET=<CONSUMER_SECRET> -e ACCESS_TOKEN=<ACCESS_TOKEN> -e ACCESS_TOKEN_SECRET=<ACCESS_TOKEN_SECRET>\n```\n\n**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.\n\n## License\n[MIT License](https://github.com/omg-services/twitter/blob/master/LICENSE).\n",
         "service": {
             "alias": "twitter",
             "description": "Twitter as a microservice",
