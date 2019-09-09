@@ -447,11 +447,11 @@ class ExpressionResolver:
         assert tree.data == 'expression'
         return self.expr_visitor.expression(tree)
 
-    def build_arguments(self, tree, name, fn_type):
+    def build_arguments(self, tree, fname, fn_type):
         args = {}
         for c in tree.extract('arguments'):
             tree.expect(len(c.children) >= 2, 'arg_name_required',
-                        fn_type=fn_type, name=name)
+                        fn_type=fn_type, name=fname)
             name = c.child(0)
             type_ = self.expression(c.child(1)).type()
             sym = Symbol.from_path(name, type_)
@@ -537,16 +537,33 @@ class ExpressionResolver:
         fn.check_call(tree, args)
         return base_symbol(fn.output())
 
-    def resolve_service(self, tree):
+    def resolve_service(self, tree, output_sym=None):
+        """
+        Resolve a service using hub-sdk API and check the caller arguments.
+        Params:
+            tree: Service tree root node.
+            output_sym: Symbol of the object output from when block
+                in case of event based service.
+        """
         service_name = tree.path.child(0).value
         action_node = tree.service_fragment.command
         tree.expect(action_node is not None, 'service_without_command')
         action_name = action_node.child(0).value
         args = self.build_arguments(
             tree.service_fragment,
-            service_name,
-            action_name
+            fname=service_name,
+            fn_type='Service'
         )
+
+        if output_sym is not None:
+            return self.module.service_typing.resolve_service_output_object(
+                tree,
+                service_name,
+                action_name,
+                args,
+                output_sym
+            )
+
         return self.module.service_typing.resolve_service(
             tree, service_name, action_name, args)
 
@@ -579,10 +596,10 @@ class ExpressionResolver:
             # -> must be a service
             return base_symbol(self.resolve_service(tree))
 
-        # variable exists -> mutation/event-based service
+        # variable exists -> event-based service
         if t.type() == ObjectType.instance():
-            # In case of event-based service return Anytype for now.
-            return base_symbol(AnyType.instance())
+            # In case of event-based service resolve using output_sym.
+            return base_symbol(self.resolve_service(tree, t))
 
         var_name = tree.path.child(0).value
         tree.path.expect(0, 'service_name_not_var', var=var_name)

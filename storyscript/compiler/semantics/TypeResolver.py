@@ -203,8 +203,8 @@ class TypeResolver(ScopeSelectiveVisitor):
         listener = listener_sym.type().object()
         args = self.resolver.build_arguments(
             tree.service.service_fragment,
-            name=listener_name,
-            fn_type=event_name,
+            fname=event_name,
+            fn_type='Service Event',
         )
         output_type = self.module.service_typing.resolve_service_event(
             tree,
@@ -244,7 +244,7 @@ class TypeResolver(ScopeSelectiveVisitor):
         args = self.resolver.build_arguments(
             tree.service.service_fragment,
             fn_type='Service',
-            name=service_name,
+            fname=service_name,
         )
 
         if name is None:

@@ -55,15 +55,15 @@
       "name": [
         "__p-3.1"
       ],
-      "service": "request",
-      "command": "fetch",
+      "service": "gmaps",
+      "command": "geocode",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "url",
+          "name": "address",
           "arg": {
             "$OBJECT": "string",
-            "string": "foo-url"
+            "string": "Venice"
           }
         }
       ],
@@ -73,20 +73,28 @@
     "3.2": {
       "method": "execute",
       "ln": "3.2",
-      "col_start": "46",
-      "col_end": "59",
+      "col_start": "54",
+      "col_end": "68",
       "name": [
         "__p-3.2"
       ],
-      "service": "request",
-      "command": "fetch",
+      "service": "random",
+      "command": "integer",
       "args": [
         {
           "$OBJECT": "arg",
-          "name": "url",
+          "name": "low",
           "arg": {
-            "$OBJECT": "string",
-            "string": "bar-url"
+            "$OBJECT": "int",
+            "int": 1
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
           }
         }
       ],
@@ -107,10 +115,21 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-3.1"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "int"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-3.1",
+                  {
+                    "$OBJECT": "dot",
+                    "dot": "lat"
+                  }
+                ]
+              }
             },
             {
               "$OBJECT": "path",
@@ -122,11 +141,13 @@
         }
       ],
       "parent": "2",
-      "src": "        a = (request fetch url:\"foo-url\") + (request fetch url:\"bar-url\")"
+      "src": "        a = (gmaps geocode address: \"Venice\").lat + (random integer low: 1 high: 10)"
     }
   },
   "services": [
-    "http"
+    "gmaps",
+    "http",
+    "random"
   ],
   "entrypoint": "1"
 }

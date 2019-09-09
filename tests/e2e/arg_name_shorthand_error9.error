@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 17
+
+2|        when client listen path:"/" :"post" as result
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+E0118: Service Event `listen` requires arguments to be named
