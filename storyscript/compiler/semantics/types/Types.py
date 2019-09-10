@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from storyhub.sdk.service.Output import Output as ServiceOutput
-
 from storyscript.compiler.semantics.types.Indexing import IndexKind
 
 
@@ -74,53 +72,6 @@ def implicit_cast(t1, t2):
     if t2_t1 is not None:
         return t2_t1
     return None
-
-
-def type_class_mapping(type_string):
-    """
-    Maps a given string (holding type information, from hub sdk)
-    to its corresponding TypeClass in the compiler
-    """
-    assert type(type_string) == str
-    if type_string == 'boolean':
-        return BooleanType
-    elif type_string == 'int':
-        return IntType
-    elif type_string == 'float':
-        return FloatType
-    elif type_string == 'string':
-        return StringType
-    elif type_string == 'any':
-        return AnyType
-    elif type_string == 'object':
-        return ObjectType
-    elif type_string == 'list':
-        return ListType
-    else:
-        assert type_string == 'map'
-        return MapType
-
-
-def get_type_instance(var, object=None):
-    """
-    Returns the correctly mapped type class instance of the given type
-    Params:
-        var: A Symbol from which type could be retrieved.
-        object: In case the Symbol is of type Object, the object that
-            should be wrapped inside the ObjectType instance.
-    """
-    type_class = type_class_mapping(var.type())
-    if type_class == ObjectType:
-        output_type = ObjectType(object=object)
-    elif type_class == ListType:
-        output_type = ListType(AnyType.instance())
-    elif type_class == MapType:
-        output_type = MapType(AnyType.instance(), AnyType.instance())
-    else:
-        assert type_class in (
-            AnyType, BooleanType, FloatType, IntType, StringType)
-        output_type = type_class.instance()
-    return output_type
 
 
 class BaseType:
@@ -675,30 +626,10 @@ class ObjectType(BaseType):
     def op(self, op):
         return None
 
-    def index(self, tree, symbol, name, other, kind):
+    def index(self, other, kind):
         if kind == IndexKind.DOT:
             assert isinstance(other, StringType)
-            if isinstance(self._object, ServiceOutput):
-                prop = self._object.property(name)
-                tree.expect(prop is not None, 'service_output_invalid_prop',
-                            object=symbol.name(), prop=name)
-                return get_type_instance(var=prop)
-            if isinstance(self._object, dict):
-                # right now we are only storing a dict as the wrapped
-                # value inside a ObjectType instance for the special case
-                # of `app` keyword.
-                assert symbol.name() == 'app'
-                prop = self._object.get(name, None)
-                tree.expect(prop is not None, 'object_invalid_prop',
-                            object=symbol.name(), prop=name)
-                # for the app we already store the correct TypeClass in Symbol
-                # type therefore no need to perform mapping.
-                return prop.type()
-            if isinstance(self._object, MapType):
-                return self._object.index(other, IndexKind.INDEX)
-            # if the object isn't a service output object, do no checks on
-            # property existence for now.
-            return AnyType.instance()
+            return self._object
         return None
 
     def has_boolean(self):

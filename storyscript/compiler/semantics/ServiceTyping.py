@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from storyhub.sdk.service.Output import Output as ServiceOutput
 
-from storyscript.Hub import story_hub
 from storyscript.compiler.semantics.types.Casting import implicit_type_cast
+from storyscript.hub.Hub import TypeMappings, story_hub
 
-from .types.Types import NoneType, ObjectType, get_type_instance
+from .types.Types import NoneType, ObjectType
 
 
 class ServiceTyping:
@@ -41,7 +41,7 @@ class ServiceTyping:
             action_arg = action.arg(arg)
             tree.expect(action_arg is not None, 'service_arg_invalid',
                         service=service_name, action=action_name, arg=arg)
-            target_type = get_type_instance(var=action_arg)
+            target_type = TypeMappings.get_type_instance(var=action_arg)
             source_type = sym.type()
 
             implicit_type_cast(tree, source_type, target_type,
@@ -74,7 +74,9 @@ class ServiceTyping:
     def get_service_output(self, action):
         output = action.output()
         if output is not None:
-            output_type = get_type_instance(var=output, object=output)
+            output_type = TypeMappings.get_type_instance(
+                var=output,
+                object=output)
         else:
             output_type = NoneType.instance()
         return output_type

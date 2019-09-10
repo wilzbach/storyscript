@@ -5,8 +5,8 @@ from pytest import mark, raises
 
 from storyscript.compiler.semantics.types.Types import AnyType, \
     BaseType, BooleanType, FloatType, IntType, ListType, MapType, \
-    NoneType, ObjectType, RegExpType, StringType, singleton, \
-    type_class_mapping
+    NoneType, ObjectType, RegExpType, StringType, singleton
+from storyscript.hub.Hub import TypeMappings
 
 
 def test_singleton():
@@ -68,11 +68,11 @@ def test_base_type_not_implemented():
 
 
 def test_type_class_mapping():
-    assert type_class_mapping('float') == FloatType
-    assert type_class_mapping('boolean') == BooleanType
-    assert type_class_mapping('int') == IntType
-    assert type_class_mapping('string') == StringType
-    assert type_class_mapping('any') == AnyType
-    assert type_class_mapping('object') == ObjectType
-    assert type_class_mapping('list') == ListType
-    assert type_class_mapping('map') == MapType
+    assert TypeMappings.type_class_mapping('float') == FloatType
+    assert TypeMappings.type_class_mapping('boolean') == BooleanType
+    assert TypeMappings.type_class_mapping('int') == IntType
+    assert TypeMappings.type_class_mapping('string') == StringType
+    assert TypeMappings.type_class_mapping('any') == AnyType
+    assert TypeMappings.type_class_mapping('object') == ObjectType
+    assert TypeMappings.type_class_mapping('list') == ListType
+    assert TypeMappings.type_class_mapping('map') == MapType
