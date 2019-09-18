@@ -68,7 +68,7 @@ class ServiceTyping:
         self.check_action_args(tree, action, args, service_name, action_name)
 
         if nested_block:
-            return ObjectType(object=action)
+            return ObjectType(obj=action)
         else:
             return self.get_service_output(action)
 

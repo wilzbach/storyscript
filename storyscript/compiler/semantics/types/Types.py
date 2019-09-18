@@ -611,8 +611,8 @@ class ObjectType(BaseType):
     """
     Represents an object
     """
-    def __init__(self, object=None):
-        self._object = object
+    def __init__(self, obj=None):
+        self._object = obj
 
     def __str__(self):
         return f'Object'

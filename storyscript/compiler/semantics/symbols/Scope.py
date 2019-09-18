@@ -8,7 +8,7 @@ from .Symbols import StorageClass, Symbol, Symbols
 
 app_props = {
     'secrets': Symbol(name='secrets',
-                      type_=ObjectType(object=MapType(StringType.instance(),
+                      type_=ObjectType(obj=MapType(StringType.instance(),
                                        StringType.instance())),
                       storage_class=StorageClass.read()),
     'hostname': Symbol(name='hostname', type_=StringType.instance(),
@@ -16,7 +16,7 @@ app_props = {
     'version': Symbol(name='version', type_=StringType.instance(),
                       storage_class=StorageClass.read()),
 }
-app_keyword = Symbol(name='app', type_=ObjectType(object=app_props),
+app_keyword = Symbol(name='app', type_=ObjectType(obj=app_props),
                      storage_class=StorageClass.read())
 
 

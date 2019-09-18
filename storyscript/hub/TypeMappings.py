@@ -40,7 +40,7 @@ class TypeMappings:
         """
         type_class = TypeMappings.type_class_mapping(var.type())
         if type_class == ObjectType:
-            output_type = ObjectType(object=obj)
+            output_type = ObjectType(obj=obj)
         elif type_class == ListType:
             output_type = ListType(AnyType.instance())
         elif type_class == MapType:
