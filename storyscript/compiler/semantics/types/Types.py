@@ -611,8 +611,8 @@ class ObjectType(BaseType):
     """
     Represents an object
     """
-    def __init__(self, object=None):
-        self._object = object
+    def __init__(self, obj=None):
+        self._object = obj
 
     def __str__(self):
         return f'Object'
@@ -628,9 +628,8 @@ class ObjectType(BaseType):
 
     def index(self, other, kind):
         if kind == IndexKind.DOT:
-            return AnyType.instance()
-        if other.implicit_to(StringType.instance()) is not None:
-            return AnyType.instance()
+            assert isinstance(other, StringType)
+            return self._object
         return None
 
     def has_boolean(self):

@@ -36,7 +36,7 @@
             "a",
             {
               "$OBJECT": "dot",
-              "dot": "b"
+              "dot": "lon"
             }
           ]
         }
@@ -76,7 +76,7 @@
           ]
         }
       ],
-      "src": "b = \"foo{a.b}\""
+      "src": "b = \"foo{a.lon}\""
     }
   },
   "services": [

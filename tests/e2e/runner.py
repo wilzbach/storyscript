@@ -11,7 +11,7 @@ from click import unstyle
 
 from pytest import fixture, mark
 
-import storyscript.Hub as StoryHub
+import storyscript.hub.Hub as StoryHub
 from storyscript.Api import Api
 from storyscript.App import _clean_dict
 

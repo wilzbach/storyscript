@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 9
+
+3|            res["body"] = 2
+              ^^^^^^^^^^
+
+E0104: `Object` can't be indexed with `body` of type `string`

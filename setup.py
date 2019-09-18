@@ -54,7 +54,7 @@ requirements = [
     'click==7.0',
     'lark-parser==0.7.2',
     'click-aliases==1.0.1',
-    'story-hub==0.1.4'
+    'story-hub==0.1.5'
 ]
 
 extras = [

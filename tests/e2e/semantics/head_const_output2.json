@@ -78,12 +78,23 @@
       ],
       "args": [
         {
-          "$OBJECT": "string",
-          "string": "test"
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "foo"
+              },
+              {
+                "$OBJECT": "string",
+                "string": "bar"
+              }
+            ]
+          ]
         }
       ],
       "parent": "1",
-      "src": "       comment = \"test\""
+      "src": "       comment = {\"foo\": \"bar\"}"
     }
   },
   "services": [

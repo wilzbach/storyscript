@@ -42,16 +42,12 @@
             "app",
             {
               "$OBJECT": "dot",
-              "dot": "environment"
-            },
-            {
-              "$OBJECT": "dot",
-              "dot": "FOO"
+              "dot": "version"
             }
           ]
         }
       ],
-      "src": "b = app.environment.FOO",
+      "src": "b = app.version",
       "next": "3"
     },
     "3": {

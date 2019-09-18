@@ -53,7 +53,7 @@
             "app",
             {
               "$OBJECT": "dot",
-              "dot": "environment"
+              "dot": "secrets"
             },
             {
               "$OBJECT": "dot",
@@ -63,7 +63,7 @@
         }
       ],
       "parent": "1",
-      "src": "    b = app.environment.FOO"
+      "src": "    b = app.secrets.FOO"
     }
   },
   "entrypoint": "1",

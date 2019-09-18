@@ -1,2 +1,2 @@
 a = gmaps geocode address:"foobar"
-a.b = 100
+a.lat = 100
