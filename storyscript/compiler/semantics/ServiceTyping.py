@@ -2,7 +2,8 @@
 from storyhub.sdk.service.Output import Output as ServiceOutput
 
 from storyscript.compiler.semantics.types.Casting import implicit_type_cast
-from storyscript.hub.Hub import TypeMappings, story_hub
+from storyscript.hub.Hub import story_hub
+from storyscript.hub.TypeMappings import TypeMappings
 
 from .types.Types import NoneType, ObjectType
 
@@ -76,7 +77,7 @@ class ServiceTyping:
         if output is not None:
             output_type = TypeMappings.get_type_instance(
                 var=output,
-                object=output)
+                obj=output)
         else:
             output_type = NoneType.instance()
         return output_type

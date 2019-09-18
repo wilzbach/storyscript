@@ -4,7 +4,7 @@ from storyhub.sdk.service.Output import Output as ServiceOutput
 from storyscript.compiler.semantics.types.Indexing import IndexKind
 from storyscript.compiler.semantics.types.Types import BaseType, MapType, \
     ObjectType
-from storyscript.hub.Hub import TypeMappings
+from storyscript.hub.TypeMappings import TypeMappings
 
 
 class StorageClass:

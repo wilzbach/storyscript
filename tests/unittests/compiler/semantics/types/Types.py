@@ -6,7 +6,7 @@ from pytest import mark, raises
 from storyscript.compiler.semantics.types.Types import AnyType, \
     BaseType, BooleanType, FloatType, IntType, ListType, MapType, \
     NoneType, ObjectType, RegExpType, StringType, singleton
-from storyscript.hub.Hub import TypeMappings
+from storyscript.hub.TypeMappings import TypeMappings
 
 
 def test_singleton():
