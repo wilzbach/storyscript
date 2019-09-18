@@ -9,7 +9,7 @@ class TypeMappings:
     def type_class_mapping(type_string):
         """
         Maps a given string (holding type information, from hub sdk)
-        to its corresponding TypeClass in the compiler
+        to its corresponding TypeClass in the compiler.
         """
         assert type(type_string) == str
         if type_string == 'boolean':
@@ -33,7 +33,7 @@ class TypeMappings:
     @staticmethod
     def get_type_instance(var, obj=None):
         """
-        Returns the correctly mapped type class instance of the given type
+        Returns the correctly mapped type class instance of the given type.
         Params:
             var: A Symbol from which type could be retrieved.
             object: In case the Symbol is of type Object, the object that
