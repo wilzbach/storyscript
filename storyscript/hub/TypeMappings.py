@@ -4,6 +4,7 @@ from storyscript.compiler.semantics.types.Types import AnyType, BooleanType, \
 
 
 class TypeMappings:
+
     @staticmethod
     def type_class_mapping(type_string):
         """
