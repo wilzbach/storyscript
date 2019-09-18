@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2
+
+2|    a[a["bar"].keys()[0] + a["foo"].keys()[0]]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+E0103: `+` between `any` and `any` is not supported.

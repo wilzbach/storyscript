@@ -1,0 +1,6 @@
+Error: syntax error in story at line 10, column 8
+
+10|    t4 = "hello\{with\}\{{obj[b][c]} paths"
+             ^^^^^^^^
+
+E0104: `any` can't be indexed with `c` of type `int`

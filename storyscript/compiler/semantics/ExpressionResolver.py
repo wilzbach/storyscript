@@ -212,8 +212,6 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         """
         Cast nary_expression arguments implicitly.
         """
-        if target_type == AnyType.instance():
-            return
         for i, t in enumerate(source_types):
             if i > 0:
                 # ignore the arith_operator tree child

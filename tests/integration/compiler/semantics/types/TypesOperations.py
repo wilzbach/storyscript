@@ -309,50 +309,49 @@ def test_string_string_ops(source, op):
 # Test operations on AnyType
 ###############################################################################
 
-ANY = 'any_obj = {} as Map[any,any]\nany_var=any_obj[0]\n'
+ANY = 'any_var = 1 as any\n'
 
 
 @mark.parametrize('source,op', op_builder('any_var', 'any_var'))
 def test_any_any_ops(source, op):
-    runner(source, op, allowed=all_ops, pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', 'true', swapped=True))
 def test_any_boolean_ops(source, op):
-    runner(source, op, allowed=all_ops, pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '2', swapped=True))
 def test_any_int_ops(source, op):
-    runner(source, op, allowed=all_ops, pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '2.5', swapped=True))
 def test_any_float_ops(source, op):
-    runner(source, op, allowed=all_except_equal, pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '"."', swapped=True))
 def test_any_string_ops(source, op):
-    runner(source, op, allowed=[is_equal, is_sum, is_cmp], pre=ANY)
+    runner(source, op, allowed=[is_sum], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '[1]', swapped=True))
 def test_any_list_ops(source, op):
-    runner(source, op, allowed=[is_equal, is_sum], pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '{"a": 1}', swapped=True))
 def test_any_obj_ops(source, op):
-    runner(source, op, allowed=[is_equal], pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '1m', swapped=True))
 def test_any_time_ops(source, op):
-    allowed = [is_equal, is_sum, is_sub, is_cmp]
-    runner(source, op, allowed=allowed, pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', 're', swapped=True))
 def test_any_regex_ops(source, op):
-    runner(source, op, allowed=is_equal, pre=ANY + 're=/foo/\n')
+    runner(source, op, allowed=[], pre=ANY + 're=/foo/\n')

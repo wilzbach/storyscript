@@ -38,13 +38,9 @@ def binary_op(op, left, right):
     if new_type is None:
         return None
 
+    # binary operations on any are not valid
     if new_type == AnyType.instance():
-        # one of the types is 'any', check if the type would be compatible with
-        # itself
-        if left == AnyType.instance():
-            return right.op(op)
-        else:
-            return left.op(op)
+        return None
 
     return new_type.op(op)
 
@@ -109,6 +105,8 @@ class BaseType:
         """
         Returns True if the type can be compared with `other`, False otherwise.
         """
+        if other == AnyType.instance():
+            return None
         return implicit_cast(self, other)
 
     def equal(self, other):
@@ -116,6 +114,8 @@ class BaseType:
         Returns True if the type can perform equality comparison with `other`,
         False otherwise.
         """
+        if other == AnyType.instance():
+            return None
         return implicit_cast(self, other)
 
     def can_be_assigned(self, other):
@@ -664,9 +664,6 @@ class AnyType(BaseType):
         return True
 
     def index(self, other, kind):
-        if other.hashable():
-            return self
-        # type couldn't have been a key
         return None
 
     @singleton
@@ -688,23 +685,19 @@ class AnyType(BaseType):
         return False
 
     def cmp(self, other):
-        if self == other:
-            return self
-        return other.cmp(other)
+        return False
 
     def equal(self, other):
-        if self == other:
-            return self
-        return other.equal(other)
+        return False
 
     def hashable(self):
-        return True
+        return False
 
     def op(self, op):
-        return self
+        return None
 
     def implicit_to(self, other):
-        return self
+        return None
 
     def explicit_from(self, other):
         if other != NoneType.instance():
