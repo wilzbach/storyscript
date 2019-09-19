@@ -148,6 +148,8 @@ class StoryError(SyntaxError):
             return ErrorCodes.expected_closing_block
         elif self.error.expected == ['_COLON']:
             return ErrorCodes.arguments_expected
+        elif self.error.token == 'as':
+            return ErrorCodes.assignment_no_as
         elif intention.assignment():
             return ErrorCodes.assignment_incomplete
 
