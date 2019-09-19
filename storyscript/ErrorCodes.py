@@ -280,6 +280,10 @@ class ErrorCodes:
         'E0151',
         'Object `{object}` has no property `{prop}`.'
     )
+    assignment_no_as = (
+        'E0152',
+        '`as` can not be used in assignments.'
+    )
 
     @staticmethod
     def is_error(error_name):
