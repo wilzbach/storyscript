@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 18
+
+2|           comment = res.body["comment"]["body"]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+E0104: `any` can't be indexed with `body` of type `string`
