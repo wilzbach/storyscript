@@ -212,5 +212,5 @@ def test_explicit_cast(right, left, should_fail):
 
 @mark.parametrize('el', all_types.items())
 def test_string_convertible(el):
-    should_fail = el[0] == 'none'
+    should_fail = el[0] != 'string'
     run(f'a="." + {el[1]}', should_fail=should_fail)

@@ -74,10 +74,17 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "path",
-              "paths": [
-                "__p-3.2"
-              ]
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "string"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-3.2"
+                ]
+              }
             },
             {
               "$OBJECT": "type_cast",
@@ -132,7 +139,7 @@
         }
       ],
       "parent": "2",
-      "src": "        a = \"foo {(random string length:10) + msg}\""
+      "src": "        a = \"foo {(random string length:10) as string + msg as string}\""
     }
   },
   "services": [
