@@ -45,7 +45,7 @@
       "enter": "3",
       "exit": "5",
       "src": "foreach items as item",
-      "next": "3"
+      "next": "5"
     },
     "3": {
       "method": "expression",
@@ -64,8 +64,7 @@
         }
       ],
       "parent": "2",
-      "src": "    x = item",
-      "next": "5"
+      "src": "    x = item"
     },
     "5": {
       "method": "expression",
@@ -116,7 +115,7 @@
       "enter": "8",
       "exit": "9",
       "src": "if a > 0",
-      "next": "8"
+      "next": "9"
     },
     "8": {
       "method": "expression",
@@ -133,8 +132,7 @@
         }
       ],
       "parent": "7",
-      "src": "    a = 0",
-      "next": "9"
+      "src": "    a = 0"
     },
     "9": {
       "method": "else",
@@ -144,7 +142,7 @@
       "enter": "10",
       "exit": "12",
       "src": "else",
-      "next": "10"
+      "next": "12"
     },
     "10": {
       "method": "expression",
@@ -161,8 +159,7 @@
         }
       ],
       "parent": "9",
-      "src": "    b = 0",
-      "next": "12"
+      "src": "    b = 0"
     },
     "12": {
       "method": "while",
@@ -178,7 +175,7 @@
       "enter": "13",
       "exit": "15",
       "src": "while true",
-      "next": "13"
+      "next": "15"
     },
     "13": {
       "method": "expression",
@@ -195,8 +192,7 @@
         }
       ],
       "parent": "12",
-      "src": "    x = 0",
-      "next": "15"
+      "src": "    x = 0"
     },
     "15": {
       "method": "try",
@@ -206,7 +202,7 @@
       "enter": "16",
       "exit": "17",
       "src": "try",
-      "next": "16"
+      "next": "17"
     },
     "16": {
       "method": "expression",
@@ -223,8 +219,7 @@
         }
       ],
       "parent": "15",
-      "src": "    a = 0",
-      "next": "17"
+      "src": "    a = 0"
     },
     "17": {
       "method": "catch",
@@ -232,8 +227,9 @@
       "col_start": "1",
       "col_end": "6",
       "enter": "18",
+      "exit": "20",
       "src": "catch",
-      "next": "18"
+      "next": "20"
     },
     "18": {
       "method": "expression",
@@ -250,8 +246,7 @@
         }
       ],
       "parent": "17",
-      "src": "    b = 0",
-      "next": "20"
+      "src": "    b = 0"
     },
     "20": {
       "method": "expression",

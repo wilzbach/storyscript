@@ -31,8 +31,7 @@
         }
       ],
       "enter": "3",
-      "src": "while cond",
-      "next": "3"
+      "src": "while cond"
     },
     "3": {
       "method": "expression",

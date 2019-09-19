@@ -7,8 +7,7 @@
       "col_end": "11",
       "function": "bar",
       "enter": "2",
-      "src": "function bar",
-      "next": "2"
+      "src": "function bar"
     },
     "2": {
       "method": "return",

@@ -30,7 +30,7 @@
       "enter": "2",
       "exit": "4.1",
       "src": "function name k1:int k2:int returns string",
-      "next": "2"
+      "next": "4.1"
     },
     "2": {
       "method": "return",
@@ -44,8 +44,7 @@
         }
       ],
       "parent": "1",
-      "src": "    return \"a\"",
-      "next": "4.1"
+      "src": "    return \"a\""
     },
     "4.1": {
       "method": "call",

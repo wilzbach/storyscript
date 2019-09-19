@@ -46,8 +46,7 @@
         }
       ],
       "enter": "3",
-      "src": "foreach items as key, value",
-      "next": "3"
+      "src": "foreach items as key, value"
     },
     "3": {
       "method": "expression",

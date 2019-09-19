@@ -64,7 +64,7 @@
       "enter": "4",
       "exit": "5",
       "src": "while true",
-      "next": "4"
+      "next": "5"
     },
     "4": {
       "method": "expression",
@@ -91,8 +91,7 @@
         }
       ],
       "parent": "3",
-      "src": "    c = app.secrets.slack",
-      "next": "5"
+      "src": "    c = app.secrets.slack"
     },
     "5": {
       "method": "for",
@@ -118,8 +117,7 @@
         }
       ],
       "enter": "6",
-      "src": "foreach [1, 2] as z",
-      "next": "6"
+      "src": "foreach [1, 2] as z"
     },
     "6": {
       "method": "expression",

@@ -12,7 +12,7 @@
       "enter": "2",
       "exit": "4",
       "src": "function foo returns Map[int,List[string]]",
-      "next": "2"
+      "next": "4"
     },
     "2": {
       "method": "return",
@@ -46,8 +46,7 @@
         }
       ],
       "parent": "1",
-      "src": "    return {20: [\"foo\", \"bar\"]}",
-      "next": "4"
+      "src": "    return {20: [\"foo\", \"bar\"]}"
     },
     "4": {
       "method": "expression",

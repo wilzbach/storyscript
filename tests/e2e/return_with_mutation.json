@@ -10,8 +10,7 @@
       ],
       "function": "random",
       "enter": "2",
-      "src": "function random returns any",
-      "next": "2"
+      "src": "function random returns any"
     },
     "2": {
       "method": "expression",

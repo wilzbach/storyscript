@@ -151,8 +151,7 @@
         }
       ],
       "enter": "7",
-      "src": "while a + b == c or d > 4",
-      "next": "7"
+      "src": "while a + b == c or d > 4"
     },
     "7": {
       "method": "expression",

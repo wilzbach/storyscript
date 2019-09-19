@@ -67,8 +67,7 @@
         }
       ],
       "enter": "3",
-      "src": "foreach obj.keys() as item",
-      "next": "3"
+      "src": "foreach obj.keys() as item"
     },
     "3": {
       "method": "execute",

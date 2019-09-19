@@ -13,7 +13,9 @@ class Lines:
         self.variables = []
         self.services = []
         self.functions = {}
-        self.output_scopes = {}
+        self.output_scopes = []
+        self.scopes = []
+        self.previous_scope = None
         self.finished_scopes = []
 
     def entrypoint(self):
@@ -56,47 +58,51 @@ class Lines:
         Finds the previous line, and set the current as its next line
         """
         previous_line = self.last()
-        if previous_line is not None:
-            previous_line['next'] = line_number
+        if previous_line is None:
+            return
 
-    def set_exit(self, line):
-        """
-        Sets the current line as the exit line for a previous one, as needed
-        in if/elif/else and try/catch/finally blocks.
-        """
-        methods = ['if', 'elif', 'try', 'catch']
-        for line_number in self._lines[::-1]:
-            if self.lines[line_number]['method'] in methods:
-                self.finished_scopes = []
-                self.lines[line_number]['exit'] = line
-                break
+        if self.previous_scope is not None:
+            # if a scope had only one line (NO_NEXT) ignore it
+            if self.previous_scope != 'NO_NEXT':
+                self.lines[self.previous_scope]['next'] = line_number
 
-    def set_scope(self, line, parent, output=[]):
+            self.previous_scope = None
+            return
+
+        previous_line['next'] = line_number
+
+    def set_scope(self, line, parent, output):
         """
         Keeps track of output scopes so that defined outputs are recognized for
         nested children.
         """
-        self.output_scopes[line] = {'parent': parent, 'output': output}
+        self.scopes.append(line)
+        # initially a new scope starts without a next reference
+        self.previous_scope = 'NO_NEXT'
+        self.output_scopes.append({line: {'parent': parent, 'output': output}})
 
     def finish_scope(self, line):
         """
         Finishes an output scope and prepares 'exit' adjustment for the scope
         when the next line gets added.
         """
-        self.finished_scopes.append(line)
+        self.previous_scope = self.scopes.pop()
+        self.finished_scopes.append(self.previous_scope)
+        self.output_scopes.pop()
 
     def is_output(self, parent, service):
         """
         Checks whether a service has been defined as output for this block
         or for its parents.
         """
-        if parent in self.output_scopes:
-            scope = self.output_scopes[parent]
-            if service in scope['output']:
-                return True
-            if scope['parent']:
-                assert scope['parent'] != parent
-                return self.is_output(scope['parent'], service)
+        for output_scope in self.output_scopes:
+            if parent in output_scope:
+                scope = output_scope[parent]
+                if service in scope['output']:
+                    return True
+                if scope['parent']:
+                    assert scope['parent'] != parent
+                    return self.is_output(scope['parent'], service)
         return False
 
     def make(self, method, position, name=None, args=None, service=None,

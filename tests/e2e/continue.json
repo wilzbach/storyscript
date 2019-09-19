@@ -12,8 +12,7 @@
         }
       ],
       "enter": "2",
-      "src": "while true",
-      "next": "2"
+      "src": "while true"
     },
     "2": {
       "method": "continue",

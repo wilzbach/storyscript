@@ -35,8 +35,7 @@
         }
       ],
       "enter": "2",
-      "src": "foreach [2] + [3] as item",
-      "next": "2"
+      "src": "foreach [2] + [3] as item"
     },
     "2": {
       "method": "execute",

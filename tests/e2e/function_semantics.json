@@ -55,8 +55,7 @@
         }
       ],
       "enter": "4",
-      "src": "function fun a:int returns int",
-      "next": "4"
+      "src": "function fun a:int returns int"
     },
     "4": {
       "method": "return",

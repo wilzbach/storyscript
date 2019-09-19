@@ -40,7 +40,7 @@
       "enter": "2",
       "exit": "4.1",
       "src": "function boomrang k1: Map[string, float] k2: float returns float",
-      "next": "2"
+      "next": "4.1"
     },
     "2": {
       "method": "return",
@@ -60,8 +60,7 @@
         }
       ],
       "parent": "1",
-      "src": "  return k1[\"foo\"]",
-      "next": "4.1"
+      "src": "  return k1[\"foo\"]"
     },
     "4.1": {
       "method": "call",

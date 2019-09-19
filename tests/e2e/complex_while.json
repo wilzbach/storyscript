@@ -41,8 +41,7 @@
         }
       ],
       "enter": "3",
-      "src": "while i < 10",
-      "next": "3"
+      "src": "while i < 10"
     },
     "3": {
       "method": "expression",
