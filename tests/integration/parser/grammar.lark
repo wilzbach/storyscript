@@ -12,7 +12,8 @@ key_value: (string| path| number| boolean) _COLON base_expression
 map: OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)? (_NL _DEDENT)? CCB
 regular_expression: REGEXP
 inline_expression: _OP inline_service _CP| call_expression
-values: number| string| boolean| void| list| map| regular_expression| time
+value_fragment: OSB expression CSB
+values: number| string| boolean| void| (list|map) value_fragment*| regular_expression| time
 range_start: (number | path) _COLON
 range_start_end: (number | path) _COLON (number | path)
 range_end: _COLON (number | path)

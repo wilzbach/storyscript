@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1
+
+1|    a = {"foo": "bar"}[0]
+      ^^^^^^^^^^^^^^^^^^^^^
+
+E0104: `Map[string,string]` can't be indexed with `0` of type `int`
