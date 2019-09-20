@@ -20,16 +20,10 @@ def binary_op(op, left, right):
     """
     Default binary operation:
         1) if both types are equal -> left.op(op)
-        2) if string concat and the other type can be stringified -> string
-        3) try to implicitly convert left to right or right -> implicit.op(op)
+        2) try to implicitly convert left to right or right -> implicit.op(op)
     """
     if left == right:
         return left.op(op)
-    if op and op.type == 'PLUS':
-        if isinstance(left, StringType) and right.string():
-            return left
-        if isinstance(right, StringType) and left.string():
-            return right
 
     left_implicit = left.implicit_to(right)
     right_implicit = right.implicit_to(left)
@@ -141,13 +135,6 @@ class BaseType:
         """
         return from_type.implicit_to(self)
 
-    def string(self):
-        """
-        Returns True if the type can be stringified.
-        False otherwise.
-        """
-        return True
-
     def hashable(self):
         """
         Returns whether the type can be hashed.
@@ -229,9 +216,6 @@ class NoneType(BaseType):
 
     def equal(self, other):
         return None
-
-    def string(self):
-        return False
 
     def hashable(self):
         return False

@@ -1,12 +1,12 @@
 {
   "tree": {
-    "1.1": {
+    "1.2": {
       "method": "mutation",
-      "ln": "1.1",
-      "col_start": "12",
-      "col_end": "15",
+      "ln": "1.2",
+      "col_start": "7",
+      "col_end": "10",
       "name": [
-        "__p-1.1"
+        "__p-1.2"
       ],
       "args": [
         {
@@ -28,6 +28,22 @@
           ]
         }
       ],
+      "next": "1.1"
+    },
+    "1.1": {
+      "method": "expression",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.2"
+          ]
+        }
+      ],
       "next": "1"
     },
     "1": {
@@ -45,7 +61,7 @@
           "values": [
             {
               "$OBJECT": "string",
-              "string": "a"
+              "string": "a "
             },
             {
               "$OBJECT": "type_cast",
@@ -63,8 +79,8 @@
           ]
         }
       ],
-      "src": "a = \"a\" + (\"b\".contains(item: \"c\"))"
+      "src": "a = \"a {\\\"b\\\".contains(item: \\\"c\\\")}\""
     }
   },
-  "entrypoint": "1.1"
+  "entrypoint": "1.2"
 }

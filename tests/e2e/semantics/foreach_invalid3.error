@@ -1,6 +1,6 @@
-Error: syntax error in story at line 4, column 5
+Error: syntax error in story at line 4, column 9
 
 4|        b = b + elem
-          ^^^
+              ^^^^^^^^
 
-E0100: Can't assign `string` to `int`
+E0103: `+` between `int` and `string` is not supported.
