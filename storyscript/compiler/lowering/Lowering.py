@@ -525,6 +525,41 @@ class Lowering:
         for c in node.children:
             self.visit_arguments(c)
 
+    def visit_expr_values(self, node, fake_tree):
+        """
+        Transforms a value with a direct index path into two lines.
+        """
+        if not hasattr(node, 'children') or len(node.children) == 0:
+            return
+
+        if node.data == 'expression':
+            values = node.follow(['entity', 'values'])
+            if values is not None and len(values.children) > 1:
+                value_type = values.child(0).data
+                assert value_type == 'list' or value_type == 'map'
+
+                path_fragments = values.children[1:]
+
+                # insert the list as a new temporary reference
+                values.children = [values.children[0]]
+                obj = Tree('expression', node.children)
+                path = fake_tree.add_assignment(obj, original_line='1')
+
+                # insert all path fragments to it
+                path.children.extend(path_fragments)
+                # replace assignment with new path
+                node.children = [
+                    Tree('entity', [
+                        path
+                    ])
+                ]
+
+        if node.data == 'block':
+            fake_tree = self.fake_tree(node)
+
+        for c in node.children:
+            self.visit_expr_values(c, fake_tree)
+
     def visit_as_expr(self, node, block):
         """
         Visit assignments and move 'as' up the tree if required
@@ -645,5 +680,6 @@ class Lowering:
         self.visit_function_dot(tree, block=None)
         self.visit(tree, None, None, pred,
                    self.replace_expression, parent=None)
+        self.visit_expr_values(tree, None)
         self.visit_path(tree, None)
         return tree

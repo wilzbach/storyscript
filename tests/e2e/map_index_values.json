@@ -1,0 +1,52 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "expression",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "foo"
+              },
+              {
+                "$OBJECT": "string",
+                "string": "bar"
+              }
+            ]
+          ]
+        }
+      ],
+      "next": "1"
+    },
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1",
+            {
+              "$OBJECT": "string",
+              "string": "foo"
+            }
+          ]
+        }
+      ],
+      "src": "a = {\"foo\": \"bar\"}[\"foo\"]"
+    }
+  },
+  "entrypoint": "1.1"
+}

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1
+
+1|    a = {"foo": "bar"}["foo"]["bar"]
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+E0104: `string` can't be indexed with `bar` of type `string`

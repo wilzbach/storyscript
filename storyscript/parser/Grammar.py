@@ -85,7 +85,8 @@ class Grammar:
         self.ebnf.regular_expression = 'regexp'
         self.ebnf.inline_expression = ('op inline_service cp, '
                                        'call_expression')
-        values = ('number, string, boolean, void, list, map, '
+        self.ebnf.value_fragment = 'osb expression csb'
+        values = ('number, string, boolean, void, (list|map) value_fragment*, '
                   'regular_expression, time')
         self.ebnf.values = values
 

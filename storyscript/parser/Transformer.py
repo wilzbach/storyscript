@@ -528,6 +528,14 @@ class Transformer(LarkTransformer):
             return Tree('path_fragment', matches)
 
     @classmethod
+    def value_fragment(cls, matches):
+        """
+        Remove OSB `[` and CSB `]` from map, but save their line/column
+        information.
+        """
+        return cls.path_fragment(matches)
+
+    @classmethod
     def add_line_info(cls, t, matches):
         """
         Save line/column information from OSB `[` or OCB `{` tokens.
