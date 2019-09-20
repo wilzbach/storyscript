@@ -14,8 +14,9 @@ class PathResolver:
     """
     Resolves a path to a symbol
     """
-    def __init__(self, symbol_resolver):
+    def __init__(self, symbol_resolver, module):
         # how to resolve existing symbols
+        self.module = module
         self.symbol_resolver = symbol_resolver
 
     @staticmethod

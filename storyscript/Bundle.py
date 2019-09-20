@@ -14,6 +14,7 @@ class Bundle:
 
     def __init__(self, story_files=None, features=None):
         self.stories = {}
+        self.deprecations = {}
         if isinstance(features, Features):
             self.features = features
         else:
@@ -138,6 +139,7 @@ class Bundle:
             story.parse(parser=parser)
             story.compile()
             self.stories[storypath] = story.compiled.output()
+            self.deprecations[storypath] = story.context.get_deprecations()
 
     def bundle(self, ebnf=None):
         """
@@ -147,7 +149,7 @@ class Bundle:
         parser = self.parser(ebnf)
         self.compile(entrypoint, parser=parser)
         return {'stories': self.stories, 'services': self.services(),
-                'entrypoint': entrypoint}
+                'entrypoint': entrypoint}, self.deprecations
 
     def bundle_trees(self, ebnf=None, lower=False):
         """

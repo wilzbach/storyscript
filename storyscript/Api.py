@@ -11,18 +11,18 @@ class StoryscriptCompilationResult:
     Contains the compiled story or a list of compilation errors.
     """
 
-    def __init__(self, result, errors):
+    def __init__(self, result, errors, deprecations=[]):
         self._result = result
         self._errors = errors
-        self._deprecations = []
+        self._deprecations = deprecations
         self._warnings = []
 
     @classmethod
-    def from_result(cls, story):
+    def from_result(cls, story, deprecations):
         """
         Creates a CompilationResult from a result.
         """
-        return cls(story, errors=[])
+        return cls(story, errors=[], deprecations=deprecations)
 
     @classmethod
     def from_error(cls, error):
@@ -80,8 +80,10 @@ class Api:
         """
         features = Features(features)
         try:
-            s = Story(string, features).process()
-            return StoryscriptCompilationResult.from_result(s)
+            story = Story(string, features)
+            s = story.process()
+            deprecations = story.context.get_deprecations()
+            return StoryscriptCompilationResult.from_result(s, deprecations)
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)
         except Exception as e:
@@ -100,7 +102,8 @@ class Api:
         try:
             story = Story.from_stream(stream, features).process()
             s = {stream.name: story, 'services': story['services']}
-            return StoryscriptCompilationResult.from_result(s)
+            deprecations = {stream.name: story.context.get_deprecations()}
+            return StoryscriptCompilationResult.from_result(s, deprecations)
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)
         except Exception as e:
@@ -117,8 +120,9 @@ class Api:
         """
         features = Features(features)
         try:
-            s = Bundle(story_files=files, features=features).bundle()
-            return StoryscriptCompilationResult.from_result(s)
+            s, deprecations = Bundle(story_files=files,
+                                     features=features).bundle()
+            return StoryscriptCompilationResult.from_result(s, deprecations)
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)
         except Exception as e:

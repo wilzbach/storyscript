@@ -44,14 +44,14 @@ class App:
         """
         bundle = Bundle.from_path(path, ignored_path=ignored_path,
                                   features=features)
-        result = bundle.bundle(ebnf=ebnf)
+        result, deprecations = bundle.bundle(ebnf=ebnf)
         if concise:
             result = _clean_dict(result)
         if first:
             if len(result['stories']) != 1:
                 raise StoryError.create_error('first_option_more_stories')
             result = next(iter(result['stories'].values()))
-        return json.dumps(result, indent=2)
+        return json.dumps(result, indent=2), deprecations
 
     @staticmethod
     def lex(path, features, ebnf=None):

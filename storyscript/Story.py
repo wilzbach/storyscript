@@ -10,6 +10,7 @@ from .compiler import Compiler
 from .compiler.lowering import Lowering
 from .compiler.pretty.PrettyPrinter import PrettyPrinter
 from .exceptions import CompilerError, StoryError, StorySyntaxError
+from .exceptions.WarningDeprecation import WarningDeprecation
 from .parser import Parser
 
 
@@ -19,6 +20,25 @@ def _parser():
     Cached instance of the parser
     """
     return Parser()
+
+
+class StoryContext:
+    """
+    Represents context of a given story.
+    """
+
+    def __init__(self, story, features):
+        self.story = story
+        self.features = features
+        self.deprecations = []
+
+    def deprecate(self, tree, name, **kwargs):
+        deprecation = WarningDeprecation.deprecate(
+            self.story, tree=tree, name=name)
+        self.deprecations.append(deprecation)
+
+    def get_deprecations(self):
+        return self.deprecations
 
 
 class Story:
@@ -31,7 +51,18 @@ class Story:
         self.story = story
         self.path = path
         self.lines = story.splitlines(keepends=False)
-        self.features = features
+        self.context = StoryContext(story=self, features=features)
+
+    def name(self):
+        """
+        Extracts the name of the story from the path.
+        """
+        if self.path:
+            working_directory = os.getcwd()
+            if self.path.startswith(working_directory):
+                return self.path[len(working_directory) + 1:]
+            return self.path
+        return 'story'
 
     @classmethod
     def read(cls, path):
@@ -81,7 +112,7 @@ class Story:
             self.tree = parser.parse(self.story,
                                      allow_single_quotes=allow_single_quotes)
             if lower:
-                proc = Lowering(parser, features=self.features)
+                proc = Lowering(parser, features=self.context.features)
                 self.tree = proc.process(self.tree)
         except (CompilerError, StorySyntaxError) as error:
             raise self.error(error) from error
@@ -105,8 +136,7 @@ class Story:
         Compiles the story and stores the result.
         """
         try:
-            self.compiled = Compiler.compile(self.tree, story=self,
-                                             features=self.features)
+            self.compiled = Compiler.compile(self.tree, story=self)
         except (CompilerError, StorySyntaxError) as error:
             raise self.error(error) from error
 

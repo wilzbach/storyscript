@@ -25,8 +25,14 @@ def echo(patch):
 
 
 @fixture
-def app(patch):
-    patch.many(App, ['compile', 'parse', 'format'])
+def compile(magic):
+    return [magic(), magic()]
+
+
+@fixture
+def app(patch, compile):
+    patch.many(App, ['parse', 'format'])
+    patch.object(App, 'compile', return_value=compile)
     return App
 
 
@@ -289,7 +295,7 @@ def test_cli_compile_output_file(patch, runner, app):
     patch.object(io, 'open')
     runner.invoke(Cli.compile, ['/path', 'hello.story', '-j'])
     io.open.assert_called_with('hello.story', 'w')
-    io.open().__enter__().write.assert_called_with(App.compile())
+    io.open().__enter__().write.assert_called_with(App.compile()[0])
 
 
 @mark.parametrize('option', ['--silent', '-s'])
@@ -350,7 +356,7 @@ def test_cli_compile_json(runner, echo, app, option):
     App.compile.assert_called_with('.', ebnf=None,
                                    ignored_path=None, concise=False,
                                    first=False, features={})
-    click.echo.assert_called_with(App.compile())
+    click.echo.assert_called_with(App.compile()[0])
 
 
 def test_cli_compile_ebnf(runner, echo, app):
