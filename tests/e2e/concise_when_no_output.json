@@ -8,8 +8,7 @@
       ],
       "service": "http",
       "command": "server",
-      "enter": "1",
-      "next": "1"
+      "enter": "1"
     },
     "1": {
       "method": "when",
@@ -41,8 +40,7 @@
       ],
       "enter": "2",
       "parent": "1.1",
-      "src": "when http server listen path:\"/health\" method:\"get\"",
-      "next": "2"
+      "src": "when http server listen path:\"/health\" method:\"get\""
     },
     "2": {
       "method": "expression",

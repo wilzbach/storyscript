@@ -14,7 +14,7 @@
       "enter": "2",
       "exit": "4.1",
       "src": "while /regexp/",
-      "next": "2"
+      "next": "4.1"
     },
     "2": {
       "method": "break",
@@ -22,8 +22,7 @@
       "col_start": "5",
       "col_end": "10",
       "parent": "1",
-      "src": "    break",
-      "next": "4.1"
+      "src": "    break"
     },
     "4.1": {
       "method": "expression",
@@ -70,8 +69,7 @@
         }
       ],
       "enter": "5",
-      "src": "while \"2 {/regexp/}\"",
-      "next": "5"
+      "src": "while \"2 {/regexp/}\""
     },
     "5": {
       "method": "break",

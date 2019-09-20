@@ -12,7 +12,7 @@
       "enter": "2",
       "exit": "5.2",
       "src": "function foo returns int",
-      "next": "2"
+      "next": "5.2"
     },
     "2": {
       "method": "expression",
@@ -46,8 +46,7 @@
         }
       ],
       "parent": "1",
-      "src": "    return a",
-      "next": "5.2"
+      "src": "    return a"
     },
     "5.2": {
       "method": "call",

@@ -11,8 +11,7 @@
       "service": "http",
       "command": "server",
       "enter": "2",
-      "src": "http server as s",
-      "next": "2"
+      "src": "http server as s"
     },
     "2": {
       "method": "when",
@@ -44,8 +43,7 @@
       ],
       "enter": "3",
       "parent": "1",
-      "src": "  when s listen path:\"/health\" method:\"get\" as client",
-      "next": "3"
+      "src": "  when s listen path:\"/health\" method:\"get\" as client"
     },
     "3": {
       "method": "expression",

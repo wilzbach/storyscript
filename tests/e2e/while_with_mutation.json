@@ -53,8 +53,7 @@
         }
       ],
       "enter": "3",
-      "src": "while x.isOdd()",
-      "next": "3"
+      "src": "while x.isOdd()"
     },
     "3": {
       "method": "break",

@@ -43,8 +43,7 @@
         }
       ],
       "enter": "3",
-      "src": "foreach items as item",
-      "next": "3"
+      "src": "foreach items as item"
     },
     "3": {
       "method": "expression",

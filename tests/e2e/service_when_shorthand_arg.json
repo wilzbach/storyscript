@@ -28,8 +28,7 @@
       "service": "http",
       "command": "server",
       "enter": "3",
-      "src": "http server",
-      "next": "3"
+      "src": "http server"
     },
     "3": {
       "method": "when",
@@ -55,8 +54,7 @@
       ],
       "enter": "4",
       "parent": "2",
-      "src": "    when server listen :path",
-      "next": "4"
+      "src": "    when server listen :path"
     },
     "4": {
       "method": "expression",

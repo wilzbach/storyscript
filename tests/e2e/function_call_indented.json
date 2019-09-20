@@ -30,7 +30,7 @@
       "enter": "2",
       "exit": "4.1",
       "src": "function fun a: string b:string returns string",
-      "next": "2"
+      "next": "4.1"
     },
     "2": {
       "method": "return",
@@ -44,8 +44,7 @@
         }
       ],
       "parent": "1",
-      "src": "    return \"foo\"",
-      "next": "4.1"
+      "src": "    return \"foo\""
     },
     "4.1": {
       "method": "call",

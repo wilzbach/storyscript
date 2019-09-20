@@ -9,7 +9,8 @@ def test_functions_function():
     result = Api.loads('function f\n    x = 0').result().output()
     assert result['tree']['1']['method'] == 'function'
     assert result['tree']['1']['function'] == 'f'
-    assert result['tree']['1']['next'] == '2'
+    assert 'next' not in result['tree']['1']
+    assert 'next' not in result['tree']['2']
     assert result['tree']['2']['method'] == 'expression'
     assert result['tree']['2']['args'] == [{'$OBJECT': 'int', 'int': 0}]
     assert result['tree']['2']['parent'] == '1'

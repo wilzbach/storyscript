@@ -84,8 +84,7 @@
         }
       ],
       "enter": "4",
-      "src": "while l.contains(item:0)",
-      "next": "4"
+      "src": "while l.contains(item:0)"
     },
     "4": {
       "method": "execute",

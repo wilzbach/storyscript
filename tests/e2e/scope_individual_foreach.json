@@ -30,7 +30,7 @@
       "enter": "2",
       "exit": "5",
       "src": "foreach [1, 2, 3] as a",
-      "next": "2"
+      "next": "5"
     },
     "2": {
       "method": "expression",
@@ -49,8 +49,7 @@
         }
       ],
       "parent": "1",
-      "src": "    b = a",
-      "next": "5"
+      "src": "    b = a"
     },
     "5": {
       "method": "expression",

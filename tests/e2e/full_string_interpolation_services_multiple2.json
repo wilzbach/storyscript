@@ -11,8 +11,7 @@
       "service": "slack",
       "command": "bot",
       "enter": "2",
-      "src": "slack bot",
-      "next": "2"
+      "src": "slack bot"
     },
     "2": {
       "method": "when",
@@ -36,8 +35,7 @@
       ],
       "enter": "3.2",
       "parent": "1",
-      "src": "    when hears channel: \"foobar\" as msg",
-      "next": "3.2"
+      "src": "    when hears channel: \"foobar\" as msg"
     },
     "3.2": {
       "method": "execute",

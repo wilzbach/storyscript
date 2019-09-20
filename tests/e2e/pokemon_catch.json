@@ -8,7 +8,7 @@
       "enter": "2",
       "exit": "3",
       "src": "try",
-      "next": "2"
+      "next": "3"
     },
     "2": {
       "method": "throw",
@@ -22,8 +22,7 @@
         }
       ],
       "parent": "1",
-      "src": "     throw \"error\"",
-      "next": "3"
+      "src": "     throw \"error\""
     },
     "3": {
       "method": "catch",
@@ -33,7 +32,7 @@
       "enter": "4",
       "exit": "5",
       "src": "catch",
-      "next": "4"
+      "next": "5"
     },
     "4": {
       "method": "execute",
@@ -53,8 +52,7 @@
         }
       ],
       "parent": "3",
-      "src": "    log info msg: \"Error Happened\"",
-      "next": "5"
+      "src": "    log info msg: \"Error Happened\""
     },
     "5": {
       "method": "finally",
@@ -62,8 +60,7 @@
       "col_start": "1",
       "col_end": "9",
       "enter": "6",
-      "src": "finally",
-      "next": "6"
+      "src": "finally"
     },
     "6": {
       "method": "execute",

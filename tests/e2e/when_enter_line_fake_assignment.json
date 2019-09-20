@@ -11,8 +11,7 @@
       "service": "http",
       "command": "server",
       "enter": "2",
-      "src": "http server as s",
-      "next": "2"
+      "src": "http server as s"
     },
     "2": {
       "method": "when",
@@ -35,9 +34,10 @@
         }
       ],
       "enter": "3.1",
+      "exit": "4",
       "parent": "1",
       "src": "    when s listen path:\"/test\" as req",
-      "next": "3.1"
+      "next": "4"
     },
     "3.1": {
       "method": "execute",
@@ -79,8 +79,7 @@
         }
       ],
       "parent": "2",
-      "src": "        a = (gmaps geocode address:\"Chandigarh\")",
-      "next": "4"
+      "src": "        a = (gmaps geocode address:\"Chandigarh\")"
     },
     "4": {
       "method": "expression",

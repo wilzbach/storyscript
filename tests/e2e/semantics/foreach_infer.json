@@ -80,8 +80,7 @@
         }
       ],
       "enter": "5",
-      "src": "foreach a as elem",
-      "next": "5"
+      "src": "foreach a as elem"
     },
     "5": {
       "method": "expression",

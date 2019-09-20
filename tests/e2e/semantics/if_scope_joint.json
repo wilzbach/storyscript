@@ -24,7 +24,7 @@
       "enter": "2",
       "exit": "3",
       "src": "if 0 == 0",
-      "next": "2"
+      "next": "3"
     },
     "2": {
       "method": "expression",
@@ -41,8 +41,7 @@
         }
       ],
       "parent": "1",
-      "src": "    originalCount = 0",
-      "next": "3"
+      "src": "    originalCount = 0"
     },
     "3": {
       "method": "else",
@@ -52,7 +51,7 @@
       "enter": "4",
       "exit": "6",
       "src": "else",
-      "next": "4"
+      "next": "6"
     },
     "4": {
       "method": "expression",
@@ -69,8 +68,7 @@
         }
       ],
       "parent": "3",
-      "src": "    originalCount = 0",
-      "next": "6"
+      "src": "    originalCount = 0"
     },
     "6": {
       "method": "expression",

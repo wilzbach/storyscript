@@ -43,8 +43,7 @@
         }
       ],
       "enter": "2",
-      "src": "while random list length:42 type:\"int\"",
-      "next": "2"
+      "src": "while random list length:42 type:\"int\""
     },
     "2": {
       "method": "expression",

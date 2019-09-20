@@ -19,7 +19,7 @@ def test_lines_init(lines):
     assert lines.variables == []
     assert lines.services == []
     assert lines.functions == {}
-    assert lines.output_scopes == {}
+    assert lines.output_scopes == []
 
 
 def test_lines_first(patch, lines):
@@ -56,43 +56,37 @@ def test_lines_set_next(patch, lines):
     assert lines.lines['1']['next'] == '2'
 
 
-@mark.parametrize('method', ['if', 'elif', 'try', 'catch'])
-def test_lines_set_exit(patch, lines, method):
-    lines.finished_scopes = ['1']
-    lines.lines = {'1': {}, '2': {'method': method}}
-    lines._lines = ['1', '2']
-    lines.set_exit('3')
-    assert lines.lines['2']['exit'] == '3'
-    assert lines.finished_scopes == []
-
-
 def test_lines_set_scope(patch, lines):
-    lines.set_scope('2', '1')
-    assert lines.output_scopes['2'] == {'parent': '1', 'output': []}
+    lines.output_scopes = []
+    lines.set_scope('2', '1', [])
+    assert lines.output_scopes[0]['2'] == {'parent': '1', 'output': []}
 
 
 def test_lines_set_scope_output(lines):
+    lines.output_scopes = []
     lines.set_scope('2', '1', output=['x'])
-    assert lines.output_scopes['2']['output'] == ['x']
+    assert lines.output_scopes[0]['2']['output'] == ['x']
 
 
 def test_lines_finish_scope(lines):
-    lines.finish_scope('1')
-    assert lines.finished_scopes == ['1']
-    lines.finish_scope('2')
-    assert lines.finished_scopes == ['1', '2']
+    lines.scopes = ['1', '2']
+    lines.output_scopes = [1, 2]
+    lines.finish_scope('.')
+    assert lines.finished_scopes == ['2']
+    lines.finish_scope('.')
+    assert lines.finished_scopes == ['2', '1']
 
 
 def test_lines_is_output(lines):
-    lines.output_scopes = {'1': {'parent': None, 'output': ['service']}}
+    lines.output_scopes = [{'1': {'parent': None, 'output': ['service']}}]
     assert lines.is_output('1', 'service') is True
 
 
 def test_lines_is_output_from_parent(lines):
-    lines.output_scopes = {
+    lines.output_scopes = [{
         '2': {'parent': '1', 'output': []},
         '1': {'output': ['service']}
-    }
+    }]
     assert lines.is_output('2', 'service') is True
 
 

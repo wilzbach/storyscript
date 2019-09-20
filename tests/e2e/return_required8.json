@@ -20,8 +20,7 @@
         }
       ],
       "enter": "2",
-      "src": "function sum a:int returns int",
-      "next": "2"
+      "src": "function sum a:int returns int"
     },
     "2": {
       "method": "expression",
@@ -103,7 +102,7 @@
       "exit": "7",
       "parent": "1",
       "src": "    while true",
-      "next": "6"
+      "next": "7"
     },
     "6": {
       "method": "return",
@@ -117,8 +116,7 @@
         }
       ],
       "parent": "5",
-      "src": "         return 0",
-      "next": "7"
+      "src": "         return 0"
     },
     "7": {
       "method": "expression",

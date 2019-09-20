@@ -28,8 +28,9 @@
       "service": "http",
       "command": "server",
       "enter": "3",
+      "exit": "11",
       "src": "http server as s",
-      "next": "3"
+      "next": "11"
     },
     "3": {
       "method": "expression",
@@ -70,9 +71,10 @@
         }
       ],
       "enter": "5",
+      "exit": "10",
       "parent": "2",
       "src": "    when s listen path: \"/\" as req",
-      "next": "5"
+      "next": "10"
     },
     "5": {
       "method": "expression",
@@ -282,8 +284,7 @@
         }
       ],
       "parent": "4",
-      "src": "        d = 3",
-      "next": "10"
+      "src": "        d = 3"
     },
     "10": {
       "method": "expression",
@@ -300,8 +301,7 @@
         }
       ],
       "parent": "2",
-      "src": "    e = 4",
-      "next": "11"
+      "src": "    e = 4"
     },
     "11": {
       "method": "expression",
@@ -322,7 +322,8 @@
   },
   "services": [
     "gmaps",
-    "http"
+    "http",
+    "req"
   ],
   "entrypoint": "1"
 }

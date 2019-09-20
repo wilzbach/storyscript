@@ -20,8 +20,7 @@
         }
       ],
       "enter": "2",
-      "src": "function sum a:int returns int",
-      "next": "2"
+      "src": "function sum a:int returns int"
     },
     "2": {
       "method": "expression",

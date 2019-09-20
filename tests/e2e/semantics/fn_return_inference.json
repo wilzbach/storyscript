@@ -10,8 +10,7 @@
       ],
       "function": "foo",
       "enter": "2",
-      "src": "function foo returns int",
-      "next": "2"
+      "src": "function foo returns int"
     },
     "2": {
       "method": "expression",

@@ -32,7 +32,7 @@
       "enter": "2",
       "exit": "4.1",
       "src": "function foobar stuff : Map[string, any] returns int",
-      "next": "2"
+      "next": "4.1"
     },
     "2": {
       "method": "return",
@@ -59,8 +59,7 @@
         }
       ],
       "parent": "1",
-      "src": "  return stuff[\"a\"] as int",
-      "next": "4.1"
+      "src": "  return stuff[\"a\"] as int"
     },
     "4.1": {
       "method": "call",

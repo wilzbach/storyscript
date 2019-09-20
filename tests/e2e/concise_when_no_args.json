@@ -8,8 +8,7 @@
       ],
       "service": "twitter",
       "command": "stream",
-      "enter": "1",
-      "next": "1"
+      "enter": "1"
     },
     "1": {
       "method": "when",
@@ -23,8 +22,7 @@
       "command": "tweet",
       "enter": "2",
       "parent": "1.1",
-      "src": "when twitter stream tweet",
-      "next": "2"
+      "src": "when twitter stream tweet"
     },
     "2": {
       "method": "expression",

@@ -10,8 +10,7 @@
       ],
       "function": "divideByZero",
       "enter": "2",
-      "src": "function divideByZero returns int",
-      "next": "2"
+      "src": "function divideByZero returns int"
     },
     "2": {
       "method": "expression",

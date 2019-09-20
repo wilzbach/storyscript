@@ -9,7 +9,8 @@
       "service": "twitter",
       "command": "stream",
       "enter": "1",
-      "next": "1"
+      "exit": "3.1",
+      "next": "3.1"
     },
     "1": {
       "method": "when",
@@ -22,9 +23,9 @@
       "service": "stream",
       "command": "tweet",
       "enter": "2",
+      "exit": "3.1",
       "parent": "1.1",
-      "src": "when twitter stream tweet",
-      "next": "2"
+      "src": "when twitter stream tweet"
     },
     "2": {
       "method": "break",
@@ -32,8 +33,7 @@
       "col_start": "5",
       "col_end": "10",
       "parent": "1",
-      "src": "    break",
-      "next": "3.1"
+      "src": "    break"
     },
     "3.1": {
       "method": "execute",
@@ -44,7 +44,8 @@
       "service": "twitter",
       "command": "stream",
       "enter": "3",
-      "next": "3"
+      "exit": "5.1",
+      "next": "5.1"
     },
     "3": {
       "method": "when",
@@ -57,9 +58,9 @@
       "service": "stream",
       "command": "tweet",
       "enter": "4",
+      "exit": "5.1",
       "parent": "3.1",
-      "src": "when twitter stream tweet as os",
-      "next": "4"
+      "src": "when twitter stream tweet as os"
     },
     "4": {
       "method": "break",
@@ -67,8 +68,7 @@
       "col_start": "5",
       "col_end": "10",
       "parent": "3",
-      "src": "    break",
-      "next": "5.1"
+      "src": "    break"
     },
     "5.1": {
       "method": "execute",
@@ -79,7 +79,8 @@
       "service": "twitter",
       "command": "stream",
       "enter": "5",
-      "next": "5"
+      "exit": "7.1",
+      "next": "7.1"
     },
     "5": {
       "method": "when",
@@ -102,9 +103,9 @@
         }
       ],
       "enter": "6",
+      "exit": "7.1",
       "parent": "5.1",
-      "src": "when twitter stream tweet track:\"storyscript\"",
-      "next": "6"
+      "src": "when twitter stream tweet track:\"storyscript\""
     },
     "6": {
       "method": "break",
@@ -112,8 +113,7 @@
       "col_start": "5",
       "col_end": "10",
       "parent": "5",
-      "src": "    break",
-      "next": "7.1"
+      "src": "    break"
     },
     "7.1": {
       "method": "execute",
@@ -123,8 +123,7 @@
       ],
       "service": "twitter",
       "command": "stream",
-      "enter": "7",
-      "next": "7"
+      "enter": "7"
     },
     "7": {
       "method": "when",
@@ -148,8 +147,7 @@
       ],
       "enter": "8",
       "parent": "7.1",
-      "src": "when twitter stream tweet track:\"storyscript\" as li",
-      "next": "8"
+      "src": "when twitter stream tweet track:\"storyscript\" as li"
     },
     "8": {
       "method": "break",

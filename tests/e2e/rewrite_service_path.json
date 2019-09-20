@@ -11,8 +11,7 @@
       "service": "http",
       "command": "server",
       "enter": "2",
-      "src": "http server as client",
-      "next": "2"
+      "src": "http server as client"
     },
     "2": {
       "method": "when",
@@ -36,8 +35,7 @@
       ],
       "enter": "3",
       "parent": "1",
-      "src": "    when client listen path: \"/\" as request",
-      "next": "3"
+      "src": "    when client listen path: \"/\" as request"
     },
     "3": {
       "method": "execute",
@@ -137,7 +135,8 @@
   },
   "services": [
     "awesome",
-    "http"
+    "http",
+    "request"
   ],
   "entrypoint": "1"
 }

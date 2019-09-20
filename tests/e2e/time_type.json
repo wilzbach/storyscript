@@ -22,7 +22,7 @@
       "enter": "2",
       "exit": "4.1",
       "src": "function foo arg1: time returns time",
-      "next": "2"
+      "next": "4.1"
     },
     "2": {
       "method": "return",
@@ -36,8 +36,7 @@
         }
       ],
       "parent": "1",
-      "src": "    return 5s",
-      "next": "4.1"
+      "src": "    return 5s"
     },
     "4.1": {
       "method": "call",

@@ -46,8 +46,7 @@
         }
       ],
       "enter": "2",
-      "src": "foreach random list type: \"string\" length: 10 as item",
-      "next": "2"
+      "src": "foreach random list type: \"string\" length: 10 as item"
     },
     "2": {
       "method": "expression",

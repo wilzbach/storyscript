@@ -22,7 +22,7 @@
       "enter": "2",
       "exit": "4",
       "src": "function my_function k1:boolean returns boolean",
-      "next": "2"
+      "next": "4"
     },
     "2": {
       "method": "return",
@@ -36,8 +36,7 @@
         }
       ],
       "parent": "1",
-      "src": "    return true",
-      "next": "4"
+      "src": "    return true"
     },
     "4": {
       "method": "expression",

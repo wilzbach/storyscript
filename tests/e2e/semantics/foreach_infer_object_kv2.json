@@ -44,8 +44,7 @@
         }
       ],
       "enter": "4",
-      "src": "foreach {\"1\": 2} as k, v",
-      "next": "4"
+      "src": "foreach {\"1\": 2} as k, v"
     },
     "4": {
       "method": "expression",
