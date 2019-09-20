@@ -284,6 +284,14 @@ class ErrorCodes:
         'E0152',
         '`as` can not be used in assignments.'
     )
+    return_type_no_object = (
+        'E0153',
+        'Return type cannot be `object`.'
+    )
+    object_no_as = (
+        'E0154',
+        'Type cast to `object` is not allowed.'
+    )
 
     @staticmethod
     def is_error(error_name):
