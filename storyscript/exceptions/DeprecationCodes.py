@@ -4,6 +4,7 @@
 class DeprecationCodes:
 
     unidentified_deprecation = ('D0001', '')
+    no_range = ('D0002', 'Ranges are deprecated.')
 
     @staticmethod
     def is_deprecation(deprecation_name):
