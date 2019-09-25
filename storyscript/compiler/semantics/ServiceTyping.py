@@ -70,6 +70,8 @@ class ServiceTyping:
         if nested_block:
             return ObjectType(obj=action)
         else:
+            tree.expect(action.events() == [], 'expression_no_event',
+                        service=service_name, action=action_name)
             return self.get_service_output(action)
 
     def get_service_output(self, action):
