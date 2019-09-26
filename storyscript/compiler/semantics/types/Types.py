@@ -128,13 +128,6 @@ class BaseType:
             return other
         return None
 
-    def explicit_from(self, from_type):
-        """
-        Return `self` if the type can be explicitly converted from `other`.
-        None otherwise.
-        """
-        return from_type.implicit_to(self)
-
     def hashable(self):
         """
         Returns whether the type can be hashed.

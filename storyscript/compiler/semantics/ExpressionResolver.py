@@ -78,6 +78,7 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         assert tree.child(1).data == 'as_operator'
         # check for compatibility
         t = self.visitor.types(tree.child(1).types)
+        tree.expect(t.type() != ObjectType.instance(), 'object_no_as')
         tree.expect(explicit_cast(expr.type(), t.type()),
                     'type_operation_cast_incompatible',
                     left=expr.type(), right=t.type())

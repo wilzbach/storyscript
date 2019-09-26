@@ -195,8 +195,8 @@ implicit_assigns = {
                            'any', 'Map[float,string]', 'Map[string,float]',
                            'Map[string,int]'],
     'none': [],
-    'object': ['object', 'any', 'string'],
-    'any': [k for k in all_types.keys() if k != 'none'],
+    'object': ['any', 'string'],
+    'any': [k for k in all_types.keys() if k != 'none' and k != 'object'],
 }
 
 
