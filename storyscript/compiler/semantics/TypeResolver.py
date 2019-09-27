@@ -196,10 +196,22 @@ class TypeResolver(ScopeSelectiveVisitor):
             listener_name = self.service_block_output.child(0).value
 
         event_name = event_node.child(0).value
+
+        if self.service_block_output is not None:
+            service_output_name = self.service_block_output.child(0).value
+            # If when is nested in service block, it should be listening to
+            # events defined for actions in that service only.
+            tree.expect(listener_name == service_output_name,
+                        'event_not_defined',
+                        event=event_name, output=listener_name)
+
         listener_sym = scope.resolve(listener_name)
-        tree.expect(listener_sym is not None,
-                    'event_not_defined',
-                    event=event_name, output=listener_name)
+        tree.expect(
+            listener_sym is not None and
+            isinstance(listener_sym.type(), ObjectType) and
+            listener_sym.type().object() is not None,
+            'event_not_defined',
+            event=event_name, output=listener_name)
         listener = listener_sym.type().object()
         args = self.resolver.build_arguments(
             tree.service.service_fragment,
