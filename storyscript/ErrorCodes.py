@@ -292,6 +292,10 @@ class ErrorCodes:
         'E0154',
         'Type cast to `object` is not allowed.'
     )
+    object_expect_action = (
+        'E0155',
+        'Service object expected but existing variable `{var}` found.'
+    )
 
     @staticmethod
     def is_error(error_name):

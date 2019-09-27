@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from storyhub.sdk.service.Action import Action as ServiceAction
+
 from storyscript.compiler.semantics.types.Types import BooleanType, \
     NoneType, ObjectType, StringType
 from storyscript.exceptions import expect
@@ -212,7 +214,10 @@ class TypeResolver(ScopeSelectiveVisitor):
             listener_sym.type().object() is not None,
             'event_not_defined',
             event=event_name, output=listener_name)
+
         listener = listener_sym.type().object()
+        tree.expect(isinstance(listener, ServiceAction),
+                    'object_expect_action', var=listener_name)
         args = self.resolver.build_arguments(
             tree.service.service_fragment,
             fname=event_name,
