@@ -3,21 +3,28 @@ import io
 import os
 
 from lark.exceptions import UnexpectedInput, UnexpectedToken
+from lark.lexer import Token
 
 from pytest import fixture, mark, raises
 
 import storyscript.Story as StoryModule
-from storyscript.Story import Story
+from storyscript.Story import Story, StoryContext
 from storyscript.compiler import Compiler
 from storyscript.compiler.lowering.Lowering import Lowering
 from storyscript.compiler.pretty.PrettyPrinter import PrettyPrinter
 from storyscript.exceptions import CompilerError, StoryError, StorySyntaxError
 from storyscript.parser import Parser
+from storyscript.parser.Tree import Tree
 
 
 @fixture
 def story():
     return Story('story', features=None)
+
+
+@fixture
+def storycontext():
+    return StoryContext(features=None)
 
 
 @fixture
@@ -223,3 +230,18 @@ def test_story_process_parser(patch, story, parser):
     story.parse.assert_called_with(parser=parser)
     story.compile.assert_called_with()
     assert result == story.compiled
+
+
+def test_storycontext_deprecate(patch, storycontext):
+    patch.object(StoryModule, 'deprecate', side_effect=['d1', 'd2'])
+    tree = Tree('foo', [])
+    storycontext.deprecate(tree, 'deprecation_1')
+    StoryModule.deprecate.assert_called_with(
+        tree=tree, name='deprecation_1')
+
+    token = Token('NAME', 'bar')
+    storycontext.deprecate(token, 'deprecation_2')
+    StoryModule.deprecate.assert_called_with(
+        token=token, name='deprecation_2')
+
+    assert storycontext.deprecations() == ['d1', 'd2']
