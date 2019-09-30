@@ -12,6 +12,7 @@ from .compiler.lowering import Lowering
 from .compiler.pretty.PrettyPrinter import PrettyPrinter
 from .exceptions import CompilerError, StoryError, StorySyntaxError
 from .exceptions.Deprecation import deprecate
+from .exceptions.DeprecationMessage import DeprecationMessage
 from .parser import Parser
 from .parser.Tree import Tree
 
@@ -180,3 +181,11 @@ class Story:
             i = int(i)
         assert i <= len(self.lines)
         return self.lines[i - 1]
+
+    def deprecations(self):
+        """
+        Returns a list of deprecations after wrapping it in
+        DeprecationMessage which will provide nicely formatted messages.
+        """
+        return [DeprecationMessage(d, self)
+                for d in self.context.deprecations()]

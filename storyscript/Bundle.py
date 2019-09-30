@@ -139,7 +139,7 @@ class Bundle:
             story.parse(parser=parser)
             story.compile()
             self.stories[storypath] = story.compiled.output()
-            self.deprecations[storypath] = story.context.deprecations()
+            self.deprecations[storypath] = story.deprecations()
 
     def bundle(self, ebnf=None):
         """
