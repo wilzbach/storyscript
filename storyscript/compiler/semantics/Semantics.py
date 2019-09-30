@@ -15,7 +15,7 @@ class Semantics:
     Performs semantic analysis on the AST
     """
 
-    def __init__(self, story_context):
+    def __init__(self, storycontext):
         root_scope = Scope.root()
         service_typing = ServiceTyping()
 
@@ -24,9 +24,7 @@ class Semantics:
             function_table=FunctionTable(),
             mutation_table=MutationTable.init(),
             root_scope=root_scope,
-            # TODO: replace features accesses
-            features=story_context.features,
-            story_context=story_context,
+            storycontext=storycontext,
             service_typing=service_typing,
         )
 
