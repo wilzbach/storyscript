@@ -40,9 +40,9 @@ class WarningDeprecation(Diagnostics):
         """
         Creates the header of the message
         """
-        name = self.story.name()
+        name = self.story.name
         if self.with_color:
-            name = click.style(self.story.name(), bold=True)
+            name = click.style(self.story.name, bold=True)
         text = f'Warning: deprecation warning in ' \
             f'{name} at line {self.int_line()}'
         if self.column != 'None':

@@ -52,8 +52,9 @@ class Story:
         self.path = path
         self.lines = story.splitlines(keepends=False)
         self.context = StoryContext(story=self, features=features)
+        self.name = self.extract_name()
 
-    def name(self):
+    def extract_name(self):
         """
         Extracts the name of the story from the path.
         """

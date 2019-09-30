@@ -43,6 +43,27 @@ def test_story_init_path():
     assert story.path == 'path'
 
 
+def test_story_name(story):
+    assert story.extract_name() == 'story'
+    assert story.name == 'story'
+
+
+def test_story_name_path(patch, story):
+    patch.object(os, 'getcwd', return_value='/abspath')
+    story.path = 'hello.story'
+    assert story.extract_name() == 'hello.story'
+
+
+def test_story_name_reduce_path(patch, story):
+    """
+    Ensures that paths are simplified for stories in the current working
+    directory.
+    """
+    patch.object(os, 'getcwd', return_value='/abspath')
+    story.path = '/abspath/hello.story'
+    assert story.extract_name() == 'hello.story'
+
+
 def test_story_read(patch):
     """
     Ensures Story.read can read a story

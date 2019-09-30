@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
-
 import click
 
 from lark.exceptions import UnexpectedCharacters, UnexpectedToken
@@ -26,17 +24,6 @@ class StoryError(SyntaxError):
         self.with_color = True
         self.tabwidth = 2
 
-    def name(self):
-        """
-        Extracts the name of the story from the path.
-        """
-        if self.path:
-            working_directory = os.getcwd()
-            if self.path.startswith(working_directory):
-                return self.path[len(working_directory) + 1:]
-            return self.path
-        return 'story'
-
     def int_line(self):
         """
         Gets the error line as an integer
@@ -57,9 +44,9 @@ class StoryError(SyntaxError):
         """
         Creates the header of the message
         """
-        name = self.name()
+        name = self.story.name
         if self.with_color:
-            name = click.style(self.name(), bold=True)
+            name = click.style(self.story.name, bold=True)
         text = f'Error: syntax error in {name} at line {self.int_line()}'
         if self.error.column != 'None':
             text += f', column {self.error.column}'
