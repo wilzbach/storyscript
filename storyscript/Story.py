@@ -5,13 +5,15 @@ from functools import lru_cache
 from bom_open import bom_open
 
 from lark.exceptions import UnexpectedInput, UnexpectedToken
+from lark.lexer import Token
 
 from .compiler import Compiler
 from .compiler.lowering import Lowering
 from .compiler.pretty.PrettyPrinter import PrettyPrinter
 from .exceptions import CompilerError, StoryError, StorySyntaxError
-from .exceptions.WarningDeprecation import WarningDeprecation
+from .exceptions.Deprecation import deprecate
 from .parser import Parser
+from .parser.Tree import Tree
 
 
 @lru_cache(maxsize=1)
@@ -27,14 +29,16 @@ class StoryContext:
     Represents context of a given story.
     """
 
-    def __init__(self, story, features):
-        self.story = story
+    def __init__(self, features):
         self.features = features
         self._deprecations = []
 
-    def deprecate(self, tree, name, **kwargs):
-        deprecation = WarningDeprecation.deprecate(
-            self.story, tree=tree, name=name)
+    def deprecate(self, tree_or_token, name, **kwargs):
+        if isinstance(tree_or_token, Tree):
+            deprecation = deprecate(name=name, tree=tree_or_token, **kwargs)
+        else:
+            assert isinstance(tree_or_token, Token)
+            deprecation = deprecate(name=name, token=tree_or_token, **kwargs)
         self._deprecations.append(deprecation)
 
     def deprecations(self):
@@ -51,7 +55,7 @@ class Story:
         self.story = story
         self.path = path
         self.lines = story.splitlines(keepends=False)
-        self.context = StoryContext(story=self, features=features)
+        self.context = StoryContext(features=features)
         self.name = self.extract_name()
 
     def extract_name(self):
