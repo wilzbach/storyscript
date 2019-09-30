@@ -120,9 +120,10 @@ class Api:
         """
         features = Features(features)
         try:
-            s, deprecations = Bundle(story_files=files,
-                                     features=features).bundle()
-            return StoryscriptCompilationResult.from_result(s, deprecations)
+            compiledbundle = Bundle(story_files=files,
+                                    features=features).bundle()
+            return StoryscriptCompilationResult.from_result(
+                compiledbundle.results, compiledbundle.deprecations)
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)
         except Exception as e:

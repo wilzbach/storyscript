@@ -46,13 +46,16 @@ def test_api_load_map(patch, magic):
     """
     patch.init(Bundle)
     patch.init(Features)
-    patch.object(Bundle, 'bundle', return_value=[magic(), magic()])
+    patch.object(Bundle, 'bundle')
     files = {'a.story': "import 'b' as b", 'b.story': 'x = 0'}
-    result = Api.load_map(files).result()
+    api_loaded = Api.load_map(files)
+    result = api_loaded.result()
+    deprecations = api_loaded.deprecations()
     Bundle.__init__.assert_called_with(story_files=files, features=ANY)
     assert isinstance(Bundle.__init__.call_args[1]['features'], Features)
     Bundle.bundle.assert_called()
-    assert result == Bundle.bundle()[0]
+    assert result == Bundle.bundle().results
+    assert deprecations == Bundle.bundle().deprecations
 
 
 def test_api_loads_internal_error(patch):

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from collections import namedtuple
 from functools import lru_cache
 
 from bom_open import bom_open
@@ -15,6 +16,9 @@ from .exceptions.Deprecation import deprecate
 from .exceptions.DeprecationMessage import DeprecationMessage
 from .parser import Parser
 from .parser.Tree import Tree
+
+
+Compiled = namedtuple('Compiled', ['results', 'deprecations'])
 
 
 @lru_cache(maxsize=1)

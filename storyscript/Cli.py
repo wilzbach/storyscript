@@ -150,13 +150,14 @@ class Cli:
         Compiles stories and validates syntax
         """
         try:
-            results, deprecations = App.compile(path, ignored_path=ignore,
-                                                ebnf=ebnf, concise=concise,
-                                                first=first, features=preview)
+            compiledstories = App.compile(path, ignored_path=ignore,
+                                          ebnf=ebnf, concise=concise,
+                                          first=first, features=preview)
+            results = compiledstories.results
             if not silent:
-                for fn, deprecation in deprecations.items():
-                    if deprecation:
-                        for d in deprecation:
+                for fn, deprecations in compiledstories.deprecations.items():
+                    if deprecations:
+                        for d in deprecations:
                             click.echo(click.style(d.message(), fg='yellow'))
                 if json:
                     if output:

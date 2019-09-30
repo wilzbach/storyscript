@@ -4,23 +4,15 @@ import json
 from pytest import fixture, raises
 
 import storyscript.App as AppModule
-from storyscript.App import App
+from storyscript.App import App, Compiled
 from storyscript.Bundle import Bundle
 from storyscript.exceptions import StoryError
 from storyscript.parser import Grammar
 
 
 @fixture
-def deprecation(magic):
-    return magic()
-
-
-@fixture
-def bundle(patch, magic, deprecation):
-    patch.many(Bundle, ['from_path', 'bundle_trees', 'lex'])
-    patch.object(Bundle, 'bundle', return_value=[magic(), deprecation])
-    patch.object(Bundle.from_path(), 'bundle',
-                 return_value=[magic(), deprecation])
+def bundle(patch):
+    patch.many(Bundle, ['from_path', 'bundle_trees', 'bundle', 'lex'])
 
 
 def test_app_parse(bundle):
@@ -64,26 +56,32 @@ def test_app_parse_lower(patch, bundle, magic):
     assert result == Bundle.from_path().bundle_trees(story)
 
 
-def test_app_compile(patch, bundle, deprecation):
+def test_app_compile(patch, bundle):
     patch.object(json, 'dumps')
     result = App.compile('path')
     Bundle.from_path.assert_called_with('path', ignored_path=None,
                                         features=None)
     Bundle.from_path().bundle.assert_called_with(ebnf=None)
-    json.dumps.assert_called_with(Bundle.from_path().bundle()[0], indent=2)
-    assert result == (json.dumps(), deprecation)
+    json.dumps.assert_called_with(
+        Bundle.from_path().bundle().results, indent=2)
+    assert result == Compiled(
+        results=json.dumps(),
+        deprecations=Bundle.from_path().bundle().deprecations)
 
 
-def test_app_compile_concise(patch, bundle, deprecation):
+def test_app_compile_concise(patch, bundle):
     patch.object(json, 'dumps')
     patch.object(AppModule, '_clean_dict')
     result = App.compile('path', concise=True)
     Bundle.from_path.assert_called_with('path', ignored_path=None,
                                         features=None)
     Bundle.from_path().bundle.assert_called_with(ebnf=None)
-    AppModule._clean_dict.assert_called_with(Bundle.from_path().bundle()[0])
+    AppModule._clean_dict.assert_called_with(
+        Bundle.from_path().bundle().results)
     json.dumps.assert_called_with(AppModule._clean_dict(), indent=2)
-    assert result == (json.dumps(), deprecation)
+    assert result == Compiled(
+        results=json.dumps(),
+        deprecations=Bundle.from_path().bundle().deprecations)
 
 
 def test_app_compile_ignored_path(patch, bundle):
@@ -106,10 +104,9 @@ def test_app_compile_first(patch, bundle):
     """
     Ensures that the App only returns the first story
     """
-    Bundle.from_path().bundle.return_value = [
-        {'stories': {'my_story': 42}},
-        {'my_story': []}
-    ]
+    Bundle.from_path().bundle.return_value = Compiled(
+        results={'stories': {'my_story': 42}},
+        deprecations={'my_story': []})
     patch.object(json, 'dumps')
     result = App.compile('path', first=True)
     Bundle.from_path.assert_called_with('path', ignored_path=None,
@@ -123,12 +120,12 @@ def test_app_compile_first_error(patch, bundle):
     """
     Ensures that the App throws an error for --first with more than one story
     """
-    Bundle.from_path().bundle.return_value = [
-        {'stories': {
+    Bundle.from_path().bundle.return_value = Compiled(
+        results={'stories': {
             'my_story': 42, 'another_story': 43,
         }},
-        {'my_story': [], 'another_story': []}
-    ]
+        deprecations={'my_story': [], 'another_story': []}
+    )
     patch.object(json, 'dumps')
     with raises(StoryError) as e:
         App.compile('path', first=True)

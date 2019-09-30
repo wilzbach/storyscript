@@ -3,7 +3,7 @@ import os
 import subprocess
 
 from .Features import Features
-from .Story import Story
+from .Story import Compiled, Story
 from .parser import Parser
 
 
@@ -148,8 +148,10 @@ class Bundle:
         entrypoint = self.find_stories()
         parser = self.parser(ebnf)
         self.compile(entrypoint, parser=parser)
-        return {'stories': self.stories, 'services': self.services(),
-                'entrypoint': entrypoint}, self.deprecations
+        return Compiled(
+            results={'stories': self.stories, 'services': self.services(),
+                     'entrypoint': entrypoint},
+            deprecations=self.deprecations)
 
     def bundle_trees(self, ebnf=None, lower=False):
         """
