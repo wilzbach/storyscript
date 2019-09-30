@@ -82,7 +82,7 @@ class Api:
         try:
             story = Story(string, features)
             s = story.process()
-            deprecations = story.context.get_deprecations()
+            deprecations = story.context.deprecations()
             return StoryscriptCompilationResult.from_result(s, deprecations)
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)
@@ -102,7 +102,7 @@ class Api:
         try:
             story = Story.from_stream(stream, features).process()
             s = {stream.name: story, 'services': story['services']}
-            deprecations = {stream.name: story.context.get_deprecations()}
+            deprecations = {stream.name: story.context.deprecations()}
             return StoryscriptCompilationResult.from_result(s, deprecations)
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)

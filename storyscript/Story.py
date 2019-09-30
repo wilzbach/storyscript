@@ -30,15 +30,15 @@ class StoryContext:
     def __init__(self, story, features):
         self.story = story
         self.features = features
-        self.deprecations = []
+        self._deprecations = []
 
     def deprecate(self, tree, name, **kwargs):
         deprecation = WarningDeprecation.deprecate(
             self.story, tree=tree, name=name)
-        self.deprecations.append(deprecation)
+        self._deprecations.append(deprecation)
 
-    def get_deprecations(self):
-        return self.deprecations
+    def deprecations(self):
+        return self._deprecations
 
 
 class Story:
