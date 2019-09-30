@@ -11,7 +11,7 @@ class StoryscriptCompilationResult:
     Contains the compiled story or a list of compilation errors.
     """
 
-    def __init__(self, result, errors, deprecations=[]):
+    def __init__(self, result, errors, deprecations):
         self._result = result
         self._errors = errors
         self._deprecations = deprecations
@@ -29,7 +29,7 @@ class StoryscriptCompilationResult:
         """
         Creates a CompilationResult from a single error.
         """
-        return cls(None, errors=[error])
+        return cls(None, errors=[error], deprecations=[])
 
     def result(self):
         """
