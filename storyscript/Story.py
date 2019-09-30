@@ -101,7 +101,7 @@ class Story:
         """
         Handles errors by wrapping the real error in a smart StoryError
         """
-        return StoryError(error, self, path=self.path)
+        return StoryError(error, self)
 
     def parse(self, parser, lower=False, allow_single_quotes=False):
         """

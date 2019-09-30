@@ -25,14 +25,8 @@ def storyerror(error, magic):
 def test_storyerror_init(storyerror, error):
     assert storyerror.error == error
     assert storyerror.story is not None
-    assert storyerror.path is None
     assert storyerror.error_tuple is None
     assert issubclass(StoryError, SyntaxError)
-
-
-def test_storyerror_init_path():
-    storyerror = StoryError('error', 'story', path='hello.story')
-    assert storyerror.path == 'hello.story'
 
 
 def test_storyerror_int_line(patch, storyerror, error):
