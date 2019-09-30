@@ -31,12 +31,19 @@ features = {'globals': True}
 
 
 # compile a story and compare its tree with the expected tree
-def run_test_story(source, expected_story, features):
+def run_test_story(source, expected_story, features, expected_deprecation):
     s = Api.loads(source, features)
     s.check_success()
     result = _clean_dict(s.result().output())
     del result['version']
     assert expected_story == result
+
+    if expected_deprecation is not None:
+        deprecations = s.deprecations()
+        output_str = ''
+        for deprecation in deprecations:
+            output_str += deprecation.message()
+        assert expected_deprecation.strip() == unstyle(output_str).strip()
 
 
 # compile a story which should fail and compare its output text with the
@@ -70,9 +77,14 @@ def run_test(story_path):
         with io.open(expected_path + '.json', 'r') as f:
             expected_story = f.read()
 
+        expected_deprecation = None
+        if path.isfile(expected_path + '.output'):
+            with io.open(expected_path + '.output', 'r') as f:
+                expected_deprecation = f.read()
         # deserialize the expected story
         expected_story = json.loads(expected_story)
-        return run_test_story(story_string, expected_story, parsed_features)
+        return run_test_story(story_string, expected_story,
+                              parsed_features, expected_deprecation)
 
     if path.isfile(expected_path + '.error'):
         expected_output = None
