@@ -3,11 +3,7 @@
 from os import path
 import sys
 
-
-sys.path.insert(
-    0, path.dirname(path.dirname(path.dirname(path.realpath(__file__)))))
-
-from tests.e2e.utils.StoryscriptHubFixture import StoryscriptHubFixture
+from storyhub.sdk.ServiceWrapper import ServiceWrapper
 
 
 services = [
@@ -26,4 +22,7 @@ services = [
     'yaml'
 ]
 
-StoryscriptHubFixture.update_hub_fixtures(services)
+hub_fixtures_file = path.join(path.dirname(path.realpath(__file__)),
+                              'hub_fixture.json.fixed')
+
+ServiceWrapper(services).as_json_file(hub_fixtures_file)

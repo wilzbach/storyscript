@@ -22,7 +22,7 @@ class ServiceTyping:
         retrieve service data for a given service name and return it
         after doing a check for its existence.
         """
-        service_data = self.hub.get(service_name, wrap_service=True)
+        service_data = self.hub.get(service_name)
         tree.expect(service_data is not None,
                     'service_not_found', name=service_name)
         return service_data
