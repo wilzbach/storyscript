@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 2
+
+1|    (http server)
+       ^^^^^^^^^^^
+
+E0156: Event based action `server` of service `http` cannot be used in expressions.

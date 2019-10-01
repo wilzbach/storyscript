@@ -296,6 +296,11 @@ class ErrorCodes:
         'E0155',
         'Service object expected but existing variable `{var}` found.'
     )
+    expression_no_event = (
+        'E0156',
+        'Event based action `{action}` of service `{service}` cannot be used '
+        'in expressions.'
+    )
 
     @staticmethod
     def is_error(error_name):
