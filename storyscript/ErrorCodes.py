@@ -301,6 +301,11 @@ class ErrorCodes:
         'Event based action `{action}` of service `{service}` cannot be used '
         'in expressions.'
     )
+    service_event_expected = (
+        'E0157',
+        'Event based action expected but action `{action}` of service '
+        '`{service}` found.'
+    )
 
     @staticmethod
     def is_error(error_name):
