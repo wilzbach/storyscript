@@ -5,7 +5,6 @@ from storyscript.compiler.semantics.types.Types import NoneType
 from storyscript.exceptions import CompilerError
 
 from .ExpressionResolver import ExpressionResolver
-from .SymbolResolver import SymbolResolver
 
 
 class ReturnVisitor:
@@ -14,7 +13,7 @@ class ReturnVisitor:
     """
     def __init__(self, return_type, module):
         self.return_type = return_type
-        self.symbol_resolver = SymbolResolver(scope=None)
+        self.module = module
         self.resolver = ExpressionResolver(module=module)
 
     def has_return(self, tree):
@@ -43,7 +42,7 @@ class ReturnVisitor:
 
     def return_statement(self, tree, scope):
         assert tree.data == 'return_statement'
-        self.symbol_resolver.update_scope(scope)
+        self.module.symbol_resolver.update_scope(tree.scope)
         obj = tree.base_expression
         if obj is None:
             return base_symbol(NoneType.instance()), tree
@@ -79,5 +78,7 @@ class ReturnVisitor:
 
     @classmethod
     def check(cls, tree, scope, return_type, module):
+        # NOTE: ReturnVisitor updates the module.symbol_resolver scope
+        # and depends upon the caller to restore old scope when this returns.
         rv = ReturnVisitor(return_type, module)
         rv.function_block(tree, scope)
