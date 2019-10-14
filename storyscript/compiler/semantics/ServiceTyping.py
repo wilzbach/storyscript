@@ -68,6 +68,8 @@ class ServiceTyping:
         self.check_action_args(tree, action, args, service_name, action_name)
 
         if nested_block:
+            tree.expect(action.events() != [], 'service_event_expected',
+                        service=service_name, action=action_name)
             return ObjectType(obj=action)
         else:
             tree.expect(action.events() == [], 'expression_no_event',

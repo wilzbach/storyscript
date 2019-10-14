@@ -270,7 +270,7 @@ class TypeResolver(ScopeSelectiveVisitor):
                 service_name,
                 action_name,
                 args,
-                nested_block=True
+                nested_block=tree.nested_block is not None
             )
         else:
             output_type = self.module.service_typing. \
