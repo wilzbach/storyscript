@@ -1,0 +1,12 @@
+jobs:
+  include:
+    - os: windows
+      language: bash
+      before_install:
+        - choco install python --version 3.7
+      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+
+install: pip install tox-travis
+script:
+  - tox -e unit
+  - tox -e integration
