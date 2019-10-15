@@ -1,0 +1,31 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "11",
+      "output": [
+        "List"
+      ],
+      "function": "foo",
+      "enter": "2",
+      "src": "function foo returns List[int]"
+    },
+    "2": {
+      "method": "return",
+      "ln": "2",
+      "col_start": "5",
+      "col_end": "16",
+      "args": [
+        null
+      ],
+      "parent": "1",
+      "src": "    return null"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "foo": "1"
+  }
+}

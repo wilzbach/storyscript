@@ -83,8 +83,9 @@ def runner(source, op=None, allowed=None, pre=''):
     if any(allowed_fn(op) for allowed_fn in allowed):
         s.check_success()
     else:
-        e = s.errors()[0]
-        assert isinstance(e.error, CompilerError)
+        errors = s.errors()
+        assert len(errors) == 1, f'Error expected for `{source}`'
+        assert isinstance(errors[0].error, CompilerError)
 
 
 ###############################################################################
@@ -304,6 +305,55 @@ def test_int_string_ops(source, op):
 def test_string_string_ops(source, op):
     runner(source, op, allowed=[is_equal, is_sum, is_cmp])
 
+###############################################################################
+# Test operations on NullType
+###############################################################################
+
+
+@mark.parametrize('source,op', op_builder('null', 'null'))
+def test_null_null_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', 'true', swapped=True))
+def test_null_boolean_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', '2', swapped=True))
+def test_null_int_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', '2.5', swapped=True))
+def test_null_float_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', '"."', swapped=True))
+def test_null_string_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', '[1]', swapped=True))
+def test_null_list_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', '{"a": 1}', swapped=True))
+def test_null_obj_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', '1m', swapped=True))
+def test_null_time_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', 're', swapped=True))
+def test_null_regex_ops(source, op):
+    runner(source, op, allowed=[is_equal], pre='re=/foo/\n')
+
 
 ###############################################################################
 # Test operations on AnyType
@@ -355,3 +405,8 @@ def test_any_time_ops(source, op):
 @mark.parametrize('source,op', op_builder('any_var', 're', swapped=True))
 def test_any_regex_ops(source, op):
     runner(source, op, allowed=[], pre=ANY + 're=/foo/\n')
+
+
+@mark.parametrize('source,op', op_builder('any_var', 'null', swapped=True))
+def test_any_null_ops(source, op):
+    runner(source, op, allowed=[], pre=ANY)

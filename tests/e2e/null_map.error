@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 5
+
+3|    c = b[a]
+          ^^^
+
+E0104: `Map[any,any]` can't be indexed with `a` of type `null`

@@ -5,7 +5,7 @@ from pytest import mark, raises
 
 from storyscript.compiler.semantics.types.Types import AnyType, \
     BaseType, BooleanType, FloatType, IntType, ListType, MapType, \
-    NoneType, ObjectType, RegExpType, StringType, singleton
+    NoneType, NullType, ObjectType, RegExpType, StringType, singleton
 from storyscript.hub.TypeMappings import TypeMappings
 
 
@@ -32,6 +32,7 @@ def test_singleton():
     (ListType(AnyType.instance()), 'List[any]'),
     (MapType(IntType.instance(), StringType.instance()),
         'Map[int,string]'),
+    (NullType.instance(), 'null'),
 ])
 def test_boolean_str(type_, expected):
     assert str(type_) == expected

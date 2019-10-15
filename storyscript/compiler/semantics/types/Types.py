@@ -110,11 +110,15 @@ class BaseType:
         """
         if other == AnyType.instance():
             return None
+        if other == NullType.instance():
+            return self
         return implicit_cast(self, other)
 
     def can_be_assigned(self, other):
         if other == AnyType.instance():
             return None
+        if other == NullType.instance():
+            return self
         return other.implicit_to(self)
 
     def implicit_to(self, other):
@@ -311,6 +315,8 @@ class FloatType(BaseType):
         """
         Returns True if the type can perform equality comparison with `other`,
         """
+        if other == NullType.instance():
+            return self
         return False
 
 
@@ -624,6 +630,58 @@ class ObjectType(BaseType):
         Returns a static instance of the ObjectType
         """
         return ObjectType()
+
+
+class NullType(BaseType):
+    """
+    Represents a special type for `null`. It behaves similar to 'any', but
+    allows equivalence comparisons.
+    """
+
+    def __str__(self):
+        return 'null'
+
+    def __eq__(self, other):
+        return isinstance(other, NullType)
+
+    def can_be_assigned(self, other):
+        return True
+
+    def index(self, other, kind):
+        return None
+
+    @singleton
+    def instance():
+        """
+        Returns a static instance of the NullType.
+        """
+        return NullType()
+
+    def has_boolean(self):
+        return False
+
+    def cmp(self, other):
+        return False
+
+    def equal(self, other):
+        if isinstance(other, NullType):
+            return self
+        # only possible if the other type allows comparison with null
+        return other.equal(self)
+
+    def hashable(self):
+        return False
+
+    def op(self, op):
+        return None
+
+    def implicit_to(self, other):
+        return None
+
+    def explicit_from(self, other):
+        if other != NoneType.instance():
+            return self
+        return None
 
 
 class AnyType(BaseType):
