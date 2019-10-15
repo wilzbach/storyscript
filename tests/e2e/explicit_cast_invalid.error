@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 5
 
 2|    c = t to Map[float,float]
-          ^^^^^^^^^^^^^^
+          ^^^^^^^^^^^^^^^^^^^^
 
 E0126: Type casting not supported from `Map[time,time]` to `Map[float,float]`.

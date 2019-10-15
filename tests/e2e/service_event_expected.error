@@ -1,6 +1,6 @@
 Error: syntax error in story at line 1, column 1
 
 1|    gmaps geocode address: "foo" as g
-      ^^^^^^^^^^^^^
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 E0157: Event based action expected but action `geocode` of service `gmaps` found.

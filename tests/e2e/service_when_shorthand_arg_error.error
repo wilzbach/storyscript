@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 10
 
 2|        when server listen :"path"
-               
+               ^^^^
 
 E0142: Event action `server` has no event `server`.

@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 7
+Error: syntax error in story at line 2, column 16
 
 2|    b = a.contains(pattern: 2)
-            ^^^^^^^^^^^^^^^^
+                     ^^^^^^^^^^
 
-E0115: Mutation `contains` requires argument `pattern` to be of `regexp`, not `int`
+E0115: Mutation `contains` requires argument `pattern` to be of type `regexp`, not `int`

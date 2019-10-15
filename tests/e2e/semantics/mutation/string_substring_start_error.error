@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 7
+Error: syntax error in story at line 2, column 17
 
 2|    b = a.substring(start: "1")
-            ^^^^^^^^^^^^^^^
+                      ^^^^^^^^^^
 
-E0115: Mutation `substring` requires argument `start` to be of `int`, not `string`
+E0115: Mutation `substring` requires argument `start` to be of type `int`, not `string`

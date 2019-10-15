@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1
+Error: syntax error in story at line 1, column 31
 
 1|    a = 1.5.approxEqual(value: 1).sqrt()
-      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                    ^^^^
 
 E0117: Invalid mutation `sqrt`
