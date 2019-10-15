@@ -51,7 +51,7 @@ class Grammar:
         self.ebnf._DEDENT = '<DEDENT>'
         self.ebnf.TRUE = 'true'
         self.ebnf.FALSE = 'false'
-        self.ebnf.NULL = 'null'
+        self.ebnf.NULL_CONSTANT = 'null'
         self.ebnf.set_token('RAW_INT.2', r'/[0-9]+/')
         self.ebnf.set_token('INT.2', '("+"|"-")? RAW_INT')
         self.ebnf.set_token('FLOAT.2', '("+"|"-")? INT "." RAW_INT? | '
@@ -68,7 +68,7 @@ class Grammar:
         self.ebnf._OP = '('
         self.ebnf._CP = ')'
         self.ebnf.boolean = 'true, false'
-        self.ebnf.void = 'null'
+        self.ebnf.null = 'null_constant'
         self.ebnf.number = 'int, float'
         self.ebnf.time = 'raw_time'
 
@@ -86,7 +86,7 @@ class Grammar:
         self.ebnf.inline_expression = ('op inline_service cp, '
                                        'call_expression')
         self.ebnf.value_fragment = 'osb expression csb'
-        values = ('number, string, boolean, void, (list|map) value_fragment*, '
+        values = ('number, string, boolean, null, (list|map) value_fragment*, '
                   'regular_expression, time')
         self.ebnf.values = values
 

@@ -426,8 +426,8 @@ class ExpressionResolver:
             elif subtree.data == 'regular_expression':
                 return self.regular_expression(subtree)
             else:
-                assert subtree.data == 'void'
                 return base_symbol(AnyType.instance())
+                assert subtree.data == 'null'
 
         assert subtree.type == 'NAME'
         return self.path(tree)
