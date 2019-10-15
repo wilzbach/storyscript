@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "8",
       "name": [
         "l"
       ],
@@ -26,7 +26,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "i"
       ],
@@ -43,7 +43,7 @@
       "method": "mutation",
       "ln": "3.1",
       "col_start": "7",
-      "col_end": "8",
+      "col_end": "24",
       "name": [
         "__p-3.1"
       ],
@@ -74,7 +74,7 @@
     "3": {
       "method": "while",
       "ln": "3",
-      "col_end": "8",
+      "col_end": "29",
       "args": [
         {
           "$OBJECT": "path",
@@ -90,7 +90,7 @@
       "method": "execute",
       "ln": "4",
       "col_start": "5",
-      "col_end": "13",
+      "col_end": "29",
       "service": "log",
       "command": "info",
       "args": [

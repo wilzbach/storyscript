@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "12",
       "name": [
         "d"
       ],
@@ -32,7 +32,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "7",
+      "col_end": "14",
       "name": [
         "list"
       ],
@@ -58,7 +58,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "1",
-      "col_end": "2",
+      "col_end": "44",
       "args": [
         {
           "$OBJECT": "expression",

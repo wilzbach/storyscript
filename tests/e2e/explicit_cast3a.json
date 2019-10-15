@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "13",
       "name": [
         "arr"
       ],
@@ -30,7 +30,7 @@
       "method": "mutation",
       "ln": "2.1",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "15",
       "name": [
         "__p-2.1"
       ],
@@ -53,7 +53,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "21",
       "name": [
         "a"
       ],

@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "7",
       "name": [
         "a"
       ],
@@ -21,7 +21,7 @@
       "method": "for",
       "ln": "3",
       "col_start": "10",
-      "col_end": "6",
+      "col_end": "14",
       "output": [
         "k",
         "v"
@@ -50,7 +50,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "14",
       "name": [
         "a"
       ],

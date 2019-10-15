@@ -4,7 +4,7 @@
       "method": "execute",
       "ln": "1.1",
       "col_start": "10",
-      "col_end": "21",
+      "col_end": "47",
       "name": [
         "__p-1.1"
       ],
@@ -33,7 +33,7 @@
     "1": {
       "method": "for",
       "ln": "1",
-      "col_end": "12",
+      "col_end": "80",
       "output": [
         "item"
       ],
@@ -52,7 +52,7 @@
       "method": "execute",
       "ln": "2",
       "col_start": "5",
-      "col_end": "17",
+      "col_end": "80",
       "service": "mailgun",
       "command": "send",
       "args": [

@@ -43,7 +43,7 @@
       "method": "when",
       "ln": "4",
       "col_start": "10",
-      "col_end": "21",
+      "col_end": "15",
       "output": [
         "tweet"
       ],
@@ -77,7 +77,7 @@
       "method": "when",
       "ln": "6",
       "col_start": "10",
-      "col_end": "21",
+      "col_end": "41",
       "output": [
         "t"
       ],
@@ -110,7 +110,7 @@
       "method": "execute",
       "ln": "9",
       "col_start": "1",
-      "col_end": "15",
+      "col_end": "20",
       "output": [
         "s"
       ],
@@ -147,7 +147,7 @@
       "method": "when",
       "ln": "12",
       "col_start": "10",
-      "col_end": "17",
+      "col_end": "22",
       "output": [
         "t"
       ],
@@ -205,7 +205,7 @@
       "method": "when",
       "ln": "16",
       "col_start": "10",
-      "col_end": "17",
+      "col_end": "43",
       "output": [
         "t"
       ],

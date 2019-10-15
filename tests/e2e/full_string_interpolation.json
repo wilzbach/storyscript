@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "17",
+      "col_end": "43",
       "name": [
         "repo_full_name"
       ],
@@ -21,7 +21,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "15",
+      "col_end": "29",
       "name": [
         "pull_request"
       ],
@@ -48,6 +48,7 @@
     "3.1": {
       "method": "expression",
       "ln": "3.1",
+      "col_end": "35",
       "name": [
         "__p-3.1"
       ],
@@ -69,7 +70,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "86",
       "name": [
         "diff_url"
       ],

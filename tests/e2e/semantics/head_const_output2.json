@@ -14,7 +14,7 @@
       "method": "when",
       "ln": "1",
       "col_start": "11",
-      "col_end": "24",
+      "col_end": "57",
       "output": [
         "res"
       ],
@@ -46,7 +46,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "8",
-      "col_end": "17",
+      "col_end": "26",
       "name": [
         "comment"
       ],
@@ -70,7 +70,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "8",
-      "col_end": "17",
+      "col_end": "31",
       "name": [
         "comment"
       ],

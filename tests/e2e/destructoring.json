@@ -3,6 +3,7 @@
     "1.1": {
       "method": "expression",
       "ln": "1.1",
+      "col_end": "29",
       "name": [
         "__p-1.1"
       ],
@@ -39,7 +40,7 @@
       "method": "expression",
       "ln": "1.2",
       "col_start": "3",
-      "col_end": "11",
+      "col_end": "4",
       "name": [
         "a"
       ],
@@ -61,7 +62,7 @@
       "method": "expression",
       "ln": "1.3",
       "col_start": "6",
-      "col_end": "11",
+      "col_end": "7",
       "name": [
         "b"
       ],

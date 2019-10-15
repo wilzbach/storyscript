@@ -41,7 +41,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "1",
-      "col_end": "5",
+      "col_end": "7",
       "name": [
         "a1"
       ],
@@ -58,7 +58,7 @@
       "method": "expression",
       "ln": "5",
       "col_start": "1",
-      "col_end": "5",
+      "col_end": "7",
       "name": [
         "a2"
       ],

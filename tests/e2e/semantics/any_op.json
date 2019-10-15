@@ -4,7 +4,7 @@
       "method": "execute",
       "ln": "1",
       "col_start": "5",
-      "col_end": "18",
+      "col_end": "29",
       "name": [
         "a"
       ],
@@ -27,7 +27,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "12",
       "name": [
         "a"
       ],
@@ -56,7 +56,7 @@
       "method": "execute",
       "ln": "3",
       "col_start": "5",
-      "col_end": "18",
+      "col_end": "29",
       "name": [
         "b"
       ],
@@ -79,7 +79,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "12",
       "name": [
         "c"
       ],

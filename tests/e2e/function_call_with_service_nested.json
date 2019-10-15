@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "9",
+      "col_end": "12",
       "output": [
         "int"
       ],
@@ -32,7 +32,7 @@
       "method": "function",
       "ln": "4",
       "col_start": "1",
-      "col_end": "9",
+      "col_end": "12",
       "output": [
         "int"
       ],
@@ -100,7 +100,6 @@
       "method": "execute",
       "ln": "7.3",
       "col_start": "38",
-      "col_end": "52",
       "name": [
         "__p-7.3"
       ],
@@ -134,7 +133,7 @@
       "method": "call",
       "ln": "7.4",
       "col_start": "25",
-      "col_end": "85",
+      "col_end": "88",
       "name": [
         "__p-7.4"
       ],
@@ -165,7 +164,7 @@
       "method": "execute",
       "ln": "7",
       "col_start": "5",
-      "col_end": "19",
+      "col_end": "97",
       "name": [
         "b"
       ],

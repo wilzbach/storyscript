@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "9",
+      "col_end": "17",
       "name": [
         "colour"
       ],
@@ -21,7 +21,7 @@
       "method": "if",
       "ln": "2",
       "col_start": "4",
-      "col_end": "6",
+      "col_end": "10",
       "args": [
         {
           "$OBJECT": "expression",
@@ -47,7 +47,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "10",
       "name": [
         "x"
       ],
