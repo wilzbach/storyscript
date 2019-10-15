@@ -41,8 +41,9 @@ class BaseFunction:
                 tree.expect(0, 'function_arg_required', fn_type=self.fn_type,
                             name=self._name, arg=d)
             else:
-                tree.expect(0, 'function_arg_invalid', fn_type=self.fn_type,
-                            name=self._name, arg=d)
+                args[d][1].expect(0, 'function_arg_invalid',
+                                  fn_type=self.fn_type,
+                                  name=self._name, arg=d)
 
     def _check_arg_types(self, tree, args):
         """
@@ -52,8 +53,8 @@ class BaseFunction:
         for k, (sym, arg_node) in args.items():
             target = self._args[k].type()
             t = sym.type()
-            implicit_type_cast(tree, t, target,
-                               self.fn_type, self._name, k, arg_node)
+            implicit_type_cast(arg_node, t, target,
+                               self.fn_type, self._name, k)
 
     def output(self):
         return self._output
