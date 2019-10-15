@@ -5,7 +5,7 @@ from contextlib import contextmanager
 from lark.lexer import Token
 
 from storyscript.compiler.semantics.types.Types import AnyType, BaseType, \
-    BooleanType, FloatType, IntType, ListType, MapType, ObjectType, \
+    BooleanType, FloatType, IntType, ListType, MapType, NullType, ObjectType, \
     RegExpType, StringType, TimeType, explicit_cast
 from storyscript.compiler.visitors.ExpressionVisitor import ExpressionVisitor
 from storyscript.exceptions import CompilerError
@@ -426,8 +426,8 @@ class ExpressionResolver:
             elif subtree.data == 'regular_expression':
                 return self.regular_expression(subtree)
             else:
-                assert subtree.data == 'void'
-                return base_symbol(AnyType.instance())
+                assert subtree.data == 'null'
+                return base_symbol(NullType.instance())
 
         assert subtree.type == 'NAME'
         return self.path(tree)

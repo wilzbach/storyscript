@@ -1,0 +1,44 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        null
+      ],
+      "src": "a = null",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "string"
+          },
+          "value": {
+            "$OBJECT": "path",
+            "paths": [
+              "a"
+            ]
+          }
+        }
+      ],
+      "src": "b = \"{a}\""
+    }
+  },
+  "entrypoint": "1"
+}

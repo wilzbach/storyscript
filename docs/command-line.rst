@@ -10,7 +10,7 @@ The grammar command provides a simple way to check the current EBNF grammar::
    > storyscript grammar
    ...
     boolean: TRUE| FALSE
-    void: NULL
+    null: NULL
     number: INT| FLOAT
    ...
 

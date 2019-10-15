@@ -199,7 +199,7 @@ class Objects:
                 return self.regular_expression(subtree)
             elif subtree.data == 'types':
                 return self.types(subtree)
-            elif subtree.data == 'void':
+            elif subtree.data == 'null':
                 return 'null'
 
         return self.path(tree)

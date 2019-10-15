@@ -307,11 +307,11 @@ def test_objects_values(patch, magic, value_type):
     assert result == getattr(Objects, value_type)()
 
 
-def test_objects_values_void(patch, magic):
+def test_objects_values_null(patch, magic):
     """
-    Ensures Objects.values returns None when given a void value.
+    Ensures Objects.values returns None when given a null value.
     """
-    item = magic(data='void')
+    item = magic(data='null')
     tree = magic(child=lambda x: item)
     assert Objects().values(tree) is None
 

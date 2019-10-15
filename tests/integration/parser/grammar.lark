@@ -3,7 +3,7 @@ list_type: _LIST_KEYWORD OSB types CSB
 map_type: _MAP_KEYWORD OSB base_type _COMMA types CSB
 types: list_type | map_type| base_type
 boolean: TRUE| FALSE
-void: NULL
+null: NULL_CONSTANT
 number: INT| FLOAT
 time: RAW_TIME
 string: SINGLE_QUOTED| DOUBLE_QUOTED| DOUBLE_QUOTED_HEREDOC
@@ -13,7 +13,7 @@ map: OCB (_NL _INDENT)? (key_value (_COMMA _NL? key_value)*)? (_NL _DEDENT)? CCB
 regular_expression: REGEXP
 inline_expression: _OP inline_service _CP| call_expression
 value_fragment: OSB expression CSB
-values: number| string| boolean| void| (list|map) value_fragment*| regular_expression| time
+values: number| string| boolean| null| (list|map) value_fragment*| regular_expression| time
 range_start: (number | path) _COLON
 range_start_end: (number | path) _COLON (number | path)
 range_end: _COLON (number | path)
@@ -111,7 +111,7 @@ _INDENT: "<INDENT>"
 _DEDENT: "<DEDENT>"
 TRUE: "true"
 FALSE: "false"
-NULL: "null"
+NULL_CONSTANT: "null"
 RAW_INT.2: /[0-9]+/
 INT.2: ("+"|"-")? RAW_INT
 FLOAT.2: ("+"|"-")? INT "." RAW_INT? | "." RAW_INT
