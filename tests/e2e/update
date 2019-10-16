@@ -14,15 +14,24 @@ from bom_open import bom_open
 
 from click import unstyle
 
+import storyscript.hub.Hub as StoryHub
 from storyscript.Api import Api
 from storyscript.App import _clean_dict
 
+from storyhub.sdk.ServiceWrapper import ServiceWrapper
+
 from utils.Features import parse_features
+
 
 test_dir = path.dirname(path.realpath(__file__))
 Result = namedtuple('Result', ['status', 'updated'])
 
 features = {'globals': True}
+
+hub_fixtures_file = path.join(path.dirname(test_dir),
+                              'fixtures', 'hub_fixture.json.fixed')
+StoryHub.StoryscriptHub = lambda: \
+    ServiceWrapper.from_json_file(hub_fixtures_file)
 
 
 def parse_args():

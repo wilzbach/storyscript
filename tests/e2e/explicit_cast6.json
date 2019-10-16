@@ -132,7 +132,7 @@
           }
         }
       ],
-      "src": "c = b as Map[int, string]"
+      "src": "c = b to Map[int, string]"
     }
   },
   "entrypoint": "1.1"

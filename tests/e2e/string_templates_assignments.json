@@ -48,15 +48,8 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             },
             {
               "$OBJECT": "expression",
@@ -101,7 +94,7 @@
           ]
         }
       ],
-      "src": "a1  = 0 + \"a{b}c{d}\"",
+      "src": "a1  = \"0\" + \"a{b}c{d}\"",
       "next": "4"
     },
     "4": {
@@ -158,20 +151,13 @@
               ]
             },
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             }
           ]
         }
       ],
-      "src": "a2  = \"a{b}c{d}\" + 0",
+      "src": "a2  = \"a{b}c{d}\" + \"0\"",
       "next": "5"
     },
     "5": {
@@ -192,15 +178,8 @@
               "expression": "sum",
               "values": [
                 {
-                  "$OBJECT": "type_cast",
-                  "type": {
-                    "$OBJECT": "type",
-                    "type": "string"
-                  },
-                  "value": {
-                    "$OBJECT": "int",
-                    "int": 0
-                  }
+                  "$OBJECT": "string",
+                  "string": "0"
                 },
                 {
                   "$OBJECT": "expression",
@@ -245,20 +224,13 @@
               ]
             },
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             }
           ]
         }
       ],
-      "src": "a3  = 0 + \"a{b}c{d}\" + 0",
+      "src": "a3  = \"0\" + \"a{b}c{d}\" + \"0\"",
       "next": "6"
     },
     "6": {
@@ -279,15 +251,8 @@
               "expression": "sum",
               "values": [
                 {
-                  "$OBJECT": "type_cast",
-                  "type": {
-                    "$OBJECT": "type",
-                    "type": "string"
-                  },
-                  "value": {
-                    "$OBJECT": "int",
-                    "int": 0
-                  }
+                  "$OBJECT": "string",
+                  "string": "0"
                 },
                 {
                   "$OBJECT": "type_cast",
@@ -305,20 +270,13 @@
               ]
             },
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             }
           ]
         }
       ],
-      "src": "a4  = 0 + \"{b}\" + 0",
+      "src": "a4  = \"0\" + \"{b}\" + \"0\"",
       "next": "7"
     },
     "7": {
@@ -335,15 +293,8 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             },
             {
               "$OBJECT": "type_cast",
@@ -361,7 +312,7 @@
           ]
         }
       ],
-      "src": "a5  = 0 + \"{b}\"",
+      "src": "a5  = \"0\" + \"{b}\"",
       "next": "8"
     },
     "8": {
@@ -391,20 +342,13 @@
               }
             },
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             }
           ]
         }
       ],
-      "src": "a6  = \"{b}\" + 0",
+      "src": "a6  = \"{b}\" + \"0\"",
       "next": "9"
     },
     "9": {
@@ -421,15 +365,8 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             },
             {
               "$OBJECT": "expression",
@@ -457,7 +394,7 @@
           ]
         }
       ],
-      "src": "a7  = 0 + \"a{b}\"",
+      "src": "a7  = \"0\" + \"a{b}\"",
       "next": "10"
     },
     "10": {
@@ -497,20 +434,13 @@
               ]
             },
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             }
           ]
         }
       ],
-      "src": "a7  = \"a{b}\" + 0",
+      "src": "a7  = \"a{b}\" + \"0\"",
       "next": "11"
     },
     "11": {
@@ -531,15 +461,8 @@
               "expression": "sum",
               "values": [
                 {
-                  "$OBJECT": "type_cast",
-                  "type": {
-                    "$OBJECT": "type",
-                    "type": "string"
-                  },
-                  "value": {
-                    "$OBJECT": "int",
-                    "int": 0
-                  }
+                  "$OBJECT": "string",
+                  "string": "0"
                 },
                 {
                   "$OBJECT": "expression",
@@ -567,20 +490,13 @@
               ]
             },
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             }
           ]
         }
       ],
-      "src": "a8  = 0 + \"a{b}\" + 0",
+      "src": "a8  = \"0\" + \"a{b}\" + \"0\"",
       "next": "12"
     },
     "12": {
@@ -624,20 +540,13 @@
               ]
             },
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             }
           ]
         }
       ],
-      "src": "a9  = \"a{b}c\" + 0",
+      "src": "a9  = \"a{b}c\" + \"0\"",
       "next": "13"
     },
     "13": {
@@ -654,15 +563,8 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             },
             {
               "$OBJECT": "expression",
@@ -694,7 +596,7 @@
           ]
         }
       ],
-      "src": "a10 = 0 + \"a{b}c\"",
+      "src": "a10 = \"0\" + \"a{b}c\"",
       "next": "14"
     },
     "14": {
@@ -715,15 +617,8 @@
               "expression": "sum",
               "values": [
                 {
-                  "$OBJECT": "type_cast",
-                  "type": {
-                    "$OBJECT": "type",
-                    "type": "string"
-                  },
-                  "value": {
-                    "$OBJECT": "int",
-                    "int": 0
-                  }
+                  "$OBJECT": "string",
+                  "string": "0"
                 },
                 {
                   "$OBJECT": "expression",
@@ -755,20 +650,13 @@
               ]
             },
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             }
           ]
         }
       ],
-      "src": "a11 = 0 + \"a{b}c\" + 0",
+      "src": "a11 = \"0\" + \"a{b}c\" + \"0\"",
       "next": "15"
     },
     "15": {
@@ -825,20 +713,13 @@
               ]
             },
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             }
           ]
         }
       ],
-      "src": "a12 = \"a{b}c{d}\" + 0",
+      "src": "a12 = \"a{b}c{d}\" + \"0\"",
       "next": "16"
     },
     "16": {
@@ -855,15 +736,8 @@
           "expression": "sum",
           "values": [
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             },
             {
               "$OBJECT": "expression",
@@ -908,7 +782,7 @@
           ]
         }
       ],
-      "src": "a13 = 0 + \"a{b}c{d}\"",
+      "src": "a13 = \"0\" + \"a{b}c{d}\"",
       "next": "17"
     },
     "17": {
@@ -929,15 +803,8 @@
               "expression": "sum",
               "values": [
                 {
-                  "$OBJECT": "type_cast",
-                  "type": {
-                    "$OBJECT": "type",
-                    "type": "string"
-                  },
-                  "value": {
-                    "$OBJECT": "int",
-                    "int": 0
-                  }
+                  "$OBJECT": "string",
+                  "string": "0"
                 },
                 {
                   "$OBJECT": "expression",
@@ -982,20 +849,13 @@
               ]
             },
             {
-              "$OBJECT": "type_cast",
-              "type": {
-                "$OBJECT": "type",
-                "type": "string"
-              },
-              "value": {
-                "$OBJECT": "int",
-                "int": 0
-              }
+              "$OBJECT": "string",
+              "string": "0"
             }
           ]
         }
       ],
-      "src": "a14 = 0 + \"a{b}c{d}\" + 0"
+      "src": "a14 = \"0\" + \"a{b}c{d}\" + \"0\""
     }
   },
   "entrypoint": "1"

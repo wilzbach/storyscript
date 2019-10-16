@@ -45,8 +45,7 @@
         }
       ],
       "enter": "2",
-      "src": "if (random string length: 3) == \"foo\"",
-      "next": "2"
+      "src": "if (random string length: 3) == \"foo\""
     },
     "2": {
       "method": "expression",

@@ -51,7 +51,7 @@ class Grammar:
         self.ebnf._DEDENT = '<DEDENT>'
         self.ebnf.TRUE = 'true'
         self.ebnf.FALSE = 'false'
-        self.ebnf.NULL = 'null'
+        self.ebnf.NULL_CONSTANT = 'null'
         self.ebnf.set_token('RAW_INT.2', r'/[0-9]+/')
         self.ebnf.set_token('INT.2', '("+"|"-")? RAW_INT')
         self.ebnf.set_token('FLOAT.2', '("+"|"-")? INT "." RAW_INT? | '
@@ -68,7 +68,7 @@ class Grammar:
         self.ebnf._OP = '('
         self.ebnf._CP = ')'
         self.ebnf.boolean = 'true, false'
-        self.ebnf.void = 'null'
+        self.ebnf.null = 'null_constant'
         self.ebnf.number = 'int, float'
         self.ebnf.time = 'raw_time'
 
@@ -85,7 +85,8 @@ class Grammar:
         self.ebnf.regular_expression = 'regexp'
         self.ebnf.inline_expression = ('op inline_service cp, '
                                        'call_expression')
-        values = ('number, string, boolean, void, list, map, '
+        self.ebnf.value_fragment = 'osb expression csb'
+        values = ('number, string, boolean, null, (list|map) value_fragment*, '
                   'regular_expression, time')
         self.ebnf.values = values
 
@@ -124,6 +125,7 @@ class Grammar:
         self.ebnf.AND = 'and'
 
         self.ebnf._AS = 'as'
+        self.ebnf._TO = 'to'
 
         self.ebnf.GREATER = '>'
         self.ebnf.GREATER_EQUAL = '>='
@@ -150,8 +152,7 @@ class Grammar:
         self.ebnf.mul_operator = 'MULTIPLIER, BSLASH, MODULUS'
 
         self.ebnf.primary_expression = 'entity , op or_expression cp'
-        self.ebnf.output_names = 'name (comma name)*'
-        self.ebnf.as_operator = 'as (types | output_names)'
+        self.ebnf.to_operator = 'to types'
         self.ebnf.pow_operator = 'POWER'
 
         args = 'name op arguments* cp'
@@ -162,9 +163,9 @@ class Grammar:
                                    'unary_expression)?, dot_expression'
         self.ebnf.unary_expression = ('unary_operator unary_expression , '
                                       'pow_expression')
-        self.ebnf.as_expression = 'unary_expression (as_operator)?'
+        self.ebnf.to_expression = 'unary_expression (to_operator)?'
         self.ebnf.mul_expression = '(mul_expression mul_operator)? ' \
-                                   'as_expression'
+                                   'to_expression'
         self.ebnf.arith_expression = '(arith_expression arith_operator)? ' \
                                      'mul_expression'
         self.ebnf.cmp_expression = '(cmp_expression cmp_operator)? ' \

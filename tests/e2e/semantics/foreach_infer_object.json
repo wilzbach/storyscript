@@ -43,8 +43,7 @@
         }
       ],
       "enter": "4",
-      "src": "foreach {\"1\": 2} as elem",
-      "next": "4"
+      "src": "foreach {\"1\": 2} as elem"
     },
     "4": {
       "method": "expression",

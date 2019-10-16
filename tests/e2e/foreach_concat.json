@@ -35,8 +35,7 @@
         }
       ],
       "enter": "2",
-      "src": "foreach [2] + [3] as item",
-      "next": "2"
+      "src": "foreach [2] + [3] as item"
     },
     "2": {
       "method": "execute",
@@ -50,8 +49,26 @@
           "$OBJECT": "arg",
           "name": "to",
           "arg": {
-            "$OBJECT": "string",
-            "string": "foo@bar.com"
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "List",
+              "values": [
+                {
+                  "$OBJECT": "type",
+                  "type": "any"
+                }
+              ]
+            },
+            "value": {
+              "$OBJECT": "list",
+              "items": [
+                {
+                  "$OBJECT": "string",
+                  "string": "foo@bar.com"
+                }
+              ]
+            }
           }
         },
         {
@@ -78,10 +95,18 @@
               ]
             }
           }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "text",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foobar"
+          }
         }
       ],
       "parent": "1",
-      "src": "    mailgun send to: \"foo@bar.com\" from: \"ss@ss.com\" subject: item as string"
+      "src": "    mailgun send to: [\"foo@bar.com\"] from: \"ss@ss.com\" subject: item to string text: \"foobar\""
     }
   },
   "services": [

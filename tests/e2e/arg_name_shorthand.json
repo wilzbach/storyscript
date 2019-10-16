@@ -19,7 +19,7 @@
       "enter": "2",
       "exit": "4",
       "src": "function test arg:int",
-      "next": "2"
+      "next": "4"
     },
     "2": {
       "method": "return",
@@ -27,8 +27,7 @@
       "col_start": "5",
       "col_end": "11",
       "parent": "1",
-      "src": "    return",
-      "next": "4"
+      "src": "    return"
     },
     "4": {
       "method": "expression",

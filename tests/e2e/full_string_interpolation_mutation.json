@@ -15,15 +15,15 @@
         }
       ],
       "src": "bar = 0",
-      "next": "2.1"
+      "next": "2.2"
     },
-    "2.1": {
+    "2.2": {
       "method": "mutation",
-      "ln": "2.1",
+      "ln": "2.2",
       "col_start": "7",
-      "col_end": "20",
+      "col_end": "10",
       "name": [
-        "__p-2.1"
+        "__p-2.2"
       ],
       "args": [
         {
@@ -36,6 +36,22 @@
           "$OBJECT": "mutation",
           "mutation": "increment",
           "args": []
+        }
+      ],
+      "next": "2.1"
+    },
+    "2.1": {
+      "method": "expression",
+      "ln": "2.1",
+      "name": [
+        "__p-2.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.2"
+          ]
         }
       ],
       "next": "2"
@@ -73,7 +89,7 @@
           ]
         }
       ],
-      "src": "a = \"foo{bar increment}\""
+      "src": "a = \"foo{bar.increment()}\""
     }
   },
   "entrypoint": "1"

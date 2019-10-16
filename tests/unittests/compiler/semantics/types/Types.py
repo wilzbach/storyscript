@@ -5,7 +5,8 @@ from pytest import mark, raises
 
 from storyscript.compiler.semantics.types.Types import AnyType, \
     BaseType, BooleanType, FloatType, IntType, ListType, MapType, \
-    NoneType, RegExpType, StringType, singleton
+    NoneType, NullType, ObjectType, RegExpType, StringType, singleton
+from storyscript.hub.TypeMappings import TypeMappings
 
 
 def test_singleton():
@@ -31,6 +32,7 @@ def test_singleton():
     (ListType(AnyType.instance()), 'List[any]'),
     (MapType(IntType.instance(), StringType.instance()),
         'Map[int,string]'),
+    (NullType.instance(), 'null'),
 ])
 def test_boolean_str(type_, expected):
     assert str(type_) == expected
@@ -61,6 +63,29 @@ def test_none_explicit_from():
     assert NoneType.instance().explicit_from(AnyType.instance()) is None
 
 
+def test_null_explicit_from():
+    assert NullType.instance().explicit_from(NoneType.instance()) is None
+    assert NullType.instance().explicit_from(AnyType.instance()) \
+        is NullType.instance()
+    assert NullType.instance().explicit_from(IntType.instance()) \
+        is NullType.instance()
+
+
+def test_null_hashable():
+    assert not NullType.instance().hashable()
+
+
 def test_base_type_not_implemented():
     with raises(NotImplementedError):
         BaseType().op(None)
+
+
+def test_type_class_mapping():
+    assert TypeMappings.type_class_mapping('float') == FloatType
+    assert TypeMappings.type_class_mapping('boolean') == BooleanType
+    assert TypeMappings.type_class_mapping('int') == IntType
+    assert TypeMappings.type_class_mapping('string') == StringType
+    assert TypeMappings.type_class_mapping('any') == AnyType
+    assert TypeMappings.type_class_mapping('object') == ObjectType
+    assert TypeMappings.type_class_mapping('list') == ListType
+    assert TypeMappings.type_class_mapping('map') == MapType

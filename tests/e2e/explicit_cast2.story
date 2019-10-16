@@ -1,1 +1,1 @@
-a = 2 as float
+a = 2 to float

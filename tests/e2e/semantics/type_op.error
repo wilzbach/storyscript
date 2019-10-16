@@ -1,6 +1,6 @@
-Error: syntax error in story at line 5, column 5
+Error: syntax error in story at line 4, column 5
 
-5|    e = [1,2] / a
+4|    d = "foo" + a
           ^^^^^^^^^
 
-E0103: `/` between `List[int]` and `int` is not supported.
+E0103: `+` between `string` and `int` is not supported.

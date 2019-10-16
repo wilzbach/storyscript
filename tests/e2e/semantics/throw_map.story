@@ -1,2 +1,2 @@
-a = {} as Map[any,any]
+a = {} to Map[any,any]
 throw a

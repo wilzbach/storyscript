@@ -1,0 +1,54 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "float",
+          "float": 1.5
+        }
+      ],
+      "src": "a = 1.5",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "equal",
+          "values": [
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "float"
+              },
+              "value": null
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "b = null == a"
+    }
+  },
+  "entrypoint": "1"
+}

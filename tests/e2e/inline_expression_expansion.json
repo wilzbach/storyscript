@@ -22,7 +22,7 @@
       "enter": "2",
       "exit": "4",
       "src": "function build_jira_request_body body:any returns any",
-      "next": "2"
+      "next": "4"
     },
     "2": {
       "method": "return",
@@ -53,8 +53,7 @@
         }
       ],
       "parent": "1",
-      "src": "    return {} as Map[any,any]",
-      "next": "4"
+      "src": "    return {} to Map[any,any]"
     },
     "4": {
       "method": "function",
@@ -75,8 +74,7 @@
         }
       ],
       "enter": "5.1",
-      "src": "function create_jira_issue body:any returns any",
-      "next": "5.1"
+      "src": "function create_jira_issue body:any returns any"
     },
     "5.1": {
       "method": "call",

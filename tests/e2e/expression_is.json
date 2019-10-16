@@ -41,8 +41,7 @@
         }
       ],
       "enter": "3",
-      "src": "if colour == \"red\"",
-      "next": "3"
+      "src": "if colour == \"red\""
     },
     "3": {
       "method": "expression",

@@ -45,10 +45,17 @@
           "$OBJECT": "arg",
           "name": "tweet",
           "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "__p-1.1"
-            ]
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "string"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-1.1"
+              ]
+            }
           }
         }
       ],
@@ -84,7 +91,7 @@
           }
         }
       ],
-      "src": "log info msg:(twitter retweet tweet:(random integer low: 10 high: 100))[\"tweet\"]"
+      "src": "log info msg:(twitter retweet tweet:(random integer low: 10 high: 100) to string)[\"tweet\"]"
     }
   },
   "services": [

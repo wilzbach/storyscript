@@ -169,7 +169,7 @@
           }
         }
       ],
-      "src": "list_empty = [] as List[any]",
+      "src": "list_empty = [] to List[any]",
       "next": "10"
     },
     "10": {
@@ -267,7 +267,7 @@
           }
         }
       ],
-      "src": "obj_empty = {} as Map[any,any]",
+      "src": "obj_empty = {} to Map[any,any]",
       "next": "16"
     },
     "16": {

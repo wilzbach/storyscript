@@ -1,1 +1,1 @@
-a = [] as List[int]
+a = [] to List[int]

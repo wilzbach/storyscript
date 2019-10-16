@@ -8,7 +8,7 @@
       "enter": "2",
       "exit": "3",
       "src": "try",
-      "next": "2"
+      "next": "3"
     },
     "2": {
       "method": "expression",
@@ -25,8 +25,7 @@
         }
       ],
       "parent": "1",
-      "src": "  e = 1",
-      "next": "3"
+      "src": "  e = 1"
     },
     "3": {
       "method": "catch",
@@ -36,7 +35,7 @@
       "enter": "4",
       "exit": "5",
       "src": "catch",
-      "next": "4"
+      "next": "5"
     },
     "4": {
       "method": "expression",
@@ -53,8 +52,7 @@
         }
       ],
       "parent": "3",
-      "src": "  e = 42",
-      "next": "5"
+      "src": "  e = 42"
     },
     "5": {
       "method": "finally",
@@ -64,7 +62,7 @@
       "enter": "6",
       "exit": "8",
       "src": "finally",
-      "next": "6"
+      "next": "8"
     },
     "6": {
       "method": "expression",
@@ -93,8 +91,7 @@
         }
       ],
       "parent": "5",
-      "src": "  e += 1",
-      "next": "8"
+      "src": "  e += 1"
     },
     "8": {
       "method": "expression",

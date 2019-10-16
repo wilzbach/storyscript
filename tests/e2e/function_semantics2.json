@@ -11,7 +11,7 @@
       "enter": "2.1",
       "exit": "4",
       "src": "function fun returns int",
-      "next": "2.1"
+      "next": "4"
     },
     "2.1": {
       "method": "call",
@@ -38,8 +38,7 @@
         }
       ],
       "parent": "1",
-      "src": "   return bar()",
-      "next": "4"
+      "src": "   return bar()"
     },
     "4": {
       "method": "function",
@@ -51,8 +50,7 @@
       ],
       "function": "bar",
       "enter": "5",
-      "src": "function bar returns int",
-      "next": "5"
+      "src": "function bar returns int"
     },
     "5": {
       "method": "return",

@@ -47,8 +47,7 @@
         }
       ],
       "enter": "4",
-      "src": "foreach l as el",
-      "next": "4"
+      "src": "foreach l as el"
     },
     "4": {
       "method": "expression",

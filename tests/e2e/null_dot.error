@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 5
+
+2|    b = a.foo
+          ^^^^^
+
+E0131: `null` can't be dot-accessed with `foo` of type `string`

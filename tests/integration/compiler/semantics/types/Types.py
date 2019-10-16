@@ -1,7 +1,7 @@
 from pytest import mark
 
 from storyscript.Api import Api
-from storyscript.exceptions import CompilerError
+from storyscript.exceptions import StoryError
 
 features = {'globals': True}
 
@@ -21,7 +21,7 @@ def fail(source):
     s = Api.loads(source, features=features)
     assert not s.success()
     e = s.errors()[0]
-    assert isinstance(e.error, CompilerError)
+    assert isinstance(e, StoryError)
 
 
 def run(source, should_fail):
@@ -30,7 +30,7 @@ def run(source, should_fail):
     Otherwise, expect it to pass.
     """
     if 'ANY' in source:
-        pre = 'ANY = {} as Map[any,any]\n'
+        pre = 'ANY = {} to Map[any,any]\n'
     elif 'fn_none' in source:
         pre = 'function fn_none\n    return\n'
     else:
@@ -93,7 +93,7 @@ def build_type_permutations(types):
     ('Map[int,string]', False),
     ('none', False),
     ('time', True),
-    ('any', True),
+    ('any', False),
     ('object', False),
     ('boolean', True),
 ])
@@ -112,17 +112,17 @@ index_types = {
     'float': [],
     'time': [],
     'regex': [],
-    'string': ['int', 'any'],
-    'List[boolean]': ['int', 'any'],
-    'List[int]': ['int', 'any'],
-    'List[float]': ['int', 'any'],
-    'List[time]': ['int', 'any'],
-    'List[string]': ['int', 'any'],
-    'Map[string,int]': ['string', 'any'],
-    'Map[int,string]': ['int', 'any'],
+    'string': ['int'],
+    'List[boolean]': ['int'],
+    'List[int]': ['int'],
+    'List[float]': ['int'],
+    'List[time]': ['int'],
+    'List[string]': ['int'],
+    'Map[string,int]': ['string'],
+    'Map[int,string]': ['int'],
     'none': [],
-    'any': ['boolean', 'int', 'float', 'time', 'string', 'any'],
-    'object': ['string', 'any'],
+    'any': [],
+    'object': [],
 }
 
 
@@ -168,42 +168,42 @@ def test_implicit_assign(right, left, should_fail):
 
 
 implicit_assigns = {
-    'boolean': ['boolean', 'int', 'float', 'string', 'any'],
-    'int': ['int', 'float', 'string', 'any'],
-    'float': ['int', 'float', 'string', 'any'],
-    'time': ['time', 'string', 'any'],
-    'regex': ['regex', 'string', 'any'],
+    'boolean': ['boolean', 'int', 'float', 'string', 'any', 'null'],
+    'int': ['int', 'float', 'string', 'any', 'null'],
+    'float': ['int', 'float', 'string', 'any', 'null'],
+    'time': ['time', 'string', 'any', 'null'],
+    'regex': ['regex', 'string', 'any', 'null'],
     'string': ['string', 'int', 'float', 'string', 'regex',
-               'any', 'time'],
+               'any', 'time', 'null'],
     'List[boolean]': ['List[boolean]', 'List[int]', 'List[float]',
-                      'List[string]', 'List[any]', 'any', 'string'],
+                      'List[string]', 'List[any]', 'any', 'string', 'null'],
     'List[int]': ['List[int]', 'List[float]',
-                  'List[string]', 'List[any]', 'any', 'string'],
+                  'List[string]', 'List[any]', 'any', 'string', 'null'],
     'List[float]': ['List[int]', 'List[float]',
-                    'List[string]', 'List[any]', 'any', 'string'],
+                    'List[string]', 'List[any]', 'any', 'string', 'null'],
     'List[time]': ['List[string]', 'List[any]', 'any',
-                   'string', 'List[time]'],
+                   'string', 'List[time]', 'null'],
     'List[string]': ['List[int]', 'List[float]', 'List[time]',
-                     'List[string]', 'List[any]', 'any', 'string'],
+                     'List[string]', 'List[any]', 'any', 'string', 'null'],
     'Map[int,string]': ['Map[int,string]', 'Map[string,string]', 'string',
                         'any', 'Map[float,string]', 'Map[string,float]',
-                        'Map[string,int]'],
+                        'Map[string,int]', 'null'],
     'Map[string,int]': ['Map[int,string]', 'Map[string,string]', 'string',
                         'any', 'Map[float,string]', 'Map[string,float]',
-                        'Map[string,int]'],
+                        'Map[string,int]', 'null'],
     'Map[string,string]': ['Map[int,string]', 'Map[string,string]', 'string',
                            'any', 'Map[float,string]', 'Map[string,float]',
-                           'Map[string,int]'],
+                           'Map[string,int]', 'null'],
     'none': [],
-    'object': ['object', 'any', 'string'],
-    'any': [k for k in all_types.keys() if k != 'none'],
+    'object': ['any', 'string', 'null'],
+    'any': [k for k in all_types.keys() if k != 'none' and k != 'object'],
 }
 
 
 @mark.parametrize('left,right,should_fail',
                   build_type_permutations(implicit_assigns))
 def test_explicit_cast(right, left, should_fail):
-    run(f'a = {left[1]} as {right[0]}', should_fail=should_fail)
+    run(f'a = {left[1]} to {right[0]}', should_fail=should_fail)
 
 ###############################################################################
 # ConvertibleToString
@@ -212,5 +212,5 @@ def test_explicit_cast(right, left, should_fail):
 
 @mark.parametrize('el', all_types.items())
 def test_string_convertible(el):
-    should_fail = el[0] == 'none'
+    should_fail = el[0] != 'string'
     run(f'a="." + {el[1]}', should_fail=should_fail)

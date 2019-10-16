@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 12
+Error: syntax error in story at line 1, column 1
 
-2|        return app.var
-                 ^^^
+1|    function foo returns object
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-E0128: `any` is readonly and can not be returned.
+E0153: Return type cannot be `object`.

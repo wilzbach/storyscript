@@ -38,7 +38,7 @@ def test_values_null():
     result = parse('null\n')
     expression = result.block.rules.absolute_expression.expression
     entity = get_entity(expression)
-    assert entity.values.void.child(0) == Token('NULL', 'null')
+    assert entity.values.null.child(0) == Token('NULL_CONSTANT', 'null')
 
 
 def test_values_int():

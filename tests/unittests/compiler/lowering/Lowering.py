@@ -283,38 +283,6 @@ def test_preprocessor_visit_nested_parent(patch, magic, preprocessor, entity):
     ]
 
 
-def test_preprocessor_service_mut(patch, magic, preprocessor, entity):
-    """
-    Check that services are correctly converted into mutations
-    """
-    tree = magic()
-    tree.data = 'service'
-    replace = magic()
-    cs = [magic(), magic()]
-    for c in cs:
-        c.children = [magic()]
-
-    tree.children = [cs[0]]
-    cs[0].children = [cs[1]]
-    cs[0].data = 'path'
-    tree.child(0).data = 'path'
-
-    def is_inline(n):
-        return n == cs[0]
-
-    preprocessor.visit(tree, '.block.', entity, is_inline,
-                       replace, parent=None)
-    preprocessor.fake_tree.mock_calls = [
-        mock.call(tree),
-    ]
-    replace.mock_calls = [
-        mock.call(cs[0], preprocessor.fake_tree(), tree),
-    ]
-    assert tree.data == 'mutation'
-    assert tree.entity == Tree('entity', [tree.path])
-    assert tree.service_fragment.data == 'mutation_fragment'
-
-
 def test_preprocessor_visit_base_expression(patch, magic, preprocessor,
                                             entity):
     """

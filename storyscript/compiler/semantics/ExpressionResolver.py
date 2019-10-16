@@ -4,9 +4,8 @@ from contextlib import contextmanager
 
 from lark.lexer import Token
 
-from storyscript.compiler.lowering.utils import service_to_mutation
 from storyscript.compiler.semantics.types.Types import AnyType, BaseType, \
-    BooleanType, FloatType, IntType, ListType, MapType, ObjectType, \
+    BooleanType, FloatType, IntType, ListType, MapType, NullType, ObjectType, \
     RegExpType, StringType, TimeType, explicit_cast
 from storyscript.compiler.visitors.ExpressionVisitor import ExpressionVisitor
 from storyscript.exceptions import CompilerError
@@ -75,10 +74,11 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         yield
         self.visitor.with_as = prev
 
-    def as_expression(self, tree, expr):
-        assert tree.child(1).data == 'as_operator'
+    def to_expression(self, tree, expr):
+        assert tree.child(1).data == 'to_operator'
         # check for compatibility
         t = self.visitor.types(tree.child(1).types)
+        tree.expect(t.type() != ObjectType.instance(), 'object_no_as')
         tree.expect(explicit_cast(expr.type(), t.type()),
                     'type_operation_cast_incompatible',
                     left=expr.type(), right=t.type())
@@ -178,12 +178,12 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         """
         Type casts the given expr_node to the target_type.
         This is done by creating a new AST for the expr_node with an
-        `as_operator`.
+        `to_operator`.
 
         Args:
             expr_node: Tree node representing an expression. This is the
                 expression for which this function will generate a new
-                expression node which also contains an `as_operator` to
+                expression node which also contains an `to_operator` to
                 represent the type cast.
             target_type: The type to type cast given expression (expr_node)
                 into. Must be a `types` node.
@@ -200,21 +200,19 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         )
         element = Tree('expression', [
             expr_node,
-            Tree('as_operator', [
+            Tree('to_operator', [
                 Tree('types', [
                     cast_type
                 ])
             ])
         ])
-        element.kind = 'as_expression'
+        element.kind = 'to_expression'
         return element
 
     def nary_args_implicit_cast(self, tree, target_type, source_types):
         """
         Cast nary_expression arguments implicitly.
         """
-        if target_type == AnyType.instance():
-            return
         for i, t in enumerate(source_types):
             if i > 0:
                 # ignore the arith_operator tree child
@@ -428,8 +426,8 @@ class ExpressionResolver:
             elif subtree.data == 'regular_expression':
                 return self.regular_expression(subtree)
             else:
-                assert subtree.data == 'void'
-                return base_symbol(AnyType.instance())
+                assert subtree.data == 'null'
+                return base_symbol(NullType.instance())
 
         assert subtree.type == 'NAME'
         return self.path(tree)
@@ -448,11 +446,11 @@ class ExpressionResolver:
         assert tree.data == 'expression'
         return self.expr_visitor.expression(tree)
 
-    def build_arguments(self, tree, name, fn_type):
+    def build_arguments(self, tree, fname, fn_type):
         args = {}
         for c in tree.extract('arguments'):
             tree.expect(len(c.children) >= 2, 'arg_name_required',
-                        fn_type=fn_type, name=name)
+                        fn_type=fn_type, name=fname)
             name = c.child(0)
             type_ = self.expression(c.child(1)).type()
             sym = Symbol.from_path(name, type_)
@@ -538,16 +536,33 @@ class ExpressionResolver:
         fn.check_call(tree, args)
         return base_symbol(fn.output())
 
-    def resolve_service(self, tree):
+    def resolve_service(self, tree, output_sym=None):
+        """
+        Resolve a service using hub-sdk API and check the caller arguments.
+        Params:
+            tree: Service tree root node.
+            output_sym: Symbol of the object output from when block
+                in case of event based service.
+        """
         service_name = tree.path.child(0).value
         action_node = tree.service_fragment.command
         tree.expect(action_node is not None, 'service_without_command')
         action_name = action_node.child(0).value
         args = self.build_arguments(
             tree.service_fragment,
-            service_name,
-            action_name
+            fname=service_name,
+            fn_type='Service'
         )
+
+        if output_sym is not None:
+            return self.module.service_typing.resolve_service_output_object(
+                tree,
+                service_name,
+                action_name,
+                args,
+                output_sym
+            )
+
         return self.module.service_typing.resolve_service(
             tree, service_name, action_name, args)
 
@@ -580,15 +595,17 @@ class ExpressionResolver:
             # -> must be a service
             return base_symbol(self.resolve_service(tree))
 
-        # variable exists -> mutation
-        service_to_mutation(tree)
-        return self.resolve_mutation(t, tree)
+        # variable exists -> event-based service
+        if t.type() == ObjectType.instance():
+            # In case of event-based service resolve using output_sym.
+            return base_symbol(self.resolve_service(tree, t))
+
+        var_name = tree.path.child(0).value
+        tree.path.expect(0, 'service_name_not_var', var=var_name)
 
     def mutation(self, tree):
-        if tree.path:
-            s = self.path(tree.path)
-        else:
-            s = self.expression(tree.expression)
+        assert tree.expression is not None
+        s = self.expression(tree.expression)
         return self.resolve_mutation(s, tree)
 
     def call_expression(self, tree):

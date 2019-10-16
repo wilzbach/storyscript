@@ -11,8 +11,7 @@
       "service": "twitter",
       "command": "stream",
       "enter": "2",
-      "src": "twitter stream",
-      "next": "2"
+      "src": "twitter stream"
     },
     "2": {
       "method": "when",
@@ -35,9 +34,10 @@
         }
       ],
       "enter": "3",
+      "exit": "4",
       "parent": "1",
       "src": "      when tweet track: \"storyscript\" as ss",
-      "next": "3"
+      "next": "4"
     },
     "3": {
       "method": "expression",
@@ -54,8 +54,7 @@
         }
       ],
       "parent": "2",
-      "src": "          x = 0",
-      "next": "4"
+      "src": "          x = 0"
     },
     "4": {
       "method": "when",
@@ -78,9 +77,10 @@
         }
       ],
       "enter": "5",
+      "exit": "6",
       "parent": "1",
       "src": "      when tweet track: \"omg\"",
-      "next": "5"
+      "next": "6"
     },
     "5": {
       "method": "expression",
@@ -97,8 +97,7 @@
         }
       ],
       "parent": "4",
-      "src": "          x = 1",
-      "next": "6"
+      "src": "          x = 1"
     },
     "6": {
       "method": "when",
@@ -111,9 +110,10 @@
       "service": "stream",
       "command": "tweet",
       "enter": "7",
+      "exit": "8",
       "parent": "1",
       "src": "      when tweet as t",
-      "next": "7"
+      "next": "8"
     },
     "7": {
       "method": "expression",
@@ -130,8 +130,7 @@
         }
       ],
       "parent": "6",
-      "src": "          x = 2",
-      "next": "8"
+      "src": "          x = 2"
     },
     "8": {
       "method": "when",
@@ -145,8 +144,7 @@
       "command": "tweet",
       "enter": "9",
       "parent": "1",
-      "src": "      when tweet",
-      "next": "9"
+      "src": "      when tweet"
     },
     "9": {
       "method": "expression",

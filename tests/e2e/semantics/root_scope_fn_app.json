@@ -7,8 +7,7 @@
       "col_end": "6",
       "function": "bar",
       "enter": "2",
-      "src": "function bar",
-      "next": "2"
+      "src": "function bar"
     },
     "2": {
       "method": "expression",
@@ -53,7 +52,7 @@
             "app",
             {
               "$OBJECT": "dot",
-              "dot": "environment"
+              "dot": "secrets"
             },
             {
               "$OBJECT": "dot",
@@ -63,7 +62,7 @@
         }
       ],
       "parent": "1",
-      "src": "    b = app.environment.FOO"
+      "src": "    b = app.secrets.FOO"
     }
   },
   "entrypoint": "1",

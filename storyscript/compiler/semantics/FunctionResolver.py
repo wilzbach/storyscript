@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from storyscript.compiler.semantics.types.Types import NoneType
+from storyscript.compiler.semantics.types.Types import NoneType, ObjectType
 from storyscript.parser import Tree
 
 from .ExpressionResolver import ExpressionResolver
@@ -47,6 +47,8 @@ class FunctionResolver(ScopeSelectiveVisitor):
         output = tree.function_output
         if output is not None:
             return_type = self.resolver.types(output.types).type()
+            tree.expect(return_type != ObjectType.instance(),
+                        'return_type_no_object')
         self.module.function_table.insert(function_name, args, return_type)
         return scope, return_type
 

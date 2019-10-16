@@ -45,8 +45,7 @@
         }
       ],
       "enter": "2",
-      "src": "if (random string length:8) == \"horrible\"",
-      "next": "2"
+      "src": "if (random string length:8) == \"horrible\""
     },
     "2": {
       "method": "execute",

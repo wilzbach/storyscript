@@ -1,0 +1,151 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "12",
+      "output": [
+        "client"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "2",
+      "src": "http server as client"
+    },
+    "2": {
+      "method": "when",
+      "ln": "2",
+      "col_start": "10",
+      "col_end": "23",
+      "output": [
+        "request"
+      ],
+      "service": "client",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "method",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "get"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "path",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "/"
+          }
+        }
+      ],
+      "enter": "3.1",
+      "parent": "1",
+      "src": "    when client listen method:\"get\" path:\"/\" as request"
+    },
+    "3.1": {
+      "method": "execute",
+      "ln": "3.1",
+      "col_start": "14",
+      "col_end": "27",
+      "name": [
+        "__p-3.1"
+      ],
+      "service": "gmaps",
+      "command": "geocode",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "address",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "Venice"
+          }
+        }
+      ],
+      "parent": "2",
+      "next": "3.2"
+    },
+    "3.2": {
+      "method": "execute",
+      "ln": "3.2",
+      "col_start": "54",
+      "col_end": "68",
+      "name": [
+        "__p-3.2"
+      ],
+      "service": "random",
+      "command": "integer",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "low",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 1
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "high",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 10
+          }
+        }
+      ],
+      "parent": "2",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "col_start": "9",
+      "col_end": "12",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "__p-3.1",
+                {
+                  "$OBJECT": "dot",
+                  "dot": "lat"
+                }
+              ]
+            },
+            {
+              "$OBJECT": "type_cast",
+              "type": {
+                "$OBJECT": "type",
+                "type": "float"
+              },
+              "value": {
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-3.2"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "parent": "2",
+      "src": "        a = (gmaps geocode address: \"Venice\").lat + (random integer low: 1 high: 10)"
+    }
+  },
+  "services": [
+    "gmaps",
+    "http",
+    "random"
+  ],
+  "entrypoint": "1"
+}

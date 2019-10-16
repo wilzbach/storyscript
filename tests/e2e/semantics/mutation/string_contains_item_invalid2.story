@@ -1,2 +1,2 @@
 a = [1, 2]
-b = a contains item: "a"
+b = a.contains(item: "a")

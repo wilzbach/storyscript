@@ -13,7 +13,7 @@ from pytest import fixture, mark
 
 from storyhub.sdk.ServiceWrapper import ServiceWrapper
 
-import storyscript.Hub as StoryHub
+import storyscript.hub.Hub as StoryHub
 from storyscript.Api import Api
 from storyscript.App import _clean_dict
 

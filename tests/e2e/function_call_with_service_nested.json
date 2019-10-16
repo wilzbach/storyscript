@@ -12,7 +12,7 @@
       "enter": "2",
       "exit": "4",
       "src": "function random returns int",
-      "next": "2"
+      "next": "4"
     },
     "2": {
       "method": "return",
@@ -26,8 +26,7 @@
         }
       ],
       "parent": "1",
-      "src": "  return 28  # Assume some RNG here",
-      "next": "4"
+      "src": "  return 28  # Assume some RNG here"
     },
     "4": {
       "method": "function",
@@ -59,7 +58,7 @@
       "enter": "5",
       "exit": "7.1",
       "src": "function my_func k1: int k2: int returns int",
-      "next": "5"
+      "next": "7.1"
     },
     "5": {
       "method": "return",
@@ -73,8 +72,7 @@
         }
       ],
       "parent": "4",
-      "src": "  return 28  # Assume some RNG here",
-      "next": "7.1"
+      "src": "  return 28  # Assume some RNG here"
     },
     "7.1": {
       "method": "call",

@@ -12,9 +12,9 @@
         }
       ],
       "enter": "2",
-      "exit": "4",
+      "exit": "4.1",
       "src": "while /regexp/",
-      "next": "2"
+      "next": "4.1"
     },
     "2": {
       "method": "break",
@@ -22,7 +22,20 @@
       "col_start": "5",
       "col_end": "10",
       "parent": "1",
-      "src": "    break",
+      "src": "    break"
+    },
+    "4.1": {
+      "method": "expression",
+      "ln": "4.1",
+      "name": [
+        "__p-4.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "regexp",
+          "regexp": "regexp"
+        }
+      ],
       "next": "4"
     },
     "4": {
@@ -37,7 +50,7 @@
           "values": [
             {
               "$OBJECT": "string",
-              "string": "2"
+              "string": "2 "
             },
             {
               "$OBJECT": "type_cast",
@@ -46,16 +59,17 @@
                 "type": "string"
               },
               "value": {
-                "$OBJECT": "regexp",
-                "regexp": "regexp"
+                "$OBJECT": "path",
+                "paths": [
+                  "__p-4.1"
+                ]
               }
             }
           ]
         }
       ],
       "enter": "5",
-      "src": "while \"2\" + /regexp/",
-      "next": "5"
+      "src": "while \"2 {/regexp/}\""
     },
     "5": {
       "method": "break",

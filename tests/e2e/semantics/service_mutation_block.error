@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 3
 
-2|    a get key: "b"
+2|    a.get(key: "b")
         ^^^^^^^
 
 E0113: Mutation `get` requires argument `default`

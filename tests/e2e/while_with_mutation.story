@@ -1,3 +1,3 @@
 x = 5
-while x isOdd
+while x.isOdd()
     break

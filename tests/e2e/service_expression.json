@@ -90,7 +90,7 @@
           }
         }
       ],
-      "src": "random integer low: 2 + 2 high: (a == b) as int"
+      "src": "random integer low: 2 + 2 high: (a == b) to int"
     }
   },
   "services": [

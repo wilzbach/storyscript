@@ -1,0 +1,79 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "expression",
+      "ln": "1.1",
+      "name": [
+        "__p-1.1"
+      ],
+      "args": [
+        {
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "Map",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              },
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "dict",
+            "items": []
+          }
+        }
+      ],
+      "next": "1.2"
+    },
+    "1.2": {
+      "method": "expression",
+      "ln": "1.2",
+      "col_start": "2",
+      "col_end": "9",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1",
+            {
+              "$OBJECT": "string",
+              "string": "a"
+            }
+          ]
+        }
+      ],
+      "next": "1.3"
+    },
+    "1.3": {
+      "method": "expression",
+      "ln": "1.3",
+      "col_start": "5",
+      "col_end": "9",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-1.1",
+            {
+              "$OBJECT": "string",
+              "string": "b"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "entrypoint": "1.1"
+}

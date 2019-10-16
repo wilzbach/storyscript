@@ -161,8 +161,6 @@ class ErrorCodes:
         'E0117', 'Invalid mutation `{name}`')
     arg_name_required = (
         'E0118', '{fn_type} `{name}` requires arguments to be named')
-    mutation_nested = (
-        'E0119', "Mutations can't have nested blocks.")
     mutation_output = (
         'E0120', "Mutations can't have outputs.")
     mutation_overload_mismatch = (
@@ -265,6 +263,48 @@ class ErrorCodes:
     service_action_without_output = (
         'E0147',
         'Service object `{object}` only support events, no actions.'
+    )
+    service_name_not_var = (
+        'E0148',
+        'Service name expected but existing variable `{var}` found.'
+    )
+    service_name_not_inline_service = (
+        'E0149',
+        'Service name expected but inline service expression found.'
+    )
+    service_output_invalid_prop = (
+        'E0150',
+        'Service output object `{object}` has no property `{prop}`.'
+    )
+    object_invalid_prop = (
+        'E0151',
+        'Object `{object}` has no property `{prop}`.'
+    )
+    assignment_no_as = (
+        'E0152',
+        '`as` can not be used in assignments.'
+    )
+    return_type_no_object = (
+        'E0153',
+        'Return type cannot be `object`.'
+    )
+    object_no_as = (
+        'E0154',
+        'Type cast to `object` is not allowed.'
+    )
+    object_expect_action = (
+        'E0155',
+        'Service object expected but existing variable `{var}` found.'
+    )
+    expression_no_event = (
+        'E0156',
+        'Event based action `{action}` of service `{service}` cannot be used '
+        'in expressions.'
+    )
+    service_event_expected = (
+        'E0157',
+        'Event based action expected but action `{action}` of service '
+        '`{service}` found.'
     )
 
     @staticmethod

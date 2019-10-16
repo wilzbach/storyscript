@@ -4,8 +4,7 @@ from enum import Enum
 from lark.lexer import Token
 
 from storyscript.compiler.lowering.Faketree import FakeTree
-from storyscript.compiler.lowering.utils import service_to_mutation, \
-        unicode_escape
+from storyscript.compiler.lowering.utils import unicode_escape
 from storyscript.parser.Transformer import Transformer
 from storyscript.parser.Tree import Tree
 
@@ -103,10 +102,8 @@ class Lowering:
             # Evaluate from leaf to the top
             fun(node, fake_tree, entity.path)
 
-            # split services into service calls and mutations
-            if entity.data == 'service':
-                entity.entity = Tree('entity', [entity.path])
-                service_to_mutation(entity)
+            entity.path.expect(entity.data != 'service',
+                               'service_name_not_inline_service')
 
     @staticmethod
     def is_inline_expression(n):
@@ -295,7 +292,7 @@ class Lowering:
 
                 # cast to string (`as string`)
                 base_type = orig_node.create_token('STRING_TYPE', 'string')
-                as_operator = Tree('as_operator', [
+                to_operator = Tree('to_operator', [
                     Tree('types', [
                         Tree('base_type', [
                             base_type
@@ -308,7 +305,7 @@ class Lowering:
                             evaled_node
                         ]),
                     ]),
-                    as_operator
+                    to_operator
                 ])
                 as_tree.kind = 'pow_expression'
                 as_tree.child(0).kind = 'primary_expression'
@@ -528,31 +525,40 @@ class Lowering:
         for c in node.children:
             self.visit_arguments(c)
 
-    def visit_as_expr(self, node, block):
+    def visit_expr_values(self, node, fake_tree):
         """
-        Visit assignments and move 'as' up the tree if required
+        Transforms a value with a direct index path into two lines.
         """
         if not hasattr(node, 'children') or len(node.children) == 0:
             return
 
-        if node.data == 'foreach_block':
-            block = node.foreach_statement
-            assert block is not None
-        elif node.data == 'service_block' or node.data == 'when_block':
-            block = node.service.service_fragment
-            block = node.service.service_fragment
-            assert block is not None
+        if node.data == 'expression':
+            values = node.follow(['entity', 'values'])
+            if values is not None and len(values.children) > 1:
+                value_type = values.child(0).data
+                assert value_type == 'list' or value_type == 'map'
 
-        if node.data == 'expression' and node.kind == 'as_expression':
-            as_op = node.as_operator
-            if as_op is not None and as_op.output_names is not None:
-                output = Tree('output', as_op.output_names.children)
-                node.expect(block is not None, 'service_no_inline_output')
-                block.children.append(output)
-                node.children = [node.children[0].children[0]]
+                path_fragments = values.children[1:]
+
+                # insert the list as a new temporary reference
+                values.children = [values.children[0]]
+                obj = Tree('expression', node.children)
+                path = fake_tree.add_assignment(obj, original_line='1')
+
+                # insert all path fragments to it
+                path.children.extend(path_fragments)
+                # replace assignment with new path
+                node.children = [
+                    Tree('entity', [
+                        path
+                    ])
+                ]
+
+        if node.data == 'block':
+            fake_tree = self.fake_tree(node)
 
         for c in node.children:
-            self.visit_as_expr(c, block)
+            self.visit_expr_values(c, fake_tree)
 
     def visit_function_dot(self, node, block):
         """
@@ -641,12 +647,12 @@ class Lowering:
         pred = Lowering.is_inline_expression
         self.visit_concise_when(tree)
         self.visit_cmp_expr(tree)
-        self.visit_as_expr(tree, block=None)
         self.visit_arguments(tree)
         self.visit_assignment(tree, block=None, parent=None)
         self.visit_string_templates(tree, block=None, parent=None)
         self.visit_function_dot(tree, block=None)
         self.visit(tree, None, None, pred,
                    self.replace_expression, parent=None)
+        self.visit_expr_values(tree, None)
         self.visit_path(tree, None)
         return tree

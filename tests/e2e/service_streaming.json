@@ -11,8 +11,7 @@
       "service": "twitter",
       "command": "stream",
       "enter": "2",
-      "src": "twitter stream as client",
-      "next": "2"
+      "src": "twitter stream as client"
     },
     "2": {
       "method": "when",
@@ -36,8 +35,7 @@
       ],
       "enter": "3",
       "parent": "1",
-      "src": "    when client tweet track: \"storyscript\" as e",
-      "next": "3"
+      "src": "    when client tweet track: \"storyscript\" as e"
     },
     "3": {
       "method": "expression",

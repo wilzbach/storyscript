@@ -37,16 +37,16 @@ def test_objects_expression_two_as(patch, tree):
     """
     Ensures ExpressionVisitor.expression works with as
     """
-    patch.many(ExpressionVisitor, ['as_expression'])
-    tree.child(1).data = 'as_operator'
+    patch.many(ExpressionVisitor, ['to_expression'])
+    tree.child(1).data = 'to_operator'
     tree.children = ['!', 1]
     expression = ExpressionVisitor().expression
     patch.object(ExpressionVisitor, 'expression')
     r = expression(tree)
-    ExpressionVisitor.as_expression.assert_called_with(
+    ExpressionVisitor.to_expression.assert_called_with(
         tree, ExpressionVisitor.expression(tree.first_child()),
     )
-    assert r == ExpressionVisitor.as_expression()
+    assert r == ExpressionVisitor.to_expression()
 
 
 def test_objects_expression_three(patch, tree):
@@ -85,10 +85,10 @@ def test_objects_values(patch, tree):
         ExpressionVisitor().values(0)
 
 
-def test_objects_as_expression(patch, tree):
+def test_objects_to_expression(patch, tree):
     """
     Ensures that the ExpressionVisitor by default throws AssertionErrors
     for to-be-implemented methods.
     """
     with raises(NotImplementedError):
-        ExpressionVisitor().as_expression(None, 0)
+        ExpressionVisitor().to_expression(None, 0)

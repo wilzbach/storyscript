@@ -1,4 +1,4 @@
-a = {} as Map[any,any]
+a = {} to Map[any,any]
 ANY = a[0]
-t = {} as Map[any,any]
+t = {} to Map[any,any]
 b = ANY[t]

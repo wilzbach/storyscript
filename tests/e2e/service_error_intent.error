@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 17
+
+1|    a = http server as t
+                      ^
+
+E0152: `as` can not be used in assignments.

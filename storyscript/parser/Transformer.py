@@ -412,8 +412,8 @@ class Transformer(LarkTransformer):
         return cls.expression_rewrite('unary_expression', matches)
 
     @classmethod
-    def as_expression(cls, matches):
-        return cls.expression_rewrite('as_expression', matches)
+    def to_expression(cls, matches):
+        return cls.expression_rewrite('to_expression', matches)
 
     @classmethod
     def pow_expression(cls, matches):
@@ -526,6 +526,14 @@ class Transformer(LarkTransformer):
         else:
             assert matches[0].type == 'NAME'
             return Tree('path_fragment', matches)
+
+    @classmethod
+    def value_fragment(cls, matches):
+        """
+        Remove OSB `[` and CSB `]` from map, but save their line/column
+        information.
+        """
+        return cls.path_fragment(matches)
 
     @classmethod
     def add_line_info(cls, t, matches):

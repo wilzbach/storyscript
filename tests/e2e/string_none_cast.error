@@ -1,0 +1,6 @@
+Error: syntax error in story at line 4
+
+4|    b = "{foo()}"
+      ^^^^^^^^^^^^^
+
+E0126: Type casting not supported from `none` to `string`.

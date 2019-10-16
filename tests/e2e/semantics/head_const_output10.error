@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 8
+
+3|           comment = "foobar"
+             ^^^^^^^^^
+
+E0100: Can't assign `string` to `Map[any,any]`

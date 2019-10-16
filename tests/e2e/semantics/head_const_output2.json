@@ -8,8 +8,7 @@
       ],
       "service": "http",
       "command": "server",
-      "enter": "1",
-      "next": "1"
+      "enter": "1"
     },
     "1": {
       "method": "when",
@@ -41,8 +40,7 @@
       ],
       "enter": "2",
       "parent": "1.1",
-      "src": "when http server listen method:\"post\" path:\"/foo\" as res",
-      "next": "2"
+      "src": "when http server listen method:\"post\" path:\"/foo\" as res"
     },
     "2": {
       "method": "expression",
@@ -78,12 +76,23 @@
       ],
       "args": [
         {
-          "$OBJECT": "string",
-          "string": "test"
+          "$OBJECT": "dict",
+          "items": [
+            [
+              {
+                "$OBJECT": "string",
+                "string": "foo"
+              },
+              {
+                "$OBJECT": "string",
+                "string": "bar"
+              }
+            ]
+          ]
         }
       ],
       "parent": "1",
-      "src": "       comment = \"test\""
+      "src": "       comment = {\"foo\": \"bar\"}"
     }
   },
   "services": [

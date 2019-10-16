@@ -1,6 +1,6 @@
 Error: syntax error in story at line 1, column 5
 
-1|    a = [] as Map[string,string]
+1|    a = [] to Map[string,string]
           ^^^^^^^^^^^^^^^^
 
 E0126: Type casting not supported from `List[any]` to `Map[string,string]`.

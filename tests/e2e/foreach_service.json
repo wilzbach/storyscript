@@ -67,8 +67,7 @@
         }
       ],
       "enter": "3",
-      "src": "foreach obj.keys() as item",
-      "next": "3"
+      "src": "foreach obj.keys() as item"
     },
     "3": {
       "method": "execute",
@@ -82,10 +81,28 @@
           "$OBJECT": "arg",
           "name": "to",
           "arg": {
-            "$OBJECT": "path",
-            "paths": [
-              "item"
-            ]
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "List",
+              "values": [
+                {
+                  "$OBJECT": "type",
+                  "type": "any"
+                }
+              ]
+            },
+            "value": {
+              "$OBJECT": "list",
+              "items": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "item"
+                  ]
+                }
+              ]
+            }
           }
         },
         {
@@ -122,7 +139,7 @@
         }
       ],
       "parent": "2",
-      "src": "    mailgun send to: item from: \"foo@bar.com\" subject: \"Spam\" text: obj[item]"
+      "src": "    mailgun send to: [item] from: \"foo@bar.com\" subject: \"Spam\" text: obj[item]"
     }
   },
   "services": [

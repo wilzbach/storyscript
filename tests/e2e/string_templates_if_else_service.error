@@ -1,6 +1,6 @@
 Error: syntax error in story at line 1
 
-1|    if (random integer low: 1 high: "{random integer low: 10 high: 20}" as int) or (random integer low: 10 high: "{random integer low: 20 high: 30}" as int)
+1|    if (random integer low: 1 high: "{random integer low: 10 high: 20}" to int) or (random integer low: 10 high: "{random integer low: 20 high: 30}" to int)
       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 E0122: `int` can't be converted to `boolean`

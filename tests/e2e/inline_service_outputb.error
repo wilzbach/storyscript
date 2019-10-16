@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 25
+
+1|    a = (listen command) to client
+                              ^
+
+E0041: `c` is not allowed here

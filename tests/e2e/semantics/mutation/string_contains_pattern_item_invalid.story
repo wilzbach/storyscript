@@ -1,2 +1,2 @@
 a = ""
-b = a contains item: "a" pattern: 42
+b = a.contains(item: "a" pattern: 42)

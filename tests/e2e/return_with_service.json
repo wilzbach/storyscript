@@ -9,8 +9,7 @@
       ],
       "function": "random",
       "enter": "2.1",
-      "src": "function random returns any",
-      "next": "2.1"
+      "src": "function random returns any"
     },
     "2.1": {
       "method": "execute",

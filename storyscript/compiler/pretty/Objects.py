@@ -199,7 +199,7 @@ class Objects:
                 return self.regular_expression(subtree)
             elif subtree.data == 'types':
                 return self.types(subtree)
-            elif subtree.data == 'void':
+            elif subtree.data == 'null':
                 return 'null'
 
         return self.path(tree)
@@ -235,6 +235,11 @@ class Objects:
 
         sep = ' '
         return f'{sep.join(arguments)}'
+
+    def output(self, tree):
+        assert tree.data == 'output'
+        outputs = [c.value for c in tree.children]
+        return ', '.join(outputs)
 
     def expression(self, tree):
         """

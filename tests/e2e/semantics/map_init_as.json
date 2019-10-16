@@ -31,7 +31,7 @@
           }
         }
       ],
-      "src": "arr = {} as Map[int, int]"
+      "src": "arr = {} to Map[int, int]"
     }
   },
   "entrypoint": "1"

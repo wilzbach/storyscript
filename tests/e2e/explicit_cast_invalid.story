@@ -1,2 +1,2 @@
-t = {} as Map[time,time]
-c = t as Map[float,float]
+t = {} to Map[time,time]
+c = t to Map[float,float]

@@ -1,2 +1,2 @@
 a = gmaps geocode address:"Venice"
-a.b = "bar"
+a.lon = 100

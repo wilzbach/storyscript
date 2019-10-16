@@ -83,8 +83,9 @@ def runner(source, op=None, allowed=None, pre=''):
     if any(allowed_fn(op) for allowed_fn in allowed):
         s.check_success()
     else:
-        e = s.errors()[0]
-        assert isinstance(e.error, CompilerError)
+        errors = s.errors()
+        assert len(errors) == 1, f'Error expected for `{source}`'
+        assert isinstance(errors[0].error, CompilerError)
 
 
 ###############################################################################
@@ -108,7 +109,7 @@ def test_regex_boolean_ops(source, op):
 
 @mark.parametrize('source,op', op_builder('re', '"."', swapped=True))
 def test_regex_string_ops(source, op):
-    runner(source, op, allowed=is_sum, pre='re=/foo/\n')
+    runner(source, op, allowed=[], pre='re=/foo/\n')
 
 
 ###############################################################################
@@ -132,7 +133,7 @@ def test_map_boolean_ops(source, op):
 
 @mark.parametrize('source,op', op_builder('{"a": 1}', '"."', swapped=True))
 def test_map_string_ops(source, op):
-    runner(source, op, allowed=[is_sum])
+    runner(source, op, allowed=[])
 
 
 ###############################################################################
@@ -156,7 +157,7 @@ def test_list_boolean_ops(source, op):
 
 @mark.parametrize('source,op', op_builder('[1]', '"."', swapped=True))
 def test_list_string_ops(source, op):
-    runner(source, op, allowed=[is_sum])
+    runner(source, op, allowed=[])
 
 
 ###############################################################################
@@ -180,7 +181,7 @@ def test_time_boolean_ops(source, op):
 
 @mark.parametrize('source,op', op_builder('1m', '"."', swapped=True))
 def test_time_string_ops(source, op):
-    runner(source, op, allowed=[is_sum])
+    runner(source, op, allowed=[])
 
 ###############################################################################
 # Test operations on ObjectType
@@ -204,7 +205,7 @@ def test_object_boolean_ops(source, op):
 
 @mark.parametrize('source,op', op_builder('app', '"."', swapped=True))
 def test_object_string_ops(source, op):
-    runner(source, op, allowed=[is_sum])
+    runner(source, op, allowed=[])
 
 
 ###############################################################################
@@ -260,7 +261,7 @@ def test_float_boolean_ops(source, op):
 
 @mark.parametrize('source,op', op_builder('1.5', '"."', swapped=True))
 def test_float_string_ops(source, op):
-    runner(source, op, allowed=[is_sum])
+    runner(source, op, allowed=[])
 
 
 ###############################################################################
@@ -279,7 +280,7 @@ def test_boolean_int_ops(source, op):
 
 @mark.parametrize('source,op', op_builder('true', '"."', swapped=True))
 def test_boolean_string_ops(source, op):
-    runner(source, op, allowed=[is_sum])
+    runner(source, op, allowed=[])
 
 
 ###############################################################################
@@ -293,7 +294,7 @@ def test_int_int_ops(source, op):
 
 @mark.parametrize('source,op', op_builder('1', '"."', swapped=True))
 def test_int_string_ops(source, op):
-    runner(source, op, allowed=[is_sum])
+    runner(source, op, allowed=[])
 
 
 ###############################################################################
@@ -304,55 +305,108 @@ def test_int_string_ops(source, op):
 def test_string_string_ops(source, op):
     runner(source, op, allowed=[is_equal, is_sum, is_cmp])
 
+###############################################################################
+# Test operations on NullType
+###############################################################################
+
+
+@mark.parametrize('source,op', op_builder('null', 'null'))
+def test_null_null_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', 'true', swapped=True))
+def test_null_boolean_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', '2', swapped=True))
+def test_null_int_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', '2.5', swapped=True))
+def test_null_float_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', '"."', swapped=True))
+def test_null_string_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', '[1]', swapped=True))
+def test_null_list_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', '{"a": 1}', swapped=True))
+def test_null_obj_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', '1m', swapped=True))
+def test_null_time_ops(source, op):
+    runner(source, op, allowed=[is_equal])
+
+
+@mark.parametrize('source,op', op_builder('null', 're', swapped=True))
+def test_null_regex_ops(source, op):
+    runner(source, op, allowed=[is_equal], pre='re=/foo/\n')
+
 
 ###############################################################################
 # Test operations on AnyType
 ###############################################################################
 
-ANY = 'any_obj = {} as Map[any,any]\nany_var=any_obj[0]\n'
+ANY = 'any_var = 1 to any\n'
 
 
 @mark.parametrize('source,op', op_builder('any_var', 'any_var'))
 def test_any_any_ops(source, op):
-    runner(source, op, allowed=all_ops, pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', 'true', swapped=True))
 def test_any_boolean_ops(source, op):
-    runner(source, op, allowed=all_ops, pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '2', swapped=True))
 def test_any_int_ops(source, op):
-    runner(source, op, allowed=all_ops, pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '2.5', swapped=True))
 def test_any_float_ops(source, op):
-    runner(source, op, allowed=all_except_equal, pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '"."', swapped=True))
 def test_any_string_ops(source, op):
-    runner(source, op, allowed=[is_equal, is_sum, is_cmp], pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '[1]', swapped=True))
 def test_any_list_ops(source, op):
-    runner(source, op, allowed=[is_equal, is_sum], pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '{"a": 1}', swapped=True))
 def test_any_obj_ops(source, op):
-    runner(source, op, allowed=[is_equal], pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', '1m', swapped=True))
 def test_any_time_ops(source, op):
-    allowed = [is_equal, is_sum, is_sub, is_cmp]
-    runner(source, op, allowed=allowed, pre=ANY)
+    runner(source, op, allowed=[], pre=ANY)
 
 
 @mark.parametrize('source,op', op_builder('any_var', 're', swapped=True))
 def test_any_regex_ops(source, op):
-    runner(source, op, allowed=is_equal, pre=ANY + 're=/foo/\n')
+    runner(source, op, allowed=[], pre=ANY + 're=/foo/\n')
+
+
+@mark.parametrize('source,op', op_builder('any_var', 'null', swapped=True))
+def test_any_null_ops(source, op):
+    runner(source, op, allowed=[], pre=ANY)

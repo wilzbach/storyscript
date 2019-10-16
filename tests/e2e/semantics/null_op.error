@@ -1,0 +1,6 @@
+Error: syntax error in story at line 4, column 5
+
+4|    c = a * b
+          ^^^^^
+
+E0103: `*` between `null` and `null` is not supported.

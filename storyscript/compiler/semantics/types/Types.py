@@ -20,16 +20,10 @@ def binary_op(op, left, right):
     """
     Default binary operation:
         1) if both types are equal -> left.op(op)
-        2) if string concat and the other type can be stringified -> string
-        3) try to implicitly convert left to right or right -> implicit.op(op)
+        2) try to implicitly convert left to right or right -> implicit.op(op)
     """
     if left == right:
         return left.op(op)
-    if op and op.type == 'PLUS':
-        if isinstance(left, StringType) and right.string():
-            return left
-        if isinstance(right, StringType) and left.string():
-            return right
 
     left_implicit = left.implicit_to(right)
     right_implicit = right.implicit_to(left)
@@ -38,13 +32,9 @@ def binary_op(op, left, right):
     if new_type is None:
         return None
 
+    # binary operations on any are not valid
     if new_type == AnyType.instance():
-        # one of the types is 'any', check if the type would be compatible with
-        # itself
-        if left == AnyType.instance():
-            return right.op(op)
-        else:
-            return left.op(op)
+        return None
 
     return new_type.op(op)
 
@@ -109,6 +99,8 @@ class BaseType:
         """
         Returns True if the type can be compared with `other`, False otherwise.
         """
+        if other == AnyType.instance():
+            return None
         return implicit_cast(self, other)
 
     def equal(self, other):
@@ -116,11 +108,17 @@ class BaseType:
         Returns True if the type can perform equality comparison with `other`,
         False otherwise.
         """
+        if other == AnyType.instance():
+            return None
+        if other == NullType.instance():
+            return self
         return implicit_cast(self, other)
 
     def can_be_assigned(self, other):
         if other == AnyType.instance():
             return None
+        if other == NullType.instance():
+            return self
         return other.implicit_to(self)
 
     def implicit_to(self, other):
@@ -133,20 +131,6 @@ class BaseType:
         if other == AnyType.instance():
             return other
         return None
-
-    def explicit_from(self, from_type):
-        """
-        Return `self` if the type can be explicitly converted from `other`.
-        None otherwise.
-        """
-        return from_type.implicit_to(self)
-
-    def string(self):
-        """
-        Returns True if the type can be stringified.
-        False otherwise.
-        """
-        return True
 
     def hashable(self):
         """
@@ -229,9 +213,6 @@ class NoneType(BaseType):
 
     def equal(self, other):
         return None
-
-    def string(self):
-        return False
 
     def hashable(self):
         return False
@@ -334,6 +315,8 @@ class FloatType(BaseType):
         """
         Returns True if the type can perform equality comparison with `other`,
         """
+        if other == NullType.instance():
+            return self
         return False
 
 
@@ -611,8 +594,8 @@ class ObjectType(BaseType):
     """
     Represents an object
     """
-    def __init__(self, object=None):
-        self._object = object
+    def __init__(self, obj=None):
+        self._object = obj
 
     def __str__(self):
         return f'Object'
@@ -628,9 +611,8 @@ class ObjectType(BaseType):
 
     def index(self, other, kind):
         if kind == IndexKind.DOT:
-            return AnyType.instance()
-        if other.implicit_to(StringType.instance()) is not None:
-            return AnyType.instance()
+            assert isinstance(other, StringType)
+            return self._object
         return None
 
     def has_boolean(self):
@@ -650,6 +632,58 @@ class ObjectType(BaseType):
         return ObjectType()
 
 
+class NullType(BaseType):
+    """
+    Represents a special type for `null`. It behaves similar to 'any', but
+    allows equivalence comparisons.
+    """
+
+    def __str__(self):
+        return 'null'
+
+    def __eq__(self, other):
+        return isinstance(other, NullType)
+
+    def can_be_assigned(self, other):
+        return True
+
+    def index(self, other, kind):
+        return None
+
+    @singleton
+    def instance():
+        """
+        Returns a static instance of the NullType.
+        """
+        return NullType()
+
+    def has_boolean(self):
+        return False
+
+    def cmp(self, other):
+        return False
+
+    def equal(self, other):
+        if isinstance(other, NullType):
+            return self
+        # only possible if the other type allows comparison with null
+        return other.equal(self)
+
+    def hashable(self):
+        return False
+
+    def op(self, op):
+        return None
+
+    def implicit_to(self, other):
+        return None
+
+    def explicit_from(self, other):
+        if other != NoneType.instance():
+            return self
+        return None
+
+
 class AnyType(BaseType):
     """
     Represents any possible type.
@@ -665,9 +699,6 @@ class AnyType(BaseType):
         return True
 
     def index(self, other, kind):
-        if other.hashable():
-            return self
-        # type couldn't have been a key
         return None
 
     @singleton
@@ -689,23 +720,19 @@ class AnyType(BaseType):
         return False
 
     def cmp(self, other):
-        if self == other:
-            return self
-        return other.cmp(other)
+        return False
 
     def equal(self, other):
-        if self == other:
-            return self
-        return other.equal(other)
+        return False
 
     def hashable(self):
-        return True
+        return False
 
     def op(self, op):
-        return self
+        return None
 
     def implicit_to(self, other):
-        return self
+        return None
 
     def explicit_from(self, other):
         if other != NoneType.instance():

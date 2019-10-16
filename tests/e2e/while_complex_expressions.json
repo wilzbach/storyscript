@@ -84,8 +84,7 @@
         }
       ],
       "enter": "4",
-      "src": "while l.contains(item:0)",
-      "next": "4"
+      "src": "while l.contains(item:0)"
     },
     "4": {
       "method": "execute",
@@ -114,7 +113,7 @@
         }
       ],
       "parent": "3",
-      "src": "    log info msg:i as string"
+      "src": "    log info msg:i to string"
     }
   },
   "services": [

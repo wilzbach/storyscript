@@ -42,7 +42,7 @@
           }
         }
       ],
-      "src": "a = {2: \"42\"} as Map[float,float]"
+      "src": "a = {2: \"42\"} to Map[float,float]"
     }
   },
   "entrypoint": "1"

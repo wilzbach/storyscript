@@ -39,7 +39,7 @@
       "enter": "4",
       "exit": "6.1",
       "src": "function sayHello name: string returns string",
-      "next": "4"
+      "next": "6.1"
     },
     "4": {
       "method": "return",
@@ -72,8 +72,7 @@
         }
       ],
       "parent": "3",
-      "src": "    return \"{hello} name!\"",
-      "next": "6.1"
+      "src": "    return \"{hello} name!\""
     },
     "6.1": {
       "method": "call",

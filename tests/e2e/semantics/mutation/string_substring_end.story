@@ -1,2 +1,2 @@
 a = ""
-b = a substring end: 10
+b = a.substring(end: 10)

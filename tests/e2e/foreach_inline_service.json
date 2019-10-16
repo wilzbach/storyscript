@@ -46,8 +46,7 @@
         }
       ],
       "enter": "2",
-      "src": "foreach (random list type: \"string\" length: 10) as item",
-      "next": "2"
+      "src": "foreach (random list type: \"string\" length: 10) as item"
     },
     "2": {
       "method": "execute",
@@ -61,17 +60,15 @@
           "$OBJECT": "arg",
           "name": "to",
           "arg": {
-            "$OBJECT": "type_cast",
-            "type": {
-              "$OBJECT": "type",
-              "type": "string"
-            },
-            "value": {
-              "$OBJECT": "path",
-              "paths": [
-                "item"
-              ]
-            }
+            "$OBJECT": "list",
+            "items": [
+              {
+                "$OBJECT": "path",
+                "paths": [
+                  "item"
+                ]
+              }
+            ]
           }
         },
         {
@@ -89,10 +86,18 @@
             "$OBJECT": "string",
             "string": "Spam!!"
           }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "text",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foobar"
+          }
         }
       ],
       "parent": "1",
-      "src": "    mailgun send to: item from: \"foo@bar.com\" subject:\"Spam!!\""
+      "src": "    mailgun send to: [item] from: \"foo@bar.com\" subject:\"Spam!!\" text: \"foobar\""
     }
   },
   "services": [

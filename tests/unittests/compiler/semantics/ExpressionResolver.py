@@ -4,7 +4,7 @@ from unittest.mock import call
 from storyscript.compiler.semantics.ExpressionResolver \
     import SymbolExpressionVisitor
 from storyscript.compiler.semantics.types.Types import BooleanType, \
-    IntType, MapType
+    IntType, MapType, RegExpType, TimeType
 from storyscript.parser import Tree
 
 
@@ -14,6 +14,22 @@ def test_type_to_tree_boolean(magic):
     se = SymbolExpressionVisitor.type_to_tree(tree, bt)
     assert se.data == 'base_type'
     tree.create_token.assert_called_with('BOOLEAN_TYPE', 'boolean')
+
+
+def test_type_to_tree_regex(magic):
+    tree = magic()
+    bt = RegExpType.instance()
+    se = SymbolExpressionVisitor.type_to_tree(tree, bt)
+    assert se.data == 'base_type'
+    tree.create_token.assert_called_with('REGEXP_TYPE', 'regex')
+
+
+def test_type_to_tree_time(magic):
+    tree = magic()
+    bt = TimeType.instance()
+    se = SymbolExpressionVisitor.type_to_tree(tree, bt)
+    assert se.data == 'base_type'
+    tree.create_token.assert_called_with('TIME_TYPE', 'time')
 
 
 def test_type_to_tree_map(magic, patch):

@@ -21,7 +21,7 @@
       "method": "mutation",
       "ln": "2.1",
       "col_start": "7",
-      "col_end": "14",
+      "col_end": "8",
       "name": [
         "__p-2.1"
       ],
@@ -53,8 +53,7 @@
         }
       ],
       "enter": "3",
-      "src": "while x isOdd",
-      "next": "3"
+      "src": "while x.isOdd()"
     },
     "3": {
       "method": "break",

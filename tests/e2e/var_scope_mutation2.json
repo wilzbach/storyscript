@@ -24,15 +24,15 @@
         }
       ],
       "src": "my_service = [1, 2]",
-      "next": "2"
+      "next": "2.1"
     },
-    "2": {
+    "2.1": {
       "method": "mutation",
-      "ln": "2",
+      "ln": "2.1",
       "col_start": "5",
-      "col_end": "22",
+      "col_end": "15",
       "name": [
-        "a"
+        "__p-2.1"
       ],
       "args": [
         {
@@ -47,7 +47,25 @@
           "args": []
         }
       ],
-      "src": "a = my_service length"
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "4",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-2.1"
+          ]
+        }
+      ],
+      "src": "a = my_service.length()"
     }
   },
   "entrypoint": "1"

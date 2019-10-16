@@ -403,7 +403,7 @@
       "enter": "2",
       "exit": "3",
       "src": "if (random integer low: (random integer low: 1 high: 10) high: (random integer low: 10 high: 20)) == (random integer low: (random integer low: 1 high: 10) high: (random integer low: 10 high: 20))",
-      "next": "2"
+      "next": "3"
     },
     "2": {
       "method": "expression",
@@ -420,8 +420,7 @@
         }
       ],
       "parent": "1",
-      "src": "    x = 0",
-      "next": "3"
+      "src": "    x = 0"
     },
     "3": {
       "method": "elif",
@@ -450,7 +449,7 @@
       "enter": "4",
       "exit": "5",
       "src": "else if (random integer low: (random integer low: 1 high: 10) high: (random integer low: 10 high: 20)) == (random integer low: (random integer low: 1 high: 10) high: (random integer low: 10 high: 20))",
-      "next": "4"
+      "next": "5"
     },
     "4": {
       "method": "expression",
@@ -467,8 +466,7 @@
         }
       ],
       "parent": "3",
-      "src": "    x = 1",
-      "next": "5"
+      "src": "    x = 1"
     },
     "5": {
       "method": "else",
@@ -478,7 +476,7 @@
       "enter": "6",
       "exit": "8",
       "src": "else",
-      "next": "6"
+      "next": "8"
     },
     "6": {
       "method": "expression",
@@ -495,8 +493,7 @@
         }
       ],
       "parent": "5",
-      "src": "    x = 2",
-      "next": "8"
+      "src": "    x = 2"
     },
     "8": {
       "method": "expression",
