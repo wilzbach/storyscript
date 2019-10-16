@@ -37,19 +37,15 @@ class PrettyExpressionVisitor(ExpressionVisitor):
             assert len(values) == 2
             return f'{values[0]} {expr} {values[1]}'
 
-    def as_expression(self, tree, expr):
-        assert tree.child(1).data == 'as_operator'
+    def to_expression(self, tree, expr):
+        assert tree.child(1).data == 'to_operator'
         expr = self.visitor.expression(tree.child(0))
 
         t = tree.child(1).child(0)
-        if t.data == 'output_names':
-            outputs = [c.value for c in t.children]
-            output = ', '.join(outputs)
-        else:
-            assert t.data == 'types'
-            output = self.visitor.types(t)
+        assert t.data == 'types'
+        output = self.visitor.types(t)
 
-        return f'{expr} as {output}'
+        return f'{expr} to {output}'
 
     def expression(self, tree):
         v = super().expression(tree)

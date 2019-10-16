@@ -125,6 +125,7 @@ class Grammar:
         self.ebnf.AND = 'and'
 
         self.ebnf._AS = 'as'
+        self.ebnf._TO = 'to'
 
         self.ebnf.GREATER = '>'
         self.ebnf.GREATER_EQUAL = '>='
@@ -151,8 +152,7 @@ class Grammar:
         self.ebnf.mul_operator = 'MULTIPLIER, BSLASH, MODULUS'
 
         self.ebnf.primary_expression = 'entity , op or_expression cp'
-        self.ebnf.output_names = 'name (comma name)*'
-        self.ebnf.as_operator = 'as (types | output_names)'
+        self.ebnf.to_operator = 'to types'
         self.ebnf.pow_operator = 'POWER'
 
         args = 'name op arguments* cp'
@@ -163,9 +163,9 @@ class Grammar:
                                    'unary_expression)?, dot_expression'
         self.ebnf.unary_expression = ('unary_operator unary_expression , '
                                       'pow_expression')
-        self.ebnf.as_expression = 'unary_expression (as_operator)?'
+        self.ebnf.to_expression = 'unary_expression (to_operator)?'
         self.ebnf.mul_expression = '(mul_expression mul_operator)? ' \
-                                   'as_expression'
+                                   'to_expression'
         self.ebnf.arith_expression = '(arith_expression arith_operator)? ' \
                                      'mul_expression'
         self.ebnf.cmp_expression = '(cmp_expression cmp_operator)? ' \

@@ -99,7 +99,10 @@ class PrettyPrinter:
         arguments = self.objects.arguments(tree.service_fragment)
         if len(arguments) > 0:
             arguments = f' {arguments}'
-        r = f'{service_name} {command}{arguments}'
+        output = ''
+        if tree.service_fragment.output:
+            output = ' as ' + self.objects.output(tree.service_fragment.output)
+        r = f'{service_name} {command}{arguments}{output}'
         return r
 
     def when(self, tree, nested_block, parent):
@@ -162,7 +165,8 @@ class PrettyPrinter:
         """
         exp = tree.foreach_statement.base_expression
         arg = self.fake_base_expression(exp, parent)
-        self.add_line(f'foreach {arg}')
+        output = self.objects.output(tree.foreach_statement.output)
+        self.add_line(f'foreach {arg} as {output}')
         with self.scope():
             self.subtree(tree.nested_block)
 
@@ -197,7 +201,8 @@ class PrettyPrinter:
         s = self.service(tree.service, tree.nested_block, parent)
         self.add_line(s)
         if tree.nested_block:
-            self.subtree(tree.nested_block, parent=tree.line())
+            with self.scope():
+                self.subtree(tree.nested_block, parent=tree.line())
 
     def when_block(self, tree, parent):
         """

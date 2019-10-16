@@ -1,6 +1,6 @@
 Error: syntax error in story at line 1, column 6
 
-1|    a = (1 as any) as object
+1|    a = (1 to any) to object
            ^^^^^^^^^^^^^^^^^^^
 
 E0154: Type cast to `object` is not allowed.

@@ -1,2 +1,2 @@
-worldVar = {} as Map[any,any]
+worldVar = {} to Map[any,any]
 a = "hello {worldVar['myKey']}"

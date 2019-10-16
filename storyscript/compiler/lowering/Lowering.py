@@ -292,7 +292,7 @@ class Lowering:
 
                 # cast to string (`as string`)
                 base_type = orig_node.create_token('STRING_TYPE', 'string')
-                as_operator = Tree('as_operator', [
+                to_operator = Tree('to_operator', [
                     Tree('types', [
                         Tree('base_type', [
                             base_type
@@ -305,7 +305,7 @@ class Lowering:
                             evaled_node
                         ]),
                     ]),
-                    as_operator
+                    to_operator
                 ])
                 as_tree.kind = 'pow_expression'
                 as_tree.child(0).kind = 'primary_expression'
@@ -560,32 +560,6 @@ class Lowering:
         for c in node.children:
             self.visit_expr_values(c, fake_tree)
 
-    def visit_as_expr(self, node, block):
-        """
-        Visit assignments and move 'as' up the tree if required
-        """
-        if not hasattr(node, 'children') or len(node.children) == 0:
-            return
-
-        if node.data == 'foreach_block':
-            block = node.foreach_statement
-            assert block is not None
-        elif node.data == 'service_block' or node.data == 'when_block':
-            block = node.service.service_fragment
-            block = node.service.service_fragment
-            assert block is not None
-
-        if node.data == 'expression' and node.kind == 'as_expression':
-            as_op = node.as_operator
-            if as_op is not None and as_op.output_names is not None:
-                output = Tree('output', as_op.output_names.children)
-                node.expect(block is not None, 'service_no_inline_output')
-                block.children.append(output)
-                node.children = [node.children[0].children[0]]
-
-        for c in node.children:
-            self.visit_as_expr(c, block)
-
     def visit_function_dot(self, node, block):
         """
         Visit function call with more than one path and lower
@@ -673,7 +647,6 @@ class Lowering:
         pred = Lowering.is_inline_expression
         self.visit_concise_when(tree)
         self.visit_cmp_expr(tree)
-        self.visit_as_expr(tree, block=None)
         self.visit_arguments(tree)
         self.visit_assignment(tree, block=None, parent=None)
         self.visit_string_templates(tree, block=None, parent=None)

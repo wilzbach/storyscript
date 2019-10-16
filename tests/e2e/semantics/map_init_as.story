@@ -1,1 +1,1 @@
-arr = {} as Map[int, int]
+arr = {} to Map[int, int]

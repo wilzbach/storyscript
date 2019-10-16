@@ -74,8 +74,8 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         yield
         self.visitor.with_as = prev
 
-    def as_expression(self, tree, expr):
-        assert tree.child(1).data == 'as_operator'
+    def to_expression(self, tree, expr):
+        assert tree.child(1).data == 'to_operator'
         # check for compatibility
         t = self.visitor.types(tree.child(1).types)
         tree.expect(t.type() != ObjectType.instance(), 'object_no_as')
@@ -178,12 +178,12 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         """
         Type casts the given expr_node to the target_type.
         This is done by creating a new AST for the expr_node with an
-        `as_operator`.
+        `to_operator`.
 
         Args:
             expr_node: Tree node representing an expression. This is the
                 expression for which this function will generate a new
-                expression node which also contains an `as_operator` to
+                expression node which also contains an `to_operator` to
                 represent the type cast.
             target_type: The type to type cast given expression (expr_node)
                 into. Must be a `types` node.
@@ -200,13 +200,13 @@ class SymbolExpressionVisitor(ExpressionVisitor):
         )
         element = Tree('expression', [
             expr_node,
-            Tree('as_operator', [
+            Tree('to_operator', [
                 Tree('types', [
                     cast_type
                 ])
             ])
         ])
-        element.kind = 'as_expression'
+        element.kind = 'to_expression'
         return element
 
     def nary_args_implicit_cast(self, tree, target_type, source_types):

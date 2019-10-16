@@ -31,7 +31,7 @@
           }
         }
       ],
-      "src": "b = {} as Map[any,any]",
+      "src": "b = {} to Map[any,any]",
       "next": "2"
     },
     "2": {

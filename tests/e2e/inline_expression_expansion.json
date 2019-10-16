@@ -53,7 +53,7 @@
         }
       ],
       "parent": "1",
-      "src": "    return {} as Map[any,any]"
+      "src": "    return {} to Map[any,any]"
     },
     "4": {
       "method": "function",

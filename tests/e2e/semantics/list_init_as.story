@@ -1,1 +1,1 @@
-arr = [] as List[int]
+arr = [] to List[int]

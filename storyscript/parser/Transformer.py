@@ -412,8 +412,8 @@ class Transformer(LarkTransformer):
         return cls.expression_rewrite('unary_expression', matches)
 
     @classmethod
-    def as_expression(cls, matches):
-        return cls.expression_rewrite('as_expression', matches)
+    def to_expression(cls, matches):
+        return cls.expression_rewrite('to_expression', matches)
 
     @classmethod
     def pow_expression(cls, matches):

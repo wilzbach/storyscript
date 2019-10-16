@@ -27,7 +27,7 @@
           }
         }
       ],
-      "src": "a = [] as List[any]",
+      "src": "a = [] to List[any]",
       "next": "2"
     },
     "2": {
@@ -59,7 +59,7 @@
           }
         }
       ],
-      "src": "a = a as List[string]"
+      "src": "a = a to List[string]"
     }
   },
   "entrypoint": "1"

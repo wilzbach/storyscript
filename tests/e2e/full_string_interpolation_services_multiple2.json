@@ -137,7 +137,7 @@
         }
       ],
       "parent": "2",
-      "src": "        a = \"foo {(random string length:10) as string + msg as string}\""
+      "src": "        a = \"foo {(random string length:10) to string + msg to string}\""
     }
   },
   "services": [

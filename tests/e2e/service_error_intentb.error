@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 20
+
+1|    a = http server to t
+                         ^
+
+E0041: `t` is not allowed here

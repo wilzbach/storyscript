@@ -236,6 +236,11 @@ class Objects:
         sep = ' '
         return f'{sep.join(arguments)}'
 
+    def output(self, tree):
+        assert tree.data == 'output'
+        outputs = [c.value for c in tree.children]
+        return ', '.join(outputs)
+
     def expression(self, tree):
         """
         Compiles an expression object with the given tree.

@@ -116,7 +116,7 @@
           }
         }
       ],
-      "src": "c = b as List[int]"
+      "src": "c = b to List[int]"
     }
   },
   "entrypoint": "1.1"

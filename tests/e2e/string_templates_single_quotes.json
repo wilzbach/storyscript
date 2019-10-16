@@ -31,7 +31,7 @@
           }
         }
       ],
-      "src": "worldVar = {} as Map[any,any]",
+      "src": "worldVar = {} to Map[any,any]",
       "next": "2.1"
     },
     "2.1": {

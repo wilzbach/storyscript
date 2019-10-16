@@ -359,7 +359,7 @@ def test_null_regex_ops(source, op):
 # Test operations on AnyType
 ###############################################################################
 
-ANY = 'any_var = 1 as any\n'
+ANY = 'any_var = 1 to any\n'
 
 
 @mark.parametrize('source,op', op_builder('any_var', 'any_var'))

@@ -27,7 +27,7 @@
           }
         }
       ],
-      "src": "a = [] as List[int]",
+      "src": "a = [] to List[int]",
       "next": "2"
     },
     "2": {

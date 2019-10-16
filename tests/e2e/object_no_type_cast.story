@@ -1,1 +1,1 @@
-a = (1 as any) as object
+a = (1 to any) to object
