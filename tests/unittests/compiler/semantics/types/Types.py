@@ -63,6 +63,18 @@ def test_none_explicit_from():
     assert NoneType.instance().explicit_from(AnyType.instance()) is None
 
 
+def test_null_explicit_from():
+    assert NullType.instance().explicit_from(NoneType.instance()) is None
+    assert NullType.instance().explicit_from(AnyType.instance()) \
+        is NullType.instance()
+    assert NullType.instance().explicit_from(IntType.instance()) \
+        is NullType.instance()
+
+
+def test_null_hashable():
+    assert not NullType.instance().hashable()
+
+
 def test_base_type_not_implemented():
     with raises(NotImplementedError):
         BaseType().op(None)
