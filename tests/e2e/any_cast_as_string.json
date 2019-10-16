@@ -21,7 +21,7 @@
           }
         }
       ],
-      "src": "a = 1 as any",
+      "src": "a = 1 to any",
       "next": "2"
     },
     "2": {

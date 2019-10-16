@@ -1,2 +1,2 @@
-a = 1 as any
+a = 1 to any
 b = "{a}"

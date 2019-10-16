@@ -1,1 +1,1 @@
-a = {} as List[List[string]]
+a = {} to List[List[string]]

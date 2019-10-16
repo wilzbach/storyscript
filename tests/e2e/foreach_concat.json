@@ -106,7 +106,7 @@
         }
       ],
       "parent": "1",
-      "src": "    mailgun send to: [\"foo@bar.com\"] from: \"ss@ss.com\" subject: item as string text: \"foobar\""
+      "src": "    mailgun send to: [\"foo@bar.com\"] from: \"ss@ss.com\" subject: item to string text: \"foobar\""
     }
   },
   "services": [

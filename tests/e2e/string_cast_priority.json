@@ -51,7 +51,7 @@
           }
         }
       ],
-      "src": "b = a as string",
+      "src": "b = a to string",
       "next": "3"
     },
     "3": {
@@ -96,7 +96,7 @@
           ]
         }
       ],
-      "src": "c = a as string + b as string"
+      "src": "c = a to string + b to string"
     }
   },
   "entrypoint": "1"

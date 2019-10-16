@@ -160,7 +160,7 @@ start
             expression
               entity
                 path	a
-            as_operator
+            to_operator
               types
                 base_type	string
 

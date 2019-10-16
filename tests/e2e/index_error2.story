@@ -1,3 +1,3 @@
 a = 0
-b = {} as Map[any,any]
+b = {} to Map[any,any]
 c = a[b["b"]]

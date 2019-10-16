@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 18
+
+1|    uuid generate to t
+                       ^
+
+E0041: `t` is not allowed here

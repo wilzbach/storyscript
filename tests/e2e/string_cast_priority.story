@@ -1,3 +1,3 @@
 a = {"a": "b"}
-b = a as string
-c = a as string + b as string
+b = a to string
+c = a to string + b to string

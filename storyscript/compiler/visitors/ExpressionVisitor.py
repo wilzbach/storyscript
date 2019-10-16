@@ -13,7 +13,7 @@ class ExpressionVisitor:
     def values(self, tree):
         raise NotImplementedError()
 
-    def as_expression(self, tree, expr):
+    def to_expression(self, tree, expr):
         raise NotImplementedError()
 
     def entity(self, tree):
@@ -39,10 +39,10 @@ class ExpressionVisitor:
             return self.entity(first_child)
         elif len(tree.children) == 2:
             second_child = tree.child(1)
-            if second_child.data == 'as_operator':
+            if second_child.data == 'to_operator':
                 with self.with_as_cast():
                     expr = self.expression(first_child)
-                    return self.as_expression(tree, expr)
+                    return self.to_expression(tree, expr)
             # unary_expression
             op = first_child.child(0)  # unary_operator
             values = [self.expression(second_child)]

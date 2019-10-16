@@ -1,1 +1,1 @@
-a = [1, 2] as boolean
+a = [1, 2] to boolean

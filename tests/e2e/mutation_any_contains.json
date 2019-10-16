@@ -27,7 +27,7 @@
           }
         }
       ],
-      "src": "a = [] as List[any]",
+      "src": "a = [] to List[any]",
       "next": "2"
     },
     "2": {

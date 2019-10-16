@@ -127,7 +127,7 @@
         }
       ],
       "parent": "7",
-      "src": "    return {} as Map[any,any]"
+      "src": "    return {} to Map[any,any]"
     },
     "9": {
       "method": "function",

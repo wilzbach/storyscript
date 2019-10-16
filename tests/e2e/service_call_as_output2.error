@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 2
+Error: syntax error in story at line 1, column 17
 
 1|    (uuid generate) as t
-       ^^^^^^^^^^^^^^^^^^^
+                      ^
 
-E0109: Inline service calls can't define an output
+E0152: `as` can not be used in assignments.

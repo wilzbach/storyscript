@@ -1,7 +1,7 @@
 from pytest import mark
 
 from storyscript.Api import Api
-from storyscript.exceptions import CompilerError
+from storyscript.exceptions import StoryError
 
 features = {'globals': True}
 
@@ -21,7 +21,7 @@ def fail(source):
     s = Api.loads(source, features=features)
     assert not s.success()
     e = s.errors()[0]
-    assert isinstance(e.error, CompilerError)
+    assert isinstance(e, StoryError)
 
 
 def run(source, should_fail):
@@ -30,7 +30,7 @@ def run(source, should_fail):
     Otherwise, expect it to pass.
     """
     if 'ANY' in source:
-        pre = 'ANY = {} as Map[any,any]\n'
+        pre = 'ANY = {} to Map[any,any]\n'
     elif 'fn_none' in source:
         pre = 'function fn_none\n    return\n'
     else:
@@ -203,7 +203,7 @@ implicit_assigns = {
 @mark.parametrize('left,right,should_fail',
                   build_type_permutations(implicit_assigns))
 def test_explicit_cast(right, left, should_fail):
-    run(f'a = {left[1]} as {right[0]}', should_fail=should_fail)
+    run(f'a = {left[1]} to {right[0]}', should_fail=should_fail)
 
 ###############################################################################
 # ConvertibleToString

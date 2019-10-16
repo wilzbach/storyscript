@@ -27,7 +27,7 @@
           }
         }
       ],
-      "src": "arr = [] as List[int]"
+      "src": "arr = [] to List[int]"
     }
   },
   "entrypoint": "1"

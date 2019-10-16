@@ -1,2 +1,2 @@
-b = {} as Map[any,any]
+b = {} to Map[any,any]
 a = b[:-1]

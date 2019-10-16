@@ -1,1 +1,1 @@
-sendgrid sendOne from: "hello@world.com" to: "hello@world.com" subject: "Hello world" content: "Hello world" content_type: "string"
+sendgrid sendOne to: "hello@world.com" from: "hello@world.com" subject: "Hello world" content: "Hello world" content_type: "string"

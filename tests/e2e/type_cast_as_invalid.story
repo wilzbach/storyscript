@@ -1,1 +1,1 @@
-a = [] as Map[string,string]
+a = [] to Map[string,string]

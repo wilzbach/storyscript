@@ -1,2 +1,2 @@
-a = [] as List[int]
+a = [] to List[int]
 b = 2 + a[0]

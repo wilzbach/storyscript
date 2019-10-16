@@ -337,7 +337,7 @@
       ],
       "enter": "2",
       "exit": "3",
-      "src": "if (random list length: 10 type: \"string\") == (random list length: (random integer low:1 high:10) type: \"{random string length: ((random boolean) as int)}\")",
+      "src": "if (random list length: 10 type: \"string\") == (random list length: (random integer low:1 high:10) type: \"{random string length: ((random boolean) to int)}\")",
       "next": "3"
     },
     "2": {
@@ -382,7 +382,7 @@
         }
       ],
       "enter": "4",
-      "src": "else if (random integer low: 10 high: (\"20\" as int)) == (random integer low: (random integer low: 10 high:20+10) high: (\"{random string length: ((random boolean) as int)}\" as int))"
+      "src": "else if (random integer low: 10 high: (\"20\" to int)) == (random integer low: (random integer low: 10 high:20+10) high: (\"{random string length: ((random boolean) to int)}\" to int))"
     },
     "4": {
       "method": "expression",

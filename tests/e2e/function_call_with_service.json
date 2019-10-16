@@ -100,7 +100,7 @@
         }
       ],
       "parent": "4",
-      "src": "  return k1 as string +k2 as string  # Assume some RNG here"
+      "src": "  return k1 to string +k2 to string  # Assume some RNG here"
     },
     "7.1": {
       "method": "call",

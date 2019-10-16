@@ -1,1 +1,1 @@
-{a, b} = {} as Map[any, any]
+{a, b} = {} to Map[any, any]

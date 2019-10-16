@@ -35,7 +35,7 @@ class JSONExpressionVisitor(ExpressionVisitor):
             'values': values,
         }
 
-    def as_expression(self, tree, expr):
-        assert tree.child(1).data == 'as_operator'
+    def to_expression(self, tree, expr):
+        assert tree.child(1).data == 'to_operator'
         t = self.visitor.types(tree.child(1).types)
         return {'$OBJECT': 'type_cast', 'type': t, 'value': expr}

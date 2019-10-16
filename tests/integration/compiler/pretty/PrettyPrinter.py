@@ -96,15 +96,15 @@ def story_format(source):
      'a = a.mut(a:1 b:2 c:3).mut(a:4 b:5 c:6).mut(c:9 d:10)'),
     ('a=fun(a:"1")', 'a = fun(a:"1")'),
     ('a=fun(a:1  b:"b")', 'a = fun(a:1 b:"b")'),
-    ('a="5" as  boolean', 'a = "5" as boolean'),
-    ('a="5" as  int', 'a = "5" as int'),
-    ('a="5" as  float', 'a = "5" as float'),
-    ('a="5" as  time', 'a = "5" as time'),
-    ('a="5" as  regex', 'a = "5" as regex'),
-    ('a="5" as  any', 'a = "5" as any'),
-    ('a="5" as  List[int]', 'a = "5" as List[int]'),
-    ('a="5" as  List[List[float]]', 'a = "5" as List[List[float]]'),
-    ('a="5" as  Map[string, boolean]', 'a = "5" as Map[string, boolean]'),
+    ('a="5" to  boolean', 'a = "5" to boolean'),
+    ('a="5" to  int', 'a = "5" to int'),
+    ('a="5" to  float', 'a = "5" to float'),
+    ('a="5" to  time', 'a = "5" to time'),
+    ('a="5" to  regex', 'a = "5" to regex'),
+    ('a="5" to  any', 'a = "5" to any'),
+    ('a="5" to  List[int]', 'a = "5" to List[int]'),
+    ('a="5" to  List[List[float]]', 'a = "5" to List[List[float]]'),
+    ('a="5" to  Map[string, boolean]', 'a = "5" to Map[string, boolean]'),
 ])
 def test_compiler_pretty_print_format(source, expected):
     """
@@ -287,4 +287,30 @@ def test_compiler_pretty_print_format_when_block_output():
 """
     story_format("""when server_listen as x
     c=0
+""") == result
+
+
+def test_compiler_pretty_print_format_nested_story():
+    result = """http server as s
+  when server listen as s2
+    foreach [1] as a,b
+      x = 0 to float
+"""
+    story_format("""http server as s
+  when server listen as s2
+    foreach [1] as a, b
+      x = 0 to float
+""") == result
+
+
+def test_compiler_pretty_print_format_nested_story2():
+    result = """http server port:"port"
+  when server listen path: "path"
+    foreach [1] as a,b
+      x = 0 to float
+"""
+    story_format("""http server port: "port"
+  when server listen path: "path"
+    foreach [1] as a, b
+      x = 0 to float
 """) == result

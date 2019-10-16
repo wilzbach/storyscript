@@ -32,7 +32,7 @@
           }
         }
       ],
-      "src": "a = [\"1\"] as List[int]"
+      "src": "a = [\"1\"] to List[int]"
     }
   },
   "entrypoint": "1"

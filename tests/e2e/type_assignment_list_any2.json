@@ -33,7 +33,7 @@
           }
         }
       ],
-      "src": "a = [] as List[List[string]]"
+      "src": "a = [] to List[List[string]]"
     }
   },
   "entrypoint": "1"

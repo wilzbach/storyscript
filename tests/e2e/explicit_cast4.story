@@ -1,1 +1,1 @@
-a = {2: "42"} as Map[float,float]
+a = {2: "42"} to Map[float,float]

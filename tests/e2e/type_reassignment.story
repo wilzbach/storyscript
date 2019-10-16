@@ -1,2 +1,2 @@
-a = [] as List[any]
-a = a as List[string]
+a = [] to List[any]
+a = a to List[string]
