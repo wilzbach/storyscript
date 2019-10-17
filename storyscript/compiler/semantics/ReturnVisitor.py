@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from contextlib import contextmanager
 
 from storyscript.compiler.semantics.symbols.Symbols import base_symbol
 from storyscript.compiler.semantics.types.Types import NoneType
@@ -15,6 +16,13 @@ class ReturnVisitor:
         self.return_type = return_type
         self.module = module
         self.resolver = ExpressionResolver(module=module)
+
+    @contextmanager
+    def scope(self, scope):
+        current_scope = self.module.symbol_resolver.scope
+        self.module.symbol_resolver.update_scope(scope)
+        yield
+        self.module.symbol_resolver.update_scope(current_scope)
 
     def has_return(self, tree):
         if tree.rules and tree.rules.return_statement:
@@ -42,11 +50,11 @@ class ReturnVisitor:
 
     def return_statement(self, tree, scope):
         assert tree.data == 'return_statement'
-        self.module.symbol_resolver.update_scope(tree.scope)
-        obj = tree.base_expression
-        if obj is None:
-            return base_symbol(NoneType.instance()), tree
-        return self.resolver.base_expression(tree.base_expression), obj
+        with self.scope(tree.scope):
+            obj = tree.base_expression
+            if obj is None:
+                return base_symbol(NoneType.instance()), tree
+            return self.resolver.base_expression(tree.base_expression), obj
 
     def function_block(self, tree, scope):
         if tree.function_statement.function_output:
@@ -78,7 +86,5 @@ class ReturnVisitor:
 
     @classmethod
     def check(cls, tree, scope, return_type, module):
-        # NOTE: ReturnVisitor updates the module.symbol_resolver scope
-        # and depends upon the caller to restore old scope when this returns.
         rv = ReturnVisitor(return_type, module)
         rv.function_block(tree, scope)
