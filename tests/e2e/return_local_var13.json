@@ -1,0 +1,316 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "6",
+      "output": [
+        "int"
+      ],
+      "function": "foo",
+      "enter": "2",
+      "src": "function foo returns int"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "5",
+      "col_end": "8",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "1",
+      "src": "    a = 1",
+      "next": "3"
+    },
+    "3": {
+      "method": "try",
+      "ln": "3",
+      "col_start": "5",
+      "col_end": "12",
+      "enter": "4",
+      "exit": "5",
+      "parent": "1",
+      "src": "    try",
+      "next": "5"
+    },
+    "4": {
+      "method": "return",
+      "ln": "4",
+      "col_start": "9",
+      "col_end": "17",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
+      "parent": "3",
+      "src": "        return a"
+    },
+    "5": {
+      "method": "finally",
+      "ln": "5",
+      "col_start": "5",
+      "col_end": "10",
+      "enter": "6",
+      "exit": "16",
+      "parent": "1",
+      "src": "    finally",
+      "next": "16"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "col_start": "9",
+      "col_end": "12",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
+      "parent": "5",
+      "src": "        b = 2",
+      "next": "7"
+    },
+    "7": {
+      "method": "try",
+      "ln": "7",
+      "col_start": "9",
+      "col_end": "16",
+      "enter": "8",
+      "exit": "10",
+      "parent": "5",
+      "src": "        try",
+      "next": "10"
+    },
+    "8": {
+      "method": "expression",
+      "ln": "8",
+      "col_start": "13",
+      "col_end": "16",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 3
+        }
+      ],
+      "parent": "7",
+      "src": "            c = 3",
+      "next": "9"
+    },
+    "9": {
+      "method": "return",
+      "ln": "9",
+      "col_start": "13",
+      "col_end": "21",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "c"
+                  ]
+                },
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "b"
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            }
+          ]
+        }
+      ],
+      "parent": "7",
+      "src": "            return c + b + a"
+    },
+    "10": {
+      "method": "catch",
+      "ln": "10",
+      "col_start": "9",
+      "col_end": "14",
+      "enter": "11",
+      "exit": "13",
+      "parent": "5",
+      "src": "        catch",
+      "next": "13"
+    },
+    "11": {
+      "method": "expression",
+      "ln": "11",
+      "col_start": "13",
+      "col_end": "16",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 4
+        }
+      ],
+      "parent": "10",
+      "src": "            d = 4",
+      "next": "12"
+    },
+    "12": {
+      "method": "return",
+      "ln": "12",
+      "col_start": "13",
+      "col_end": "21",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "d"
+                  ]
+                },
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "b"
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            }
+          ]
+        }
+      ],
+      "parent": "10",
+      "src": "            return d + b + a"
+    },
+    "13": {
+      "method": "finally",
+      "ln": "13",
+      "col_start": "9",
+      "col_end": "14",
+      "enter": "14",
+      "exit": "16",
+      "parent": "5",
+      "src": "        finally"
+    },
+    "14": {
+      "method": "expression",
+      "ln": "14",
+      "col_start": "13",
+      "col_end": "16",
+      "name": [
+        "e"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 5
+        }
+      ],
+      "parent": "13",
+      "src": "            e = 5",
+      "next": "15"
+    },
+    "15": {
+      "method": "return",
+      "ln": "15",
+      "col_start": "13",
+      "col_end": "21",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "expression",
+              "expression": "sum",
+              "values": [
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "e"
+                  ]
+                },
+                {
+                  "$OBJECT": "path",
+                  "paths": [
+                    "b"
+                  ]
+                }
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            }
+          ]
+        }
+      ],
+      "parent": "13",
+      "src": "            return e + b + a"
+    },
+    "16": {
+      "method": "return",
+      "ln": "16",
+      "col_start": "5",
+      "col_end": "13",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
+      "parent": "1",
+      "src": "    return a"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "foo": "1"
+  }
+}

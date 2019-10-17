@@ -1,0 +1,99 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "6",
+      "output": [
+        "int"
+      ],
+      "function": "foo",
+      "enter": "2",
+      "src": "function foo returns int"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "5",
+      "col_end": "8",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "1",
+      "src": "    a = 1",
+      "next": "3"
+    },
+    "3": {
+      "method": "try",
+      "ln": "3",
+      "col_start": "5",
+      "col_end": "10",
+      "enter": "4",
+      "exit": "6",
+      "parent": "1",
+      "src": "    try",
+      "next": "6"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "col_start": "9",
+      "col_end": "12",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 2
+        }
+      ],
+      "parent": "3",
+      "src": "        b = 2",
+      "next": "5"
+    },
+    "5": {
+      "method": "return",
+      "ln": "5",
+      "col_start": "9",
+      "col_end": "17",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "b"
+          ]
+        }
+      ],
+      "parent": "3",
+      "src": "        return b"
+    },
+    "6": {
+      "method": "return",
+      "ln": "6",
+      "col_start": "5",
+      "col_end": "13",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
+      "parent": "1",
+      "src": "    return a"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "foo": "1"
+  }
+}
