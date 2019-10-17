@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 import inspect
 import io
+import subprocess
 import sys
 from os import getenv, path
+from shutil import rmtree
 
-from setuptools import find_packages, setup
+from setuptools import Command, find_packages, setup
 from setuptools.command.bdist_egg import bdist_egg as _bdist_egg
 from setuptools.command.install import install as _install
 from setuptools.command.sdist import sdist as _sdist
@@ -121,6 +123,41 @@ class VerifyVersionCommand(_install):
             sys.exit(info)
 
 
+class UploadCommand(Command):
+    """Support setup.py upload."""
+
+    description = 'Build and publish the package.'
+    user_options = []
+
+    @staticmethod
+    def status(s):
+        """Prints things in bold."""
+        print('\033[1m{0}\033[0m'.format(s))
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        try:
+            self.status('Removing previous builds…')
+            rmtree(path.join(root_dir, 'dist'))
+        except OSError:
+            pass
+
+        self.status('Building Source and Wheel (universal) distribution…')
+        subprocess.run(
+            [sys.executable, 'setup.py', 'sdist', 'bdist_egg', 'bdist_wheel',
+             '--universal'],
+            check=True)
+
+        self.status('Uploading the package to PyPI via Twine…')
+        subprocess.run(['twine', 'upload', 'dist/*'], check=True, shell=True)
+        sys.exit()
+
+
 setup(name=name,
       version=release_version,
       description=short_description,
@@ -150,4 +187,5 @@ setup(name=name,
         'sdist': Sdist,
         'bdist_egg': BdistEgg,
         'verify': VerifyVersionCommand,
+        'upload': UploadCommand,
       })
