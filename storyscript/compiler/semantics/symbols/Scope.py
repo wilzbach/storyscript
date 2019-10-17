@@ -73,6 +73,15 @@ class Scope:
         scope.insert(app_keyword)
         return scope
 
+    def copy(self):
+        """
+        Creates and returns a new scope by copying over from current scope.
+        """
+        new_scope = Scope(parent=self._parent)
+        for sym in self._symbols._symbols.values():
+            new_scope.insert(sym)
+        return new_scope
+
 
 class ScopeJoiner:
     """
@@ -89,8 +98,8 @@ class ScopeJoiner:
         Performs the join operation on one or more scopes.
         """
         if self.scope is None:
-            self.scope = scope
-            self.symbols = scope._symbols._symbols
+            self.scope = scope.copy()
+            self.symbols = self.scope._symbols._symbols
         else:
             # join symbols
             new_symbols = scope._symbols._symbols

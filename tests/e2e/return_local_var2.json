@@ -1,0 +1,193 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "6",
+      "output": [
+        "int"
+      ],
+      "function": "foo",
+      "enter": "2",
+      "src": "function foo returns int"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "5",
+      "col_end": "8",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "1",
+      "src": "    a = 1",
+      "next": "3"
+    },
+    "3": {
+      "method": "if",
+      "ln": "3",
+      "col_start": "8",
+      "col_end": "9",
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
+      ],
+      "enter": "4",
+      "exit": "6",
+      "parent": "1",
+      "src": "    if true",
+      "next": "6"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "col_start": "9",
+      "col_end": "12",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "3",
+      "src": "        b = 1",
+      "next": "5"
+    },
+    "5": {
+      "method": "return",
+      "ln": "5",
+      "col_start": "9",
+      "col_end": "17",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "b"
+          ]
+        }
+      ],
+      "parent": "3",
+      "src": "        return b"
+    },
+    "6": {
+      "method": "elif",
+      "ln": "6",
+      "col_start": "13",
+      "col_end": "15",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "equal",
+          "values": [
+            {
+              "$OBJECT": "int",
+              "int": 1
+            },
+            {
+              "$OBJECT": "int",
+              "int": 2
+            }
+          ]
+        }
+      ],
+      "enter": "7",
+      "exit": "8",
+      "parent": "1",
+      "src": "    else if 1 == 2",
+      "next": "8"
+    },
+    "7": {
+      "method": "return",
+      "ln": "7",
+      "col_start": "9",
+      "col_end": "17",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
+      "parent": "6",
+      "src": "        return a"
+    },
+    "8": {
+      "method": "else",
+      "ln": "8",
+      "col_start": "5",
+      "col_end": "10",
+      "enter": "9",
+      "exit": "11",
+      "parent": "1",
+      "src": "    else",
+      "next": "11"
+    },
+    "9": {
+      "method": "expression",
+      "ln": "9",
+      "col_start": "9",
+      "col_end": "12",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 3
+        }
+      ],
+      "parent": "8",
+      "src": "        c = 3",
+      "next": "10"
+    },
+    "10": {
+      "method": "return",
+      "ln": "10",
+      "col_start": "9",
+      "col_end": "17",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "c"
+          ]
+        }
+      ],
+      "parent": "8",
+      "src": "        return c"
+    },
+    "11": {
+      "method": "return",
+      "ln": "11",
+      "col_start": "5",
+      "col_end": "13",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
+      "parent": "1",
+      "src": "    return a"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "foo": "1"
+  }
+}
