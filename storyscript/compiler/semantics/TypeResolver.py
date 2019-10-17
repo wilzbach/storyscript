@@ -61,11 +61,13 @@ class TypeResolver(ScopeSelectiveVisitor):
             self.storage_class_scope = StorageClass.read()
 
     def assignment(self, tree, scope):
-        target_symbol = self.path_resolver.path(tree.path)
+        lhs_node = tree.path
+        target_symbol = self.path_resolver.path(lhs_node)
 
         # allow rebindable assignments here
-        tree.expect(target_symbol.can_assign(), 'readonly_type_assignment',
-                    left=target_symbol.name())
+        lhs_node.expect(
+            target_symbol.can_assign(), 'readonly_type_assignment',
+            left=target_symbol.name())
 
         frag = tree.assignment_fragment
         expr_sym = self.resolver.base_expression(frag.base_expression)
@@ -291,8 +293,8 @@ class TypeResolver(ScopeSelectiveVisitor):
 
         if tree.nested_block:
             with self.create_scope(tree.scope):
-                tree.expect(self.service_block_output is None,
-                            'nested_service_block')
+                tree.service.expect(self.service_block_output is None,
+                                    'nested_service_block')
                 # In case of nested_block, we will always have output
                 self.service_block_output = output
                 for c in tree.nested_block.children:

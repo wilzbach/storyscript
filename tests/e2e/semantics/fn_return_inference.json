@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "13",
       "output": [
         "int"
       ],
@@ -16,7 +16,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "10",
       "name": [
         "a"
       ],

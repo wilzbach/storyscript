@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "10",
+      "col_end": "14",
       "name": [
         "my_list"
       ],
@@ -26,7 +26,7 @@
       "method": "mutation",
       "ln": "2.1",
       "col_start": "5",
-      "col_end": "12",
+      "col_end": "27",
       "name": [
         "__p-2.1"
       ],
@@ -58,7 +58,6 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "4",
       "name": [
         "a"
       ],

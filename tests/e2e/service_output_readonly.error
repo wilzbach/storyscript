@@ -1,6 +1,6 @@
 Error: syntax error in story at line 1, column 11
 
 1|    when http server listen as client
-                
+                ^^^^
 
 E0143: server `listen` requires argument `path`.

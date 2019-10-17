@@ -51,7 +51,7 @@
       "method": "when",
       "ln": "3",
       "col_start": "14",
-      "col_end": "26",
+      "col_end": "32",
       "output": [
         "os"
       ],
@@ -129,7 +129,7 @@
       "method": "when",
       "ln": "7",
       "col_start": "14",
-      "col_end": "26",
+      "col_end": "52",
       "output": [
         "li"
       ],

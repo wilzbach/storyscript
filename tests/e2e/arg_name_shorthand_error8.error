@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 8
+Error: syntax error in story at line 1, column 23
 
 1|    random integer low:1 :2
-             ^^^^^^^^^^^^^^^^
+                            ^
 
 E0118: Service `random` requires arguments to be named

@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "17",
       "output": [
         "int"
       ],
@@ -26,7 +26,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "5",
-      "col_end": "6",
+      "col_end": "10",
       "args": [
         {
           "$OBJECT": "expression",
@@ -51,7 +51,7 @@
       "method": "if",
       "ln": "3",
       "col_start": "8",
-      "col_end": "9",
+      "col_end": "17",
       "args": [
         {
           "$OBJECT": "boolean",
@@ -82,7 +82,7 @@
       "method": "elif",
       "ln": "5",
       "col_start": "13",
-      "col_end": "19",
+      "col_end": "21",
       "args": [
         {
           "$OBJECT": "boolean",
@@ -99,7 +99,7 @@
       "method": "while",
       "ln": "6",
       "col_start": "15",
-      "col_end": "19",
+      "col_end": "21",
       "args": [
         {
           "$OBJECT": "boolean",
@@ -129,7 +129,7 @@
       "method": "else",
       "ln": "8",
       "col_start": "5",
-      "col_end": "15",
+      "col_end": "17",
       "enter": "9",
       "parent": "1",
       "src": "    else"

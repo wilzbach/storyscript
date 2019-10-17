@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "13",
       "output": [
         "function"
       ],
@@ -32,7 +32,7 @@
       "method": "function",
       "ln": "3",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "17",
       "output": [
         "regex"
       ],
@@ -60,7 +60,7 @@
       "method": "function",
       "ln": "5",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "13",
       "output": [
         "any"
       ],
@@ -88,7 +88,7 @@
       "method": "function",
       "ln": "7",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "29",
       "output": [
         "Map"
       ],
@@ -102,7 +102,7 @@
       "method": "return",
       "ln": "8",
       "col_start": "5",
-      "col_end": "14",
+      "col_end": "29",
       "args": [
         {
           "$OBJECT": "type_cast",
@@ -133,7 +133,7 @@
       "method": "function",
       "ln": "9",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "15",
       "output": [
         "List"
       ],
@@ -145,7 +145,7 @@
       "method": "return",
       "ln": "10",
       "col_start": "5",
-      "col_end": "13",
+      "col_end": "15",
       "args": [
         {
           "$OBJECT": "list",

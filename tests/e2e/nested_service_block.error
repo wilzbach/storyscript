@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 5
 
 2|        http server as c2
-          ^^^^^
+          ^^^^^^^^^^^^^^^^^
 
 E0065: Nested service blocks are not allowed

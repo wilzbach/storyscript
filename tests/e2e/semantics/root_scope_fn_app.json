@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "24",
       "function": "bar",
       "enter": "2",
       "src": "function bar"
@@ -13,7 +13,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "26",
       "name": [
         "a"
       ],
@@ -41,7 +41,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "24",
       "name": [
         "b"
       ],

@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "13",
       "output": [
         "int"
       ],
@@ -42,7 +42,7 @@
       "method": "call",
       "ln": "4.1",
       "col_start": "5",
-      "col_end": "13",
+      "col_end": "16",
       "name": [
         "__p-4.1"
       ],
@@ -63,7 +63,6 @@
       "method": "expression",
       "ln": "4",
       "col_start": "1",
-      "col_end": "4",
       "name": [
         "a"
       ],

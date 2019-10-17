@@ -4,7 +4,6 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "9",
       "output": [
         "int"
       ],
@@ -26,7 +25,6 @@
       "method": "if",
       "ln": "2",
       "col_start": "8",
-      "col_end": "9",
       "args": [
         {
           "$OBJECT": "expression",
@@ -77,7 +75,7 @@
       "method": "call",
       "ln": "5.1",
       "col_start": "20",
-      "col_end": "31",
+      "col_end": "38",
       "name": [
         "__p-5.1"
       ],
@@ -111,7 +109,6 @@
       "method": "return",
       "ln": "5",
       "col_start": "9",
-      "col_end": "17",
       "args": [
         {
           "$OBJECT": "expression",

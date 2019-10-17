@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "2",
-      "col_end": "3",
+      "col_end": "43",
       "args": [
         {
           "$OBJECT": "expression",

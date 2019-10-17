@@ -1,6 +1,6 @@
-Error: syntax error in story at line 5, column 1
+Error: syntax error in story at line 5, column 7
 
 5|    test(:2)
-      ^^^^^^^
+            ^
 
 E0118: Function `test` requires arguments to be named

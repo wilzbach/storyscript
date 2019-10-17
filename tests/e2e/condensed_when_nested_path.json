@@ -17,7 +17,7 @@
       "method": "when",
       "ln": "2",
       "col_start": "10",
-      "col_end": "21",
+      "col_end": "42",
       "output": [
         "ss"
       ],
@@ -43,7 +43,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "9",
-      "col_end": "12",
+      "col_end": "14",
       "name": [
         "x"
       ],
@@ -74,7 +74,7 @@
       "method": "expression",
       "ln": "5",
       "col_start": "9",
-      "col_end": "12",
+      "col_end": "14",
       "name": [
         "x"
       ],

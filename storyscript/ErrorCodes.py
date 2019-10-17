@@ -153,7 +153,7 @@ class ErrorCodes:
         'E0114', '{fn_type} `{name}` does not accept argument `{arg}`')
     param_arg_type_mismatch = (
         'E0115',
-        '{fn_type} `{name}` requires argument `{arg_name}` to be of '
+        '{fn_type} `{name}` requires argument `{arg_name}` to be of type '
         '`{target}`, not `{source}`')
     assignment_type_none = (
         'E0116', 'Assignments with the type `None` are not allowed')

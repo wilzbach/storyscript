@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "9",
       "name": [
         "t"
       ],
@@ -21,7 +21,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "10",
       "name": [
         "f"
       ],
@@ -38,7 +38,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "1",
-      "col_end": "8",
+      "col_end": "13",
       "name": [
         "_null"
       ],
@@ -52,7 +52,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "1",
-      "col_end": "7",
+      "col_end": "9",
       "name": [
         "zero"
       ],
@@ -69,7 +69,7 @@
       "method": "expression",
       "ln": "5",
       "col_start": "1",
-      "col_end": "7",
+      "col_end": "10",
       "name": [
         "_int"
       ],
@@ -86,7 +86,7 @@
       "method": "expression",
       "ln": "6",
       "col_start": "1",
-      "col_end": "9",
+      "col_end": "14",
       "name": [
         "_float"
       ],
@@ -103,7 +103,7 @@
       "method": "expression",
       "ln": "7",
       "col_start": "1",
-      "col_end": "10",
+      "col_end": "17",
       "name": [
         "_string"
       ],
@@ -120,7 +120,7 @@
       "method": "expression",
       "ln": "8",
       "col_start": "1",
-      "col_end": "8",
+      "col_end": "15",
       "name": [
         "_list"
       ],
@@ -146,7 +146,7 @@
       "method": "expression",
       "ln": "9",
       "col_start": "1",
-      "col_end": "13",
+      "col_end": "28",
       "name": [
         "list_empty"
       ],
@@ -176,7 +176,7 @@
       "method": "expression",
       "ln": "10",
       "col_start": "1",
-      "col_end": "17",
+      "col_end": "2",
       "name": [
         "list_multiline"
       ],
@@ -202,7 +202,7 @@
       "method": "expression",
       "ln": "14",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "22",
       "name": [
         "obj"
       ],
@@ -240,7 +240,7 @@
       "method": "expression",
       "ln": "15",
       "col_start": "1",
-      "col_end": "12",
+      "col_end": "30",
       "name": [
         "obj_empty"
       ],
@@ -274,7 +274,7 @@
       "method": "expression",
       "ln": "16",
       "col_start": "1",
-      "col_end": "16",
+      "col_end": "11",
       "name": [
         "obj_multiline"
       ],
@@ -312,7 +312,7 @@
       "method": "expression",
       "ln": "20",
       "col_start": "1",
-      "col_end": "9",
+      "col_end": "16",
       "name": [
         "regexp"
       ],
@@ -329,7 +329,7 @@
       "method": "expression",
       "ln": "21",
       "col_start": "1",
-      "col_end": "15",
+      "col_end": "23",
       "name": [
         "regexp_flags"
       ],
@@ -347,7 +347,7 @@
       "method": "expression",
       "ln": "22",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "12",
       "name": [
         "sum"
       ],
@@ -374,7 +374,7 @@
       "method": "expression",
       "ln": "23",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "12",
       "name": [
         "mul"
       ],
@@ -401,7 +401,7 @@
       "method": "execute",
       "ln": "24",
       "col_start": "14",
-      "col_end": "24",
+      "col_end": "38",
       "name": [
         "my_service"
       ],
@@ -424,7 +424,7 @@
       "method": "execute",
       "ln": "25.1",
       "col_start": "19",
-      "col_end": "30",
+      "col_end": "47",
       "name": [
         "__p-25.1"
       ],
@@ -448,7 +448,6 @@
       "method": "expression",
       "ln": "25",
       "col_start": "1",
-      "col_end": "17",
       "name": [
         "service_inline"
       ],

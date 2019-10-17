@@ -14,7 +14,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "5",
-      "col_end": "7",
+      "col_end": "8",
       "name": [
         "x"
       ],
@@ -31,7 +31,7 @@
       "method": "finally",
       "ln": "3",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "8",
       "enter": "4",
       "src": "finally"
     },
@@ -39,7 +39,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "5",
-      "col_end": "7",
+      "col_end": "8",
       "name": [
         "x"
       ],
