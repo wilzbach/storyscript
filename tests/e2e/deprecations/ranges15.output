@@ -1,6 +1,6 @@
-Deprecation: deprecated syntax in story at line 2, column 5
+Deprecation: deprecated syntax in story at line 2, column 8
 
 2|    b = a[:2]
-          ^^^^
+             ^
 
 D0002: Ranges are deprecated.

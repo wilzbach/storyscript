@@ -45,7 +45,7 @@ class PathResolver:
                     type_ = BooleanType.instance()
                     value = child.child(0).value
                 elif child.data == 'range':
-                    self.module.storycontext.deprecate(tree, 'no_range')
+                    self.module.storycontext.deprecate(child, 'no_range')
                     type_ = RangeType.instance()
                     value = 'range'
                 elif child.data == 'number':
