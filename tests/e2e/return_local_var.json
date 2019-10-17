@@ -1,0 +1,85 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "12",
+      "output": [
+        "int"
+      ],
+      "function": "foo",
+      "enter": "2",
+      "src": "function foo returns int"
+    },
+    "2": {
+      "method": "if",
+      "ln": "2",
+      "col_start": "8",
+      "col_end": "10",
+      "args": [
+        {
+          "$OBJECT": "boolean",
+          "boolean": true
+        }
+      ],
+      "enter": "3",
+      "exit": "5",
+      "parent": "1",
+      "src": "    if true",
+      "next": "5"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "col_start": "9",
+      "col_end": "12",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "2",
+      "src": "        a = 1",
+      "next": "4"
+    },
+    "4": {
+      "method": "return",
+      "ln": "4",
+      "col_start": "9",
+      "col_end": "17",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
+      "parent": "2",
+      "src": "        return a"
+    },
+    "5": {
+      "method": "return",
+      "ln": "5",
+      "col_start": "5",
+      "col_end": "13",
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
+      "parent": "1",
+      "src": "    return 1"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "foo": "1"
+  }
+}

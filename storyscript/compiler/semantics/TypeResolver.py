@@ -388,6 +388,9 @@ class TypeResolver(ScopeSelectiveVisitor):
         tree.entity.expect(sym.type() == StringType.instance(),
                            'throw_only_string')
 
+    def return_statement(self, tree, scope):
+        tree.scope = scope
+
     def function_block(self, tree, scope):
         tree.scope, return_type = self.function_statement(
             tree.function_statement, scope
