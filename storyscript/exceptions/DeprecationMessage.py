@@ -24,5 +24,5 @@ class DeprecationMessage(ErrorTextFormatter):
 
     def hint(self):
         if self.error_tuple == DeprecationCodes.unidentified_deprecation:
-            return self._internal_error(self)
+            return self._internal_error(self.error)
         return self.error_tuple[1].format(**self.error.format_args)
