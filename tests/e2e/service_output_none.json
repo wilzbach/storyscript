@@ -1,0 +1,35 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "10",
+      "service": "redis",
+      "command": "set",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "key",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "count"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "value",
+          "arg": {
+            "$OBJECT": "int",
+            "int": 0
+          }
+        }
+      ],
+      "src": "redis set key: \"count\" value: 0"
+    }
+  },
+  "services": [
+    "redis"
+  ],
+  "entrypoint": "1"
+}
