@@ -135,8 +135,7 @@
   },
   "services": [
     "awesome",
-    "http",
-    "request"
+    "http"
   ],
   "entrypoint": "1"
 }

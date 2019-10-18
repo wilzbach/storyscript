@@ -322,8 +322,7 @@
   },
   "services": [
     "gmaps",
-    "http",
-    "req"
+    "http"
   ],
   "entrypoint": "1"
 }
