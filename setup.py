@@ -114,7 +114,7 @@ setup(name=name,
       extras_require={
           'docs': extras
       },
-      python_requires='>=3.5',
+      python_requires='>=3.6',
       entry_points={
           'console_scripts': ['storyscript=storyscript.Cli:Cli.main']
       },
