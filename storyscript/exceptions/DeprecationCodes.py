@@ -14,6 +14,8 @@ class DeprecationCodes:
         if isinstance(deprecation_name, str):
             if hasattr(DeprecationCodes, deprecation_name):
                 return True
+            return False
+        assert 0, 'Deprecation name should be a string.'
 
     @staticmethod
     def get_deprecation(deprecation_name):
