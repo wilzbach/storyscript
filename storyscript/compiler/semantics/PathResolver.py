@@ -38,6 +38,8 @@ class PathResolver:
             child = fragment.child(0)
             kind = IndexKind.INDEX
             if isinstance(child, Tree):
+                child.expect(child.data != 'null',
+                             'path_index_no_null')
                 if child.data == 'string':
                     type_ = StringType.instance()
                     value = child.child(0).value
