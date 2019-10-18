@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 5
+
+2|        a = null
+          ^^^^^^^^
+
+E0100: Can't assign `null` to `Object`

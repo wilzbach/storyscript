@@ -622,6 +622,9 @@ class ObjectType(BaseType):
     def hashable(self):
         return False
 
+    def can_be_assigned(self, other):
+        return other.implicit_to(self)
+
     @singleton
     def instance():
         """
