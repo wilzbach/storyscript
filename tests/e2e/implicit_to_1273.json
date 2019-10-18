@@ -1,0 +1,128 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "output": [
+        "server"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "1"
+    },
+    "1": {
+      "method": "when",
+      "ln": "1",
+      "col_start": "11",
+      "col_end": "24",
+      "output": [
+        "r"
+      ],
+      "service": "server",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "path",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "/"
+          }
+        }
+      ],
+      "enter": "2",
+      "parent": "1.1",
+      "src": "when http server listen path: \"/\" as r"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "3",
+      "col_end": "10",
+      "name": [
+        "query"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "r",
+            {
+              "$OBJECT": "dot",
+              "dot": "query_params"
+            },
+            {
+              "$OBJECT": "string",
+              "string": "query"
+            }
+          ]
+        }
+      ],
+      "parent": "1",
+      "src": "  query = r.query_params[\"query\"]",
+      "next": "3"
+    },
+    "3": {
+      "method": "execute",
+      "ln": "3",
+      "col_start": "3",
+      "col_end": "13",
+      "service": "r",
+      "command": "redirect",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "url",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "https://google.com/search"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "query",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "Map",
+              "values": [
+                {
+                  "$OBJECT": "type",
+                  "type": "any"
+                },
+                {
+                  "$OBJECT": "type",
+                  "type": "any"
+                }
+              ]
+            },
+            "value": {
+              "$OBJECT": "dict",
+              "items": [
+                [
+                  {
+                    "$OBJECT": "string",
+                    "string": "q"
+                  },
+                  {
+                    "$OBJECT": "path",
+                    "paths": [
+                      "query"
+                    ]
+                  }
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "parent": "1",
+      "src": "  r redirect url: \"https://google.com/search\" query: {\"q\": query}"
+    }
+  },
+  "services": [
+    "http"
+  ],
+  "entrypoint": "1.1"
+}
