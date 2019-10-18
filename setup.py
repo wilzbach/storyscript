@@ -110,7 +110,6 @@ setup(name=name,
       license='MIT',
       packages=find_packages(exclude=('build.*', 'tests', 'tests.*')),
       include_package_data=True,
-      zip_safe=True,
       install_requires=requirements,
       extras_require={
           'docs': extras
