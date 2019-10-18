@@ -198,8 +198,9 @@ class JSONCompiler:
             sf.command = tree.service.path
             output_name = self.find_parent_with_output(tree, parent)
             tree.service.path = self.objects.name_to_path(output_name[0])
-        self.service(tree.service, nested_block, parent)
+        output = self.service(tree.service, nested_block, parent)
         self.lines.last()['method'] = 'when'
+        return output
 
     def return_statement(self, tree, parent):
         """
@@ -352,8 +353,8 @@ class JSONCompiler:
                 self.subtree(tree.nested_block, parent=tree.line())
 
     def when_block(self, tree, parent):
-        self.when(tree, tree.nested_block, parent)
-        with self.create_scope(tree.position(), parent):
+        output = self.when(tree, tree.nested_block, parent)
+        with self.create_scope(tree.position(), parent, output):
             self.subtree(tree.nested_block, parent=tree.line())
 
     def try_block(self, tree, parent):
