@@ -110,12 +110,11 @@ setup(name=name,
       license='MIT',
       packages=find_packages(exclude=('build.*', 'tests', 'tests.*')),
       include_package_data=True,
-      zip_safe=True,
       install_requires=requirements,
       extras_require={
           'docs': extras
       },
-      python_requires='>=3.5',
+      python_requires='>=3.6',
       entry_points={
           'console_scripts': ['storyscript=storyscript.Cli:Cli.main']
       },
