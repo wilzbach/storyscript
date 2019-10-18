@@ -732,7 +732,9 @@ class AnyType(BaseType):
         return None
 
     def implicit_to(self, other):
-        return None
+        if other != AnyType.instance():
+            return None
+        return self
 
     def explicit_from(self, other):
         if other != NoneType.instance():
