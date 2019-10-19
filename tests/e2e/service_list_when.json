@@ -1,0 +1,62 @@
+{
+  "tree": {
+    "1.1": {
+      "method": "execute",
+      "ln": "1.1",
+      "output": [
+        "server"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "1"
+    },
+    "1": {
+      "method": "when",
+      "ln": "1",
+      "col_start": "11",
+      "col_end": "39",
+      "output": [
+        "r"
+      ],
+      "service": "server",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "path",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "/"
+          }
+        }
+      ],
+      "enter": "2",
+      "parent": "1.1",
+      "src": "when http server listen path: \"/\" as r"
+    },
+    "2": {
+      "method": "execute",
+      "ln": "2",
+      "col_start": "3",
+      "col_end": "28",
+      "service": "r",
+      "command": "write",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "content",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "hello!"
+          }
+        }
+      ],
+      "parent": "1",
+      "src": "  r write content: \"hello!\""
+    }
+  },
+  "services": [
+    "http"
+  ],
+  "entrypoint": "1.1"
+}

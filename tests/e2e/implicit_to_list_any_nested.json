@@ -1,0 +1,140 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "10",
+      "function": "foo",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "a",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "List",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "List",
+                "values": [
+                  {
+                    "$OBJECT": "type",
+                    "type": "any"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": "4",
+      "src": "function foo a:List[List[any]]",
+      "next": "4"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "5",
+      "col_end": "10",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "1",
+      "src": "    b = 0"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "col_start": "1",
+      "col_end": "10",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "list",
+          "items": [
+            {
+              "$OBJECT": "list",
+              "items": [
+                {
+                  "$OBJECT": "int",
+                  "int": 1
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "src": "a = [[1]]",
+      "next": "5.1"
+    },
+    "5.1": {
+      "method": "call",
+      "ln": "5.1",
+      "col_start": "1",
+      "col_end": "7",
+      "name": [
+        "__p-5.1"
+      ],
+      "function": "foo",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "a",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "List",
+              "values": [
+                {
+                  "$OBJECT": "type",
+                  "type": "List",
+                  "values": [
+                    {
+                      "$OBJECT": "type",
+                      "type": "any"
+                    }
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "a"
+              ]
+            }
+          }
+        }
+      ],
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-5.1"
+          ]
+        }
+      ],
+      "src": "foo(:a)"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "foo": "1"
+  }
+}
