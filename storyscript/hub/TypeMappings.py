@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from storyscript.compiler.semantics.types.Types import AnyType, BooleanType, \
-    FloatType, IntType, ListType, MapType, ObjectType, StringType
+    FloatType, IntType, ListType, MapType, NoneType, ObjectType, StringType
 
 
 class TypeMappings:
@@ -26,6 +26,8 @@ class TypeMappings:
             return ObjectType
         elif type_string == 'list':
             return ListType
+        elif type_string == 'none':
+            return NoneType
         else:
             assert type_string == 'map'
             return MapType
@@ -48,6 +50,6 @@ class TypeMappings:
             output_type = MapType(AnyType.instance(), AnyType.instance())
         else:
             assert type_class in (
-                AnyType, BooleanType, FloatType, IntType, StringType)
+                AnyType, BooleanType, FloatType, IntType, StringType, NoneType)
             output_type = type_class.instance()
         return output_type

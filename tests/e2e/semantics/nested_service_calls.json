@@ -67,8 +67,7 @@
     }
   },
   "services": [
-    "http",
-    "request"
+    "http"
   ],
   "entrypoint": "1"
 }
