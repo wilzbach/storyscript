@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 7
+
+1|    break = 1
+            ^
+
+E0041: `=` is not allowed here

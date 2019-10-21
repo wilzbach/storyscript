@@ -13,9 +13,13 @@ class Transformer(LarkTransformer):
     All trees are transformed to Storyscript's custom tree. In some cases,
     additional transformations or checks are performed.
     """
-    reserved_keywords = ['function', 'if', 'else', 'foreach', 'return',
-                         'returns', 'try', 'catch', 'finally', 'when', 'as',
-                         'while', 'throw', 'null']
+    reserved_keywords = [
+        'List', 'Map', 'and', 'any', 'as', 'boolean', 'break', 'catch',
+        'continue', 'else', 'false', 'finally', 'float', 'foreach',
+        'function', 'if', 'int', 'not', 'null', 'object', 'or', 'regex',
+        'return', 'returns', 'string', 'throw', 'time', 'to', 'true',
+        'try', 'when', 'while'
+    ]
     future_reserved_keywords = [
         'async', 'story', 'assert', 'called', 'mock', 'class', 'extends',
         'implements', 'interface', 'type', 'public', 'private', 'protected',
@@ -134,7 +138,6 @@ class Transformer(LarkTransformer):
 
     @classmethod
     def command(cls, matches):
-        cls.is_keyword(matches[0])
         return Tree('command', matches)
 
     @classmethod
