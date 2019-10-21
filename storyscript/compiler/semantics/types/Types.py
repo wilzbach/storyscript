@@ -677,6 +677,8 @@ class NullType(BaseType):
         return None
 
     def implicit_to(self, other):
+        if other == AnyType.instance():
+            return other
         return None
 
     def explicit_from(self, other):
