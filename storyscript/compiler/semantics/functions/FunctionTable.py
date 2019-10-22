@@ -19,6 +19,13 @@ class FunctionTable:
         fn = Function(name, args, output)
         self.functions[name] = fn
 
+    def insert_fn_table(self, fn_table):
+        """
+        Insert a another function table into this function table.
+        """
+        for name, fn in fn_table.functions.items():
+            self.functions[name] = fn
+
     def resolve(self, name):
         """
         Returns the function `name` or `None`.

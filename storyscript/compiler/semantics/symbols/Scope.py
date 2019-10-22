@@ -32,6 +32,13 @@ class Scope:
     def insert(self, sym):
         self._symbols.insert(sym)
 
+    def insert_scope(self, scope):
+        """
+        Insert all symbols of 'scope' in this scope.
+        """
+        for sym in scope._symbols._symbols.values():
+            self.insert(sym)
+
     def resolve(self, path):
         for scope in self.scopes():
             p = scope._symbols.resolve(path)
@@ -78,8 +85,7 @@ class Scope:
         Creates and returns a new scope by copying over from current scope.
         """
         new_scope = Scope(parent=self._parent)
-        for sym in self._symbols._symbols.values():
-            new_scope.insert(sym)
+        new_scope.insert_scope(self)
         return new_scope
 
 
