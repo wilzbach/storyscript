@@ -3,7 +3,7 @@ from storyhub.sdk.service.Output import Output as ServiceOutput
 
 from storyscript.compiler.semantics.types.Indexing import IndexKind
 from storyscript.compiler.semantics.types.Types import BaseType, MapType, \
-    NullType, ObjectType
+    ObjectType
 from storyscript.hub.TypeMappings import TypeMappings
 
 
@@ -134,11 +134,6 @@ class Symbol:
             assert isinstance(type_, BaseType)
 
         cur_type = symbol.type()
-        tree.expect(type_ != NullType.instance(),
-                    'type_index_incompatible',
-                    left=cur_type,
-                    name=name,
-                    right=type_)
         new_type = cur_type.index(type_, kind)
         if isinstance(cur_type, ObjectType) and new_type is not None:
             obj = new_type

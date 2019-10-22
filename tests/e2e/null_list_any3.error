@@ -1,0 +1,6 @@
+Error: syntax error in story at line 4, column 5
+
+4|    c = b[a]
+          ^^^
+
+E0104: `List[any]` can't be indexed with `a` of type `any`
