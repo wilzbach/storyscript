@@ -33,5 +33,5 @@ class Semantics:
     def process(self, tree):
         for visitor in self.visitors:
             v = visitor(module=self.module)
-            v.visit(tree)
+            v.visit(tree, self.module.root_scope)
         return self.module

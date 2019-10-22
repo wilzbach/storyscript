@@ -422,8 +422,7 @@ class TypeResolver(ScopeSelectiveVisitor):
     def create_scope(self, scope, storage_class=None):
         return ScopeBlock(self, scope, storage_class)
 
-    def start(self, tree, scope=None):
-        # create the root scope
-        tree.scope = Scope.root()
+    def start(self, tree, scope):
+        tree.scope = scope
         self.update_scope(tree.scope)
         self.visit_children(tree, scope=tree.scope)
