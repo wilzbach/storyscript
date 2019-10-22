@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 1
+
+1|    finally = 1
+      ^^^^^^^
+
+E0020: `finally` is a reserved keyword
