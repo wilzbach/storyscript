@@ -11,11 +11,11 @@ class DeprecationCodes:
         """
         Checks whether a given deprecation name is a valid deprecation.
         """
-        if isinstance(deprecation_name, str):
-            if hasattr(DeprecationCodes, deprecation_name):
-                return True
-            return False
-        assert 0, 'Deprecation name should be a string.'
+        assert isinstance(deprecation_name, str), \
+            'Deprecation name should be a string.'
+        if hasattr(DeprecationCodes, deprecation_name):
+            return True
+        return False
 
     @staticmethod
     def get_deprecation(deprecation_name):
