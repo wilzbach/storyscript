@@ -115,8 +115,6 @@ class BaseType:
         return implicit_cast(self, other)
 
     def can_be_assigned(self, other):
-        if other == AnyType.instance():
-            return None
         if other == NullType.instance():
             return self
         return other.implicit_to(self)
@@ -623,6 +621,9 @@ class ObjectType(BaseType):
 
     def hashable(self):
         return False
+
+    def can_be_assigned(self, other):
+        return other.implicit_to(self)
 
     @singleton
     def instance():
