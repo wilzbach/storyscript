@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
-
 import click
 
 from lark.exceptions import UnexpectedCharacters, UnexpectedToken
@@ -27,34 +25,8 @@ def storyerror(error, magic):
 def test_storyerror_init(storyerror, error):
     assert storyerror.error == error
     assert storyerror.story is not None
-    assert storyerror.path is None
     assert storyerror.error_tuple is None
     assert issubclass(StoryError, SyntaxError)
-
-
-def test_storyerror_init_path():
-    storyerror = StoryError('error', 'story', path='hello.story')
-    assert storyerror.path == 'hello.story'
-
-
-def test_storyerror_name(storyerror):
-    assert storyerror.name() == 'story'
-
-
-def test_storyerror_name_path(patch, storyerror):
-    patch.object(os, 'getcwd', return_value='/abspath')
-    storyerror.path = 'hello.story'
-    assert storyerror.name() == 'hello.story'
-
-
-def test_storyerror_name_reduce_path(patch, storyerror):
-    """
-    Ensures that paths are simplified for stories in the current working
-    directory.
-    """
-    patch.object(os, 'getcwd', return_value='/abspath')
-    storyerror.path = '/abspath/hello.story'
-    assert storyerror.name() == 'hello.story'
 
 
 def test_storyerror_int_line(patch, storyerror, error):
@@ -96,10 +68,10 @@ def test_storyerror_header(patch, storyerror, error):
     Ensures StoryError.header returns the correct text.
     """
     patch.object(click, 'style')
-    patch.many(StoryError, ['name', 'int_line'])
+    patch.object(StoryError, 'int_line')
     template = 'Error: syntax error in {} at line {}, column {}'
     result = storyerror.header()
-    click.style.assert_called_with(StoryError.name(), bold=True)
+    click.style.assert_called_with(storyerror.story.name, bold=True)
     assert result == template.format(click.style(),
                                      storyerror.int_line(), error.column)
 

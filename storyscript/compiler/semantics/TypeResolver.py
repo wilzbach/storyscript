@@ -51,7 +51,8 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.resolver = ExpressionResolver(module=self.module)
         self.path_symbol_resolver = SymbolResolver(
             scope=None, check_variable_existence=False)
-        self.path_resolver = PathResolver(self.path_symbol_resolver)
+        self.path_resolver = PathResolver(self.path_symbol_resolver,
+                                          self.module)
         # Service output object when inside a service block
         self.service_block_output = None
         self.in_when_block = False

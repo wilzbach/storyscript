@@ -242,7 +242,7 @@ def test_bundle_bundle(patch, bundle):
     Bundle.compile.assert_called_with(Bundle.find_stories(),
                                       parser=Bundle.parser())
     expected = {'stories': bundle.stories, 'services': Bundle.services(),
-                'entrypoint': Bundle.find_stories()}
+                'entrypoint': Bundle.find_stories()}, bundle.deprecations
     assert result == expected
 
 

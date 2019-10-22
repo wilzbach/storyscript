@@ -3,21 +3,28 @@ import io
 import os
 
 from lark.exceptions import UnexpectedInput, UnexpectedToken
+from lark.lexer import Token
 
 from pytest import fixture, mark, raises
 
 import storyscript.Story as StoryModule
-from storyscript.Story import Story
+from storyscript.Story import Story, StoryContext
 from storyscript.compiler import Compiler
 from storyscript.compiler.lowering.Lowering import Lowering
 from storyscript.compiler.pretty.PrettyPrinter import PrettyPrinter
 from storyscript.exceptions import CompilerError, StoryError, StorySyntaxError
 from storyscript.parser import Parser
+from storyscript.parser.Tree import Tree
 
 
 @fixture
 def story():
     return Story('story', features=None)
+
+
+@fixture
+def storycontext():
+    return StoryContext(features=None)
 
 
 @fixture
@@ -41,6 +48,27 @@ def test_story_init(story):
 def test_story_init_path():
     story = Story('story', features=None, path='path')
     assert story.path == 'path'
+
+
+def test_story_name(story):
+    assert story.extract_name() == 'story'
+    assert story.name == 'story'
+
+
+def test_story_name_path(patch, story):
+    patch.object(os, 'getcwd', return_value='/abspath')
+    story.path = 'hello.story'
+    assert story.extract_name() == 'hello.story'
+
+
+def test_story_name_reduce_path(patch, story):
+    """
+    Ensures that paths are simplified for stories in the current working
+    directory.
+    """
+    patch.object(os, 'getcwd', return_value='/abspath')
+    story.path = '/abspath/hello.story'
+    assert story.extract_name() == 'hello.story'
 
 
 def test_story_read(patch):
@@ -127,7 +155,7 @@ def test_story_parse_error(patch, story, parser, error):
 
 def test_story_compile(patch, story, compiler):
     story.compile()
-    Compiler.compile.assert_called_with(story.tree, story=story, features=None)
+    Compiler.compile.assert_called_with(story.tree, story=story)
     assert story.compiled == Compiler.compile()
 
 
@@ -202,3 +230,18 @@ def test_story_process_parser(patch, story, parser):
     story.parse.assert_called_with(parser=parser)
     story.compile.assert_called_with()
     assert result == story.compiled
+
+
+def test_storycontext_deprecate(patch, storycontext):
+    patch.object(StoryModule, 'deprecate', side_effect=['d1', 'd2'])
+    tree = Tree('foo', [])
+    storycontext.deprecate(tree, 'deprecation_1')
+    StoryModule.deprecate.assert_called_with(
+        tree=tree, name='deprecation_1')
+
+    token = Token('NAME', 'bar')
+    storycontext.deprecate(token, 'deprecation_2')
+    StoryModule.deprecate.assert_called_with(
+        token=token, name='deprecation_2')
+
+    assert storycontext.deprecations() == ['d1', 'd2']

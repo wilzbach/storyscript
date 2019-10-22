@@ -234,7 +234,8 @@ class ExpressionResolver:
         self.expr_visitor = SymbolExpressionVisitor(self)
         # how to resolve existing symbols
         self.path_resolver = PathResolver(
-            symbol_resolver=module.symbol_resolver
+            symbol_resolver=module.symbol_resolver,
+            module=module
         )
         self.module = module
         self.with_as = False

@@ -6,7 +6,7 @@ from click.testing import CliRunner
 
 from pytest import fixture, mark
 
-from storyscript.App import App
+from storyscript.App import App, Compiled
 from storyscript.Cli import Cli
 from storyscript.Project import Project
 from storyscript.Version import version
@@ -289,7 +289,7 @@ def test_cli_compile_output_file(patch, runner, app):
     patch.object(io, 'open')
     runner.invoke(Cli.compile, ['/path', 'hello.story', '-j'])
     io.open.assert_called_with('hello.story', 'w')
-    io.open().__enter__().write.assert_called_with(App.compile())
+    io.open().__enter__().write.assert_called_with(App.compile().results)
 
 
 @mark.parametrize('option', ['--silent', '-s'])
@@ -350,7 +350,22 @@ def test_cli_compile_json(runner, echo, app, option):
     App.compile.assert_called_with('.', ebnf=None,
                                    ignored_path=None, concise=False,
                                    first=False, features={})
-    click.echo.assert_called_with(App.compile())
+    click.echo.assert_called_with(App.compile().results)
+
+
+def test_cli_compile_deprecation(patch, magic, runner, echo):
+    deprecation = magic()
+    patch.object(click, 'style', return_value='Deprecations')
+    patch.object(
+        App, 'compile',
+        return_value=Compiled(
+            results=magic(),
+            deprecations={'app.story': [
+                deprecation
+            ]}))
+    runner.invoke(Cli.compile, [])
+    click.style.assert_any_call(deprecation.message(), fg='yellow')
+    click.echo.assert_any_call('Deprecations')
 
 
 def test_cli_compile_ebnf(runner, echo, app):
