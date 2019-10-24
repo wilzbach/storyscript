@@ -1,8 +1,8 @@
 when twitter stream tweet
-    break
+    a = 1
 when twitter stream tweet as os
-    break
+    b = 1
 when twitter stream tweet track:"storyscript"
-    break
+    c = 1
 when twitter stream tweet track:"storyscript" as li
-    break
+    d = 1

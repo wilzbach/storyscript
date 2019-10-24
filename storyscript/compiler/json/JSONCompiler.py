@@ -206,7 +206,6 @@ class JSONCompiler:
         """
         Compiles a return_statement tree
         """
-        tree.expect(parent is not None, 'return_outside')
         position = tree.position()
         args = None
         if tree.base_expression:
@@ -421,11 +420,9 @@ class JSONCompiler:
             self.subtree(nested_block, parent=position.line)
 
     def break_statement(self, tree, parent):
-        tree.expect(parent is not None, 'break_outside')
         self.lines.append('break', tree.position(), parent=parent)
 
     def continue_statement(self, tree, parent):
-        tree.expect(parent is not None, 'continue_outside')
         self.lines.append('continue', tree.position(), parent=parent)
 
     def subtrees(self, *trees, parent=None):

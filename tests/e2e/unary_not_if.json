@@ -21,7 +21,7 @@
       "method": "if",
       "ln": "2",
       "col_start": "4",
-      "col_end": "11",
+      "col_end": "24",
       "args": [
         {
           "$OBJECT": "expression",
@@ -40,13 +40,37 @@
       "src": "if not b"
     },
     "3": {
-      "method": "return",
+      "method": "execute",
       "ln": "3",
       "col_start": "5",
-      "col_end": "11",
+      "col_end": "24",
+      "service": "log",
+      "command": "info",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "string"
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            }
+          }
+        }
+      ],
       "parent": "2",
-      "src": "    return"
+      "src": "    log info msg: \"{b}\""
     }
   },
+  "services": [
+    "log"
+  ],
   "entrypoint": "1"
 }

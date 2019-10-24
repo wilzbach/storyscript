@@ -1,3 +1,3 @@
 b = false
 if not b
-    return
+    log info msg: "{b}"

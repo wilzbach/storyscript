@@ -46,7 +46,7 @@
     "1": {
       "method": "while",
       "ln": "1",
-      "col_end": "11",
+      "col_end": "29",
       "args": [
         {
           "$OBJECT": "path",
@@ -59,13 +59,28 @@
       "src": "while [1, 2, 3].contains(item:1)"
     },
     "2": {
-      "method": "return",
+      "method": "execute",
       "ln": "2",
       "col_start": "5",
-      "col_end": "11",
+      "col_end": "29",
+      "service": "log",
+      "command": "info",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "returing"
+          }
+        }
+      ],
       "parent": "1",
-      "src": "    return"
+      "src": "    log info msg: \"returing\""
     }
   },
+  "services": [
+    "log"
+  ],
   "entrypoint": "1.1"
 }

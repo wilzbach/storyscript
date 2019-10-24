@@ -13,7 +13,7 @@ class SelectiveVisitor(BaseVisitor):
     A selective visitor which only visits defined nodes.
     visit_children must be called explicitly.
     """
-    def visit(self, tree):
+    def visit(self, tree, scope=None):
         if hasattr(self, tree.data):
             return getattr(self, tree.data)(tree)
 

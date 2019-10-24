@@ -1,17 +1,17 @@
 twitter stream
     when tweet as t
-        break
+        log info msg: "breaking"
     when tweet track: "storyscript"
-        break
+        log info msg: "breaking"
     when tweet track: "storyscript" as t
-        break
+        log info msg: "breaking"
 
 twitter stream as s
     when s tweet
-        break
+        log info msg: "breaking"
     when s tweet as t
-        break
+        log info msg: "breaking"
     when s tweet track: "storyscript"
-        break
+        log info msg: "breaking"
     when s tweet track: "storyscript" as t
-        break
+        log info msg: "breaking"
