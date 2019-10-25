@@ -306,6 +306,10 @@ class ErrorCodes:
         'Event based action expected but action `{action}` of service '
         '`{service}` found.'
     )
+    path_index_no_null = (
+        'E0158',
+        'Cannot use `null` in index'
+    )
 
     @staticmethod
     def is_error(error_name):
