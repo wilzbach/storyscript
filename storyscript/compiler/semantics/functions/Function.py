@@ -55,7 +55,22 @@ class BaseFunction:
             implicit_type_cast(tree, t, target,
                                self.fn_type, self._name, k, arg_node)
 
+    def name(self):
+        """
+        Returns the name of this function.
+        """
+        return self._name
+
+    def args(self):
+        """
+        Returns the arguments of this function.
+        """
+        return self._args
+
     def output(self):
+        """
+        Returns the output type of this function.
+        """
         return self._output
 
     def pretty(self):
@@ -68,10 +83,7 @@ class BaseFunction:
             for k, v in sorted(self._args.items()):
                 args_arr.append(f'{k}:`{v.type()}`')
             args = ' '.join(args_arr)
-            if self.fn_type == 'Mutation':
-                args = f' {args}'
-        if self.fn_type == 'Function':
-            args = f'({args})'
+        args = f'({args})'
         return f'{self._name}{args}'
 
     def __str__(self):

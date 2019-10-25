@@ -1,6 +1,5 @@
 from storyscript.compiler.semantics.functions.FunctionTable import \
         FunctionTable
-
 from storyscript.compiler.semantics.types.Types import AnyType
 
 

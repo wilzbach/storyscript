@@ -47,9 +47,10 @@ class Scope:
 
     def symbols(self):
         """
-        Returns all symbols available in the current scope
+        Iterate over all available symbols.
         """
-        return self._symbols
+        for scope in self.scopes():
+            yield from scope._symbols._symbols.values()
 
     def parent(self):
         """
@@ -68,7 +69,7 @@ class Scope:
     def pretty(self):
         indent = '\t'
         return (f'Parent: {self.parent()}\n'
-                f'Symbols:\n{self.symbols().pretty(indent=indent)}')
+                f'Symbols:\n{self._symbols.pretty(indent=indent)}')
 
     @classmethod
     def root(cls):
@@ -87,6 +88,10 @@ class Scope:
         new_scope = Scope(parent=self._parent)
         new_scope.insert_scope(self)
         return new_scope
+
+    def __str__(self):
+        symbols = ','.join(s.name() for s in self.symbols())
+        return f'Scope({symbols})'
 
 
 class ScopeJoiner:

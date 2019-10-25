@@ -15,14 +15,15 @@ class Semantics:
     Performs semantic analysis on the AST
     """
 
-    def __init__(self, features):
-        root_scope = Scope.root()
+    def __init__(self, features, root_scope=None):
+        if root_scope is None:
+            root_scope = Scope.root()
         service_typing = ServiceTyping()
 
         self.module = Module(
             symbol_resolver=SymbolResolver(scope=root_scope),
             function_table=FunctionTable(),
-            mutation_table=MutationTable.init(),
+            mutation_table=MutationTable.instance(),
             root_scope=root_scope,
             features=features,
             service_typing=service_typing,

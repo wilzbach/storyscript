@@ -90,7 +90,7 @@ class TypeResolver(ScopeSelectiveVisitor):
                                             'assignment_type_none')
             sym = Symbol(target_symbol.name(), expr_type,
                          storage_class=storage_class)
-            scope.symbols().insert(sym)
+            scope.insert(sym)
         else:
             tree.expect(target_symbol.type().can_be_assigned(expr_type),
                         'type_assignment_different',
