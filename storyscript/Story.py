@@ -27,11 +27,13 @@ class Story:
     compiling it.
     """
 
-    def __init__(self, story, features, path=None):
+    def __init__(self, story, features, path=None, backend='json', scope=None):
         self.story = story
         self.path = path
         self.lines = story.splitlines(keepends=False)
         self.features = features
+        self.backend = backend
+        self.scope = scope
 
     @classmethod
     def read(cls, path):
@@ -106,7 +108,9 @@ class Story:
         """
         try:
             self.compiled = Compiler.compile(self.tree, story=self,
-                                             features=self.features)
+                                             features=self.features,
+                                             backend=self.backend,
+                                             scope=self.scope)
         except (CompilerError, StorySyntaxError) as error:
             raise self.error(error) from error
 

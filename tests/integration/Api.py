@@ -6,12 +6,15 @@ from pytest import raises
 from storyscript.Api import Api
 from storyscript.Bundle import Bundle
 from storyscript.Story import Story
+from storyscript.compiler.semantics.symbols.Scope import Scope
+from storyscript.compiler.semantics.symbols.Symbols import Symbol
+from storyscript.compiler.semantics.types.Types import IntType
 from storyscript.exceptions import StoryError
 
 
 def test_api_load_map_compiling_try_block():
     """
-    Ensures Api.load functions return errors
+    Ensures Api.load_map functions return errors
     """
     files = {'asd': 'foo ='}
     with raises(StoryError) as e:
@@ -19,9 +22,20 @@ def test_api_load_map_compiling_try_block():
     assert e.value.short_message() == 'E0007: Missing value after `=`'
 
 
-def test_api_load_map_compiling_try_block_loads():
+def test_api_loads_with_scope():
     """
     Ensures Api.load functions return errors
+    """
+    scope = Scope.root()
+    symbol = Symbol('a', IntType.instance())
+    scope.insert(symbol)
+    story = Api.loads('foo = a', backend='semantic', scope=scope)
+    story.check_success()
+
+
+def test_api_loads_compiling_try_block():
+    """
+    Ensures Api.loads functions return errors
     """
     s = Api.loads('foo =')
     assert len(s.deprecations()) == 0
@@ -40,7 +54,7 @@ E0007: Missing value after `=`"""
 
 def test_api_load_map_syntax_error():
     """
-    Ensures Api.load functions return errors
+    Ensures Api.load_map functions return errors
     """
     files = {'abc.story': 'foo ='}
     s = Api.load_map(files)

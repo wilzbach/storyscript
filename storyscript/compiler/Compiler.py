@@ -31,20 +31,23 @@ class CompilerOutput:
 class Compiler:
 
     @classmethod
-    def generate(cls, tree, features):
+    def generate(cls, tree, features, scope):
         """
         Parses an AST and checks it.
         """
         tree = Lowering(parser=tree.parser, features=features).process(tree)
-        module = Semantics(features=features).process(tree)
+        module = Semantics(features=features, root_scope=scope).process(tree)
         return tree, module
 
     @classmethod
-    def compile(cls, tree, story, features, backend='json'):
-        assert backend == 'json'
-        compiler = JSONCompiler(story)
-        tree, module = cls.generate(tree, features)
-        output = compiler.compile(tree)
+    def compile(cls, tree, story, features, backend='json', scope=None):
+        tree, module = cls.generate(tree, features, scope=scope)
+        if backend == 'json':
+            compiler = JSONCompiler(story)
+            output = compiler.compile(tree)
+        else:
+            assert backend == 'semantic'
+            output = tree
         return CompilerOutput(
             backend=backend,
             module=module,
