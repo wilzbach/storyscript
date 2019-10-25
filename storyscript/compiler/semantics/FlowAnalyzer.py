@@ -1,50 +1,23 @@
 # -*- coding: utf-8 -*-
 from contextlib import contextmanager
 
-from .Visitors import SelectiveVisitor
+from .Visitors import FullVisitor
 
 
-class FlowAnalyzer(SelectiveVisitor):
+class FlowAnalyzer(FullVisitor):
     """
     Checks break and continue statements are inside of a looping construct
     """
+    ignore_nodes = [
+        'assignment',
+        'absolute_expression',
+        'concise_when_block',
+    ]
+
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(ignore_nodes=self.ignore_nodes, **kwargs)
         self.inside_loop = 0
         self.inside_function = 0
-
-    def rules(self, tree):
-        self.visit_children(tree)
-
-    def block(self, tree):
-        self.visit_children(tree)
-
-    def nested_block(self, tree):
-        self.visit_children(tree)
-
-    def when_block(self, tree):
-        self.visit_children(tree)
-
-    def service_block(self, tree):
-        self.visit_children(tree)
-
-    def if_block(self, tree):
-        self.visit_children(tree)
-
-    def elseif_block(self, tree):
-        self.visit_children(tree)
-
-    def else_block(self, tree):
-        self.visit_children(tree)
-
-    def try_block(self, tree):
-        self.visit_children(tree)
-
-    def catch_block(self, tree):
-        self.visit_children(tree)
-
-    def finally_block(self, tree):
-        self.visit_children(tree)
 
     def foreach_block(self, tree):
         with self.with_loop():
@@ -78,6 +51,3 @@ class FlowAnalyzer(SelectiveVisitor):
         self.inside_function += 1
         yield
         self.inside_function -= 1
-
-    def start(self, tree):
-        self.visit_children(tree)
