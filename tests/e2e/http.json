@@ -1,0 +1,73 @@
+{
+  "tree": {
+    "1": {
+      "method": "execute",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "12",
+      "output": [
+        "server"
+      ],
+      "service": "http",
+      "command": "server",
+      "enter": "2",
+      "src": "http server as server"
+    },
+    "2": {
+      "method": "when",
+      "ln": "2",
+      "col_start": "10",
+      "col_end": "23",
+      "output": [
+        "r"
+      ],
+      "service": "server",
+      "command": "listen",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "method",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "get"
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "path",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "/"
+          }
+        }
+      ],
+      "enter": "3",
+      "parent": "1",
+      "src": "    when server listen method: \"get\" path: \"/\" as r"
+    },
+    "3": {
+      "method": "execute",
+      "ln": "3",
+      "col_start": "9",
+      "col_end": "16",
+      "service": "r",
+      "command": "write",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "content",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "Hello world!"
+          }
+        }
+      ],
+      "parent": "2",
+      "src": "        r write content: \"Hello world!\""
+    }
+  },
+  "services": [
+    "http"
+  ],
+  "entrypoint": "1"
+}
