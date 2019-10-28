@@ -235,7 +235,7 @@
                                 "type": "string"
                             },
                             "full_response": {
-                                "type": "array"
+                                "type": "list"
                             },
                             "state": {
                                 "type": "string"
@@ -344,7 +344,7 @@
                                 "type": "string"
                             },
                             "full_response": {
-                                "type": "array"
+                                "type": "list"
                             },
                             "state": {
                                 "type": "string"
@@ -420,7 +420,7 @@
                                 "options"
                             ],
                             "in": "requestBody",
-                            "type": "string"
+                            "type": "enum"
                         },
                         "query": {
                             "help": "Set an optional map of query parameters.\nQuery parameters are automatically appended to the url specified (/url?foo=bar&john=doe)\n",
@@ -434,11 +434,15 @@
                         }
                     },
                     "help": "Make a HTTP request to the outside world.\nThis command is native to the platform for performance reasons.\n",
+                    "http": {
+                        "method": "post",
+                        "path": "/ignore",
+                        "port": 8000
+                    },
                     "output": {
                         "type": "any"
                     }
                 },
-                "help": "Make http calls and listen for http connections through the Asyncy Gateway\nresulting in serverless http endpoints.\n",
                 "server": {
                     "events": {
                         "listen": {
@@ -454,7 +458,7 @@
                                         "options"
                                     ],
                                     "in": "requestBody",
-                                    "type": "string"
+                                    "type": "enum"
                                 },
                                 "path": {
                                     "in": "requestBody",
@@ -462,7 +466,7 @@
                                     "type": "string"
                                 }
                             },
-                            "help": "Listen and respond to http connections by\nregistering with the Asyncy Gateway resulting in a serverless function.\n",
+                            "help": "Listen and respond to http connections by\nregistering with the Storyscript Gateway resulting in a serverless function.\n",
                             "http": {
                                 "port": 8889,
                                 "subscribe": {
@@ -556,16 +560,33 @@
                                     "write": {
                                         "arguments": {
                                             "content": {
+                                                "help": "The response content.",
                                                 "in": "responseBody",
                                                 "required": true,
                                                 "type": "string"
                                             },
                                             "flush": {
+                                                "help": "Parameter which decides whether to flush the response.",
                                                 "in": "responseBody",
                                                 "required": false,
                                                 "type": "boolean"
                                             }
                                         },
+                                        "http": {
+                                            "contentType": "application/json",
+                                            "use_event_conn": true
+                                        }
+                                    },
+                                    "writeJSON": {
+                                        "arguments": {
+                                            "content": {
+                                                "help": "The content from which the JSON response will be built.",
+                                                "in": "responseBody",
+                                                "required": true,
+                                                "type": "any"
+                                            }
+                                        },
+                                        "help": "Write a JSON response body.",
                                         "http": {
                                             "contentType": "application/json",
                                             "use_event_conn": true
@@ -600,6 +621,20 @@
                         }
                     }
                 }
+            },
+            "info": {
+                "contact": {
+                    "email": "infra@storyscript.io",
+                    "name": "Storyscript",
+                    "url": "https://storyscript.io"
+                },
+                "description": "This is the HTTP service for Storyscript Cloud, which allows stories to be triggered via HTTP from the outside world.",
+                "license": {
+                    "name": "Apache 2",
+                    "url": "http://opensource.org/licenses/Apache-2.0"
+                },
+                "title": "HTTP gateway for Storyscript Cloud",
+                "version": "1.0.0"
             },
             "omg": 1
         },
@@ -646,7 +681,7 @@
                                 "options"
                             ],
                             "in": "requestBody",
-                            "type": "string"
+                            "type": "enum"
                         },
                         "query": {
                             "help": "Set an optional map of query parameters.\nQuery parameters are automatically appended to the url specified (/url?foo=bar&john=doe)\n",
@@ -660,11 +695,15 @@
                         }
                     },
                     "help": "Make a HTTP request to the outside world.\nThis command is native to the platform for performance reasons.\n",
+                    "http": {
+                        "method": "post",
+                        "path": "/ignore",
+                        "port": 8000
+                    },
                     "output": {
                         "type": "any"
                     }
                 },
-                "help": "Make http calls and listen for http connections through the Asyncy Gateway\nresulting in serverless http endpoints.\n",
                 "server": {
                     "events": {
                         "listen": {
@@ -680,7 +719,7 @@
                                         "options"
                                     ],
                                     "in": "requestBody",
-                                    "type": "string"
+                                    "type": "enum"
                                 },
                                 "path": {
                                     "in": "requestBody",
@@ -688,7 +727,7 @@
                                     "type": "string"
                                 }
                             },
-                            "help": "Listen and respond to http connections by\nregistering with the Asyncy Gateway resulting in a serverless function.\n",
+                            "help": "Listen and respond to http connections by\nregistering with the Storyscript Gateway resulting in a serverless function.\n",
                             "http": {
                                 "port": 8889,
                                 "subscribe": {
@@ -782,16 +821,33 @@
                                     "write": {
                                         "arguments": {
                                             "content": {
+                                                "help": "The response content.",
                                                 "in": "responseBody",
                                                 "required": true,
                                                 "type": "string"
                                             },
                                             "flush": {
+                                                "help": "Parameter which decides whether to flush the response.",
                                                 "in": "responseBody",
                                                 "required": false,
                                                 "type": "boolean"
                                             }
                                         },
+                                        "http": {
+                                            "contentType": "application/json",
+                                            "use_event_conn": true
+                                        }
+                                    },
+                                    "writeJSON": {
+                                        "arguments": {
+                                            "content": {
+                                                "help": "The content from which the JSON response will be built.",
+                                                "in": "responseBody",
+                                                "required": true,
+                                                "type": "any"
+                                            }
+                                        },
+                                        "help": "Write a JSON response body.",
                                         "http": {
                                             "contentType": "application/json",
                                             "use_event_conn": true
@@ -826,6 +882,20 @@
                         }
                     }
                 }
+            },
+            "info": {
+                "contact": {
+                    "email": "infra@storyscript.io",
+                    "name": "Storyscript",
+                    "url": "https://storyscript.io"
+                },
+                "description": "This is the HTTP service for Storyscript Cloud, which allows stories to be triggered via HTTP from the outside world.",
+                "license": {
+                    "name": "Apache 2",
+                    "url": "http://opensource.org/licenses/Apache-2.0"
+                },
+                "title": "HTTP gateway for Storyscript Cloud",
+                "version": "1.0.0"
             },
             "omg": 1
         },
@@ -1054,52 +1124,88 @@
                 "debug": {
                     "arguments": {
                         "msg": {
+                            "in": "requestBody",
                             "required": true,
                             "type": "string"
                         }
                     },
-                    "help": "Log a message with the DEBUG level"
+                    "help": "Log a message with the DEBUG level",
+                    "http": {
+                        "method": "post",
+                        "path": "/ignore",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "none"
+                    }
                 },
                 "error": {
                     "arguments": {
                         "msg": {
+                            "in": "requestBody",
                             "required": true,
                             "type": "string"
                         }
                     },
-                    "help": "Log a message with the ERROR level"
+                    "help": "Log a message with the ERROR level",
+                    "http": {
+                        "method": "post",
+                        "path": "/ignore",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "none"
+                    }
                 },
                 "info": {
                     "arguments": {
                         "msg": {
+                            "in": "requestBody",
                             "required": true,
                             "type": "string"
                         }
                     },
-                    "help": "Log a message with the INFO level"
+                    "help": "Log a message with the INFO level",
+                    "http": {
+                        "method": "post",
+                        "path": "/ignore",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "none"
+                    }
                 },
                 "warn": {
                     "arguments": {
                         "msg": {
+                            "in": "requestBody",
                             "required": true,
                             "type": "string"
                         }
                     },
-                    "help": "Log a message with the WARN level"
+                    "help": "Log a message with the WARN level",
+                    "http": {
+                        "method": "post",
+                        "path": "/ignore",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "none"
+                    }
                 }
             },
             "info": {
                 "contact": {
-                    "email": "support@asyncy.com",
-                    "name": "Asyncy",
-                    "url": "https://asyncy.com"
+                    "email": "infra@storyscript.io",
+                    "name": "Storyscript",
+                    "url": "https://storyscript.io"
                 },
                 "description": "This is the microservice.yml which corresponds to the native implementation of the log service",
                 "license": {
                     "name": "MIT",
                     "url": "https://opensource.org/licenses/MIT"
                 },
-                "title": "Simple logger for the Asyncy platform",
+                "title": "Simple logger for Storyscript Cloud",
                 "version": "1.0.1"
             },
             "omg": 1
@@ -1128,52 +1234,88 @@
                 "debug": {
                     "arguments": {
                         "msg": {
+                            "in": "requestBody",
                             "required": true,
                             "type": "string"
                         }
                     },
-                    "help": "Log a message with the DEBUG level"
+                    "help": "Log a message with the DEBUG level",
+                    "http": {
+                        "method": "post",
+                        "path": "/ignore",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "none"
+                    }
                 },
                 "error": {
                     "arguments": {
                         "msg": {
+                            "in": "requestBody",
                             "required": true,
                             "type": "string"
                         }
                     },
-                    "help": "Log a message with the ERROR level"
+                    "help": "Log a message with the ERROR level",
+                    "http": {
+                        "method": "post",
+                        "path": "/ignore",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "none"
+                    }
                 },
                 "info": {
                     "arguments": {
                         "msg": {
+                            "in": "requestBody",
                             "required": true,
                             "type": "string"
                         }
                     },
-                    "help": "Log a message with the INFO level"
+                    "help": "Log a message with the INFO level",
+                    "http": {
+                        "method": "post",
+                        "path": "/ignore",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "none"
+                    }
                 },
                 "warn": {
                     "arguments": {
                         "msg": {
+                            "in": "requestBody",
                             "required": true,
                             "type": "string"
                         }
                     },
-                    "help": "Log a message with the WARN level"
+                    "help": "Log a message with the WARN level",
+                    "http": {
+                        "method": "post",
+                        "path": "/ignore",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "none"
+                    }
                 }
             },
             "info": {
                 "contact": {
-                    "email": "support@asyncy.com",
-                    "name": "Asyncy",
-                    "url": "https://asyncy.com"
+                    "email": "infra@storyscript.io",
+                    "name": "Storyscript",
+                    "url": "https://storyscript.io"
                 },
                 "description": "This is the microservice.yml which corresponds to the native implementation of the log service",
                 "license": {
                     "name": "MIT",
                     "url": "https://opensource.org/licenses/MIT"
                 },
-                "title": "Simple logger for the Asyncy platform",
+                "title": "Simple logger for Storyscript Cloud",
                 "version": "1.0.1"
             },
             "omg": 1
@@ -1683,6 +1825,30 @@
     {
         "configuration": {
             "actions": {
+                "append": {
+                    "arguments": {
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "value": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "any"
+                        }
+                    },
+                    "help": "Appends 'value' to a 'key'.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/append",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "int"
+                    }
+                },
                 "blpop": {
                     "arguments": {
                         "key": {
@@ -1691,6 +1857,7 @@
                             "type": "string"
                         }
                     },
+                    "help": "Removes and returns the first element of the list stored at 'key'.\nWhen there are no element in the list, the command will not return\nuntil an element got added.\n",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -1709,6 +1876,7 @@
                             "type": "string"
                         }
                     },
+                    "help": "Removes and returns the last element of the list stored at 'key'.\nWhen there are no element in the list, the command will not return\nuntil an elements got added.\n",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -1719,7 +1887,30 @@
                         "type": "any"
                     }
                 },
-                "del": {
+                "decrement": {
+                    "arguments": {
+                        "by": {
+                            "in": "requestBody",
+                            "type": "any"
+                        },
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Decrements a number stored at 'key'.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/decr",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "int"
+                    }
+                },
+                "delete": {
                     "arguments": {
                         "key": {
                             "in": "requestBody",
@@ -1727,6 +1918,7 @@
                             "type": "string"
                         }
                     },
+                    "help": "Removes 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -1750,6 +1942,7 @@
                             "type": "int"
                         }
                     },
+                    "help": "Set a timeout on a 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -1768,6 +1961,7 @@
                             "type": "string"
                         }
                     },
+                    "help": "Returns the value of 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -1775,7 +1969,54 @@
                         "port": 8000
                     },
                     "output": {
-                        "type": "any"
+                        "type": "string"
+                    }
+                },
+                "getSet": {
+                    "arguments": {
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "value": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "any"
+                        }
+                    },
+                    "help": "Returns the current value of 'key' and overwrites it with 'value'.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/getset",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "string"
+                    }
+                },
+                "increment": {
+                    "arguments": {
+                        "by": {
+                            "in": "requestBody",
+                            "type": "any"
+                        },
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Increments a number stored at 'key'.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/incr",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "int"
                     }
                 },
                 "listener": {
@@ -1840,6 +2081,7 @@
                             "type": "string"
                         }
                     },
+                    "help": "Removes and returns the first element of the list stored at 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -1863,6 +2105,7 @@
                             "type": "any"
                         }
                     },
+                    "help": "Insert 'value' at the head of list stored at 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -1873,6 +2116,60 @@
                         "type": "none"
                     }
                 },
+                "mget": {
+                    "arguments": {
+                        "keys": {
+                            "in": "requestBody",
+                            "type": "list"
+                        }
+                    },
+                    "help": "Returns the values of multiple 'keys'.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/get",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "list"
+                    }
+                },
+                "mset": {
+                    "arguments": {
+                        "pairs": {
+                            "in": "requestBody",
+                            "type": "map"
+                        }
+                    },
+                    "help": "Sets multiple 'key'/'value' pairs simultaneously.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/mset",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "none"
+                    }
+                },
+                "msetnx": {
+                    "arguments": {
+                        "pairs": {
+                            "in": "requestBody",
+                            "type": "map"
+                        }
+                    },
+                    "help": "Sets multiple 'key'/'value' pairs simultaneously.\nOnly non-existing keys will be set.\n",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/msetnx",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "boolean"
+                    }
+                },
                 "rpop": {
                     "arguments": {
                         "key": {
@@ -1881,6 +2178,7 @@
                             "type": "string"
                         }
                     },
+                    "help": "Removes and returns the last element of the list stored at 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -1904,6 +2202,7 @@
                             "type": "any"
                         }
                     },
+                    "help": "Insert 'value' at the end of list stored at 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -1927,6 +2226,7 @@
                             "type": "any"
                         }
                     },
+                    "help": "Sets 'key' to hold 'value'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -1935,6 +2235,30 @@
                     },
                     "output": {
                         "type": "none"
+                    }
+                },
+                "setnx": {
+                    "arguments": {
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "value": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "any"
+                        }
+                    },
+                    "help": "Set a 'key' to 'value' only if the key does not exist yet.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/setnx",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -1950,6 +2274,12 @@
                 },
                 "REDIS_PORT": {
                     "type": "int"
+                }
+            },
+            "health": {
+                "http": {
+                    "path": "/health",
+                    "port": 8000
                 }
             },
             "info": {
@@ -1996,6 +2326,30 @@
     {
         "configuration": {
             "actions": {
+                "append": {
+                    "arguments": {
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "value": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "any"
+                        }
+                    },
+                    "help": "Appends 'value' to a 'key'.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/append",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "int"
+                    }
+                },
                 "blpop": {
                     "arguments": {
                         "key": {
@@ -2004,6 +2358,7 @@
                             "type": "string"
                         }
                     },
+                    "help": "Removes and returns the first element of the list stored at 'key'.\nWhen there are no element in the list, the command will not return\nuntil an element got added.\n",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -2022,6 +2377,7 @@
                             "type": "string"
                         }
                     },
+                    "help": "Removes and returns the last element of the list stored at 'key'.\nWhen there are no element in the list, the command will not return\nuntil an elements got added.\n",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -2032,7 +2388,30 @@
                         "type": "any"
                     }
                 },
-                "del": {
+                "decrement": {
+                    "arguments": {
+                        "by": {
+                            "in": "requestBody",
+                            "type": "any"
+                        },
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Decrements a number stored at 'key'.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/decr",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "int"
+                    }
+                },
+                "delete": {
                     "arguments": {
                         "key": {
                             "in": "requestBody",
@@ -2040,6 +2419,7 @@
                             "type": "string"
                         }
                     },
+                    "help": "Removes 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -2063,6 +2443,7 @@
                             "type": "int"
                         }
                     },
+                    "help": "Set a timeout on a 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -2081,6 +2462,7 @@
                             "type": "string"
                         }
                     },
+                    "help": "Returns the value of 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -2088,7 +2470,54 @@
                         "port": 8000
                     },
                     "output": {
-                        "type": "any"
+                        "type": "string"
+                    }
+                },
+                "getSet": {
+                    "arguments": {
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "value": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "any"
+                        }
+                    },
+                    "help": "Returns the current value of 'key' and overwrites it with 'value'.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/getset",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "string"
+                    }
+                },
+                "increment": {
+                    "arguments": {
+                        "by": {
+                            "in": "requestBody",
+                            "type": "any"
+                        },
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "Increments a number stored at 'key'.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/incr",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "int"
                     }
                 },
                 "listener": {
@@ -2153,6 +2582,7 @@
                             "type": "string"
                         }
                     },
+                    "help": "Removes and returns the first element of the list stored at 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -2176,6 +2606,7 @@
                             "type": "any"
                         }
                     },
+                    "help": "Insert 'value' at the head of list stored at 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -2186,6 +2617,60 @@
                         "type": "none"
                     }
                 },
+                "mget": {
+                    "arguments": {
+                        "keys": {
+                            "in": "requestBody",
+                            "type": "list"
+                        }
+                    },
+                    "help": "Returns the values of multiple 'keys'.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/get",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "list"
+                    }
+                },
+                "mset": {
+                    "arguments": {
+                        "pairs": {
+                            "in": "requestBody",
+                            "type": "map"
+                        }
+                    },
+                    "help": "Sets multiple 'key'/'value' pairs simultaneously.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/mset",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "none"
+                    }
+                },
+                "msetnx": {
+                    "arguments": {
+                        "pairs": {
+                            "in": "requestBody",
+                            "type": "map"
+                        }
+                    },
+                    "help": "Sets multiple 'key'/'value' pairs simultaneously.\nOnly non-existing keys will be set.\n",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/msetnx",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "boolean"
+                    }
+                },
                 "rpop": {
                     "arguments": {
                         "key": {
@@ -2194,6 +2679,7 @@
                             "type": "string"
                         }
                     },
+                    "help": "Removes and returns the last element of the list stored at 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -2217,6 +2703,7 @@
                             "type": "any"
                         }
                     },
+                    "help": "Insert 'value' at the end of list stored at 'key'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -2240,6 +2727,7 @@
                             "type": "any"
                         }
                     },
+                    "help": "Sets 'key' to hold 'value'.",
                     "http": {
                         "contentType": "application/json",
                         "method": "post",
@@ -2248,6 +2736,30 @@
                     },
                     "output": {
                         "type": "none"
+                    }
+                },
+                "setnx": {
+                    "arguments": {
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "value": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "any"
+                        }
+                    },
+                    "help": "Set a 'key' to 'value' only if the key does not exist yet.",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/setnx",
+                        "port": 8000
+                    },
+                    "output": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -2263,6 +2775,12 @@
                 },
                 "REDIS_PORT": {
                     "type": "int"
+                }
+            },
+            "health": {
+                "http": {
+                    "path": "/health",
+                    "port": 8000
                 }
             },
             "info": {
@@ -2313,6 +2831,16 @@
                     "arguments": {
                         "asm": {
                             "in": "requestBody",
+                            "properties": {
+                                "group": {
+                                    "required": true,
+                                    "type": "int"
+                                },
+                                "groups_to_display": {
+                                    "required": false,
+                                    "type": "list"
+                                }
+                            },
                             "type": "object"
                         },
                         "attachments": {
@@ -2334,16 +2862,26 @@
                         },
                         "custom_args": {
                             "in": "requestBody",
-                            "type": "object"
+                            "type": "any"
                         },
                         "from": {
                             "in": "requestBody",
+                            "properties": {
+                                "email": {
+                                    "required": true,
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "required": false,
+                                    "type": "string"
+                                }
+                            },
                             "required": true,
                             "type": "object"
                         },
                         "headers": {
                             "in": "requestBody",
-                            "type": "object"
+                            "type": "any"
                         },
                         "ip_pool_name": {
                             "in": "requestBody",
@@ -2351,20 +2889,101 @@
                         },
                         "mail_settings": {
                             "in": "requestBody",
+                            "properties": {
+                                "bcc": {
+                                    "properties": {
+                                        "email": {
+                                            "required": false,
+                                            "type": "string"
+                                        },
+                                        "enable": {
+                                            "required": false,
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "required": false,
+                                    "type": "object"
+                                },
+                                "bypass_list_management": {
+                                    "properties": {
+                                        "enable": {
+                                            "required": false,
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "required": false,
+                                    "type": "object"
+                                },
+                                "footer": {
+                                    "properties": {
+                                        "enable": {
+                                            "required": false,
+                                            "type": "boolean"
+                                        },
+                                        "html": {
+                                            "required": false,
+                                            "type": "string"
+                                        },
+                                        "text": {
+                                            "required": false,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": false,
+                                    "type": "object"
+                                },
+                                "sandbox_mode": {
+                                    "properties": {
+                                        "enable": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "required": false,
+                                    "type": "object"
+                                },
+                                "spam_check": {
+                                    "properties": {
+                                        "enable": {
+                                            "required": false,
+                                            "type": "boolean"
+                                        },
+                                        "post_to_url": {
+                                            "required": false,
+                                            "type": "string"
+                                        },
+                                        "threshold": {
+                                            "required": false,
+                                            "type": "int"
+                                        }
+                                    },
+                                    "required": false,
+                                    "type": "object"
+                                }
+                            },
                             "type": "object"
                         },
                         "personalizations": {
                             "in": "requestBody",
                             "required": true,
-                            "type": "object"
+                            "type": "list"
                         },
                         "reply_to": {
                             "in": "requestBody",
+                            "properties": {
+                                "email": {
+                                    "required": true,
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "required": false,
+                                    "type": "string"
+                                }
+                            },
                             "type": "object"
                         },
                         "sections": {
                             "in": "requestBody",
-                            "type": "object"
+                            "type": "any"
                         },
                         "send_at": {
                             "in": "requestBody",
@@ -2380,7 +2999,7 @@
                         },
                         "tracking_settings": {
                             "in": "requestBody",
-                            "type": "object"
+                            "type": "any"
                         }
                     },
                     "http": {
@@ -2450,9 +3069,13 @@
                 }
             },
             "info": {
-                "description": "This is a sendgrid service",
-                "title": "Sendgrid",
-                "version": "1.0.0"
+                "description": "Access to the Sendgrid email API",
+                "license": {
+                    "name": "MIT",
+                    "url": "https://opensource.org/licenses/MIT"
+                },
+                "title": "OMG-Sendgrid",
+                "version": "0.1.0"
             },
             "lifecycle": {
                 "startup": {
@@ -2491,6 +3114,16 @@
                     "arguments": {
                         "asm": {
                             "in": "requestBody",
+                            "properties": {
+                                "group": {
+                                    "required": true,
+                                    "type": "int"
+                                },
+                                "groups_to_display": {
+                                    "required": false,
+                                    "type": "list"
+                                }
+                            },
                             "type": "object"
                         },
                         "attachments": {
@@ -2512,16 +3145,26 @@
                         },
                         "custom_args": {
                             "in": "requestBody",
-                            "type": "object"
+                            "type": "any"
                         },
                         "from": {
                             "in": "requestBody",
+                            "properties": {
+                                "email": {
+                                    "required": true,
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "required": false,
+                                    "type": "string"
+                                }
+                            },
                             "required": true,
                             "type": "object"
                         },
                         "headers": {
                             "in": "requestBody",
-                            "type": "object"
+                            "type": "any"
                         },
                         "ip_pool_name": {
                             "in": "requestBody",
@@ -2529,20 +3172,101 @@
                         },
                         "mail_settings": {
                             "in": "requestBody",
+                            "properties": {
+                                "bcc": {
+                                    "properties": {
+                                        "email": {
+                                            "required": false,
+                                            "type": "string"
+                                        },
+                                        "enable": {
+                                            "required": false,
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "required": false,
+                                    "type": "object"
+                                },
+                                "bypass_list_management": {
+                                    "properties": {
+                                        "enable": {
+                                            "required": false,
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "required": false,
+                                    "type": "object"
+                                },
+                                "footer": {
+                                    "properties": {
+                                        "enable": {
+                                            "required": false,
+                                            "type": "boolean"
+                                        },
+                                        "html": {
+                                            "required": false,
+                                            "type": "string"
+                                        },
+                                        "text": {
+                                            "required": false,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": false,
+                                    "type": "object"
+                                },
+                                "sandbox_mode": {
+                                    "properties": {
+                                        "enable": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "required": false,
+                                    "type": "object"
+                                },
+                                "spam_check": {
+                                    "properties": {
+                                        "enable": {
+                                            "required": false,
+                                            "type": "boolean"
+                                        },
+                                        "post_to_url": {
+                                            "required": false,
+                                            "type": "string"
+                                        },
+                                        "threshold": {
+                                            "required": false,
+                                            "type": "int"
+                                        }
+                                    },
+                                    "required": false,
+                                    "type": "object"
+                                }
+                            },
                             "type": "object"
                         },
                         "personalizations": {
                             "in": "requestBody",
                             "required": true,
-                            "type": "object"
+                            "type": "list"
                         },
                         "reply_to": {
                             "in": "requestBody",
+                            "properties": {
+                                "email": {
+                                    "required": true,
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "required": false,
+                                    "type": "string"
+                                }
+                            },
                             "type": "object"
                         },
                         "sections": {
                             "in": "requestBody",
-                            "type": "object"
+                            "type": "any"
                         },
                         "send_at": {
                             "in": "requestBody",
@@ -2558,7 +3282,7 @@
                         },
                         "tracking_settings": {
                             "in": "requestBody",
-                            "type": "object"
+                            "type": "any"
                         }
                     },
                     "http": {
@@ -2628,9 +3352,13 @@
                 }
             },
             "info": {
-                "description": "This is a sendgrid service",
-                "title": "Sendgrid",
-                "version": "1.0.0"
+                "description": "Access to the Sendgrid email API",
+                "license": {
+                    "name": "MIT",
+                    "url": "https://opensource.org/licenses/MIT"
+                },
+                "title": "OMG-Sendgrid",
+                "version": "0.1.0"
             },
             "lifecycle": {
                 "startup": {

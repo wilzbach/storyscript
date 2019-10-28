@@ -4,6 +4,6 @@ Error: syntax error in story at line 2, column 7
             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 E0121: Multiple mutation overloads for `contains` found:
-	- contains item:`string`
-	- contains pattern:`regexp`
+	- contains(item:`string`)
+	- contains(pattern:`regexp`)
 but none matches.

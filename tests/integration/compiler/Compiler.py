@@ -3,6 +3,8 @@ from pytest import mark
 
 from storyscript.Api import Api
 from storyscript.compiler.semantics.functions.HubMutations import Hub
+from storyscript.compiler.semantics.functions.MutationTable import \
+    MutationTable
 
 
 def test_compiler_empty_files():
@@ -96,6 +98,9 @@ def test_compiler_int_mutation_arguments(mocker):
     hub = Hub('int increment a:int -> int\n'
               'int decrement b:int -> int')
     mocker.patch.object(Hub, 'instance', return_value=hub)
+    mt = MutationTable.init()
+    mocker.patch.object(MutationTable, 'instance', return_value=mt)
+
     source = 'a = 0.increment(a: 1).decrement(b:2)'
     result = Api.loads(source, features={'debug': True})
     result.check_success()

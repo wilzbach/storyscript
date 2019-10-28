@@ -41,6 +41,15 @@ def test_symbols_pretty():
     assert symbols.pretty(indent='  ') == '  foo: int\n  bar: string\n'
 
 
+def test_symbols_str():
+    int_sym = Symbol('foo', IntType.instance())
+    string_sym = Symbol('bar', StringType.instance())
+    symbols = Symbols()
+    symbols.insert(int_sym)
+    symbols.insert(string_sym)
+    assert str(symbols) == 'Symbols(foo,bar)'
+
+
 def test_storage_class_readonly():
     assert str(StorageClass.read()) == 'r-'
 

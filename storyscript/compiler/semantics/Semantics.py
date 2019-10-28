@@ -15,14 +15,15 @@ class Semantics:
     Performs semantic analysis on the AST
     """
 
-    def __init__(self, storycontext):
-        root_scope = Scope.root()
+    def __init__(self, storycontext, root_scope=None):
+        if root_scope is None:
+            root_scope = Scope.root()
         service_typing = ServiceTyping()
 
         self.module = Module(
             symbol_resolver=SymbolResolver(scope=root_scope),
             function_table=FunctionTable(),
-            mutation_table=MutationTable.init(),
+            mutation_table=MutationTable.instance(),
             root_scope=root_scope,
             storycontext=storycontext,
             service_typing=service_typing,
@@ -33,5 +34,5 @@ class Semantics:
     def process(self, tree):
         for visitor in self.visitors:
             v = visitor(module=self.module)
-            v.visit(tree)
+            v.visit(tree, self.module.root_scope)
         return self.module

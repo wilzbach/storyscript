@@ -4,7 +4,7 @@ Error: syntax error in story at line 3, column 7
             ^^^^^^^^^^^^^^^
 
 E0121: Multiple mutation overloads for `substring` found:
-	- string substring end:`int`
-	- string substring end:`int` start:`int`
-	- string substring start:`int`
+	- string .substring(end:`int`)
+	- string .substring(end:`int` start:`int`)
+	- string .substring(start:`int`)
 but none matches.

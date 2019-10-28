@@ -155,7 +155,8 @@ def test_story_parse_error(patch, story, parser, error):
 
 def test_story_compile(patch, story, compiler):
     story.compile()
-    Compiler.compile.assert_called_with(story.tree, story=story)
+    Compiler.compile.assert_called_with(story.tree, story=story,
+                                        scope=None, backend='json')
     assert story.compiled == Compiler.compile()
 
 
