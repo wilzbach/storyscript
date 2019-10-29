@@ -19,7 +19,24 @@ def test_api_loads(patch, magic):
     patch.object(Story, 'process')
     Story.context = magic()
     result = Api.loads('string').result()
-    Story.__init__.assert_called_with('string', ANY)
+    Story.__init__.assert_called_with('string', ANY, scope=None,
+                                      backend='json')
+    assert isinstance(Story.__init__.call_args[0][1], Features)
+    Story.process.assert_called_with()
+    assert result == Story.process()
+
+
+def test_api_loads_custom(patch):
+    """
+    Ensures Api.loads can compile a story from a string
+    with a custom backend and scope.
+    """
+    patch.init(Story)
+    patch.init(Features)
+    patch.object(Story, 'process')
+    result = Api.loads('string', backend='custom', scope='my.scope').result()
+    Story.__init__.assert_called_with('string', ANY, scope='my.scope',
+                                      backend='custom')
     assert isinstance(Story.__init__.call_args[0][1], Features)
     Story.process.assert_called_with()
     assert result == Story.process()

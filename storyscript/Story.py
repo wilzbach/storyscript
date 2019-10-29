@@ -56,11 +56,13 @@ class Story:
     compiling it.
     """
 
-    def __init__(self, story, features, path=None):
+    def __init__(self, story, features, path=None, backend='json', scope=None):
         self.story = story
         self.path = path
         self.lines = story.splitlines(keepends=False)
         self.context = StoryContext(features=features)
+        self.backend = backend
+        self.scope = scope
         self.name = self.extract_name()
 
     def extract_name(self):
@@ -146,7 +148,9 @@ class Story:
         Compiles the story and stores the result.
         """
         try:
-            self.compiled = Compiler.compile(self.tree, story=self)
+            self.compiled = Compiler.compile(self.tree, story=self,
+                                             backend=self.backend,
+                                             scope=self.scope)
         except (CompilerError, StorySyntaxError) as error:
             raise self.error(error) from error
 

@@ -483,7 +483,7 @@ class ExpressionResolver:
         for me in overloads.all():
             overload = me.instantiate(t).pretty()
             if isinstance(t, AnyType):
-                overload = f'{me.type()} {overload}'
+                overload = f'{me.type()} .{overload}'
             overload_list.append(overload)
         sep = '\n\t- '
         overload_list = sep + sep.join(overload_list)

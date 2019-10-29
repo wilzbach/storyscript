@@ -28,7 +28,7 @@ class ScopeSelectiveVisitor(BaseVisitor):
     A selective visitor which only visits defined nodes.
     visit_children must be called explicitly.
     """
-    def visit(self, tree, scope=None):
+    def visit(self, tree, scope):
         if hasattr(self, tree.data):
             return getattr(self, tree.data)(tree, scope)
 

@@ -74,13 +74,13 @@ class Api:
     Exposes functionalities for external use
     """
     @staticmethod
-    def loads(string, features=None):
+    def loads(string, features=None, backend='json', scope=None):
         """
         Load story from a string.
         """
         features = Features(features)
         try:
-            story = Story(string, features)
+            story = Story(string, features, backend=backend, scope=scope)
             s = story.process()
             deprecations = story.deprecations()
             return StoryscriptCompilationResult.from_result(s, deprecations)

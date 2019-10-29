@@ -28,6 +28,8 @@ class TypeMappings:
             return ListType
         elif type_string == 'none':
             return NoneType
+        elif type_string == 'enum':
+            return StringType
         else:
             assert type_string == 'map'
             return MapType

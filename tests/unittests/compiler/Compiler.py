@@ -13,7 +13,8 @@ def test_compiler_generate(patch, magic):
     patch.many(JSONCompiler, ['compile'])
     tree = magic()
     storycontext = magic()
-    result = Compiler.generate(tree, storycontext=storycontext)
+    result = Compiler.generate(tree, storycontext=storycontext,
+                               scope=None)
     Lowering.__init__.assert_called_with(
         parser=tree.parser, features=storycontext.features)
     Lowering.process.assert_called_with(tree)
@@ -27,7 +28,7 @@ def test_compiler_compile(patch, magic):
     tree = magic()
     story = magic()
     result = Compiler.compile(tree, story=story)
-    Compiler.generate.assert_called_with(tree, story.context)
+    Compiler.generate.assert_called_with(tree, story.context, scope=None)
     JSONCompiler.compile.assert_called_with('tree')
     assert result.output() == JSONCompiler.compile()
     assert result.module() == 'sem'

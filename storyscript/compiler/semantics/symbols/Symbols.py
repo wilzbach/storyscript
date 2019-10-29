@@ -201,3 +201,7 @@ class Symbols:
         for k, v in self._symbols.items():
             result += f'{indent}{k}: {v.pretty()}\n'
         return result
+
+    def __str__(self):
+        symbols = ','.join(self._symbols.keys())
+        return f'Symbols({symbols})'

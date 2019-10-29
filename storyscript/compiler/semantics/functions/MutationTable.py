@@ -1,3 +1,4 @@
+from functools import lru_cache
 from itertools import chain
 
 from storyscript.compiler.semantics.functions.HubMutations import Hub
@@ -114,6 +115,17 @@ class MutationTable:
             mo.add_overloads(overloads)
         return mo
 
+    def resolve_by_type(self, type_):
+        """
+        Returns all mutations for a type.
+        """
+        t = self.type_key(type(type_))
+        for name, muts in self.mutations.items():
+            res = muts.get(t, None)
+            if res is not None:
+                for mut in res.values():
+                    yield mut
+
     def resolve(self, type_, name):
         """
         Returns the mutation `name` or `None`.
@@ -143,3 +155,7 @@ class MutationTable:
         for m in Hub.instance().mutations():
             mi.insert(m)
         return mi
+
+    @lru_cache(maxsize=1)
+    def instance():
+        return MutationTable.init()
