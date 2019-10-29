@@ -392,6 +392,8 @@ class TypeResolver(ScopeSelectiveVisitor):
                            'throw_only_string')
 
     def return_statement(self, tree, scope):
+        if self.in_when_block:
+            tree.expect(tree.base_expression is None, 'when_return_no_value')
         tree.scope = scope
 
     def function_block(self, tree, scope):

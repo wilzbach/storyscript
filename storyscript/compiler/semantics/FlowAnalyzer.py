@@ -18,6 +18,7 @@ class FlowAnalyzer(FullVisitor):
         super().__init__(ignore_nodes=self.ignore_nodes, **kwargs)
         self.inside_loop = 0
         self.inside_function = 0
+        self.inside_when = 0
 
     def foreach_block(self, tree):
         with self.with_loop():
@@ -31,6 +32,10 @@ class FlowAnalyzer(FullVisitor):
         with self.with_function():
             self.visit_children(tree)
 
+    def when_block(self, tree):
+        with self.with_when():
+            self.visit_children(tree)
+
     def break_statement(self, tree):
         tree.expect(self.inside_loop > 0, 'break_outside')
 
@@ -38,7 +43,8 @@ class FlowAnalyzer(FullVisitor):
         tree.expect(self.inside_loop > 0, 'continue_outside')
 
     def return_statement(self, tree):
-        tree.expect(self.inside_function > 0, 'return_outside')
+        tree.expect(self.inside_function > 0 or
+                    self.inside_when > 0, 'return_outside')
 
     @contextmanager
     def with_loop(self):
@@ -51,3 +57,9 @@ class FlowAnalyzer(FullVisitor):
         self.inside_function += 1
         yield
         self.inside_function -= 1
+
+    @contextmanager
+    def with_when(self):
+        self.inside_when += 1
+        yield
+        self.inside_when -= 1
