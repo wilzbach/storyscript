@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 9
+
+2|        a = server.data["foobar"]
+              ^^^^^^^^^^^^^^^^^^^^
+
+E0131: `Object` can't be dot-accessed with `data` of type `string`

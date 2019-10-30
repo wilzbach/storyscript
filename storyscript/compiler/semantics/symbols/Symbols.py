@@ -154,7 +154,11 @@ class Symbol:
                 # type therefore no need to perform mapping.
                 new_type = prop.type()
             else:
-                assert isinstance(obj, MapType)
+                tree.expect(isinstance(obj, MapType),
+                            'type_dot_incompatible',
+                            left=cur_type,
+                            name=name,
+                            right=type_)
                 new_type = obj.index(type_, IndexKind.INDEX)
 
         if kind == IndexKind.DOT:
