@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 14
+
+2|    foreach a as e
+                   ^
+
+E0106: `foreach` requires an iterable type, but `any` is not

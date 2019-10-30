@@ -711,14 +711,6 @@ class AnyType(BaseType):
         """
         return AnyType()
 
-    def output(self, n):
-        """
-        Output types of the AnyType.
-        """
-        if n == 1:
-            return AnyType.instance(),
-        return AnyType.instance(), AnyType.instance()
-
     def has_boolean(self):
         return False
 
