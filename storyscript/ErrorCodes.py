@@ -272,10 +272,6 @@ class ErrorCodes:
         'E0149',
         'Service name expected but inline service expression found.'
     )
-    service_output_invalid_prop = (
-        'E0150',
-        'Service output object `{object}` has no property `{prop}`.'
-    )
     object_invalid_prop = (
         'E0151',
         'Object `{object}` has no property `{prop}`.'

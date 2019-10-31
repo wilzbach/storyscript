@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from storyhub.sdk.service.Output import Output as ServiceOutput
+from storyhub.sdk.service.ServiceOutput import ServiceOutput
 
 from storyscript.compiler.semantics.types.Casting import implicit_type_cast
 from storyscript.hub.Hub import story_hub
@@ -42,7 +42,7 @@ class ServiceTyping:
             action_arg = action.arg(arg)
             tree.expect(action_arg is not None, 'service_arg_invalid',
                         service=service_name, action=action_name, arg=arg)
-            target_type = TypeMappings.get_type_instance(var=action_arg)
+            target_type = TypeMappings.get_type_instance(ty=action_arg.type())
             source_type = sym.type()
 
             implicit_type_cast(tree, source_type, target_type,
@@ -70,7 +70,7 @@ class ServiceTyping:
         if nested_block:
             tree.expect(action.events() != [], 'service_event_expected',
                         service=service_name, action=action_name)
-            return ObjectType(obj=action)
+            return ObjectType(obj={}, action=action)
         else:
             tree.expect(action.events() == [], 'expression_no_event',
                         service=service_name, action=action_name)
@@ -79,9 +79,9 @@ class ServiceTyping:
     def get_service_output(self, action):
         output = action.output()
         if output is not None:
-            output_type = TypeMappings.get_type_instance(
-                var=output,
-                obj=output)
+            output_type = TypeMappings.get_type_instance(ty=output.type())
+            if isinstance(output_type, ObjectType):
+                output_type.set_action(output)
         else:
             output_type = NoneType.instance()
         return output_type
@@ -101,7 +101,7 @@ class ServiceTyping:
         Handles event-based service output objects which define actions.
         The object output originates from when block listening on an event.
         """
-        service_output = service_symbol.type().object()
+        service_output = service_symbol.type().action()
         tree.expect(isinstance(service_output, ServiceOutput),
                     'service_action_without_output',
                     object=output_name)
