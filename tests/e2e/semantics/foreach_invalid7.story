@@ -1,6 +1,5 @@
-b = {} to Map[any,any]
-a = b[0]
-c = b[0]
+a = {} to Map[any,any]
+c = a[0]
 d = 0
 
 foreach a as k, v

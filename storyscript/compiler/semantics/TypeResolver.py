@@ -145,9 +145,9 @@ class TypeResolver(ScopeSelectiveVisitor):
             stmt.expect(nr_children > 0, 'foreach_output_required')
 
             iterable_types = output_type.output(nr_children)
-            stmt.output.expect(iterable_types is not None,
-                               'foreach_iterable_required',
-                               target=output_type)
+            stmt.base_expression.expect(iterable_types is not None,
+                                        'foreach_iterable_required',
+                                        target=output_type)
             stmt.output.expect(nr_children <= 2,
                                'foreach_output_children')
 
