@@ -7,7 +7,7 @@ from storyhub.sdk.ServiceWrapper import ServiceWrapper
 
 
 services = [
-    'Arinono/microservice-validate',
+    'Arinono/aws-s3',
     'awesome',
     'gmaps',
     'http',
