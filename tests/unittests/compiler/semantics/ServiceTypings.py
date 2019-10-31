@@ -10,8 +10,7 @@ def test_service_output(patch, magic):
     typings = ServiceTyping()
     res = typings.get_service_output(action)
     TypeMappings.get_type_instance.assert_called_with(
-        var=action.output(),
-        obj=action.output(),
+        ty=action.output().type(),
     )
     assert res == TypeMappings.get_type_instance()
 

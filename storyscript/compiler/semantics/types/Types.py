@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from storyscript.compiler.semantics.types.Indexing import IndexKind
 
 
 def singleton(fn):
@@ -136,10 +135,15 @@ class BaseType:
         """
         return True
 
-    def index(self, index_type, index_kind):
+    def index(self, other):
         """
-        Returns the type resulting from an index operation with `index_type` of
-        kind `index_kind` ('index' or 'dot')
+        Returns the type resulting from an index operation with `other`.
+        """
+        return None
+
+    def dot(self, name):
+        """
+        Returns the type resulting from an dot operation with `name`.
         """
         return None
 
@@ -232,9 +236,6 @@ class IntType(BaseType):
 
     def op(self, op):
         return self
-
-    def index(self, other, kind):
-        return None
 
     @singleton
     def instance():
@@ -334,11 +335,8 @@ class StringType(BaseType):
             return self
         return None
 
-    def index(self, other, kind):
-        # no dot on strings
-        if kind != IndexKind.INDEX:
-            return None
-        # only numeric indices or  ranges
+    def index(self, other):
+        # only numeric indices or ranges
         if isinstance(other, RangeType):
             return self
         if other.implicit_to(IntType.instance()):
@@ -480,10 +478,7 @@ class ListType(BaseType):
             return None
         return ListType(im_to)
 
-    def index(self, other, kind):
-        # no dot on lists
-        if kind != IndexKind.INDEX:
-            return None
+    def index(self, other):
         # only numeric indices or range indices
         if isinstance(other, RangeType):
             return self
@@ -551,17 +546,14 @@ class MapType(BaseType):
             return None
         return MapType(im_key, im_value)
 
-    def index(self, other, kind):
-        # no dot on maps
-        if kind != IndexKind.INDEX:
-            return None
+    def index(self, other):
         if other.implicit_to(self.key) is not None:
             return self.value
         return None
 
     def output(self, n):
         """
-        Output types of the ObjectType.
+        Output types of the MapType.
         """
         if n == 1:
             return self.key,
@@ -592,26 +584,30 @@ class ObjectType(BaseType):
     """
     Represents an object
     """
-    def __init__(self, obj=None):
+    def __init__(self, obj, action=None):
         self._object = obj
+        self._action = action
 
     def __str__(self):
-        return f'Object'
+        return 'Object'
 
     def __eq__(self, other):
         return isinstance(other, ObjectType)
 
-    def object(self):
-        return self._object
+    def set_action(self, action):
+        self._action = action
+
+    def action(self):
+        return self._action
 
     def op(self, op):
         return None
 
-    def index(self, other, kind):
-        if kind == IndexKind.DOT:
-            assert isinstance(other, StringType)
-            return self._object
-        return None
+    def dot(self, name):
+        if isinstance(self._object, MapType):
+            # special case for wildcard objects like e.g. app.secrets
+            return self._object.index(StringType.instance())
+        return self._object.get(name, None)
 
     def has_boolean(self):
         return False
@@ -630,7 +626,7 @@ class ObjectType(BaseType):
         """
         Returns a static instance of the ObjectType
         """
-        return ObjectType()
+        return ObjectType({})
 
 
 class NullType(BaseType):
@@ -647,9 +643,6 @@ class NullType(BaseType):
 
     def can_be_assigned(self, other):
         return True
-
-    def index(self, other, kind):
-        return None
 
     @singleton
     def instance():
@@ -700,9 +693,6 @@ class AnyType(BaseType):
 
     def can_be_assigned(self, other):
         return True
-
-    def index(self, other, kind):
-        return None
 
     @singleton
     def instance():

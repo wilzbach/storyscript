@@ -213,12 +213,11 @@ class TypeResolver(ScopeSelectiveVisitor):
         listener_sym = scope.resolve(listener_name)
         tree.expect(
             listener_sym is not None and
-            isinstance(listener_sym.type(), ObjectType) and
-            listener_sym.type().object() is not None,
+            isinstance(listener_sym.type(), ObjectType),
             'event_not_defined',
             event=event_name, output=listener_name)
 
-        listener = listener_sym.type().object()
+        listener = listener_sym.type().action()
         tree.expect(isinstance(listener, ServiceAction),
                     'object_expect_action', var=listener_name)
         args = self.resolver.build_arguments(
