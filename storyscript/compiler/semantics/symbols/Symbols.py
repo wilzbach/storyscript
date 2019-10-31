@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-from storyhub.sdk.service.Output import Output as ServiceOutput
-
 from storyscript.compiler.semantics.types.Indexing import IndexKind
-from storyscript.compiler.semantics.types.Types import BaseType, MapType, \
-    ObjectType
-from storyscript.hub.TypeMappings import TypeMappings
+from storyscript.compiler.semantics.types.Types import BaseType, ObjectType
 
 
 class StorageClass:
@@ -134,41 +130,30 @@ class Symbol:
             assert isinstance(type_, BaseType)
 
         cur_type = symbol.type()
-        new_type = cur_type.index(type_, kind)
-        if isinstance(cur_type, ObjectType) and new_type is not None:
-            obj = new_type
-            if isinstance(obj, ServiceOutput):
-                prop = obj.property(name)
-                tree.expect(prop is not None, 'service_output_invalid_prop',
-                            object=symbol.name(), prop=name)
-                new_type = TypeMappings.get_type_instance(var=prop)
-            elif isinstance(obj, dict):
-                # right now we are only storing a dict as the wrapped
-                # value inside a ObjectType instance for the special case
-                # of `app` keyword.
-                assert symbol.name() == 'app'
-                prop = obj.get(name, None)
-                tree.expect(prop is not None, 'object_invalid_prop',
-                            object=symbol.name(), prop=name)
-                # for the app we already store the correct TypeClass in Symbol
-                # type therefore no need to perform mapping.
-                new_type = prop.type()
-            else:
-                assert isinstance(obj, MapType)
-                new_type = obj.index(type_, IndexKind.INDEX)
 
         if kind == IndexKind.DOT:
-            tree.expect(new_type is not None,
-                        'type_dot_incompatible',
-                        left=symbol.type(),
-                        name=name,
-                        right=type_)
+            new_type = cur_type.dot(name)
         else:
-            tree.expect(new_type is not None,
-                        'type_index_incompatible',
-                        left=symbol.type(),
-                        name=name,
-                        right=type_)
+            assert kind == IndexKind.INDEX
+            new_type = cur_type.index(type_)
+
+        if isinstance(cur_type, ObjectType) and kind == IndexKind.DOT:
+            tree.expect(new_type is not None, 'object_invalid_prop',
+                        object=symbol.name(), prop=name)
+            # property might have been stored as symbol
+            if isinstance(new_type, Symbol):
+                new_type = new_type.type()
+
+        if kind == IndexKind.DOT:
+            msg = 'type_dot_incompatible'
+        else:
+            assert kind == IndexKind.INDEX
+            msg = 'type_index_incompatible'
+
+        tree.expect(new_type is not None, msg,
+                    left=symbol.type(),
+                    name=name,
+                    right=type_)
         sc = self._storage_class.index()
         return Symbol(name=symbol.name() + '[]', type_=new_type,
                       storage_class=sc)
