@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 14
+
+3|    foreach a as i, j, k
+                   ^^^^^^^
+
+E0105: `foreach` can only have one or two outputs

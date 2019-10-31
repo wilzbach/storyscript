@@ -1,6 +1,6 @@
-Error: syntax error in story at line 8, column 5
+Error: syntax error in story at line 3, column 15
 
-8|        d = v
-          ^^^^^
+3|    foreach 42 as elem
+                    ^^^^
 
-E0100: Can't assign `any` to `int`
+E0106: `foreach` requires an iterable type, but `int` is not

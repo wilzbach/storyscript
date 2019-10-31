@@ -1,0 +1,126 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "10",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "abc"
+        }
+      ],
+      "src": "a = \"abc\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "7",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": ""
+        }
+      ],
+      "src": "b = \"\"",
+      "next": "4"
+    },
+    "4": {
+      "method": "for",
+      "ln": "4",
+      "col_start": "9",
+      "col_end": "13",
+      "output": [
+        "elem"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
+      "enter": "5",
+      "src": "foreach a as elem"
+    },
+    "5": {
+      "method": "if",
+      "ln": "5",
+      "col_start": "7",
+      "col_end": "16",
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "equal",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "elem"
+              ]
+            },
+            {
+              "$OBJECT": "string",
+              "string": "a"
+            }
+          ]
+        }
+      ],
+      "enter": "6",
+      "exit": "7",
+      "parent": "4",
+      "src": "   if elem == \"a\"",
+      "next": "7"
+    },
+    "6": {
+      "method": "continue",
+      "ln": "6",
+      "col_start": "8",
+      "col_end": "16",
+      "parent": "5",
+      "src": "       continue"
+    },
+    "7": {
+      "method": "expression",
+      "ln": "7",
+      "col_start": "4",
+      "col_end": "13",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "elem"
+              ]
+            }
+          ]
+        }
+      ],
+      "parent": "4",
+      "src": "   b += elem"
+    }
+  },
+  "entrypoint": "1"
+}

@@ -1,0 +1,139 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "10",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": "abc"
+        }
+      ],
+      "src": "a = \"abc\"",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "7",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "string",
+          "string": ""
+        }
+      ],
+      "src": "b = \"\"",
+      "next": "3"
+    },
+    "3": {
+      "method": "expression",
+      "ln": "3",
+      "col_start": "1",
+      "col_end": "6",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "src": "c = 0",
+      "next": "5"
+    },
+    "5": {
+      "method": "for",
+      "ln": "5",
+      "col_start": "9",
+      "col_end": "10",
+      "output": [
+        "i",
+        "elem"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "a"
+          ]
+        }
+      ],
+      "enter": "6",
+      "src": "foreach a as i, elem"
+    },
+    "6": {
+      "method": "expression",
+      "ln": "6",
+      "col_start": "4",
+      "col_end": "13",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "b"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "elem"
+              ]
+            }
+          ]
+        }
+      ],
+      "parent": "5",
+      "src": "   b += elem",
+      "next": "7"
+    },
+    "7": {
+      "method": "expression",
+      "ln": "7",
+      "col_start": "4",
+      "col_end": "10",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "expression",
+          "expression": "sum",
+          "values": [
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "c"
+              ]
+            },
+            {
+              "$OBJECT": "path",
+              "paths": [
+                "i"
+              ]
+            }
+          ]
+        }
+      ],
+      "parent": "5",
+      "src": "   c += i"
+    }
+  },
+  "entrypoint": "1"
+}

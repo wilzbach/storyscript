@@ -359,6 +359,14 @@ class StringType(BaseType):
         if other != NoneType.instance():
             return self
 
+    def output(self, n):
+        """
+        Output types of the StringType.
+        """
+        if n == 1:
+            return self,
+        return IntType.instance(), self
+
 
 class TimeType(BaseType):
     """

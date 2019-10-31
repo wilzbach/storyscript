@@ -1,6 +1,6 @@
-Error: syntax error in story at line 3, column 18
+Error: syntax error in story at line 4, column 9
 
-3|    foreach "foo" as elem
-                       ^^^^
+4|        b = b + elem
+              ^^^^^^^^
 
-E0106: `foreach` requires an iterable type, but `string` is not
+E0103: `+` between `int` and `string` is not supported.
