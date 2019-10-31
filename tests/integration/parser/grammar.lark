@@ -118,7 +118,7 @@ SINGLE_QUOTED: /'([^'\\]*(?:\\(.|\n)[^'\\]*)*)'/
 DOUBLE_QUOTED: /"([^"\\]*(?:\\(.|\n)[^"\\]*)*)"/
 DOUBLE_QUOTED_HEREDOC.2: /"""(.|\n)*?"""/
 REGEXP.10: /\/([^\/\n]*)\/g?i?m?s?u?y?/
-NAME.1: /[a-zA-Z_][a-zA-Z-\/_0-9]*/
+NAME.1: /[a-zA-Z_][-\w]*(\/[-\w]+)?(?<![-\/])/
 RAW_TIME.3: /([0-9]+(ms|[smhdw]))+/
 OCB: "{"
 CCB: "}"

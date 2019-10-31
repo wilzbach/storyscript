@@ -60,7 +60,8 @@ class Grammar:
         self.ebnf.DOUBLE_QUOTED = r'/"([^"\\]*(?:\\(.|\n)[^"\\]*)*)"/'
         self.ebnf.set_token('DOUBLE_QUOTED_HEREDOC.2', r'/"""(.|\n)*?"""/')
         self.ebnf.set_token('REGEXP.10', r'/\/([^\/\n]*)\/g?i?m?s?u?y?/')
-        self.ebnf.set_token('NAME.1', r'/[a-zA-Z_][a-zA-Z-\/_0-9]*/')
+        self.ebnf.set_token('NAME.1',
+                            r'/[a-zA-Z_][-\w]*(\/[-\w]+)?(?<![-\/])/')
         self.ebnf.set_token('RAW_TIME.3', r'/([0-9]+(ms|[smhdw]))+/')
         self.ebnf.OCB = '{'
         self.ebnf.CCB = '}'

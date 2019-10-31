@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 17
+
+1|    http server as s/
+                      ^
+
+E0041: `/` is not allowed here
