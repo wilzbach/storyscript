@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 5
+Error: syntax error in story at line 1, column 14
 
-2|        a = null
-          ^^^^^^^^
+1|    function foo a: object
+                   ^^^^^^^^^
 
-E0100: Can't assign `null` to `Object`
+E0160: Function argument `a` cannot be of type `Object`.
