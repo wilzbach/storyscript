@@ -310,6 +310,10 @@ class ErrorCodes:
         'E0158',
         'Cannot use `null` in index'
     )
+    when_return_no_value = (
+        'E0159',
+        'Cannot return values from `when` block.'
+    )
 
     @staticmethod
     def is_error(error_name):

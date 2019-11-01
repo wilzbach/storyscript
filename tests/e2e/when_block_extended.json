@@ -28,12 +28,21 @@
       "src": "when twitter stream tweet"
     },
     "2": {
-      "method": "break",
+      "method": "expression",
       "ln": "2",
       "col_start": "5",
       "col_end": "10",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
       "parent": "1",
-      "src": "    break"
+      "src": "    a = 1"
     },
     "3.1": {
       "method": "execute",
@@ -63,12 +72,21 @@
       "src": "when twitter stream tweet as os"
     },
     "4": {
-      "method": "break",
+      "method": "expression",
       "ln": "4",
       "col_start": "5",
       "col_end": "10",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
       "parent": "3",
-      "src": "    break"
+      "src": "    b = 1"
     },
     "5.1": {
       "method": "execute",
@@ -108,12 +126,21 @@
       "src": "when twitter stream tweet track:\"storyscript\""
     },
     "6": {
-      "method": "break",
+      "method": "expression",
       "ln": "6",
       "col_start": "5",
       "col_end": "10",
+      "name": [
+        "c"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
       "parent": "5",
-      "src": "    break"
+      "src": "    c = 1"
     },
     "7.1": {
       "method": "execute",
@@ -150,12 +177,21 @@
       "src": "when twitter stream tweet track:\"storyscript\" as li"
     },
     "8": {
-      "method": "break",
+      "method": "expression",
       "ln": "8",
       "col_start": "5",
       "col_end": "10",
+      "name": [
+        "d"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 1
+        }
+      ],
       "parent": "7",
-      "src": "    break"
+      "src": "    d = 1"
     }
   },
   "services": [

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from .FlowAnalyzer import FlowAnalyzer
 from .FunctionResolver import FunctionResolver
 from .Module import Module
 from .ServiceTyping import ServiceTyping
@@ -29,7 +30,7 @@ class Semantics:
             service_typing=service_typing,
         )
 
-    visitors = [FunctionResolver, TypeResolver]
+    visitors = [FunctionResolver, TypeResolver, FlowAnalyzer]
 
     def process(self, tree):
         for visitor in self.visitors:

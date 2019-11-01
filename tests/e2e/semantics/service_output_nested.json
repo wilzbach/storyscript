@@ -38,12 +38,24 @@
       "src": "    when a listen path:\"/\" as b"
     },
     "3": {
-      "method": "break",
+      "method": "execute",
       "ln": "3",
       "col_start": "9",
-      "col_end": "14",
+      "col_end": "31",
+      "service": "b",
+      "command": "write",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "content",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foo"
+          }
+        }
+      ],
       "parent": "2",
-      "src": "        break"
+      "src": "        b write content: \"foo\""
     }
   },
   "services": [
