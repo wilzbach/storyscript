@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 1
+Error: syntax error in story at line 1, column 5
 
-1|    a.b (key: 2)
-      ^
+1|    c = a.b (key: 2)
+          ^
 
 E0101: Variable `a` has not been defined.

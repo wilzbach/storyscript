@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 10
+Error: syntax error in story at line 1, column 14
 
-1|    {"a": 1}.get(key: "b")
-               ^^^^^^^^^^^^
+1|    b = {"a": 1}.get(key: "b")
+                   ^^^^^^^^^^^^
 
 E0113: Mutation `get` requires argument `default`

@@ -4,7 +4,10 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "42",
+      "col_end": "46",
+      "name": [
+        "a"
+      ],
       "args": [
         {
           "$OBJECT": "expression",
@@ -107,7 +110,7 @@
           ]
         }
       ],
-      "src": "0 + 1 * 2 - 3 / 4 % 5 + 6 ^ 2 > 7 or true"
+      "src": "a = 0 + 1 * 2 - 3 / 4 % 5 + 6 ^ 2 > 7 or true"
     }
   },
   "entrypoint": "1"

@@ -29,8 +29,8 @@
     "2.1": {
       "method": "mutation",
       "ln": "2.1",
-      "col_start": "1",
-      "col_end": "18",
+      "col_start": "5",
+      "col_end": "22",
       "name": [
         "__p-2.1"
       ],
@@ -52,6 +52,10 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "1",
+      "name": [
+        "a"
+      ],
       "args": [
         {
           "$OBJECT": "path",
@@ -60,7 +64,7 @@
           ]
         }
       ],
-      "src": "my_service.length()"
+      "src": "a = my_service.length()"
     }
   },
   "entrypoint": "1"

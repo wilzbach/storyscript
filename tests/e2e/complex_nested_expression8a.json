@@ -3,8 +3,11 @@
     "1": {
       "method": "expression",
       "ln": "1",
-      "col_start": "2",
-      "col_end": "43",
+      "col_start": "1",
+      "col_end": "47",
+      "name": [
+        "a"
+      ],
       "args": [
         {
           "$OBJECT": "expression",
@@ -81,7 +84,7 @@
           ]
         }
       ],
-      "src": "(1 + 2) == (0 - -3) and 2 == -4 - (-5 + -6)"
+      "src": "a = (1 + 2) == (0 - -3) and 2 == -4 - (-5 + -6)"
     }
   },
   "entrypoint": "1"
