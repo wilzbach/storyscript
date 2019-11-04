@@ -314,6 +314,10 @@ class ErrorCodes:
         'E0159',
         'Cannot return values from `when` block.'
     )
+    arg_type_no_object = (
+        'E0160',
+        'Function argument `{arg}` cannot be of type `{type}`.'
+    )
 
     @staticmethod
     def is_error(error_name):

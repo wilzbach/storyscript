@@ -37,6 +37,10 @@ class FunctionResolver(ScopeSelectiveVisitor):
             if isinstance(c, Tree) and c.data == 'typed_argument':
                 name = c.child(0)
                 e_sym = self.resolver.types(c.types)
+                c.expect(e_sym.type() != ObjectType.instance(),
+                         'arg_type_no_object',
+                         arg=name,
+                         type=e_sym.type())
                 sym = Symbol.from_path(name, e_sym.type())
                 scope.insert(sym)
                 args[sym.name()] = sym
