@@ -1,6 +1,6 @@
-Error: syntax error in story at line 4, column 1
+Error: syntax error in story at line 4, column 5
 
-4|    a["foo"]()
-      ^
+4|    b = a["foo"]()
+          ^
 
 E0101: Variable `a` has not been defined.

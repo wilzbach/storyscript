@@ -1,4 +1,4 @@
 function foo returns int
     return 0
 
-foo[0]()
+a = foo[0]()

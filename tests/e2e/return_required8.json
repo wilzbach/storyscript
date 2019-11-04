@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "10",
+      "col_end": "14",
       "output": [
         "int"
       ],
@@ -62,7 +62,10 @@
       "method": "expression",
       "ln": "4",
       "col_start": "5",
-      "col_end": "10",
+      "col_end": "14",
+      "name": [
+        "c"
+      ],
       "args": [
         {
           "$OBJECT": "expression",
@@ -84,7 +87,7 @@
         }
       ],
       "parent": "1",
-      "src": "    a + b",
+      "src": "    c = a + b",
       "next": "5"
     },
     "5": {
@@ -122,7 +125,10 @@
       "method": "expression",
       "ln": "7",
       "col_start": "5",
-      "col_end": "10",
+      "col_end": "14",
+      "name": [
+        "d"
+      ],
       "args": [
         {
           "$OBJECT": "expression",
@@ -144,7 +150,7 @@
         }
       ],
       "parent": "1",
-      "src": "    a + b"
+      "src": "    d = a + b"
     }
   },
   "entrypoint": "1",

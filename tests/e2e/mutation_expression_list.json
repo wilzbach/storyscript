@@ -3,8 +3,8 @@
     "1.1": {
       "method": "mutation",
       "ln": "1.1",
-      "col_start": "1",
-      "col_end": "46",
+      "col_start": "5",
+      "col_end": "50",
       "name": [
         "__p-1.1"
       ],
@@ -42,6 +42,10 @@
     "1": {
       "method": "expression",
       "ln": "1",
+      "col_start": "1",
+      "name": [
+        "a"
+      ],
       "args": [
         {
           "$OBJECT": "path",
@@ -50,7 +54,7 @@
           ]
         }
       ],
-      "src": "[\"opened\", \"labeled\"].contains(item: \"opened\")"
+      "src": "a = [\"opened\", \"labeled\"].contains(item: \"opened\")"
     }
   },
   "entrypoint": "1.1"

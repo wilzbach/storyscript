@@ -1,0 +1,6 @@
+Error: syntax error in story at line 4, column 1
+
+4|    foo()["foobar"]
+      ^^^^^^^^^^^^^^
+
+E0161: Effectless expressions without assignment not allowed.

@@ -23,28 +23,24 @@
       "src": "function sum a:int returns int"
     },
     "2": {
-      "method": "expression",
+      "method": "execute",
       "ln": "2",
       "col_start": "5",
-      "col_end": "10",
+      "col_end": "31",
+      "service": "log",
+      "command": "info",
       "args": [
         {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "int",
-              "int": 1
-            },
-            {
-              "$OBJECT": "int",
-              "int": 2
-            }
-          ]
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "inside sum"
+          }
         }
       ],
       "parent": "1",
-      "src": "    1 + 2",
+      "src": "    log info msg: \"inside sum\"",
       "next": "3"
     },
     "3": {
@@ -62,6 +58,9 @@
       "src": "    return 0"
     }
   },
+  "services": [
+    "log"
+  ],
   "entrypoint": "1",
   "functions": {
     "sum": "1"

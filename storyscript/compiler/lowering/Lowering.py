@@ -640,6 +640,25 @@ class Lowering:
             for c in node.children:
                 self.visit_path(c, block)
 
+    def visit_absolute_expr(self, node):
+        """
+        Visit absolute expression and check it has only call expressions
+        """
+        if not hasattr(node, 'children') or len(node.children) == 0:
+            return
+
+        if node.data == 'absolute_expression':
+            path_node = node.follow(['expression', 'entity', 'path'])
+            node.expect(path_node is not None, 'no_effectless_expr')
+            node.expect(len(path_node.children) == 1, 'no_effectless_expr')
+
+            call_expr_node = path_node.follow([
+                'inline_expression', 'call_expression'])
+            node.expect(call_expr_node is not None, 'no_effectless_expr')
+
+        for c in node.children:
+            self.visit_absolute_expr(c)
+
     def process(self, tree):
         """
         Applies several preprocessing steps to the existing AST.
@@ -651,6 +670,7 @@ class Lowering:
         self.visit_assignment(tree, block=None, parent=None)
         self.visit_string_templates(tree, block=None, parent=None)
         self.visit_function_dot(tree, block=None)
+        self.visit_absolute_expr(tree)
         self.visit(tree, None, None, pred,
                    self.replace_expression, parent=None)
         self.visit_expr_values(tree, None)

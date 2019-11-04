@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 2
+
+1|    (log info msg: "1")
+       ^^^^^^^^^^^^^^^^^
+
+E0161: Effectless expressions without assignment not allowed.

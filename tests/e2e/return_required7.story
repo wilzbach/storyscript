@@ -1,3 +1,3 @@
 function sum a:int returns int
-    1 + 2
+    log info msg: "inside sum"
     return 0

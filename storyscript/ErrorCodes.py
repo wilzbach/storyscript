@@ -318,6 +318,10 @@ class ErrorCodes:
         'E0160',
         'Function argument `{arg}` cannot be of type `{type}`.'
     )
+    no_effectless_expr = (
+        'E0161',
+        'Effectless expressions without assignment not allowed.'
+    )
 
     @staticmethod
     def is_error(error_name):

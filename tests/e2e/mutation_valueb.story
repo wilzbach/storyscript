@@ -1,1 +1,1 @@
-"hello".length()
+a = "hello".length()
