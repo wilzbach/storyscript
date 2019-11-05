@@ -4,17 +4,43 @@
       "method": "execute",
       "ln": "1",
       "col_start": "5",
-      "col_end": "43",
+      "col_end": "51",
       "name": [
         "a"
       ],
-      "service": "Arinono/microservice-validate",
-      "command": "validate",
-      "src": "a = Arinono/microservice-validate validate"
+      "service": "Arinono/aws-s3",
+      "command": "upload",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "key",
+          "arg": {
+            "$OBJECT": "string",
+            "string": ""
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "file",
+          "arg": {
+            "$OBJECT": "string",
+            "string": ""
+          }
+        },
+        {
+          "$OBJECT": "arg",
+          "name": "bucket",
+          "arg": {
+            "$OBJECT": "string",
+            "string": ""
+          }
+        }
+      ],
+      "src": "a = Arinono/aws-s3 upload key:\"\" file:\"\" bucket:\"\""
     }
   },
   "services": [
-    "Arinono/microservice-validate"
+    "Arinono/aws-s3"
   ],
   "entrypoint": "1"
 }

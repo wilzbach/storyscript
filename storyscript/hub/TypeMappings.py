@@ -1,57 +1,60 @@
 # -*- coding: utf-8 -*-
+from storyhub.sdk.service.output import (
+    OutputAny,
+    OutputBase,
+    OutputBoolean,
+    OutputEnum,
+    OutputFloat,
+    OutputInt,
+    OutputList,
+    OutputMap,
+    OutputNone,
+    OutputObject,
+    OutputRegex,
+    OutputString,
+)
+
 from storyscript.compiler.semantics.types.Types import AnyType, BooleanType, \
-    FloatType, IntType, ListType, MapType, NoneType, ObjectType, StringType
+    FloatType, IntType, ListType, MapType, NoneType, ObjectType, RegExpType, \
+    StringType
 
 
 class TypeMappings:
 
-    @staticmethod
-    def type_class_mapping(type_string):
+    @classmethod
+    def get_type_instance(cls, ty):
         """
-        Maps a given string (holding type information, from hub sdk)
-        to its corresponding TypeClass in the compiler.
+        Maps a type class from the hub SDK to its corresponding TypeClass
+        in the compiler.
         """
-        assert type(type_string) == str
-        if type_string == 'boolean':
-            return BooleanType
-        elif type_string == 'int':
-            return IntType
-        elif type_string == 'float':
-            return FloatType
-        elif type_string == 'string':
-            return StringType
-        elif type_string == 'any':
-            return AnyType
-        elif type_string == 'object':
-            return ObjectType
-        elif type_string == 'list':
-            return ListType
-        elif type_string == 'none':
-            return NoneType
-        elif type_string == 'enum':
-            return StringType
-        else:
-            assert type_string == 'map'
-            return MapType
+        assert isinstance(ty, OutputBase), ty
+        if isinstance(ty, OutputBoolean):
+            return BooleanType.instance()
+        if isinstance(ty, OutputInt):
+            return IntType.instance()
+        if isinstance(ty, OutputFloat):
+            return FloatType.instance()
+        if isinstance(ty, OutputString):
+            return StringType.instance()
+        if isinstance(ty, OutputAny):
+            return AnyType.instance()
+        if isinstance(ty, OutputObject):
+            return ObjectType({
+                k: cls.get_type_instance(v) for k, v in ty.properties().items()
+            })
+        if isinstance(ty, OutputList):
+            return ListType(
+                cls.get_type_instance(ty.elements()),
+            )
+        if isinstance(ty, OutputNone):
+            return NoneType.instance()
+        if isinstance(ty, OutputRegex):
+            return RegExpType.instance()
+        if isinstance(ty, OutputEnum):
+            return StringType.instance()
 
-    @staticmethod
-    def get_type_instance(var, obj=None):
-        """
-        Returns the correctly mapped type class instance of the given type.
-        Params:
-            var: A Symbol from which type could be retrieved.
-            object: In case the Symbol is of type Object, the object that
-                should be wrapped inside the ObjectType instance.
-        """
-        type_class = TypeMappings.type_class_mapping(var.type())
-        if type_class == ObjectType:
-            output_type = ObjectType(obj=obj)
-        elif type_class == ListType:
-            output_type = ListType(AnyType.instance())
-        elif type_class == MapType:
-            output_type = MapType(AnyType.instance(), AnyType.instance())
-        else:
-            assert type_class in (
-                AnyType, BooleanType, FloatType, IntType, StringType, NoneType)
-            output_type = type_class.instance()
-        return output_type
+        assert isinstance(ty, OutputMap), f'Unknown Hub Type: {ty!r}'
+        return MapType(
+            cls.get_type_instance(ty.keys()),
+            cls.get_type_instance(ty.values()),
+        )

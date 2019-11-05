@@ -109,25 +109,18 @@
           "$OBJECT": "arg",
           "name": "address",
           "arg": {
-            "$OBJECT": "type_cast",
-            "type": {
-              "$OBJECT": "type",
-              "type": "string"
-            },
-            "value": {
-              "$OBJECT": "path",
-              "paths": [
-                "req",
-                {
-                  "$OBJECT": "dot",
-                  "dot": "query_params"
-                },
-                {
-                  "$OBJECT": "string",
-                  "string": "city"
-                }
-              ]
-            }
+            "$OBJECT": "path",
+            "paths": [
+              "req",
+              {
+                "$OBJECT": "dot",
+                "dot": "query_params"
+              },
+              {
+                "$OBJECT": "string",
+                "string": "city"
+              }
+            ]
           }
         }
       ],

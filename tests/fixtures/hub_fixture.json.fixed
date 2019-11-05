@@ -2,23 +2,229 @@
     {
         "configuration": {
             "actions": {
-                "validate": {
+                "copyObject": {
                     "arguments": {
-                        "file": {
-                            "help": "The content of the microservice.yml you want to validate (in a multipart/form-data)",
+                        "bucket": {
                             "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "copySource": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
                             "type": "string"
                         }
                     },
-                    "help": "Validates the provided microservice.yml content",
+                    "help": "https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#copyObject-property",
                     "http": {
+                        "contentType": "application/json",
                         "method": "post",
-                        "path": "/validate",
+                        "path": "/copyObject",
                         "port": 5000
                     },
                     "output": {
-                        "type": "string"
+                        "type": "any"
                     }
+                },
+                "createBucket": {
+                    "arguments": {
+                        "bucket": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "locationConstraint": {
+                            "in": "requestBody",
+                            "required": false,
+                            "type": "string"
+                        }
+                    },
+                    "help": "https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#createBucket-property",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "post",
+                        "path": "/createBucket",
+                        "port": 5000
+                    },
+                    "output": {
+                        "type": "any"
+                    }
+                },
+                "deleteBucket": {
+                    "arguments": {
+                        "bucket": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteBucket-property",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "delete",
+                        "path": "/deleteBucket",
+                        "port": 5000
+                    },
+                    "output": {
+                        "type": "any"
+                    }
+                },
+                "deleteObject": {
+                    "arguments": {
+                        "bucket": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteObject-property",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "delete",
+                        "path": "/deleteObject",
+                        "port": 5000
+                    },
+                    "output": {
+                        "type": "any"
+                    }
+                },
+                "deleteObjects": {
+                    "arguments": {
+                        "bucket": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "objects": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "list"
+                        }
+                    },
+                    "help": "https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteObjects-property",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "delete",
+                        "path": "/deleteObjects",
+                        "port": 5000
+                    },
+                    "output": {
+                        "type": "any"
+                    }
+                },
+                "getObject": {
+                    "arguments": {
+                        "bucket": {
+                            "in": "query",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "key": {
+                            "in": "query",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "help": "https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getObject-property",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "get",
+                        "path": "/getObject",
+                        "port": 5000
+                    },
+                    "output": {
+                        "type": "any"
+                    }
+                },
+                "listBuckets": {
+                    "help": "https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#listBuckets-property",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "get",
+                        "path": "/listBuckets",
+                        "port": 5000
+                    },
+                    "output": {
+                        "type": "any"
+                    }
+                },
+                "listObjects": {
+                    "arguments": {
+                        "bucket": {
+                            "in": "query",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "limit": {
+                            "in": "query",
+                            "required": true,
+                            "type": "number"
+                        }
+                    },
+                    "help": "https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#listObjects-property",
+                    "http": {
+                        "contentType": "application/json",
+                        "method": "get",
+                        "path": "/listObjects",
+                        "port": 5000
+                    },
+                    "output": {
+                        "type": "any"
+                    }
+                },
+                "upload": {
+                    "arguments": {
+                        "bucket": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "file": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "any"
+                        },
+                        "key": {
+                            "in": "requestBody",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "options": {
+                            "in": "requestBody",
+                            "required": false,
+                            "type": "map"
+                        }
+                    },
+                    "help": "https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property",
+                    "http": {
+                        "contentType": "multipart/form-data",
+                        "method": "post",
+                        "path": "/upload",
+                        "port": 5000
+                    },
+                    "output": {
+                        "type": "any"
+                    }
+                }
+            },
+            "environment": {
+                "AWS_ACCESS_KEY_ID": {
+                    "required": true,
+                    "type": "string"
+                },
+                "AWS_SECRET_ACCESS_KEY": {
+                    "required": true,
+                    "type": "string"
                 }
             },
             "health": {
@@ -31,43 +237,46 @@
                 "contact": {
                     "email": "aurelien@storyscript.io",
                     "name": "Aurelien ARINO",
-                    "url": "https://storyscript.io"
+                    "url": "git@github.com:Arinono/aws-s3.git"
                 },
-                "description": "One microservice to rule them all",
+                "description": "AWS S3 SDK as microservice",
                 "license": {
-                    "name": "ISC",
+                    "name": "MIT",
                     "url": "https://opensource.org/licenses/MIT"
                 },
-                "title": "microservice-validates",
-                "version": "1.1.0"
+                "title": "aws-s3",
+                "version": "0.0.1"
             },
             "lifecycle": {
                 "startup": {
                     "command": [
                         "node",
-                        "validate"
+                        "/app/dist/index.js"
                     ]
                 }
             },
-            "omg": 1
+            "oms": 1
         },
-        "readme": "# microservice-validate\n",
+        "readme": null,
         "service": {
             "alias": null,
-            "description": "One microservice to rule them all",
+            "description": "AWS S3 SDK as a microservice",
             "isCertified": false,
-            "name": "microservice-validate",
+            "name": "aws-s3",
             "owner": {
                 "username": "Arinono"
             },
             "public": true,
             "topics": [
-                "microservice",
-                "omg",
-                "validation"
+                "aws",
+                "s3",
+                "bucket",
+                "file",
+                "storage",
+                "cloud"
             ]
         },
-        "serviceUuid": "9d1161dd-3105-4393-a852-7de19faa0fc6",
+        "serviceUuid": "5ad21d56-3019-4042-8a54-17aa4950af83",
         "state": "BETA"
     },
     {
@@ -111,7 +320,7 @@
             "isCertified": true,
             "name": "awesome",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -165,7 +374,7 @@
             "isCertified": true,
             "name": "awesome",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -273,7 +482,7 @@
             "isCertified": true,
             "name": "gmaps",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -382,7 +591,7 @@
             "isCertified": true,
             "name": "gmaps",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -599,16 +808,79 @@
                                         "help": "The JSON body of the incoming HTTP request",
                                         "type": "map"
                                     },
+                                    "files": {
+                                        "map": {
+                                            "keys": {
+                                                "help": "File name in the request",
+                                                "type": "string"
+                                            },
+                                            "values": {
+                                                "help": "Individual file object",
+                                                "properties": {
+                                                    "body": {
+                                                        "help": "Raw source of this file",
+                                                        "type": "string"
+                                                    },
+                                                    "contentType": {
+                                                        "help": "Content-Type of the file object",
+                                                        "type": "string"
+                                                    },
+                                                    "filename": {
+                                                        "help": "Original local file name",
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "help": "File name in the request",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "map"
+                                    },
+                                    "formFields": {
+                                        "help": "The form fields of the incoming HTTP request",
+                                        "map": {
+                                            "keys": {
+                                                "type": "string"
+                                            },
+                                            "values": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "map"
+                                    },
                                     "headers": {
                                         "help": "The HTTP headers of the incoming HTTP request",
                                         "type": "map"
                                     },
                                     "path": {
-                                        "help": "The path portion of th URI of the incoming HTTP request",
+                                        "help": "The path portion of the URI of the incoming HTTP request",
                                         "type": "string"
                                     },
-                                    "query_params": {
+                                    "queryParams": {
                                         "help": "The parsed query parameters of the HTTP request",
+                                        "map": {
+                                            "keys": {
+                                                "type": "string"
+                                            },
+                                            "values": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "map"
+                                    },
+                                    "query_params": {
+                                        "help": "DEPRECATED. Use 'queryParams'.\n",
+                                        "map": {
+                                            "keys": {
+                                                "type": "string"
+                                            },
+                                            "values": {
+                                                "type": "string"
+                                            }
+                                        },
                                         "type": "map"
                                     },
                                     "uri": {
@@ -860,16 +1132,79 @@
                                         "help": "The JSON body of the incoming HTTP request",
                                         "type": "map"
                                     },
+                                    "files": {
+                                        "map": {
+                                            "keys": {
+                                                "help": "File name in the request",
+                                                "type": "string"
+                                            },
+                                            "values": {
+                                                "help": "Individual file object",
+                                                "properties": {
+                                                    "body": {
+                                                        "help": "Raw source of this file",
+                                                        "type": "string"
+                                                    },
+                                                    "contentType": {
+                                                        "help": "Content-Type of the file object",
+                                                        "type": "string"
+                                                    },
+                                                    "filename": {
+                                                        "help": "Original local file name",
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "help": "File name in the request",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "map"
+                                    },
+                                    "formFields": {
+                                        "help": "The form fields of the incoming HTTP request",
+                                        "map": {
+                                            "keys": {
+                                                "type": "string"
+                                            },
+                                            "values": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "map"
+                                    },
                                     "headers": {
                                         "help": "The HTTP headers of the incoming HTTP request",
                                         "type": "map"
                                     },
                                     "path": {
-                                        "help": "The path portion of th URI of the incoming HTTP request",
+                                        "help": "The path portion of the URI of the incoming HTTP request",
                                         "type": "string"
                                     },
-                                    "query_params": {
+                                    "queryParams": {
                                         "help": "The parsed query parameters of the HTTP request",
+                                        "map": {
+                                            "keys": {
+                                                "type": "string"
+                                            },
+                                            "values": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "map"
+                                    },
+                                    "query_params": {
+                                        "help": "DEPRECATED. Use 'queryParams'.\n",
+                                        "map": {
+                                            "keys": {
+                                                "type": "string"
+                                            },
+                                            "values": {
+                                                "type": "string"
+                                            }
+                                        },
                                         "type": "map"
                                     },
                                     "uri": {
@@ -1406,9 +1741,8 @@
             },
             "info": {
                 "contact": {
-                    "email": "hello@asyncy.com",
-                    "name": "Asyncy",
-                    "url": "https://asyncy.com"
+                    "name": "Storyscript",
+                    "url": "https://storyscript.io"
                 },
                 "description": "Mailgun as a microservice",
                 "license": {
@@ -1436,7 +1770,7 @@
             "isCertified": false,
             "name": "mailgun",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -1516,9 +1850,8 @@
             },
             "info": {
                 "contact": {
-                    "email": "hello@asyncy.com",
-                    "name": "Asyncy",
-                    "url": "https://asyncy.com"
+                    "name": "Storyscript",
+                    "url": "https://storyscript.io"
                 },
                 "description": "Mailgun as a microservice",
                 "license": {
@@ -1546,7 +1879,7 @@
             "isCertified": false,
             "name": "mailgun",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -1679,7 +2012,7 @@
             "isCertified": false,
             "name": "random",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -1811,7 +2144,7 @@
             "isCertified": false,
             "name": "random",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -1891,7 +2224,7 @@
                     "arguments": {
                         "by": {
                             "in": "requestBody",
-                            "type": "any"
+                            "type": "int"
                         },
                         "key": {
                             "in": "requestBody",
@@ -2000,7 +2333,7 @@
                     "arguments": {
                         "by": {
                             "in": "requestBody",
-                            "type": "any"
+                            "type": "int"
                         },
                         "key": {
                             "in": "requestBody",
@@ -2310,7 +2643,7 @@
             "isCertified": true,
             "name": "redis",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -2392,7 +2725,7 @@
                     "arguments": {
                         "by": {
                             "in": "requestBody",
-                            "type": "any"
+                            "type": "int"
                         },
                         "key": {
                             "in": "requestBody",
@@ -2501,7 +2834,7 @@
                     "arguments": {
                         "by": {
                             "in": "requestBody",
-                            "type": "any"
+                            "type": "int"
                         },
                         "key": {
                             "in": "requestBody",
@@ -2811,7 +3144,7 @@
             "isCertified": true,
             "name": "redis",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -3093,7 +3426,7 @@
             "isCertified": true,
             "name": "sendgrid",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -3376,7 +3709,7 @@
             "isCertified": true,
             "name": "sendgrid",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -3661,7 +3994,7 @@
             "isCertified": true,
             "name": "slack",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -3944,7 +4277,7 @@
             "isCertified": true,
             "name": "slack",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -4170,7 +4503,7 @@
             "isCertified": false,
             "name": "twitter",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -4395,7 +4728,7 @@
             "isCertified": false,
             "name": "twitter",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -4444,7 +4777,7 @@
             "isCertified": true,
             "name": "uuid",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -4493,7 +4826,7 @@
             "isCertified": true,
             "name": "uuid",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -4576,7 +4909,7 @@
             "isCertified": false,
             "name": "yaml",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
@@ -4662,7 +4995,7 @@
             "isCertified": false,
             "name": "yaml",
             "owner": {
-                "username": "omg-services"
+                "username": "oms-services"
             },
             "public": true,
             "topics": [
