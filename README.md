@@ -6,43 +6,21 @@
 
 
 <div align="center">
-<img src="https://user-images.githubusercontent.com/4370550/56803568-460e5800-6823-11e9-8a70-25ab4b7e32ea.png" width="275">
+    <h2 align="center">Storyscript</h2>
+    <h3 align="center">Code that connects without plumbing.</h3>
+    <p align="center">The <b>open source</b> cloud-native programming language that<br>connects containers, “serverless” functions and APIs seamlessly<br>for building powerful mini-apps and workflows.</p>
+
+![design_story@2x dea339a6](https://user-images.githubusercontent.com/2041757/68863667-aa501680-06a4-11ea-9200-47fbdac7f769.png)
 </div>
 
-## &#x1f44b;<!-- wave --> Meet Storyscript
-The [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) for **Application Storytelling**.
-Develop rapidly, deploy natively to the cloud and focus on what matters most: business-logic.
-Designed with &#x2764;&#xfe0f;<!-- heart --> by [Storyscript](https://storyscript.io) on a mission to bring application development to the next level.
+<h3 align="center">Learn more at <a href="https://storyscript.io">https://storyscript.io</a></h3>
 
-```coffee
-# Applications are stories of data.
-when http server listen path: "/" as request     # Serverless
-    result = anyMicroservice action key: value   # Written in any language wrapped in Docker or RKT
-    result = anyFunction(key: value)             # Lambda, OpenFaaS, KNative or Storyscript
-    items = "string".split(by: ",")              # Builtins == No middleware
-    data = OpenAPI get users: users              # OpenAPI & AsyncAPI for legacy system support
-    sent = machinebox/textbox process input:data # Free/Paid Services
-    if sent.positive                             # Conditions
-        foreach list as item                     # Turing complete
-            # ...
-    request write content: "Hello World!"
 
-# Next launch on the Storyscript Platform
-$ story deploy  # Zero-devop deployments into Kubernetes
-```
+<hr>
+<hr>
 
-&#x1f4af;<!-- 100 --> Open Source for a delicious application development. &#x2728;<!-- sparkles -->&#x1f370;<!-- cake -->&#x2728;<!-- sparkles -->
 
-> &#x1f680;<!-- rocket --> Choose: hosted **Storyscript Cloud** or `helm install story` for on-premises deployments.
-
-## Using Storyscript
-
-If you are interested in using Storyscript, please see the [Quick Start guide](https://docs.storyscript.io/quick-start/).
-
-## Editor plugins
-
-- [VSCode](https://asyncy.click/vscode)
-- [Atom](https://github.com/storyscript/atom)
+# Developer Documentation
 
 ## Installation
 
