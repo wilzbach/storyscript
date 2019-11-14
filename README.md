@@ -5,22 +5,19 @@
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg?style=for-the-badge)](https://github.com/storyscript/.github/blob/master/CODE_OF_CONDUCT.md)
 
 
-<div align="center">
-    <h2 align="center">Storyscript</h2>
+<div>
+    <p align="center"><img src="https://user-images.githubusercontent.com/2041757/68865115-19c70580-06a7-11ea-955a-1c769960b366.png" width="450"></p>
     <h3 align="center">Code that connects without plumbing.</h3>
     <p align="center">The <b>open source</b> cloud-native programming language that<br>connects containers, “serverless” functions and APIs seamlessly<br>for building powerful mini-apps and workflows.</p>
-
-![design_story@2x dea339a6](https://user-images.githubusercontent.com/2041757/68863667-aa501680-06a4-11ea-9200-47fbdac7f769.png)
+     <p align="center"><img src="https://user-images.githubusercontent.com/2041757/68863667-aa501680-06a4-11ea-9200-47fbdac7f769.png" width="650"></p>
 </div>
 
 <h3 align="center">Learn more at <a href="https://storyscript.io">https://storyscript.io</a></h3>
 
 
 <hr>
+<blockquote align="center">Developer Documentation</blockquote>
 <hr>
-
-
-# Developer Documentation
 
 ## Installation
 
