@@ -111,9 +111,7 @@ setup(name=name,
       packages=find_packages(exclude=('build.*', 'tests', 'tests.*')),
       include_package_data=True,
       install_requires=requirements,
-      extras_require={
-          'docs': extras
-      },
+    extras_require={"docs": extras, "stylecheck": ["black==19.10b0"],},
       python_requires='>=3.6',
       entry_points={
           'console_scripts': ['storyscript=storyscript.Cli:Cli.main']

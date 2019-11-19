@@ -81,6 +81,12 @@ jobs:
                     tox -e pep8
 
             - run:
+                name: run black stylecheck
+                command: |
+                    . venv/bin/activate
+                    tox -e stylecheck
+
+            - run:
                 name: run unit tests
                 command: |
                     . venv/bin/activate
