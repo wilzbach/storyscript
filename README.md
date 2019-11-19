@@ -3,6 +3,7 @@
 [![Codecov](https://img.shields.io/codecov/c/github/storyscript/storyscript.svg?style=for-the-badge)](https://codecov.io/github/storyscript/storyscript)
 [![Docs](https://img.shields.io/badge/docs-online-brightgreen.svg?style=for-the-badge)](https://docs.storyscript.io)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg?style=for-the-badge)](https://github.com/storyscript/.github/blob/master/CODE_OF_CONDUCT.md)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)](https://github.com/psf/black)
 
 
 <div>
@@ -46,6 +47,15 @@ storyscript compile -j hello.story
 [Development docs](https://storyscript.readthedocs.io) are provided for those
 who wish to contribute to the project or want to understand how to execute
 compiled stories.
+
+Install [pre-commit](https://pre-commit.com/#install) and set up a git hook:
+
+```bash
+pip install --user pre-commit
+pre-commit install
+```
+
+This will ensure that every commit is formatted according to [`black`](https://github.com/psf/black).
 
 ## Contributing
 
