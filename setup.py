@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import io
 import subprocess
 import sys
 from os import path
@@ -15,7 +14,8 @@ root_dir = path.dirname(__file__)
 
 # Read a file and return its as a string
 def read(file_name):
-    return io.open(path.join(root_dir, file_name)).read()
+    with open(path.join(root_dir, file_name), encoding='utf-8') as f:
+        return f.read()
 
 
 name = 'storyscript'
