@@ -28,19 +28,26 @@ class Bundle:
         """
         Get the list of files ignored by git
         """
-        command = ['git', 'ls-files', '--others', '--ignored',
-                   '--exclude-standard']
+        command = [
+            "git",
+            "ls-files",
+            "--others",
+            "--ignored",
+            "--exclude-standard",
+        ]
         try:
-            p = subprocess.run(command,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.DEVNULL,
-                               encoding='utf8')
+            p = subprocess.run(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                encoding="utf8",
+            )
         except Exception:  # Graceful fallback when there's no git executable.
             return []
 
         if p.returncode != 0:
             return []
-        return p.stdout.split('\n')
+        return p.stdout.split("\n")
 
     @staticmethod
     def ignores(path):
@@ -48,7 +55,7 @@ class Bundle:
         if os.path.isdir(path):
             for root, subdirs, files in os.walk(path):
                 for file in files:
-                    if file.endswith('.story'):
+                    if file.endswith(".story"):
                         story = os.path.relpath(os.path.join(root, file))
                         ignores.append(story)
             return ignores
@@ -56,7 +63,7 @@ class Bundle:
 
     @staticmethod
     def filter_path(root, filename, ignores):
-        if filename.endswith('.story'):
+        if filename.endswith(".story"):
             path = os.path.relpath(os.path.join(root, filename))
             if path not in ignores:
                 return path
@@ -110,7 +117,7 @@ class Bundle:
     def services(self):
         services = []
         for storypath, story in self.stories.items():
-            services += story['services']
+            services += story["services"]
         services = list(set(services))
         services.sort()
         return services
@@ -149,9 +156,13 @@ class Bundle:
         parser = self.parser(ebnf)
         self.compile(entrypoint, parser=parser)
         return Compiled(
-            results={'stories': self.stories, 'services': self.services(),
-                     'entrypoint': entrypoint},
-            deprecations=self.deprecations)
+            results={
+                "stories": self.stories,
+                "services": self.services(),
+                "entrypoint": entrypoint,
+            },
+            deprecations=self.deprecations,
+        )
 
     def bundle_trees(self, ebnf=None, lower=False):
         """
@@ -169,6 +180,7 @@ class Bundle:
         parser = self.parser(ebnf)
         results = {}
         for story in stories:
-            results[story] = Story.from_file(story, features=self.features) \
-                                  .lex(parser=parser)
+            results[story] = Story.from_file(
+                story, features=self.features
+            ).lex(parser=parser)
         return results

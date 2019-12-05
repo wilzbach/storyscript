@@ -24,8 +24,10 @@ class Ebnf:
         Creates a macro with the given name, by creating a method on the
         instance
         """
+
         def compile_macro(*args):
             return template.format(*args)
+
         setattr(self, name, compile_macro)
 
     def set_token(self, name, value):
@@ -33,19 +35,19 @@ class Ebnf:
         Registers a token under a simplified name, and keep the original name,
         the value and the real token
         """
-        token = name.split('.')[0]
+        token = name.split(".")[0]
         token_name = token.lower()
-        if token_name.startswith('_'):
+        if token_name.startswith("_"):
             token_name = token_name[1:]
 
         token_value = '"{}"'.format(value)
         if len(value) > 2:
-            if value.startswith('/'):
-                if value.endswith('/'):
+            if value.startswith("/"):
+                if value.endswith("/"):
                     token_value = value
             elif '"' in value:
                 token_value = value
-        dictionary = {'name': name, 'value': token_value, 'token': token}
+        dictionary = {"name": name, "value": token_value, "token": token}
         self._tokens[token_name] = dictionary
 
     def resolve(self, name):
@@ -53,10 +55,10 @@ class Ebnf:
         Resolves a name to its real value if it's a token, or leave it as it
         is.
         """
-        name = name.replace(',', '|')
-        clean_name = name.strip('*[]()?|+')
+        name = name.replace(",", "|")
+        clean_name = name.strip("*[]()?|+")
         if clean_name in self._tokens:
-            real_name = self._tokens[clean_name]['token']
+            real_name = self._tokens[clean_name]["token"]
         else:
             real_name = clean_name
         return name.replace(clean_name, real_name)
@@ -65,33 +67,33 @@ class Ebnf:
         """
         Registers a rule, transforming tokens to their identifiers.
         """
-        rule = ''
+        rule = ""
         for shard in value.split():
-            rule = '{} {}'.format(rule, self.resolve(shard))
+            rule = "{} {}".format(rule, self.resolve(shard))
         self._rules[name] = rule.strip()
 
     def ignore(self, terminal):
-        self._ignores.append('%ignore {}'.format(terminal))
+        self._ignores.append("%ignore {}".format(terminal))
 
     def load(self, token):
-        self._imports[token] = '%import common.{}'.format(token.upper())
+        self._imports[token] = "%import common.{}".format(token.upper())
 
     def build_tokens(self):
         """
         Build the tokens that have been defined into a string
         """
-        string = ''
+        string = ""
         for name, value in self._tokens.items():
-            string = '{}{}: {}\n'.format(string, value['name'], value['value'])
+            string = "{}{}: {}\n".format(string, value["name"], value["value"])
         return string
 
     def build_rules(self):
         """
         Build the rules that have been defined into a string
         """
-        string = ''
+        string = ""
         for name, value in self._rules.items():
-            string = '{}{}: {}\n'.format(string, name, value)
+            string = "{}{}: {}\n".format(string, name, value)
         return string
 
     def build(self):
@@ -100,9 +102,9 @@ class Ebnf:
         """
         tokens = self.build_tokens()
         rules = self.build_rules()
-        ignores = '\n'.join(self._ignores)
-        imports = '\n'.join(self._imports.values())
-        return '{}\n{}\n{}\n\n{}'.format(rules, tokens, ignores, imports)
+        ignores = "\n".join(self._ignores)
+        imports = "\n".join(self._imports.values())
+        return "{}\n{}\n{}\n\n{}".format(rules, tokens, ignores, imports)
 
     def __setattr__(self, name, value):
         if isinstance(value, str):

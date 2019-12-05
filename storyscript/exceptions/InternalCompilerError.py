@@ -7,7 +7,7 @@ class InternalCompilerError(Exception):
     It should never happen for any user input.
     """
 
-    def __init__(self, message=''):
+    def __init__(self, message=""):
         self.message = message
         pass
 
@@ -22,8 +22,8 @@ def internal_assert(a, b=None):
     """
     if b is None:
         if not a:
-            message = 'Internal Error'
+            message = "Internal Error"
             raise InternalCompilerError(message)
     elif a != b:
-        message = f'{str(a)} != {str(b)}'
+        message = f"{str(a)} != {str(b)}"
         raise InternalCompilerError(message)

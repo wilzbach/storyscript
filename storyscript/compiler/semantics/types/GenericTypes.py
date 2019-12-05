@@ -1,16 +1,21 @@
-from storyscript.compiler.semantics.types.Types import AnyType, BaseType, \
-    ListType, MapType
+from storyscript.compiler.semantics.types.Types import (
+    AnyType,
+    BaseType,
+    ListType,
+    MapType,
+)
 
 
 class TypeSymbol:
     """
     An to-be-resolved symbol of a generic type.
     """
+
     def __init__(self, name):
         self._name = name
 
     def __repr__(self):
-        return f'TypeSymbol({self._name})'
+        return f"TypeSymbol({self._name})"
 
     def __hash__(self):
         return self._name.__hash__()
@@ -37,6 +42,7 @@ class GenericType:
     """
     A type that can be instantiated.
     """
+
     def __init__(self, symbols):
         assert len(symbols) > 0
         self.symbols = symbols
@@ -82,14 +88,15 @@ class GenericType:
 
     def __str__(self):
         buf = self.base_type_name()
-        symbols = ','.join(x.name() for x in self.symbols)
-        return f'{buf}[{symbols}]'
+        symbols = ",".join(x.name() for x in self.symbols)
+        return f"{buf}[{symbols}]"
 
 
 class ListGenericType(GenericType):
     """
     A generic list type.
     """
+
     _base_type = ListType
 
     def build_type_mapping(self, l):
@@ -103,13 +110,14 @@ class ListGenericType(GenericType):
         return {self.symbols[0]: inner}
 
     def base_type_name(self):
-        return 'List'
+        return "List"
 
 
 class MapGenericType(GenericType):
     """
     A generic object type.
     """
+
     _base_type = MapType
 
     def build_type_mapping(self, l):
@@ -127,7 +135,7 @@ class MapGenericType(GenericType):
         }
 
     def base_type_name(self):
-        return 'Map'
+        return "Map"
 
 
 def instantiate(symbols, t):

@@ -14,13 +14,21 @@ from storyhub.sdk.service.output import (
     OutputString,
 )
 
-from storyscript.compiler.semantics.types.Types import AnyType, BooleanType, \
-    FloatType, IntType, ListType, MapType, NoneType, ObjectType, RegExpType, \
-    StringType
+from storyscript.compiler.semantics.types.Types import (
+    AnyType,
+    BooleanType,
+    FloatType,
+    IntType,
+    ListType,
+    MapType,
+    NoneType,
+    ObjectType,
+    RegExpType,
+    StringType,
+)
 
 
 class TypeMappings:
-
     @classmethod
     def get_type_instance(cls, ty):
         """
@@ -39,13 +47,14 @@ class TypeMappings:
         if isinstance(ty, OutputAny):
             return AnyType.instance()
         if isinstance(ty, OutputObject):
-            return ObjectType({
-                k: cls.get_type_instance(v) for k, v in ty.properties().items()
-            })
-        if isinstance(ty, OutputList):
-            return ListType(
-                cls.get_type_instance(ty.elements()),
+            return ObjectType(
+                {
+                    k: cls.get_type_instance(v)
+                    for k, v in ty.properties().items()
+                }
             )
+        if isinstance(ty, OutputList):
+            return ListType(cls.get_type_instance(ty.elements()),)
         if isinstance(ty, OutputNone):
             return NoneType.instance()
         if isinstance(ty, OutputRegex):
@@ -53,7 +62,7 @@ class TypeMappings:
         if isinstance(ty, OutputEnum):
             return StringType.instance()
 
-        assert isinstance(ty, OutputMap), f'Unknown Hub Type: {ty!r}'
+        assert isinstance(ty, OutputMap), f"Unknown Hub Type: {ty!r}"
         return MapType(
             cls.get_type_instance(ty.keys()),
             cls.get_type_instance(ty.values()),

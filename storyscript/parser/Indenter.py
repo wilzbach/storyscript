@@ -19,8 +19,8 @@ class Indenter:
 
         yield token
 
-        indent_str = token.rsplit('\n', 1)[1]  # Tabs and spaces
-        indent = indent_str.count(' ') + indent_str.count('\t') * self.tab_len
+        indent_str = token.rsplit("\n", 1)[1]  # Tabs and spaces
+        indent = indent_str.count(" ") + indent_str.count("\t") * self.tab_len
 
         if indent > self.indent_level[-1]:
             self.indent_level.append(indent)
@@ -34,11 +34,14 @@ class Indenter:
             if indent != self.indent_level[-1]:
                 if indent > self.indent_level[-1]:
                     self.indent_level.append(last_pop)
-                    yield Token.new_borrow_pos('_DOUBLE_DEDENT',
-                                               indent_str, token)
+                    yield Token.new_borrow_pos(
+                        "_DOUBLE_DEDENT", indent_str, token
+                    )
                 else:
-                    assert indent == self.indent_level[-1], \
-                        '%s != %s' % (indent, self.indent_level[-1])
+                    assert indent == self.indent_level[-1], "%s != %s" % (
+                        indent,
+                        self.indent_level[-1],
+                    )
 
     def process(self, stream):
         self.reset()
@@ -57,7 +60,7 @@ class Indenter:
 
         while len(self.indent_level) > 1:
             self.indent_level.pop()
-            yield Token(self.DEDENT_type, '')
+            yield Token(self.DEDENT_type, "")
 
         assert self.indent_level == [0], self.indent_level
 
@@ -68,9 +71,9 @@ class Indenter:
 
 
 class CustomIndenter(Indenter):
-    NL_type = '_NL'
+    NL_type = "_NL"
     OPEN_PAREN_types = []
     CLOSE_PAREN_types = []
-    INDENT_type = '_INDENT'
-    DEDENT_type = '_DEDENT'
+    INDENT_type = "_INDENT"
+    DEDENT_type = "_DEDENT"
     tab_len = 8

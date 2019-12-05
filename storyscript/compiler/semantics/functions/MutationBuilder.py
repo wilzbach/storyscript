@@ -1,11 +1,24 @@
 from storyscript.compiler.semantics.functions.Mutation import Mutation
-from storyscript.compiler.semantics.types.GenericTypes import \
-    GenericType, ListGenericType, MapGenericType, TypeSymbol
-from storyscript.compiler.semantics.types.Types import AnyType, BaseType, \
-    BooleanType, FloatType, IntType, NoneType, RegExpType, StringType, TimeType
+from storyscript.compiler.semantics.types.GenericTypes import (
+    GenericType,
+    ListGenericType,
+    MapGenericType,
+    TypeSymbol,
+)
+from storyscript.compiler.semantics.types.Types import (
+    AnyType,
+    BaseType,
+    BooleanType,
+    FloatType,
+    IntType,
+    NoneType,
+    RegExpType,
+    StringType,
+    TimeType,
+)
 
 
-def parse_type_inner(text, start_tok='[', end_tok=']'):
+def parse_type_inner(text, start_tok="[", end_tok="]"):
     """
     Returns the inner type of a generic type.
     Example: List[any] => any
@@ -22,11 +35,11 @@ def parse_type_inner(text, start_tok='[', end_tok=']'):
                 start = i + 1
             level = level + 1
         elif c == end_tok:
-            assert level > 0, 'No start ['
+            assert level > 0, "No start ["
             level = level - 1
             if level == 0:
                 return text[start:i]
-    assert 0, 'No ] found'
+    assert 0, "No ] found"
 
 
 def parse_type(type_):
@@ -38,35 +51,35 @@ def parse_type(type_):
     """
     assert len(type_) > 0
     type_ = type_.strip()
-    if type_ == 'boolean':
+    if type_ == "boolean":
         return BooleanType.instance()
-    if type_ == 'int':
+    if type_ == "int":
         return IntType.instance()
-    if type_ == 'float':
+    if type_ == "float":
         return FloatType.instance()
-    if type_ == 'string':
+    if type_ == "string":
         return StringType.instance()
-    if type_ == 'time':
+    if type_ == "time":
         return TimeType.instance()
-    if type_ == 'none':
+    if type_ == "none":
         return NoneType.instance()
-    if type_ == 'regexp':
+    if type_ == "regexp":
         return RegExpType.instance()
-    if type_ == 'any':
+    if type_ == "any":
         return AnyType.instance()
 
-    if '[' in type_:
+    if "[" in type_:
         types = []
-        for t in parse_type_inner(type_).split(','):
+        for t in parse_type_inner(type_).split(","):
             t2 = parse_type(t)
             types.append(t2)
-        if type_.startswith('List['):
+        if type_.startswith("List["):
             return ListGenericType(types)
         else:
-            assert type_.startswith('Map[')
+            assert type_.startswith("Map[")
             return MapGenericType(types)
 
-    assert ']' not in type_
+    assert "]" not in type_
     return TypeSymbol(type_)
 
 
@@ -96,7 +109,7 @@ def check_type_symbols(t, symbols):
     t_symbols = get_symbols(t)
     for s in t_symbols:
         if not isinstance(s, BaseType):
-            assert s in symbols, f'unknown symbol {s} used'
+            assert s in symbols, f"unknown symbol {s} used"
 
 
 def mutation_builder(builtin):
@@ -104,26 +117,27 @@ def mutation_builder(builtin):
     Build a mutation from a plain builtin typing.
     :return: the parsed Mutation
     """
-    name = builtin['name']
-    desc = builtin['desc']
+    name = builtin["name"]
+    desc = builtin["desc"]
 
     # type to operator on
-    in_type = parse_type(builtin['input_type'])
+    in_type = parse_type(builtin["input_type"])
     symbols = get_symbols(in_type)
 
     # arguments:
     arguments = {}
-    if 'args' in builtin:
-        for arg_name, payload in builtin['args'].items():
-            t = parse_type(payload['type'])
+    if "args" in builtin:
+        for arg_name, payload in builtin["args"].items():
+            t = parse_type(payload["type"])
             # check that only symbols from the in_type are found
             check_type_symbols(t, symbols)
-            arguments[arg_name] = {'type': t, 'desc': payload['desc']}
+            arguments[arg_name] = {"type": t, "desc": payload["desc"]}
 
     # out:
-    out_type = parse_type(builtin['return_type'])
+    out_type = parse_type(builtin["return_type"])
     # check that only symbols from the in_type are found
     check_type_symbols(out_type, symbols)
 
-    return Mutation(ti=in_type, name=name, args=arguments, output=out_type,
-                    desc=desc)
+    return Mutation(
+        ti=in_type, name=name, args=arguments, output=out_type, desc=desc
+    )

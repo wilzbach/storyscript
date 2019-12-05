@@ -8,17 +8,17 @@ def test_compilererror():
 
 
 def test_error_message(patch):
-    patch.many(ErrorCodes, ['is_error', 'get_error'])
+    patch.many(ErrorCodes, ["is_error", "get_error"])
     ErrorCodes.is_error.return_value = True
-    ErrorCodes.get_error.return_value = [None, 'foo']
-    e2 = CompilerError('my_custom_error')
-    assert str(e2) == 'foo'
+    ErrorCodes.get_error.return_value = [None, "foo"]
+    e2 = CompilerError("my_custom_error")
+    assert str(e2) == "foo"
 
     ErrorCodes.is_error.return_value = False
     e3 = CompilerError(None)
-    assert str(e3) == 'Unknown compiler error'
+    assert str(e3) == "Unknown compiler error"
 
 
 def test_compiler_error_extra_parameters():
-    e2 = CompilerError('my_custom_error', format_args={'a': 2})
+    e2 = CompilerError("my_custom_error", format_args={"a": 2})
     assert e2.format_args.a == 2
