@@ -7,6 +7,7 @@ class FunctionTable:
     """
     A table of all available functions inside a story.
     """
+
     def __init__(self):
         self.functions = {}
 

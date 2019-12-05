@@ -8,24 +8,28 @@ from storyscript.compiler.semantics import Semantics
 
 def test_compiler_generate(patch, magic):
     patch.init(Lowering)
-    patch.object(Lowering, 'process')
-    patch.object(Semantics, 'process')
-    patch.many(JSONCompiler, ['compile'])
+    patch.object(Lowering, "process")
+    patch.object(Semantics, "process")
+    patch.many(JSONCompiler, ["compile"])
     tree = magic()
-    result = Compiler.generate(tree, features=None, scope=None)
-    Lowering.__init__.assert_called_with(parser=tree.parser, features=None)
+    storycontext = magic()
+    result = Compiler.generate(tree, storycontext=storycontext, scope=None)
+    Lowering.__init__.assert_called_with(
+        parser=tree.parser, features=storycontext.features
+    )
     Lowering.process.assert_called_with(tree)
     Semantics.process.assert_called_with(Lowering.process())
     assert result == (Lowering.process(), Semantics.process())
 
 
 def test_compiler_compile(patch, magic):
-    patch.object(Compiler, 'generate', return_value=('tree', 'sem'))
-    patch.object(JSONCompiler, 'compile')
+    patch.object(Compiler, "generate", return_value=("tree", "sem"))
+    patch.object(JSONCompiler, "compile")
     tree = magic()
-    result = Compiler.compile(tree, story=None, features=None, scope=None)
-    Compiler.generate.assert_called_with(tree, None, scope=None)
-    JSONCompiler.compile.assert_called_with('tree')
+    story = magic()
+    result = Compiler.compile(tree, story=story)
+    Compiler.generate.assert_called_with(tree, story.context, scope=None)
+    JSONCompiler.compile.assert_called_with("tree")
     assert result.output() == JSONCompiler.compile()
-    assert result.module() == 'sem'
-    assert result.backend == 'json'
+    assert result.module() == "sem"
+    assert result.backend == "json"

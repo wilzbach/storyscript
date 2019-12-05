@@ -1,6 +1,6 @@
 Error: syntax error in story at line 3, column 9
 
 3|            res.body = 2
-              ^^^^^^^^^^
+              ^^^^^^^^
 
 E0127: `res[]` is readonly and can not be assigned to.

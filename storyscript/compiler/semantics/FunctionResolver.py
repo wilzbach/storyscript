@@ -13,6 +13,7 @@ class FunctionResolver(ScopeSelectiveVisitor):
     Populate the table of all function symbols before checking their calls
     in the next semantic run.
     """
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.resolver = ExpressionResolver(module=self.module)
@@ -34,21 +35,31 @@ class FunctionResolver(ScopeSelectiveVisitor):
         return_type = NoneType.instance()
         args = {}
         for c in tree.children[2:]:
-            if isinstance(c, Tree) and c.data == 'typed_argument':
+            if isinstance(c, Tree) and c.data == "typed_argument":
                 name = c.child(0)
                 e_sym = self.resolver.types(c.types)
+                c.expect(
+                    e_sym.type() != ObjectType.instance(),
+                    "arg_type_no_object",
+                    arg=name,
+                    type=e_sym.type(),
+                )
                 sym = Symbol.from_path(name, e_sym.type())
                 scope.insert(sym)
                 args[sym.name()] = sym
         # add function to the function table
         function_name = tree.child(1).value
-        tree.expect(self.module.function_table.resolve(function_name) is None,
-                    'function_redeclaration', name=function_name)
+        tree.expect(
+            self.module.function_table.resolve(function_name) is None,
+            "function_redeclaration",
+            name=function_name,
+        )
         output = tree.function_output
         if output is not None:
             return_type = self.resolver.types(output.types).type()
-            tree.expect(return_type != ObjectType.instance(),
-                        'return_type_no_object')
+            tree.expect(
+                return_type != ObjectType.instance(), "return_type_no_object"
+            )
         self.module.function_table.insert(function_name, args, return_type)
         return scope, return_type
 

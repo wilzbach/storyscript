@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from pytest import fixture, raises
+from pytest import fixture
 
-from storyscript.exceptions.ProcessingError import ConstDict, ProcessingError
+from storyscript.exceptions.ProcessingError import ProcessingError
 
 
 @fixture
 def error():
-    return ProcessingError('error')
+    return ProcessingError("error")
 
 
 @fixture
@@ -15,24 +15,24 @@ def token(magic):
 
 
 def test_processingerror_init(patch, error):
-    patch.many(ProcessingError, ['token_position', 'tree_position'])
-    error = ProcessingError('error')
-    assert error.error == 'error'
+    patch.many(ProcessingError, ["token_position", "tree_position"])
+    error = ProcessingError("error")
+    assert error.error == "error"
     ProcessingError.token_position.assert_called_with(None)
     ProcessingError.tree_position.assert_called_with(None)
     assert issubclass(ProcessingError, Exception)
 
 
 def test_processingerror_init_token(patch):
-    patch.many(ProcessingError, ['token_position', 'tree_position'])
-    ProcessingError('error', token='token')
-    ProcessingError.token_position.assert_called_with('token')
+    patch.many(ProcessingError, ["token_position", "tree_position"])
+    ProcessingError("error", token="token")
+    ProcessingError.token_position.assert_called_with("token")
 
 
 def test_processingerror_init_tree(patch):
-    patch.many(ProcessingError, ['token_position', 'tree_position'])
-    ProcessingError('error', tree='tree')
-    ProcessingError.tree_position.assert_called_with('tree')
+    patch.many(ProcessingError, ["token_position", "tree_position"])
+    ProcessingError("error", tree="tree")
+    ProcessingError.tree_position.assert_called_with("tree")
 
 
 def test_processingerror_token_position(error, token):
@@ -67,14 +67,3 @@ def test_processingerror_tree_position_none(error):
     Ensures tree_position can deal with null values
     """
     error.tree_position(None)
-
-
-def test_const_dict():
-    """
-    Ensures that the const dictionary provides access
-    """
-    d = ConstDict({'foo': 'bar', 'f2': 'b2'})
-    assert d.foo == 'bar'
-    assert d.f2 == 'b2'
-    with raises(Exception):
-        d.bar

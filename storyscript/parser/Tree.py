@@ -23,7 +23,7 @@ class Tree(LarkTree):
         """
         Finds a subtree or a nested subtree, using path
         """
-        shards = path.split('.')
+        shards = path.split(".")
         current = None
         for shard in shards:
             if current is None:
@@ -95,11 +95,11 @@ class Tree(LarkTree):
         for child in childs:
             if isinstance(child, Token):
                 return str(getattr(child, position))
-            t = child._find_position(position, reverse=False)
+            t = child._find_position(position, reverse=reverse)
             if t is not None:
                 return t
 
-        node_pos = getattr(self, f'_{position}', None)
+        node_pos = getattr(self, f"_{position}", None)
         if node_pos is not None:
             return str(node_pos)
         return None
@@ -108,21 +108,21 @@ class Tree(LarkTree):
         """
         Finds the line number of a tree using _find_position
         """
-        line = self._find_position('line')
-        assert line != 'None', self
+        line = self._find_position("line")
+        assert line != "None", self
         return line
 
     def column(self):
         """
         Finds the column number of a tree using _find_position
         """
-        return self._find_position('column')
+        return self._find_position("column")
 
     def end_column(self):
         """
         Finds the end column number of a tree using _find_position
         """
-        return self._find_position('end_column', reverse=True)
+        return self._find_position("end_column", reverse=True)
 
     def position(self):
         """
@@ -155,10 +155,10 @@ class Tree(LarkTree):
         """
         Extracts the path name from a path tree
         """
-        string = ''
+        string = ""
         for child in self.children:
             if isinstance(child, Tree):
-                string = '{}.{}'.format(string, child.child(0).value)
+                string = "{}.{}".format(string, child.child(0).value)
             else:
                 string += child.value
         return string
@@ -200,7 +200,7 @@ class Tree(LarkTree):
         """
         child = self.child(index)
         assert isinstance(child, Token)
-        assert child.type == 'NAME'
+        assert child.type == "NAME"
         return child
 
     def create_token(self, name, data):
@@ -216,12 +216,12 @@ class Tree(LarkTree):
         return tok
 
     @classmethod
-    def create_token_from_tok(cls,  token, name, data):
+    def create_token_from_tok(cls, token, name, data):
         """
         Create a token from another token and use this token
         for the position of the to-be-created token (line, column, end_column).
         """
-        tree = cls('dummy', [token])
+        tree = cls("dummy", [token])
         return tree.create_token(name, data)
 
     def follow(self, nodes):

@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "9",
+      "col_end": "18",
       "output": [
         "float"
       ],
@@ -46,7 +46,7 @@
       "method": "return",
       "ln": "2",
       "col_start": "3",
-      "col_end": "12",
+      "col_end": "18",
       "args": [
         {
           "$OBJECT": "path",
@@ -66,7 +66,7 @@
       "method": "call",
       "ln": "4.1",
       "col_start": "1",
-      "col_end": "27",
+      "col_end": "30",
       "name": [
         "__p-4.1"
       ],

@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "13",
       "output": [
         "int"
       ],
@@ -16,7 +16,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "10",
       "name": [
         "a"
       ],
@@ -34,7 +34,7 @@
       "method": "try",
       "ln": "3",
       "col_start": "5",
-      "col_end": "10",
+      "col_end": "29",
       "enter": "4",
       "exit": "5",
       "parent": "1",
@@ -61,7 +61,7 @@
       "method": "catch",
       "ln": "5",
       "col_start": "5",
-      "col_end": "10",
+      "col_end": "29",
       "enter": "6",
       "exit": "16",
       "parent": "1",
@@ -72,7 +72,7 @@
       "method": "expression",
       "ln": "6",
       "col_start": "9",
-      "col_end": "12",
+      "col_end": "14",
       "name": [
         "b"
       ],
@@ -90,7 +90,7 @@
       "method": "try",
       "ln": "7",
       "col_start": "9",
-      "col_end": "16",
+      "col_end": "29",
       "enter": "8",
       "exit": "10",
       "parent": "5",
@@ -101,7 +101,7 @@
       "method": "expression",
       "ln": "8",
       "col_start": "13",
-      "col_end": "16",
+      "col_end": "18",
       "name": [
         "c"
       ],
@@ -119,7 +119,7 @@
       "method": "return",
       "ln": "9",
       "col_start": "13",
-      "col_end": "21",
+      "col_end": "29",
       "args": [
         {
           "$OBJECT": "expression",
@@ -159,7 +159,7 @@
       "method": "catch",
       "ln": "10",
       "col_start": "9",
-      "col_end": "14",
+      "col_end": "29",
       "enter": "11",
       "exit": "13",
       "parent": "5",
@@ -170,7 +170,7 @@
       "method": "expression",
       "ln": "11",
       "col_start": "13",
-      "col_end": "16",
+      "col_end": "18",
       "name": [
         "d"
       ],
@@ -188,7 +188,7 @@
       "method": "return",
       "ln": "12",
       "col_start": "13",
-      "col_end": "21",
+      "col_end": "29",
       "args": [
         {
           "$OBJECT": "expression",
@@ -228,7 +228,7 @@
       "method": "finally",
       "ln": "13",
       "col_start": "9",
-      "col_end": "14",
+      "col_end": "29",
       "enter": "14",
       "exit": "16",
       "parent": "5",
@@ -238,7 +238,7 @@
       "method": "expression",
       "ln": "14",
       "col_start": "13",
-      "col_end": "16",
+      "col_end": "18",
       "name": [
         "e"
       ],
@@ -256,7 +256,7 @@
       "method": "return",
       "ln": "15",
       "col_start": "13",
-      "col_end": "21",
+      "col_end": "29",
       "args": [
         {
           "$OBJECT": "expression",

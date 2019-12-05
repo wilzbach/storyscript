@@ -1,6 +1,6 @@
 Error: syntax error in story at line 5, column 5
 
 5|        l[0] = el
-          ^^^^^^
+          ^^^
 
 E0127: `l[]` is readonly and can not be assigned to.

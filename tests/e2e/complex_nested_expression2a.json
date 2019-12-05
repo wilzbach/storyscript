@@ -4,7 +4,10 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "5",
+      "col_end": "33",
+      "name": [
+        "a"
+      ],
       "args": [
         {
           "$OBJECT": "expression",
@@ -51,7 +54,7 @@
           ]
         }
       ],
-      "src": "true and 1 + 1 == 2 or false"
+      "src": "a = true and 1 + 1 == 2 or false"
     }
   },
   "entrypoint": "1"

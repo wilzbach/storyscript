@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "12",
       "name": [
         "d"
       ],
@@ -31,8 +31,11 @@
     "2": {
       "method": "expression",
       "ln": "2",
-      "col_start": "2",
-      "col_end": "3",
+      "col_start": "1",
+      "col_end": "29",
+      "name": [
+        "a"
+      ],
       "args": [
         {
           "$OBJECT": "expression",
@@ -72,7 +75,7 @@
           ]
         }
       ],
-      "src": "(0 == 1) to int + (d[\"a\"])"
+      "src": "a = (0 == 1) to int + (d[\"a\"])"
     }
   },
   "entrypoint": "1"

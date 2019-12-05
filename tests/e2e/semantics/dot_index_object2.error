@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 13
+
+3|            a = s.data["foobar"]
+                  ^^^^^^^^^^^^^^^
+
+E0151: Object `s` has no property `data`.

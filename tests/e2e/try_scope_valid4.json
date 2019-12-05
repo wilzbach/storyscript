@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "a"
       ],
@@ -21,7 +21,7 @@
       "method": "try",
       "ln": "2",
       "col_start": "1",
-      "col_end": "8",
+      "col_end": "9",
       "enter": "3",
       "exit": "4",
       "src": "try",
@@ -31,7 +31,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "3",
-      "col_end": "7",
+      "col_end": "9",
       "name": [
         "a"
       ],
@@ -60,7 +60,7 @@
       "method": "catch",
       "ln": "4",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "9",
       "enter": "5",
       "exit": "6",
       "src": "catch",
@@ -70,7 +70,7 @@
       "method": "expression",
       "ln": "5",
       "col_start": "3",
-      "col_end": "7",
+      "col_end": "9",
       "name": [
         "a"
       ],
@@ -99,7 +99,7 @@
       "method": "finally",
       "ln": "6",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "9",
       "enter": "7",
       "exit": "9",
       "src": "finally",
@@ -109,7 +109,7 @@
       "method": "expression",
       "ln": "7",
       "col_start": "3",
-      "col_end": "7",
+      "col_end": "9",
       "name": [
         "a"
       ],
@@ -138,7 +138,7 @@
       "method": "expression",
       "ln": "9",
       "col_start": "1",
-      "col_end": "5",
+      "col_end": "7",
       "name": [
         "a"
       ],

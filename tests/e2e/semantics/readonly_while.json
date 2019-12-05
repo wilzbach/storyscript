@@ -4,7 +4,7 @@
       "method": "while",
       "ln": "2",
       "col_start": "7",
-      "col_end": "6",
+      "col_end": "13",
       "args": [
         {
           "$OBJECT": "boolean",
@@ -18,7 +18,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "18",
       "name": [
         "a"
       ],
@@ -49,7 +49,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "5",
-      "col_end": "11",
+      "col_end": "13",
       "name": [
         "a",
         {

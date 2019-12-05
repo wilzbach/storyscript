@@ -1,0 +1,96 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "10",
+      "function": "foo",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "a",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "any"
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": "4",
+      "src": "function foo a:any",
+      "next": "4"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "5",
+      "col_end": "10",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "int",
+          "int": 0
+        }
+      ],
+      "parent": "1",
+      "src": "    b = 0"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "col_start": "1",
+      "col_end": "9",
+      "name": [
+        "a"
+      ],
+      "args": [
+        null
+      ],
+      "src": "a = null",
+      "next": "5.1"
+    },
+    "5.1": {
+      "method": "call",
+      "ln": "5.1",
+      "col_start": "1",
+      "col_end": "7",
+      "name": [
+        "__p-5.1"
+      ],
+      "function": "foo",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "a",
+          "arg": {
+            "$OBJECT": "path",
+            "paths": [
+              "a"
+            ]
+          }
+        }
+      ],
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-5.1"
+          ]
+        }
+      ],
+      "src": "foo(:a)"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "foo": "1"
+  }
+}

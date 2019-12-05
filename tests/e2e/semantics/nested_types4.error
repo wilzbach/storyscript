@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 13
 
 2|        return {20: ["foo", "bar"]}
-                  ^^
+                  ^^^^^^^^^^^^^^^^^^
 
 E0102: `Map[int,List[string]]` can't be implicitly converted to expected return type `Map[string,List[string]]`.

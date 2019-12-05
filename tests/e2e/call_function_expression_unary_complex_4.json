@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "16",
       "output": [
         "boolean"
       ],
@@ -42,7 +42,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "9",
       "name": [
         "b"
       ],
@@ -59,7 +59,7 @@
       "method": "call",
       "ln": "5.1",
       "col_start": "5",
-      "col_end": "19",
+      "col_end": "34",
       "name": [
         "__p-5.1"
       ],
@@ -98,7 +98,6 @@
       "method": "expression",
       "ln": "5",
       "col_start": "1",
-      "col_end": "4",
       "name": [
         "a"
       ],

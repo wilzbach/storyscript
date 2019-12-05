@@ -1,0 +1,6 @@
+Deprecation: deprecated syntax in story at line 4, column 7
+
+4|    b = a[start:end]
+            ^^^^^^^^^
+
+D0002: Ranges are deprecated.

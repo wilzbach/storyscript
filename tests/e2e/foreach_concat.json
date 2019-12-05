@@ -4,7 +4,7 @@
       "method": "for",
       "ln": "1",
       "col_start": "9",
-      "col_end": "12",
+      "col_end": "94",
       "output": [
         "item"
       ],
@@ -41,7 +41,7 @@
       "method": "execute",
       "ln": "2",
       "col_start": "5",
-      "col_end": "17",
+      "col_end": "94",
       "service": "mailgun",
       "command": "send",
       "args": [

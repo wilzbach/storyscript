@@ -1,7 +1,7 @@
 Error: syntax error in story at line 2, column 7
 
 2|    b = a.contains(start:1)
-            ^^^^^^^^^^^^^^
+            ^^^^^^^^^^^^^^^^
 
 E0121: Multiple mutation overloads for `contains` found:
 	- contains(item:`string`)

@@ -11,25 +11,25 @@ class StoryscriptCompilationResult:
     Contains the compiled story or a list of compilation errors.
     """
 
-    def __init__(self, result, errors):
+    def __init__(self, result, errors, deprecations):
         self._result = result
         self._errors = errors
-        self._deprecations = []
+        self._deprecations = deprecations
         self._warnings = []
 
     @classmethod
-    def from_result(cls, story):
+    def from_result(cls, story, deprecations):
         """
         Creates a CompilationResult from a result.
         """
-        return cls(story, errors=[])
+        return cls(story, errors=[], deprecations=deprecations)
 
     @classmethod
     def from_error(cls, error):
         """
         Creates a CompilationResult from a single error.
         """
-        return cls(None, errors=[error])
+        return cls(None, errors=[error], deprecations=[])
 
     def result(self):
         """
@@ -73,15 +73,18 @@ class Api:
     """
     Exposes functionalities for external use
     """
+
     @staticmethod
-    def loads(string, features=None, backend='json', scope=None):
+    def loads(string, features=None, backend="json", scope=None):
         """
         Load story from a string.
         """
         features = Features(features)
         try:
-            s = Story(string, features, backend=backend, scope=scope).process()
-            return StoryscriptCompilationResult.from_result(s)
+            story = Story(string, features, backend=backend, scope=scope)
+            s = story.process()
+            deprecations = story.deprecations()
+            return StoryscriptCompilationResult.from_result(s, deprecations)
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)
         except Exception as e:
@@ -99,8 +102,9 @@ class Api:
         features = Features(features)
         try:
             story = Story.from_stream(stream, features).process()
-            s = {stream.name: story, 'services': story['services']}
-            return StoryscriptCompilationResult.from_result(s)
+            s = {stream.name: story, "services": story["services"]}
+            deprecations = {stream.name: story.deprecations()}
+            return StoryscriptCompilationResult.from_result(s, deprecations)
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)
         except Exception as e:
@@ -117,8 +121,12 @@ class Api:
         """
         features = Features(features)
         try:
-            s = Bundle(story_files=files, features=features).bundle()
-            return StoryscriptCompilationResult.from_result(s)
+            compiledbundle = Bundle(
+                story_files=files, features=features
+            ).bundle()
+            return StoryscriptCompilationResult.from_result(
+                compiledbundle.results, compiledbundle.deprecations
+            )
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)
         except Exception as e:

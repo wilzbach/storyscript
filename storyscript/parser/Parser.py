@@ -15,7 +15,8 @@ class Parser:
     Wraps up the parser submodule and exposes parsing and lexing
     functionalities.
     """
-    def __init__(self, algo='lalr', ebnf=None):
+
+    def __init__(self, algo="lalr", ebnf=None):
         self.algo = algo
         self.ebnf = ebnf
         self.lark = self._lark()
@@ -36,7 +37,7 @@ class Parser:
 
     def grammar(self):
         if self.ebnf:
-            with io.open(self.ebnf, 'r') as f:
+            with io.open(self.ebnf, "r") as f:
                 return f.read()
         return Grammar().build()
 
@@ -50,9 +51,9 @@ class Parser:
         """
         Parses the source string.
         """
-        if source == '':
-            return Tree('empty', [])
-        source = '{}\n'.format(source)
+        if source == "":
+            return Tree("empty", [])
+        source = "{}\n".format(source)
         lark = self.lark
         tree = lark.parse(source)
         try:

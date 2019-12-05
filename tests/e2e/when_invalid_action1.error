@@ -1,6 +1,6 @@
 Error: syntax error in story at line 3, column 10
 
 3|        when a listen path: "/" as r
-               
+               ^^^^^^^^^^^^^^^^^^^^^^^^
 
 E0144: No event listener with output `a` for event `listen`.

@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "13",
       "output": [
         "int"
       ],
@@ -16,7 +16,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "10",
       "name": [
         "a"
       ],
@@ -34,7 +34,7 @@
       "method": "try",
       "ln": "3",
       "col_start": "5",
-      "col_end": "12",
+      "col_end": "21",
       "enter": "4",
       "exit": "6",
       "parent": "1",
@@ -45,7 +45,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "9",
-      "col_end": "12",
+      "col_end": "14",
       "name": [
         "b"
       ],
@@ -63,7 +63,7 @@
       "method": "return",
       "ln": "5",
       "col_start": "9",
-      "col_end": "17",
+      "col_end": "21",
       "args": [
         {
           "$OBJECT": "expression",
@@ -91,7 +91,7 @@
       "method": "catch",
       "ln": "6",
       "col_start": "5",
-      "col_end": "10",
+      "col_end": "21",
       "enter": "7",
       "exit": "9",
       "parent": "1",
@@ -102,7 +102,7 @@
       "method": "expression",
       "ln": "7",
       "col_start": "9",
-      "col_end": "12",
+      "col_end": "14",
       "name": [
         "c"
       ],
@@ -120,7 +120,7 @@
       "method": "return",
       "ln": "8",
       "col_start": "9",
-      "col_end": "17",
+      "col_end": "21",
       "args": [
         {
           "$OBJECT": "expression",
@@ -148,7 +148,7 @@
       "method": "finally",
       "ln": "9",
       "col_start": "5",
-      "col_end": "10",
+      "col_end": "21",
       "enter": "10",
       "exit": "12",
       "parent": "1",
@@ -159,7 +159,7 @@
       "method": "expression",
       "ln": "10",
       "col_start": "9",
-      "col_end": "12",
+      "col_end": "14",
       "name": [
         "d"
       ],
@@ -177,7 +177,7 @@
       "method": "return",
       "ln": "11",
       "col_start": "9",
-      "col_end": "17",
+      "col_end": "21",
       "args": [
         {
           "$OBJECT": "expression",

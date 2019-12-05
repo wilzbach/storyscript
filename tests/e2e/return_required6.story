@@ -1,5 +1,5 @@
 function sum a:int returns int
-    1 + 2
+    log info msg: "inside sum"
     if true
         return 2
     else if true

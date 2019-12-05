@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "10",
+      "col_end": "16",
       "name": [
         "map_int"
       ],
@@ -32,7 +32,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "12",
+      "col_end": "22",
       "name": [
         "map_float"
       ],
@@ -60,7 +60,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "1",
-      "col_end": "12",
+      "col_end": "20",
       "name": [
         "map_float"
       ],

@@ -4,7 +4,7 @@
       "method": "execute",
       "ln": "1.1",
       "col_start": "38",
-      "col_end": "52",
+      "col_end": "70",
       "name": [
         "__p-1.1"
       ],
@@ -34,7 +34,7 @@
       "method": "execute",
       "ln": "1.2",
       "col_start": "15",
-      "col_end": "30",
+      "col_end": "81",
       "name": [
         "__p-1.2"
       ],
@@ -65,7 +65,7 @@
       "method": "execute",
       "ln": "1",
       "col_start": "1",
-      "col_end": "9",
+      "col_end": "90",
       "service": "log",
       "command": "info",
       "args": [

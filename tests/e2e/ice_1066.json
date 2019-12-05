@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "23",
       "name": [
         "a"
       ],
@@ -43,7 +43,7 @@
       "method": "mutation",
       "ln": "2.4",
       "col_start": "12",
-      "col_end": "13",
+      "col_end": "59",
       "name": [
         "__p-2.4"
       ],
@@ -116,7 +116,7 @@
       "method": "expression",
       "ln": "2.2",
       "col_start": "3",
-      "col_end": "11",
+      "col_end": "4",
       "name": [
         "b"
       ],
@@ -138,7 +138,7 @@
       "method": "expression",
       "ln": "2.3",
       "col_start": "6",
-      "col_end": "11",
+      "col_end": "7",
       "name": [
         "c"
       ],

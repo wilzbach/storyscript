@@ -3,6 +3,7 @@
     "1.1": {
       "method": "expression",
       "ln": "1.1",
+      "col_end": "48",
       "name": [
         "__p-1.1"
       ],
@@ -49,7 +50,7 @@
       "method": "expression",
       "ln": "1.2",
       "col_start": "2",
-      "col_end": "18",
+      "col_end": "5",
       "name": [
         "foo"
       ],
@@ -71,7 +72,7 @@
       "method": "expression",
       "ln": "1.3",
       "col_start": "7",
-      "col_end": "18",
+      "col_end": "10",
       "name": [
         "bar"
       ],
@@ -93,7 +94,7 @@
       "method": "expression",
       "ln": "1.4",
       "col_start": "12",
-      "col_end": "18",
+      "col_end": "15",
       "name": [
         "car"
       ],

@@ -3,46 +3,22 @@
 [![Codecov](https://img.shields.io/codecov/c/github/storyscript/storyscript.svg?style=for-the-badge)](https://codecov.io/github/storyscript/storyscript)
 [![Docs](https://img.shields.io/badge/docs-online-brightgreen.svg?style=for-the-badge)](https://docs.storyscript.io)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg?style=for-the-badge)](https://github.com/storyscript/.github/blob/master/CODE_OF_CONDUCT.md)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)](https://github.com/psf/black)
 
 
-<div align="center">
-<img src="https://user-images.githubusercontent.com/4370550/56803568-460e5800-6823-11e9-8a70-25ab4b7e32ea.png" width="275">
+<div>
+    <p align="center"><img src="https://user-images.githubusercontent.com/2041757/68865115-19c70580-06a7-11ea-955a-1c769960b366.png" width="450"></p>
+    <h3 align="center">Code that connects without plumbing.</h3>
+    <p align="center">The <b>open source</b> cloud-native programming language that<br>connects containers, “serverless” functions and APIs seamlessly<br>for building powerful mini-apps and workflows.</p>
+     <p align="center"><img src="https://user-images.githubusercontent.com/2041757/68863667-aa501680-06a4-11ea-9200-47fbdac7f769.png" width="650"></p>
 </div>
 
-## &#x1f44b;<!-- wave --> Meet Storyscript
-The [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) for **Application Storytelling**.
-Develop rapidly, deploy natively to the cloud and focus on what matters most: business-logic.
-Designed with &#x2764;&#xfe0f;<!-- heart --> by [Storyscript](https://storyscript.io) on a mission to bring application development to the next level.
+<h3 align="center">Learn more at <a href="https://storyscript.io">https://storyscript.io</a></h3>
 
-```coffee
-# Applications are stories of data.
-when http server listen path: "/" as request     # Serverless
-    result = anyMicroservice action key: value   # Written in any language wrapped in Docker or RKT
-    result = anyFunction(key: value)             # Lambda, OpenFaaS, KNative or Storyscript
-    items = "string".split(by: ",")              # Builtins == No middleware
-    data = OpenAPI get users: users              # OpenAPI & AsyncAPI for legacy system support
-    sent = machinebox/textbox process input:data # Free/Paid Services
-    if sent.positive                             # Conditions
-        foreach list as item                     # Turing complete
-            # ...
-    request write content: "Hello World!"
 
-# Next launch on the Storyscript Platform
-$ story deploy  # Zero-devop deployments into Kubernetes
-```
-
-&#x1f4af;<!-- 100 --> Open Source for a delicious application development. &#x2728;<!-- sparkles -->&#x1f370;<!-- cake -->&#x2728;<!-- sparkles -->
-
-> &#x1f680;<!-- rocket --> Choose: hosted **Storyscript Cloud** or `helm install story` for on-premises deployments.
-
-## Using Storyscript
-
-If you are interested in using Storyscript, please see the [Quick Start guide](https://docs.storyscript.io/quick-start/).
-
-## Editor plugins
-
-- [VSCode](https://asyncy.click/vscode)
-- [Atom](https://github.com/storyscript/atom)
+<hr>
+<blockquote align="center">Developer Documentation</blockquote>
+<hr>
 
 ## Installation
 
@@ -71,6 +47,15 @@ storyscript compile -j hello.story
 [Development docs](https://storyscript.readthedocs.io) are provided for those
 who wish to contribute to the project or want to understand how to execute
 compiled stories.
+
+Install [pre-commit](https://pre-commit.com/#install) and set up a git hook:
+
+```bash
+pip install --user pre-commit
+pre-commit install
+```
+
+This will ensure that every commit is formatted according to [`black`](https://github.com/psf/black).
 
 ## Contributing
 

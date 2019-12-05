@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "a"
       ],
@@ -21,7 +21,7 @@
       "method": "execute",
       "ln": "2",
       "col_start": "1",
-      "col_end": "12",
+      "col_end": "17",
       "output": [
         "s"
       ],
@@ -36,7 +36,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "10",
       "name": [
         "b"
       ],
@@ -54,7 +54,7 @@
       "method": "when",
       "ln": "4",
       "col_start": "10",
-      "col_end": "18",
+      "col_end": "35",
       "output": [
         "req"
       ],
@@ -80,7 +80,7 @@
       "method": "expression",
       "ln": "5",
       "col_start": "9",
-      "col_end": "12",
+      "col_end": "14",
       "name": [
         "c"
       ],
@@ -98,7 +98,7 @@
       "method": "execute",
       "ln": "6.1",
       "col_start": "16",
-      "col_end": "29",
+      "col_end": "62",
       "name": [
         "__p-6.1"
       ],
@@ -131,7 +131,6 @@
       "method": "expression",
       "ln": "6",
       "col_start": "9",
-      "col_end": "14",
       "name": [
         "geo"
       ],
@@ -150,6 +149,7 @@
     "7.1": {
       "method": "expression",
       "ln": "7.1",
+      "col_end": "24",
       "name": [
         "__p-7.1"
       ],
@@ -171,6 +171,7 @@
     "7.2": {
       "method": "expression",
       "ln": "7.2",
+      "col_end": "24",
       "name": [
         "__p-7.2"
       ],
@@ -193,7 +194,7 @@
       "method": "expression",
       "ln": "7",
       "col_start": "9",
-      "col_end": "14",
+      "col_end": "36",
       "name": [
         "loc"
       ],
@@ -243,7 +244,7 @@
       "method": "execute",
       "ln": "8",
       "col_start": "9",
-      "col_end": "18",
+      "col_end": "31",
       "service": "req",
       "command": "write",
       "args": [
@@ -266,7 +267,7 @@
       "method": "expression",
       "ln": "9",
       "col_start": "9",
-      "col_end": "12",
+      "col_end": "14",
       "name": [
         "d"
       ],
@@ -283,7 +284,7 @@
       "method": "expression",
       "ln": "10",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "10",
       "name": [
         "e"
       ],
@@ -300,7 +301,7 @@
       "method": "expression",
       "ln": "11",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "d"
       ],

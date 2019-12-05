@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 6
 
 2|    when a listen path: "/" as r
-           
+           ^^^^^^^^^^^^^^^^^^^^^^^^
 
 E0155: Service object expected but existing variable `a` found.

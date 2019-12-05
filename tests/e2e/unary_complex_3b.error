@@ -1,6 +1,6 @@
-Error: syntax error in story at line 3, column 6
+Error: syntax error in story at line 3, column 10
 
 3|    a = [not b, not 2] <= not t + t
-           ^^^^^
+               ^
 
 E0122: `int` can't be converted to `boolean`

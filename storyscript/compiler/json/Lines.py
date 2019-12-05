@@ -6,6 +6,7 @@ class Lines:
     """
     Holds compiled lines and provides methods for operation on lines.
     """
+
     def __init__(self, story):
         self.story = story
         self.lines = {}
@@ -49,7 +50,7 @@ class Lines:
         """
         previous_line = self.last()
         if previous_line is not None:
-            previous_line['name'] = name
+            previous_line["name"] = name
 
         self.variables.append(name)
 
@@ -63,13 +64,13 @@ class Lines:
 
         if self.previous_scope is not None:
             # if a scope had only one line (NO_NEXT) ignore it
-            if self.previous_scope != 'NO_NEXT':
-                self.lines[self.previous_scope]['next'] = line_number
+            if self.previous_scope != "NO_NEXT":
+                self.lines[self.previous_scope]["next"] = line_number
 
             self.previous_scope = None
             return
 
-        previous_line['next'] = line_number
+        previous_line["next"] = line_number
 
     def set_scope(self, line, parent, output):
         """
@@ -78,8 +79,8 @@ class Lines:
         """
         self.scopes.append(line)
         # initially a new scope starts without a next reference
-        self.previous_scope = 'NO_NEXT'
-        self.output_scopes.append({line: {'parent': parent, 'output': output}})
+        self.previous_scope = "NO_NEXT"
+        self.output_scopes.append({line: {"parent": parent, "output": output}})
 
     def finish_scope(self, line):
         """
@@ -98,39 +99,51 @@ class Lines:
         for output_scope in self.output_scopes:
             if parent in output_scope:
                 scope = output_scope[parent]
-                if service in scope['output']:
+                if service in scope["output"]:
                     return True
-                if scope['parent']:
-                    assert scope['parent'] != parent
-                    return self.is_output(scope['parent'], service)
+                if scope["parent"]:
+                    assert scope["parent"] != parent
+                    return self.is_output(scope["parent"], service)
         return False
 
-    def make(self, method, position, name=None, args=None, service=None,
-             command=None, function=None, output=None, enter=None, exit=None,
-             parent=None):
+    def make(
+        self,
+        method,
+        position,
+        name=None,
+        args=None,
+        service=None,
+        command=None,
+        function=None,
+        output=None,
+        enter=None,
+        exit=None,
+        parent=None,
+    ):
         """
         Creates the base dictionary for a given line.
         """
-        assert position.line not in self.lines, \
-            f'Line {position.line} is not unique'
+        assert (
+            position.line not in self.lines
+        ), f"Line {position.line} is not unique"
         col_start = self._as_none(position.column)
         col_end = self._as_none(position.end_column)
         raw_line = self.story.line(position.line)
         self.lines[position.line] = {
-            'method': method,
-            'ln': position.line,
-            'col_start': col_start,
-            'col_end': col_end,
-            'output': output,
-            'name': name,
-            'service': service,
-            'command': command,
-            'function': function,
-            'args': args,
-            'enter': enter,
-            'exit': exit,
-            'parent': parent,
-            'src': raw_line,
+            "method": method,
+            "ln": position.line,
+            "col_start": col_start,
+            "col_end": col_end,
+            "output": output,
+            "name": name,
+            "service": service,
+            "command": command,
+            "function": function,
+            "args": args,
+            "enter": enter,
+            "exit": exit,
+            "parent": parent,
+            "src": raw_line,
         }
         # save insertion order
         self._lines.append(position.line)
@@ -139,29 +152,36 @@ class Lines:
         """
         Checks whether a service name is valid
         """
-        if '.' in service:
-            raise StorySyntaxError('service_name')
+        if "." in service:
+            raise StorySyntaxError("service_name")
 
     def append(self, method, position, **kwargs):
         for scope in self.finished_scopes:
-            self.lines[scope]['exit'] = position.line
+            self.lines[scope]["exit"] = position.line
         self.finished_scopes = []
-        if 'service' in kwargs:
-            self.check_service_name(kwargs['service'], position.line)
+        if "service" in kwargs:
+            self.check_service_name(kwargs["service"], position.line)
 
-        if method == 'function':
-            self.functions[kwargs['function']] = position.line
-        elif method == 'execute':
-            if self.is_output(kwargs['parent'], kwargs['service']) is False:
-                self.services.append(kwargs['service'])
+        if method == "function":
+            self.functions[kwargs["function"]] = position.line
+        elif method == "execute":
+            if self.is_output(kwargs["parent"], kwargs["service"]) is False:
+                self.services.append(kwargs["service"])
         self.set_next(position.line)
         self.make(method, position, **kwargs)
 
-    def execute(self, position, service, command, arguments, output, enter,
-                parent):
-        kwargs = {'service': service, 'command': command, 'args': arguments,
-                  'output': output, 'enter': enter, 'parent': parent}
-        self.append('execute', position, **kwargs)
+    def execute(
+        self, position, service, command, arguments, output, enter, parent
+    ):
+        kwargs = {
+            "service": service,
+            "command": command,
+            "args": arguments,
+            "output": output,
+            "enter": enter,
+            "parent": parent,
+        }
+        self.append("execute", position, **kwargs)
 
     def get_services(self):
         """
@@ -179,4 +199,4 @@ class Lines:
         return False
 
     def _as_none(self, value):
-        return value if value != 'None' else None
+        return value if value != "None" else None

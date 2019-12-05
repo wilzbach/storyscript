@@ -1,2 +1,2 @@
 a = {"a": 1}
-a.get(key: "b")
+b = a.get(key: "b")

@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 7
+
+2|    c = b[null]
+            ^^^^
+
+E0158: Cannot use `null` in index

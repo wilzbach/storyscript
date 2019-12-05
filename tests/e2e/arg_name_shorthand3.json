@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "7",
+      "col_end": "27",
       "name": [
         "from"
       ],
@@ -21,7 +21,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "10",
+      "col_end": "19",
       "name": [
         "subject"
       ],
@@ -38,7 +38,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "1",
-      "col_end": "7",
+      "col_end": "16",
       "name": [
         "text"
       ],
@@ -55,7 +55,7 @@
       "method": "execute",
       "ln": "4",
       "col_start": "1",
-      "col_end": "13",
+      "col_end": "54",
       "service": "mailgun",
       "command": "send",
       "args": [

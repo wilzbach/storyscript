@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "x"
       ],
@@ -21,7 +21,10 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "2",
+      "col_end": "10",
+      "name": [
+        "y"
+      ],
       "args": [
         {
           "$OBJECT": "expression",
@@ -40,7 +43,7 @@
           ]
         }
       ],
-      "src": "x + 2"
+      "src": "y = x + 2"
     }
   },
   "entrypoint": "1"

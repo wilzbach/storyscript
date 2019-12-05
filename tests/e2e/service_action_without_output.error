@@ -1,6 +1,6 @@
 Error: syntax error in story at line 3, column 5
 
 3|        s fetch body:body
-          ^
+          ^^^^^^^^^^^^^^^^^
 
 E0147: Service object `s` only support events, no actions.

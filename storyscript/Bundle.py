@@ -3,7 +3,7 @@ import os
 import subprocess
 
 from .Features import Features
-from .Story import Story
+from .Story import Compiled, Story
 from .parser import Parser
 
 
@@ -14,6 +14,7 @@ class Bundle:
 
     def __init__(self, story_files=None, features=None):
         self.stories = {}
+        self.deprecations = {}
         if isinstance(features, Features):
             self.features = features
         else:
@@ -27,19 +28,26 @@ class Bundle:
         """
         Get the list of files ignored by git
         """
-        command = ['git', 'ls-files', '--others', '--ignored',
-                   '--exclude-standard']
+        command = [
+            "git",
+            "ls-files",
+            "--others",
+            "--ignored",
+            "--exclude-standard",
+        ]
         try:
-            p = subprocess.run(command,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.DEVNULL,
-                               encoding='utf8')
+            p = subprocess.run(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                encoding="utf8",
+            )
         except Exception:  # Graceful fallback when there's no git executable.
             return []
 
         if p.returncode != 0:
             return []
-        return p.stdout.split('\n')
+        return p.stdout.split("\n")
 
     @staticmethod
     def ignores(path):
@@ -47,7 +55,7 @@ class Bundle:
         if os.path.isdir(path):
             for root, subdirs, files in os.walk(path):
                 for file in files:
-                    if file.endswith('.story'):
+                    if file.endswith(".story"):
                         story = os.path.relpath(os.path.join(root, file))
                         ignores.append(story)
             return ignores
@@ -55,7 +63,7 @@ class Bundle:
 
     @staticmethod
     def filter_path(root, filename, ignores):
-        if filename.endswith('.story'):
+        if filename.endswith(".story"):
             path = os.path.relpath(os.path.join(root, filename))
             if path not in ignores:
                 return path
@@ -109,7 +117,7 @@ class Bundle:
     def services(self):
         services = []
         for storypath, story in self.stories.items():
-            services += story['services']
+            services += story["services"]
         services = list(set(services))
         services.sort()
         return services
@@ -138,6 +146,7 @@ class Bundle:
             story.parse(parser=parser)
             story.compile()
             self.stories[storypath] = story.compiled.output()
+            self.deprecations[storypath] = story.deprecations()
 
     def bundle(self, ebnf=None):
         """
@@ -146,8 +155,14 @@ class Bundle:
         entrypoint = self.find_stories()
         parser = self.parser(ebnf)
         self.compile(entrypoint, parser=parser)
-        return {'stories': self.stories, 'services': self.services(),
-                'entrypoint': entrypoint}
+        return Compiled(
+            results={
+                "stories": self.stories,
+                "services": self.services(),
+                "entrypoint": entrypoint,
+            },
+            deprecations=self.deprecations,
+        )
 
     def bundle_trees(self, ebnf=None, lower=False):
         """
@@ -165,6 +180,7 @@ class Bundle:
         parser = self.parser(ebnf)
         results = {}
         for story in stories:
-            results[story] = Story.from_file(story, features=self.features) \
-                                  .lex(parser=parser)
+            results[story] = Story.from_file(
+                story, features=self.features
+            ).lex(parser=parser)
         return results

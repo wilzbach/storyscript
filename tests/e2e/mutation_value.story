@@ -1,2 +1,2 @@
 s = "hello"
-s.length()
+a = s.length()

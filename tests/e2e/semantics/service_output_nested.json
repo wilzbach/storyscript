@@ -4,7 +4,7 @@
       "method": "execute",
       "ln": "1",
       "col_start": "1",
-      "col_end": "12",
+      "col_end": "17",
       "output": [
         "a"
       ],
@@ -17,7 +17,7 @@
       "method": "when",
       "ln": "2",
       "col_start": "10",
-      "col_end": "18",
+      "col_end": "32",
       "output": [
         "b"
       ],
@@ -38,12 +38,24 @@
       "src": "    when a listen path:\"/\" as b"
     },
     "3": {
-      "method": "break",
+      "method": "execute",
       "ln": "3",
       "col_start": "9",
-      "col_end": "14",
+      "col_end": "31",
+      "service": "b",
+      "command": "write",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "content",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "foo"
+          }
+        }
+      ],
       "parent": "2",
-      "src": "        break"
+      "src": "        b write content: \"foo\""
     }
   },
   "services": [

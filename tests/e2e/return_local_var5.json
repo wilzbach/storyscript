@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "13",
       "output": [
         "int"
       ],
@@ -16,7 +16,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "10",
       "name": [
         "a"
       ],
@@ -34,7 +34,7 @@
       "method": "if",
       "ln": "3",
       "col_start": "8",
-      "col_end": "14",
+      "col_end": "21",
       "args": [
         {
           "$OBJECT": "boolean",
@@ -51,7 +51,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "9",
-      "col_end": "12",
+      "col_end": "14",
       "name": [
         "b"
       ],
@@ -69,7 +69,7 @@
       "method": "return",
       "ln": "5",
       "col_start": "9",
-      "col_end": "17",
+      "col_end": "21",
       "args": [
         {
           "$OBJECT": "expression",
@@ -97,7 +97,7 @@
       "method": "elif",
       "ln": "6",
       "col_start": "13",
-      "col_end": "10",
+      "col_end": "21",
       "args": [
         {
           "$OBJECT": "expression",
@@ -124,7 +124,7 @@
       "method": "expression",
       "ln": "7",
       "col_start": "9",
-      "col_end": "12",
+      "col_end": "14",
       "name": [
         "c"
       ],
@@ -142,7 +142,7 @@
       "method": "return",
       "ln": "8",
       "col_start": "9",
-      "col_end": "17",
+      "col_end": "21",
       "args": [
         {
           "$OBJECT": "expression",

@@ -59,7 +59,7 @@ class StoryRunner():
         if s.success():
             result = _clean_dict(s.result().output())
             del result['version']
-            self.update_success(result)
+            self.update_success(result, s.deprecations())
             return Result(status=True, updated=self.updated)
         else:
             e = s.errors()[0]
@@ -67,10 +67,17 @@ class StoryRunner():
 
         return Result(status=False, updated=self.updated)
 
-    def update_success(self, result):
+    def update_success(self, result, deprecations):
         json_file = self.story_path_raw + '.json'
         text = json.dumps(result, indent=2)
         self.check_update(json_file, text)
+
+        if deprecations:
+            text = ''
+            for deprecation in deprecations:
+                text += deprecation.message()
+            deprecate_file = self.story_path_raw + '.output'
+            self.check_update(deprecate_file, unstyle(text))
 
     def update_error(self, error):
         error_file = self.story_path_raw + '.error'
