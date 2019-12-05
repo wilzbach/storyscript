@@ -122,11 +122,6 @@ jobs:
                     . venv/bin/activate
                     python setup.py install
             - run:
-                  name: verify git tag vs. version
-                  command: |
-                    . venv/bin/activate
-                    python setup.py verify
-            - run:
                   name: init .pypirc
                   command: |
                     echo -e "[pypi]" >> ~/.pypirc
@@ -136,6 +131,7 @@ jobs:
                   name: upload to PyPI
                   command: |
                     pip install twine==1.13.0
+                    pip install wheel
                     . venv/bin/activate
                     python setup.py upload
     stable:

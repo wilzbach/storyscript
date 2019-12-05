@@ -4,6 +4,7 @@ import subprocess
 import sys
 from os import path
 from shutil import rmtree
+from glob import glob
 
 from pkg_resources import DistributionNotFound, get_distribution
 
@@ -93,7 +94,7 @@ class UploadCommand(Command):
         )
 
         self.status("Uploading the package to PyPI via Twine…")
-        subprocess.run(["twine", "upload", "dist/*"], check=True, shell=True)
+        subprocess.run(["twine", "upload", *glob("dist/*")], check=True)
         sys.exit()
 
 
