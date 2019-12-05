@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 20
+
+1|    function foo a:int b:object returns int
+                         ^^^^^^^^
+
+E0160: Function argument `b` cannot be of type `Object`.

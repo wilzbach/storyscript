@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "38",
       "name": [
         "obj"
       ],
@@ -32,7 +32,7 @@
       "method": "mutation",
       "ln": "2.1",
       "col_start": "9",
-      "col_end": "12",
+      "col_end": "17",
       "name": [
         "__p-2.1"
       ],
@@ -54,7 +54,7 @@
     "2": {
       "method": "for",
       "ln": "2",
-      "col_end": "12",
+      "col_end": "79",
       "output": [
         "item"
       ],
@@ -73,7 +73,7 @@
       "method": "execute",
       "ln": "3",
       "col_start": "5",
-      "col_end": "17",
+      "col_end": "79",
       "service": "mailgun",
       "command": "send",
       "args": [

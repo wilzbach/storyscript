@@ -114,8 +114,6 @@ class BaseType:
         return implicit_cast(self, other)
 
     def can_be_assigned(self, other):
-        if other == AnyType.instance():
-            return None
         if other == NullType.instance():
             return self
         return other.implicit_to(self)
@@ -620,6 +618,9 @@ class ObjectType(BaseType):
     def hashable(self):
         return False
 
+    def can_be_assigned(self, other):
+        return other.implicit_to(self)
+
     @singleton
     def instance():
         """
@@ -669,6 +670,8 @@ class NullType(BaseType):
         return None
 
     def implicit_to(self, other):
+        if other == AnyType.instance():
+            return other
         return None
 
     def explicit_from(self, other):
@@ -697,14 +700,6 @@ class AnyType(BaseType):
         Returns a static instance of the AnyType.
         """
         return AnyType()
-
-    def output(self, n):
-        """
-        Output types of the AnyType.
-        """
-        if n == 1:
-            return AnyType.instance(),
-        return AnyType.instance(), AnyType.instance()
 
     def has_boolean(self):
         return False

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from .FlowAnalyzer import FlowAnalyzer
 from .FunctionResolver import FunctionResolver
 from .Module import Module
 from .ServiceTyping import ServiceTyping
@@ -15,7 +16,7 @@ class Semantics:
     Performs semantic analysis on the AST
     """
 
-    def __init__(self, features, root_scope=None):
+    def __init__(self, storycontext, root_scope=None):
         if root_scope is None:
             root_scope = Scope.root()
         service_typing = ServiceTyping()
@@ -25,11 +26,11 @@ class Semantics:
             function_table=FunctionTable(),
             mutation_table=MutationTable.instance(),
             root_scope=root_scope,
-            features=features,
+            storycontext=storycontext,
             service_typing=service_typing,
         )
 
-    visitors = [FunctionResolver, TypeResolver]
+    visitors = [FunctionResolver, TypeResolver, FlowAnalyzer]
 
     def process(self, tree):
         for visitor in self.visitors:

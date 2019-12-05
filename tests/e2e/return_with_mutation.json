@@ -4,7 +4,6 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "11",
       "output": [
         "any"
       ],
@@ -16,7 +15,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "5",
-      "col_end": "13",
+      "col_end": "15",
       "name": [
         "my_int"
       ],
@@ -34,7 +33,7 @@
       "method": "mutation",
       "ln": "3.1",
       "col_start": "12",
-      "col_end": "18",
+      "col_end": "28",
       "name": [
         "__p-3.1"
       ],

@@ -153,7 +153,7 @@ class ErrorCodes:
         'E0114', '{fn_type} `{name}` does not accept argument `{arg}`')
     param_arg_type_mismatch = (
         'E0115',
-        '{fn_type} `{name}` requires argument `{arg_name}` to be of '
+        '{fn_type} `{name}` requires argument `{arg_name}` to be of type '
         '`{target}`, not `{source}`')
     assignment_type_none = (
         'E0116', 'Assignments with the type `None` are not allowed')
@@ -301,6 +301,22 @@ class ErrorCodes:
         'E0157',
         'Event based action expected but action `{action}` of service '
         '`{service}` found.'
+    )
+    path_index_no_null = (
+        'E0158',
+        'Cannot use `null` in index'
+    )
+    when_return_no_value = (
+        'E0159',
+        'Cannot return values from `when` block.'
+    )
+    arg_type_no_object = (
+        'E0160',
+        'Function argument `{arg}` cannot be of type `{type}`.'
+    )
+    no_effectless_expr = (
+        'E0161',
+        'Effectless expressions without assignment not allowed.'
     )
 
     @staticmethod

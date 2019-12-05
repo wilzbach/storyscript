@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "31",
       "output": [
         "Map"
       ],
@@ -18,7 +18,7 @@
       "method": "return",
       "ln": "2",
       "col_start": "5",
-      "col_end": "15",
+      "col_end": "31",
       "args": [
         {
           "$OBJECT": "dict",
@@ -52,7 +52,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "a"
       ],
@@ -80,7 +80,6 @@
       "method": "expression",
       "ln": "5",
       "col_start": "1",
-      "col_end": "4",
       "name": [
         "b"
       ],
@@ -99,7 +98,7 @@
       "method": "expression",
       "ln": "6",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "17",
       "name": [
         "c"
       ],
@@ -116,7 +115,7 @@
       "method": "expression",
       "ln": "7",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "12",
       "name": [
         "c"
       ],

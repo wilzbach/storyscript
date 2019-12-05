@@ -1,6 +1,6 @@
-Error: syntax error in story at line 3, column 18
+Error: syntax error in story at line 3, column 22
 
-3|    a.contains(item: req.body["action"])
-                       ^^^^^^^^^^^^^^^^^
+3|    b = a.contains(item: req.body["action"])
+                           ^^^^^^^^^^^^^^^^^
 
 E0131: `any` can't be dot-accessed with `body` of type `string`

@@ -1,6 +1,6 @@
 Error: syntax error in story at line 4, column 1
 
 4|    function foo a:int
-      ^^^^^^^^^^^^^^
+      ^^^^^^^^^^^^^^^^^^
 
 E0111: Function `foo` has already been declared

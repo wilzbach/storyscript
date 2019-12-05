@@ -142,27 +142,31 @@ def test_cli_parse_lower_file(open_mock, runner):
     """
     Ensures that parser with --lower works properly
     """
-    mock.mock_open(open_mock, read_data='".{a}"')
+    mock.mock_open(open_mock, read_data='b = ".{a}"')
     e = runner.invoke(Cli.parse, ['--lower', '/parse/path'])
 
     assert e.output == """File: /parse/path
 start
   block
     rules
-      absolute_expression
-        expression
-          expression
-            entity
-              values
-                string	.
-          arith_operator	+
-          expression
+      assignment
+        path	b
+        assignment_fragment
+          =
+          base_expression
             expression
-              entity
-                path	a
-            to_operator
-              types
-                base_type	string
+              expression
+                entity
+                  values
+                    string	.
+              arith_operator	+
+              expression
+                expression
+                  entity
+                    path	a
+                to_operator
+                  types
+                    base_type	string
 
 """
     assert e.exit_code == 0

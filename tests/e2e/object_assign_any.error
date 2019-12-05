@@ -1,0 +1,6 @@
+Error: syntax error in story at line 3, column 5
+
+3|        server = a
+          ^^^^^^^^^^
+
+E0100: Can't assign `any` to `Object`

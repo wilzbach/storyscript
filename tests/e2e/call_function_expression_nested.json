@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "13",
       "output": [
         "int"
       ],
@@ -50,7 +50,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "a"
       ],
@@ -67,7 +67,7 @@
       "method": "expression",
       "ln": "5",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "b"
       ],
@@ -84,7 +84,7 @@
       "method": "expression",
       "ln": "6",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "c"
       ],
@@ -101,7 +101,7 @@
       "method": "call",
       "ln": "7.1",
       "col_start": "1",
-      "col_end": "30",
+      "col_end": "41",
       "name": [
         "__p-7.1"
       ],

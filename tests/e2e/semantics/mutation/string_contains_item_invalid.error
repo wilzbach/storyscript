@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 7
+Error: syntax error in story at line 2, column 16
 
 2|    b = a.contains(item: true)
-            ^^^^^^^^^^^^^
+                     ^^^^^^^^^^
 
-E0115: Mutation `contains` requires argument `item` to be of `string`, not `boolean`
+E0115: Mutation `contains` requires argument `item` to be of type `string`, not `boolean`

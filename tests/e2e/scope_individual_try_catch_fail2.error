@@ -1,6 +1,6 @@
 Error: syntax error in story at line 1, column 1
 
 1|    try
-      ^^^^^
+      ^^^^^^^^^^
 
 E0137: Scope variable type mismatch: `c` of int is not compatible with `c` of string.

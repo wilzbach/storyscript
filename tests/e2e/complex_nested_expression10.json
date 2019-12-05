@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "12",
       "name": [
         "d"
       ],
@@ -32,7 +32,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "7",
+      "col_end": "14",
       "name": [
         "list"
       ],
@@ -58,7 +58,10 @@
       "method": "expression",
       "ln": "3",
       "col_start": "1",
-      "col_end": "2",
+      "col_end": "50",
+      "name": [
+        "foo"
+      ],
       "args": [
         {
           "$OBJECT": "expression",
@@ -135,7 +138,7 @@
           ]
         }
       ],
-      "src": "d[\"a\"] + list[0] / list[1] * d[\"a\"] % d[\"b\"]"
+      "src": "foo = d[\"a\"] + list[0] / list[1] * d[\"a\"] % d[\"b\"]"
     }
   },
   "entrypoint": "1"

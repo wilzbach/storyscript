@@ -51,7 +51,8 @@ class TypeResolver(ScopeSelectiveVisitor):
         self.resolver = ExpressionResolver(module=self.module)
         self.path_symbol_resolver = SymbolResolver(
             scope=None, check_variable_existence=False)
-        self.path_resolver = PathResolver(self.path_symbol_resolver)
+        self.path_resolver = PathResolver(self.path_symbol_resolver,
+                                          self.module)
         # Service output object when inside a service block
         self.service_block_output = None
         self.in_when_block = False
@@ -61,11 +62,13 @@ class TypeResolver(ScopeSelectiveVisitor):
             self.storage_class_scope = StorageClass.read()
 
     def assignment(self, tree, scope):
-        target_symbol = self.path_resolver.path(tree.path)
+        lhs_node = tree.path
+        target_symbol = self.path_resolver.path(lhs_node)
 
         # allow rebindable assignments here
-        tree.expect(target_symbol.can_assign(), 'readonly_type_assignment',
-                    left=target_symbol.name())
+        lhs_node.expect(
+            target_symbol.can_assign(), 'readonly_type_assignment',
+            left=target_symbol.name())
 
         frag = tree.assignment_fragment
         expr_sym = self.resolver.base_expression(frag.base_expression)
@@ -142,9 +145,9 @@ class TypeResolver(ScopeSelectiveVisitor):
             stmt.expect(nr_children > 0, 'foreach_output_required')
 
             iterable_types = output_type.output(nr_children)
-            stmt.output.expect(iterable_types is not None,
-                               'foreach_iterable_required',
-                               target=output_type)
+            stmt.base_expression.expect(iterable_types is not None,
+                                        'foreach_iterable_required',
+                                        target=output_type)
             stmt.output.expect(nr_children <= 2,
                                'foreach_output_children')
 
@@ -290,8 +293,8 @@ class TypeResolver(ScopeSelectiveVisitor):
 
         if tree.nested_block:
             with self.create_scope(tree.scope):
-                tree.expect(self.service_block_output is None,
-                            'nested_service_block')
+                tree.service.expect(self.service_block_output is None,
+                                    'nested_service_block')
                 # In case of nested_block, we will always have output
                 self.service_block_output = output
                 for c in tree.nested_block.children:
@@ -388,6 +391,8 @@ class TypeResolver(ScopeSelectiveVisitor):
                            'throw_only_string')
 
     def return_statement(self, tree, scope):
+        if self.in_when_block:
+            tree.expect(tree.base_expression is None, 'when_return_no_value')
         tree.scope = scope
 
     def function_block(self, tree, scope):

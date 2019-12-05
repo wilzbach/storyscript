@@ -14,8 +14,9 @@ class PathResolver:
     """
     Resolves a path to a symbol
     """
-    def __init__(self, symbol_resolver):
+    def __init__(self, symbol_resolver, module):
         # how to resolve existing symbols
+        self.module = module
         self.symbol_resolver = symbol_resolver
 
     @staticmethod
@@ -37,6 +38,8 @@ class PathResolver:
             child = fragment.child(0)
             kind = IndexKind.INDEX
             if isinstance(child, Tree):
+                child.expect(child.data != 'null',
+                             'path_index_no_null')
                 if child.data == 'string':
                     type_ = StringType.instance()
                     value = child.child(0).value
@@ -44,6 +47,7 @@ class PathResolver:
                     type_ = BooleanType.instance()
                     value = child.child(0).value
                 elif child.data == 'range':
+                    self.module.storycontext.deprecate(child, 'no_range')
                     type_ = RangeType.instance()
                     value = 'range'
                 elif child.data == 'number':

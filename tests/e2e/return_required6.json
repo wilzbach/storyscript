@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "6",
+      "col_end": "17",
       "output": [
         "int"
       ],
@@ -23,35 +23,31 @@
       "src": "function sum a:int returns int"
     },
     "2": {
-      "method": "expression",
+      "method": "execute",
       "ln": "2",
       "col_start": "5",
-      "col_end": "6",
+      "col_end": "31",
+      "service": "log",
+      "command": "info",
       "args": [
         {
-          "$OBJECT": "expression",
-          "expression": "sum",
-          "values": [
-            {
-              "$OBJECT": "int",
-              "int": 1
-            },
-            {
-              "$OBJECT": "int",
-              "int": 2
-            }
-          ]
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "inside sum"
+          }
         }
       ],
       "parent": "1",
-      "src": "    1 + 2",
+      "src": "    log info msg: \"inside sum\"",
       "next": "3"
     },
     "3": {
       "method": "if",
       "ln": "3",
       "col_start": "8",
-      "col_end": "9",
+      "col_end": "17",
       "args": [
         {
           "$OBJECT": "boolean",
@@ -82,7 +78,7 @@
       "method": "elif",
       "ln": "5",
       "col_start": "13",
-      "col_end": "19",
+      "col_end": "21",
       "args": [
         {
           "$OBJECT": "boolean",
@@ -99,7 +95,7 @@
       "method": "while",
       "ln": "6",
       "col_start": "15",
-      "col_end": "19",
+      "col_end": "21",
       "args": [
         {
           "$OBJECT": "boolean",
@@ -129,7 +125,7 @@
       "method": "else",
       "ln": "8",
       "col_start": "5",
-      "col_end": "15",
+      "col_end": "17",
       "enter": "9",
       "parent": "1",
       "src": "    else"
@@ -149,6 +145,9 @@
       "src": "        return 0"
     }
   },
+  "services": [
+    "log"
+  ],
   "entrypoint": "1",
   "functions": {
     "sum": "1"

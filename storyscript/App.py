@@ -2,7 +2,7 @@
 import json
 
 from .Bundle import Bundle
-from .Story import Story
+from .Story import Compiled, Story
 from .exceptions import StoryError
 from .parser import Grammar
 
@@ -44,14 +44,17 @@ class App:
         """
         bundle = Bundle.from_path(path, ignored_path=ignored_path,
                                   features=features)
-        result = bundle.bundle(ebnf=ebnf)
+        compiledbundle = bundle.bundle(ebnf=ebnf)
+        result = compiledbundle.results
         if concise:
             result = _clean_dict(result)
         if first:
             if len(result['stories']) != 1:
                 raise StoryError.create_error('first_option_more_stories')
             result = next(iter(result['stories'].values()))
-        return json.dumps(result, indent=2)
+        return Compiled(
+            results=json.dumps(result, indent=2),
+            deprecations=compiledbundle.deprecations)
 
     @staticmethod
     def lex(path, features, ebnf=None):

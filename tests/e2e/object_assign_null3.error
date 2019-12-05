@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 14
+
+1|    function foo a: object
+                   ^^^^^^^^^
+
+E0160: Function argument `a` cannot be of type `Object`.

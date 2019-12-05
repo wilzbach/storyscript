@@ -4,7 +4,7 @@
       "method": "function",
       "ln": "1",
       "col_start": "1",
-      "col_end": "11",
+      "col_end": "17",
       "output": [
         "List"
       ],
@@ -18,7 +18,7 @@
       "method": "return",
       "ln": "2",
       "col_start": "5",
-      "col_end": "13",
+      "col_end": "17",
       "args": [
         {
           "$OBJECT": "list",
@@ -42,7 +42,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "a"
       ],
@@ -70,7 +70,7 @@
       "method": "expression",
       "ln": "5",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "15",
       "name": [
         "a"
       ],

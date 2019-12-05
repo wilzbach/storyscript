@@ -3,7 +3,7 @@ from .Api import Api
 from .Version import version
 
 
-__version__ = version = version
+__version__ = version
 
 
 loads = Api.loads

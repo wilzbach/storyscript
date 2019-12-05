@@ -447,16 +447,6 @@ def test_compiler_return_statement_entity(patch, compiler, lines, tree):
     lines.append.assert_called_with('return', position, **kwargs)
 
 
-def test_compiler_return_statement_error(patch, compiler, tree):
-    """
-    Ensures Compiler.return_statement raises CompilerError when the return
-    is outside a function.
-    """
-    patch.object(JSONCompiler, 'fake_base_expression')
-    compiler.return_statement(tree, None)
-    tree.expect.assert_called_with(False, 'return_outside')
-
-
 def test_compiler_if_block(patch, compiler, lines, tree):
     patch.many(JSONCompiler, ['subtree', 'fake_base_expression',
                               'create_scope'])
@@ -766,11 +756,6 @@ def test_compiler_finally_block(patch, compiler, lines, tree):
 def test_compiler_break_statement(compiler, lines, tree):
     compiler.break_statement(tree, '1')
     lines.append.assert_called_with('break', tree.position(), parent='1')
-
-
-def test_compiler_break_statement_outside(patch, compiler, lines, tree):
-    compiler.break_statement(tree, None)
-    tree.expect.assert_called_with(False, 'break_outside')
 
 
 @mark.parametrize('method_name', [

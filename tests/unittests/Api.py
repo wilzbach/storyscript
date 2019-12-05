@@ -10,13 +10,14 @@ from storyscript.Story import Story
 from storyscript.exceptions import StoryError
 
 
-def test_api_loads(patch):
+def test_api_loads(patch, magic):
     """
     Ensures Api.loads can compile a story from a string
     """
     patch.init(Story)
     patch.init(Features)
     patch.object(Story, 'process')
+    Story.context = magic()
     result = Api.loads('string').result()
     Story.__init__.assert_called_with('string', ANY, scope=None,
                                       backend='json')
@@ -64,11 +65,14 @@ def test_api_load_map(patch, magic):
     patch.init(Features)
     patch.object(Bundle, 'bundle')
     files = {'a.story': "import 'b' as b", 'b.story': 'x = 0'}
-    result = Api.load_map(files).result()
+    api_loaded = Api.load_map(files)
+    result = api_loaded.result()
+    deprecations = api_loaded.deprecations()
     Bundle.__init__.assert_called_with(story_files=files, features=ANY)
     assert isinstance(Bundle.__init__.call_args[1]['features'], Features)
     Bundle.bundle.assert_called()
-    assert result == Bundle.bundle()
+    assert result == Bundle.bundle().results
+    assert deprecations == Bundle.bundle().deprecations
 
 
 def test_api_loads_internal_error(patch):

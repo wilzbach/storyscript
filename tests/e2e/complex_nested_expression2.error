@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 1
+Error: syntax error in story at line 1, column 28
 
-1|    true and 1 + 1 == 2 or 3
-      ^^^^^^^^^^^^^^^^^^^^^^^^
+1|    a = true and 1 + 1 == 2 or 3
+                                 ^
 
 E0122: `int` can't be converted to `boolean`

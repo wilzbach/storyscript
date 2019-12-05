@@ -95,7 +95,7 @@ class Tree(LarkTree):
         for child in childs:
             if isinstance(child, Token):
                 return str(getattr(child, position))
-            t = child._find_position(position, reverse=False)
+            t = child._find_position(position, reverse=reverse)
             if t is not None:
                 return t
 

@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 10
 
 2|        when client listen method:"post" path:"/foo" as res
-               
+               ^^^^^^^^^^^
 
 E0144: No event listener with output `client` for event `listen`.

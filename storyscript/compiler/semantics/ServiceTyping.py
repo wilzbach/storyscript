@@ -40,13 +40,13 @@ class ServiceTyping:
 
         for arg, (sym, arg_node) in args.items():
             action_arg = action.arg(arg)
-            tree.expect(action_arg is not None, 'service_arg_invalid',
-                        service=service_name, action=action_name, arg=arg)
+            arg_node.expect(action_arg is not None, 'service_arg_invalid',
+                            service=service_name, action=action_name, arg=arg)
             target_type = TypeMappings.get_type_instance(ty=action_arg.type())
             source_type = sym.type()
 
-            implicit_type_cast(tree, source_type, target_type,
-                               service_name, action_name, arg, arg_node)
+            implicit_type_cast(arg_node, source_type, target_type,
+                               service_name, action_name, arg)
 
     def resolve_service(self, tree, service_name, action_name, args,
                         nested_block=False):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from pytest import fixture, raises
+from pytest import fixture
 
-from storyscript.exceptions.ProcessingError import ConstDict, ProcessingError
+from storyscript.exceptions.ProcessingError import ProcessingError
 
 
 @fixture
@@ -67,14 +67,3 @@ def test_processingerror_tree_position_none(error):
     Ensures tree_position can deal with null values
     """
     error.tree_position(None)
-
-
-def test_const_dict():
-    """
-    Ensures that the const dictionary provides access
-    """
-    d = ConstDict({'foo': 'bar', 'f2': 'b2'})
-    assert d.foo == 'bar'
-    assert d.f2 == 'b2'
-    with raises(Exception):
-        d.bar

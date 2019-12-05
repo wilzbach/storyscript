@@ -32,18 +32,30 @@
       "next": "4"
     },
     "3": {
-      "method": "break",
+      "method": "execute",
       "ln": "3",
       "col_start": "9",
-      "col_end": "14",
+      "col_end": "33",
+      "service": "log",
+      "command": "info",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "breaking"
+          }
+        }
+      ],
       "parent": "2",
-      "src": "        break"
+      "src": "        log info msg: \"breaking\""
     },
     "4": {
       "method": "when",
       "ln": "4",
       "col_start": "10",
-      "col_end": "21",
+      "col_end": "15",
       "output": [
         "tweet"
       ],
@@ -66,18 +78,30 @@
       "next": "6"
     },
     "5": {
-      "method": "break",
+      "method": "execute",
       "ln": "5",
       "col_start": "9",
-      "col_end": "14",
+      "col_end": "33",
+      "service": "log",
+      "command": "info",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "breaking"
+          }
+        }
+      ],
       "parent": "4",
-      "src": "        break"
+      "src": "        log info msg: \"breaking\""
     },
     "6": {
       "method": "when",
       "ln": "6",
       "col_start": "10",
-      "col_end": "21",
+      "col_end": "41",
       "output": [
         "t"
       ],
@@ -99,18 +123,30 @@
       "src": "    when tweet track: \"storyscript\" as t"
     },
     "7": {
-      "method": "break",
+      "method": "execute",
       "ln": "7",
       "col_start": "9",
-      "col_end": "14",
+      "col_end": "33",
+      "service": "log",
+      "command": "info",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "breaking"
+          }
+        }
+      ],
       "parent": "6",
-      "src": "        break"
+      "src": "        log info msg: \"breaking\""
     },
     "9": {
       "method": "execute",
       "ln": "9",
       "col_start": "1",
-      "col_end": "15",
+      "col_end": "20",
       "output": [
         "s"
       ],
@@ -136,18 +172,30 @@
       "next": "12"
     },
     "11": {
-      "method": "break",
+      "method": "execute",
       "ln": "11",
       "col_start": "9",
-      "col_end": "14",
+      "col_end": "33",
+      "service": "log",
+      "command": "info",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "breaking"
+          }
+        }
+      ],
       "parent": "10",
-      "src": "        break"
+      "src": "        log info msg: \"breaking\""
     },
     "12": {
       "method": "when",
       "ln": "12",
       "col_start": "10",
-      "col_end": "17",
+      "col_end": "22",
       "output": [
         "t"
       ],
@@ -160,12 +208,24 @@
       "next": "14"
     },
     "13": {
-      "method": "break",
+      "method": "execute",
       "ln": "13",
       "col_start": "9",
-      "col_end": "14",
+      "col_end": "33",
+      "service": "log",
+      "command": "info",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "breaking"
+          }
+        }
+      ],
       "parent": "12",
-      "src": "        break"
+      "src": "        log info msg: \"breaking\""
     },
     "14": {
       "method": "when",
@@ -194,18 +254,30 @@
       "next": "16"
     },
     "15": {
-      "method": "break",
+      "method": "execute",
       "ln": "15",
       "col_start": "9",
-      "col_end": "14",
+      "col_end": "33",
+      "service": "log",
+      "command": "info",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "breaking"
+          }
+        }
+      ],
       "parent": "14",
-      "src": "        break"
+      "src": "        log info msg: \"breaking\""
     },
     "16": {
       "method": "when",
       "ln": "16",
       "col_start": "10",
-      "col_end": "17",
+      "col_end": "43",
       "output": [
         "t"
       ],
@@ -226,15 +298,28 @@
       "src": "    when s tweet track: \"storyscript\" as t"
     },
     "17": {
-      "method": "break",
+      "method": "execute",
       "ln": "17",
       "col_start": "9",
-      "col_end": "14",
+      "col_end": "33",
+      "service": "log",
+      "command": "info",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "msg",
+          "arg": {
+            "$OBJECT": "string",
+            "string": "breaking"
+          }
+        }
+      ],
       "parent": "16",
-      "src": "        break"
+      "src": "        log info msg: \"breaking\""
     }
   },
   "services": [
+    "log",
     "twitter"
   ],
   "entrypoint": "1"

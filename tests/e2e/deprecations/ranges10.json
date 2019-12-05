@@ -1,0 +1,66 @@
+{
+  "tree": {
+    "1": {
+      "method": "expression",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "22",
+      "name": [
+        "b"
+      ],
+      "args": [
+        {
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "Map",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              },
+              {
+                "$OBJECT": "type",
+                "type": "any"
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "dict",
+            "items": []
+          }
+        }
+      ],
+      "src": "b = {} to Map[any,any]",
+      "next": "2"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "1",
+      "col_end": "10",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "b",
+            {
+              "$OBJECT": "range",
+              "range": {
+                "end": {
+                  "$OBJECT": "int",
+                  "int": -1
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "src": "a = b[:-1]"
+    }
+  },
+  "entrypoint": "1"
+}

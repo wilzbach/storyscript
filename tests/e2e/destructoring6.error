@@ -1,6 +1,6 @@
 Error: syntax error in story at line 3, column 3
 
 3|    { c } = obj
-        ^^^^^
+        ^
 
 E0100: Can't assign `int` to `boolean`

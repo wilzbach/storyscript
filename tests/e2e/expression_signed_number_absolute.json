@@ -4,28 +4,34 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "3",
+      "col_end": "7",
+      "name": [
+        "a"
+      ],
       "args": [
         {
           "$OBJECT": "int",
           "int": -2
         }
       ],
-      "src": "-2",
+      "src": "a = -2",
       "next": "2"
     },
     "2": {
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "3",
+      "col_end": "7",
+      "name": [
+        "b"
+      ],
       "args": [
         {
           "$OBJECT": "int",
           "int": 2
         }
       ],
-      "src": "+2"
+      "src": "b = +2"
     }
   },
   "entrypoint": "1"

@@ -90,12 +90,13 @@ class Symbol:
     """
     Representation of an individual symbol.
     """
-    def __init__(self, name, type_, storage_class=None):
+    def __init__(self, name, type_, storage_class=None, desc=''):
         self._name = name
         self._type = type_
         if storage_class is None:
             storage_class = StorageClass.write()
         self._storage_class = storage_class
+        self._desc = desc
 
     def name(self):
         return self._name
@@ -105,6 +106,9 @@ class Symbol:
 
     def pretty(self):
         return f'{self._type}'
+
+    def desc(self):
+        return self._desc
 
     def __str__(self):
         base = f"'{self._name}', {self._type}, {self._storage_class}"

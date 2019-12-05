@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 5
+
+2|        server = 1.5
+          ^^^^^^^^^^^^
+
+E0100: Can't assign `float` to `Object`

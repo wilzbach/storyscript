@@ -25,6 +25,11 @@ def test_symbol_pretty_string():
     assert sym.pretty() == 'string'
 
 
+def test_symbol_desc_string():
+    sym = Symbol('foo', StringType.instance(), desc='.desc.')
+    assert sym.desc() == '.desc.'
+
+
 def test_symbol_str_ro_string():
     sym = Symbol('foo', StringType.instance(),
                  storage_class=StorageClass.read())

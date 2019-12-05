@@ -144,13 +144,18 @@ class SymbolExpressionVisitor(ExpressionVisitor):
                 return base_symbol(BooleanType.instance())
 
             # e.g. a and b, a or b, !a
-            tree.expect(types[0].has_boolean(),
-                        'type_operation_boolean_incompatible',
-                        val=types[0])
+            child_node = 0
+            if len(types) == 1:
+                child_node = 1
+            tree.child(child_node).expect(
+                types[0].has_boolean(),
+                'type_operation_boolean_incompatible',
+                val=types[0])
             if len(types) == 2:
-                tree.expect(types[1].has_boolean(),
-                            'type_operation_boolean_incompatible',
-                            val=types[1])
+                tree.child(2).expect(
+                    types[1].has_boolean(),
+                    'type_operation_boolean_incompatible',
+                    val=types[1])
             return base_symbol(BooleanType.instance())
 
         is_arithmetic = self.is_arithmetic_operator(op.type)
@@ -229,7 +234,8 @@ class ExpressionResolver:
         self.expr_visitor = SymbolExpressionVisitor(self)
         # how to resolve existing symbols
         self.path_resolver = PathResolver(
-            symbol_resolver=module.symbol_resolver
+            symbol_resolver=module.symbol_resolver,
+            module=module
         )
         self.module = module
         self.with_as = False
@@ -449,8 +455,8 @@ class ExpressionResolver:
     def build_arguments(self, tree, fname, fn_type):
         args = {}
         for c in tree.extract('arguments'):
-            tree.expect(len(c.children) >= 2, 'arg_name_required',
-                        fn_type=fn_type, name=fname)
+            c.expect(len(c.children) >= 2, 'arg_name_required',
+                     fn_type=fn_type, name=fname)
             name = c.child(0)
             type_ = self.expression(c.child(1)).type()
             sym = Symbol.from_path(name, type_)
@@ -501,7 +507,8 @@ class ExpressionResolver:
 
         # a mutation on 'any' returns 'any'
         overloads = self.module.mutation_table.resolve(t, name)
-        tree.expect(overloads is not None, 'mutation_invalid_name', name=name)
+        tree.mutation_fragment.expect(
+            overloads is not None, 'mutation_invalid_name', name=name)
         ms = overloads.match(args.keys())
         if ms is None:
             # if there's only one overload, use this for a better error
@@ -531,7 +538,7 @@ class ExpressionResolver:
                     'function_call_no_inline_expression')
         name = self.path_resolve_only_name(tree.path, fn_type='Function')
         fn = self.module.function_table.resolve(name)
-        tree.expect(fn is not None, 'function_not_found', name=name)
+        tree.path.expect(fn is not None, 'function_not_found', name=name)
         args = self.build_arguments(tree, name, fn_type='Function')
         fn.check_call(tree, args)
         return base_symbol(fn.output())

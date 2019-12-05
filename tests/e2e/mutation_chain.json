@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "14",
       "name": [
         "a"
       ],
@@ -20,8 +20,8 @@
     "2.1": {
       "method": "mutation",
       "ln": "2.1",
-      "col_start": "1",
-      "col_end": "2",
+      "col_start": "7",
+      "col_end": "22",
       "name": [
         "__p-2.1"
       ],
@@ -52,6 +52,7 @@
     "2.2": {
       "method": "mutation",
       "ln": "2.2",
+      "col_end": "44",
       "name": [
         "__p-2.2"
       ],
@@ -82,6 +83,10 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "1",
+      "name": [
+        "foo"
+      ],
       "args": [
         {
           "$OBJECT": "path",
@@ -90,7 +95,7 @@
           ]
         }
       ],
-      "src": "a.split(by: \" \").contains(item: \"foo\")"
+      "src": "foo = a.split(by: \" \").contains(item: \"foo\")"
     }
   },
   "entrypoint": "1"

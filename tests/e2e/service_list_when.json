@@ -14,7 +14,7 @@
       "method": "when",
       "ln": "1",
       "col_start": "11",
-      "col_end": "24",
+      "col_end": "39",
       "output": [
         "r"
       ],
@@ -38,7 +38,7 @@
       "method": "execute",
       "ln": "2",
       "col_start": "3",
-      "col_end": "10",
+      "col_end": "28",
       "service": "r",
       "command": "write",
       "args": [

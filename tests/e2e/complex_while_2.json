@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "a"
       ],
@@ -21,7 +21,7 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "b"
       ],
@@ -38,7 +38,7 @@
       "method": "expression",
       "ln": "3",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "c"
       ],
@@ -55,7 +55,7 @@
       "method": "expression",
       "ln": "4",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "d"
       ],
@@ -72,7 +72,7 @@
       "method": "expression",
       "ln": "5",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "6",
       "name": [
         "i"
       ],
@@ -89,7 +89,7 @@
       "method": "while",
       "ln": "6",
       "col_start": "7",
-      "col_end": "6",
+      "col_end": "14",
       "args": [
         {
           "$OBJECT": "expression",
@@ -157,7 +157,7 @@
       "method": "expression",
       "ln": "7",
       "col_start": "5",
-      "col_end": "8",
+      "col_end": "14",
       "name": [
         "i"
       ],

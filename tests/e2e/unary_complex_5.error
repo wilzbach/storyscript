@@ -1,6 +1,6 @@
-Error: syntax error in story at line 2, column 10
+Error: syntax error in story at line 2
 
 2|    a = not (not (http fetch url:url)) or not (random boolean)
-               ^
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 E0122: `any` can't be converted to `boolean`

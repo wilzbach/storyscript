@@ -4,7 +4,10 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "2",
+      "col_end": "14",
+      "name": [
+        "a"
+      ],
       "args": [
         {
           "$OBJECT": "expression",
@@ -31,7 +34,7 @@
           ]
         }
       ],
-      "src": "2 + 3 / 4"
+      "src": "a = 2 + 3 / 4"
     }
   },
   "entrypoint": "1"

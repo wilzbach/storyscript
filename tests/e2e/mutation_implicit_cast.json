@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "15",
       "name": [
         "a"
       ],
@@ -29,8 +29,8 @@
     "2.1": {
       "method": "mutation",
       "ln": "2.1",
-      "col_start": "1",
-      "col_end": "2",
+      "col_start": "5",
+      "col_end": "23",
       "name": [
         "__p-2.1"
       ],
@@ -68,6 +68,10 @@
     "2": {
       "method": "expression",
       "ln": "2",
+      "col_start": "1",
+      "name": [
+        "b"
+      ],
       "args": [
         {
           "$OBJECT": "path",
@@ -76,7 +80,7 @@
           ]
         }
       ],
-      "src": "a.contains(item: 1)"
+      "src": "b = a.contains(item: 1)"
     }
   },
   "entrypoint": "1"

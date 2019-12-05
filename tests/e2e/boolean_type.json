@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "4",
+      "col_end": "7",
       "name": [
         "a"
       ],
@@ -21,7 +21,7 @@
       "method": "function",
       "ln": "2",
       "col_start": "1",
-      "col_end": "9",
+      "col_end": "21",
       "output": [
         "boolean"
       ],
@@ -45,7 +45,7 @@
       "method": "if",
       "ln": "3",
       "col_start": "8",
-      "col_end": "9",
+      "col_end": "21",
       "args": [
         {
           "$OBJECT": "expression",
@@ -98,7 +98,7 @@
       "method": "else",
       "ln": "5",
       "col_start": "5",
-      "col_end": "15",
+      "col_end": "21",
       "enter": "6",
       "exit": "8.1",
       "parent": "2",
@@ -122,7 +122,7 @@
       "method": "call",
       "ln": "8.1",
       "col_start": "8",
-      "col_end": "17",
+      "col_end": "20",
       "name": [
         "__p-8.1"
       ],
@@ -145,7 +145,6 @@
       "method": "expression",
       "ln": "8",
       "col_start": "1",
-      "col_end": "7",
       "name": [
         "even"
       ],

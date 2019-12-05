@@ -1,6 +1,6 @@
 Error: syntax error in story at line 2, column 10
 
 2|        when tweet stream tweet
-               ^^^^^^^^^^^^
+               ^^^^
 
 E0066: Nested when blocks are not allowed

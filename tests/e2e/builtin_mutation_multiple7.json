@@ -4,7 +4,7 @@
       "method": "expression",
       "ln": "1",
       "col_start": "1",
-      "col_end": "7",
+      "col_end": "10",
       "name": [
         "text"
       ],
@@ -21,7 +21,7 @@
       "method": "mutation",
       "ln": "2.1",
       "col_start": "12",
-      "col_end": "16",
+      "col_end": "39",
       "name": [
         "__p-2.1"
       ],
@@ -52,6 +52,7 @@
     "2.2": {
       "method": "mutation",
       "ln": "2.2",
+      "col_end": "67",
       "name": [
         "__p-2.2"
       ],
@@ -95,7 +96,6 @@
       "method": "expression",
       "ln": "2",
       "col_start": "1",
-      "col_end": "11",
       "name": [
         "username"
       ],

@@ -15,9 +15,13 @@ def syntax_error(patch):
 
 
 def test_transformer():
-    keywords = ['function', 'if', 'else', 'foreach', 'return', 'returns',
-                'try', 'catch', 'finally', 'when', 'as', 'while',
-                'throw', 'null']
+    keywords = [
+        'List', 'Map', 'and', 'any', 'as', 'boolean', 'break', 'catch',
+        'continue', 'else', 'false', 'finally', 'float', 'foreach',
+        'function', 'if', 'int', 'not', 'null', 'object', 'or', 'regex',
+        'return', 'returns', 'string', 'throw', 'time', 'to', 'true',
+        'try', 'when', 'while'
+    ]
     future_keywords = [
         'async', 'story', 'assert', 'called', 'mock', 'class', 'extends',
         'implements', 'interface', 'type', 'public', 'private', 'protected',
@@ -62,9 +66,7 @@ def test_transformer_assignment(magic):
 
 
 def test_transformer_command(patch, magic):
-    patch.object(Transformer, 'is_keyword')
     result = Transformer.command(['matches'])
-    Transformer.is_keyword.assert_called_with('matches')
     assert result == Tree('command', ['matches'])
 
 

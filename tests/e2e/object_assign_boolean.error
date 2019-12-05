@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 5
+
+2|        server = true
+          ^^^^^^^^^^^^^
+
+E0100: Can't assign `boolean` to `Object`

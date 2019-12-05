@@ -70,38 +70,6 @@ def parse_type(type_):
     return TypeSymbol(type_)
 
 
-def split_type_arguments(text, start_tok='[', end_tok=']'):
-    """
-    Splits a mutation type string into its arguments.
-    :return: Array of all arguments.
-    """
-    level = 0
-    start = 0
-    in_argument = False
-    for i, c in enumerate(text):
-        if c == start_tok:
-            level = level + 1
-        elif c == end_tok:
-            assert level > 0, 'No start ['
-            level = level - 1
-        elif c == ':':
-            # ignore whitespace after an argument starts
-            in_argument = True
-        elif c == ' ':
-            if level == 0 and not in_argument:
-                if start == i:
-                    # skip over multiple whitespaces
-                    start = i + 1
-                else:
-                    yield text[start:i]
-                    start = i + 1
-        else:
-            in_argument = False
-    assert level == 0
-    t = text[start:]
-    yield t
-
-
 def get_symbols(t):
     """
     Returns the symbols of a type instance or an empty list.
@@ -131,30 +99,31 @@ def check_type_symbols(t, symbols):
             assert s in symbols, f'unknown symbol {s} used'
 
 
-def mutation_builder(type_text):
+def mutation_builder(builtin):
     """
-    Build a mutation from a plain mutation header typing.
-    Example:
-        Map[A,B] contains: A -> B
+    Build a mutation from a plain builtin typing.
     :return: the parsed Mutation
     """
-    in_types, out_types = [l.strip() for l in type_text.split('->')]
-    args = [*split_type_arguments(in_types)]
-    assert len(args) >= 2, f'input type and name required for {in_types}'
-    main_type, name, *args = args
-    # in:
-    in_type = parse_type(main_type)
+    name = builtin['name']
+    desc = builtin['desc']
+
+    # type to operator on
+    in_type = parse_type(builtin['input_type'])
     symbols = get_symbols(in_type)
+
     # arguments:
     arguments = {}
-    for arg in args:
-        arg_name, arg_type = [a.strip() for a in arg.split(':')]
-        t = parse_type(arg_type)
-        # check that only symbols from the in_type are found
-        check_type_symbols(t, symbols)
-        arguments[arg_name] = t
+    if 'args' in builtin:
+        for arg_name, payload in builtin['args'].items():
+            t = parse_type(payload['type'])
+            # check that only symbols from the in_type are found
+            check_type_symbols(t, symbols)
+            arguments[arg_name] = {'type': t, 'desc': payload['desc']}
+
     # out:
-    out_type = parse_type(out_types)
+    out_type = parse_type(builtin['return_type'])
     # check that only symbols from the in_type are found
     check_type_symbols(out_type, symbols)
-    return Mutation(ti=in_type, name=name, args=arguments, output=out_type)
+
+    return Mutation(ti=in_type, name=name, args=arguments, output=out_type,
+                    desc=desc)
