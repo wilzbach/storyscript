@@ -6,11 +6,12 @@ from storyscript.parser import Tree
 
 class FakeTree:
     # unique prefix for all compiler-inserted paths
-    prefix = '__p-'
+    prefix = "__p-"
 
     """
     Creates fake trees that are not in the original story source.
     """
+
     def __init__(self, block):
         self.block = block
         self.original_line = str(block.line())
@@ -21,7 +22,7 @@ class FakeTree:
         for child in block.children:
             if child.path:
                 tok = child.path.find_first_token()
-                if isinstance(tok.line, str) and '.' in tok.line:
+                if isinstance(tok.line, str) and "." in tok.line:
                     self.new_lines[tok.value] = False
 
     def line(self):
@@ -30,13 +31,13 @@ class FakeTree:
         so that the resulting tree is compiled correctly.
         """
         line = self.original_line
-        parts = line.split('.')
+        parts = line.split(".")
         if len(parts) > 1:
-            line = '.'.join(parts[:-1])
+            line = ".".join(parts[:-1])
         # We start at .1, s.t. lines from L1 are called L1.1 and not L1.0
         # to avoid any potential confusion
         new_suffix = len(self.new_lines) + 1
-        fake_line = f'{line}.{new_suffix}'
+        fake_line = f"{line}.{new_suffix}"
         self.new_lines[fake_line] = None
         return fake_line
 
@@ -55,8 +56,8 @@ class FakeTree:
         if line is None:
             line = self.line()
         if name is None:
-            name = f'{self.prefix}{line}'
-        return Tree('path', [Token('NAME', name, line=line)])
+            name = f"{self.prefix}{line}"
+        return Tree("path", [Token("NAME", name, line=line)])
 
     def mark_line(self, node, line):
         """
@@ -95,18 +96,18 @@ class FakeTree:
         """
         # updates all tokens
         self.mark_line(value, line)
-        equals = Token('EQUALS', '=', line=line)
+        equals = Token("EQUALS", "=", line=line)
         if eq_tok:
             # We accept and use the equals token from original expression
             # to copy over the token meta data which helps with error messages.
             equals.column = eq_tok.column
             equals.end_column = eq_tok.end_column
-        if value.data == 'base_expression':
+        if value.data == "base_expression":
             expr = value
         else:
-            expr = Tree('base_expression', [value])
-        fragment = Tree('assignment_fragment', [equals, expr])
-        return Tree('assignment', [path, fragment])
+            expr = Tree("base_expression", [value])
+        fragment = Tree("assignment_fragment", [equals, expr])
+        return Tree("assignment", [path, fragment])
 
     def find_insert_pos(self, original_line):
         """
@@ -145,6 +146,6 @@ class FakeTree:
         # we need a new node, s.t. already inserted
         # fake nodes don't get changed
         path_tok = assignment.path.child(0)
-        name = Tree.create_token_from_tok(path_tok, 'NAME', path_tok.value)
+        name = Tree.create_token_from_tok(path_tok, "NAME", path_tok.value)
         name.line = original_line
-        return Tree('path', [name])
+        return Tree("path", [name])

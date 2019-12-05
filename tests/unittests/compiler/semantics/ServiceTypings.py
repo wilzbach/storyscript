@@ -5,7 +5,7 @@ from storyscript.hub.TypeMappings import TypeMappings
 
 def test_service_output(patch, magic):
     patch.init(ServiceTyping)
-    patch.object(TypeMappings, 'get_type_instance')
+    patch.object(TypeMappings, "get_type_instance")
     action = magic()
     typings = ServiceTyping()
     res = typings.get_service_output(action)
@@ -17,7 +17,7 @@ def test_service_output(patch, magic):
 
 def test_service_output_none(patch, magic):
     patch.init(ServiceTyping)
-    patch.object(TypeMappings, 'get_type_instance')
+    patch.object(TypeMappings, "get_type_instance")
     action = magic()
     action.output.return_value = None
     typings = ServiceTyping()

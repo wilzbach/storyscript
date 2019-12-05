@@ -12,6 +12,7 @@ class ReturnVisitor:
     """
     Checks the return type of functions.
     """
+
     def __init__(self, return_type, module):
         self.return_type = return_type
         self.module = module
@@ -28,8 +29,11 @@ class ReturnVisitor:
         if tree.rules and tree.rules.return_statement:
             return True
 
-        if tree.block and len(tree.block.children) == 1 and \
-                tree.block.rules.return_statement:
+        if (
+            tree.block
+            and len(tree.block.children) == 1
+            and tree.block.rules.return_statement
+        ):
             return True
 
         if tree.if_block:
@@ -49,7 +53,7 @@ class ReturnVisitor:
         return False
 
     def return_statement(self, tree, scope):
-        assert tree.data == 'return_statement'
+        assert tree.data == "return_statement"
         with self.scope(tree.scope):
             obj = tree.base_expression
             if obj is None:
@@ -60,28 +64,31 @@ class ReturnVisitor:
         if tree.function_statement.function_output:
             if not self.has_return(tree):
                 t = tree.function_statement.function_output
-                raise CompilerError('return_required', tree=t)
-            for ret in tree.find_data('return_statement'):
+                raise CompilerError("return_required", tree=t)
+            for ret in tree.find_data("return_statement"):
                 ret_sym, obj = self.return_statement(ret, scope)
                 ret_type = ret_sym.type()
-                obj.expect(ret_sym.can_write(), 'return_type_readonly',
-                           source=ret_type)
+                obj.expect(
+                    ret_sym.can_write(),
+                    "return_type_readonly",
+                    source=ret_type,
+                )
                 obj.expect(
                     self.return_type.can_be_assigned(ret_type),
-                    'return_type_differs',
+                    "return_type_differs",
                     target=self.return_type,
-                    source=ret_type
+                    source=ret_type,
                 )
         else:
             # function has no return output, so only `return` may be used
-            for ret in tree.find_data('return_statement'):
+            for ret in tree.find_data("return_statement"):
                 ret_sym, obj = self.return_statement(ret, scope)
                 ret_type = ret_sym.type()
                 # obj might not have any tokens, e.g. {}
                 obj.expect(
                     ret_type == NoneType.instance(),
-                    'function_without_output_return',
-                    return_type=ret_type
+                    "function_without_output_return",
+                    return_type=ret_type,
                 )
 
     @classmethod

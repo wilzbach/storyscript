@@ -18,7 +18,7 @@ from .parser import Parser
 from .parser.Tree import Tree
 
 
-Compiled = namedtuple('Compiled', ['results', 'deprecations'])
+Compiled = namedtuple("Compiled", ["results", "deprecations"])
 
 
 @lru_cache(maxsize=1)
@@ -56,7 +56,7 @@ class Story:
     compiling it.
     """
 
-    def __init__(self, story, features, path=None, backend='json', scope=None):
+    def __init__(self, story, features, path=None, backend="json", scope=None):
         self.story = story
         self.path = path
         self.lines = story.splitlines(keepends=False)
@@ -72,9 +72,9 @@ class Story:
         if self.path:
             working_directory = os.getcwd()
             if self.path.startswith(working_directory):
-                return self.path[len(working_directory) + 1:]
+                return self.path[len(working_directory) + 1 :]
             return self.path
-        return 'story'
+        return "story"
 
     @classmethod
     def read(cls, path):
@@ -83,7 +83,7 @@ class Story:
         """
         has_error = False
         try:
-            with bom_open(path, 'r') as file:
+            with bom_open(path, "r") as file:
                 r = file.read()
                 return r
         except FileNotFoundError:
@@ -91,8 +91,9 @@ class Story:
 
         if has_error:
             abspath = os.path.abspath(path)
-            raise StoryError.create_error('file_not_found', path=path,
-                                          abspath=abspath)
+            raise StoryError.create_error(
+                "file_not_found", path=path, abspath=abspath
+            )
 
     @classmethod
     def from_file(cls, path, features):
@@ -121,8 +122,9 @@ class Story:
         if parser is None:
             parser = self._parser()
         try:
-            self.tree = parser.parse(self.story,
-                                     allow_single_quotes=allow_single_quotes)
+            self.tree = parser.parse(
+                self.story, allow_single_quotes=allow_single_quotes
+            )
             if lower:
                 proc = Lowering(parser, features=self.context.features)
                 self.tree = proc.process(self.tree)
@@ -148,9 +150,9 @@ class Story:
         Compiles the story and stores the result.
         """
         try:
-            self.compiled = Compiler.compile(self.tree, story=self,
-                                             backend=self.backend,
-                                             scope=self.scope)
+            self.compiled = Compiler.compile(
+                self.tree, story=self, backend=self.backend, scope=self.scope
+            )
         except (CompilerError, StorySyntaxError) as error:
             raise self.error(error) from error
 
@@ -195,5 +197,6 @@ class Story:
         Returns a list of deprecations after wrapping it in
         DeprecationMessage which will provide nicely formatted messages.
         """
-        return [DeprecationMessage(d, self)
-                for d in self.context.deprecations()]
+        return [
+            DeprecationMessage(d, self) for d in self.context.deprecations()
+        ]

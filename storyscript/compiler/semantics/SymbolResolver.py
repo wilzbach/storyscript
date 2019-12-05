@@ -25,13 +25,14 @@ class SymbolResolver:
         symbol = self.scope.resolve(val)
 
         if self._check_variable_existence:
-            tree.expect(symbol is not None, 'var_not_defined', name=val)
+            tree.expect(symbol is not None, "var_not_defined", name=val)
         else:
             if symbol is None:
-                tree.expect(len(paths) == 0, 'var_not_defined', name=val)
+                tree.expect(len(paths) == 0, "var_not_defined", name=val)
                 return Symbol(val, NoneType.instance())
 
         for p in paths:
-            symbol = symbol.index(tree, name=p.value, type_=p.type,
-                                  kind=p.kind)
+            symbol = symbol.index(
+                tree, name=p.value, type_=p.type, kind=p.kind
+            )
         return symbol

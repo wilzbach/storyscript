@@ -35,11 +35,11 @@ class ExpressionVisitor:
         """
         first_child = tree.first_child()
         if len(tree.children) == 1:
-            assert first_child.data == 'entity'
+            assert first_child.data == "entity"
             return self.entity(first_child)
         elif len(tree.children) == 2:
             second_child = tree.child(1)
-            if second_child.data == 'to_operator':
+            if second_child.data == "to_operator":
                 with self.with_as_cast():
                     expr = self.expression(first_child)
                     return self.to_expression(tree, expr)

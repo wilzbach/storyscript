@@ -7,5 +7,12 @@ from .Transformer import Transformer
 from .Tree import Tree
 
 
-__all__ = ['CustomIndenter', 'Ebnf', 'Grammar', 'Parser', 'Position',
-           'Transformer', 'Tree', ]
+__all__ = [
+    "CustomIndenter",
+    "Ebnf",
+    "Grammar",
+    "Parser",
+    "Position",
+    "Transformer",
+    "Tree",
+]

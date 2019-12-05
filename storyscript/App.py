@@ -17,8 +17,9 @@ class App:
         """
         Parses stories found in path, returning their trees
         """
-        bundle = Bundle.from_path(path, ignored_path=ignored_path,
-                                  features=features)
+        bundle = Bundle.from_path(
+            path, ignored_path=ignored_path, features=features
+        )
         return bundle.bundle_trees(ebnf=ebnf, lower=lower)
 
     @staticmethod
@@ -30,31 +31,39 @@ class App:
         story = Story.from_file(path, features=features)
         output = story.parse(parser=parser).format()
         if inplace:
-            with open(path, 'w') as w:
+            with open(path, "w") as w:
                 w.write(output)
             return None
 
         return output
 
     @staticmethod
-    def compile(path, ignored_path=None, ebnf=None, concise=False,
-                first=False, features=None):
+    def compile(
+        path,
+        ignored_path=None,
+        ebnf=None,
+        concise=False,
+        first=False,
+        features=None,
+    ):
         """
         Parses and compiles stories found in path, returning JSON
         """
-        bundle = Bundle.from_path(path, ignored_path=ignored_path,
-                                  features=features)
+        bundle = Bundle.from_path(
+            path, ignored_path=ignored_path, features=features
+        )
         compiledbundle = bundle.bundle(ebnf=ebnf)
         result = compiledbundle.results
         if concise:
             result = _clean_dict(result)
         if first:
-            if len(result['stories']) != 1:
-                raise StoryError.create_error('first_option_more_stories')
-            result = next(iter(result['stories'].values()))
+            if len(result["stories"]) != 1:
+                raise StoryError.create_error("first_option_more_stories")
+            result = next(iter(result["stories"].values()))
         return Compiled(
             results=json.dumps(result, indent=2),
-            deprecations=compiledbundle.deprecations)
+            deprecations=compiledbundle.deprecations,
+        )
 
     @staticmethod
     def lex(path, features, ebnf=None):

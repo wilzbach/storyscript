@@ -76,6 +76,7 @@ class MutationTable:
     """
     A table of all available mutation inside a story.
     """
+
     def __init__(self):
         self.mutations = {}
 
@@ -92,9 +93,10 @@ class MutationTable:
         arg_names = mutation.arg_names_hash()
         match = muts.get(t, None)
         if match is not None:
-            assert arg_names not in match, \
-                    (f'mutation {name} for {t} already exists with the '
-                     'same overload')
+            assert arg_names not in match, (
+                f"mutation {name} for {t} already exists with the "
+                "same overload"
+            )
         else:
             muts[t] = {}
         muts[t][arg_names] = mutation

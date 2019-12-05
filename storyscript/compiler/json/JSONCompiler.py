@@ -15,6 +15,7 @@ class JSONCompiler:
     """
     Compiles Storyscript abstract syntax tree to JSON.
     """
+
     def __init__(self, story):
         self.lines = Lines(story)
         self.objects = Objects()
@@ -53,7 +54,7 @@ class JSONCompiler:
         Finds and compile chained mutations
         """
         mutations = []
-        for mutation in tree.find_data('chained_mutation'):
+        for mutation in tree.find_data("chained_mutation"):
             m = self.objects.mutation_fragment(mutation.mutation_fragment)
             mutations.append(m)
         return mutations
@@ -62,7 +63,7 @@ class JSONCompiler:
         function_output = tree.function_output
         if function_output is not None:
             output_types = self.objects.types(function_output.types)
-            return [output_types['type']]
+            return [output_types["type"]]
 
     def absolute_expression(self, tree, parent):
         """
@@ -70,8 +71,7 @@ class JSONCompiler:
         """
         args = [self.objects.expression(tree.expression)]
         self.lines.append(
-            'expression', tree.position(),
-            args=args, parent=parent
+            "expression", tree.position(), args=args, parent=parent
         )
 
     def base_expression_assignment(self, tree, parent, position):
@@ -91,7 +91,7 @@ class JSONCompiler:
             return
         elif tree.expression:
             args = [self.objects.expression(tree.expression)]
-            self.lines.append('expression', position, args=args, parent=parent)
+            self.lines.append("expression", position, args=args, parent=parent)
             return
         else:
             internal_assert(tree.call_expression)
@@ -107,7 +107,7 @@ class JSONCompiler:
         if tree.expression:
             return self.objects.expression(tree.expression)
         else:
-            internal_assert(tree.child(0).data == 'path')
+            internal_assert(tree.child(0).data == "path")
             return self.objects.entity(tree)
 
     def assignment(self, tree, parent):
@@ -126,35 +126,42 @@ class JSONCompiler:
         """
         prev_line = self.lines.last()
         if prev_line is not None:
-            if prev_line['method'] != 'execute':
-                raise StorySyntaxError('arguments_noservice', tree=tree)
-            prev_args = prev_line['args']
-            prev_line['args'] = prev_args + self.objects.arguments(tree)
+            if prev_line["method"] != "execute":
+                raise StorySyntaxError("arguments_noservice", tree=tree)
+            prev_args = prev_line["args"]
+            prev_line["args"] = prev_args + self.objects.arguments(tree)
             return
-        raise StorySyntaxError('arguments_noservice', tree=tree)
+        raise StorySyntaxError("arguments_noservice", tree=tree)
 
     def call_expression(self, tree, parent):
         """
         Compiles a function call expression
         """
         position = tree.position()
-        tree.expect(tree.path.inline_expression is None,
-                    'function_call_no_inline_expression')
+        tree.expect(
+            tree.path.inline_expression is None,
+            "function_call_no_inline_expression",
+        )
         name = self.objects.names(tree.path)
-        tree.expect(len(name) == 1, 'function_call_invalid_path',
-                    name='.'.join(name))
+        tree.expect(
+            len(name) == 1, "function_call_invalid_path", name=".".join(name)
+        )
         name = tree.path.extract_path()
         args = self.objects.arguments(tree)
         self.lines.append(
-            'call', position,
-            function=name, output=None, args=args, parent=parent
+            "call",
+            position,
+            function=name,
+            output=None,
+            args=args,
+            parent=parent,
         )
 
     def service(self, tree, nested_block, parent):
         """
         Compiles a service tree.
         """
-        assert tree.data == 'service'
+        assert tree.data == "service"
         position = tree.position()
         command = tree.service_fragment.command
         command = command.child(0)
@@ -167,8 +174,13 @@ class JSONCompiler:
 
         try:
             args = (
-                position, service, command, arguments,
-                output, enter, parent
+                position,
+                service,
+                command,
+                arguments,
+                output,
+                enter,
+                parent,
             )
             self.lines.execute(*args)
             return output
@@ -180,13 +192,16 @@ class JSONCompiler:
         """
         Searches upword in the tree for a parent with an output field.
         """
-        tree.expect(parent is not None, 'when_no_output_parent')
+        tree.expect(parent is not None, "when_no_output_parent")
         parent = self.lines.lines[parent]
-        if parent['output'] is not None and len(parent['output']) > 0 and \
-                parent['service'] is not None:
-            return parent['output']
+        if (
+            parent["output"] is not None
+            and len(parent["output"]) > 0
+            and parent["service"] is not None
+        ):
+            return parent["output"]
 
-        return self.find_parent_with_output(tree, parent['parent'])
+        return self.find_parent_with_output(tree, parent["parent"])
 
     def when(self, tree, nested_block, parent):
         """
@@ -199,7 +214,7 @@ class JSONCompiler:
             output_name = self.find_parent_with_output(tree, parent)
             tree.service.path = self.objects.name_to_path(output_name[0])
         output = self.service(tree.service, nested_block, parent)
-        self.lines.last()['method'] = 'when'
+        self.lines.last()["method"] = "when"
         return output
 
     def return_statement(self, tree, parent):
@@ -210,21 +225,23 @@ class JSONCompiler:
         args = None
         if tree.base_expression:
             args = [self.fake_base_expression(tree.base_expression, parent)]
-        self.lines.append('return', position, args=args, parent=parent)
+        self.lines.append("return", position, args=args, parent=parent)
 
     def if_block(self, tree, parent):
         position = tree.position()
         nested_block = tree.nested_block
-        args = [self.fake_base_expression(tree.if_statement.base_expression,
-                                          parent)]
+        args = [
+            self.fake_base_expression(
+                tree.if_statement.base_expression, parent
+            )
+        ]
         self.lines.append(
-            'if', position,
-            args=args, enter=nested_block.line(), parent=parent
+            "if", position, args=args, enter=nested_block.line(), parent=parent
         )
         with self.create_scope(position, parent):
             self.subtree(nested_block, parent=position.line)
 
-        trees = tree.extract('elseif_block')
+        trees = tree.extract("elseif_block")
         if tree.else_block:
             trees.append(tree.else_block)
         self.subtrees(*trees, parent=parent)
@@ -239,8 +256,11 @@ class JSONCompiler:
         nested_block = tree.nested_block
 
         self.lines.append(
-            'elif', position,
-            args=args, enter=nested_block.line(), parent=parent
+            "elif",
+            position,
+            args=args,
+            enter=nested_block.line(),
+            parent=parent,
         )
         with self.create_scope(position, parent):
             self.subtree(nested_block, parent=position.line)
@@ -252,8 +272,7 @@ class JSONCompiler:
         position = tree.position()
         nested_block = tree.nested_block
         self.lines.append(
-            'else', position,
-            enter=nested_block.line(), parent=parent
+            "else", position, enter=nested_block.line(), parent=parent
         )
         with self.create_scope(position, parent):
             self.subtree(nested_block, parent=position.line)
@@ -265,8 +284,12 @@ class JSONCompiler:
         output = self.output(tree.foreach_statement.output)
         nested_block = tree.nested_block
         self.lines.append(
-            'for', position,
-            args=args, enter=nested_block.line(), parent=parent, output=output
+            "for",
+            position,
+            args=args,
+            enter=nested_block.line(),
+            parent=parent,
+            output=output,
         )
         with self.create_scope(position, parent, output):
             self.subtree(nested_block, parent=position.line)
@@ -277,8 +300,11 @@ class JSONCompiler:
         args = [self.fake_base_expression(exp, parent)]
         nested_block = tree.nested_block
         self.lines.append(
-            'while', position,
-            args=args, enter=nested_block.line(), parent=parent
+            "while",
+            position,
+            args=args,
+            enter=nested_block.line(),
+            parent=parent,
         )
         with self.create_scope(position, parent):
             self.subtree(nested_block, parent=position.line)
@@ -294,9 +320,13 @@ class JSONCompiler:
         nested_block = tree.nested_block or tree.block
         function_name = function.child(1).value
         self.lines.append(
-            'function', position,
-            function=function_name, output=output,
-            args=args, enter=nested_block.line(), parent=parent
+            "function",
+            position,
+            function=function_name,
+            output=output,
+            args=args,
+            enter=nested_block.line(),
+            parent=parent,
         )
         with self.create_scope(position, parent):
             self.subtree(nested_block, parent=position.line)
@@ -308,21 +338,22 @@ class JSONCompiler:
         if tree.path:
             args = [
                 self.objects.path(tree.path),
-                self.objects.mutation_fragment(tree.mutation_fragment)
+                self.objects.mutation_fragment(tree.mutation_fragment),
             ]
             args = args + self.chained_mutations(tree)
         else:
             expr = tree.mutation.expression
             args = [
                 self.objects.expression(expr),
-                self.objects.mutation_fragment(tree.mutation.mutation_fragment)
+                self.objects.mutation_fragment(
+                    tree.mutation.mutation_fragment
+                ),
             ]
             args = args + self.chained_mutations(tree.mutation)
         if tree.nested_block:
             args = args + self.chained_mutations(tree.nested_block)
         self.lines.append(
-            'mutation', tree.position(),
-            args=args, parent=parent
+            "mutation", tree.position(), args=args, parent=parent
         )
 
     def indented_chain(self, tree, parent):
@@ -331,12 +362,13 @@ class JSONCompiler:
         """
         prev_line = self.lines.last()
         if prev_line is not None:
-            if prev_line['method'] != 'mutation':
-                raise StorySyntaxError('arguments_nomutation', tree=tree)
-            prev_line['args'] = prev_line['args'] + \
-                self.chained_mutations(tree)
+            if prev_line["method"] != "mutation":
+                raise StorySyntaxError("arguments_nomutation", tree=tree)
+            prev_line["args"] = prev_line["args"] + self.chained_mutations(
+                tree
+            )
             return
-        raise StorySyntaxError('arguments_nomutation', tree=tree)
+        raise StorySyntaxError("arguments_nomutation", tree=tree)
 
     def service_block(self, tree, parent):
         """
@@ -363,8 +395,7 @@ class JSONCompiler:
         position = tree.position()
         nested_block = tree.nested_block
         self.lines.append(
-            'try', position,
-            enter=nested_block.line(), parent=parent
+            "try", position, enter=nested_block.line(), parent=parent
         )
         with self.create_scope(position, parent):
             self.subtree(nested_block, parent=position.line)
@@ -381,7 +412,7 @@ class JSONCompiler:
         args = []
         if len(tree.children) > 1:
             args = [self.objects.entity(tree.child(1))]
-        self.lines.append('throw', position, args=args, parent=parent)
+        self.lines.append("throw", position, args=args, parent=parent)
 
     def catch_block(self, tree, parent):
         """
@@ -395,13 +426,16 @@ class JSONCompiler:
         if len(tree.catch_statement.children) > 1:
             # we need to ignore the catch token when looking at the catch
             # output name
-            ct = Tree('catch_statement', tree.catch_statement.children[1:])
-            assert len(ct.children) == 1, 'There can only be one output'
+            ct = Tree("catch_statement", tree.catch_statement.children[1:])
+            assert len(ct.children) == 1, "There can only be one output"
             output = self.objects.names(ct)
 
         self.lines.append(
-            'catch', position,
-            enter=nested_block.line(), output=output, parent=parent
+            "catch",
+            position,
+            enter=nested_block.line(),
+            output=output,
+            parent=parent,
         )
         with self.create_scope(position, parent, output):
             self.subtree(nested_block, parent=position.line)
@@ -413,17 +447,16 @@ class JSONCompiler:
         position = tree.position()
         nested_block = tree.nested_block
         self.lines.append(
-            'finally', position,
-            enter=nested_block.line(), parent=parent
+            "finally", position, enter=nested_block.line(), parent=parent
         )
         with self.create_scope(position, parent):
             self.subtree(nested_block, parent=position.line)
 
     def break_statement(self, tree, parent):
-        self.lines.append('break', tree.position(), parent=parent)
+        self.lines.append("break", tree.position(), parent=parent)
 
     def continue_statement(self, tree, parent):
-        self.lines.append('continue', tree.position(), parent=parent)
+        self.lines.append("continue", tree.position(), parent=parent)
 
     def subtrees(self, *trees, parent=None):
         """
@@ -437,13 +470,26 @@ class JSONCompiler:
         Parses a subtree, checking whether it should be compiled directly
         or keep parsing for deeper trees.
         """
-        allowed_nodes = ['service_block', 'absolute_expression', 'assignment',
-                         'if_block', 'elseif_block', 'else_block',
-                         'foreach_block', 'function_block', 'when_block',
-                         'try_block', 'return_statement', 'arguments',
-                         'while_block', 'throw_statement', 'break_statement',
-                         'continue_statement', 'mutation_block',
-                         'indented_chain']
+        allowed_nodes = [
+            "service_block",
+            "absolute_expression",
+            "assignment",
+            "if_block",
+            "elseif_block",
+            "else_block",
+            "foreach_block",
+            "function_block",
+            "when_block",
+            "try_block",
+            "return_statement",
+            "arguments",
+            "while_block",
+            "throw_statement",
+            "break_statement",
+            "continue_statement",
+            "mutation_block",
+            "indented_chain",
+        ]
         if tree.data in allowed_nodes:
             getattr(self, tree.data)(tree, parent)
         else:
@@ -463,6 +509,10 @@ class JSONCompiler:
         """
         self.parse_tree(tree)
         lines = self.lines
-        return {'tree': lines.lines, 'services': lines.get_services(),
-                'entrypoint': lines.entrypoint(), 'functions': lines.functions,
-                'version': version}
+        return {
+            "tree": lines.lines,
+            "services": lines.get_services(),
+            "entrypoint": lines.entrypoint(),
+            "functions": lines.functions,
+            "version": version,
+        }

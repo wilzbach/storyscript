@@ -5,7 +5,7 @@ from storyscript.compiler.json import Lines
 from storyscript.exceptions import StorySyntaxError
 from storyscript.parser import Position
 
-position_fixed = Position('1', '2', '3')
+position_fixed = Position("1", "2", "3")
 
 
 @fixture
@@ -23,9 +23,9 @@ def test_lines_init(lines):
 
 
 def test_lines_first(patch, lines):
-    lines.lines = {'1': '1'}
-    lines._lines = ['1']
-    assert lines.first() == '1'
+    lines.lines = {"1": "1"}
+    lines._lines = ["1"]
+    assert lines.first() == "1"
 
 
 def test_lines_first_none(lines):
@@ -33,9 +33,9 @@ def test_lines_first_none(lines):
 
 
 def test_lines_last(patch, lines):
-    lines.lines = {'1': '1'}
-    lines._lines = ['1']
-    assert lines.last() == '1'
+    lines.lines = {"1": "1"}
+    lines._lines = ["1"]
+    assert lines.last() == "1"
 
 
 def test_lines_last_no_lines(lines):
@@ -44,127 +44,150 @@ def test_lines_last_no_lines(lines):
 
 def test_lines_set_name(patch, lines):
     d = {}
-    patch.object(Lines, 'last', return_value=d)
-    lines.set_name('name')
-    assert d['name'] == 'name'
+    patch.object(Lines, "last", return_value=d)
+    lines.set_name("name")
+    assert d["name"] == "name"
 
 
 def test_lines_set_next(patch, lines):
-    lines.lines['1'] = {}
-    patch.object(Lines, 'last', return_value=lines.lines['1'])
-    lines.set_next('2')
-    assert lines.lines['1']['next'] == '2'
+    lines.lines["1"] = {}
+    patch.object(Lines, "last", return_value=lines.lines["1"])
+    lines.set_next("2")
+    assert lines.lines["1"]["next"] == "2"
 
 
 def test_lines_set_scope(patch, lines):
     lines.output_scopes = []
-    lines.set_scope('2', '1', [])
-    assert lines.output_scopes[0]['2'] == {'parent': '1', 'output': []}
+    lines.set_scope("2", "1", [])
+    assert lines.output_scopes[0]["2"] == {"parent": "1", "output": []}
 
 
 def test_lines_set_scope_output(lines):
     lines.output_scopes = []
-    lines.set_scope('2', '1', output=['x'])
-    assert lines.output_scopes[0]['2']['output'] == ['x']
+    lines.set_scope("2", "1", output=["x"])
+    assert lines.output_scopes[0]["2"]["output"] == ["x"]
 
 
 def test_lines_finish_scope(lines):
-    lines.scopes = ['1', '2']
+    lines.scopes = ["1", "2"]
     lines.output_scopes = [1, 2]
-    lines.finish_scope('.')
-    assert lines.finished_scopes == ['2']
-    lines.finish_scope('.')
-    assert lines.finished_scopes == ['2', '1']
+    lines.finish_scope(".")
+    assert lines.finished_scopes == ["2"]
+    lines.finish_scope(".")
+    assert lines.finished_scopes == ["2", "1"]
 
 
 def test_lines_is_output(lines):
-    lines.output_scopes = [{'1': {'parent': None, 'output': ['service']}}]
-    assert lines.is_output('1', 'service') is True
+    lines.output_scopes = [{"1": {"parent": None, "output": ["service"]}}]
+    assert lines.is_output("1", "service") is True
 
 
 def test_lines_is_output_from_parent(lines):
-    lines.output_scopes = [{
-        '2': {'parent': '1', 'output': []},
-        '1': {'output': ['service']}
-    }]
-    assert lines.is_output('2', 'service') is True
+    lines.output_scopes = [
+        {"2": {"parent": "1", "output": []}, "1": {"output": ["service"]}}
+    ]
+    assert lines.is_output("2", "service") is True
 
 
 def test_lines_is_output_false(lines):
-    assert lines.is_output('1', 'service') is False
+    assert lines.is_output("1", "service") is False
 
 
 def test_lines_make(lines):
-    expected = {'1': {'method': 'method',
-                      'ln': '1', 'col_start': '2', 'col_end': '3',
-                      'output': None,
-                      'name': None,
-                      'function': None, 'service': None, 'command': None,
-                      'enter': None, 'exit': None, 'args': None,
-                      'parent': None, 'src': lines.story.line()}}
-    lines.make('method', position_fixed)
-    lines.story.line.assert_called_with('1')
+    expected = {
+        "1": {
+            "method": "method",
+            "ln": "1",
+            "col_start": "2",
+            "col_end": "3",
+            "output": None,
+            "name": None,
+            "function": None,
+            "service": None,
+            "command": None,
+            "enter": None,
+            "exit": None,
+            "args": None,
+            "parent": None,
+            "src": lines.story.line(),
+        }
+    }
+    lines.make("method", position_fixed)
+    lines.story.line.assert_called_with("1")
     assert lines.lines == expected
 
 
-@mark.parametrize('keywords', ['service', 'command', 'function', 'output',
-                               'args', 'enter', 'exit', 'parent', 'name'])
+@mark.parametrize(
+    "keywords",
+    [
+        "service",
+        "command",
+        "function",
+        "output",
+        "args",
+        "enter",
+        "exit",
+        "parent",
+        "name",
+    ],
+)
 def test_lines_make_keywords(lines, keywords):
-    lines.make('method', position_fixed, **{keywords: keywords})
-    assert lines.lines['1'][keywords] == keywords
+    lines.make("method", position_fixed, **{keywords: keywords})
+    assert lines.lines["1"][keywords] == keywords
 
 
 def test_lines_check_service_name(lines):
     """
     Asserts that these service names are valid and don't throw an Error
     """
-    lines.check_service_name('alpine', '1')
-    lines.check_service_name('_alpine', '1')
+    lines.check_service_name("alpine", "1")
+    lines.check_service_name("_alpine", "1")
 
 
 def test_lines_check_service_name_error(patch, lines):
     patch.init(StorySyntaxError)
     with raises(StorySyntaxError):
-        lines.check_service_name('wrong.name', '1')
-    StorySyntaxError.__init__.assert_called_with('service_name')
+        lines.check_service_name("wrong.name", "1")
+    StorySyntaxError.__init__.assert_called_with("service_name")
 
 
 def test_lines_append(patch, lines):
-    patch.many(Lines, ['make', 'set_next'])
-    lines.append('method', position_fixed, extras='whatever')
-    lines.set_next.assert_called_with('1')
-    lines.make.assert_called_with('method', position_fixed, extras='whatever')
+    patch.many(Lines, ["make", "set_next"])
+    lines.append("method", position_fixed, extras="whatever")
+    lines.set_next.assert_called_with("1")
+    lines.make.assert_called_with("method", position_fixed, extras="whatever")
 
 
 def test_lines_append_function(patch, lines):
     """
     Ensures that a function is registered properly.
     """
-    patch.many(Lines, ['make', 'set_next'])
-    lines.append('function', position_fixed, function='function')
-    assert lines.functions['function'] == '1'
+    patch.many(Lines, ["make", "set_next"])
+    lines.append("function", position_fixed, function="function")
+    assert lines.functions["function"] == "1"
 
 
 def test_compiler_append_service(patch, lines):
     """
     Ensures that a service is registed in Compiler.services
     """
-    patch.many(Lines, ['make', 'set_next', 'is_output', 'check_service_name'])
+    patch.many(Lines, ["make", "set_next", "is_output", "check_service_name"])
     Lines.is_output.return_value = False
-    lines.append('execute', position_fixed, service='service', parent='parent')
-    Lines.check_service_name.assert_called_with('service', '1')
-    lines.is_output.assert_called_with('parent', 'service')
-    assert lines.services[0] == 'service'
+    lines.append("execute", position_fixed, service="service", parent="parent")
+    Lines.check_service_name.assert_called_with("service", "1")
+    lines.is_output.assert_called_with("parent", "service")
+    assert lines.services[0] == "service"
 
 
 def test_compiler_append_function_call(patch, lines):
     """
     Ensures that a function is registed in Compiler.services
     """
-    patch.many(Lines, ['make', 'set_next', 'is_output', 'check_service_name'])
+    patch.many(Lines, ["make", "set_next", "is_output", "check_service_name"])
     Lines.is_output.return_value = False
-    lines.append('call', position_fixed, service='my_function',
-                 parent='parent')
+    lines.append(
+        "call", position_fixed, service="my_function", parent="parent"
+    )
     lines.is_output.assert_not_called()
     assert lines.services == []
 
@@ -174,9 +197,9 @@ def test_lines_append_service_block_output(patch, lines):
     Ensures that a service is not registered if the current service block
     has defined it as output
     """
-    patch.many(Lines, ['make', 'set_next', 'is_output', 'check_service_name'])
-    lines.outputs = {'line': ['service']}
-    lines.append('execute', position_fixed, service='service', parent='parent')
+    patch.many(Lines, ["make", "set_next", "is_output", "check_service_name"])
+    lines.outputs = {"line": ["service"]}
+    lines.append("execute", position_fixed, service="service", parent="parent")
     assert lines.services == []
 
 
@@ -184,47 +207,58 @@ def test_lines_append_function_call(patch, lines):
     """
     Ensures that a function call is registered properly.
     """
-    patch.many(Lines, ['make', 'set_next', 'check_service_name'])
-    lines.functions['function'] = 1
-    lines.append('call', position_fixed, service='function')
-    lines.make.assert_called_with('call', position_fixed, service='function')
+    patch.many(Lines, ["make", "set_next", "check_service_name"])
+    lines.functions["function"] = 1
+    lines.append("call", position_fixed, service="function")
+    lines.make.assert_called_with("call", position_fixed, service="function")
 
 
 def test_lines_append_scope(patch, lines):
     """
     Ensures that 'exit' is set properly after a scope was left.
     """
-    patch.many(Lines, ['make', 'set_next'])
-    lines.finished_scopes = ['1']
-    lines.lines['1'] = {}
-    lines.append('method', position_fixed, extras='whatever')
-    lines.set_next.assert_called_with('1')
-    lines.make.assert_called_with('method', position_fixed, extras='whatever')
-    assert lines.lines['1']['exit'] == '1'
+    patch.many(Lines, ["make", "set_next"])
+    lines.finished_scopes = ["1"]
+    lines.lines["1"] = {}
+    lines.append("method", position_fixed, extras="whatever")
+    lines.set_next.assert_called_with("1")
+    lines.make.assert_called_with("method", position_fixed, extras="whatever")
+    assert lines.lines["1"]["exit"] == "1"
 
 
 def test_lines_execute(patch, lines):
-    patch.object(Lines, 'append')
+    patch.object(Lines, "append")
     lines.execute(
         position_fixed,
-        'service', 'command', 'args', 'output', 'enter', 'parent'
+        "service",
+        "command",
+        "args",
+        "output",
+        "enter",
+        "parent",
     )
-    kwargs = {'service': 'service', 'command': 'command', 'args': 'args',
-              'output': 'output', 'enter': 'enter', 'parent': 'parent'}
-    Lines.append.assert_called_with('execute', position_fixed, **kwargs)
+    kwargs = {
+        "service": "service",
+        "command": "command",
+        "args": "args",
+        "output": "output",
+        "enter": "enter",
+        "parent": "parent",
+    }
+    Lines.append.assert_called_with("execute", position_fixed, **kwargs)
 
 
 def test_compiler_get_services(lines):
-    lines.services = ['one', 'one']
-    assert lines.get_services() == ['one']
+    lines.services = ["one", "one"]
+    assert lines.get_services() == ["one"]
 
 
 def test_lines_is_variable_defined(patch, lines):
     """
     Ensures that the check for previously seen variables works
     """
-    lines.variables = [['one', 'two'], ['three']]
-    assert lines.is_variable_defined('one')
-    assert lines.is_variable_defined('two')
-    assert lines.is_variable_defined('three')
-    assert not lines.is_variable_defined('four')
+    lines.variables = [["one", "two"], ["three"]]
+    assert lines.is_variable_defined("one")
+    assert lines.is_variable_defined("two")
+    assert lines.is_variable_defined("three")
+    assert not lines.is_variable_defined("four")

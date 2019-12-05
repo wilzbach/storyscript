@@ -13,6 +13,7 @@ class SelectiveVisitor(BaseVisitor):
     A selective visitor which only visits defined nodes.
     visit_children must be called explicitly.
     """
+
     def visit(self, tree, scope=None):
         if hasattr(self, tree.data):
             return getattr(self, tree.data)(tree)
@@ -28,6 +29,7 @@ class ScopeSelectiveVisitor(BaseVisitor):
     A selective visitor which only visits defined nodes.
     visit_children must be called explicitly.
     """
+
     def visit(self, tree, scope):
         if hasattr(self, tree.data):
             return getattr(self, tree.data)(tree, scope)
@@ -52,6 +54,8 @@ class FullVisitor(SelectiveVisitor):
     def visit(self, tree, scope=None):
         if hasattr(self, tree.data):
             return getattr(self, tree.data)(tree)
-        if self.ignore_nodes is not None and \
-                tree.data not in self.ignore_nodes:
+        if (
+            self.ignore_nodes is not None
+            and tree.data not in self.ignore_nodes
+        ):
             self.visit_children(tree)

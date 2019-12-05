@@ -15,9 +15,10 @@ class ProcessingError(Diagnostics):
     def message(self):
         if ErrorCodes.is_error(self.error):
             return ErrorCodes.get_error(self.error)[1].format(
-                **self.format_args)
+                **self.format_args
+            )
         else:
-            return 'Unknown compiler error'
+            return "Unknown compiler error"
 
     def __str__(self):
         return self.message()
