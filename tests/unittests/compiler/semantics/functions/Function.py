@@ -45,23 +45,28 @@ def test_function_pretty_b():
 
 
 def test_mutation__to_str():
-    fn = MutationFunction('foo', {}, AnyType.instance())
+    fn = MutationFunction('foo', {}, AnyType.instance(), desc='')
     assert str(fn) == 'Mutation(foo)'
 
 
+def test_mutation_desc():
+    fn = MutationFunction('foo', {}, AnyType.instance(), desc='.desc.')
+    assert fn.desc() == '.desc.'
+
+
 def test_mutation_pretty():
-    fn = MutationFunction('foo', {}, AnyType.instance())
+    fn = MutationFunction('foo', {}, AnyType.instance(), desc='')
     assert fn.pretty() == 'foo()'
 
 
 def test_mutation_pretty_a():
     args = {'a': Symbol('a', IntType.instance())}
-    fn = MutationFunction('foo', args, AnyType.instance())
+    fn = MutationFunction('foo', args, AnyType.instance(), desc='')
     assert fn.pretty() == 'foo(a:`int`)'
 
 
 def test_mutation_pretty_b():
     args = {'a': Symbol('a', IntType.instance()),
             'b': Symbol('b', StringType.instance())}
-    fn = MutationFunction('foo', args, AnyType.instance())
+    fn = MutationFunction('foo', args, AnyType.instance(), desc='')
     assert fn.pretty() == 'foo(a:`int` b:`string`)'

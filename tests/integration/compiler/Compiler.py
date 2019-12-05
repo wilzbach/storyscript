@@ -95,8 +95,23 @@ def test_compiler_int_mutation_arguments(mocker):
     """
     Test integer mutation with arguments (through mocked fake mutations)
     """
-    hub = Hub('int increment a:int -> int\n'
-              'int decrement b:int -> int')
+    builtins = [
+        {
+            'name': 'increment',
+            'input_type': 'int',
+            'return_type': 'int',
+            'desc': 'returns the number + 1',
+            'args': {'a': {'type': 'int', 'desc': 'Dummy arg'}},
+        },
+        {
+            'name': 'decrement',
+            'input_type': 'int',
+            'return_type': 'int',
+            'desc': 'returns the number - 1',
+            'args': {'b': {'type': 'int', 'desc': 'Dummy arg'}},
+        },
+        ]
+    hub = Hub(builtins)
     mocker.patch.object(Hub, 'instance', return_value=hub)
     mt = MutationTable.init()
     mocker.patch.object(MutationTable, 'instance', return_value=mt)
