@@ -1,7 +1,7 @@
 from pytest import mark, raises
 
 from storyscript.compiler.semantics.functions.MutationBuilder import \
-    parse_type, parse_type_inner, split_type_arguments
+    parse_type, parse_type_inner
 from storyscript.compiler.semantics.types.GenericTypes import \
     ListGenericType, MapGenericType, TypeSymbol
 from storyscript.compiler.semantics.types.Types import AnyType, BooleanType, \
@@ -22,22 +22,6 @@ def test_parse_end(text, expected):
 def test_parse_end_error():
     with raises(AssertionError):
         parse_type_inner('foo[bar')
-
-
-@mark.parametrize('text,expected', [
-    ('foo[abc]', ['foo[abc]']),
-    ('foo[ abc ]', ['foo[ abc ]']),
-    ('foo[a,b]', ['foo[a,b]']),
-    ('foo[a, b] arg:[]', ['foo[a, b]', 'arg:[]']),
-    ('foo[a, b]   arg:[]', ['foo[a, b]', 'arg:[]']),
-    ('foo[a, b]   arg:  []', ['foo[a, b]', 'arg:  []']),
-    ('foo[a, b] arg:list[int] a2:bar',
-        ['foo[a, b]', 'arg:list[int]', 'a2:bar']),
-    ('foo[a, b] arg:foo[bar]', ['foo[a, b]', 'arg:foo[bar]']),
-    ('foo[bar[abc]] arg:foo[bar]', ['foo[bar[abc]]', 'arg:foo[bar]']),
-])
-def test_split_args(text, expected):
-    assert [*split_type_arguments(text)] == expected
 
 
 @mark.parametrize('text,expected', [

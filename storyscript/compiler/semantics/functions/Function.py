@@ -6,7 +6,7 @@ class BaseFunction:
     """
     An individual function.
     """
-    def __init__(self, fn_type, name, args, output):
+    def __init__(self, fn_type, name, args, output, desc=''):
         assert fn_type == 'function' or fn_type == 'mutation'
         self.fn_type = fn_type.capitalize()
         self._name = name
@@ -14,6 +14,7 @@ class BaseFunction:
         self._arg_names = set(args.keys())
         assert isinstance(output, BaseType)
         self._output = output
+        self._desc = desc
 
     def check_call(self, tree, args):
         """
@@ -62,6 +63,12 @@ class BaseFunction:
         """
         return self._name
 
+    def desc(self):
+        """
+        Returns a description of this function.
+        """
+        return self._desc
+
     def args(self):
         """
         Returns the arguments of this function.
@@ -103,5 +110,5 @@ class MutationFunction(BaseFunction):
     """
     Representation of a instantiated Storyscript mutation.
     """
-    def __init__(self, name, args, output):
-        super().__init__('mutation', name, args, output)
+    def __init__(self, name, args, output, desc):
+        super().__init__('mutation', name, args, output, desc=desc)
