@@ -19,7 +19,8 @@ workflows:
             - build
           filters:
             branches:
-              only: stable
+              only:
+                - stable
       - version_prs:
           requires:
             - deploy
