@@ -19,7 +19,7 @@ class StoryError(ErrorTextFormatter, SyntaxError):
         super().__init__(error, story)
 
     def header(self):
-        text = 'Error: syntax error in {name} at line {line}'
+        text = "Error: syntax error in {name} at line {line}"
         return self._format_header(text)
 
     def hint(self):
@@ -35,7 +35,7 @@ class StoryError(ErrorTextFormatter, SyntaxError):
             return self.error.message()
 
         # We might have added formatting attributes to a Lark error
-        values = getattr(self, '_format', {})
+        values = getattr(self, "_format", {})
         return self.error_tuple[1].format(**values)
 
     def unexpected_token_code(self):
@@ -45,32 +45,31 @@ class StoryError(ErrorTextFormatter, SyntaxError):
         intention = Intention(self.get_line())
         token = self.error.token
 
-        if self.error.expected == ['_CP']:
-            if token.type == '_AS':
+        if self.error.expected == ["_CP"]:
+            if token.type == "_AS":
                 return ErrorCodes.service_no_inline_output
-            self._format = {'cp': ')'}
+            self._format = {"cp": ")"}
             return ErrorCodes.expected_closing_parenthesis
 
         if intention.unnecessary_colon():
             return ErrorCodes.unnecessary_colon
-        elif self.error.expected == ['_INDENT']:
+        elif self.error.expected == ["_INDENT"]:
             return ErrorCodes.block_expected_after
-        elif self.error.expected == ['_DEDENT']:
+        elif self.error.expected == ["_DEDENT"]:
             return ErrorCodes.expected_closing_block
-        elif self.error.expected == ['_COLON']:
+        elif self.error.expected == ["_COLON"]:
             return ErrorCodes.arguments_expected
-        elif self.error.token == 'as':
+        elif self.error.token == "as":
             return ErrorCodes.assignment_no_as
         elif intention.assignment():
             return ErrorCodes.assignment_incomplete
 
-        self._format = {'allowed': str(self.error.expected)}
-        if token.type == '_NL':
+        self._format = {"allowed": str(self.error.expected)}
+        if token.type == "_NL":
             return ErrorCodes.unexpected_end_of_line
 
-        self._format['token'] = str(token)
-        if len(self.error.expected) == 1 and \
-                self.error.expected[0] == '_NL':
+        self._format["token"] = str(token)
+        if len(self.error.expected) == 1 and self.error.expected[0] == "_NL":
             return ErrorCodes.expected_end_of_line
 
         return ErrorCodes.unexpected_token
@@ -80,7 +79,7 @@ class StoryError(ErrorTextFormatter, SyntaxError):
         """
         Checks whether a character token is a valid start of a name
         """
-        return char.isalpha() or char == '_'
+        return char.isalpha() or char == "_"
 
     def unexpected_characters_code(self):
         """
@@ -95,20 +94,21 @@ class StoryError(ErrorTextFormatter, SyntaxError):
             return ErrorCodes.unnecessary_colon
         elif error_column == "'":
             return ErrorCodes.single_quotes
-        elif error_column == '\t':
+        elif error_column == "\t":
             return ErrorCodes.tabs
-        elif self.error.allowed is None and \
-                self.is_valid_name_start(error_column):
+        elif self.error.allowed is None and self.is_valid_name_start(
+            error_column
+        ):
             return ErrorCodes.block_expected_before
 
-        self._format = {'character': error_column}
+        self._format = {"character": error_column}
         return ErrorCodes.invalid_character
 
     def identify(self):
         """
         Identifies the error.
         """
-        if hasattr(self.error, 'error'):
+        if hasattr(self.error, "error"):
             if not isinstance(self.error.error, str):
                 return ErrorCodes.unidentified_error
             if ErrorCodes.is_error(self.error.error):

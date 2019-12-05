@@ -11,17 +11,25 @@ class JSONExpressionVisitor(ExpressionVisitor):
         self.visitor = visitor
 
     _types = {
-        'PLUS': 'sum', 'DASH': 'subtraction', 'POWER': 'exponential',
-        'MULTIPLIER': 'multiplication', 'BSLASH': 'division',
-        'MODULUS': 'modulus',
-        'AND': 'and', 'OR': 'or', 'NOT': 'not', 'EQUAL': 'equal',
-        'LESSER': 'less', 'LESSER_EQUAL': 'less_equal'
+        "PLUS": "sum",
+        "DASH": "subtraction",
+        "POWER": "exponential",
+        "MULTIPLIER": "multiplication",
+        "BSLASH": "division",
+        "MODULUS": "modulus",
+        "AND": "and",
+        "OR": "or",
+        "NOT": "not",
+        "EQUAL": "equal",
+        "LESSER": "less",
+        "LESSER_EQUAL": "less_equal",
     }
 
     def expression_type(self, operator, tree):
         ret = self._types.get(operator, None)
-        tree.expect(ret is not None, 'compiler_error_no_operator',
-                    operator=operator)
+        tree.expect(
+            ret is not None, "compiler_error_no_operator", operator=operator
+        )
         return ret
 
     def values(self, tree):
@@ -30,12 +38,12 @@ class JSONExpressionVisitor(ExpressionVisitor):
     def nary_expression(self, tree, op, values):
         expression = self.expression_type(op.type, tree)
         return {
-            '$OBJECT': 'expression',
-            'expression': expression,
-            'values': values,
+            "$OBJECT": "expression",
+            "expression": expression,
+            "values": values,
         }
 
     def to_expression(self, tree, expr):
-        assert tree.child(1).data == 'to_operator'
+        assert tree.child(1).data == "to_operator"
         t = self.visitor.types(tree.child(1).types)
-        return {'$OBJECT': 'type_cast', 'type': t, 'value': expr}
+        return {"$OBJECT": "type_cast", "type": t, "value": expr}

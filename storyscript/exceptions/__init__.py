@@ -6,11 +6,11 @@ from .StoryError import StoryError
 from .StorySyntaxError import StorySyntaxError
 
 __all__ = [
-    'CompilerError',
-    'expect',
-    'InternalCompilerError',
-    'internal_assert',
-    'ProcessingError',
-    'StoryError',
-    'StorySyntaxError'
+    "CompilerError",
+    "expect",
+    "InternalCompilerError",
+    "internal_assert",
+    "ProcessingError",
+    "StoryError",
+    "StorySyntaxError",
 ]

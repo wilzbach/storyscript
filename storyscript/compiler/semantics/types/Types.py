@@ -12,6 +12,7 @@ def singleton(fn):
         if _instance is None:
             _instance = fn()
         return _instance
+
     return wrapped
 
 
@@ -154,7 +155,7 @@ class BooleanType(BaseType):
     """
 
     def __str__(self):
-        return 'boolean'
+        return "boolean"
 
     def __eq__(self, other):
         return isinstance(other, BooleanType)
@@ -192,7 +193,7 @@ class NoneType(BaseType):
     """
 
     def __str__(self):
-        return 'none'
+        return "none"
 
     def __eq__(self, other):
         return isinstance(other, NoneType)
@@ -229,7 +230,7 @@ class IntType(BaseType):
     """
 
     def __str__(self):
-        return 'int'
+        return "int"
 
     def __eq__(self, other):
         return isinstance(other, IntType)
@@ -281,7 +282,7 @@ class FloatType(BaseType):
     """
 
     def __str__(self):
-        return 'float'
+        return "float"
 
     def __eq__(self, other):
         return isinstance(other, FloatType)
@@ -325,13 +326,13 @@ class StringType(BaseType):
     """
 
     def __str__(self):
-        return 'string'
+        return "string"
 
     def __eq__(self, other):
         return isinstance(other, StringType)
 
     def op(self, op):
-        if op.type == 'PLUS':
+        if op.type == "PLUS":
             return self
         return None
 
@@ -364,13 +365,13 @@ class TimeType(BaseType):
     """
 
     def __str__(self):
-        return 'time'
+        return "time"
 
     def __eq__(self, other):
         return isinstance(other, TimeType)
 
     def op(self, op):
-        if op.type == 'PLUS' or op.type == 'DASH':
+        if op.type == "PLUS" or op.type == "DASH":
             return self
         return None
 
@@ -397,7 +398,7 @@ class RegExpType(BaseType):
     """
 
     def __str__(self):
-        return 'regexp'
+        return "regexp"
 
     def __eq__(self, other):
         return isinstance(other, RegExpType)
@@ -435,7 +436,7 @@ class RangeType(BaseType):
     """
 
     def __str__(self):
-        return 'range'
+        return "range"
 
     def __eq__(self, other):
         return isinstance(other, RangeType)
@@ -452,19 +453,19 @@ class ListType(BaseType):
     """
     Represents a List.
     """
+
     def __init__(self, inner):
         assert isinstance(inner, BaseType)
         self.inner = inner
 
     def __str__(self):
-        return f'List[{self.inner}]'
+        return f"List[{self.inner}]"
 
     def __eq__(self, other):
-        return isinstance(other, ListType) and \
-            self.inner == other.inner
+        return isinstance(other, ListType) and self.inner == other.inner
 
     def op(self, op):
-        if op.type == 'PLUS':
+        if op.type == "PLUS":
             return self
         return None
 
@@ -491,7 +492,7 @@ class ListType(BaseType):
         Output types of the ListType.
         """
         if n == 1:
-            return self.inner,
+            return (self.inner,)
         return IntType.instance(), self.inner
 
     def has_boolean(self):
@@ -518,6 +519,7 @@ class MapType(BaseType):
     """
     Represents a Map
     """
+
     def __init__(self, key, value):
         assert isinstance(key, BaseType)
         assert isinstance(value, BaseType)
@@ -525,12 +527,14 @@ class MapType(BaseType):
         self.value = value
 
     def __str__(self):
-        return f'Map[{self.key},{self.value}]'
+        return f"Map[{self.key},{self.value}]"
 
     def __eq__(self, other):
-        return isinstance(other, MapType) and \
-               self.key == other.key and \
-               self.value == other.value
+        return (
+            isinstance(other, MapType)
+            and self.key == other.key
+            and self.value == other.value
+        )
 
     def op(self, op):
         return None
@@ -556,7 +560,7 @@ class MapType(BaseType):
         Output types of the MapType.
         """
         if n == 1:
-            return self.key,
+            return (self.key,)
         return self.key, self.value
 
     def has_boolean(self):
@@ -584,12 +588,13 @@ class ObjectType(BaseType):
     """
     Represents an object
     """
+
     def __init__(self, obj, action=None):
         self._object = obj
         self._action = action
 
     def __str__(self):
-        return 'Object'
+        return "Object"
 
     def __eq__(self, other):
         return isinstance(other, ObjectType)
@@ -636,7 +641,7 @@ class NullType(BaseType):
     """
 
     def __str__(self):
-        return 'null'
+        return "null"
 
     def __eq__(self, other):
         return isinstance(other, NullType)
@@ -686,7 +691,7 @@ class AnyType(BaseType):
     """
 
     def __str__(self):
-        return 'any'
+        return "any"
 
     def __eq__(self, other):
         return isinstance(other, AnyType)

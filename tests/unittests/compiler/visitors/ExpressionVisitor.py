@@ -8,8 +8,8 @@ def test_objects_expression_one(patch, tree):
     """
     Ensures ExpressionVisitor.expression works with one node
     """
-    patch.many(ExpressionVisitor, ['entity'])
-    tree.first_child().data = 'entity'
+    patch.many(ExpressionVisitor, ["entity"])
+    tree.first_child().data = "entity"
     tree.children = [1]
     r = ExpressionVisitor().expression(tree)
     ExpressionVisitor.entity.assert_called_with(tree.first_child())
@@ -20,16 +20,17 @@ def test_objects_expression_two(patch, tree):
     """
     Ensures ExpressionVisitor.expression works with two nodes
     """
-    patch.many(ExpressionVisitor, ['nary_expression'])
-    tree.first_child().data = 'unary_operator'
-    tree.children = ['!', 1]
+    patch.many(ExpressionVisitor, ["nary_expression"])
+    tree.first_child().data = "unary_operator"
+    tree.children = ["!", 1]
     expression = ExpressionVisitor().expression
-    patch.object(ExpressionVisitor, 'expression')
+    patch.object(ExpressionVisitor, "expression")
     r = expression(tree)
     ExpressionVisitor.nary_expression.assert_called_with(
-        tree, tree.first_child().child(0), [
-            ExpressionVisitor.expression(tree.child(1))
-        ])
+        tree,
+        tree.first_child().child(0),
+        [ExpressionVisitor.expression(tree.child(1))],
+    )
     assert r == ExpressionVisitor.nary_expression()
 
 
@@ -37,11 +38,11 @@ def test_objects_expression_two_as(patch, tree):
     """
     Ensures ExpressionVisitor.expression works with as
     """
-    patch.many(ExpressionVisitor, ['to_expression'])
-    tree.child(1).data = 'to_operator'
-    tree.children = ['!', 1]
+    patch.many(ExpressionVisitor, ["to_expression"])
+    tree.child(1).data = "to_operator"
+    tree.children = ["!", 1]
     expression = ExpressionVisitor().expression
-    patch.object(ExpressionVisitor, 'expression')
+    patch.object(ExpressionVisitor, "expression")
     r = expression(tree)
     ExpressionVisitor.to_expression.assert_called_with(
         tree, ExpressionVisitor.expression(tree.first_child()),
@@ -53,17 +54,20 @@ def test_objects_expression_three(patch, tree):
     """
     Ensures ExpressionVisitor.expression works with three nodes
     """
-    patch.many(ExpressionVisitor, ['nary_expression'])
-    tree.child(1).data = 'mul_operator'
-    tree.children = [1, '*', 2]
+    patch.many(ExpressionVisitor, ["nary_expression"])
+    tree.child(1).data = "mul_operator"
+    tree.children = [1, "*", 2]
     expression = ExpressionVisitor().expression
-    patch.object(ExpressionVisitor, 'expression')
+    patch.object(ExpressionVisitor, "expression")
     r = expression(tree)
     ExpressionVisitor.nary_expression.assert_called_with(
-        tree, tree.child(1).child(0), [
+        tree,
+        tree.child(1).child(0),
+        [
             ExpressionVisitor.expression(tree.first_child()),
-            ExpressionVisitor.expression(tree.child(2))
-        ])
+            ExpressionVisitor.expression(tree.child(2)),
+        ],
+    )
     assert r == ExpressionVisitor.nary_expression()
 
 

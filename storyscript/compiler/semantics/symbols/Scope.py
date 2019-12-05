@@ -1,23 +1,38 @@
 # -*- coding: utf-8 -*-
 
-from storyscript.compiler.semantics.types.Types import MapType, ObjectType, \
-    StringType
+from storyscript.compiler.semantics.types.Types import (
+    MapType,
+    ObjectType,
+    StringType,
+)
 
 from .Symbols import StorageClass, Symbol, Symbols
 
 
 app_props = {
-    'secrets': Symbol(name='secrets',
-                      type_=ObjectType(obj=MapType(StringType.instance(),
-                                       StringType.instance())),
-                      storage_class=StorageClass.read()),
-    'hostname': Symbol(name='hostname', type_=StringType.instance(),
-                       storage_class=StorageClass.read()),
-    'version': Symbol(name='version', type_=StringType.instance(),
-                      storage_class=StorageClass.read()),
+    "secrets": Symbol(
+        name="secrets",
+        type_=ObjectType(
+            obj=MapType(StringType.instance(), StringType.instance())
+        ),
+        storage_class=StorageClass.read(),
+    ),
+    "hostname": Symbol(
+        name="hostname",
+        type_=StringType.instance(),
+        storage_class=StorageClass.read(),
+    ),
+    "version": Symbol(
+        name="version",
+        type_=StringType.instance(),
+        storage_class=StorageClass.read(),
+    ),
 }
-app_keyword = Symbol(name='app', type_=ObjectType(obj=app_props),
-                     storage_class=StorageClass.read())
+app_keyword = Symbol(
+    name="app",
+    type_=ObjectType(obj=app_props),
+    storage_class=StorageClass.read(),
+)
 
 
 class Scope:
@@ -67,9 +82,11 @@ class Scope:
             yield from self._parent.scopes()
 
     def pretty(self):
-        indent = '\t'
-        return (f'Parent: {self.parent()}\n'
-                f'Symbols:\n{self._symbols.pretty(indent=indent)}')
+        indent = "\t"
+        return (
+            f"Parent: {self.parent()}\n"
+            f"Symbols:\n{self._symbols.pretty(indent=indent)}"
+        )
 
     @classmethod
     def root(cls):
@@ -90,8 +107,8 @@ class Scope:
         return new_scope
 
     def __str__(self):
-        symbols = ','.join(s.name() for s in self.symbols())
-        return f'Scope({symbols})'
+        symbols = ",".join(s.name() for s in self.symbols())
+        return f"Scope({symbols})"
 
 
 class ScopeJoiner:
@@ -127,10 +144,10 @@ class ScopeJoiner:
                         # all scopes, so we must save it for later and check
                         # for such invalid symbols at the end
                         self.invalid_symbols[k] = {
-                            't1name': t1.name(),
-                            't1type': t1.type(),
-                            't2name': t2.name(),
-                            't2type': t2.type(),
+                            "t1name": t1.name(),
+                            "t1type": t1.type(),
+                            "t2name": t2.name(),
+                            "t2type": t2.type(),
                         }
 
     def insert_to(self, tree, scope):
@@ -142,7 +159,7 @@ class ScopeJoiner:
         # wouldn't be hoisted. However, all scopes have been added now and
         # we can check if any symbols had type mismatches.
         for v in self.invalid_symbols.values():
-            tree.expect(False, 'scope_join_incompatible', **v)
+            tree.expect(False, "scope_join_incompatible", **v)
 
         for s in self.symbols.values():
             scope.insert(s)

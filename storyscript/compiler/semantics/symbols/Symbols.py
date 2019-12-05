@@ -74,23 +74,24 @@ class StorageClass:
         return sc
 
     def __str__(self):
-        read_write = 'w' if self.can_write() else 'r'
-        assign = 'a' if self.can_assign() else '-'
-        return f'{read_write}{assign}'
+        read_write = "w" if self.can_write() else "r"
+        assign = "a" if self.can_assign() else "-"
+        return f"{read_write}{assign}"
 
 
 def base_symbol(type_):
     """
     Creates a temporary symbol for a base type
     """
-    return Symbol('tmp', type_)
+    return Symbol("tmp", type_)
 
 
 class Symbol:
     """
     Representation of an individual symbol.
     """
-    def __init__(self, name, type_, storage_class=None, desc=''):
+
+    def __init__(self, name, type_, storage_class=None, desc=""):
         self._name = name
         self._type = type_
         if storage_class is None:
@@ -105,23 +106,23 @@ class Symbol:
         return self._type
 
     def pretty(self):
-        return f'{self._type}'
+        return f"{self._type}"
 
     def desc(self):
         return self._desc
 
     def __str__(self):
         base = f"'{self._name}', {self._type}, {self._storage_class}"
-        return f'Symbol({base})'
+        return f"Symbol({base})"
 
     @classmethod
     def from_path(cls, node, type_, storage_class=None):
-        assert node.type == 'NAME'
+        assert node.type == "NAME"
         name = node.value
         return cls(name, type_, storage_class=storage_class)
 
     def is_internal(self):
-        return self._name.startswith('__p-')
+        return self._name.startswith("__p-")
 
     def index(self, tree, name, type_, kind):
         """
@@ -142,25 +143,33 @@ class Symbol:
             new_type = cur_type.index(type_)
 
         if isinstance(cur_type, ObjectType) and kind == IndexKind.DOT:
-            tree.expect(new_type is not None, 'object_invalid_prop',
-                        object=symbol.name(), prop=name)
+            tree.expect(
+                new_type is not None,
+                "object_invalid_prop",
+                object=symbol.name(),
+                prop=name,
+            )
             # property might have been stored as symbol
             if isinstance(new_type, Symbol):
                 new_type = new_type.type()
 
         if kind == IndexKind.DOT:
-            msg = 'type_dot_incompatible'
+            msg = "type_dot_incompatible"
         else:
             assert kind == IndexKind.INDEX
-            msg = 'type_index_incompatible'
+            msg = "type_index_incompatible"
 
-        tree.expect(new_type is not None, msg,
-                    left=symbol.type(),
-                    name=name,
-                    right=type_)
+        tree.expect(
+            new_type is not None,
+            msg,
+            left=symbol.type(),
+            name=name,
+            right=type_,
+        )
         sc = self._storage_class.index()
-        return Symbol(name=symbol.name() + '[]', type_=new_type,
-                      storage_class=sc)
+        return Symbol(
+            name=symbol.name() + "[]", type_=new_type, storage_class=sc
+        )
 
     def can_write(self):
         return self._storage_class.can_write()
@@ -185,12 +194,12 @@ class Symbols:
     def insert(self, symbol):
         self._symbols[symbol.name()] = symbol
 
-    def pretty(self, indent=''):
-        result = ''
+    def pretty(self, indent=""):
+        result = ""
         for k, v in self._symbols.items():
-            result += f'{indent}{k}: {v.pretty()}\n'
+            result += f"{indent}{k}: {v.pretty()}\n"
         return result
 
     def __str__(self):
-        symbols = ','.join(self._symbols.keys())
-        return f'Symbols({symbols})'
+        symbols = ",".join(self._symbols.keys())
+        return f"Symbols({symbols})"

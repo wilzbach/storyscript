@@ -18,11 +18,9 @@ def test_a_selective_visitor():
             self._node = self._node + 1
             self.visit_children(tree)
 
-    tree = Tree('node', [
-        Tree('node', []),
-        Token('TOK', 42),
-        Tree('unknown', [])
-    ])
+    tree = Tree(
+        "node", [Tree("node", []), Token("TOK", 42), Tree("unknown", [])]
+    )
     visitor = TestVisitor()
     visitor.visit(tree)
     assert visitor._node == 2

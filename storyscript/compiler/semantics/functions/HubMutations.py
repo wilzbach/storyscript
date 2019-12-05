@@ -1,7 +1,8 @@
 from storyhub.engine.Builtins import builtins
 
-from storyscript.compiler.semantics.functions.MutationBuilder import \
-    mutation_builder
+from storyscript.compiler.semantics.functions.MutationBuilder import (
+    mutation_builder,
+)
 
 
 class Hub:
@@ -9,6 +10,7 @@ class Hub:
     A representation of a Storyscript Engine and Hub.
     Assumed to be Asyncy Engine for now.
     """
+
     def __init__(self, mutations):
         self._mutations = []
         for m in mutations:

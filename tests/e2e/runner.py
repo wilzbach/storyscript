@@ -21,13 +21,18 @@ from tests.e2e.utils.Features import parse_features
 
 test_dir = path.dirname(path.realpath(__file__))
 # make the test_file paths relative, s.t. test paths are nice to read
-test_files = list(map(lambda e: path.relpath(e, test_dir),
-                  glob(path.join(test_dir, '**', '*.story'), recursive=True)))
+test_files = list(
+    map(
+        lambda e: path.relpath(e, test_dir),
+        glob(path.join(test_dir, "**", "*.story"), recursive=True),
+    )
+)
 
-hub_fixtures_file = path.join(path.dirname(test_dir),
-                              'fixtures', 'hub_fixture.json.fixed')
+hub_fixtures_file = path.join(
+    path.dirname(test_dir), "fixtures", "hub_fixture.json.fixed"
+)
 
-features = {'globals': True}
+features = {"globals": True}
 
 
 # compile a story and compare its tree with the expected tree
@@ -35,12 +40,12 @@ def run_test_story(source, expected_story, features, expected_deprecation):
     s = Api.loads(source, features)
     s.check_success()
     result = _clean_dict(s.result().output())
-    del result['version']
+    del result["version"]
     assert expected_story == result
 
     if expected_deprecation is not None:
         deprecations = s.deprecations()
-        output_str = ''
+        output_str = ""
         for deprecation in deprecations:
             output_str += deprecation.message()
         assert expected_deprecation.strip() == unstyle(output_str).strip()
@@ -52,43 +57,45 @@ def run_fail_story(source, expected_output, features):
     s = Api.loads(source, features)
     errors = s.errors()
     if len(errors) > 0:
-        assert len(errors) == 1, 'Only one error supported for now'
+        assert len(errors) == 1, "Only one error supported for now"
         result = unstyle(errors[0].message())
         assert expected_output == result
         return
 
-    assert 0, 'The story was expected to fail, but did not fail.'
+    assert 0, "The story was expected to fail, but did not fail."
 
 
 # load a story from the file system and load its expected result file (.json)
 def run_test(story_path):
     story_string = None
-    with bom_open(story_path, 'r') as f:
+    with bom_open(story_path, "r") as f:
         story_string = f.read()
 
     expected_path = path.splitext(story_path)[0]
     parsed_features = parse_features(features, story_string)
-    if path.isfile(expected_path + '.json'):
+    if path.isfile(expected_path + ".json"):
         # check for duplicate results
-        assert not path.isfile(expected_path + '.error'), \
-            f'{expected_path} must either be a JSON result or an ERROR.'
+        assert not path.isfile(
+            expected_path + ".error"
+        ), f"{expected_path} must either be a JSON result or an ERROR."
 
         expected_story = None
-        with io.open(expected_path + '.json', 'r') as f:
+        with io.open(expected_path + ".json", "r") as f:
             expected_story = f.read()
 
         expected_deprecation = None
-        if path.isfile(expected_path + '.output'):
-            with io.open(expected_path + '.output', 'r') as f:
+        if path.isfile(expected_path + ".output"):
+            with io.open(expected_path + ".output", "r") as f:
                 expected_deprecation = f.read()
         # deserialize the expected story
         expected_story = json.loads(expected_story)
-        return run_test_story(story_string, expected_story,
-                              parsed_features, expected_deprecation)
+        return run_test_story(
+            story_string, expected_story, parsed_features, expected_deprecation
+        )
 
-    if path.isfile(expected_path + '.error'):
+    if path.isfile(expected_path + ".error"):
         expected_output = None
-        with io.open(expected_path + '.error', 'r') as f:
+        with io.open(expected_path + ".error", "r") as f:
             expected_output = f.read().strip()
 
         # deserialize the expected story
@@ -101,17 +108,17 @@ def run_test(story_path):
         print(e.result())
     else:
         e.errors()[0].echo()
-    assert 0, f'{story_path} has no expected result file.'
+    assert 0, f"{story_path} has no expected result file."
 
 
 @fixture
-def patched_storyhub(mocker, scope='module'):
+def patched_storyhub(mocker, scope="module"):
     hub = ServiceWrapper.from_json_file(hub_fixtures_file)
-    mocker.patch.object(StoryHub, 'StoryscriptHub', return_value=hub)
+    mocker.patch.object(StoryHub, "StoryscriptHub", return_value=hub)
 
 
-@mark.usefixtures('patched_storyhub')
-@mark.parametrize('test_file', test_files)
+@mark.usefixtures("patched_storyhub")
+@mark.parametrize("test_file", test_files)
 def test_story(test_file):
     test_file = path.join(test_dir, test_file)
     run_test(test_file)

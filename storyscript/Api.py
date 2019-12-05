@@ -73,8 +73,9 @@ class Api:
     """
     Exposes functionalities for external use
     """
+
     @staticmethod
-    def loads(string, features=None, backend='json', scope=None):
+    def loads(string, features=None, backend="json", scope=None):
         """
         Load story from a string.
         """
@@ -101,7 +102,7 @@ class Api:
         features = Features(features)
         try:
             story = Story.from_stream(stream, features).process()
-            s = {stream.name: story, 'services': story['services']}
+            s = {stream.name: story, "services": story["services"]}
             deprecations = {stream.name: story.deprecations()}
             return StoryscriptCompilationResult.from_result(s, deprecations)
         except StoryError as e:
@@ -120,10 +121,12 @@ class Api:
         """
         features = Features(features)
         try:
-            compiledbundle = Bundle(story_files=files,
-                                    features=features).bundle()
+            compiledbundle = Bundle(
+                story_files=files, features=features
+            ).bundle()
             return StoryscriptCompilationResult.from_result(
-                compiledbundle.results, compiledbundle.deprecations)
+                compiledbundle.results, compiledbundle.deprecations
+            )
         except StoryError as e:
             return StoryscriptCompilationResult.from_error(e)
         except Exception as e:
