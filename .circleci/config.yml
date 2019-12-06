@@ -50,7 +50,7 @@ commands:
 executors:
   python-default:
     docker:
-      - image: circleci/python:3.6.8
+      - image: circleci/python:3.7
 jobs:
     build:
         executor: python-default

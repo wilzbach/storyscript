@@ -122,7 +122,7 @@ setup(
     include_package_data=True,
     install_requires=requirements,
     extras_require={"docs": extras, "stylecheck": ["black==19.10b0"],},
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     entry_points={"console_scripts": ["storyscript=storyscript.Cli:Cli.main"]},
     use_scm_version=True,
     setup_requires=["setuptools_scm~=3.3",],
