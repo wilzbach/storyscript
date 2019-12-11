@@ -8,9 +8,9 @@
 
 <div>
     <p align="center"><img src="https://user-images.githubusercontent.com/2041757/68865115-19c70580-06a7-11ea-955a-1c769960b366.png" width="450"></p>
-    <h3 align="center">Code that connects without plumbing.</h3>
-    <p align="center">The <b>open source</b> cloud-native programming language that<br>connects containers, “serverless” functions and APIs seamlessly<br>for building powerful mini-apps and workflows.</p>
-     <p align="center"><img src="https://user-images.githubusercontent.com/2041757/68863667-aa501680-06a4-11ea-9200-47fbdac7f769.png" width="650"></p>
+    <h3 align="center">Magical coding notebook for tomorrow's developer.</h3>
+    <p align="center">Storyscript is code, editor, infrastructure and community all-in-one.<br>Fully open source and on a mission to make coding for everyone.</p>
+     <p align="center"><img src="https://user-images.githubusercontent.com/2041757/70599795-5cb8c200-1bee-11ea-89a5-dc52e2e708d2.png" width="650"></p>
 </div>
 
 <h3 align="center">Learn more at <a href="https://storyscript.io">https://storyscript.io</a></h3>
