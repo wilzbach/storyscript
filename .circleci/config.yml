@@ -131,9 +131,9 @@ jobs:
             - run:
                   name: upload to PyPI
                   command: |
+                    . venv/bin/activate
                     pip install twine==1.13.0
                     pip install wheel
-                    . venv/bin/activate
                     python setup.py upload
     stable:
         executor: python-default
