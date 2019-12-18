@@ -20,7 +20,7 @@ def test_api_loads(patch, magic):
     Story.context = magic()
     result = Api.loads("string").result()
     Story.__init__.assert_called_with(
-        "string", ANY, scope=None, backend="json"
+        "string", ANY, scope=None, backend="json", hub=None,
     )
     assert isinstance(Story.__init__.call_args[0][1], Features)
     Story.process.assert_called_with()
@@ -35,9 +35,11 @@ def test_api_loads_custom(patch):
     patch.init(Story)
     patch.init(Features)
     patch.object(Story, "process")
-    result = Api.loads("string", backend="custom", scope="my.scope").result()
+    result = Api.loads(
+        "string", backend="custom", scope="my.scope", hub="my.hub"
+    ).result()
     Story.__init__.assert_called_with(
-        "string", ANY, scope="my.scope", backend="custom"
+        "string", ANY, scope="my.scope", backend="custom", hub="my.hub",
     )
     assert isinstance(Story.__init__.call_args[0][1], Features)
     Story.process.assert_called_with()

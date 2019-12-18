@@ -24,7 +24,7 @@ def story():
 
 @fixture
 def storycontext():
-    return StoryContext(features=None)
+    return StoryContext(features=None, hub=None)
 
 
 @fixture

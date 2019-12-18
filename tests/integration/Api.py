@@ -3,6 +3,8 @@ from unittest.mock import patch
 
 from pytest import raises
 
+from storyhub.sdk.ServiceWrapper import ServiceWrapper
+
 from storyscript.Api import Api
 from storyscript.Bundle import Bundle
 from storyscript.Story import Story
@@ -31,6 +33,18 @@ def test_api_loads_with_scope():
     scope.insert(symbol)
     story = Api.loads("foo = a", backend="semantic", scope=scope)
     story.check_success()
+
+
+def test_api_loads_with_hub():
+    """
+    Ensures Api.load functions return errors
+    """
+    hub = ServiceWrapper(services=None)
+    story = Api.loads("http server", backend="semantic", hub=hub)
+    e = story.errors()[0]
+    assert (
+        e.short_message() == "E0139: Service `http` does not exist on the hub."
+    )
 
 
 def test_api_loads_compiling_try_block():

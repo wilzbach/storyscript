@@ -14,6 +14,7 @@ from .compiler.pretty.PrettyPrinter import PrettyPrinter
 from .exceptions import CompilerError, StoryError, StorySyntaxError
 from .exceptions.Deprecation import deprecate
 from .exceptions.DeprecationMessage import DeprecationMessage
+from .hub.Hub import story_hub
 from .parser import Parser
 from .parser.Tree import Tree
 
@@ -34,9 +35,10 @@ class StoryContext:
     Represents context of a given story.
     """
 
-    def __init__(self, features):
+    def __init__(self, features, hub):
         self.features = features
         self._deprecations = []
+        self.hub = hub
 
     def deprecate(self, tree_or_token, name, **kwargs):
         if isinstance(tree_or_token, Tree):
@@ -56,11 +58,15 @@ class Story:
     compiling it.
     """
 
-    def __init__(self, story, features, path=None, backend="json", scope=None):
+    def __init__(
+        self, story, features, path=None, backend="json", scope=None, hub=None
+    ):
         self.story = story
         self.path = path
         self.lines = story.splitlines(keepends=False)
-        self.context = StoryContext(features=features)
+        if hub is None:
+            hub = story_hub()
+        self.context = StoryContext(features=features, hub=hub)
         self.backend = backend
         self.scope = scope
         self.name = self.extract_name()
