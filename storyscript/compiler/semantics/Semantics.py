@@ -19,7 +19,7 @@ class Semantics:
     def __init__(self, storycontext, root_scope=None):
         if root_scope is None:
             root_scope = Scope.root()
-        service_typing = ServiceTyping()
+        service_typing = ServiceTyping(storycontext.hub)
 
         self.module = Module(
             symbol_resolver=SymbolResolver(scope=root_scope),
