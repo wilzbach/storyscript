@@ -2,7 +2,6 @@
 from storyhub.sdk.service.ServiceOutput import ServiceOutput
 
 from storyscript.compiler.semantics.types.Casting import implicit_type_cast
-from storyscript.hub.Hub import story_hub
 from storyscript.hub.TypeMappings import TypeMappings
 
 from .types.Types import NoneType, ObjectType
@@ -14,8 +13,8 @@ class ServiceTyping:
     information of services
     """
 
-    def __init__(self):
-        self.hub = story_hub()
+    def __init__(self, hub):
+        self.hub = hub
 
     def enforce_service_data(self, tree, service_name):
         """
