@@ -14,6 +14,8 @@ from storyhub.sdk.service.output import (
     OutputString,
 )
 
+from storyscript.compiler.semantics.symbols.Symbols import StorageClass, Symbol
+
 from storyscript.compiler.semantics.types.Types import (
     AnyType,
     BooleanType,
@@ -49,7 +51,12 @@ class TypeMappings:
         if isinstance(ty, OutputObject):
             return ObjectType(
                 {
-                    k: cls.get_type_instance(v)
+                    k: Symbol(
+                        k,
+                        cls.get_type_instance(v),
+                        storage_class=StorageClass.read(),
+                        desc=v.help(),
+                    )
                     for k, v in ty.properties().items()
                 }
             )
