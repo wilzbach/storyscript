@@ -16,22 +16,26 @@ app_props = {
             obj=MapType(StringType.instance(), StringType.instance())
         ),
         storage_class=StorageClass.read(),
+        desc="Secret variables of this application",
     ),
     "hostname": Symbol(
         name="hostname",
         type_=StringType.instance(),
         storage_class=StorageClass.read(),
+        desc="Server hostname of this application",
     ),
     "version": Symbol(
         name="version",
         type_=StringType.instance(),
         storage_class=StorageClass.read(),
+        desc="Version of this application",
     ),
 }
 app_keyword = Symbol(
     name="app",
     type_=ObjectType(obj=app_props),
     storage_class=StorageClass.read(),
+    desc="Access application settings",
 )
 
 
