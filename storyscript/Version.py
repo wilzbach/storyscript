@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-from pkg_resources import DistributionNotFound, get_distribution
+import pkg_resources
 
-try:
-    __version__ = get_distribution(__name__).version
-except DistributionNotFound:
-    __version__ = "0.0.0"
 
-version = __version__
+def get_version():
+    try:
+        return pkg_resources.get_distribution("storyscript").version
+    except pkg_resources.DistributionNotFound:
+        return "0.0.0"
+
+
+version = get_version()
