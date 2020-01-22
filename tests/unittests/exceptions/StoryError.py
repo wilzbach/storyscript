@@ -451,3 +451,13 @@ def test_storyerror_internal_message(patch):
         "Please report at https://github.com/storyscript/storyscript/issues"
     )
     assert StoryError._internal_error(error) == expected
+
+
+def test_storyerror_start_column(storyerror):
+    storyerror.error.column = 10
+    assert storyerror.start_column() == 10
+
+
+def test_storyerror_end_column(storyerror):
+    storyerror.error.end_column = 10
+    assert storyerror.end_column() == 10
