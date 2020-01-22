@@ -13,6 +13,8 @@ class ErrorTextFormatter:
         self.error_tuple = None
         self.with_color = True
         self.tabwidth = 2
+        self._start_column = None
+        self._end_column = None
 
     def int_line(self):
         """
@@ -47,26 +49,40 @@ class ErrorTextFormatter:
             text += f", column {self.error.column}"
         return text
 
-    def symbols(self, line):
-        """
-        Creates the repeated symbols that mark the error.
-        """
+    def detect_column(self):
+        raw_line = self.get_line()
         if self.error.column != "None":
-            end_column = int(self.error.column) + 1
+            self._end_column = int(self.error.column) + 1
             if (
                 hasattr(self.error, "end_column")
                 and self.error.end_column != "None"
             ):
-                end_column = int(self.error.end_column)
-            start_column = int(self.error.column)
+                self._end_column = int(self.error.end_column)
+            self._start_column = int(self.error.column)
         else:
             # if the column is not known, start at the first non-whitespace
             # token
             # columns are 1-indexed
-            start_column = len(line) - len(line.lstrip()) + 1
-            end_column = len(line) + 1
+            self._start_column = len(raw_line) - len(raw_line.lstrip()) + 1
+            self._end_column = len(raw_line) + 1
 
+    def start_column(self):
+        if self._start_column is None:
+            self.detect_column()
+        return self._start_column
+
+    def end_column(self):
+        if self._end_column is None:
+            self.detect_column()
+        return self._end_column
+
+    def symbols(self, line):
+        """
+        Creates the repeated symbols that mark the error.
+        """
         # add tab offset
+        start_column = self.start_column()
+        end_column = self.end_column()
         start_column += line.count("\t", 0, start_column) * (self.tabwidth - 1)
         end_column += line.count("\t", 0, end_column) * (self.tabwidth - 1)
         symbols = "^" * (end_column - start_column)
